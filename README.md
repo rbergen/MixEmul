@@ -1,3 +1,4 @@
+![MixEmul](http://rbergen.home.xs4all.nl/mixemullogo.jpg)
 #MixEmul
 ##What is it?
 MixEmul is an emulator for the MIX computer that is described in The Art of Computer Programming (TAOCP) series of books from D.E. Knuth. MIX is a mythical, non-existent computer with features similar to those of real computers of the 1960s. It ‑ or more accurately, its assembly language MIXAL ‑ is used as the foundation for the text of aforementioned books.
