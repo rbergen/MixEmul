@@ -81,7 +81,7 @@ namespace MixAssembler.Value
 					value = AtomicExpressionValue.ParseValue(text.Substring(1), sectionCharIndex + 1, status);
 					if (value != null)
 					{
-						return text[0] == '-' ? new NumberValue(Word.ChangeSign(value.GetSign(status.LocationCounter)), value.GetMagnitude(status.LocationCounter)) : value;
+						return text[0] == '-' ? new NumberValue(value.GetSign(status.LocationCounter).Invert(), value.GetMagnitude(status.LocationCounter)) : value;
 					}
 				}
 

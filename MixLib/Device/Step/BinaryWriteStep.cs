@@ -37,7 +37,7 @@ namespace MixLib.Device.Step
 			int byteIndex = 0;
 			foreach (IFullWord currentWord in writeWords)
 			{
-				writeBytes[byteIndex++] = currentWord.Sign == Word.Signs.Negative ? (byte)'-' : (byte)'+';
+				writeBytes[byteIndex++] = currentWord.Sign.ToChar();
 
 				foreach (MixByte currentByte in currentWord)
 				{

@@ -103,9 +103,9 @@ namespace MixLib
 
 			IFullWord composedWord = memory[firstAddress + i];
 			int addressValue = ((byte)composedWord[addressByteIndex] << MixByte.BitCount) | (byte)composedWord[addressByteIndex + 1];
-			if (composedWord.Sign == Word.Signs.Negative)
+			if (composedWord.Sign.IsNegative())
 			{
-				addressValue = -addressValue;
+				addressValue = addressValue.GetMagnitude();
 			}
 
 			flagValues flags = (flagValues)(byte)composedWord[flagsByteIndex];
@@ -238,7 +238,7 @@ namespace MixLib
 			Greater
 		}
 
-		public enum Offset : int
+        public enum Offset : int
 		{
 			rA = 0,
 			rI1 = 1,

@@ -167,7 +167,7 @@ namespace MixGui.Utils
 			{
 				numberText = word.MagnitudeLongValue.ToString("0000000000");
 
-				if (word.Sign == Word.Signs.Positive)
+				if (word.Sign.IsPositive())
 				{
 					lineBuilder.Append(numberText);
 				}

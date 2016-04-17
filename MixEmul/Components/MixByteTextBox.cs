@@ -261,6 +261,6 @@ namespace MixGui.Components
 			}
 		}
 
-		public delegate void ValueChangedEventHandler(MixByteTextBox sender, MixByteTextBox.ValueChangedEventArgs args);
+		public delegate void ValueChangedEventHandler(MixByteTextBox sender, MixByteTextBox.ValueChangedEventArgs e);
 	}
 }

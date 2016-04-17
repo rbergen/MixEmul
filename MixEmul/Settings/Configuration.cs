@@ -53,7 +53,7 @@ namespace MixGui.Settings
 			fillEmptyMembers();
 		}
 
-		public Configuration(SerializationInfo info, StreamingContext context)
+		protected Configuration(SerializationInfo info, StreamingContext context)
 		{
 			mSerializationInfo = info;
 		}
@@ -76,7 +76,7 @@ namespace MixGui.Settings
 			}
 		}
 
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("mColors", Colors);
 			info.AddValue("mTickCounts", TickCounts);

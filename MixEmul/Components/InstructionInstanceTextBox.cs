@@ -414,7 +414,7 @@ namespace MixGui.Components
 
 			int address = (int)Word.BytesToLong(addressBytes);
 
-			if (mInstructionWord.Sign == MixLib.Type.Word.Signs.Negative)
+			if (mInstructionWord.Sign.IsNegative())
 			{
 				address = -address;
 			}

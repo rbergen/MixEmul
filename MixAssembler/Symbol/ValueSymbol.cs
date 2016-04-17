@@ -147,7 +147,7 @@ namespace MixAssembler.Symbol
 		{
 			get
 			{
-				return Sign == Word.Signs.Negative ? -Magnitude : Magnitude;
+				return Sign.ApplyTo(Magnitude);
 			}
 		}
 	}

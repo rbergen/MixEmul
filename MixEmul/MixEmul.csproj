@@ -23,7 +23,7 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
     <RootNamespace>MixGui</RootNamespace>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -198,6 +198,7 @@
     <Compile Include="Events\IndexedAddressCalculatorCallback.cs" />
     <Compile Include="Events\WordValueEditorChangedEventHandler.cs" />
     <Compile Include="Events\WordValueEditorChangedEventArgs.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MixForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,18 +297,45 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Documentation\Changes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="DeviceEditorFormIcon.ico" />
     <Content Include="MixFormIcon.ico" />
+    <Content Include="control.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documentation\MixEmul Documentation 0.3.3.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="floatingpoint.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\99bottles.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\easter.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\echo.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\hello.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\loader.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\permutations.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\primes.mixal">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\Find_5650.png" />
     <None Include="Resources\Symbols_Up_16xLG - kopie.png" />
     <None Include="Resources\Symbols_Down_16xLG.png" />
     <None Include="app.config" />
-    <Content Include="floatingpoint.mixal">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="control.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\NavigateForward_6271.png" />
     <None Include="Resources\NavigateBackwards_6270.png" />
   </ItemGroup>

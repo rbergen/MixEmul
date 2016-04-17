@@ -64,7 +64,7 @@ namespace MixLib.Device.Step
 			{
 				currentWord = new FullWord();
 
-				currentWord.Sign = readBytes[byteIndex++] == '-' ? Word.Signs.Negative : Word.Signs.Positive;
+				currentWord.Sign = readBytes[byteIndex++].ToSign();
 
 				for (int j = 0; j < FullWord.ByteCount; j++)
 				{

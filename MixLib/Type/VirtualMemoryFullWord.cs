@@ -111,10 +111,10 @@ namespace MixLib.Type
 			}
 		}
 
-		public void NegateSign()
+		public void InvertSign()
 		{
 			fetchRealWordIfNotFetched();
-			mRealWord.NegateSign();
+			mRealWord.InvertSign();
 		}
 
 		public string ToString(bool asChars)

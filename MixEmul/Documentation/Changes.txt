@@ -1,0 +1,164 @@
+=========================================
+
+Legend:
++: New feature or functional improvement
+-: Dropped feature (yeah, as if...)
+*: Change
+x: Bugfix
+!: Modification that may have side-effects, particularly for existing users. If you ignore all the rest, do read these!
+
+=========================================
+
+0.3.5951.18504 (2016-04-17)
+* Cleaned up the source code a little bit more
+* Pulled non-code resources into the solution to get them pushed to github as well
+
+0.3.5950.35754 (2016-04-16)
+* Cleaned up the source code (well, a little bit...)
+* Committed the whole affair to Github: https://github.com/rbergen/MixEmul
+
+0.3.5748.20387 (2015-09-27)
+* Rebuild against version 4.6 of the .NET Framework
+
+0.3.5137.21359 (2014-01-24)
+* Visual updates of the memory and device editors are suspended while resizing the respective windows, except for the first word/record/line. This is done to make resize operations run much more smoothly.
+
+0.3.5133.29904 (2014-01-20)
+* Cursor movement is more intuitive when using scroll bar or mouse wheel
+
+0.3.5133.26573 (2014-01-20)
++ Double-clicking a device indicator in the devices region now opens the device editor if closed, brings it to the front and selects the tab for the device in question. In case the TTY indicator is double-clicked, the Teletype window opens instead.
+* 99bottles.mixal sample program modified
+
+0.3.5129.18613 (2014-01-16)
+* The program counter is no longer increased after execution of the HLT instruction; the old behavior had some undesired side-effects
+* The memory-related classes have been made thread-safe (again), to prevent race and dirty read conditions between the UI and the actual emulator
+
+0.3.5128.29274 (2014-01-15)
+x Names of index registers in register region corrected from r1..6 to rI1..6
+
+0.3.5127.31859 (2014-01-14)
++ Possibility added to search the contents of the memory
++ Profiling feature included
+x Certain invalid index or field values, when entered in an instruction editor or loaded by the assembler, would cause MixEmul to crash
+
+0.3.5125.2748 (2014-01-12)
+x Under certain circumstances, the contents of memory word editors would be cleared when they shouldn't be 
+
+0.3.5123.26755 (2014-01-10)
+* Minor code changes to make MixEmul work better when executed using Mono. As it does seem to work quite well, it is now possible to use MixEmul on other platforms than Microsoft Windows!
+x The Defaults button on the Preferences form would not reset the number of memory words for the floating point module 
+
+0.3.5123.22217 (2014-01-10)
+x Under certain circumstances, the loaded instruction tooltip of instruction editors would be incorrect
+
+0.3.5122.35213 (2014-01-09)
+* A system reset now also reloads the floating point program
+x Under certain circumstances, the memory words that were on screen would not get updated when they should
+
+0.3.5122.26290 (2014-01-09)
++ Addition of browse buttons that allow navigation through those areas of memory (main or floating point) that are not empty
+x On entry, the instruction editor would not always be cleared when it should
+
+0.3.5121.19023 (2014-01-08)
++ Support for interrupts (TAOCP section 1.4.4 exercise 18) added, including negative address space
++ Floating point module (TAOCP section 4.2.1) implemented
++ Mouse wheel scrolling now works in relevant parts of MixEmul (i.e. memory region, device editors)
++ Numeric and instruction editors that represent +0 now clear when entered, to allow easier input
+* Default loader program was changed to include support for negative addresses
+* Virtualized memory; memory words are now only created for addresses that are actually filled with anything other than +0
+x Various minor bug fixes
+* Version bump to 0.3
+
+0.2.5111.3683 (2013-12-29)
+* Cosmetic changes to the memory area export parameter dialog
+* The default loader program has been changed
+
+0.2.5110.14422 (2013-12-28)
++ The GO button/MIX loader feature has been added, including the possibility to export and load information/transfer card decks
++ The editor controls have been improved. Amongst others, the audio feedback to keyboard actions (like pressing Enter) has been sanitized, and Ctrl-A now works throughout
++ The memory address history navigation feature has been improved and works far more intuitively
+* Version bump to 0.2
+
+0.1.5108.5502 (2013-12-26)
++ The device editors now include a button with which a device's file can be deleted, which effectively resets/clears the device in question
+x On executing an HLT instruction, MixEmul would no longer keep running until all device I/O had finished
+* MixEmul now uses version 3.5 of the .NET Framework, as version 2.0 is no longer available from Microsoft
+
+0.1.5106.26579 (2013-12-24)
+x The clipboard buttons in the device editor were clipped due to a slight increase in size
+
+0.1.5106.25197 (2013-12-24)
++ Navigation buttons have been added to the memory editor, with which it is possible to navigate backwards and forwards through the history of displayed memory addresses
++ The navigation through the memory editor using the keyboard has been improved. Arrow keys now work intuitively across editor controls and memory lines
++ The visual appearance of the instruction editors is now identical to that of the other memory editor controls
+x Literal constants in source were incorrectly parsed as an expression instead of a W-expression
+
+0.1.5101.4374 (2013-12-19)
+x The numerical sign was lost in negative literal value constants
+
+0.1.5100.41692 (2013-12-18)
+x The checks in the context menu of devices that indicated input/output capability were hidden
+x The settings window lower buttons were cut off by the botton window border on newer Windows versions
+
+0.1.2995.24753 (2008-03-14)
+x The "Show Indexed Address" context-menu option of the instruction editor was incorrectly disabled for memory words after program startup, until they were set to a value.
+x Literal constants with a negative value were loaded into memory as being positive values. Once more, credits to Yarra for finding this
+* Modified the handling of numeric MIX values (sign + magnitude) throughout MixEmul to make it consistent and less error-prone.
+
+0.1.2986.29185 (2008-03-05)
+x Registers that were set to -0 weren't reset to +0 when the Reset button was pressed (yes, here's me hoping that will be the last negative zero bug...) Again, credits to Yarra for finding this
+
+0.1.2983.32166 (2008-03-02)
+x The value -0 (negative zero) wasn't handled properly throughout MixEmul (while parsing source, rendering instructions, editing symbols and editing registers/memory words.) Credits to Yarra for reporting this bug
+
+0.1.2949.31709 (2008-01-28)
+x Reverting the device reload interval to the default value in the preferences window would not actually clear it, but set it to what was the default at that time
+
+0.1.2949.21030 (2008-01-28)
++ Made symbol section editable
++ Symbols in symbol section can now be used when entering instructions directly into MIX memory
+* Improved look and feel
++ Added device editors for all file-based devices (disks, tapes, card reader, card punch, printer, papertape)
++ Added an option to the Preferences window through which the minimum interval for automatic device reloads can be configured
+x Fixed a bug that made the Teletype window popup shortly on startup
+x The parse result window no longer marks URLs
+x When making a memory word visible by right-clicking an instruction text field, the sign of the address was ignored. This has been fixed
+x When all checkpoints were cleared using the appropriate button, they were still shown as being active. This has been fixed
+x Fixed a bug that meant that if the device file directory was restored to its default value in the Preferences window, this change would not be saved
+
+0.1.2919.7893 (2007-12-29)
+* Recovered source code after hardware problem (ouch...)
++ Memory section now shows original source code for instructions that were loaded into memory by the assembler
++ Added symbol section
++ Made it possible to make the memory word visible that corresponds to another memory word's address field, by right-clicking the instruction text field
++ Made it possible to make a memory word visible from the symbol or messages section by pressing Enter
+! Moved from XML configuration file format to binary format, due to generic types not being able to be stored in XML format. This means that any customizations to the settings must be redone after installing this MixEmul version over an older one.
+* Source code migrated further to .NET Framework 2.0
++ Added source code documentation at a number of places
+x Minor bugs and performance issues fixed 
+
+0.1.2613.30717 (2007-02-26)
+x Temporarily switch off "keep TeleType on top" when opening a modal dialog, to prevent the latter being blocked by an immovable TeleType window
+x "Keep On Top" and "Echo Input" checkboxes now respond correctly to a resize of the TeleType window
+x Addressed unhandled security-related errors when performing I/O
+
+0.1.2605.36655 (2007-02-18)
+x Fixed IndexOutOfRangeException that could occur when using the arrow down key to navigate through the memory
+
+0.1.2605.23661 (2007-02-18)
+* Program migrated to .NET Framework 2.0, moved to generic collection types where possible
++ Added proper logging and reporting of unhandled exceptions
+* Made time distribution between GUI-updating and running MIX more sane. To be precise: at least as much time is spent on running MIX as is spent on updating the GUI
+
+0.1.2432.21917 (2006-08-29)
++ "Echo input" option added to teletype window
+
+0.1.2431.40214 (2006-08-28)
++ "Keep on top" option added to teletype window
++ Teletype visibility, size and location remembered between sessions
+* Code #regionized
+x Minor errors in class member naming and visibility fixed
+
+0.1.2424.30916 (2006-08-21)
+* First public release

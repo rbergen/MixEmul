@@ -25,21 +25,9 @@ namespace MixLib.Instruction
 			int registerIndex = instance.MixInstruction.Opcode - opcodeBase;
 			Register register = module.Registers[registerIndex];
 
-			int comparisonValue = WordField.LoadFromFullWord(instance.FieldSpec, register.FullWordValue).CompareTo(module.Memory[indexedAddress]);
-			if (comparisonValue < 0)
-			{
-				module.Registers.CompareIndicator = Registers.CompValues.Less;
-			}
-			else if (comparisonValue > 0)
-			{
-				module.Registers.CompareIndicator = Registers.CompValues.Greater;
-			}
-			else
-			{
-				module.Registers.CompareIndicator = Registers.CompValues.Equal;
-			}
+            module.Registers.CompareIndicator = WordField.LoadFromFullWord(instance.FieldSpec, register.FullWordValue).CompareTo(module.Memory[indexedAddress]).ToCompValue();
 
-			return true;
+ 			return true;
 		}
 	}
 }

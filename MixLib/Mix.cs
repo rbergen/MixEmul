@@ -13,7 +13,7 @@ using MixLib.Type;
 
 namespace MixLib
 {
-	public class Mix : ModuleBase
+	public class Mix : ModuleBase, IDisposable
 	{
 		private const string moduleName = "Mix";
 		private const int loaderStartAddress = 16;
@@ -541,5 +541,37 @@ namespace MixLib
 
 			return false;
 		}
-	}
+
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (mStartStep != null)
+                    {
+                        mStartStep.Dispose();
+                    }
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        ~Mix()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+    }
 }

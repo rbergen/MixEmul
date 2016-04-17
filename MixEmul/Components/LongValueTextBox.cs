@@ -40,7 +40,7 @@ namespace MixGui.Components
 		}
 
 		public LongValueTextBox(bool supportsSign, long minValue, long maxValue, long value)
-			: this(supportsSign, minValue, maxValue, value < 0 ? Word.Signs.Negative : Word.Signs.Positive, value < 0 ? -value : value)
+			: this(supportsSign, minValue, maxValue, value.GetSign(), value.GetMagnitude())
 		{
 		}
 
@@ -80,7 +80,7 @@ namespace MixGui.Components
 
 		void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
-			if (ClearZero && mMagnitude == 0 && mSign == Word.Signs.Positive)
+			if (ClearZero && mMagnitude == 0 && mSign.IsPositive())
 			{
 				base.Text = "";
 			}
@@ -177,7 +177,7 @@ namespace MixGui.Components
 		private void checkAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
 		{
 			mEditMode = false;
-			long newValue = newSign == Word.Signs.Negative ? -newMagnitude : newMagnitude;
+			long newValue = newSign.ApplyTo(newMagnitude);
 
 			if (newValue < MinValue)
 			{
@@ -424,7 +424,7 @@ namespace MixGui.Components
 		{
 			get
 			{
-				return mSign == Word.Signs.Negative ? -mMagnitude : mMagnitude;
+				return mSign.ApplyTo(mMagnitude);
 			}
 			set
 			{
@@ -533,70 +533,38 @@ namespace MixGui.Components
 			}
 		}
 
-		public class ValueChangedEventArgs
+		public class ValueChangedEventArgs : EventArgs
 		{
-			private long mNewMagnitude;
-			private long mOldMagnitude;
-			private Word.Signs mNewSign;
-			private Word.Signs mOldSign;
+            public long OldMagnitude { get; private set; }
+            public Word.Signs OldSign { get; private set; }
+            public long NewMagnitude { get; private set; }
+            public Word.Signs NewSign { get; private set; }
 
-			public ValueChangedEventArgs(Word.Signs oldSign, long oldMagnitude, Word.Signs newSign, long newMagnitude)
+            public ValueChangedEventArgs(Word.Signs oldSign, long oldMagnitude, Word.Signs newSign, long newMagnitude)
 			{
-				mOldMagnitude = oldMagnitude;
-				mNewMagnitude = newMagnitude;
-				mOldSign = oldSign;
-				mNewSign = newSign;
+				OldMagnitude = oldMagnitude;
+				NewMagnitude = newMagnitude;
+				OldSign = oldSign;
+				NewSign = newSign;
 			}
 
-			public long NewMagnitude
+            public long NewValue
 			{
 				get
 				{
-					return mNewMagnitude;
+					return NewSign.ApplyTo(NewMagnitude);
 				}
 			}
 
-			public Word.Signs NewSign
+            public long OldValue
 			{
 				get
 				{
-					return mNewSign;
-				}
-			}
-
-			public long NewValue
-			{
-				get
-				{
-					return mNewSign == Word.Signs.Negative ? -mNewMagnitude : mNewMagnitude;
-				}
-			}
-
-			public long OldMagnitude
-			{
-				get
-				{
-					return mOldMagnitude;
-				}
-			}
-
-			public Word.Signs OldSign
-			{
-				get
-				{
-					return mOldSign;
-				}
-			}
-
-			public long OldValue
-			{
-				get
-				{
-					return mOldSign == Word.Signs.Negative ? -mOldMagnitude : mOldMagnitude;
+					return OldSign.ApplyTo(OldMagnitude);
 				}
 			}
 		}
 
-		public delegate void ValueChangedEventHandler(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args);
+		public delegate void ValueChangedEventHandler(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs e);
 	}
 }

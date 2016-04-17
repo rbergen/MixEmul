@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using MixLib.Events;
+using MixLib.Utils;
 
 namespace MixLib.Type
 {
@@ -71,22 +72,14 @@ namespace MixLib.Type
 				longValue = (longValue << MixByte.BitCount) + (long)bytes[i];
 			}
 
-			if (sign == Signs.Negative)
-			{
-				longValue = -longValue;
-			}
+            longValue = sign.ApplyTo(longValue);
 
 			return longValue;
 		}
 
-		public void NegateSign()
+		public void InvertSign()
 		{
-			Sign = ChangeSign(Sign);
-		}
-
-		public static Signs ChangeSign(Signs sign)
-		{
-			return (sign == Signs.Positive) ? Signs.Negative : Signs.Positive;
+			Sign = Sign.Invert();
 		}
 
 		public string ToString(bool asChars)
@@ -104,7 +97,7 @@ namespace MixLib.Type
 			}
 			else
 			{
-				stringValue = Sign == Signs.Negative ? "-" : "+";
+                stringValue = "" + Sign.ToChar();
 
 				foreach (MixByte mixByte in mBytes)
 				{
@@ -201,7 +194,7 @@ namespace MixLib.Type
 					}
 
 					setMagnitudeLongValue(value);
-					mSign = value < 0L ? Signs.Negative : Signs.Positive;
+					mSign = value.GetSign();
 				}
 				finally
 				{
@@ -216,10 +209,7 @@ namespace MixLib.Type
 		{
 			long oldValue = MagnitudeLongValue;
 
-			if (magnitude < 0L)
-			{
-				magnitude = -magnitude;
-			}
+            magnitude = magnitude.GetMagnitude();
 
 			if (oldValue == magnitude)
 			{
@@ -325,7 +315,7 @@ namespace MixLib.Type
 
 				try
 				{
-					if (setMagnitudeLongValue(value) == Math.Abs(value))
+					if (setMagnitudeLongValue(value) == value.GetMagnitude())
 					{
 						return;
 					}
@@ -425,7 +415,7 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return MagnitudeLongValue == 0 && Sign == Signs.Positive;
+				return MagnitudeLongValue == 0 && Sign.IsPositive();
 			}
 		}
 

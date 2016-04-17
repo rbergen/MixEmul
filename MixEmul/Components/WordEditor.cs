@@ -62,7 +62,7 @@ namespace MixGui.Components
 			mSignButton.Size = new Size(18, 21);
 			mSignButton.TabIndex = 0;
 			mSignButton.TabStop = false;
-			mSignButton.Text = (mWord.Sign == Word.Signs.Positive) ? "+" : "-";
+			mSignButton.Text = "" + mWord.Sign.ToChar();
 			mSignButton.FlatStyle = FlatStyle.Flat;
 			mSignButton.Enabled = !ReadOnly;
 			mSignButton.Click += new EventHandler(mSignButton_Click);
@@ -107,7 +107,7 @@ namespace MixGui.Components
 		{
 			char keyChar = e.KeyChar;
 
-			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign == Word.Signs.Negative)))
+			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative())))
 			{
 				negateSign();
 			}
@@ -270,10 +270,10 @@ namespace MixGui.Components
 		private void negateSign()
 		{
 			Word.Signs sign = mWord.Sign;
-			mWord.NegateSign();
+			mWord.InvertSign();
 			mLastRenderedMagnitude = mWord.MagnitudeLongValue;
 			mLastRenderedSign = mWord.Sign;
-			mSignButton.Text = mWord.Sign == Word.Signs.Positive ? "+" : "-";
+            mSignButton.Text = "" + mWord.Sign.ToChar();
 
 			Word oldValue = new Word(mWord.Magnitude, sign);
 			Word newValue = new Word(mWord.Magnitude, mWord.Sign);
@@ -304,7 +304,7 @@ namespace MixGui.Components
 		{
 			if (mLastRenderedMagnitude != mWord.MagnitudeLongValue || mLastRenderedSign != mWord.Sign || mLastRenderedMagnitude == unrendered)
 			{
-				mSignButton.Text = (mWord.Sign == Word.Signs.Positive) ? "+" : "-";
+                mSignButton.Text = "" + mWord.Sign.ToChar();
 
 				foreach (MixByteTextBox box in mByteTextBoxes)
 				{

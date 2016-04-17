@@ -405,10 +405,18 @@ namespace MixGui
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			if (disposing)
 			{
-				components.Dispose();
-			}
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+
+                if (mMix != null)
+                {
+                    mMix.Dispose();
+                }
+            }
 
 			base.Dispose(disposing);
 		}

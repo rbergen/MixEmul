@@ -26,7 +26,7 @@ namespace MixLib.Instruction
 			get
 			{
 				string addressText = mInstance.AddressMagnitude.ToString();
-				if (mInstance.AddressSign == Word.Signs.Negative)
+				if (mInstance.AddressSign.IsNegative())
 				{
 					addressText = '-' + addressText;
 				}

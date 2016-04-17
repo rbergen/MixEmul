@@ -23,7 +23,7 @@ namespace MixLib.Instruction
 
 			if (negateSign)
 			{
-				memoryField.NegateSign();
+				memoryField.InvertSign();
 			}
 
 			memoryField.ApplyToRegister(module.Registers[registerIndex]);

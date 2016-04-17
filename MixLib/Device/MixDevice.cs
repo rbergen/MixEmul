@@ -199,7 +199,7 @@ namespace MixLib.Device
 
 						if (mIncludeSign)
 						{
-							mBytesForReading[currentByte] = base.Operands.Memory[currentAddress].Sign == Word.Signs.Negative ? (byte)'-' : (byte)'+';
+							mBytesForReading[currentByte] = base.Operands.Memory[currentAddress].Sign.ToChar();
 							currentByte++;
 						}
 
@@ -273,7 +273,7 @@ namespace MixLib.Device
 
 						if (mIncludeSign)
 						{
-							base.Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte] == '-' ? Word.Signs.Negative : Word.Signs.Positive;
+							base.Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
 							currentByte++;
 						}
 						else

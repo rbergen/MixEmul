@@ -217,7 +217,7 @@ namespace MixGui.Components
 			mCompareButton.Size = new Size(18, 21);
 			mCompareButton.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mCompareButton.Width, mrJEditor.Top);
 			mCompareButton.TabIndex = 21;
-			mCompareButton.Text = textForCompareValue(mRegisters.CompareIndicator);
+			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
 			mCompareButton.Click += new EventHandler(mCompareButton_Click);
 
 			mOverflowLabel.Location = new Point(Math.Min(mCompareButton.Left, mOverflowBox.Left) - Math.Max(mCompareLabel.Width, mOverflowLabel.Width), mOverflowBox.Top);
@@ -277,47 +277,14 @@ namespace MixGui.Components
 
 		private void mCompareButton_Click(object sender, EventArgs e)
 		{
-			MixLib.Registers.CompValues compValue = nextCompareValue(mRegisters.CompareIndicator);
+			MixLib.Registers.CompValues compValue = mRegisters.CompareIndicator.Next();
 			mRegisters.CompareIndicator = compValue;
-			mCompareButton.Text = textForCompareValue(compValue);
+			mCompareButton.Text = "" + compValue.ToChar();
 		}
 
 		private void mOverflowBox_CheckedChanged(object sender, EventArgs e)
 		{
 			mRegisters.OverflowIndicator = mOverflowBox.Checked;
-		}
-
-		private MixLib.Registers.CompValues nextCompareValue(MixLib.Registers.CompValues compValue)
-		{
-			switch (compValue)
-			{
-				case MixLib.Registers.CompValues.Less:
-					return MixLib.Registers.CompValues.Equal;
-
-				case MixLib.Registers.CompValues.Equal:
-					return MixLib.Registers.CompValues.Greater;
-
-				case MixLib.Registers.CompValues.Greater:
-					return MixLib.Registers.CompValues.Less;
-			}
-
-			return MixLib.Registers.CompValues.Equal;
-		}
-
-		private string textForCompareValue(MixLib.Registers.CompValues compValue)
-		{
-			switch (compValue)
-			{
-				case MixLib.Registers.CompValues.Less:
-					return "<";
-
-				case MixLib.Registers.CompValues.Equal:
-					return "=";
-
-				case MixLib.Registers.CompValues.Greater:
-					return ">";
-			}
-			return null;
 		}
 
 		public new void Update()
@@ -327,7 +294,7 @@ namespace MixGui.Components
 				editor.Update();
 			}
 
-			mCompareButton.Text = textForCompareValue(mRegisters.CompareIndicator);
+			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
 			mOverflowBox.Checked = mRegisters.OverflowIndicator;
 
 			base.Update();

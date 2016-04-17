@@ -35,7 +35,7 @@ namespace MixAssembler.Value
 
 		public virtual long GetValue(int currentAddress)
 		{
-			return Sign == Word.Signs.Negative ? -Magnitude : Magnitude;
+			return Sign.ApplyTo(Magnitude);
 		}
 
 		public virtual bool IsValueDefined(int currentAddress)

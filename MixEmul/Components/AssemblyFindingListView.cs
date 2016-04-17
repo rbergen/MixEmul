@@ -159,6 +159,6 @@ namespace MixGui.Components
 			}
 		}
 
-		public delegate void SelectionChangedHandler(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args);
+		public delegate void SelectionChangedHandler(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs e);
 	}
 }

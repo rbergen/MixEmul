@@ -23,12 +23,12 @@ namespace MixAssembler.Symbol
 
 		private static string getName(Word.Signs literalSign, long literalMagnitude, int count)
 		{
-			return string.Concat("=", (literalSign == Word.Signs.Negative ? "-" : ""), literalMagnitude, '=', count);
+			return string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
 		}
 
 		public override long GetValue(int currentAddress)
 		{
-			return mSign == Word.Signs.Negative ? -mMagnitude : mMagnitude;
+			return mSign.ApplyTo(mMagnitude);
 		}
 
 		public override long GetMagnitude(int currentAddress)
@@ -78,16 +78,8 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-			if (value < 0)
-			{
-				value = -value;
-				mSign = Word.Signs.Negative;
-			}
-			else
-			{
-				mSign = Word.Signs.Positive;
-			}
-			mMagnitude = value;
+            mSign = value.GetSign();
+			mMagnitude = value.GetMagnitude();
 			mValueDefined = true;
 		}
 
@@ -126,7 +118,7 @@ namespace MixAssembler.Symbol
 		{
 			get
 			{
-				return mLiteralSign == Word.Signs.Negative ? -mLiteralMagnitude : mLiteralMagnitude;
+				return mLiteralSign.ApplyTo(mLiteralMagnitude);
 			}
 		}
 	}

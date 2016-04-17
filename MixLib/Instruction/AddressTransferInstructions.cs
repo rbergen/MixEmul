@@ -53,14 +53,10 @@ namespace MixLib.Instruction
 
 			longValue += indexedAddress;
 
-			if (longValue < 0L)
+			if (longValue != 0L)
 			{
-				register.Sign = Word.Signs.Negative;
-				longValue = -longValue;
-			}
-			else if (longValue > 0L)
-			{
-				register.Sign = Word.Signs.Positive;
+				register.Sign = longValue.GetSign();
+				longValue = longValue.GetMagnitude();
 			}
 
 			if (longValue > register.MaxMagnitude)

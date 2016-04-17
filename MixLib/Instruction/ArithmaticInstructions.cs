@@ -31,14 +31,11 @@ namespace MixLib.Instruction
 			}
 
 			long sumValue = rALongValue + memoryWordValue;
-			if (sumValue < 0L)
+
+            if (sumValue != 0L)
 			{
-				rA.Sign = Word.Signs.Negative;
-				sumValue = -sumValue;
-			}
-			else if (sumValue > 0L)
-			{
-				rA.Sign = Word.Signs.Positive;
+				rA.Sign = sumValue.GetSign();
+				sumValue = sumValue.GetMagnitude();
 			}
 
 			if (sumValue > rA.MaxMagnitude)
@@ -80,15 +77,8 @@ namespace MixLib.Instruction
 			decimal divider = (decimal)rAXValue / memoryWordValue;
 
 			rX.Sign = rA.Sign;
-			if (divider < 0M)
-			{
-				rA.Sign = Word.Signs.Negative;
-				divider = -divider;
-			}
-			else
-			{
-				rA.Sign = Word.Signs.Positive;
-			}
+		    rA.Sign = divider.GetSign();
+		    divider = divider.GetMagnitude();
 
 			if (divider > rA.MaxMagnitude)
 			{
@@ -121,15 +111,8 @@ namespace MixLib.Instruction
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 
 			decimal result = decimal.Multiply(rAValue, memoryWordValue);
-			if (result < 0M)
-			{
-				rA.Sign = rX.Sign = Word.Signs.Negative;
-				result = -result;
-			}
-			else
-			{
-				rA.Sign = rX.Sign = Word.Signs.Positive;
-			}
+			rA.Sign = rX.Sign = result.GetSign();
+			result = result.GetMagnitude();
 
 			long rXResultValue = (long)(result % ((long)1 << rX.BitCount));
 			long rAResultValue = (long)decimal.Truncate(result / ((long)1 << rX.BitCount));

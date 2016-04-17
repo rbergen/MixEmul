@@ -5,7 +5,7 @@ namespace MixLib.Type
 {
 	public interface IWord : IEnumerable, IEnumerable<MixByte>, IMixByteCollection
 	{
-		void NegateSign();
+		void InvertSign();
 
 		bool IsEmpty { get; }
 		int BitCount { get; }
