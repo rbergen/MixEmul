@@ -9,6 +9,11 @@ x: Bugfix
 
 =========================================
 
+0.3.5951.23459 (2016-04-17)
+* More mascara modifications to the sources
+* Updated the documentation to reflect the fact that the source is now on github
+* Pulled the documentation source .docx into the solution
+
 0.3.5951.18504 (2016-04-17)
 * Cleaned up the source code a little bit more
 * Pulled non-code resources into the solution to get them pushed to github as well

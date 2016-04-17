@@ -2,22 +2,22 @@ using MixAssembler;
 
 namespace MixAssembler.Finding
 {
-	public class AssemblyInfo : AssemblyFinding
-  {
-    private string mMessage;
-
-    public AssemblyInfo(string message, int lineNumber, LineSection lineSection, int startCharIndex, int length)
-      : base(MixLib.Misc.Severity.Info, lineNumber, lineSection, startCharIndex, length)
+    public class AssemblyInfo : AssemblyFinding
     {
-      mMessage = message;
-    }
+        private string mMessage;
 
-    public override string Message
-    {
-      get
-      {
-        return mMessage;
-      }
+        public AssemblyInfo(string message, int lineNumber, LineSection lineSection, int startCharIndex, int length)
+          : base(MixLib.Misc.Severity.Info, lineNumber, lineSection, startCharIndex, length)
+        {
+            mMessage = message;
+        }
+
+        public override string Message
+        {
+            get
+            {
+                return mMessage;
+            }
+        }
     }
-  }
 }

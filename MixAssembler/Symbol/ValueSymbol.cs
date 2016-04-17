@@ -114,17 +114,8 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-			if (value < 0)
-			{
-				Sign = Word.Signs.Negative;
-				value = -value;
-			}
-			else
-			{
-				Sign = Word.Signs.Positive;
-			}
-
-			Magnitude = value;
+            Sign = value.GetSign();
+			Magnitude = value.GetMagnitude();
 			mIsDefined = true;
 		}
 

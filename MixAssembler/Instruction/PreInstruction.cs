@@ -4,7 +4,7 @@ namespace MixAssembler.Instruction
 {
 	/// <summary>
 	/// This class represents an instruction that has been parsed (first assembly pass), but not yet assembled.
-	/// Specifically, it contains an instruction "template" and the the parameters required to create an actual instance of that instruction.
+	/// Specifically, it contains an instruction "template" and the parameters required to create an actual instance of that instruction.
 	/// </summary>
 	public class PreInstruction
 	{
