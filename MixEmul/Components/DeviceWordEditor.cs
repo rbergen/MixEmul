@@ -35,12 +35,21 @@ namespace MixGui.Components
 			initializeComponent();
 		}
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return mFullWordEditor.Focus(field, index);
-		}
+        public Control EditorControl => this;
 
-		private void initializeComponent()
+        public FieldTypes? FocusedField => mFullWordEditor.FocusedField;
+
+        public int? CaretIndex => mFullWordEditor.CaretIndex;
+
+        public bool Focus(FieldTypes? field, int? index) => mFullWordEditor.Focus(field, index);
+
+        public void Select(int start, int length) => mFullWordEditor.Select(start, length);
+
+        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void mFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
+
+        private void initializeComponent()
 		{
 			base.SuspendLayout();
 
@@ -74,27 +83,11 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, e);
+                    break;
 
 				case Keys.Right:
 					break;
-			}
-		}
-
-		private void mFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
-		{
-			OnValueChanged(args);
-		}
-
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
 			}
 		}
 
@@ -169,35 +162,6 @@ namespace MixGui.Components
 
 				DeviceWord = (IFullWord)value;
 			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return mFullWordEditor.FocusedField;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return mFullWordEditor.CaretIndex;
-			}
-		}
-
-		public void Select(int start, int length)
-		{
-			mFullWordEditor.Select(start, length);
 		}
 	}
 }

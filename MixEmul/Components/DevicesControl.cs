@@ -141,20 +141,11 @@ namespace MixGui.Components
 			base.ResumeLayout(false);
 		}
 
-		private int getHorizontalSpacing()
-		{
-			return mStructure == null ? 0 : mStructure.HorizontalSpacing;
-		}
+		private int getHorizontalSpacing() => mStructure == null ? 0 : mStructure.HorizontalSpacing;
 
-		private Orientations getOrientation()
-		{
-			return mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
-		}
+		private Orientations getOrientation() => mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
 
-		private int getVerticalSpacing()
-		{
-			return mStructure == null ? 0 : mStructure.VerticalSpacing;
-		}
+		private int getVerticalSpacing() => mStructure == null ? 0 : mStructure.VerticalSpacing;
 
 		public new void Update()
 		{
@@ -204,13 +195,7 @@ namespace MixGui.Components
 			}
 		}
 
-		private void DevicesControl_DoubleClick(object sender, EventArgs e)
-		{
-			if (DeviceDoubleClick != null)
-			{
-				DeviceDoubleClick(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
-			}
-		}
+		private void DevicesControl_DoubleClick(object sender, EventArgs e) => DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
 
 		public LayoutStructure Structure
 		{
@@ -257,10 +242,11 @@ namespace MixGui.Components
 
 		public class LayoutStructure
 		{
-			private int mHorizontalSpacing;
 			private SortedList<int, DevicesControl.Breaks> mLayoutList;
-			private DevicesControl.Orientations mOrientation;
-			private int mVerticalSpacing;
+
+            public DevicesControl.Orientations Orientation { get; set; }
+            public int HorizontalSpacing { get; set; }
+            public int VerticalSpacing { get; set; }
 
 			public LayoutStructure(DevicesControl.Orientations orientation)
 				: this(orientation, 0, 0)
@@ -270,21 +256,9 @@ namespace MixGui.Components
 			public LayoutStructure(DevicesControl.Orientations orientation, int horizontalSpacing, int verticalSpacing)
 			{
 				mLayoutList = new SortedList<int, DevicesControl.Breaks>();
-				mOrientation = orientation;
-				mHorizontalSpacing = horizontalSpacing;
-				mVerticalSpacing = verticalSpacing;
-			}
-
-			public int HorizontalSpacing
-			{
-				get
-				{
-					return mHorizontalSpacing;
-				}
-				set
-				{
-					mHorizontalSpacing = value;
-				}
+				Orientation = orientation;
+				HorizontalSpacing = horizontalSpacing;
+				VerticalSpacing = verticalSpacing;
 			}
 
 			public DevicesControl.Breaks this[int location]
@@ -303,30 +277,6 @@ namespace MixGui.Components
 					{
 						mLayoutList.Add(location, value);
 					}
-				}
-			}
-
-			public DevicesControl.Orientations Orientation
-			{
-				get
-				{
-					return mOrientation;
-				}
-				set
-				{
-					mOrientation = value;
-				}
-			}
-
-			public int VerticalSpacing
-			{
-				get
-				{
-					return mVerticalSpacing;
-				}
-				set
-				{
-					mVerticalSpacing = value;
 				}
 			}
 		}

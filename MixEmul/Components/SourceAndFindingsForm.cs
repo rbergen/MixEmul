@@ -30,11 +30,13 @@ namespace MixGui.Components
 			mFindingListView.SelectionChanged += new AssemblyFindingListView.SelectionChangedHandler(mFindingListView_SelectionChanged);
 		}
 
-		protected override void Dispose(bool disposing)
+        public void UpdateLayout() => mSourceControl.UpdateLayout();
+
+        protected override void Dispose(bool disposing)
 		{
-			if (disposing && components != null)
+			if (disposing)
 			{
-				components.Dispose();
+				components?.Dispose();
 			}
 
 			base.Dispose(disposing);
@@ -42,134 +44,134 @@ namespace MixGui.Components
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceAndFindingsForm));
-			this.mStatusBar = new System.Windows.Forms.StatusBar();
-			this.mStatusBarPanel = new System.Windows.Forms.StatusBarPanel();
-			this.mListPanel = new System.Windows.Forms.Panel();
-			this.mCloseButton = new System.Windows.Forms.Button();
-			this.mExportButton = new System.Windows.Forms.Button();
-			this.mLoadButton = new System.Windows.Forms.Button();
-			this.mFindingListView = new MixGui.Components.AssemblyFindingListView();
-			this.mSplitter = new System.Windows.Forms.Splitter();
-			this.mSaveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
-			this.mSourceControl = new MixGui.Components.SourceCodeControl();
-			((System.ComponentModel.ISupportInitialize)(this.mStatusBarPanel)).BeginInit();
-			this.mListPanel.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// mStatusBar
-			// 
-			this.mStatusBar.Location = new System.Drawing.Point(0, 383);
-			this.mStatusBar.Name = "mStatusBar";
-			this.mStatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-            this.mStatusBarPanel});
-			this.mStatusBar.ShowPanels = true;
-			this.mStatusBar.Size = new System.Drawing.Size(568, 22);
-			this.mStatusBar.TabIndex = 3;
-			// 
-			// mStatusBarPanel
-			// 
-			this.mStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-			this.mStatusBarPanel.Name = "mStatusBarPanel";
-			this.mStatusBarPanel.Width = 551;
-			// 
-			// mListPanel
-			// 
-			this.mListPanel.Controls.Add(this.mCloseButton);
-			this.mListPanel.Controls.Add(this.mExportButton);
-			this.mListPanel.Controls.Add(this.mLoadButton);
-			this.mListPanel.Controls.Add(this.mFindingListView);
-			this.mListPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.mListPanel.Location = new System.Drawing.Point(0, 303);
-			this.mListPanel.Name = "mListPanel";
-			this.mListPanel.Size = new System.Drawing.Size(568, 80);
-			this.mListPanel.TabIndex = 2;
-			// 
-			// mCloseButton
-			// 
-			this.mCloseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mCloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.mCloseButton.Location = new System.Drawing.Point(498, 53);
-			this.mCloseButton.Name = "mCloseButton";
-			this.mCloseButton.Size = new System.Drawing.Size(62, 23);
-			this.mCloseButton.TabIndex = 3;
-			this.mCloseButton.Text = "&Close";
-			// 
-			// mExportButton
-			// 
-			this.mExportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mExportButton.Location = new System.Drawing.Point(498, 28);
-			this.mExportButton.Name = "mExportButton";
-			this.mExportButton.Size = new System.Drawing.Size(62, 23);
-			this.mExportButton.TabIndex = 2;
-			this.mExportButton.Text = "&Export...";
-			this.mExportButton.Click += new System.EventHandler(this.mExportButton_Click);
-			// 
-			// mLoadButton
-			// 
-			this.mLoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mLoadButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.mLoadButton.Location = new System.Drawing.Point(498, 3);
-			this.mLoadButton.Name = "mLoadButton";
-			this.mLoadButton.Size = new System.Drawing.Size(62, 23);
-			this.mLoadButton.TabIndex = 1;
-			this.mLoadButton.Text = "&Load";
-			// 
-			// mFindingListView
-			// 
-			this.mFindingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mFindingListView.Location = new System.Drawing.Point(0, 0);
-			this.mFindingListView.Name = "mFindingListView";
-			this.mFindingListView.SeverityImageList = null;
-			this.mFindingListView.Size = new System.Drawing.Size(492, 80);
-			this.mFindingListView.TabIndex = 0;
-			// 
-			// mSplitter
-			// 
-			this.mSplitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.mSplitter.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.mSplitter.Location = new System.Drawing.Point(0, 295);
-			this.mSplitter.MinExtra = 100;
-			this.mSplitter.MinSize = 80;
-			this.mSplitter.Name = "mSplitter";
-			this.mSplitter.Size = new System.Drawing.Size(568, 8);
-			this.mSplitter.TabIndex = 1;
-			this.mSplitter.TabStop = false;
-			// 
-			// mSaveExportFileDialog
-			// 
-			this.mSaveExportFileDialog.DefaultExt = "mixdeck";
-			this.mSaveExportFileDialog.Filter = "MixEmul card deck files|*.mixdeck|All files|*.*";
-			this.mSaveExportFileDialog.Title = "Specify export file name";
-			// 
-			// mSourceControl
-			// 
-			this.mSourceControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mSourceControl.Location = new System.Drawing.Point(0, 0);
-			this.mSourceControl.MarkedFinding = null;
-			this.mSourceControl.Name = "mSourceControl";
-			this.mSourceControl.Size = new System.Drawing.Size(568, 295);
-			this.mSourceControl.TabIndex = 0;
-			// 
-			// SourceAndFindingsForm
-			// 
-			//this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(568, 405);
-			this.Controls.Add(this.mSourceControl);
-			this.Controls.Add(this.mSplitter);
-			this.Controls.Add(this.mListPanel);
-			this.Controls.Add(this.mStatusBar);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(400, 224);
-			this.Name = "SourceAndFindingsForm";
-			this.ShowInTaskbar = false;
-			this.Text = "Assembly result";
-			((System.ComponentModel.ISupportInitialize)(this.mStatusBarPanel)).EndInit();
-			this.mListPanel.ResumeLayout(false);
-			this.ResumeLayout(false);
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(SourceAndFindingsForm));
+            mStatusBar = new System.Windows.Forms.StatusBar();
+            mStatusBarPanel = new System.Windows.Forms.StatusBarPanel();
+            mListPanel = new System.Windows.Forms.Panel();
+            mCloseButton = new Button();
+            mExportButton = new Button();
+            mLoadButton = new Button();
+            mFindingListView = new MixGui.Components.AssemblyFindingListView();
+            mSplitter = new System.Windows.Forms.Splitter();
+            mSaveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
+            mSourceControl = new MixGui.Components.SourceCodeControl();
+			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
+            mListPanel.SuspendLayout();
+            SuspendLayout();
+            // 
+            // mStatusBar
+            // 
+            mStatusBar.Location = new System.Drawing.Point(0, 383);
+            mStatusBar.Name = "mStatusBar";
+            mStatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+            mStatusBarPanel});
+            mStatusBar.ShowPanels = true;
+            mStatusBar.Size = new System.Drawing.Size(568, 22);
+            mStatusBar.TabIndex = 3;
+            // 
+            // mStatusBarPanel
+            // 
+            mStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            mStatusBarPanel.Name = "mStatusBarPanel";
+            mStatusBarPanel.Width = 551;
+            // 
+            // mListPanel
+            // 
+            mListPanel.Controls.Add(mCloseButton);
+            mListPanel.Controls.Add(mExportButton);
+            mListPanel.Controls.Add(mLoadButton);
+            mListPanel.Controls.Add(mFindingListView);
+            mListPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            mListPanel.Location = new System.Drawing.Point(0, 303);
+            mListPanel.Name = "mListPanel";
+            mListPanel.Size = new System.Drawing.Size(568, 80);
+            mListPanel.TabIndex = 2;
+            // 
+            // mCloseButton
+            // 
+            mCloseButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+            mCloseButton.DialogResult = DialogResult.Cancel;
+            mCloseButton.Location = new System.Drawing.Point(498, 53);
+            mCloseButton.Name = "mCloseButton";
+            mCloseButton.Size = new System.Drawing.Size(62, 23);
+            mCloseButton.TabIndex = 3;
+            mCloseButton.Text = "&Close";
+            // 
+            // mExportButton
+            // 
+            mExportButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+            mExportButton.Location = new System.Drawing.Point(498, 28);
+            mExportButton.Name = "mExportButton";
+            mExportButton.Size = new System.Drawing.Size(62, 23);
+            mExportButton.TabIndex = 2;
+            mExportButton.Text = "&Export...";
+            mExportButton.Click += new EventHandler(mExportButton_Click);
+            // 
+            // mLoadButton
+            // 
+            mLoadButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+            mLoadButton.DialogResult = DialogResult.OK;
+            mLoadButton.Location = new System.Drawing.Point(498, 3);
+            mLoadButton.Name = "mLoadButton";
+            mLoadButton.Size = new System.Drawing.Size(62, 23);
+            mLoadButton.TabIndex = 1;
+            mLoadButton.Text = "&Load";
+            // 
+            // mFindingListView
+            // 
+            mFindingListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mFindingListView.Location = new System.Drawing.Point(0, 0);
+            mFindingListView.Name = "mFindingListView";
+            mFindingListView.SeverityImageList = null;
+            mFindingListView.Size = new System.Drawing.Size(492, 80);
+            mFindingListView.TabIndex = 0;
+            // 
+            // mSplitter
+            // 
+            mSplitter.BorderStyle = BorderStyle.Fixed3D;
+            mSplitter.Dock = System.Windows.Forms.DockStyle.Bottom;
+            mSplitter.Location = new System.Drawing.Point(0, 295);
+            mSplitter.MinExtra = 100;
+            mSplitter.MinSize = 80;
+            mSplitter.Name = "mSplitter";
+            mSplitter.Size = new System.Drawing.Size(568, 8);
+            mSplitter.TabIndex = 1;
+            mSplitter.TabStop = false;
+            // 
+            // mSaveExportFileDialog
+            // 
+            mSaveExportFileDialog.DefaultExt = "mixdeck";
+            mSaveExportFileDialog.Filter = "MixEmul card deck files|*.mixdeck|All files|*.*";
+            mSaveExportFileDialog.Title = "Specify export file name";
+            // 
+            // mSourceControl
+            // 
+            mSourceControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            mSourceControl.Location = new System.Drawing.Point(0, 0);
+            mSourceControl.MarkedFinding = null;
+            mSourceControl.Name = "mSourceControl";
+            mSourceControl.Size = new System.Drawing.Size(568, 295);
+            mSourceControl.TabIndex = 0;
+            // 
+            // SourceAndFindingsForm
+            // 
+            //this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            ClientSize = new System.Drawing.Size(568, 405);
+            Controls.Add(mSourceControl);
+            Controls.Add(mSplitter);
+            Controls.Add(mListPanel);
+            Controls.Add(mStatusBar);
+            Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            MinimizeBox = false;
+            MinimumSize = new System.Drawing.Size(400, 224);
+            Name = "SourceAndFindingsForm";
+            ShowInTaskbar = false;
+            Text = "Assembly result";
+			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
+            mListPanel.ResumeLayout(false);
+            ResumeLayout(false);
 
 		}
 
@@ -237,11 +239,6 @@ namespace MixGui.Components
 			}
 
 			mStatusBarPanel.Text = message;
-		}
-
-		public void UpdateLayout()
-		{
-			mSourceControl.UpdateLayout();
 		}
 
 		public ImageList SeverityImageList

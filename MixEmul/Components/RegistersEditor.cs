@@ -252,7 +252,9 @@ namespace MixGui.Components
 			base.ResumeLayout(false);
 		}
 
-		private void keyDown(object sender, KeyEventArgs e)
+        private void mOverflowBox_CheckedChanged(object sender, EventArgs e) => mRegisters.OverflowIndicator = mOverflowBox.Checked;
+
+        private void keyDown(object sender, KeyEventArgs e)
 		{
 			FieldTypes? editorField = null;
 			int? index = null;
@@ -280,11 +282,6 @@ namespace MixGui.Components
 			MixLib.Registers.CompValues compValue = mRegisters.CompareIndicator.Next();
 			mRegisters.CompareIndicator = compValue;
 			mCompareButton.Text = "" + compValue.ToChar();
-		}
-
-		private void mOverflowBox_CheckedChanged(object sender, EventArgs e)
-		{
-			mRegisters.OverflowIndicator = mOverflowBox.Checked;
 		}
 
 		public new void Update()

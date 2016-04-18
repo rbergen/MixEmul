@@ -168,7 +168,7 @@ namespace MixAssembler
 			if (symbol != null)
 			{
 				// if the location field contains a symbol name, set its value to the location counter
-				symbol.SetValue((long)status.LocationCounter);
+				symbol.SetValue(status.LocationCounter);
 			}
 
 			getMixOrLoaderInstructionAndParameters(lineFields[opFieldIndex], lineFields[addressFieldIndex], status, out instruction, out instructionParameters);
@@ -251,7 +251,7 @@ namespace MixAssembler
 			else
 			{
 				// all symbols that are not yet defined at the end of the parsing process are treated as if "<symbolname> CON *" instructions were included just before the END instruction
-				foreach (SymbolBase symbol in (IEnumerable<SymbolBase>)status.Symbols)
+				foreach (SymbolBase symbol in status.Symbols)
 				{
 					if (!symbol.IsSymbolDefined)
 					{

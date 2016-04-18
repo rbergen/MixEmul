@@ -66,7 +66,37 @@ namespace MixGui.Components
 			updateProfilingLayout();
 		}
 
-		public GetMaxProfilingCountCallback GetMaxProfilingCount
+        public Control EditorControl => this;
+
+        public FieldTypes? FocusedField => mInstructionTextBox.Focused ? FieldTypes.Instruction : mFullWordEditor.FocusedField;
+
+        public int? CaretIndex => FocusedField == FieldTypes.Instruction ? mInstructionTextBox.CaretIndex : mFullWordEditor.CaretIndex;
+
+        public bool Focus(FieldTypes? field, int? index) => field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
+
+        private Color getBlendedColor(double fraction) => fraction < .5 ? interpolate(Color.Green, Color.Yellow, fraction * 2) : interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
+
+        private int roundForArgb(double d) => d < 0 ? 0 : (d > 255 ? 255 : (int)d);
+
+        private double interpolate(double d1, double d2, double fraction) => d1 * (1 - fraction) + d2 * fraction;
+
+        private void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+
+        protected virtual void OnAddressDoubleClick(EventArgs e) => AddressDoubleClick?.Invoke(this, e);
+
+        protected virtual void OnBreakpointCheckedChanged(EventArgs e) => BreakpointCheckedChanged?.Invoke(this, e);
+
+        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        void mInstructionTextBox_MouseWheel(object sender, MouseEventArgs e) => OnMouseWheel(e);
+
+        void mInstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args) => OnAddressSelected(args);
+
+        private void mAddressLabel_DoubleClick(object sender, EventArgs e) => OnAddressDoubleClick(e);
+
+        private void mBreakPointBox_CheckedChanged(object sender, EventArgs e) => OnBreakpointCheckedChanged(e);
+
+        public GetMaxProfilingCountCallback GetMaxProfilingCount
 		{
 			get
 			{
@@ -80,11 +110,6 @@ namespace MixGui.Components
 					updateProfilingCount();
 				}
 			}
-		}
-
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
 		}
 
 		private void initializeComponent()
@@ -184,27 +209,12 @@ namespace MixGui.Components
 			base.ResumeLayout(false);
 		}
 
-		private Color getBlendedColor(double fraction)
-		{
-			return fraction < .5 ? interpolate(Color.Green, Color.Yellow, fraction * 2) : interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
-		}
-
 		private Color interpolate(Color color1, Color color2, double fraction)
 		{
 			int r = roundForArgb(interpolate(color1.R, color2.R, fraction));
 			int g = roundForArgb(interpolate(color1.G, color2.G, fraction));
 			int b = roundForArgb(interpolate(color1.B, color2.B, fraction));
 			return Color.FromArgb(r, g, b);
-		}
-
-		private int roundForArgb(double d)
-		{
-			return d < 0 ? 0 : (d > 255 ? 255 : (int)d);
-		}
-
-		private double interpolate(double d1, double d2, double fraction)
-		{
-			return d1 * (1 - fraction) + d2 * fraction;
 		}
 
 		private void updateProfilingCount()
@@ -253,11 +263,6 @@ namespace MixGui.Components
 			}
 		}
 
-		void mInstructionTextBox_MouseWheel(object sender, MouseEventArgs e)
-		{
-			OnMouseWheel(e);
-		}
-
 		public int MemoryMinIndex
 		{
 			get
@@ -279,19 +284,6 @@ namespace MixGui.Components
 			set
 			{
 				mInstructionTextBox.MemoryMaxIndex = value;
-			}
-		}
-
-		void mInstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args)
-		{
-			OnAddressSelected(args);
-		}
-
-		private void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			if (AddressSelected != null)
-			{
-				AddressSelected(this, args);
 			}
 		}
 
@@ -317,12 +309,9 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
-					}
+                    NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
 
-					e.Handled = true;
+                    e.Handled = true;
 					break;
 
 				case Keys.Right:
@@ -341,11 +330,8 @@ namespace MixGui.Components
 				case Keys.Left:
 					if (sender == mFullWordEditor)
 					{
-						if (NavigationKeyDown != null)
-						{
-							NavigationKeyDown(this, e);
-						}
-					}
+                        NavigationKeyDown?.Invoke(this, e);
+                    }
 					else if (sender == mInstructionTextBox && mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength == 0)
 					{
 						mFullWordEditor.Focus(FieldTypes.Chars, null);
@@ -354,16 +340,6 @@ namespace MixGui.Components
 
 					break;
 			}
-		}
-
-		private void mAddressLabel_DoubleClick(object sender, EventArgs e)
-		{
-			OnAddressDoubleClick(e);
-		}
-
-		private void mBreakPointBox_CheckedChanged(object sender, EventArgs e)
-		{
-			OnBreakpointCheckedChanged(e);
 		}
 
 		private void mInstructionTextBox_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
@@ -376,30 +352,6 @@ namespace MixGui.Components
 		{
 			mInstructionTextBox.Update();
 			OnValueChanged(args);
-		}
-
-		protected virtual void OnAddressDoubleClick(EventArgs e)
-		{
-			if (AddressDoubleClick != null)
-			{
-				AddressDoubleClick(this, e);
-			}
-		}
-
-		protected virtual void OnBreakpointCheckedChanged(EventArgs e)
-		{
-			if (BreakpointCheckedChanged != null)
-			{
-				BreakpointCheckedChanged(this, e);
-			}
-		}
-
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
 		}
 
 		public new void Update()
@@ -553,30 +505,6 @@ namespace MixGui.Components
 				}
 
 				MemoryWord = (IMemoryFullWord)value;
-			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return mInstructionTextBox.Focused ? FieldTypes.Instruction : mFullWordEditor.FocusedField;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return FocusedField == FieldTypes.Instruction ? mInstructionTextBox.CaretIndex : mFullWordEditor.CaretIndex;
 			}
 		}
 

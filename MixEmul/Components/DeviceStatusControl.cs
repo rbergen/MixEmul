@@ -16,7 +16,8 @@ namespace MixGui.Components
 		private MenuItem mOutputMenuItem;
 		private MenuItem mResetMenuItem;
 		private Label mStatusLabel;
-		private ToolTip mToolTip;
+
+		public ToolTip ToolTip { get; set; }
 
 		public DeviceStatusControl()
 			: this(null)
@@ -80,12 +81,9 @@ namespace MixGui.Components
 			UpdateLayout();
 		}
 
-		void control_DoubleClick(object sender, EventArgs e)
-		{
-			OnDoubleClick(e);
-		}
+        void control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
 
-		private void mResetMenuItem_Click(object sender, EventArgs e)
+        private void mResetMenuItem_Click(object sender, EventArgs e)
 		{
 			if (mDevice != null)
 			{
@@ -103,9 +101,9 @@ namespace MixGui.Components
 				mIndexLabel.Text = "";
 				mStatusLabel.BackColor = Color.Gray;
 				mStatusLabel.Text = "";
-				if (mToolTip != null)
+				if (ToolTip != null)
 				{
-					mToolTip.SetToolTip(mStatusLabel, "No device connected");
+					ToolTip.SetToolTip(mStatusLabel, "No device connected");
 				}
 
 				mInputMenuItem.Checked = false;
@@ -120,9 +118,9 @@ namespace MixGui.Components
 				mIndexLabel.Text = Device.Id + ":";
 				mStatusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
 				mStatusLabel.Text = Device.ShortName;
-				if (mToolTip != null)
+				if (ToolTip != null)
 				{
-					mToolTip.SetToolTip(mStatusLabel, Device.StatusDescription);
+					ToolTip.SetToolTip(mStatusLabel, Device.StatusDescription);
 				}
 				mInputMenuItem.Checked = Device.SupportsInput;
 				mOutputMenuItem.Checked = Device.SupportsOutput;
@@ -150,18 +148,6 @@ namespace MixGui.Components
 					mDevice = value;
 					Update();
 				}
-			}
-		}
-
-		public ToolTip ToolTip
-		{
-			get
-			{
-				return mToolTip;
-			}
-			set
-			{
-				mToolTip = value;
 			}
 		}
 	}

@@ -37,12 +37,17 @@ namespace MixGui.Components
 			initializeComponent();
 		}
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
-		}
+        public Control EditorControl => this;
 
-		private void initializeComponent()
+        public FieldTypes? FocusedField => mWordCharTextBox.Focused ? FieldTypes.Chars : mWordValueEditor.FocusedField;
+
+        public int? CaretIndex => FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
+
+        public bool Focus(FieldTypes? field, int? index) => field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
+
+        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void initializeComponent()
 		{
 			base.SuspendLayout();
 
@@ -96,11 +101,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
+                    break;
 
 				case Keys.Right:
 					if (sender == mWordValueEditor)
@@ -138,14 +140,6 @@ namespace MixGui.Components
 		{
 			mWordCharTextBox.Update();
 			OnValueChanged(args);
-		}
-
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
 		}
 
 		public new void Update()
@@ -211,30 +205,6 @@ namespace MixGui.Components
 				}
 
 				FullWord = (IFullWord)value;
-			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return mWordCharTextBox.Focused ? FieldTypes.Chars : mWordValueEditor.FocusedField;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
 			}
 		}
 

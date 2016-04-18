@@ -69,7 +69,7 @@ namespace MixLib.Type
 
 			for (int i = 0; i < bytes.Length; i++)
 			{
-				longValue = (longValue << MixByte.BitCount) + (long)bytes[i];
+				longValue = (longValue << MixByte.BitCount) + bytes[i];
 			}
 
             longValue = sign.ApplyTo(longValue);
@@ -333,7 +333,7 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return (long)((1 << BitCount) - 1);
+				return (1 << BitCount) - 1;
 			}
 		}
 
@@ -382,11 +382,8 @@ namespace MixLib.Type
 
 		protected void OnWordValueChanged()
 		{
-			if (WordValueChanged != null)
-			{
-				WordValueChanged(this);
-			}
-		}
+            WordValueChanged?.Invoke(this);
+        }
 
 		public virtual Object Clone()
 		{

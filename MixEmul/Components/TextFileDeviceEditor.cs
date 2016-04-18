@@ -19,14 +19,12 @@ namespace MixGui.Components
 
 		private const int maxLoadRetryCount = 5;
 
-		private FileBasedDevice mDevice;
 		private bool mChangesPending;
 		private List<IMixByteCollection> mReadBytes;
 		private List<IMixByteCollection> mEditBytes;
 		private delayedIOOperation mDelayedIOOperation;
 		private int mLoadRetryCount;
-		private int mDeviceRecordCount;
-		private int mDeviceBytesPerRecord;
+        private int mDeviceBytesPerRecord;
 		private OpenStreamCallback mOpenStream;
 		private ReadMixByteCallback mReadDeviceBytes;
 		private WriteMixByteCallback mWriteDeviceBytes;
@@ -40,7 +38,10 @@ namespace MixGui.Components
 		private DateTime mLastLoadTime;
 		private bool mLoading;
 
-		public TextFileDeviceEditor()
+        public FileBasedDevice Device { get; private set; }
+        public long DeviceRecordCount { get; private set; }
+
+        public TextFileDeviceEditor()
 		{
 			InitializeComponent();
 
@@ -63,7 +64,25 @@ namespace MixGui.Components
 			mLoading = false;
 		}
 
-		public void Initialize(int bytesPerRecord, OpenStreamCallback openStream, ReadMixByteCallback readBytes, WriteMixByteCallback writeBytes)
+        public bool SupportsAppending => !mReadOnlyCheckBox.Checked;
+
+        private bool loadRecords() => loadRecords(loadErrorHandlingMode.AbortOnError);
+
+        public new void Update() => mMixByteCollectionEditorList.Update();
+
+        public bool Save() => writeRecords();
+
+        private void mSaveButton_Click(object sender, EventArgs e) => writeRecords();
+
+        private void mRevertButton_Click(object sender, EventArgs e) => revert();
+
+        private void mDeviceFileWatcher_Event(object sender, FileSystemEventArgs e) => handleFileWatcherEvent();
+
+        private void DeviceEditor_VisibleChanged(object sender, EventArgs e) => processVisibility();
+
+        private void mDeviceFileWatcher_Renamed(object sender, RenamedEventArgs e) => handleFileWatcherEvent();
+
+        public void Initialize(int bytesPerRecord, OpenStreamCallback openStream, ReadMixByteCallback readBytes, WriteMixByteCallback writeBytes)
 		{
 			if (mInitialized)
 			{
@@ -77,9 +96,9 @@ namespace MixGui.Components
 
 			mFirstRecordTextBox.ClearZero = false;
 			mFirstRecordTextBox.MinValue = 0L;
-			mFirstRecordTextBox.MaxValue = mDeviceRecordCount - 1;
+			mFirstRecordTextBox.MaxValue = DeviceRecordCount - 1;
 
-			mMixByteCollectionEditorList.MaxIndex = (int)mDeviceRecordCount - 1;
+			mMixByteCollectionEditorList.MaxIndex = (int)DeviceRecordCount - 1;
 			mMixByteCollectionEditorList.CreateEditor = createMixByteCollectionEditor;
 			mMixByteCollectionEditorList.LoadEditor = loadMixByteCollectionEditor;
 
@@ -105,20 +124,12 @@ namespace MixGui.Components
 			}
 		}
 
-		public bool SupportsAppending
-		{
-			get
-			{
-				return !mReadOnlyCheckBox.Checked;
-			}
-		}
-
 		private void processSupportsAppending()
 		{
 			bool supportsAppending = SupportsAppending;
 
 			mAppendButton.Enabled = supportsAppending;
-			mTruncateButton.Enabled = supportsAppending ? mDeviceRecordCount > 1 : false;
+			mTruncateButton.Enabled = supportsAppending ? DeviceRecordCount > 1 : false;
 		}
 
 		public bool ShowReadOnly
@@ -180,14 +191,6 @@ namespace MixGui.Components
 			processSupportsAppending();
 		}
 
-		public long DeviceRecordCount
-		{
-			get
-			{
-				return mDeviceRecordCount;
-			}
-		}
-
 		private void setDeviceRecordCount(int recordCount)
 		{
 			if (recordCount < 1)
@@ -195,13 +198,13 @@ namespace MixGui.Components
 				recordCount = 1;
 			}
 
-			mDeviceRecordCount = recordCount;
+			DeviceRecordCount = recordCount;
 
-			mMixByteCollectionEditorList.MaxIndex = mDeviceRecordCount - 1;
+			mMixByteCollectionEditorList.MaxIndex = (int)DeviceRecordCount - 1;
 
 			adaptListToRecordCount(mEditBytes);
 
-			mFirstRecordTextBox.MaxValue = mDeviceRecordCount - 1;
+			mFirstRecordTextBox.MaxValue = DeviceRecordCount - 1;
 
 			mIndexCharCount = (recordCount - 1).ToString().Length;
 			foreach (DeviceMixByteCollectionEditor editor in mMixByteCollectionEditorList)
@@ -216,12 +219,12 @@ namespace MixGui.Components
 
 		private void adaptListToRecordCount(List<IMixByteCollection> list)
 		{
-			while (list.Count < mDeviceRecordCount)
+			while (list.Count < DeviceRecordCount)
 			{
 				list.Add(new MixByteCollection(mDeviceBytesPerRecord));
 			}
 
-			while (list.Count > mDeviceRecordCount)
+			while (list.Count > DeviceRecordCount)
 			{
 				list.RemoveAt(list.Count - 1);
 			}
@@ -241,7 +244,7 @@ namespace MixGui.Components
 		{
 			if (Visible)
 			{
-				if (mDevice != null)
+				if (Device != null)
 				{
 					mDeviceFileWatcher.EnableRaisingEvents = true;
 				}
@@ -255,7 +258,7 @@ namespace MixGui.Components
 					writeRecords();
 				}
 
-				if (mDevice != null)
+				if (Device != null)
 				{
 					mDeviceFileWatcher.EnableRaisingEvents = false;
 				}
@@ -275,32 +278,24 @@ namespace MixGui.Components
 			deviceEditor.MixByteCollectionIndex = index;
 		}
 
-		public FileBasedDevice Device
-		{
-			get
-			{
-				return mDevice;
-			}
-		}
-
 		public bool SetDevice(FileBasedDevice device)
 		{
-			if (device == null || mDevice == device)
+			if (device == null || Device == device)
 			{
 				return true;
 			}
 
 			mDeviceFileWatcher.EnableRaisingEvents = false;
 
-			FileBasedDevice oldDevice = mDevice;
-			mDevice = device;
+			FileBasedDevice oldDevice = Device;
+			Device = device;
 			initDeviceFileWatcher();
 
 			bool success = loadRecords(loadErrorHandlingMode.AbortOnError);
 
 			if (!success)
 			{
-				mDevice = oldDevice;
+				Device = oldDevice;
 				initDeviceFileWatcher();
 			}
 			else
@@ -313,10 +308,10 @@ namespace MixGui.Components
 
 		private void initDeviceFileWatcher()
 		{
-			if (mDevice != null)
+			if (Device != null)
 			{
-				mDeviceFileWatcher.Path = Path.GetDirectoryName(mDevice.FilePath);
-				mDeviceFileWatcher.Filter = Path.GetFileName(mDevice.FilePath);
+				mDeviceFileWatcher.Path = Path.GetDirectoryName(Device.FilePath);
+				mDeviceFileWatcher.Filter = Path.GetFileName(Device.FilePath);
 				if (Visible)
 				{
 					mDeviceFileWatcher.EnableRaisingEvents = true;
@@ -339,11 +334,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private bool loadRecords()
-		{
-			return loadRecords(loadErrorHandlingMode.AbortOnError);
-		}
-
 		private bool loadRecords(loadErrorHandlingMode errorHandlingMode)
 		{
 			if (!Visible)
@@ -351,7 +341,7 @@ namespace MixGui.Components
 				return true;
 			}
 
-			if (mDevice == null)
+			if (Device == null)
 			{
 				return false;
 			}
@@ -370,9 +360,9 @@ namespace MixGui.Components
 
 				List<IMixByteCollection> readBytes = null;
 
-				if (File.Exists(mDevice.FilePath))
+				if (File.Exists(Device.FilePath))
 				{
-					stream = mOpenStream(mDevice.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+					stream = mOpenStream(Device.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
 					readBytes = mReadDeviceBytes(stream, mDeviceBytesPerRecord);
 
@@ -481,7 +471,7 @@ namespace MixGui.Components
 					mDeviceFileWatcher.EnableRaisingEvents = false;
 				}
 
-				stream = mOpenStream(mDevice.FilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+				stream = mOpenStream(Device.FilePath, FileMode.Create, FileAccess.Write, FileShare.Read);
 				stream.SetLength(0);
 
 				mWriteDeviceBytes(stream, mDeviceBytesPerRecord, mEditBytes);
@@ -532,11 +522,6 @@ namespace MixGui.Components
 			return true;
 		}
 
-		public new void Update()
-		{
-			mMixByteCollectionEditorList.Update();
-		}
-
 		public void UpdateSettings()
 		{
 			initDeviceFileWatcher();
@@ -569,11 +554,6 @@ namespace MixGui.Components
 			processReadOnlySettings();
 		}
 
-		public bool Save()
-		{
-			return writeRecords();
-		}
-
 		private void mFirstRecordTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
 			mMixByteCollectionEditorList.FirstVisibleIndex = (int)args.NewValue;
@@ -582,16 +562,6 @@ namespace MixGui.Components
 		private void mMixByteCollectionEditorList_FirstVisibleIndexChanged(EditorList<IMixByteCollectionEditor> sender, MixByteCollectionEditorList.FirstVisibleIndexChangedEventArgs args)
 		{
 			mFirstRecordTextBox.LongValue = mMixByteCollectionEditorList.FirstVisibleIndex;
-		}
-
-		private void mSaveButton_Click(object sender, EventArgs e)
-		{
-			writeRecords();
-		}
-
-		private void mRevertButton_Click(object sender, EventArgs e)
-		{
-			revert();
 		}
 
 		private void revert()
@@ -634,11 +604,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private void mDeviceFileWatcher_Event(object sender, FileSystemEventArgs e)
-		{
-			handleFileWatcherEvent();
-		}
-
 		private void handleFileWatcherEvent()
 		{
 			if (mLoading || mIODelayTimer.Enabled)
@@ -657,16 +622,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private void DeviceEditor_VisibleChanged(object sender, EventArgs e)
-		{
-			processVisibility();
-		}
-
-		private void mDeviceFileWatcher_Renamed(object sender, RenamedEventArgs e)
-		{
-			handleFileWatcherEvent();
-		}
-
 		private void mIODelayTimer_Tick(object sender, EventArgs e)
 		{
 			mIODelayTimer.Stop();
@@ -682,29 +637,29 @@ namespace MixGui.Components
 
 		private void mAppendButton_Click(object sender, EventArgs e)
 		{
-			setDeviceRecordCount(mDeviceRecordCount + 1);
+			setDeviceRecordCount((int)DeviceRecordCount + 1);
 
 			changesPending = true;
 		}
 
 		private void mTruncateButton_Click(object sender, EventArgs e)
 		{
-			setDeviceRecordCount(mDeviceRecordCount - 1);
+			setDeviceRecordCount((int)DeviceRecordCount - 1);
 
 			changesPending = true;
 		}
 
 		public void DeleteDeviceFile()
 		{
-			if (mDevice != null && File.Exists(mDevice.FilePath))
+			if (Device != null && File.Exists(Device.FilePath))
 			{
-				mDevice.CloseStream();
+				Device.CloseStream();
 
 				try
 				{
-					File.Delete(mDevice.FilePath);
+					File.Delete(Device.FilePath);
 
-					mDevice.Reset();
+					Device.Reset();
 				}
 				catch (Exception ex)
 				{
@@ -718,15 +673,15 @@ namespace MixGui.Components
 
 		internal void LoadDeviceFile(string filePath)
 		{
-			if (mDevice != null)
+			if (Device != null)
 			{
-				mDevice.CloseStream();
+				Device.CloseStream();
 
 				try
 				{
-					File.Copy(filePath, mDevice.FilePath, true);
+					File.Copy(filePath, Device.FilePath, true);
 
-					mDevice.Reset();
+					Device.Reset();
 				}
 				catch (Exception ex)
 				{

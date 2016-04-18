@@ -9,8 +9,8 @@ using System.Windows.Forms.Design;
 namespace MixGui.Components
 {
 	[ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip |
-																				 ToolStripItemDesignerAvailability.ContextMenuStrip |
-																				 ToolStripItemDesignerAvailability.StatusStrip)]
+									   ToolStripItemDesignerAvailability.ContextMenuStrip |
+									   ToolStripItemDesignerAvailability.StatusStrip)]
 	public partial class ToolStripCycleButton : ToolStripControlHost
 	{
 		private Step mCurrentStep;
@@ -29,15 +29,17 @@ namespace MixGui.Components
 		{
 			InitializeComponent();
 			mSteps = new List<Step>();
-			this.AutoSize = false;
-			this.Size = Control.Size;
+            AutoSize = false;
+            Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
 			Control.Click += Control_Click;
 			Control.Paint += ToolStripCycleButton_Paint;
 			Text = "";
 		}
 
-		void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
+        protected void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
+
+        void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
 		{
 			if (string.IsNullOrEmpty(Text))
 			{
@@ -46,14 +48,6 @@ namespace MixGui.Components
 				stringFormat.LineAlignment = StringAlignment.Center;
 
 				e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
-			}
-		}
-
-		protected void OnValueChanged(EventArgs e)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, e);
 			}
 		}
 
@@ -69,7 +63,7 @@ namespace MixGui.Components
 
 		void Control_SizeChanged(object sender, EventArgs e)
 		{
-			this.Size = Control.Size;
+            Size = Control.Size;
 		}
 
 		public Step AddStep(object value)
@@ -166,7 +160,11 @@ namespace MixGui.Components
 
 		public class Step
 		{
-			public Step(object value, string text) : this(value, text, null) { }
+            public object Value { get; private set; }
+            public string Text { get; private set; }
+            public Step NextStep { get; set; }
+
+            public Step(object value, string text) : this(value, text, null) { }
 
 			public Step(object value) : this(value, value.ToString(), null) { }
 
@@ -177,24 +175,6 @@ namespace MixGui.Components
 				Value = value;
 				Text = text;
 				NextStep = nextStep;
-			}
-
-			public object Value
-			{
-				get;
-				private set;
-			}
-
-			public string Text
-			{
-				get;
-				private set;
-			}
-
-			public Step NextStep
-			{
-				get;
-				set;
 			}
 		}
 	}

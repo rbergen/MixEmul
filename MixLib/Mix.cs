@@ -22,9 +22,9 @@ namespace MixLib
 		private const int timerMemoryAddress = -10;
 		private static readonly long[] loaderInstructionValues = { 1060, 4457506, 103 };
 
-		private MixLib.Devices mDevices = new MixLib.Devices();
-		private MixLib.Memory mFullMemory = new MixLib.Memory(memoryMinIndex, memoryMaxIndex);
-		private MixLib.Registers mRegisters = new MixLib.Registers();
+		private Devices mDevices = new Devices();
+		private Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);
+		private Registers mRegisters = new Registers();
 		private MemoryView mMemory;
 		private Queue<Interrupt> mInterruptQueue = new Queue<Interrupt>();
 
@@ -118,11 +118,8 @@ namespace MixLib
 		{
 			mLog.Enqueue(line);
 
-			if (LogLineAdded != null)
-			{
-				LogLineAdded(this, new EventArgs());
-			}
-		}
+            LogLineAdded?.Invoke(this, new EventArgs());
+        }
 
 		public void ContinueRun()
 		{
@@ -330,7 +327,7 @@ namespace MixLib
 			}
 
 			IMemoryFullWord instructionWord = Memory[ProgramCounter];
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction((byte)instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
+			MixInstruction instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -420,7 +417,7 @@ namespace MixLib
 			Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
 		}
 
-		public override MixLib.Devices Devices
+		public override Devices Devices
 		{
 			get
 			{
@@ -469,7 +466,7 @@ namespace MixLib
 			}
 		}
 
-		public override MixLib.Registers Registers
+		public override Registers Registers
 		{
 			get
 			{
@@ -551,10 +548,7 @@ namespace MixLib
             {
                 if (disposing)
                 {
-                    if (mStartStep != null)
-                    {
-                        mStartStep.Dispose();
-                    }
+                    mStartStep?.Dispose();
                 }
 
                 disposedValue = true;

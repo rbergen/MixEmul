@@ -36,11 +36,8 @@ namespace MixLib.Device
 
 		private void onReportingEvent(ReportingEventArgs args)
 		{
-			if (ReportingEvent != null)
-			{
-				ReportingEvent(this, args);
-			}
-		}
+            ReportingEvent?.Invoke(this, args);
+        }
 
 		public void Reset()
 		{

@@ -37,10 +37,19 @@ namespace MixGui.Components
 			initializeComponent();
 		}
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return mCharTextBox.FocusWithIndex(index);
-		}
+        public Control EditorControl => this;
+
+        public FieldTypes? FocusedField => mCharTextBox.Focused ? FieldTypes.Chars : (FieldTypes?)null;
+
+        public int? CaretIndex => mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : (int?)null;
+
+        public void Select(int start, int length) => mCharTextBox.Select(start, length);
+
+        public bool Focus(FieldTypes? field, int? index) => mCharTextBox.FocusWithIndex(index);
+
+        protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => OnValueChanged(args);
 
 		private void initializeComponent()
 		{
@@ -85,24 +94,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
-					break;
-			}
-		}
-
-		private void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			OnValueChanged(args);
-		}
-
-		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
+                    NavigationKeyDown?.Invoke(this, e);
+                    break;
 			}
 		}
 
@@ -205,35 +198,6 @@ namespace MixGui.Components
 			{
 				DeviceMixByteCollection = value;
 			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return mCharTextBox.Focused ? FieldTypes.Chars : (FieldTypes?)null;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : (int?)null;
-			}
-		}
-
-		public void Select(int start, int length)
-		{
-			mCharTextBox.Select(start, length);
 		}
 	}
 }

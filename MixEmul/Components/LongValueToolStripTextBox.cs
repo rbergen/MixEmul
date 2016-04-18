@@ -31,34 +31,30 @@ namespace MixGui.Components
 			: base(new LongValueTextBox(supportsSign, minValue, maxValue, value))
 		{
 			InitializeComponent();
-			this.AutoSize = false;
-			this.Size = Control.Size;
+            AutoSize = false;
+            Size = Control.Size;
 			Control.SizeChanged += new EventHandler(Control_SizeChanged);
-		}
-
-		void Control_SizeChanged(object sender, EventArgs e)
-		{
-			this.Size = Control.Size;
 		}
 
 		public LongValueToolStripTextBox(LongValueTextBox innerBox)
 			: base(innerBox)
 		{
 			InitializeComponent();
-			this.AutoSize = false;
-			this.Size = innerBox.Size;
+            AutoSize = false;
+            Size = innerBox.Size;
 			Control.SizeChanged += new EventHandler(Control_SizeChanged);
 		}
 
-		public LongValueTextBox LongValueTextBox
-		{
-			get
-			{
-				return (LongValueTextBox)Control;
-			}
-		}
+		public LongValueTextBox LongValueTextBox => (LongValueTextBox)Control;
 
-		public long LongValue
+        public bool SupportSign => ((LongValueTextBox)Control).SupportSign;
+
+        void Control_SizeChanged(object sender, EventArgs e)
+        {
+            Size = Control.Size;
+        }
+
+        public long LongValue
 		{
 			get
 			{
@@ -103,14 +99,6 @@ namespace MixGui.Components
 			set
 			{
 				((LongValueTextBox)Control).ClearZero = value;
-			}
-		}
-
-		public bool SupportSign
-		{
-			get
-			{
-				return ((LongValueTextBox)Control).SupportSign;
 			}
 		}
 

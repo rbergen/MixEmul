@@ -24,7 +24,9 @@ namespace MixGui.Components
 			initializeComponent();
 		}
 
-		private void initializeComponent()
+        protected void OnItemSelected(ItemSelectedEventArgs<T> e) => ItemSelected?.Invoke(this, e);
+
+        private void initializeComponent()
 		{
 			mNavigateForwards = new Button();
 			mNavigateBackwards = new Button();
@@ -158,14 +160,6 @@ namespace MixGui.Components
 			mNavigateForwards.Enabled = mCurrentItem != null && mCurrentItem.Next != null;
 		}
 
-		protected void OnItemSelected(ItemSelectedEventArgs<T> e)
-		{
-			if (ItemSelected != null)
-			{
-				ItemSelected(this, e);
-			}
-		}
-
 		private void mNavigateBackwards_Click(object sender, EventArgs e)
 		{
 			if (mGetCurrentItem != null)
@@ -257,7 +251,11 @@ namespace MixGui.Components
 
 	public class LinkedItem<T>
 	{
-		public LinkedItem(LinkedItem<T> previous, T item, LinkedItem<T> next)
+        public LinkedItem<T> Previous { get; set; }
+        public LinkedItem<T> Next { get; set; }
+        public T Item { get; private set; }
+
+        public LinkedItem(LinkedItem<T> previous, T item, LinkedItem<T> next)
 		{
 			Previous = previous;
 			Item = item;
@@ -275,23 +273,5 @@ namespace MixGui.Components
 		public LinkedItem(T item)
 			: this(null, item, null)
 		{ }
-
-		public LinkedItem<T> Previous
-		{
-			get;
-			set;
-		}
-
-		public LinkedItem<T> Next
-		{
-			get;
-			set;
-		}
-
-		public T Item
-		{
-			get;
-			private set;
-		}
 	}
 }

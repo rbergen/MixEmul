@@ -15,7 +15,11 @@ namespace MixGui.Components
 			mSearchTextBox.MixByteCollectionValue = new MixByteCollection(80);
 		}
 
-		public SearchParameters SearchParameters
+        private void fieldCheckedChanged(object sender, EventArgs e) => setFindButtonEnabledState();
+
+        private void mSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => setFindButtonEnabledState();
+
+        public SearchParameters SearchParameters
 		{
 			get
 			{
@@ -31,11 +35,6 @@ namespace MixGui.Components
 					fillControls();
 				}
 			}
-		}
-
-		private void fieldCheckedChanged(object sender, EventArgs e)
-		{
-			setFindButtonEnabledState();
 		}
 
 		private void setFindButtonEnabledState()
@@ -96,11 +95,6 @@ namespace MixGui.Components
 				mMatchWholeWordCheckBox.Checked = false;
 				mWrapSearchCheckBox.Checked = true;
 			}
-		}
-
-		private void mSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			setFindButtonEnabledState();
 		}
 	}
 }

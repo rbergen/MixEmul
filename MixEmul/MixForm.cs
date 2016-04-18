@@ -136,14 +136,14 @@ namespace MixGui
 			mMix.LogLineAdded += mMix_LogLineAdded;
 
 			mPCBox = new LongValueTextBox();
-			mPCBox.BackColor = System.Drawing.Color.White;
-			mPCBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			mPCBox.ForeColor = System.Drawing.Color.Black;
+			mPCBox.BackColor = Color.White;
+			mPCBox.BorderStyle = BorderStyle.FixedSingle;
+			mPCBox.ForeColor = Color.Black;
 			mPCBox.LongValue = mMix.ProgramCounter;
 			mPCBox.ClearZero = false;
 			setPCBoxBounds();
 			mPCBox.Name = "mPCBox";
-			mPCBox.Size = new System.Drawing.Size(40, 25);
+			mPCBox.Size = new Size(40, 25);
 			mPCBox.TabIndex = 1;
 			mPCBox.Text = "0";
 			mPCBox.ValueChanged += pcChanged;
@@ -407,15 +407,8 @@ namespace MixGui
 		{
 			if (disposing)
 			{
-                if (components != null)
-                {
-                    components.Dispose();
-                }
-
-                if (mMix != null)
-                {
-                    mMix.Dispose();
-                }
+                components?.Dispose();
+                mMix?.Dispose();
             }
 
 			base.Dispose(disposing);
@@ -486,7 +479,7 @@ namespace MixGui
 
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
 			System.Windows.Forms.ToolStripSeparator fileMenuToolStripSeparator;
 			System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 			System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -495,71 +488,71 @@ namespace MixGui
 			System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 			System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 			System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MixForm));
-			MixLib.Registers registers1 = new MixLib.Registers();
-			this.mSeverityImageList = new System.Windows.Forms.ImageList(this.components);
-			this.mMainMenuStrip = new System.Windows.Forms.MenuStrip();
-			this.mFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mOpenProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mTeletypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mDeviceEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-			this.mFindMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mFindNextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mTickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mRunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mGoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mDetachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mClearBreakpointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mPreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-			this.mProfilingEnabledMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mProfilingShowTickCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mAboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mToolStripContainer = new System.Windows.Forms.ToolStripContainer();
-			this.mStatusStrip = new System.Windows.Forms.StatusStrip();
-			this.mModeToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mModeCycleButton = new MixGui.Components.ToolStripCycleButton(this.components);
-			this.mStatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mSplitContainer = new System.Windows.Forms.SplitContainer();
-			this.mMemoryGroup = new System.Windows.Forms.GroupBox();
-			this.mMemoryTabControl = new System.Windows.Forms.TabControl();
-			this.mMainMemoryTab = new System.Windows.Forms.TabPage();
-			this.mMainMemoryEditor = new MixGui.Components.MemoryEditor();
-			this.mFloatingPointMemoryTab = new System.Windows.Forms.TabPage();
-			this.mRegistersGroup = new System.Windows.Forms.GroupBox();
-			this.mRegistersEditor = new MixGui.Components.RegistersEditor();
-			this.mDevicesGroup = new System.Windows.Forms.GroupBox();
-			this.mDeviceEditorButton = new System.Windows.Forms.Button();
-			this.mDevicesControl = new MixGui.Components.DevicesControl();
-			this.mSymbolGroup = new System.Windows.Forms.GroupBox();
-			this.mSymbolListView = new MixGui.Components.SymbolListView();
-			this.mLogListGroup = new System.Windows.Forms.GroupBox();
-			this.mLogListView = new MixGui.Components.LogListView();
-			this.mControlToolStrip = new System.Windows.Forms.ToolStrip();
-			this.mPCToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-			this.mShowPCToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mTicksToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-			this.mTicksToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
-			this.mResetTicksToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mTickToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mStepToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mRunToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mGoToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mDetachToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mClearBreakpointsToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mResetToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mTeletypeToolStripButton = new System.Windows.Forms.ToolStripButton();
-			this.mToolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.mProfilingResetCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MixForm));
+            Registers registers1 = new Registers();
+            mSeverityImageList = new System.Windows.Forms.ImageList(components);
+            mMainMenuStrip = new System.Windows.Forms.MenuStrip();
+            mFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mOpenProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mTeletypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mDeviceEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            mFindMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mFindNextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mTickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mRunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mGoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mDetachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mClearBreakpointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mPreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            mProfilingEnabledMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mProfilingShowTickCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mAboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            mToolStripContainer = new System.Windows.Forms.ToolStripContainer();
+            mStatusStrip = new System.Windows.Forms.StatusStrip();
+            mModeToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            mModeCycleButton = new MixGui.Components.ToolStripCycleButton(components);
+            mStatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            mToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            mSplitContainer = new System.Windows.Forms.SplitContainer();
+            mMemoryGroup = new GroupBox();
+            mMemoryTabControl = new System.Windows.Forms.TabControl();
+            mMainMemoryTab = new System.Windows.Forms.TabPage();
+            mMainMemoryEditor = new MixGui.Components.MemoryEditor();
+            mFloatingPointMemoryTab = new System.Windows.Forms.TabPage();
+            mRegistersGroup = new GroupBox();
+            mRegistersEditor = new MixGui.Components.RegistersEditor();
+            mDevicesGroup = new GroupBox();
+            mDeviceEditorButton = new Button();
+            mDevicesControl = new MixGui.Components.DevicesControl();
+            mSymbolGroup = new GroupBox();
+            mSymbolListView = new MixGui.Components.SymbolListView();
+            mLogListGroup = new GroupBox();
+            mLogListView = new MixGui.Components.LogListView();
+            mControlToolStrip = new System.Windows.Forms.ToolStrip();
+            mPCToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            mShowPCToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mTicksToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            mTicksToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            mResetTicksToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mTickToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mStepToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mRunToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mGoToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mDetachToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mClearBreakpointsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mResetToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mTeletypeToolStripButton = new System.Windows.Forms.ToolStripButton();
+            mToolTip = new System.Windows.Forms.ToolTip(components);
+            mProfilingResetCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			fileMenuToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -568,771 +561,771 @@ namespace MixGui
 			toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-			this.mMainMenuStrip.SuspendLayout();
-			this.mToolStripContainer.BottomToolStripPanel.SuspendLayout();
-			this.mToolStripContainer.ContentPanel.SuspendLayout();
-			this.mToolStripContainer.TopToolStripPanel.SuspendLayout();
-			this.mToolStripContainer.SuspendLayout();
-			this.mStatusStrip.SuspendLayout();
-			this.mSplitContainer.Panel1.SuspendLayout();
-			this.mSplitContainer.Panel2.SuspendLayout();
-			this.mSplitContainer.SuspendLayout();
-			this.mMemoryGroup.SuspendLayout();
-			this.mMemoryTabControl.SuspendLayout();
-			this.mMainMemoryTab.SuspendLayout();
-			this.mRegistersGroup.SuspendLayout();
-			this.mDevicesGroup.SuspendLayout();
-			this.mSymbolGroup.SuspendLayout();
-			this.mLogListGroup.SuspendLayout();
-			this.mControlToolStrip.SuspendLayout();
-			this.SuspendLayout();
+            mMainMenuStrip.SuspendLayout();
+            mToolStripContainer.BottomToolStripPanel.SuspendLayout();
+            mToolStripContainer.ContentPanel.SuspendLayout();
+            mToolStripContainer.TopToolStripPanel.SuspendLayout();
+            mToolStripContainer.SuspendLayout();
+            mStatusStrip.SuspendLayout();
+            mSplitContainer.Panel1.SuspendLayout();
+            mSplitContainer.Panel2.SuspendLayout();
+            mSplitContainer.SuspendLayout();
+            mMemoryGroup.SuspendLayout();
+            mMemoryTabControl.SuspendLayout();
+            mMainMemoryTab.SuspendLayout();
+            mRegistersGroup.SuspendLayout();
+            mDevicesGroup.SuspendLayout();
+            mSymbolGroup.SuspendLayout();
+            mLogListGroup.SuspendLayout();
+            mControlToolStrip.SuspendLayout();
+            SuspendLayout();
 			// 
 			// fileMenuToolStripSeparator
 			// 
 			fileMenuToolStripSeparator.Name = "fileMenuToolStripSeparator";
-			fileMenuToolStripSeparator.Size = new System.Drawing.Size(201, 6);
+			fileMenuToolStripSeparator.Size = new Size(201, 6);
 			// 
 			// toolStripSeparator1
 			// 
 			toolStripSeparator1.Name = "toolStripSeparator1";
-			toolStripSeparator1.Size = new System.Drawing.Size(204, 6);
+			toolStripSeparator1.Size = new Size(204, 6);
 			// 
 			// toolStripSeparator2
 			// 
 			toolStripSeparator2.Name = "toolStripSeparator2";
-			toolStripSeparator2.Size = new System.Drawing.Size(204, 6);
+			toolStripSeparator2.Size = new Size(204, 6);
 			// 
 			// toolStripSeparator3
 			// 
 			toolStripSeparator3.Name = "toolStripSeparator3";
-			toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+			toolStripSeparator3.Size = new Size(6, 25);
 			// 
 			// toolStripSeparator4
 			// 
 			toolStripSeparator4.Name = "toolStripSeparator4";
-			toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+			toolStripSeparator4.Size = new Size(6, 25);
 			// 
 			// toolStripSeparator5
 			// 
 			toolStripSeparator5.Name = "toolStripSeparator5";
-			toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+			toolStripSeparator5.Size = new Size(6, 25);
 			// 
 			// toolStripSeparator6
 			// 
 			toolStripSeparator6.Name = "toolStripSeparator6";
-			toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+			toolStripSeparator6.Size = new Size(6, 25);
 			// 
 			// toolStripSeparator7
 			// 
 			toolStripSeparator7.Name = "toolStripSeparator7";
-			toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
-			// 
-			// mSeverityImageList
-			// 
-			this.mSeverityImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
-			this.mSeverityImageList.TransparentColor = System.Drawing.Color.Transparent;
-			this.mSeverityImageList.Images.SetKeyName(0, "");
-			this.mSeverityImageList.Images.SetKeyName(1, "");
-			this.mSeverityImageList.Images.SetKeyName(2, "");
-			this.mSeverityImageList.Images.SetKeyName(3, "");
-			// 
-			// mMainMenuStrip
-			// 
-			this.mMainMenuStrip.Dock = System.Windows.Forms.DockStyle.None;
-			this.mMainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mFileToolStripMenuItem,
-            this.mViewToolStripMenuItem,
-            this.mActionsToolStripMenuItem,
-            this.mToolsToolStripMenuItem,
-            this.mHelpToolStripMenuItem});
-			this.mMainMenuStrip.Location = new System.Drawing.Point(0, 0);
-			this.mMainMenuStrip.Name = "mMainMenuStrip";
-			this.mMainMenuStrip.Size = new System.Drawing.Size(804, 24);
-			this.mMainMenuStrip.TabIndex = 0;
-			this.mMainMenuStrip.Text = "Main Menu";
-			// 
-			// mFileToolStripMenuItem
-			// 
-			this.mFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mOpenProgramToolStripMenuItem,
+			toolStripSeparator7.Size = new Size(6, 25);
+            // 
+            // mSeverityImageList
+            // 
+            mSeverityImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
+            mSeverityImageList.TransparentColor = Color.Transparent;
+            mSeverityImageList.Images.SetKeyName(0, "");
+            mSeverityImageList.Images.SetKeyName(1, "");
+            mSeverityImageList.Images.SetKeyName(2, "");
+            mSeverityImageList.Images.SetKeyName(3, "");
+            // 
+            // mMainMenuStrip
+            // 
+            mMainMenuStrip.Dock = System.Windows.Forms.DockStyle.None;
+            mMainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mFileToolStripMenuItem,
+            mViewToolStripMenuItem,
+            mActionsToolStripMenuItem,
+            mToolsToolStripMenuItem,
+            mHelpToolStripMenuItem});
+            mMainMenuStrip.Location = new Point(0, 0);
+            mMainMenuStrip.Name = "mMainMenuStrip";
+            mMainMenuStrip.Size = new Size(804, 24);
+            mMainMenuStrip.TabIndex = 0;
+            mMainMenuStrip.Text = "Main Menu";
+            // 
+            // mFileToolStripMenuItem
+            // 
+            mFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mOpenProgramToolStripMenuItem,
             fileMenuToolStripSeparator,
-            this.mExitToolStripMenuItem});
-			this.mFileToolStripMenuItem.Name = "mFileToolStripMenuItem";
-			this.mFileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.mFileToolStripMenuItem.Text = "&File";
-			// 
-			// mOpenProgramToolStripMenuItem
-			// 
-			this.mOpenProgramToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
-			this.mOpenProgramToolStripMenuItem.Name = "mOpenProgramToolStripMenuItem";
-			this.mOpenProgramToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.mOpenProgramToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-			this.mOpenProgramToolStripMenuItem.Text = "&Open program...";
-			this.mOpenProgramToolStripMenuItem.Click += new System.EventHandler(this.mOpenProgramMenuItem_Click);
-			// 
-			// mExitToolStripMenuItem
-			// 
-			this.mExitToolStripMenuItem.Name = "mExitToolStripMenuItem";
-			this.mExitToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-			this.mExitToolStripMenuItem.Text = "E&xit";
-			this.mExitToolStripMenuItem.Click += new System.EventHandler(this.mExitMenuItem_Click);
-			// 
-			// mViewToolStripMenuItem
-			// 
-			this.mViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mTeletypeToolStripMenuItem,
-            this.mDeviceEditorToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.mFindMenuItem,
-            this.mFindNextMenuItem});
-			this.mViewToolStripMenuItem.Name = "mViewToolStripMenuItem";
-			this.mViewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-			this.mViewToolStripMenuItem.Text = "&View";
-			// 
-			// mTeletypeToolStripMenuItem
-			// 
-			this.mTeletypeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
-			this.mTeletypeToolStripMenuItem.Name = "mTeletypeToolStripMenuItem";
-			this.mTeletypeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-			this.mTeletypeToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
-			this.mTeletypeToolStripMenuItem.Text = "&Show Teletype";
-			this.mTeletypeToolStripMenuItem.Click += new System.EventHandler(this.mTeletypeItem_Click);
-			// 
-			// mDeviceEditorToolStripMenuItem
-			// 
-			this.mDeviceEditorToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
-			this.mDeviceEditorToolStripMenuItem.Name = "mDeviceEditorToolStripMenuItem";
-			this.mDeviceEditorToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-			this.mDeviceEditorToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
-			this.mDeviceEditorToolStripMenuItem.Text = "Show &Device Editor";
-			this.mDeviceEditorToolStripMenuItem.Click += new System.EventHandler(this.mDeviceEditorItem_Click);
-			// 
-			// toolStripSeparator8
-			// 
-			this.toolStripSeparator8.Name = "toolStripSeparator8";
-			this.toolStripSeparator8.Size = new System.Drawing.Size(212, 6);
-			// 
-			// mFindMenuItem
-			// 
-			this.mFindMenuItem.Image = global::MixGui.Properties.Resources.Find_5650;
-			this.mFindMenuItem.Name = "mFindMenuItem";
-			this.mFindMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.mFindMenuItem.Size = new System.Drawing.Size(215, 22);
-			this.mFindMenuItem.Text = "Find in memory...";
-			this.mFindMenuItem.Click += new System.EventHandler(this.mFindMenuItem_Click);
-			// 
-			// mFindNextMenuItem
-			// 
-			this.mFindNextMenuItem.Name = "mFindNextMenuItem";
-			this.mFindNextMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.mFindNextMenuItem.Size = new System.Drawing.Size(215, 22);
-			this.mFindNextMenuItem.Text = "Find next";
-			this.mFindNextMenuItem.Click += new System.EventHandler(this.mFindNextMenuItem_Click);
-			// 
-			// mActionsToolStripMenuItem
-			// 
-			this.mActionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mTickToolStripMenuItem,
-            this.mStepToolStripMenuItem,
-            this.mRunToolStripMenuItem,
-            this.mGoToolStripMenuItem,
+            mExitToolStripMenuItem});
+            mFileToolStripMenuItem.Name = "mFileToolStripMenuItem";
+            mFileToolStripMenuItem.Size = new Size(37, 20);
+            mFileToolStripMenuItem.Text = "&File";
+            // 
+            // mOpenProgramToolStripMenuItem
+            // 
+            mOpenProgramToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
+            mOpenProgramToolStripMenuItem.Name = "mOpenProgramToolStripMenuItem";
+            mOpenProgramToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O);
+            mOpenProgramToolStripMenuItem.Size = new Size(204, 22);
+            mOpenProgramToolStripMenuItem.Text = "&Open program...";
+            mOpenProgramToolStripMenuItem.Click += new EventHandler(mOpenProgramMenuItem_Click);
+            // 
+            // mExitToolStripMenuItem
+            // 
+            mExitToolStripMenuItem.Name = "mExitToolStripMenuItem";
+            mExitToolStripMenuItem.Size = new Size(204, 22);
+            mExitToolStripMenuItem.Text = "E&xit";
+            mExitToolStripMenuItem.Click += new EventHandler(mExitMenuItem_Click);
+            // 
+            // mViewToolStripMenuItem
+            // 
+            mViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mTeletypeToolStripMenuItem,
+            mDeviceEditorToolStripMenuItem,
+            toolStripSeparator8,
+            mFindMenuItem,
+            mFindNextMenuItem});
+            mViewToolStripMenuItem.Name = "mViewToolStripMenuItem";
+            mViewToolStripMenuItem.Size = new Size(44, 20);
+            mViewToolStripMenuItem.Text = "&View";
+            // 
+            // mTeletypeToolStripMenuItem
+            // 
+            mTeletypeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
+            mTeletypeToolStripMenuItem.Name = "mTeletypeToolStripMenuItem";
+            mTeletypeToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T);
+            mTeletypeToolStripMenuItem.Size = new Size(215, 22);
+            mTeletypeToolStripMenuItem.Text = "&Show Teletype";
+            mTeletypeToolStripMenuItem.Click += new EventHandler(mTeletypeItem_Click);
+            // 
+            // mDeviceEditorToolStripMenuItem
+            // 
+            mDeviceEditorToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
+            mDeviceEditorToolStripMenuItem.Name = "mDeviceEditorToolStripMenuItem";
+            mDeviceEditorToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E);
+            mDeviceEditorToolStripMenuItem.Size = new Size(215, 22);
+            mDeviceEditorToolStripMenuItem.Text = "Show &Device Editor";
+            mDeviceEditorToolStripMenuItem.Click += new EventHandler(mDeviceEditorItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            toolStripSeparator8.Name = "toolStripSeparator8";
+            toolStripSeparator8.Size = new Size(212, 6);
+            // 
+            // mFindMenuItem
+            // 
+            mFindMenuItem.Image = global::MixGui.Properties.Resources.Find_5650;
+            mFindMenuItem.Name = "mFindMenuItem";
+            mFindMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F);
+            mFindMenuItem.Size = new Size(215, 22);
+            mFindMenuItem.Text = "Find in memory...";
+            mFindMenuItem.Click += new EventHandler(mFindMenuItem_Click);
+            // 
+            // mFindNextMenuItem
+            // 
+            mFindNextMenuItem.Name = "mFindNextMenuItem";
+            mFindNextMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            mFindNextMenuItem.Size = new Size(215, 22);
+            mFindNextMenuItem.Text = "Find next";
+            mFindNextMenuItem.Click += new EventHandler(mFindNextMenuItem_Click);
+            // 
+            // mActionsToolStripMenuItem
+            // 
+            mActionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mTickToolStripMenuItem,
+            mStepToolStripMenuItem,
+            mRunToolStripMenuItem,
+            mGoToolStripMenuItem,
             toolStripSeparator1,
-            this.mDetachToolStripMenuItem,
+            mDetachToolStripMenuItem,
             toolStripSeparator2,
-            this.mClearBreakpointsToolStripMenuItem,
-            this.mResetToolStripMenuItem});
-			this.mActionsToolStripMenuItem.Name = "mActionsToolStripMenuItem";
-			this.mActionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-			this.mActionsToolStripMenuItem.Text = "&Actions";
-			// 
-			// mTickToolStripMenuItem
-			// 
-			this.mTickToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
-			this.mTickToolStripMenuItem.Name = "mTickToolStripMenuItem";
-			this.mTickToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
-			this.mTickToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mTickToolStripMenuItem.Text = "T&ick";
-			this.mTickToolStripMenuItem.Click += new System.EventHandler(this.mTickItem_Click);
-			// 
-			// mStepToolStripMenuItem
-			// 
-			this.mStepToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
-			this.mStepToolStripMenuItem.Name = "mStepToolStripMenuItem";
-			this.mStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mStepToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mStepToolStripMenuItem.Text = "&Step";
-			this.mStepToolStripMenuItem.Click += new System.EventHandler(this.mStepItem_Click);
-			// 
-			// mRunToolStripMenuItem
-			// 
-			this.mRunToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
-			this.mRunToolStripMenuItem.Name = "mRunToolStripMenuItem";
-			this.mRunToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mRunToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mRunToolStripMenuItem.Text = "R&un";
-			this.mRunToolStripMenuItem.Click += new System.EventHandler(this.mRunItem_Click);
-			// 
-			// mGoToolStripMenuItem
-			// 
-			this.mGoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
-			this.mGoToolStripMenuItem.Name = "mGoToolStripMenuItem";
-			this.mGoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-			this.mGoToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mGoToolStripMenuItem.Text = "&Go";
-			this.mGoToolStripMenuItem.Click += new System.EventHandler(this.mGoItem_Click);
-			// 
-			// mDetachToolStripMenuItem
-			// 
-			this.mDetachToolStripMenuItem.Name = "mDetachToolStripMenuItem";
-			this.mDetachToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-			this.mDetachToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mDetachToolStripMenuItem.Text = "&Detach";
-			this.mDetachToolStripMenuItem.Click += new System.EventHandler(this.mDetachItem_Click);
-			// 
-			// mClearBreakpointsToolStripMenuItem
-			// 
-			this.mClearBreakpointsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
-			this.mClearBreakpointsToolStripMenuItem.Name = "mClearBreakpointsToolStripMenuItem";
-			this.mClearBreakpointsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-			this.mClearBreakpointsToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mClearBreakpointsToolStripMenuItem.Text = "Clear &Breakpoints";
-			this.mClearBreakpointsToolStripMenuItem.Click += new System.EventHandler(this.mClearBreakpointsItem_Click);
-			// 
-			// mResetToolStripMenuItem
-			// 
-			this.mResetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
-			this.mResetToolStripMenuItem.Name = "mResetToolStripMenuItem";
-			this.mResetToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.mResetToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-			this.mResetToolStripMenuItem.Text = "&Reset";
-			this.mResetToolStripMenuItem.Click += new System.EventHandler(this.mResetItem_Click);
-			// 
-			// mToolsToolStripMenuItem
-			// 
-			this.mToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mPreferencesToolStripMenuItem,
-            this.toolStripSeparator9,
-            this.mProfilingEnabledMenuItem,
-            this.mProfilingShowTickCountsMenuItem,
-            this.mProfilingResetCountsMenuItem});
-			this.mToolsToolStripMenuItem.Name = "mToolsToolStripMenuItem";
-			this.mToolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-			this.mToolsToolStripMenuItem.Text = "&Tools";
-			// 
-			// mPreferencesToolStripMenuItem
-			// 
-			this.mPreferencesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
-			this.mPreferencesToolStripMenuItem.Name = "mPreferencesToolStripMenuItem";
-			this.mPreferencesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.mPreferencesToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.mPreferencesToolStripMenuItem.Text = "&Preferences...";
-			this.mPreferencesToolStripMenuItem.Click += new System.EventHandler(this.mPreferencesMenuItem_Click);
-			// 
-			// toolStripSeparator9
-			// 
-			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(182, 6);
-			// 
-			// mProfilingEnabledMenuItem
-			// 
-			this.mProfilingEnabledMenuItem.CheckOnClick = true;
-			this.mProfilingEnabledMenuItem.Name = "mProfilingEnabledMenuItem";
-			this.mProfilingEnabledMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.mProfilingEnabledMenuItem.Text = "&Enable profiling";
-			this.mProfilingEnabledMenuItem.CheckedChanged += new System.EventHandler(this.mProfilingEnabledMenuItem_CheckedChanged);
-			// 
-			// mProfilingShowTickCountsMenuItem
-			// 
-			this.mProfilingShowTickCountsMenuItem.CheckOnClick = true;
-			this.mProfilingShowTickCountsMenuItem.Name = "mProfilingShowTickCountsMenuItem";
-			this.mProfilingShowTickCountsMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.mProfilingShowTickCountsMenuItem.Text = "&Show tick counts";
-			this.mProfilingShowTickCountsMenuItem.CheckedChanged += new System.EventHandler(this.mProfilingShowTickCountsMenuItem_CheckedChanged);
-			// 
-			// mHelpToolStripMenuItem
-			// 
-			this.mHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mAboutToolStripMenuItem});
-			this.mHelpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
-			this.mHelpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-			this.mHelpToolStripMenuItem.Text = "&Help";
-			// 
-			// mAboutToolStripMenuItem
-			// 
-			this.mAboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
-			this.mAboutToolStripMenuItem.Name = "mAboutToolStripMenuItem";
-			this.mAboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-			this.mAboutToolStripMenuItem.Text = "&About...";
-			this.mAboutToolStripMenuItem.Click += new System.EventHandler(this.mAboutMenuItem_Click);
-			// 
-			// mToolStripContainer
-			// 
-			// 
-			// mToolStripContainer.BottomToolStripPanel
-			// 
-			this.mToolStripContainer.BottomToolStripPanel.Controls.Add(this.mStatusStrip);
-			// 
-			// mToolStripContainer.ContentPanel
-			// 
-			this.mToolStripContainer.ContentPanel.Controls.Add(this.mSplitContainer);
-			this.mToolStripContainer.ContentPanel.Size = new System.Drawing.Size(804, 491);
-			this.mToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mToolStripContainer.LeftToolStripPanelVisible = false;
-			this.mToolStripContainer.Location = new System.Drawing.Point(0, 0);
-			this.mToolStripContainer.Name = "mToolStripContainer";
-			this.mToolStripContainer.RightToolStripPanelVisible = false;
-			this.mToolStripContainer.Size = new System.Drawing.Size(804, 562);
-			this.mToolStripContainer.TabIndex = 0;
-			this.mToolStripContainer.Text = "ToolStripContainer";
-			// 
-			// mToolStripContainer.TopToolStripPanel
-			// 
-			this.mToolStripContainer.TopToolStripPanel.Controls.Add(this.mMainMenuStrip);
-			this.mToolStripContainer.TopToolStripPanel.Controls.Add(this.mControlToolStrip);
-			// 
-			// mStatusStrip
-			// 
-			this.mStatusStrip.Dock = System.Windows.Forms.DockStyle.None;
-			this.mStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mModeToolStripStatusLabel,
-            this.mModeCycleButton,
-            this.mStatusToolStripStatusLabel,
-            this.mToolStripStatusLabel});
-			this.mStatusStrip.Location = new System.Drawing.Point(0, 0);
-			this.mStatusStrip.Name = "mStatusStrip";
-			this.mStatusStrip.Size = new System.Drawing.Size(804, 22);
-			this.mStatusStrip.TabIndex = 8;
-			// 
-			// mModeToolStripStatusLabel
-			// 
-			this.mModeToolStripStatusLabel.Name = "mModeToolStripStatusLabel";
-			this.mModeToolStripStatusLabel.Size = new System.Drawing.Size(41, 17);
-			this.mModeToolStripStatusLabel.Text = "Mode:";
-			// 
-			// mModeCycleButton
-			// 
-			this.mModeCycleButton.AutoSize = false;
-			this.mModeCycleButton.Name = "mModeCycleButton";
-			this.mModeCycleButton.Size = new System.Drawing.Size(60, 20);
-			this.mModeCycleButton.Value = null;
-			// 
-			// mStatusToolStripStatusLabel
-			// 
-			this.mStatusToolStripStatusLabel.Name = "mStatusToolStripStatusLabel";
-			this.mStatusToolStripStatusLabel.Size = new System.Drawing.Size(48, 17);
-			this.mStatusToolStripStatusLabel.Text = "| Status:";
-			// 
-			// mToolStripStatusLabel
-			// 
-			this.mToolStripStatusLabel.Name = "mToolStripStatusLabel";
-			this.mToolStripStatusLabel.Size = new System.Drawing.Size(10, 17);
-			this.mToolStripStatusLabel.Text = " ";
-			// 
-			// mSplitContainer
-			// 
-			this.mSplitContainer.BackColor = System.Drawing.SystemColors.Control;
-			this.mSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.mSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.mSplitContainer.Location = new System.Drawing.Point(0, 0);
-			this.mSplitContainer.Name = "mSplitContainer";
-			this.mSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// mSplitContainer.Panel1
-			// 
-			this.mSplitContainer.Panel1.Controls.Add(this.mMemoryGroup);
-			this.mSplitContainer.Panel1.Controls.Add(this.mRegistersGroup);
-			this.mSplitContainer.Panel1.Controls.Add(this.mDevicesGroup);
-			this.mSplitContainer.Panel1.Controls.Add(this.mSymbolGroup);
-			this.mSplitContainer.Panel1MinSize = 380;
-			// 
-			// mSplitContainer.Panel2
-			// 
-			this.mSplitContainer.Panel2.Controls.Add(this.mLogListGroup);
-			this.mSplitContainer.Panel2MinSize = 96;
-			this.mSplitContainer.Size = new System.Drawing.Size(804, 491);
-			this.mSplitContainer.SplitterDistance = 385;
-			this.mSplitContainer.TabIndex = 6;
-			// 
-			// mMemoryGroup
-			// 
-			this.mMemoryGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mMemoryGroup.Controls.Add(this.mMemoryTabControl);
-			this.mMemoryGroup.Location = new System.Drawing.Point(236, -2);
-			this.mMemoryGroup.Name = "mMemoryGroup";
-			this.mMemoryGroup.Size = new System.Drawing.Size(568, 328);
-			this.mMemoryGroup.TabIndex = 4;
-			this.mMemoryGroup.TabStop = false;
-			this.mMemoryGroup.Text = "Memory";
-			// 
-			// mMemoryTabControl
-			// 
-			this.mMemoryTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mMemoryTabControl.Controls.Add(this.mMainMemoryTab);
-			this.mMemoryTabControl.Controls.Add(this.mFloatingPointMemoryTab);
-			this.mMemoryTabControl.Location = new System.Drawing.Point(4, 16);
-			this.mMemoryTabControl.Name = "mMemoryTabControl";
-			this.mMemoryTabControl.SelectedIndex = 0;
-			this.mMemoryTabControl.Size = new System.Drawing.Size(560, 309);
-			this.mMemoryTabControl.TabIndex = 0;
-			this.mMemoryTabControl.SelectedIndexChanged += new System.EventHandler(this.mMemoryTabControl_SelectedIndexChanged);
-			this.mMemoryTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.mMemoryTabControl_Selecting);
-			// 
-			// mMainMemoryTab
-			// 
-			this.mMainMemoryTab.Controls.Add(this.mMainMemoryEditor);
-			this.mMainMemoryTab.Location = new System.Drawing.Point(4, 22);
-			this.mMainMemoryTab.Name = "mMainMemoryTab";
-			this.mMainMemoryTab.Padding = new System.Windows.Forms.Padding(3);
-			this.mMainMemoryTab.Size = new System.Drawing.Size(552, 283);
-			this.mMainMemoryTab.TabIndex = 0;
-			this.mMainMemoryTab.Text = "Main";
-			this.mMainMemoryTab.UseVisualStyleBackColor = true;
-			// 
-			// mMainMemoryEditor
-			// 
-			this.mMainMemoryEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mMainMemoryEditor.FirstVisibleAddress = 0;
-			this.mMainMemoryEditor.IndexedAddressCalculatorCallback = null;
-			this.mMainMemoryEditor.Location = new System.Drawing.Point(0, 0);
-			this.mMainMemoryEditor.MarkedAddress = -1;
-			this.mMainMemoryEditor.Memory = null;
-			this.mMainMemoryEditor.Name = "mMainMemoryEditor";
-			this.mMainMemoryEditor.ReadOnly = false;
-			this.mMainMemoryEditor.ResizeInProgress = false;
-			this.mMainMemoryEditor.Size = new System.Drawing.Size(552, 283);
-			this.mMainMemoryEditor.Symbols = null;
-			this.mMainMemoryEditor.TabIndex = 0;
-			this.mMainMemoryEditor.ToolTip = null;
-			this.mMainMemoryEditor.AddressSelected += new MixGui.Events.AddressSelectedHandler(this.mMemoryEditor_addressSelected);
-			// 
-			// mFloatingPointMemoryTab
-			// 
-			this.mFloatingPointMemoryTab.Location = new System.Drawing.Point(4, 22);
-			this.mFloatingPointMemoryTab.Name = "mFloatingPointMemoryTab";
-			this.mFloatingPointMemoryTab.Padding = new System.Windows.Forms.Padding(3);
-			this.mFloatingPointMemoryTab.Size = new System.Drawing.Size(552, 283);
-			this.mFloatingPointMemoryTab.TabIndex = 1;
-			this.mFloatingPointMemoryTab.Text = "Floating Point";
-			this.mFloatingPointMemoryTab.UseVisualStyleBackColor = true;
-			// 
-			// mRegistersGroup
-			// 
-			this.mRegistersGroup.Controls.Add(this.mRegistersEditor);
-			this.mRegistersGroup.Location = new System.Drawing.Point(0, -2);
-			this.mRegistersGroup.Name = "mRegistersGroup";
-			this.mRegistersGroup.Size = new System.Drawing.Size(232, 236);
-			this.mRegistersGroup.TabIndex = 2;
-			this.mRegistersGroup.TabStop = false;
-			this.mRegistersGroup.Text = "Registers";
-			// 
-			// mRegistersEditor
-			// 
-			this.mRegistersEditor.Location = new System.Drawing.Point(8, 16);
-			this.mRegistersEditor.Name = "mRegistersEditor";
-			this.mRegistersEditor.ReadOnly = false;
+            mClearBreakpointsToolStripMenuItem,
+            mResetToolStripMenuItem});
+            mActionsToolStripMenuItem.Name = "mActionsToolStripMenuItem";
+            mActionsToolStripMenuItem.Size = new Size(59, 20);
+            mActionsToolStripMenuItem.Text = "&Actions";
+            // 
+            // mTickToolStripMenuItem
+            // 
+            mTickToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
+            mTickToolStripMenuItem.Name = "mTickToolStripMenuItem";
+            mTickToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            mTickToolStripMenuItem.Size = new Size(207, 22);
+            mTickToolStripMenuItem.Text = "T&ick";
+            mTickToolStripMenuItem.Click += new EventHandler(mTickItem_Click);
+            // 
+            // mStepToolStripMenuItem
+            // 
+            mStepToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
+            mStepToolStripMenuItem.Name = "mStepToolStripMenuItem";
+            mStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            mStepToolStripMenuItem.Size = new Size(207, 22);
+            mStepToolStripMenuItem.Text = "&Step";
+            mStepToolStripMenuItem.Click += new EventHandler(mStepItem_Click);
+            // 
+            // mRunToolStripMenuItem
+            // 
+            mRunToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
+            mRunToolStripMenuItem.Name = "mRunToolStripMenuItem";
+            mRunToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            mRunToolStripMenuItem.Size = new Size(207, 22);
+            mRunToolStripMenuItem.Text = "R&un";
+            mRunToolStripMenuItem.Click += new EventHandler(mRunItem_Click);
+            // 
+            // mGoToolStripMenuItem
+            // 
+            mGoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
+            mGoToolStripMenuItem.Name = "mGoToolStripMenuItem";
+            mGoToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5);
+            mGoToolStripMenuItem.Size = new Size(207, 22);
+            mGoToolStripMenuItem.Text = "&Go";
+            mGoToolStripMenuItem.Click += new EventHandler(mGoItem_Click);
+            // 
+            // mDetachToolStripMenuItem
+            // 
+            mDetachToolStripMenuItem.Name = "mDetachToolStripMenuItem";
+            mDetachToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D);
+            mDetachToolStripMenuItem.Size = new Size(207, 22);
+            mDetachToolStripMenuItem.Text = "&Detach";
+            mDetachToolStripMenuItem.Click += new EventHandler(mDetachItem_Click);
+            // 
+            // mClearBreakpointsToolStripMenuItem
+            // 
+            mClearBreakpointsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
+            mClearBreakpointsToolStripMenuItem.Name = "mClearBreakpointsToolStripMenuItem";
+            mClearBreakpointsToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B);
+            mClearBreakpointsToolStripMenuItem.Size = new Size(207, 22);
+            mClearBreakpointsToolStripMenuItem.Text = "Clear &Breakpoints";
+            mClearBreakpointsToolStripMenuItem.Click += new EventHandler(mClearBreakpointsItem_Click);
+            // 
+            // mResetToolStripMenuItem
+            // 
+            mResetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
+            mResetToolStripMenuItem.Name = "mResetToolStripMenuItem";
+            mResetToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R);
+            mResetToolStripMenuItem.Size = new Size(207, 22);
+            mResetToolStripMenuItem.Text = "&Reset";
+            mResetToolStripMenuItem.Click += new EventHandler(mResetItem_Click);
+            // 
+            // mToolsToolStripMenuItem
+            // 
+            mToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mPreferencesToolStripMenuItem,
+            toolStripSeparator9,
+            mProfilingEnabledMenuItem,
+            mProfilingShowTickCountsMenuItem,
+            mProfilingResetCountsMenuItem});
+            mToolsToolStripMenuItem.Name = "mToolsToolStripMenuItem";
+            mToolsToolStripMenuItem.Size = new Size(48, 20);
+            mToolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // mPreferencesToolStripMenuItem
+            // 
+            mPreferencesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
+            mPreferencesToolStripMenuItem.Name = "mPreferencesToolStripMenuItem";
+            mPreferencesToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P);
+            mPreferencesToolStripMenuItem.Size = new Size(185, 22);
+            mPreferencesToolStripMenuItem.Text = "&Preferences...";
+            mPreferencesToolStripMenuItem.Click += new EventHandler(mPreferencesMenuItem_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            toolStripSeparator9.Name = "toolStripSeparator9";
+            toolStripSeparator9.Size = new Size(182, 6);
+            // 
+            // mProfilingEnabledMenuItem
+            // 
+            mProfilingEnabledMenuItem.CheckOnClick = true;
+            mProfilingEnabledMenuItem.Name = "mProfilingEnabledMenuItem";
+            mProfilingEnabledMenuItem.Size = new Size(185, 22);
+            mProfilingEnabledMenuItem.Text = "&Enable profiling";
+            mProfilingEnabledMenuItem.CheckedChanged += new EventHandler(mProfilingEnabledMenuItem_CheckedChanged);
+            // 
+            // mProfilingShowTickCountsMenuItem
+            // 
+            mProfilingShowTickCountsMenuItem.CheckOnClick = true;
+            mProfilingShowTickCountsMenuItem.Name = "mProfilingShowTickCountsMenuItem";
+            mProfilingShowTickCountsMenuItem.Size = new Size(185, 22);
+            mProfilingShowTickCountsMenuItem.Text = "&Show tick counts";
+            mProfilingShowTickCountsMenuItem.CheckedChanged += new EventHandler(mProfilingShowTickCountsMenuItem_CheckedChanged);
+            // 
+            // mHelpToolStripMenuItem
+            // 
+            mHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mAboutToolStripMenuItem});
+            mHelpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
+            mHelpToolStripMenuItem.Size = new Size(44, 20);
+            mHelpToolStripMenuItem.Text = "&Help";
+            // 
+            // mAboutToolStripMenuItem
+            // 
+            mAboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
+            mAboutToolStripMenuItem.Name = "mAboutToolStripMenuItem";
+            mAboutToolStripMenuItem.Size = new Size(116, 22);
+            mAboutToolStripMenuItem.Text = "&About...";
+            mAboutToolStripMenuItem.Click += new EventHandler(mAboutMenuItem_Click);
+            // 
+            // mToolStripContainer
+            // 
+            // 
+            // mToolStripContainer.BottomToolStripPanel
+            // 
+            mToolStripContainer.BottomToolStripPanel.Controls.Add(mStatusStrip);
+            // 
+            // mToolStripContainer.ContentPanel
+            // 
+            mToolStripContainer.ContentPanel.Controls.Add(mSplitContainer);
+            mToolStripContainer.ContentPanel.Size = new Size(804, 491);
+            mToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            mToolStripContainer.LeftToolStripPanelVisible = false;
+            mToolStripContainer.Location = new Point(0, 0);
+            mToolStripContainer.Name = "mToolStripContainer";
+            mToolStripContainer.RightToolStripPanelVisible = false;
+            mToolStripContainer.Size = new Size(804, 562);
+            mToolStripContainer.TabIndex = 0;
+            mToolStripContainer.Text = "ToolStripContainer";
+            // 
+            // mToolStripContainer.TopToolStripPanel
+            // 
+            mToolStripContainer.TopToolStripPanel.Controls.Add(mMainMenuStrip);
+            mToolStripContainer.TopToolStripPanel.Controls.Add(mControlToolStrip);
+            // 
+            // mStatusStrip
+            // 
+            mStatusStrip.Dock = System.Windows.Forms.DockStyle.None;
+            mStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mModeToolStripStatusLabel,
+            mModeCycleButton,
+            mStatusToolStripStatusLabel,
+            mToolStripStatusLabel});
+            mStatusStrip.Location = new Point(0, 0);
+            mStatusStrip.Name = "mStatusStrip";
+            mStatusStrip.Size = new Size(804, 22);
+            mStatusStrip.TabIndex = 8;
+            // 
+            // mModeToolStripStatusLabel
+            // 
+            mModeToolStripStatusLabel.Name = "mModeToolStripStatusLabel";
+            mModeToolStripStatusLabel.Size = new Size(41, 17);
+            mModeToolStripStatusLabel.Text = "Mode:";
+            // 
+            // mModeCycleButton
+            // 
+            mModeCycleButton.AutoSize = false;
+            mModeCycleButton.Name = "mModeCycleButton";
+            mModeCycleButton.Size = new Size(60, 20);
+            mModeCycleButton.Value = null;
+            // 
+            // mStatusToolStripStatusLabel
+            // 
+            mStatusToolStripStatusLabel.Name = "mStatusToolStripStatusLabel";
+            mStatusToolStripStatusLabel.Size = new Size(48, 17);
+            mStatusToolStripStatusLabel.Text = "| Status:";
+            // 
+            // mToolStripStatusLabel
+            // 
+            mToolStripStatusLabel.Name = "mToolStripStatusLabel";
+            mToolStripStatusLabel.Size = new Size(10, 17);
+            mToolStripStatusLabel.Text = " ";
+            // 
+            // mSplitContainer
+            // 
+            mSplitContainer.BackColor = System.Drawing.SystemColors.Control;
+            mSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            mSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            mSplitContainer.Location = new Point(0, 0);
+            mSplitContainer.Name = "mSplitContainer";
+            mSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // mSplitContainer.Panel1
+            // 
+            mSplitContainer.Panel1.Controls.Add(mMemoryGroup);
+            mSplitContainer.Panel1.Controls.Add(mRegistersGroup);
+            mSplitContainer.Panel1.Controls.Add(mDevicesGroup);
+            mSplitContainer.Panel1.Controls.Add(mSymbolGroup);
+            mSplitContainer.Panel1MinSize = 380;
+            // 
+            // mSplitContainer.Panel2
+            // 
+            mSplitContainer.Panel2.Controls.Add(mLogListGroup);
+            mSplitContainer.Panel2MinSize = 96;
+            mSplitContainer.Size = new Size(804, 491);
+            mSplitContainer.SplitterDistance = 385;
+            mSplitContainer.TabIndex = 6;
+            // 
+            // mMemoryGroup
+            // 
+            mMemoryGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mMemoryGroup.Controls.Add(mMemoryTabControl);
+            mMemoryGroup.Location = new Point(236, -2);
+            mMemoryGroup.Name = "mMemoryGroup";
+            mMemoryGroup.Size = new Size(568, 328);
+            mMemoryGroup.TabIndex = 4;
+            mMemoryGroup.TabStop = false;
+            mMemoryGroup.Text = "Memory";
+            // 
+            // mMemoryTabControl
+            // 
+            mMemoryTabControl.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mMemoryTabControl.Controls.Add(mMainMemoryTab);
+            mMemoryTabControl.Controls.Add(mFloatingPointMemoryTab);
+            mMemoryTabControl.Location = new Point(4, 16);
+            mMemoryTabControl.Name = "mMemoryTabControl";
+            mMemoryTabControl.SelectedIndex = 0;
+            mMemoryTabControl.Size = new Size(560, 309);
+            mMemoryTabControl.TabIndex = 0;
+            mMemoryTabControl.SelectedIndexChanged += new EventHandler(mMemoryTabControl_SelectedIndexChanged);
+            mMemoryTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(mMemoryTabControl_Selecting);
+            // 
+            // mMainMemoryTab
+            // 
+            mMainMemoryTab.Controls.Add(mMainMemoryEditor);
+            mMainMemoryTab.Location = new Point(4, 22);
+            mMainMemoryTab.Name = "mMainMemoryTab";
+            mMainMemoryTab.Padding = new Padding(3);
+            mMainMemoryTab.Size = new Size(552, 283);
+            mMainMemoryTab.TabIndex = 0;
+            mMainMemoryTab.Text = "Main";
+            mMainMemoryTab.UseVisualStyleBackColor = true;
+            // 
+            // mMainMemoryEditor
+            // 
+            mMainMemoryEditor.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mMainMemoryEditor.FirstVisibleAddress = 0;
+            mMainMemoryEditor.IndexedAddressCalculatorCallback = null;
+            mMainMemoryEditor.Location = new Point(0, 0);
+            mMainMemoryEditor.MarkedAddress = -1;
+            mMainMemoryEditor.Memory = null;
+            mMainMemoryEditor.Name = "mMainMemoryEditor";
+            mMainMemoryEditor.ReadOnly = false;
+            mMainMemoryEditor.ResizeInProgress = false;
+            mMainMemoryEditor.Size = new Size(552, 283);
+            mMainMemoryEditor.Symbols = null;
+            mMainMemoryEditor.TabIndex = 0;
+            mMainMemoryEditor.ToolTip = null;
+            mMainMemoryEditor.AddressSelected += new MixGui.Events.AddressSelectedHandler(mMemoryEditor_addressSelected);
+            // 
+            // mFloatingPointMemoryTab
+            // 
+            mFloatingPointMemoryTab.Location = new Point(4, 22);
+            mFloatingPointMemoryTab.Name = "mFloatingPointMemoryTab";
+            mFloatingPointMemoryTab.Padding = new Padding(3);
+            mFloatingPointMemoryTab.Size = new Size(552, 283);
+            mFloatingPointMemoryTab.TabIndex = 1;
+            mFloatingPointMemoryTab.Text = "Floating Point";
+            mFloatingPointMemoryTab.UseVisualStyleBackColor = true;
+            // 
+            // mRegistersGroup
+            // 
+            mRegistersGroup.Controls.Add(mRegistersEditor);
+            mRegistersGroup.Location = new Point(0, -2);
+            mRegistersGroup.Name = "mRegistersGroup";
+            mRegistersGroup.Size = new Size(232, 236);
+            mRegistersGroup.TabIndex = 2;
+            mRegistersGroup.TabStop = false;
+            mRegistersGroup.Text = "Registers";
+            // 
+            // mRegistersEditor
+            // 
+            mRegistersEditor.Location = new Point(8, 16);
+            mRegistersEditor.Name = "mRegistersEditor";
+            mRegistersEditor.ReadOnly = false;
 			registers1.CompareIndicator = MixLib.Registers.CompValues.Equal;
 			registers1.OverflowIndicator = false;
-			this.mRegistersEditor.Registers = registers1;
-			this.mRegistersEditor.Size = new System.Drawing.Size(218, 214);
-			this.mRegistersEditor.TabIndex = 0;
-			// 
-			// mDevicesGroup
-			// 
-			this.mDevicesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mDevicesGroup.Controls.Add(this.mDeviceEditorButton);
-			this.mDevicesGroup.Controls.Add(this.mDevicesControl);
-			this.mDevicesGroup.Location = new System.Drawing.Point(0, 326);
-			this.mDevicesGroup.Name = "mDevicesGroup";
-			this.mDevicesGroup.Size = new System.Drawing.Size(804, 56);
-			this.mDevicesGroup.TabIndex = 5;
-			this.mDevicesGroup.TabStop = false;
-			this.mDevicesGroup.Text = "Devices";
-			// 
-			// mDeviceEditorButton
-			// 
-			this.mDeviceEditorButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mDeviceEditorButton.Location = new System.Drawing.Point(721, 16);
-			this.mDeviceEditorButton.Margin = new System.Windows.Forms.Padding(0);
-			this.mDeviceEditorButton.Name = "mDeviceEditorButton";
-			this.mDeviceEditorButton.Size = new System.Drawing.Size(75, 23);
-			this.mDeviceEditorButton.TabIndex = 1;
-			this.mDeviceEditorButton.Text = "Show E&ditor";
-			this.mDeviceEditorButton.UseVisualStyleBackColor = true;
-			this.mDeviceEditorButton.Click += new System.EventHandler(this.mDeviceEditorItem_Click);
-			// 
-			// mDevicesControl
-			// 
-			this.mDevicesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mDevicesControl.Devices = null;
-			this.mDevicesControl.Location = new System.Drawing.Point(4, 16);
-			this.mDevicesControl.Name = "mDevicesControl";
-			this.mDevicesControl.Size = new System.Drawing.Size(711, 36);
-			this.mDevicesControl.Structure = null;
-			this.mDevicesControl.TabIndex = 0;
-			this.mDevicesControl.ToolTip = null;
-			// 
-			// mSymbolGroup
-			// 
-			this.mSymbolGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)));
-			this.mSymbolGroup.Controls.Add(this.mSymbolListView);
-			this.mSymbolGroup.Location = new System.Drawing.Point(0, 234);
-			this.mSymbolGroup.Name = "mSymbolGroup";
-			this.mSymbolGroup.Size = new System.Drawing.Size(232, 92);
-			this.mSymbolGroup.TabIndex = 3;
-			this.mSymbolGroup.TabStop = false;
-			this.mSymbolGroup.Text = "Symbols";
-			// 
-			// mSymbolListView
-			// 
-			this.mSymbolListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mSymbolListView.Location = new System.Drawing.Point(8, 16);
-			this.mSymbolListView.MemoryMaxIndex = 0;
-			this.mSymbolListView.MemoryMinIndex = 0;
-			this.mSymbolListView.Name = "mSymbolListView";
-			this.mSymbolListView.Size = new System.Drawing.Size(218, 70);
-			this.mSymbolListView.Symbols = null;
-			this.mSymbolListView.TabIndex = 0;
-			this.mSymbolListView.AddressSelected += new MixGui.Events.AddressSelectedHandler(this.listViews_addressSelected);
-			// 
-			// mLogListGroup
-			// 
-			this.mLogListGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mLogListGroup.Controls.Add(this.mLogListView);
-			this.mLogListGroup.Location = new System.Drawing.Point(0, 3);
-			this.mLogListGroup.Name = "mLogListGroup";
-			this.mLogListGroup.Size = new System.Drawing.Size(804, 95);
-			this.mLogListGroup.TabIndex = 7;
-			this.mLogListGroup.TabStop = false;
-			this.mLogListGroup.Text = "Messages";
-			// 
-			// mLogListView
-			// 
-			this.mLogListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.mLogListView.Location = new System.Drawing.Point(8, 16);
-			this.mLogListView.Name = "mLogListView";
-			this.mLogListView.SeverityImageList = this.mSeverityImageList;
-			this.mLogListView.Size = new System.Drawing.Size(788, 73);
-			this.mLogListView.TabIndex = 0;
-			this.mLogListView.AddressSelected += new MixGui.Events.AddressSelectedHandler(this.listViews_addressSelected);
-			// 
-			// mControlToolStrip
-			// 
-			this.mControlToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-			this.mControlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.mControlToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mPCToolStripLabel,
-            this.mShowPCToolStripButton,
+            mRegistersEditor.Registers = registers1;
+            mRegistersEditor.Size = new Size(218, 214);
+            mRegistersEditor.TabIndex = 0;
+            // 
+            // mDevicesGroup
+            // 
+            mDevicesGroup.Anchor = ((AnchorStyles.Bottom | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mDevicesGroup.Controls.Add(mDeviceEditorButton);
+            mDevicesGroup.Controls.Add(mDevicesControl);
+            mDevicesGroup.Location = new Point(0, 326);
+            mDevicesGroup.Name = "mDevicesGroup";
+            mDevicesGroup.Size = new Size(804, 56);
+            mDevicesGroup.TabIndex = 5;
+            mDevicesGroup.TabStop = false;
+            mDevicesGroup.Text = "Devices";
+            // 
+            // mDeviceEditorButton
+            // 
+            mDeviceEditorButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+            mDeviceEditorButton.Location = new Point(721, 16);
+            mDeviceEditorButton.Margin = new Padding(0);
+            mDeviceEditorButton.Name = "mDeviceEditorButton";
+            mDeviceEditorButton.Size = new Size(75, 23);
+            mDeviceEditorButton.TabIndex = 1;
+            mDeviceEditorButton.Text = "Show E&ditor";
+            mDeviceEditorButton.UseVisualStyleBackColor = true;
+            mDeviceEditorButton.Click += new EventHandler(mDeviceEditorItem_Click);
+            // 
+            // mDevicesControl
+            // 
+            mDevicesControl.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mDevicesControl.Devices = null;
+            mDevicesControl.Location = new Point(4, 16);
+            mDevicesControl.Name = "mDevicesControl";
+            mDevicesControl.Size = new Size(711, 36);
+            mDevicesControl.Structure = null;
+            mDevicesControl.TabIndex = 0;
+            mDevicesControl.ToolTip = null;
+            // 
+            // mSymbolGroup
+            // 
+            mSymbolGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left);
+            mSymbolGroup.Controls.Add(mSymbolListView);
+            mSymbolGroup.Location = new Point(0, 234);
+            mSymbolGroup.Name = "mSymbolGroup";
+            mSymbolGroup.Size = new Size(232, 92);
+            mSymbolGroup.TabIndex = 3;
+            mSymbolGroup.TabStop = false;
+            mSymbolGroup.Text = "Symbols";
+            // 
+            // mSymbolListView
+            // 
+            mSymbolListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mSymbolListView.Location = new Point(8, 16);
+            mSymbolListView.MemoryMaxIndex = 0;
+            mSymbolListView.MemoryMinIndex = 0;
+            mSymbolListView.Name = "mSymbolListView";
+            mSymbolListView.Size = new Size(218, 70);
+            mSymbolListView.Symbols = null;
+            mSymbolListView.TabIndex = 0;
+            mSymbolListView.AddressSelected += new MixGui.Events.AddressSelectedHandler(listViews_addressSelected);
+            // 
+            // mLogListGroup
+            // 
+            mLogListGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mLogListGroup.Controls.Add(mLogListView);
+            mLogListGroup.Location = new Point(0, 3);
+            mLogListGroup.Name = "mLogListGroup";
+            mLogListGroup.Size = new Size(804, 95);
+            mLogListGroup.TabIndex = 7;
+            mLogListGroup.TabStop = false;
+            mLogListGroup.Text = "Messages";
+            // 
+            // mLogListView
+            // 
+            mLogListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right);
+            mLogListView.Location = new Point(8, 16);
+            mLogListView.Name = "mLogListView";
+            mLogListView.SeverityImageList = mSeverityImageList;
+            mLogListView.Size = new Size(788, 73);
+            mLogListView.TabIndex = 0;
+            mLogListView.AddressSelected += new MixGui.Events.AddressSelectedHandler(listViews_addressSelected);
+            // 
+            // mControlToolStrip
+            // 
+            mControlToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            mControlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            mControlToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mPCToolStripLabel,
+            mShowPCToolStripButton,
             toolStripSeparator3,
-            this.mTicksToolStripLabel,
-            this.mTicksToolStripTextBox,
-            this.mResetTicksToolStripButton,
+            mTicksToolStripLabel,
+            mTicksToolStripTextBox,
+            mResetTicksToolStripButton,
             toolStripSeparator4,
-            this.mTickToolStripButton,
-            this.mStepToolStripButton,
-            this.mRunToolStripButton,
-            this.mGoToolStripButton,
+            mTickToolStripButton,
+            mStepToolStripButton,
+            mRunToolStripButton,
+            mGoToolStripButton,
             toolStripSeparator5,
-            this.mDetachToolStripButton,
+            mDetachToolStripButton,
             toolStripSeparator6,
-            this.mClearBreakpointsToolStripButton,
-            this.mResetToolStripButton,
+            mClearBreakpointsToolStripButton,
+            mResetToolStripButton,
             toolStripSeparator7,
-            this.mTeletypeToolStripButton});
-			this.mControlToolStrip.Location = new System.Drawing.Point(3, 24);
-			this.mControlToolStrip.Name = "mControlToolStrip";
-			this.mControlToolStrip.Size = new System.Drawing.Size(761, 25);
-			this.mControlToolStrip.TabIndex = 1;
-			// 
-			// mPCToolStripLabel
-			// 
-			this.mPCToolStripLabel.Name = "mPCToolStripLabel";
-			this.mPCToolStripLabel.Size = new System.Drawing.Size(28, 22);
-			this.mPCToolStripLabel.Text = "PC: ";
-			// 
-			// mShowPCToolStripButton
-			// 
-			this.mShowPCToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.mShowPCToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mShowPCToolStripButton.Image")));
-			this.mShowPCToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mShowPCToolStripButton.Name = "mShowPCToolStripButton";
-			this.mShowPCToolStripButton.Size = new System.Drawing.Size(40, 22);
-			this.mShowPCToolStripButton.Text = "Sh&ow";
-			this.mShowPCToolStripButton.ToolTipText = "Show the program counter";
-			this.mShowPCToolStripButton.Click += new System.EventHandler(this.mShowPCButton_Click);
-			// 
-			// mTicksToolStripLabel
-			// 
-			this.mTicksToolStripLabel.Name = "mTicksToolStripLabel";
-			this.mTicksToolStripLabel.Size = new System.Drawing.Size(40, 22);
-			this.mTicksToolStripLabel.Text = "Ticks: ";
-			// 
-			// mTicksToolStripTextBox
-			// 
-			this.mTicksToolStripTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mTicksToolStripTextBox.Name = "mTicksToolStripTextBox";
-			this.mTicksToolStripTextBox.ReadOnly = true;
-			this.mTicksToolStripTextBox.Size = new System.Drawing.Size(64, 25);
-			this.mTicksToolStripTextBox.Text = "0";
-			// 
-			// mResetTicksToolStripButton
-			// 
-			this.mResetTicksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.mResetTicksToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
-			this.mResetTicksToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mResetTicksToolStripButton.Name = "mResetTicksToolStripButton";
-			this.mResetTicksToolStripButton.Size = new System.Drawing.Size(39, 22);
-			this.mResetTicksToolStripButton.Text = "&Reset";
-			this.mResetTicksToolStripButton.ToolTipText = "Reset the tick counter";
-			this.mResetTicksToolStripButton.Click += new System.EventHandler(this.mResetTicksButton_Click);
-			// 
-			// mTickToolStripButton
-			// 
-			this.mTickToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripButton.Image")));
-			this.mTickToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mTickToolStripButton.Name = "mTickToolStripButton";
-			this.mTickToolStripButton.Size = new System.Drawing.Size(49, 22);
-			this.mTickToolStripButton.Text = "T&ick";
-			this.mTickToolStripButton.ToolTipText = "Execute one tick";
-			this.mTickToolStripButton.Click += new System.EventHandler(this.mTickItem_Click);
-			// 
-			// mStepToolStripButton
-			// 
-			this.mStepToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripButton.Image")));
-			this.mStepToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mStepToolStripButton.Name = "mStepToolStripButton";
-			this.mStepToolStripButton.Size = new System.Drawing.Size(50, 22);
-			this.mStepToolStripButton.Text = "Ste&p";
-			this.mStepToolStripButton.ToolTipText = "Execute one step";
-			this.mStepToolStripButton.Click += new System.EventHandler(this.mStepItem_Click);
-			// 
-			// mRunToolStripButton
-			// 
-			this.mRunToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripButton.Image")));
-			this.mRunToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mRunToolStripButton.Name = "mRunToolStripButton";
-			this.mRunToolStripButton.Size = new System.Drawing.Size(48, 22);
-			this.mRunToolStripButton.Text = "R&un";
-			this.mRunToolStripButton.ToolTipText = "Start or stop a full run";
-			this.mRunToolStripButton.Click += new System.EventHandler(this.mRunItem_Click);
-			// 
-			// mGoToolStripButton
-			// 
-			this.mGoToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripButton.Image")));
-			this.mGoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mGoToolStripButton.Name = "mGoToolStripButton";
-			this.mGoToolStripButton.Size = new System.Drawing.Size(42, 22);
-			this.mGoToolStripButton.Text = "&Go";
-			this.mGoToolStripButton.ToolTipText = "Start the MIX loader";
-			this.mGoToolStripButton.Click += new System.EventHandler(this.mGoItem_Click);
-			// 
-			// mDetachToolStripButton
-			// 
-			this.mDetachToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.mDetachToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mDetachToolStripButton.Image")));
-			this.mDetachToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mDetachToolStripButton.Name = "mDetachToolStripButton";
-			this.mDetachToolStripButton.Size = new System.Drawing.Size(48, 22);
-			this.mDetachToolStripButton.Text = "Detac&h";
-			this.mDetachToolStripButton.ToolTipText = "Switch between running MIX in the foreground or background";
-			this.mDetachToolStripButton.Click += new System.EventHandler(this.mDetachItem_Click);
-			// 
-			// mClearBreakpointsToolStripButton
-			// 
-			this.mClearBreakpointsToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
-			this.mClearBreakpointsToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mClearBreakpointsToolStripButton.Name = "mClearBreakpointsToolStripButton";
-			this.mClearBreakpointsToolStripButton.Size = new System.Drawing.Size(119, 22);
-			this.mClearBreakpointsToolStripButton.Text = "Clear &Breakpoints";
-			this.mClearBreakpointsToolStripButton.ToolTipText = "Remove all set breakpoints";
-			this.mClearBreakpointsToolStripButton.Click += new System.EventHandler(this.mClearBreakpointsItem_Click);
-			// 
-			// mResetToolStripButton
-			// 
-			this.mResetToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripButton.Image")));
-			this.mResetToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mResetToolStripButton.Name = "mResetToolStripButton";
-			this.mResetToolStripButton.Size = new System.Drawing.Size(55, 22);
-			this.mResetToolStripButton.Text = "R&eset";
-			this.mResetToolStripButton.ToolTipText = "Reset MIX to initial state";
-			this.mResetToolStripButton.Click += new System.EventHandler(this.mResetItem_Click);
-			// 
-			// mTeletypeToolStripButton
-			// 
-			this.mTeletypeToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
-			this.mTeletypeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mTeletypeToolStripButton.Name = "mTeletypeToolStripButton";
-			this.mTeletypeToolStripButton.Size = new System.Drawing.Size(104, 22);
-			this.mTeletypeToolStripButton.Text = "Show &Teletype";
-			this.mTeletypeToolStripButton.ToolTipText = "Show or hide the teletype";
-			this.mTeletypeToolStripButton.Click += new System.EventHandler(this.mTeletypeItem_Click);
-			// 
-			// mToolTip
-			// 
-			this.mToolTip.AutoPopDelay = 10000;
-			this.mToolTip.InitialDelay = 100;
-			this.mToolTip.ReshowDelay = 100;
-			this.mToolTip.ShowAlways = true;
-			// 
-			// mProfilingResetCountsMenuItem
-			// 
-			this.mProfilingResetCountsMenuItem.Name = "mProfilingResetCountsMenuItem";
-			this.mProfilingResetCountsMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.mProfilingResetCountsMenuItem.Text = "&Reset counts";
-			this.mProfilingResetCountsMenuItem.Click += new System.EventHandler(this.mProfilingResetCountsMenuItem_Click);
-			// 
-			// MixForm
-			// 
-			this.ClientSize = new System.Drawing.Size(804, 562);
-			this.Controls.Add(this.mToolStripContainer);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.KeyPreview = true;
-			this.MainMenuStrip = this.mMainMenuStrip;
-			this.MinimumSize = new System.Drawing.Size(820, 600);
-			this.Name = "MixForm";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "MixEmul";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.this_FormClosing);
-			this.ResizeBegin += new System.EventHandler(this.this_ResizeBegin);
-			this.ResizeEnd += new System.EventHandler(this.MixForm_ResizeEnd);
-			this.mMainMenuStrip.ResumeLayout(false);
-			this.mMainMenuStrip.PerformLayout();
-			this.mToolStripContainer.BottomToolStripPanel.ResumeLayout(false);
-			this.mToolStripContainer.BottomToolStripPanel.PerformLayout();
-			this.mToolStripContainer.ContentPanel.ResumeLayout(false);
-			this.mToolStripContainer.TopToolStripPanel.ResumeLayout(false);
-			this.mToolStripContainer.TopToolStripPanel.PerformLayout();
-			this.mToolStripContainer.ResumeLayout(false);
-			this.mToolStripContainer.PerformLayout();
-			this.mStatusStrip.ResumeLayout(false);
-			this.mStatusStrip.PerformLayout();
-			this.mSplitContainer.Panel1.ResumeLayout(false);
-			this.mSplitContainer.Panel2.ResumeLayout(false);
-			this.mSplitContainer.ResumeLayout(false);
-			this.mMemoryGroup.ResumeLayout(false);
-			this.mMemoryTabControl.ResumeLayout(false);
-			this.mMainMemoryTab.ResumeLayout(false);
-			this.mRegistersGroup.ResumeLayout(false);
-			this.mDevicesGroup.ResumeLayout(false);
-			this.mSymbolGroup.ResumeLayout(false);
-			this.mLogListGroup.ResumeLayout(false);
-			this.mControlToolStrip.ResumeLayout(false);
-			this.mControlToolStrip.PerformLayout();
-			this.ResumeLayout(false);
+            mTeletypeToolStripButton});
+            mControlToolStrip.Location = new Point(3, 24);
+            mControlToolStrip.Name = "mControlToolStrip";
+            mControlToolStrip.Size = new Size(761, 25);
+            mControlToolStrip.TabIndex = 1;
+            // 
+            // mPCToolStripLabel
+            // 
+            mPCToolStripLabel.Name = "mPCToolStripLabel";
+            mPCToolStripLabel.Size = new Size(28, 22);
+            mPCToolStripLabel.Text = "PC: ";
+            // 
+            // mShowPCToolStripButton
+            // 
+            mShowPCToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            mShowPCToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mShowPCToolStripButton.Image")));
+            mShowPCToolStripButton.ImageTransparentColor = Color.Magenta;
+            mShowPCToolStripButton.Name = "mShowPCToolStripButton";
+            mShowPCToolStripButton.Size = new Size(40, 22);
+            mShowPCToolStripButton.Text = "Sh&ow";
+            mShowPCToolStripButton.ToolTipText = "Show the program counter";
+            mShowPCToolStripButton.Click += new EventHandler(mShowPCButton_Click);
+            // 
+            // mTicksToolStripLabel
+            // 
+            mTicksToolStripLabel.Name = "mTicksToolStripLabel";
+            mTicksToolStripLabel.Size = new Size(40, 22);
+            mTicksToolStripLabel.Text = "Ticks: ";
+            // 
+            // mTicksToolStripTextBox
+            // 
+            mTicksToolStripTextBox.BorderStyle = BorderStyle.FixedSingle;
+            mTicksToolStripTextBox.Name = "mTicksToolStripTextBox";
+            mTicksToolStripTextBox.ReadOnly = true;
+            mTicksToolStripTextBox.Size = new Size(64, 25);
+            mTicksToolStripTextBox.Text = "0";
+            // 
+            // mResetTicksToolStripButton
+            // 
+            mResetTicksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            mResetTicksToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
+            mResetTicksToolStripButton.ImageTransparentColor = Color.Magenta;
+            mResetTicksToolStripButton.Name = "mResetTicksToolStripButton";
+            mResetTicksToolStripButton.Size = new Size(39, 22);
+            mResetTicksToolStripButton.Text = "&Reset";
+            mResetTicksToolStripButton.ToolTipText = "Reset the tick counter";
+            mResetTicksToolStripButton.Click += new EventHandler(mResetTicksButton_Click);
+            // 
+            // mTickToolStripButton
+            // 
+            mTickToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripButton.Image")));
+            mTickToolStripButton.ImageTransparentColor = Color.Magenta;
+            mTickToolStripButton.Name = "mTickToolStripButton";
+            mTickToolStripButton.Size = new Size(49, 22);
+            mTickToolStripButton.Text = "T&ick";
+            mTickToolStripButton.ToolTipText = "Execute one tick";
+            mTickToolStripButton.Click += new EventHandler(mTickItem_Click);
+            // 
+            // mStepToolStripButton
+            // 
+            mStepToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripButton.Image")));
+            mStepToolStripButton.ImageTransparentColor = Color.Magenta;
+            mStepToolStripButton.Name = "mStepToolStripButton";
+            mStepToolStripButton.Size = new Size(50, 22);
+            mStepToolStripButton.Text = "Ste&p";
+            mStepToolStripButton.ToolTipText = "Execute one step";
+            mStepToolStripButton.Click += new EventHandler(mStepItem_Click);
+            // 
+            // mRunToolStripButton
+            // 
+            mRunToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripButton.Image")));
+            mRunToolStripButton.ImageTransparentColor = Color.Magenta;
+            mRunToolStripButton.Name = "mRunToolStripButton";
+            mRunToolStripButton.Size = new Size(48, 22);
+            mRunToolStripButton.Text = "R&un";
+            mRunToolStripButton.ToolTipText = "Start or stop a full run";
+            mRunToolStripButton.Click += new EventHandler(mRunItem_Click);
+            // 
+            // mGoToolStripButton
+            // 
+            mGoToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripButton.Image")));
+            mGoToolStripButton.ImageTransparentColor = Color.Magenta;
+            mGoToolStripButton.Name = "mGoToolStripButton";
+            mGoToolStripButton.Size = new Size(42, 22);
+            mGoToolStripButton.Text = "&Go";
+            mGoToolStripButton.ToolTipText = "Start the MIX loader";
+            mGoToolStripButton.Click += new EventHandler(mGoItem_Click);
+            // 
+            // mDetachToolStripButton
+            // 
+            mDetachToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            mDetachToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mDetachToolStripButton.Image")));
+            mDetachToolStripButton.ImageTransparentColor = Color.Magenta;
+            mDetachToolStripButton.Name = "mDetachToolStripButton";
+            mDetachToolStripButton.Size = new Size(48, 22);
+            mDetachToolStripButton.Text = "Detac&h";
+            mDetachToolStripButton.ToolTipText = "Switch between running MIX in the foreground or background";
+            mDetachToolStripButton.Click += new EventHandler(mDetachItem_Click);
+            // 
+            // mClearBreakpointsToolStripButton
+            // 
+            mClearBreakpointsToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
+            mClearBreakpointsToolStripButton.ImageTransparentColor = Color.Magenta;
+            mClearBreakpointsToolStripButton.Name = "mClearBreakpointsToolStripButton";
+            mClearBreakpointsToolStripButton.Size = new Size(119, 22);
+            mClearBreakpointsToolStripButton.Text = "Clear &Breakpoints";
+            mClearBreakpointsToolStripButton.ToolTipText = "Remove all set breakpoints";
+            mClearBreakpointsToolStripButton.Click += new EventHandler(mClearBreakpointsItem_Click);
+            // 
+            // mResetToolStripButton
+            // 
+            mResetToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripButton.Image")));
+            mResetToolStripButton.ImageTransparentColor = Color.Magenta;
+            mResetToolStripButton.Name = "mResetToolStripButton";
+            mResetToolStripButton.Size = new Size(55, 22);
+            mResetToolStripButton.Text = "R&eset";
+            mResetToolStripButton.ToolTipText = "Reset MIX to initial state";
+            mResetToolStripButton.Click += new EventHandler(mResetItem_Click);
+            // 
+            // mTeletypeToolStripButton
+            // 
+            mTeletypeToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
+            mTeletypeToolStripButton.ImageTransparentColor = Color.Magenta;
+            mTeletypeToolStripButton.Name = "mTeletypeToolStripButton";
+            mTeletypeToolStripButton.Size = new Size(104, 22);
+            mTeletypeToolStripButton.Text = "Show &Teletype";
+            mTeletypeToolStripButton.ToolTipText = "Show or hide the teletype";
+            mTeletypeToolStripButton.Click += new EventHandler(mTeletypeItem_Click);
+            // 
+            // mToolTip
+            // 
+            mToolTip.AutoPopDelay = 10000;
+            mToolTip.InitialDelay = 100;
+            mToolTip.ReshowDelay = 100;
+            mToolTip.ShowAlways = true;
+            // 
+            // mProfilingResetCountsMenuItem
+            // 
+            mProfilingResetCountsMenuItem.Name = "mProfilingResetCountsMenuItem";
+            mProfilingResetCountsMenuItem.Size = new Size(185, 22);
+            mProfilingResetCountsMenuItem.Text = "&Reset counts";
+            mProfilingResetCountsMenuItem.Click += new EventHandler(mProfilingResetCountsMenuItem_Click);
+            // 
+            // MixForm
+            // 
+            ClientSize = new Size(804, 562);
+            Controls.Add(mToolStripContainer);
+            Icon = ((Icon)(resources.GetObject("$this.Icon")));
+            KeyPreview = true;
+            MainMenuStrip = mMainMenuStrip;
+            MinimumSize = new Size(820, 600);
+            Name = "MixForm";
+            StartPosition = FormStartPosition.Manual;
+            Text = "MixEmul";
+            FormClosing += new System.Windows.Forms.FormClosingEventHandler(this_FormClosing);
+            ResizeBegin += new EventHandler(this_ResizeBegin);
+            ResizeEnd += new EventHandler(MixForm_ResizeEnd);
+            mMainMenuStrip.ResumeLayout(false);
+            mMainMenuStrip.PerformLayout();
+            mToolStripContainer.BottomToolStripPanel.ResumeLayout(false);
+            mToolStripContainer.BottomToolStripPanel.PerformLayout();
+            mToolStripContainer.ContentPanel.ResumeLayout(false);
+            mToolStripContainer.TopToolStripPanel.ResumeLayout(false);
+            mToolStripContainer.TopToolStripPanel.PerformLayout();
+            mToolStripContainer.ResumeLayout(false);
+            mToolStripContainer.PerformLayout();
+            mStatusStrip.ResumeLayout(false);
+            mStatusStrip.PerformLayout();
+            mSplitContainer.Panel1.ResumeLayout(false);
+            mSplitContainer.Panel2.ResumeLayout(false);
+            mSplitContainer.ResumeLayout(false);
+            mMemoryGroup.ResumeLayout(false);
+            mMemoryTabControl.ResumeLayout(false);
+            mMainMemoryTab.ResumeLayout(false);
+            mRegistersGroup.ResumeLayout(false);
+            mDevicesGroup.ResumeLayout(false);
+            mSymbolGroup.ResumeLayout(false);
+            mLogListGroup.ResumeLayout(false);
+            mControlToolStrip.ResumeLayout(false);
+            mControlToolStrip.PerformLayout();
+            ResumeLayout(false);
 
 		}
 
@@ -1435,9 +1428,9 @@ namespace MixGui
 
 		private void mMix_InputRequired(object sender, EventArgs e)
 		{
-			if (base.InvokeRequired)
+			if (InvokeRequired)
 			{
-				base.Invoke(new EventHandler(mMix_InputRequired));
+                Invoke(new EventHandler(mMix_InputRequired));
 			}
 			else
 			{
@@ -1455,9 +1448,9 @@ namespace MixGui
 
 		private void mMix_LogLineAdded(object sender, EventArgs e)
 		{
-			if (base.InvokeRequired)
+			if (InvokeRequired)
 			{
-				base.Invoke(new EventHandler(mMix_LogLineAdded));
+                Invoke(new EventHandler(mMix_LogLineAdded));
 			}
 			else
 			{

@@ -65,17 +65,27 @@ namespace MixGui.Components
 			Memory = memory;
 		}
 
-		private void addressSelected(object sender, AddressSelectedEventArgs args)
-		{
-			MakeAddressVisible(args.SelectedAddress);
-		}
+        public ICollection Breakpoints => mBreakpoints.Values;
 
-		private void addressDoubleClick(object sender, EventArgs e)
-		{
-			OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
-		}
+        private long getMaxProfilingCount(GuiSettings.ProfilingInfoType infoType) => mProfilingMaxCounts[(int)infoType];
 
-		public ToolTip ToolTip
+        public bool IsBreakpointSet(int address) => mBreakpoints.Contains(address);
+
+        public void MakeAddressVisible(int address) => MakeAddressVisible(address, true);
+
+        public bool IsAddressVisible(int address) => mWordEditorList.IsIndexVisible(address);
+
+        public void ClearHistory() => mAddressHistorySelector.Clear();
+
+        protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+
+        private void addressSelected(object sender, AddressSelectedEventArgs args) => MakeAddressVisible(args.SelectedAddress);
+	
+		private void addressDoubleClick(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
+
+        void MemoryEditor_SizeChanged(object sender, EventArgs e) => setUpDownButtonStates(navigationDirection.None);
+
+        public ToolTip ToolTip
 		{
 			get
 			{
@@ -95,14 +105,9 @@ namespace MixGui.Components
 			}
 		}
 
-		private long getMaxProfilingCount(GuiSettings.ProfilingInfoType infoType)
-		{
-			return mProfilingMaxCounts[(int)infoType];
-		}
-
 		private IWordEditor createWordEditor(int address)
 		{
-			MemoryWordEditor editor = new MemoryWordEditor(address >= mMemory.MinWordIndex ? mMemory[address] : (IMemoryFullWord)new MemoryFullWord(address));
+			MemoryWordEditor editor = new MemoryWordEditor(address >= mMemory.MinWordIndex ? mMemory[address] : new MemoryFullWord(address));
 			editor.GetMaxProfilingCount = getMaxProfilingCount;
 			editor.MemoryMinIndex = mMemory.MinWordIndex;
 			editor.MemoryMaxIndex = mMemory.MaxWordIndex;
@@ -128,7 +133,7 @@ namespace MixGui.Components
 			}
 			else
 			{
-				memoryEditor.MemoryWord = address >= mMemory.MinWordIndex ? mMemory[address] : (IMemoryFullWord)new MemoryFullWord(address);
+				memoryEditor.MemoryWord = address >= mMemory.MinWordIndex ? mMemory[address] : new MemoryFullWord(address);
 			}
 
 			memoryEditor.BreakPointChecked = mBreakpoints.Contains(address);
@@ -221,10 +226,10 @@ namespace MixGui.Components
 
 				mExportButton.Location = new Point(mMixCharButtons.Right + 16, 0);
 				mExportButton.Name = "mExportButton";
-				mExportButton.Size = new System.Drawing.Size(62, 21);
+				mExportButton.Size = new Size(62, 21);
 				mExportButton.TabIndex = 5;
 				mExportButton.Text = "&Export...";
-				mExportButton.Click += this.mExportButton_Click;
+				mExportButton.Click += mExportButton_Click;
 
 				mDownButton.Visible = mMemory is Memory;
 				mDownButton.Enabled = false;
@@ -276,11 +281,6 @@ namespace MixGui.Components
 
 				setUpDownButtonStates(navigationDirection.None);
 			}
-		}
-
-		void MemoryEditor_SizeChanged(object sender, EventArgs e)
-		{
-			setUpDownButtonStates(navigationDirection.None);
 		}
 
 		private void setUpButtonState(Memory memory)
@@ -419,16 +419,6 @@ namespace MixGui.Components
 			mFirstAddressTextBox.LongValue = args.FirstVisibleIndex;
 		}
 
-		public bool IsBreakpointSet(int address)
-		{
-			return mBreakpoints.Contains(address);
-		}
-
-		public void MakeAddressVisible(int address)
-		{
-			MakeAddressVisible(address, true);
-		}
-
 		public void MakeAddressVisible(int address, bool trackChange)
 		{
 			if (trackChange)
@@ -465,14 +455,6 @@ namespace MixGui.Components
 			mWordEditorList.FirstVisibleIndex = (int)args.NewValue;
 
 			mAddressHistorySelector.AddItem(oldViewInfo, new EditorListViewInfo() { FirstVisibleIndex = mWordEditorList.FirstVisibleIndex });
-		}
-
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			if (AddressSelected != null)
-			{
-				AddressSelected(this, args);
-			}
 		}
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
@@ -532,14 +514,6 @@ namespace MixGui.Components
 			mWordEditorList.UpdateLayout();
 
 			base.ResumeLayout();
-		}
-
-		public ICollection Breakpoints
-		{
-			get
-			{
-				return mBreakpoints.Values;
-			}
 		}
 
 		public int FirstVisibleAddress
@@ -675,16 +649,6 @@ namespace MixGui.Components
 					}
 				}
 			}
-		}
-
-		public bool IsAddressVisible(int address)
-		{
-			return mWordEditorList.IsIndexVisible(address);
-		}
-
-		public void ClearHistory()
-		{
-			mAddressHistorySelector.Clear();
 		}
 
 		private void mUpButton_Click(object sender, EventArgs args)

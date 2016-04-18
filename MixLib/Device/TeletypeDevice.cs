@@ -67,19 +67,13 @@ namespace MixLib.Device
 
 		private void inputRequired(object sender, EventArgs e)
 		{
-			if (InputRequired != null)
-			{
-				InputRequired(this, e);
-			}
-		}
+            InputRequired?.Invoke(this, e);
+        }
 
 		private void outputAdded(object sender, EventArgs e)
 		{
-			if (OutputAdded != null)
-			{
-				OutputAdded(this, e);
-			}
-		}
+            OutputAdded?.Invoke(this, e);
+        }
 
 		public override void UpdateSettings()
 		{
@@ -254,7 +248,7 @@ namespace MixLib.Device
 
 						while (index < bytesToWriteCount)
 						{
-							charsToWrite[index] = (char)mWriteBytes[index];
+							charsToWrite[index] = mWriteBytes[index];
 							index++;
 						}
 

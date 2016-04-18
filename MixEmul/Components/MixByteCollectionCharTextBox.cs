@@ -21,7 +21,9 @@ namespace MixGui.Components
 		private bool mUpdating;
 		private IMixByteCollection mByteCollection;
 
-		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
+        public bool UseEditMode { get; set; }
+
+        public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 		public event KeyEventHandler NavigationKeyDown;
 
 		public MixByteCollectionCharTextBox()
@@ -59,13 +61,19 @@ namespace MixGui.Components
 			Update();
 		}
 
-		public bool UseEditMode
-		{
-			get;
-			set;
-		}
+        public Control EditorControl => this;
 
-		private void this_KeyDown(object sender, KeyEventArgs e)
+        public bool Focus(FieldTypes? field, int? index) => this.FocusWithIndex(index);
+
+        public FieldTypes? FocusedField => FieldTypes.Chars;
+
+        public int? CaretIndex => SelectionStart + SelectionLength;
+
+        protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void this_Leave(object sender, EventArgs e) => updateValue();
+
+        private void this_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -86,11 +94,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, new IndexKeyEventArgs(e.KeyData, SelectionStart + SelectionLength));
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, new IndexKeyEventArgs(e.KeyData, SelectionStart + SelectionLength));
+                    break;
 
 				case Keys.Right:
 					if (SelectionStart + SelectionLength == TextLength && NavigationKeyDown != null)
@@ -109,14 +114,6 @@ namespace MixGui.Components
 				case Keys.Enter:
 					e.Handled = true;
 					break;
-			}
-		}
-
-		protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
 			}
 		}
 
@@ -144,11 +141,6 @@ namespace MixGui.Components
 			int index = MixByte.MixChars.IndexOf(char.ToUpper(keyChar));
 
 			e.Handled = (index < 0 || index == MixByte.MixChars.Length - 2) && !char.IsControl(keyChar);
-		}
-
-		private void this_Leave(object sender, EventArgs e)
-		{
-			updateValue();
 		}
 
 		private void this_TextChanged(object sender, EventArgs e)
@@ -325,35 +317,6 @@ namespace MixGui.Components
 
 					Update();
 				}
-			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return this.FocusWithIndex(index);
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return FieldTypes.Chars;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return SelectionStart + SelectionLength;
 			}
 		}
 	}

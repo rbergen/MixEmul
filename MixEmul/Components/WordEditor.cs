@@ -23,8 +23,7 @@ namespace MixGui.Components
 		private Button mSignButton;
 		private IWord mWord;
 
-		public event KeyEventHandler NavigationKeyDown;
-
+        public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
 		public WordEditor()
@@ -72,7 +71,9 @@ namespace MixGui.Components
 			initializeComponent();
 		}
 
-		private void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
+        public int? CaretIndex => null;
+
+        private void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
 		{
 			Word oldValue = new Word(mWord.Magnitude, mWord.Sign);
 			mWord[textBox.Index] = args.NewValue;
@@ -85,9 +86,9 @@ namespace MixGui.Components
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			if (disposing)
 			{
-				components.Dispose();
+				components?.Dispose();
 			}
 
 			base.Dispose(disposing);
@@ -121,17 +122,7 @@ namespace MixGui.Components
 			mFocusByteSelLength = box.SelectionLength;
 		}
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			if (ByteCount > 0)
-			{
-				return mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus();
-			}
-			else
-			{
-				return mSignButton.Focus();
-			}
-		}
+		public bool Focus(FieldTypes? field, int? index) => ByteCount > 0 ? mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() : mSignButton.Focus();
 
 		private void initializeComponent()
 		{
@@ -193,11 +184,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, e);
+                    break;
 
 				case Keys.Right:
 					if (sender == mSignButton && ByteCount > 0)
@@ -217,23 +205,20 @@ namespace MixGui.Components
 							mByteTextBoxes[byteIndex + 1].Focus();
 							mByteTextBoxes[byteIndex + 1].Select(0, 2);
 						}
-						else if (NavigationKeyDown != null)
-						{
-							NavigationKeyDown(this, e);
-						}
-					}
+						else
+                        {
+                            NavigationKeyDown?.Invoke(this, e);
+                        }
+                    }
 
 					break;
 
 				case Keys.Left:
 					if (sender == mSignButton)
 					{
-						if (NavigationKeyDown != null)
-						{
-							NavigationKeyDown(this, e);
-						}
+                        NavigationKeyDown?.Invoke(this, e);
 
-						e.Handled = true;
+                        e.Handled = true;
 						break;
 					}
 
@@ -280,13 +265,7 @@ namespace MixGui.Components
 			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
 		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
-		}
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
 		private void reinitializeComponent()
 		{
@@ -400,13 +379,7 @@ namespace MixGui.Components
 			}
 		}
 
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
+		public Control EditorControl => this;
 
 		public FieldTypes? FocusedField
 		{
@@ -425,14 +398,6 @@ namespace MixGui.Components
 					}
 				}
 
-				return null;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
 				return null;
 			}
 		}

@@ -74,7 +74,7 @@ namespace MixLib.Instruction
 			long rXValue = rX.LongValue;
 
 			decimal rAXValue = (decimal)rAValue * ((long)1 << rX.BitCount) + rXValue;
-			decimal divider = (decimal)rAXValue / memoryWordValue;
+			decimal divider = rAXValue / memoryWordValue;
 
 			rX.Sign = rA.Sign;
 		    rA.Sign = divider.GetSign();
@@ -86,7 +86,7 @@ namespace MixLib.Instruction
 				return true;
 			}
 
-			decimal remainder = (decimal)rAXValue % memoryWordValue;
+			decimal remainder = rAXValue % memoryWordValue;
 			rA.MagnitudeLongValue = (long)divider;
 			rX.MagnitudeLongValue = (long)remainder;
 

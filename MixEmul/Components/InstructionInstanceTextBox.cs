@@ -11,6 +11,7 @@ using MixLib;
 using MixLib.Instruction;
 using MixLib.Misc;
 using MixLib.Type;
+using System.Text;
 
 namespace MixGui.Components
 {
@@ -30,24 +31,23 @@ namespace MixGui.Components
 		private IFullWord mInstructionWord;
 		private long mLastRenderedMagnitude;
 		private Word.Signs mLastRenderedSign;
-		private int mMemoryAddress;
+        private ToolTip mToolTip;
 		private bool mNoInstructionRendered;
-		private ToolTip mToolTip;
 		private bool mUpdating;
 		private string mLastRenderedSourceLine;
-		private SymbolCollection mSymbols;
-		private int mMemoryMinIndex;
-		private int mMemoryMaxIndex;
-
 		private string mCaption;
 
 		private MenuItem mShowAddressMenuItem;
 		private MenuItem mShowIndexedAddressMenuItem;
 		private ContextMenu mContextMenu;
 
-		private IndexedAddressCalculatorCallback mIndexedAddressCalculatorCallback = null;
+        public int MemoryMinIndex { get; set; }
+        public int MemoryMaxIndex { get; set; }
+        public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback { get; set; } = null;
+        public SymbolCollection Symbols { get; set; }
+        public int MemoryAddress { get; set; }
 
-		public event WordEditorValueChangedEventHandler ValueChanged;
+        public event WordEditorValueChangedEventHandler ValueChanged;
 		public event AddressSelectedHandler AddressSelected;
 
 		public InstructionInstanceTextBox()
@@ -86,7 +86,7 @@ namespace MixGui.Components
 
 			mUpdating = false;
 			mEditMode = false;
-			mMemoryAddress = 0;
+			MemoryAddress = 0;
 			mLastRenderedMagnitude = unrendered;
 			mLastRenderedSign = Word.Signs.Positive;
 			mLastRenderedSourceLine = null;
@@ -95,7 +95,17 @@ namespace MixGui.Components
 			Update();
 		}
 
-		private void addTextElement(string element, bool markAsError)
+        protected void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        protected void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+
+        private void this_Enter(object sender, EventArgs e) => checkContentsEditable();
+
+        private void showIndexedAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(getAddress(), mInstructionWord[MixInstruction.IndexByte])));
+
+        private void showAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(getAddress()));
+
+        private void addTextElement(string element, bool markAsError)
 		{
 			if (element != "")
 			{
@@ -176,7 +186,7 @@ namespace MixGui.Components
 			ParsedSourceLine line;
 			mEditMode = false;
 
-			InstructionInstanceBase instance = Assembler.Assemble(Text, mMemoryAddress, out line, mSymbols, out findings);
+			InstructionInstanceBase instance = Assembler.Assemble(Text, MemoryAddress, out line, Symbols, out findings);
 
 			if (instance != null && !(instance is MixInstruction.Instance))
 			{
@@ -196,10 +206,7 @@ namespace MixGui.Components
 				base.Text = line.OpField + " " + line.AddressField;
 
 				mCaption = getAssemblyErrorsCaption(line, findings);
-				if (mToolTip != null)
-				{
-					mToolTip.SetToolTip(this, mCaption);
-				}
+				mToolTip?.SetToolTip(this, mCaption);
 
 				base.Select(selectionStart, selectionLength);
 				base.ResumeLayout();
@@ -264,22 +271,6 @@ namespace MixGui.Components
 			}
 		}
 
-		protected void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
-		}
-
-		protected void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			if (AddressSelected != null)
-			{
-				AddressSelected(this, args);
-			}
-		}
-
 		private void setEditMode()
 		{
 			base.SuspendLayout();
@@ -299,10 +290,7 @@ namespace MixGui.Components
 			base.ResumeLayout();
 
 			mCaption = null;
-			if (mToolTip != null)
-			{
-				mToolTip.SetToolTip(this, null);
-			}
+            mToolTip?.SetToolTip(this, null);
 
 			ContextMenu = null;
 
@@ -328,11 +316,6 @@ namespace MixGui.Components
 				base.Select(0, 0);
 				base.ResumeLayout();
 			}
-		}
-
-		private void this_Enter(object sender, EventArgs e)
-		{
-			checkContentsEditable();
 		}
 
 		private void this_KeyDown(object sender, KeyEventArgs e)
@@ -398,11 +381,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private void showIndexedAddressMenuItem_Click(object sender, EventArgs e)
-		{
-			OnAddressSelected(new AddressSelectedEventArgs(mIndexedAddressCalculatorCallback(getAddress(), mInstructionWord[MixInstruction.IndexByte])));
-		}
-
 		private int getAddress()
 		{
 			MixByte[] addressBytes = new MixByte[MixInstruction.AddressByteCount];
@@ -422,11 +400,6 @@ namespace MixGui.Components
 			return address;
 		}
 
-		private void showAddressMenuItem_Click(object sender, EventArgs e)
-		{
-			OnAddressSelected(new AddressSelectedEventArgs(getAddress()));
-		}
-
 		private void handleNoInstructionSet()
 		{
 			showNonInstruction("No instructionset loaded");
@@ -442,10 +415,7 @@ namespace MixGui.Components
 			showNonInstruction("No instruction");
 
 			mCaption = caption;
-			if (mToolTip != null)
-			{
-				mToolTip.SetToolTip(this, caption);
-			}
+            mToolTip?.SetToolTip(this, caption);
 
 			ContextMenu = null;
 			mUpdating = false;
@@ -467,10 +437,7 @@ namespace MixGui.Components
 			mEditMode = false;
 
 			mCaption = null;
-			if (mToolTip != null)
-			{
-				mToolTip.SetToolTip(this, null);
-			}
+			mToolTip?.SetToolTip(this, null);
 
 			mLastRenderedSourceLine = sourceLine;
 			BackColor = mLastRenderedSourceLine != null ? mLoadedInstructionBackgroundColor : mEditorBackgroundColor;
@@ -479,7 +446,7 @@ namespace MixGui.Components
 
 			mLastRenderedMagnitude = mInstructionWord.MagnitudeLongValue;
 			mLastRenderedSign = mInstructionWord.Sign;
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction((byte)mInstructionWord[MixInstruction.OpcodeByte], new FieldSpec(mInstructionWord[MixInstruction.FieldSpecByte]));
+			MixInstruction instruction = InstructionSet.Instance.GetInstruction(mInstructionWord[MixInstruction.OpcodeByte], new FieldSpec(mInstructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -513,14 +480,11 @@ namespace MixGui.Components
 			}
 
 			mCaption = caption;
-			if (mToolTip != null)
-			{
-				mToolTip.SetToolTip(this, caption);
-			}
+			mToolTip?.SetToolTip(this, caption);
 
 			int address = getAddress();
-			mShowAddressMenuItem.Enabled = address >= mMemoryMinIndex && address <= mMemoryMaxIndex;
-			mShowIndexedAddressMenuItem.Enabled = mIndexedAddressCalculatorCallback != null && mIndexedAddressCalculatorCallback(address, mInstructionWord[MixInstruction.IndexByte]) != int.MinValue;
+			mShowAddressMenuItem.Enabled = address >= MemoryMinIndex && address <= MemoryMaxIndex;
+			mShowIndexedAddressMenuItem.Enabled = IndexedAddressCalculatorCallback?.Invoke(address, mInstructionWord[MixInstruction.IndexByte]) != int.MinValue;
 			ContextMenu = mContextMenu;
 
 			base.Update();
@@ -537,53 +501,35 @@ namespace MixGui.Components
 				return null;
 			}
 
-			string caption = "";
+			StringBuilder captionBuilder = new StringBuilder();
 			int errorNumber = 1;
 
 			foreach (InstanceValidationError error in errors)
 			{
 				if (errorNumber != 1)
 				{
-					caption = string.Concat(caption, Environment.NewLine, errorNumber, ". ");
+                    captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
 				}
 
 				if (errorNumber == 2)
 				{
-					caption = "1. " + caption;
+					captionBuilder.Insert(0, "1. ");
 				}
 
-				caption = caption + "address: " + error.CompiledMessage;
+                captionBuilder.AppendFormat("address: {0}", error.CompiledMessage);
 				errorNumber++;
 			}
 
-			return errorNumber == 2
-				? string.Concat("Instruction error: ", caption)
-				: string.Concat("Instruction errors:", Environment.NewLine, caption);
-		}
+            if (errorNumber == 2)
+            {
+                captionBuilder.Insert(0, "Instruction error: ");
+            }
+            else
+            {
+                captionBuilder.Insert(0, String.Format("Instruction errors:{0}", Environment.NewLine));
+            }
 
-
-		public int MemoryMinIndex
-		{
-			get
-			{
-				return mMemoryMinIndex;
-			}
-			set
-			{
-				mMemoryMinIndex = value;
-			}
-		}
-
-		public int MemoryMaxIndex
-		{
-			get
-			{
-				return mMemoryMaxIndex;
-			}
-			set
-			{
-				mMemoryMaxIndex = value;
-			}
+            return captionBuilder.ToString();
 		}
 
 		public void UpdateLayout()
@@ -604,18 +550,6 @@ namespace MixGui.Components
 
 			mUpdating = false;
 			base.ResumeLayout();
-		}
-
-		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
-		{
-			get
-			{
-				return mIndexedAddressCalculatorCallback;
-			}
-			set
-			{
-				mIndexedAddressCalculatorCallback = value;
-			}
 		}
 
 		public IFullWord InstructionWord
@@ -641,30 +575,6 @@ namespace MixGui.Components
 			}
 		}
 
-		public int MemoryAddress
-		{
-			get
-			{
-				return mMemoryAddress;
-			}
-			set
-			{
-				mMemoryAddress = value;
-			}
-		}
-
-		public SymbolCollection Symbols
-		{
-			get
-			{
-				return mSymbols;
-			}
-			set
-			{
-				mSymbols = value;
-			}
-		}
-
 		public ToolTip ToolTip
 		{
 			get
@@ -674,10 +584,7 @@ namespace MixGui.Components
 			set
 			{
 				mToolTip = value;
-				if (mToolTip != null)
-				{
-					mToolTip.SetToolTip(this, mCaption);
-				}
+                mToolTip?.SetToolTip(this, mCaption);
 			}
 		}
 

@@ -188,7 +188,7 @@ namespace MixLib.Device
 							}
 						}
 
-						mTicksLeft = (base.Operands.MValue == 0 ? (base.StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : ((long)Math.Abs(base.Operands.MValue))) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
+						mTicksLeft = (base.Operands.MValue == 0 ? (base.StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(base.Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
 					mTicksLeft -= 1L;

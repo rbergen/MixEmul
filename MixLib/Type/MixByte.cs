@@ -29,7 +29,7 @@ namespace MixLib.Type
 		public MixByte(char value)
 		{
 			int index = MixChars.IndexOf(value);
-			ByteValue = (index >= 0 && index <= MixChars.Length - 1) ? (byte)index : (byte)MaxValue;
+			ByteValue = (index >= 0 && index <= MixChars.Length - 1) ? (byte)index : MaxValue;
 		}
 
 		public override bool Equals(object o)

@@ -45,122 +45,122 @@ namespace MixGui
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
-          this.textBox1 = new System.Windows.Forms.TextBox();
-          this.label1 = new System.Windows.Forms.Label();
-          this.mDeltaButton = new System.Windows.Forms.Button();
-          this.mSummaButton = new System.Windows.Forms.Button();
-          this.mPiButton = new System.Windows.Forms.Button();
-          this.textBox2 = new System.Windows.Forms.TextBox();
-          this.label2 = new System.Windows.Forms.Label();
-          this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-          this.SuspendLayout();
-          // 
-          // textBox1
-          // 
-          this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                      | System.Windows.Forms.AnchorStyles.Left)
-                      | System.Windows.Forms.AnchorStyles.Right)));
-          this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-          this.textBox1.Location = new System.Drawing.Point(0, 0);
-          this.textBox1.Multiline = true;
-          this.textBox1.Name = "textBox1";
-          this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-          this.textBox1.Size = new System.Drawing.Size(704, 212);
-          this.textBox1.TabIndex = 0;
-          this.textBox1.Text = "textBox1";
-          // 
-          // label1
-          // 
-          this.label1.Location = new System.Drawing.Point(0, 408);
-          this.label1.Name = "label1";
-          this.label1.Size = new System.Drawing.Size(88, 21);
-          this.label1.TabIndex = 1;
-          this.label1.Text = "Set clipboard to:";
-          this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-          // 
-          // mDeltaButton
-          // 
-          this.mDeltaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-          this.mDeltaButton.Location = new System.Drawing.Point(88, 408);
-          this.mDeltaButton.Name = "mDeltaButton";
-          this.mDeltaButton.Size = new System.Drawing.Size(18, 21);
-          this.mDeltaButton.TabIndex = 2;
-          this.mDeltaButton.Text = "d";
-          this.mDeltaButton.Click += new System.EventHandler(this.clipboardButton_Click);
-          // 
-          // mSummaButton
-          // 
-          this.mSummaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-          this.mSummaButton.Location = new System.Drawing.Point(105, 408);
-          this.mSummaButton.Name = "mSummaButton";
-          this.mSummaButton.Size = new System.Drawing.Size(18, 21);
-          this.mSummaButton.TabIndex = 3;
-          this.mSummaButton.Text = "s";
-          this.mSummaButton.Click += new System.EventHandler(this.clipboardButton_Click);
-          // 
-          // mPiButton
-          // 
-          this.mPiButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-          this.mPiButton.Location = new System.Drawing.Point(122, 408);
-          this.mPiButton.Name = "mPiButton";
-          this.mPiButton.Size = new System.Drawing.Size(18, 21);
-          this.mPiButton.TabIndex = 4;
-          this.mPiButton.Text = "p";
-          this.mPiButton.Click += new System.EventHandler(this.clipboardButton_Click);
-          // 
-          // textBox2
-          // 
-          this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-          this.textBox2.Location = new System.Drawing.Point(320, 408);
-          this.textBox2.Name = "textBox2";
-          this.textBox2.Size = new System.Drawing.Size(100, 13);
-          this.textBox2.TabIndex = 5;
-          this.textBox2.Text = "textBox2";
-          // 
-          // label2
-          // 
-          this.label2.AutoSize = true;
-          this.label2.Location = new System.Drawing.Point(267, 260);
-          this.label2.Name = "label2";
-          this.label2.Size = new System.Drawing.Size(9, 13);
-          this.label2.TabIndex = 6;
-          this.label2.Text = "l";
-          // 
-          // vScrollBar1
-          // 
-          this.vScrollBar1.LargeChange = 1;
-          this.vScrollBar1.Location = new System.Drawing.Point(522, 277);
-          this.vScrollBar1.Maximum = 0;
-          this.vScrollBar1.Name = "vScrollBar1";
-          this.vScrollBar1.Size = new System.Drawing.Size(16, 80);
-          this.vScrollBar1.TabIndex = 7;
-          this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
-          // 
-          // TestForm
-          // 
-          //this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-          this.ClientSize = new System.Drawing.Size(704, 429);
-          this.Controls.Add(this.vScrollBar1);
-          this.Controls.Add(this.label2);
-          this.Controls.Add(this.textBox2);
-          this.Controls.Add(this.mPiButton);
-          this.Controls.Add(this.mSummaButton);
-          this.Controls.Add(this.mDeltaButton);
-          this.Controls.Add(this.label1);
-          this.Controls.Add(this.textBox1);
-          this.Name = "TestForm";
-          this.Text = "TestForm";
-          this.ResumeLayout(false);
-          this.PerformLayout();
+            textBox1 = new TextBox();
+            label1 = new Label();
+            mDeltaButton = new Button();
+            mSummaButton = new Button();
+            mPiButton = new Button();
+            textBox2 = new TextBox();
+            label2 = new Label();
+            vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            SuspendLayout();
+            // 
+            // textBox1
+            // 
+            textBox1.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+                      | AnchorStyles.Left)
+                      | AnchorStyles.Right);
+            textBox1.Font = new Font("Courier New", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox1.Location = new Point(0, 0);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            textBox1.Size = new Size(704, 212);
+            textBox1.TabIndex = 0;
+            textBox1.Text = "textBox1";
+            // 
+            // label1
+            // 
+            label1.Location = new Point(0, 408);
+            label1.Name = "label1";
+            label1.Size = new Size(88, 21);
+            label1.TabIndex = 1;
+            label1.Text = "Set clipboard to:";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // mDeltaButton
+            // 
+            mDeltaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            mDeltaButton.Location = new Point(88, 408);
+            mDeltaButton.Name = "mDeltaButton";
+            mDeltaButton.Size = new Size(18, 21);
+            mDeltaButton.TabIndex = 2;
+            mDeltaButton.Text = "d";
+            mDeltaButton.Click += new EventHandler(clipboardButton_Click);
+            // 
+            // mSummaButton
+            // 
+            mSummaButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            mSummaButton.Location = new Point(105, 408);
+            mSummaButton.Name = "mSummaButton";
+            mSummaButton.Size = new Size(18, 21);
+            mSummaButton.TabIndex = 3;
+            mSummaButton.Text = "s";
+            mSummaButton.Click += new EventHandler(clipboardButton_Click);
+            // 
+            // mPiButton
+            // 
+            mPiButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            mPiButton.Location = new Point(122, 408);
+            mPiButton.Name = "mPiButton";
+            mPiButton.Size = new Size(18, 21);
+            mPiButton.TabIndex = 4;
+            mPiButton.Text = "p";
+            mPiButton.Click += new EventHandler(clipboardButton_Click);
+            // 
+            // textBox2
+            // 
+            textBox2.BorderStyle = BorderStyle.None;
+            textBox2.Location = new Point(320, 408);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(100, 13);
+            textBox2.TabIndex = 5;
+            textBox2.Text = "textBox2";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(267, 260);
+            label2.Name = "label2";
+            label2.Size = new Size(9, 13);
+            label2.TabIndex = 6;
+            label2.Text = "l";
+            // 
+            // vScrollBar1
+            // 
+            vScrollBar1.LargeChange = 1;
+            vScrollBar1.Location = new Point(522, 277);
+            vScrollBar1.Maximum = 0;
+            vScrollBar1.Name = "vScrollBar1";
+            vScrollBar1.Size = new Size(16, 80);
+            vScrollBar1.TabIndex = 7;
+            vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(vScrollBar1_Scroll);
+            // 
+            // TestForm
+            // 
+            //this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            ClientSize = new Size(704, 429);
+            Controls.Add(vScrollBar1);
+            Controls.Add(label2);
+            Controls.Add(textBox2);
+            Controls.Add(mPiButton);
+            Controls.Add(mSummaButton);
+            Controls.Add(mDeltaButton);
+            Controls.Add(label1);
+            Controls.Add(textBox1);
+            Name = "TestForm";
+            Text = "TestForm";
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 

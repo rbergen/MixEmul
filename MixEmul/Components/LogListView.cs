@@ -71,7 +71,15 @@ namespace MixGui.Components
 			base.ResumeLayout(false);
 		}
 
-		void mListView_KeyPress(object sender, KeyPressEventArgs e)
+        public void AddLogLine(LogLine line) => mListView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
+
+        protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+
+        private void doubleClick(object sender, EventArgs args) => addressSelected();
+
+        private void mClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
+
+        void mListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter)
 			{
@@ -80,35 +88,12 @@ namespace MixGui.Components
 			}
 		}
 
-		public void AddLogLine(LogLine line)
-		{
-			mListView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
-		}
-
-		private void doubleClick(object sender, EventArgs args)
-		{
-			addressSelected();
-		}
-
 		private void addressSelected()
 		{
 			int selectedAddress = SelectedAddress;
 			if (selectedAddress != noAddress)
 			{
 				OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
-			}
-		}
-
-		private void mClearButton_Click(object sender, EventArgs e)
-		{
-			mListView.Items.Clear();
-		}
-
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			if (AddressSelected != null)
-			{
-				AddressSelected(this, args);
 			}
 		}
 

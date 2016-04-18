@@ -41,7 +41,21 @@ namespace MixGui.Components
 			mLastSelectedDeviceTab = 0;
 		}
 
-		private void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void mCloseButton_Click(object sender, EventArgs e) => Hide();
+
+        private void mTapeDeleteButton_Click(object sender, EventArgs e) => deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
+
+        private void mDiskDeleteButton_Click(object sender, EventArgs e) => deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
+
+        private void mCardReaderDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card reader", mCardReaderEditor);
+
+        private void mCardPunchDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card punch", mCardWriterEditor);
+
+        private void mPrinterDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("printer", mPrinterEditor);
+
+        private void mPaperTapeDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("paper tape", mPaperTapeEditor);
+
+        private void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex)
 			{
@@ -82,11 +96,6 @@ namespace MixGui.Components
 			{
 				base.Hide();
 			}
-		}
-
-		private void mCloseButton_Click(object sender, EventArgs e)
-		{
-			Hide();
 		}
 
 		public void ShowDevice(MixDevice device)
@@ -354,42 +363,12 @@ namespace MixGui.Components
 			}
 		}
 
-		private void mTapeDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
-		}
-
-		private void mDiskDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
-		}
-
 		private void deleteTextDeviceFile(string deviceName, TextFileDeviceEditor editor)
 		{
 			if (MessageBox.Show(this, "Are you sure you want to delete the device file for the " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 			{
 				editor.DeleteDeviceFile();
 			}
-		}
-
-		private void mCardReaderDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteTextDeviceFile("card reader", mCardReaderEditor);
-		}
-
-		private void mCardPunchDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteTextDeviceFile("card punch", mCardWriterEditor);
-		}
-
-		private void mPrinterDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteTextDeviceFile("printer", mPrinterEditor);
-		}
-
-		private void mPaperTapeDeleteButton_Click(object sender, EventArgs e)
-		{
-			deleteTextDeviceFile("paper tape", mPaperTapeEditor);
 		}
 
 		private void mCardReaderLoadButton_Click(object sender, EventArgs e)

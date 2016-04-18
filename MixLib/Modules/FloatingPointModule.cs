@@ -20,9 +20,9 @@ namespace MixLib.Modules
 		private const string divisionByZeroSymbol = "DIVZRO";
 
 		private Mix mMix;
-		private MixLib.Memory mFullMemory;
+		private Memory mFullMemory;
 		private IMemory mMemory;
-		private MixLib.Registers mRegisters;
+		private Registers mRegisters;
 		private RunStatus mStatus;
 		private int? mAccAddress;
 		private int? mPrenormAddress;
@@ -74,7 +74,7 @@ namespace MixLib.Modules
 			}
 		}
 
-		public override MixLib.Registers Registers
+		public override Registers Registers
 		{
 			get
 			{
@@ -294,7 +294,7 @@ namespace MixLib.Modules
 			Status = RunStatus.Running;
 
 			IMemoryFullWord instructionWord = Memory[ProgramCounter];
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction((byte)instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
+			MixInstruction instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{

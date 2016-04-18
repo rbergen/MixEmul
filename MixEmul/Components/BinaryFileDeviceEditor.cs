@@ -60,7 +60,31 @@ namespace MixGui.Components
 			mInitialized = false;
 		}
 
-		public void Initialize(long recordCount, long wordsPerRecord, OpenStreamCallback openStream, CalculateBytePositionCallback calculateBytePosition, ReadWordsCallback readWords, WriteWordsCallback writeWords)
+        public long DeviceRecordCount => mDeviceRecordCount;
+
+        public bool SupportsAppending => mCalculateRecordCount != null && !mReadOnlyCheckBox.Checked;
+
+        private bool loadRecord() => loadRecord(loadErrorHandlingMode.SilentIfSameRecord);
+
+        public bool writeRecord() => writeRecord(false);
+
+        public new void Update() => mWordEditorList.Update();
+
+        public bool SaveCurrentSector() => writeRecord(true);
+
+        private bool processRecordSelectionChange() => writeRecord() && loadRecord();
+
+        private void mSaveButton_Click(object sender, EventArgs e) => writeRecord(true);
+
+        private void mRevertButton_Click(object sender, EventArgs e) => revert();
+
+        private void mDeviceFileWatcher_Event(object sender, FileSystemEventArgs e) => handleFileWatcherEvent();
+
+        private void DeviceEditor_VisibleChanged(object sender, EventArgs e) => processVisibility();
+
+        private void mDeviceFileWatcher_Renamed(object sender, RenamedEventArgs e) => handleFileWatcherEvent();
+
+        public void Initialize(long recordCount, long wordsPerRecord, OpenStreamCallback openStream, CalculateBytePositionCallback calculateBytePosition, ReadWordsCallback readWords, WriteWordsCallback writeWords)
 		{
 			initialize(recordCount, wordsPerRecord, openStream, calculateBytePosition, readWords, writeWords, null);
 		}
@@ -122,14 +146,6 @@ namespace MixGui.Components
 				mRecordName = value;
 
 				mRecordLabel.Text = string.Format(mRecordLabelFormatString, mRecordName);
-			}
-		}
-
-		public bool SupportsAppending
-		{
-			get
-			{
-				return mCalculateRecordCount != null && !mReadOnlyCheckBox.Checked;
 			}
 		}
 
@@ -206,14 +222,6 @@ namespace MixGui.Components
 			bool anyButtonShown = mAppendButton.Visible || mTruncateButton.Visible || mRevertButton.Visible || mSaveButton.Visible;
 
 			mWordEditorList.Height = anyButtonShown ? mEditorListWithButtonsHeight : (Height - mWordEditorList.Top);
-		}
-
-		public long DeviceRecordCount
-		{
-			get
-			{
-				return mDeviceRecordCount;
-			}
 		}
 
 		private void setDeviceRecordCount(long recordCount)
@@ -417,11 +425,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private bool loadRecord()
-		{
-			return loadRecord(loadErrorHandlingMode.SilentIfSameRecord);
-		}
-
 		private bool loadRecord(loadErrorHandlingMode errorHandlingMode)
 		{
 			if (!Visible)
@@ -526,11 +529,6 @@ namespace MixGui.Components
 			return true;
 		}
 
-		public bool writeRecord()
-		{
-			return writeRecord(false);
-		}
-
 		public bool writeRecord(bool force)
 		{
 			if (!mChangesPending)
@@ -597,11 +595,6 @@ namespace MixGui.Components
 			return true;
 		}
 
-		public new void Update()
-		{
-			mWordEditorList.Update();
-		}
-
 		public void UpdateLayout()
 		{
 			mFirstWordTextBox.UpdateLayout();
@@ -639,11 +632,6 @@ namespace MixGui.Components
 			}
 		}
 
-		public bool SaveCurrentSector()
-		{
-			return writeRecord(true);
-		}
-
 		private void mRecordUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (mLastReadRecord == mRecordUpDown.Value)
@@ -662,11 +650,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private bool processRecordSelectionChange()
-		{
-			return writeRecord() && loadRecord();
-		}
-
 		private void mFirstWordTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
 			mWordEditorList.FirstVisibleIndex = (int)args.NewValue;
@@ -675,16 +658,6 @@ namespace MixGui.Components
 		private void mWordEditorList_FirstVisibleIndexChanged(EditorList<IWordEditor> sender, WordEditorList.FirstVisibleIndexChangedEventArgs args)
 		{
 			mFirstWordTextBox.LongValue = mWordEditorList.FirstVisibleIndex;
-		}
-
-		private void mSaveButton_Click(object sender, EventArgs e)
-		{
-			writeRecord(true);
-		}
-
-		private void mRevertButton_Click(object sender, EventArgs e)
-		{
-			revert();
 		}
 
 		private void revert()
@@ -723,11 +696,6 @@ namespace MixGui.Components
 			}
 		}
 
-		private void mDeviceFileWatcher_Event(object sender, FileSystemEventArgs e)
-		{
-			handleFileWatcherEvent();
-		}
-
 		private void handleFileWatcherEvent()
 		{
 			if (mLoading || mIODelayTimer.Enabled)
@@ -744,16 +712,6 @@ namespace MixGui.Components
 				mDelayedIOOperation = loadRecord;
 				mIODelayTimer.Start();
 			}
-		}
-
-		private void DeviceEditor_VisibleChanged(object sender, EventArgs e)
-		{
-			processVisibility();
-		}
-
-		private void mDeviceFileWatcher_Renamed(object sender, RenamedEventArgs e)
-		{
-			handleFileWatcherEvent();
 		}
 
 		private void mIODelayTimer_Tick(object sender, EventArgs e)

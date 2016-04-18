@@ -12,7 +12,7 @@ namespace MixLib.Modules
         public abstract string ModuleName { get; }
         public abstract IMemory FullMemory { get; }
         public abstract IMemory Memory { get; }
-        public abstract MixLib.Registers Registers { get; }
+        public abstract Registers Registers { get; }
         public abstract RunStatus Status { get; protected set; }
         public abstract RunMode Mode { get; set; }
 
@@ -31,7 +31,7 @@ namespace MixLib.Modules
 
 		public abstract void AddLogLine(LogLine line);
 
-		public virtual MixLib.Devices Devices
+		public virtual Devices Devices
 		{
 			get
 			{

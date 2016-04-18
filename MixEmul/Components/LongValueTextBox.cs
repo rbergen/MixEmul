@@ -17,11 +17,13 @@ namespace MixGui.Components
 		private long mMaxValue;
 		private long mMinValue;
 		private Color mRenderedTextColor;
-		private bool mSupportSign;
 		private bool mSupportNegativeZero;
 		private bool mUpdating;
 
-		public event ValueChangedEventHandler ValueChanged;
+        public bool SupportSign { get; private set; }
+        public bool ClearZero { get; set; }
+
+        public event ValueChangedEventHandler ValueChanged;
 		public event KeyEventHandler NavigationKeyDown;
 
 		public LongValueTextBox()
@@ -46,7 +48,7 @@ namespace MixGui.Components
 
 		public LongValueTextBox(bool supportsSign, long minValue, long maxValue, Word.Signs sign, long magnitude)
 		{
-			mSupportSign = true;
+			SupportSign = true;
 
 			base.BorderStyle = BorderStyle.FixedSingle;
 
@@ -72,13 +74,13 @@ namespace MixGui.Components
 			mLastValidText = mMagnitude.ToString();
 		}
 
-		public bool ClearZero
-		{
-			get;
-			set;
-		}
+        private void checkAndUpdateValue(Word.Signs newSign, long newMagnitude) => checkAndUpdateValue(newSign, newMagnitude, false);
 
-		void LongValueTextBox_Enter(object sender, EventArgs e)
+        protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void this_Leave(object sender, EventArgs e) => checkAndUpdateValue(Text);
+
+        void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
 			if (ClearZero && mMagnitude == 0 && mSign.IsPositive())
 			{
@@ -107,11 +109,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, e);
+                    break;
 
 				case Keys.Right:
 					if (SelectionStart + SelectionLength == TextLength && NavigationKeyDown != null)
@@ -132,11 +131,6 @@ namespace MixGui.Components
 		private void checkAndUpdateMaxLength()
 		{
 			MaxLength = Math.Max(mMinValue.ToString().Length, mMaxValue.ToString().Length);
-		}
-
-		private void checkAndUpdateValue(Word.Signs newSign, long newMagnitude)
-		{
-			checkAndUpdateValue(newSign, newMagnitude, false);
 		}
 
 		private void checkAndUpdateValue(string newValue)
@@ -190,7 +184,7 @@ namespace MixGui.Components
 				}
 			}
 
-			if (!mSupportSign && (newValue < 0L))
+			if (!SupportSign && (newValue < 0L))
 			{
 				newValue = -newValue;
 				newSign = Word.Signs.Positive;
@@ -238,19 +232,11 @@ namespace MixGui.Components
 			}
 		}
 
-		protected virtual void OnValueChanged(ValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
-		}
-
 		private void setMaxValue(long value)
 		{
 			mMaxValue = value;
 
-			if (!mSupportSign && (mMaxValue < 0L))
+			if (!SupportSign && (mMaxValue < 0L))
 			{
 				mMaxValue = -mMaxValue;
 			}
@@ -269,7 +255,7 @@ namespace MixGui.Components
 				mMaxValue = mMinValue;
 			}
 
-			mSupportSign = mMinValue < 0L;
+			SupportSign = mMinValue < 0L;
 		}
 
 		private void this_KeyPress(object sender, KeyPressEventArgs e)
@@ -341,11 +327,6 @@ namespace MixGui.Components
 				SelectionLength = selectionLength;
 				base.SelectionStart = selectionStart;
 			}
-		}
-
-		private void this_Leave(object sender, EventArgs e)
-		{
-			checkAndUpdateValue(Text);
 		}
 
 		public Word.Signs Sign
@@ -497,14 +478,6 @@ namespace MixGui.Components
 			}
 		}
 
-		public bool SupportSign
-		{
-			get
-			{
-				return mSupportSign;
-			}
-		}
-
 		public bool SupportNegativeZero
 		{
 			get
@@ -548,21 +521,9 @@ namespace MixGui.Components
 				NewSign = newSign;
 			}
 
-            public long NewValue
-			{
-				get
-				{
-					return NewSign.ApplyTo(NewMagnitude);
-				}
-			}
-
-            public long OldValue
-			{
-				get
-				{
-					return OldSign.ApplyTo(OldMagnitude);
-				}
-			}
+            public long NewValue => NewSign.ApplyTo(NewMagnitude);
+	
+            public long OldValue => OldSign.ApplyTo(OldMagnitude);
 		}
 
 		public delegate void ValueChangedEventHandler(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs e);

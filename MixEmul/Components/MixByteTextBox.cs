@@ -14,13 +14,14 @@ namespace MixGui.Components
 		private byte mByteValue;
 		private Color mEditingTextColor;
 		private bool mEditMode;
-		private int mIndex;
 		private int mLastCaretPos;
 		private string mLastValidText;
 		private Color mRenderedTextColor;
 		private bool mUpdating;
 
-		public event ValueChangedEventHandler ValueChanged;
+        public int Index { get; private set; }
+
+        public event ValueChangedEventHandler ValueChanged;
 
 		public MixByteTextBox()
 			: this(0)
@@ -29,7 +30,7 @@ namespace MixGui.Components
 
 		public MixByteTextBox(int index)
 		{
-			mIndex = index;
+			Index = index;
 			mByteValue = 0;
 
 			mLastValidText = mByteValue.ToString("D2");
@@ -56,7 +57,13 @@ namespace MixGui.Components
 			base.TextChanged += this_TextChanged;
 		}
 
-		private void checkAndUpdateValue(byte byteValue)
+        protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        private void this_Enter(object sender, EventArgs e) => base.Select(0, TextLength);
+
+        private void this_Leave(object sender, EventArgs e) => checkAndUpdateValue(Text);
+
+        private void checkAndUpdateValue(byte byteValue)
 		{
 			mEditMode = false;
 
@@ -105,19 +112,6 @@ namespace MixGui.Components
 			}
 		}
 
-		protected virtual void OnValueChanged(ValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
-			}
-		}
-
-		private void this_Enter(object sender, EventArgs e)
-		{
-			base.Select(0, TextLength);
-		}
-
 		private void this_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			char keyChar = e.KeyChar;
@@ -138,11 +132,6 @@ namespace MixGui.Components
 			}
 
 			e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
-		}
-
-		private void this_Leave(object sender, EventArgs e)
-		{
-			checkAndUpdateValue(Text);
 		}
 
 		private void this_TextChanged(object sender, EventArgs e)
@@ -200,14 +189,6 @@ namespace MixGui.Components
 			base.ResumeLayout();
 		}
 
-		public int Index
-		{
-			get
-			{
-				return mIndex;
-			}
-		}
-
 		public MixByte MixByteValue
 		{
 			get
@@ -216,7 +197,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				mByteValue = (byte)value;
+				mByteValue = value;
 				checkAndUpdateValue(mByteValue);
 			}
 		}
@@ -235,29 +216,13 @@ namespace MixGui.Components
 
 		public class ValueChangedEventArgs : EventArgs
 		{
-			private MixByte mNewValue;
-			private MixByte mOldValue;
+			public MixByte NewValue { get; private set; }
+			public MixByte OldValue { get; private set; }
 
 			public ValueChangedEventArgs(MixByte oldValue, MixByte newValue)
 			{
-				mOldValue = oldValue;
-				mNewValue = newValue;
-			}
-
-			public MixByte NewValue
-			{
-				get
-				{
-					return mNewValue;
-				}
-			}
-
-			public MixByte OldValue
-			{
-				get
-				{
-					return mOldValue;
-				}
+				OldValue = oldValue;
+				NewValue = newValue;
 			}
 		}
 

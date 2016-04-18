@@ -41,11 +41,8 @@ namespace MixLib.Device
 
 		protected virtual void OnReportingEvent(ReportingEventArgs args)
 		{
-			if (ReportingEvent != null)
-			{
-				ReportingEvent(this, args);
-			}
-		}
+            ReportingEvent?.Invoke(this, args);
+        }
 
 		public virtual void Reset()
 		{
@@ -102,11 +99,8 @@ namespace MixLib.Device
 					{
 						mCurrentStepInstance = null;
 
-						if (mCurrentOperands.InterruptQueueCallback != null)
-						{
-							mCurrentOperands.InterruptQueueCallback(new Interrupt(Id));
-						}
-					}
+                        mCurrentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
+                    }
 					else
 					{
 						DeviceStep.Instance currentStepInstance = GetCurrentStepInstance();

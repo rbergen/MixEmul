@@ -45,24 +45,15 @@ namespace MixGui.Components
 			base.ResumeLayout(false);
 		}
 
-		private void addFinding(AssemblyFinding finding)
+        protected void OnSelectionChanged(SelectionChangedEventArgs args) => SelectionChanged?.Invoke(this, args);
+
+        private void selectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
+
+        private void addFinding(AssemblyFinding finding)
 		{
 			ListViewItem item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity);
 			item.Tag = finding;
 			mFindingsListView.Items.Add(item);
-		}
-
-		protected void OnSelectionChanged(SelectionChangedEventArgs args)
-		{
-			if (SelectionChanged != null)
-			{
-				SelectionChanged(this, args);
-			}
-		}
-
-		private void selectedIndexChanged(object sender, EventArgs e)
-		{
-			OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
 		}
 
 		public AssemblyFindingCollection Findings
@@ -119,7 +110,7 @@ namespace MixGui.Components
 		{
 			public int Compare(AssemblyFinding x, AssemblyFinding y)
 			{
-				int comparison = (int)(y.Severity - x.Severity);
+				int comparison = y.Severity - x.Severity;
 				if (comparison != 0)
 				{
 					return comparison;
@@ -131,7 +122,7 @@ namespace MixGui.Components
 					return comparison;
 				}
 
-				comparison = (int)(x.LineSection - y.LineSection);
+				comparison = x.LineSection - y.LineSection;
 				if (comparison != 0)
 				{
 					return comparison;
@@ -150,13 +141,7 @@ namespace MixGui.Components
 				mSelectedFinding = finding;
 			}
 
-			public AssemblyFinding SelectedFinding
-			{
-				get
-				{
-					return mSelectedFinding;
-				}
-			}
+			public AssemblyFinding SelectedFinding => mSelectedFinding;
 		}
 
 		public delegate void SelectionChangedHandler(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs e);

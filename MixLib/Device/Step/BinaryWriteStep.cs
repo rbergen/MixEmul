@@ -55,7 +55,7 @@ namespace MixLib.Device.Step
 
 			for (int index = 0; index < bytesToWriteCount; index++)
 			{
-				buffer[index] = (byte)writeBytes[index];
+				buffer[index] = writeBytes[index];
 			}
 
 			stream.Write(buffer, 0, buffer.Length);

@@ -149,7 +149,7 @@ namespace MixLib.Device
 				{
 					if (mTicksLeft == unset)
 					{
-						mTicksLeft = ((base.StreamStatus.Position / ((long)(recordWordCount * FullWord.ByteCount + Environment.NewLine.Length))) + 1L) * DeviceSettings.GetTickCount("PaperTapeRecordWind");
+						mTicksLeft = ((base.StreamStatus.Position / (recordWordCount * FullWord.ByteCount + Environment.NewLine.Length)) + 1L) * DeviceSettings.GetTickCount("PaperTapeRecordWind");
 					}
 
 					mTicksLeft -= 1L;

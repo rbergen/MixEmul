@@ -51,7 +51,7 @@ namespace MixLib.Device.Step
 
 			while (index < charsToWriteCount)
 			{
-				charsToWrite[index] = (char)bytes[index];
+				charsToWrite[index] = bytes[index];
 				index++;
 			}
 

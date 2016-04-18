@@ -56,10 +56,7 @@ namespace MixLib
 
         protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args)
         {
-            if (DeviceReportingEvent != null)
-            {
-                DeviceReportingEvent(this, args);
-            }
+            DeviceReportingEvent?.Invoke(this, args);
         }
 
         public void Reset()

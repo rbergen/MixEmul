@@ -33,7 +33,7 @@ namespace MixLib.Type
 
 		public static bool IsValidFieldSpec(MixByte value)
 		{
-			return IsValidFieldSpec((int)(value / 8), (int)(value % 8));
+			return IsValidFieldSpec(value / 8, value % 8);
 		}
 
 		public static bool IsValidFieldSpec(int lowBound, int highBound)
@@ -96,7 +96,7 @@ namespace MixLib.Type
 					throw new InvalidOperationException("this MixFieldSpec is not valid");
 				}
 
-				return (int)(MixByteValue % 8);
+				return MixByteValue % 8;
 			}
 		}
 
@@ -133,7 +133,7 @@ namespace MixLib.Type
 					throw new InvalidOperationException("this MixFieldSpec is not valid");
 				}
 
-				return (int)(MixByteValue / 8);
+				return MixByteValue / 8;
 			}
 		}
 

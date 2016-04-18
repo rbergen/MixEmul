@@ -166,7 +166,7 @@ namespace MixLib.Instruction
 			{
 				get
 				{
-					return (byte)InstructionWord[IndexByte];
+					return InstructionWord[IndexByte];
 				}
 			}
 

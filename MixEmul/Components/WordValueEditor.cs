@@ -85,18 +85,23 @@ namespace MixGui.Components
 			sizeComponent();
 		}
 
-		protected override void Dispose(bool disposing)
+        public Control EditorControl => this;
+
+        public FieldTypes? FocusedField => mLongValueTextBox.Focused ? FieldTypes.Value : mWordEditor.FocusedField;
+
+        public int? CaretIndex => FocusedField == FieldTypes.Value ? mLongValueTextBox.SelectionStart + mLongValueTextBox.SelectionLength : mWordEditor.CaretIndex;
+
+        public bool Focus(FieldTypes? field, int? index) => field == FieldTypes.Value ? mLongValueTextBox.FocusWithIndex(index) : mWordEditor.Focus(field, index);
+
+        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
+        protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			if (disposing)
 			{
-				components.Dispose();
+				components?.Dispose();
 			}
 			base.Dispose(disposing);
-		}
-
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return field == FieldTypes.Value ? mLongValueTextBox.FocusWithIndex(index) : mWordEditor.Focus(field, index);
 		}
 
 		private void keyDown(object sender, KeyEventArgs e)
@@ -121,11 +126,8 @@ namespace MixGui.Components
 				case Keys.Next:
 				case Keys.Up:
 				case Keys.Down:
-					if (NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
-					}
-					break;
+                    NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
+                    break;
 
 				case Keys.Right:
 					if (sender == mWordEditor)
@@ -150,14 +152,6 @@ namespace MixGui.Components
 					}
 
 					break;
-			}
-		}
-
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, args);
 			}
 		}
 
@@ -294,30 +288,6 @@ namespace MixGui.Components
 				{
 					sizeComponent();
 				}
-			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return mLongValueTextBox.Focused ? FieldTypes.Value : mWordEditor.FocusedField;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return FocusedField == FieldTypes.Value ? mLongValueTextBox.SelectionStart + mLongValueTextBox.SelectionLength : mWordEditor.CaretIndex;
 			}
 		}
 

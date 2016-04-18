@@ -45,7 +45,7 @@ namespace MixAssembler.Value
 			decimal divider = new decimal(left.GetValue(currentAddress));
 			divider *= fullWordModulusMask;
 			divider /= right.GetValue(currentAddress);
-			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), ((int)1) << Math.Min(fullWordBitCount, 64)));
+			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
 		}
 
 		private static IValue doMultiply(IValue left, IValue right, int currentAddress)

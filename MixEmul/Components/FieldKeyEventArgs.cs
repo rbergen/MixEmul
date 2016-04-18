@@ -5,7 +5,7 @@ namespace MixGui.Components
 {
 	public class FieldKeyEventArgs : IndexKeyEventArgs
 	{
-		private FieldTypes mField;
+		public FieldTypes Field { get; private set; }
 
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field)
 			: this(keyData, field, null) { }
@@ -13,15 +13,7 @@ namespace MixGui.Components
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index)
 			: base(keyData, index)
 		{
-			mField = field;
-		}
-
-		public FieldTypes Field
-		{
-			get
-			{
-				return mField;
-			}
+			Field = field;
 		}
 	}
 }

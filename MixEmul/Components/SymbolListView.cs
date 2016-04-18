@@ -9,13 +9,14 @@ namespace MixGui.Components
 	public partial class SymbolListView : UserControl
 	{
 		private SymbolCollection mSymbols;
-		private int mMemoryMinIndex = 0;
-		private int mMemoryMaxIndex = 0;
 
-		private const int nameFieldIndex = 0;
+        private const int nameFieldIndex = 0;
 		private const int valueFieldIndex = 1;
 
-		public event AddressSelectedHandler AddressSelected;
+        public int MemoryMinIndex { get; set; } = 0;
+        public int MemoryMaxIndex { get; set; } = 0;
+
+        public event AddressSelectedHandler AddressSelected;
 
 		public SymbolListView()
 		{
@@ -32,22 +33,17 @@ namespace MixGui.Components
 			mListView.SelectedIndexChanged += new EventHandler(mListView_SelectedIndexChanged);
 		}
 
-		void mSymbolValueTextBox_TextChanged(object sender, EventArgs e)
-		{
-			setEnabledStates();
-		}
+		void mSymbolValueTextBox_TextChanged(object sender, EventArgs e) => setEnabledStates();
 
-		void mSymbolNameTextBox_TextChanged(object sender, EventArgs e)
-		{
-			setEnabledStates();
-		}
+		void mSymbolNameTextBox_TextChanged(object sender, EventArgs e) => setEnabledStates();
 
-		private void setEnabledStates()
-		{
-			setEnabledStates(true);
-		}
+		private void setEnabledStates() => setEnabledStates(true);
 
-		private void setEnabledStates(bool updateSelectedItem)
+        private void mListView_DoubleClick(object sender, EventArgs e) => valueSelected();
+
+        protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+
+        private void setEnabledStates(bool updateSelectedItem)
 		{
 			string symbolName = mSymbolNameTextBox.Text;
 			mSetButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && mSymbolValueTextBox.TextLength > 0;
@@ -172,50 +168,12 @@ namespace MixGui.Components
 			}
 		}
 
-
-		private void mListView_DoubleClick(object sender, EventArgs e)
-		{
-			valueSelected();
-		}
-
-		public int MemoryMinIndex
-		{
-			get
-			{
-				return mMemoryMinIndex;
-			}
-			set
-			{
-				mMemoryMinIndex = value;
-			}
-		}
-
-		public int MemoryMaxIndex
-		{
-			get
-			{
-				return mMemoryMaxIndex;
-			}
-			set
-			{
-				mMemoryMaxIndex = value;
-			}
-		}
-
 		private void valueSelected()
 		{
 			long selectedValue = SelectedValue;
-			if (selectedValue >= mMemoryMinIndex && selectedValue <= mMemoryMaxIndex)
+			if (selectedValue >= MemoryMinIndex && selectedValue <= MemoryMaxIndex)
 			{
 				OnAddressSelected(new AddressSelectedEventArgs((int)selectedValue));
-			}
-		}
-
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			if (AddressSelected != null)
-			{
-				AddressSelected(this, args);
 			}
 		}
 

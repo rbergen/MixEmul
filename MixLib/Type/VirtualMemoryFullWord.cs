@@ -347,7 +347,7 @@ namespace MixLib.Type
 		{
 			VirtualMemoryFullWord other = obj as VirtualMemoryFullWord;
 
-			return other == null ? false : other.Index == this.Index && other.mMemory == this.mMemory && other.mRealWord == this.mRealWord;
+			return other == null ? false : other.Index == Index && other.mMemory == mMemory && other.mRealWord == mRealWord;
 		}
 
         public override int GetHashCode()

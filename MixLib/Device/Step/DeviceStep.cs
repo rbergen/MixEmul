@@ -29,11 +29,8 @@ namespace MixLib.Device.Step
 
 			protected virtual void OnReportingEvent(ReportingEventArgs args)
 			{
-				if (ReportingEvent != null)
-				{
-					ReportingEvent(this, args);
-				}
-			}
+                ReportingEvent?.Invoke(this, args);
+            }
 
 			public abstract bool Tick();
 
