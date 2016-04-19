@@ -12,12 +12,6 @@ namespace MixAssembler.Finding
             mMessage = message;
         }
 
-        public override string Message
-        {
-            get
-            {
-                return mMessage;
-            }
-        }
+        public override string Message => mMessage;
     }
 }

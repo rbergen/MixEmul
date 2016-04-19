@@ -43,7 +43,8 @@ namespace MixGui.Components
 
         public int? CaretIndex => FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
 
-        public bool Focus(FieldTypes? field, int? index) => field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
+        public bool Focus(FieldTypes? field, int? index) => 
+            field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 

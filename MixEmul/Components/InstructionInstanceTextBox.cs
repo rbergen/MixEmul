@@ -70,7 +70,7 @@ namespace MixGui.Components
 			base.TextChanged += this_TextChanged;
 			base.KeyPress += this_KeyPress;
 			base.KeyDown += this_KeyDown;
-			base.Leave += this_Leave;
+			base.LostFocus += this_LostFocus;
 			base.Enter += this_Enter;
 			base.ReadOnlyChanged += this_ReadOnlyChanged;
 
@@ -95,13 +95,22 @@ namespace MixGui.Components
 			Update();
 		}
 
+        public Control EditorControl => this;
+
+        public FieldTypes? FocusedField => FieldTypes.Instruction;
+
+        public int? CaretIndex => SelectionStart + SelectionLength;
+
+        public bool Focus(FieldTypes? field, int? index) => this.FocusWithIndex(index);
+
         protected void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
         protected void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
         private void this_Enter(object sender, EventArgs e) => checkContentsEditable();
 
-        private void showIndexedAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(getAddress(), mInstructionWord[MixInstruction.IndexByte])));
+        private void showIndexedAddressMenuItem_Click(object sender, EventArgs e) => 
+            OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(getAddress(), mInstructionWord[MixInstruction.IndexByte])));
 
         private void showAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(getAddress()));
 
@@ -340,7 +349,7 @@ namespace MixGui.Components
 			}
 		}
 
-		private void this_Leave(object sender, EventArgs e)
+		private void this_LostFocus(object sender, EventArgs e)
 		{
 			if (!mEditMode || !assembleInstruction(false))
 			{
@@ -602,35 +611,6 @@ namespace MixGui.Components
 				}
 
 				InstructionWord = (IFullWord)value;
-			}
-		}
-
-		public Control EditorControl
-		{
-			get
-			{
-				return this;
-			}
-		}
-
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return this.FocusWithIndex(index);
-		}
-
-		public FieldTypes? FocusedField
-		{
-			get
-			{
-				return FieldTypes.Instruction;
-			}
-		}
-
-		public int? CaretIndex
-		{
-			get
-			{
-				return SelectionStart + SelectionLength;
 			}
 		}
 	}

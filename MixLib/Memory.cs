@@ -24,7 +24,9 @@ namespace MixLib
 			mSyncRoot = ((ICollection)mWords).SyncRoot;
 		}
 
-		public void ResetProfilingCounts()
+        public int WordCount => MaxWordIndex - MinWordIndex + 1;
+
+        public void ResetProfilingCounts()
 		{
 			lock (mSyncRoot)
 			{
@@ -264,14 +266,6 @@ namespace MixLib
 				{
 					mWords[index].SourceLine = null;
 				}
-			}
-		}
-
-		public int WordCount
-		{
-			get
-			{
-				return MaxWordIndex - MinWordIndex + 1;
 			}
 		}
     }

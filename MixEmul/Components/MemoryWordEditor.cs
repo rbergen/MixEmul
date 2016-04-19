@@ -72,9 +72,11 @@ namespace MixGui.Components
 
         public int? CaretIndex => FocusedField == FieldTypes.Instruction ? mInstructionTextBox.CaretIndex : mFullWordEditor.CaretIndex;
 
-        public bool Focus(FieldTypes? field, int? index) => field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
+        public bool Focus(FieldTypes? field, int? index) => 
+            field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
 
-        private Color getBlendedColor(double fraction) => fraction < .5 ? interpolate(Color.Green, Color.Yellow, fraction * 2) : interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
+        private Color getBlendedColor(double fraction) => 
+            fraction < .5 ? interpolate(Color.Green, Color.Yellow, fraction * 2) : interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
 
         private int roundForArgb(double d) => d < 0 ? 0 : (d > 255 ? 255 : (int)d);
 

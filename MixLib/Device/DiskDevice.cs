@@ -26,7 +26,17 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-		public override void UpdateSettings()
+        public override int RecordWordCount => WordsPerSector;
+
+        public override string ShortName => shortName;
+
+        public override bool SupportsInput => true;
+
+        public override bool SupportsOutput => true;
+
+        public static long CalculateBytePosition(long sector) => sector * WordsPerSector * (FullWord.ByteCount + 1);
+
+        public override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
 
@@ -62,38 +72,6 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 		}
 
-		public override int RecordWordCount
-		{
-			get
-			{
-				return WordsPerSector;
-			}
-		}
-
-		public override string ShortName
-		{
-			get
-			{
-				return shortName;
-			}
-		}
-
-		public override bool SupportsInput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public override bool SupportsOutput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		public new static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 		{
 			FileStream stream = FileBasedDevice.OpenStream(fileName, fileMode, fileAccess, fileShare);
@@ -110,25 +88,11 @@ namespace MixLib.Device
 			return stream;
 		}
 
-		public static long CalculateBytePosition(long sector)
-		{
-			return sector * WordsPerSector * (FullWord.ByteCount + 1);
-		}
-
 		private class openStreamStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => openingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return openingDescription;
-				}
-			}
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
 			private new class Instance : StreamStep.Instance
 			{
@@ -162,18 +126,9 @@ namespace MixLib.Device
 
 		private class seekStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => seekingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return seekingDescription;
-				}
-			}
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
 			private new class Instance : StreamStep.Instance
 			{

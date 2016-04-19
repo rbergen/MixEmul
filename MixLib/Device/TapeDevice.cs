@@ -27,7 +27,19 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-		public override void UpdateSettings()
+        public override int RecordWordCount => WordsPerRecord;
+
+        public override string ShortName => shortName;
+
+        public override bool SupportsInput => true;
+
+        public override bool SupportsOutput => true;
+
+        public static long CalculateBytePosition(long record) => record * bytesPerRecord;
+
+        public static long CalculateRecordCount(FileStream stream) => stream.Length / bytesPerRecord;
+
+        public override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
 
@@ -59,64 +71,12 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 		}
 
-		public override int RecordWordCount
-		{
-			get
-			{
-				return WordsPerRecord;
-			}
-		}
-
-		public override string ShortName
-		{
-			get
-			{
-				return shortName;
-			}
-		}
-
-		public override bool SupportsInput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public override bool SupportsOutput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public static long CalculateBytePosition(long record)
-		{
-			return record * bytesPerRecord;
-		}
-
-		public static long CalculateRecordCount(FileStream stream)
-		{
-			return stream.Length / bytesPerRecord;
-		}
-
-
 		private class openStreamStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => openingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return openingDescription;
-				}
-			}
-
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+	
 			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus)
@@ -146,18 +106,9 @@ namespace MixLib.Device
 
 		private class seekStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => windingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return windingDescription;
-				}
-			}
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
 			private new class Instance : StreamStep.Instance
 			{

@@ -49,7 +49,8 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        private void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => OnValueChanged(args);
+        private void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => 
+            OnValueChanged(args);
 
 		private void initializeComponent()
 		{

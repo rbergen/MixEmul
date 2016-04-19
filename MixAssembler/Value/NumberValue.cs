@@ -33,17 +33,15 @@ namespace MixAssembler.Value
 			Magnitude = magnitude;
 		}
 
-		public virtual long GetValue(int currentAddress)
-		{
-			return Sign.ApplyTo(Magnitude);
-		}
+		public virtual long GetValue(int currentAddress) => Sign.ApplyTo(Magnitude);
+	
+		public virtual bool IsValueDefined(int currentAddress) => true;
 
-		public virtual bool IsValueDefined(int currentAddress)
-		{
-			return true;
-		}
+        public long GetMagnitude(int currentAddress) => Magnitude;
 
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+        public Word.Signs GetSign(int currentAddress) => Sign;
+
+        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length != 0 && text.Length <= 10)
 			{
@@ -68,20 +66,5 @@ namespace MixAssembler.Value
 
 			return null;
 		}
-
-		#region IValue Members
-
-
-		public long GetMagnitude(int currentAddress)
-		{
-			return Magnitude;
-		}
-
-		public Word.Signs GetSign(int currentAddress)
-		{
-			return Sign;
-		}
-
-		#endregion
 	}
 }

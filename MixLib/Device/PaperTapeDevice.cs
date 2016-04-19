@@ -26,7 +26,15 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-		public override void UpdateSettings()
+        public override int RecordWordCount => recordWordCount;
+
+        public override string ShortName => shortName;
+
+        public override bool SupportsInput => true;
+
+        public override bool SupportsOutput => false;
+
+        public override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PaperTapeInitialization);
 
@@ -49,53 +57,12 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 		}
 
-		public override int RecordWordCount
-		{
-			get
-			{
-				return recordWordCount;
-			}
-		}
-
-		public override string ShortName
-		{
-			get
-			{
-				return shortName;
-			}
-		}
-
-		public override bool SupportsInput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public override bool SupportsOutput
-		{
-			get
-			{
-				return false;
-			}
-		}
-
 		private class openStreamStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => openingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return openingDescription;
-				}
-			}
-
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+	
 			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus)
@@ -121,18 +88,9 @@ namespace MixLib.Device
 
 		private class rewindStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+            public override string StatusDescription => rewindingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return rewindingDescription;
-				}
-			}
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
 			private new class Instance : StreamStep.Instance
 			{

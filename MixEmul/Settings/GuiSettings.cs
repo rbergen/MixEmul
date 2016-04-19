@@ -71,7 +71,9 @@ namespace MixGui.Settings
 			ColorProfilingCounts = true;
 		}
 
-		public static Color GetColor(string name)
+        public static bool IsKnownColor(string name) => mDefaultColors.ContainsKey(name);
+
+        public static Color GetColor(string name)
 		{
 			if (Colors.ContainsKey(name))
 			{
@@ -100,11 +102,6 @@ namespace MixGui.Settings
 			IEnumerator<Font> enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
 			enumerator.MoveNext();
 			return enumerator.Current;
-		}
-
-		public static bool IsKnownColor(string name)
-		{
-			return mDefaultColors.ContainsKey(name);
 		}
 
 		public static string[] KnownColorNames

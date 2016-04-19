@@ -43,9 +43,11 @@ namespace MixGui.Components
 
         private void mCloseButton_Click(object sender, EventArgs e) => Hide();
 
-        private void mTapeDeleteButton_Click(object sender, EventArgs e) => deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
+        private void mTapeDeleteButton_Click(object sender, EventArgs e) => 
+            deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
 
-        private void mDiskDeleteButton_Click(object sender, EventArgs e) => deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
+        private void mDiskDeleteButton_Click(object sender, EventArgs e) => 
+            deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
 
         private void mCardReaderDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card reader", mCardReaderEditor);
 

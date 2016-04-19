@@ -25,37 +25,27 @@ namespace MixAssembler.Value
 			mBinaryOperations[":"] = doCalculateField;
 		}
 
-		private static IValue doAdd(IValue left, IValue right, int currentAddress)
-		{
-			return new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
-		}
+		private static IValue doAdd(IValue left, IValue right, int currentAddress) =>
+            new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-		private static IValue doCalculateField(IValue left, IValue right, int currentAddress)
-		{
-			return new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
-		}
+		private static IValue doCalculateField(IValue left, IValue right, int currentAddress) =>
+            new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-		private static IValue doDivide(IValue left, IValue right, int currentAddress)
-		{
-			return new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
-		}
+		private static IValue doDivide(IValue left, IValue right, int currentAddress) =>
+            new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
 
-		private static IValue doFractionDivide(IValue left, IValue right, int currentAddress)
+        private static IValue doMultiply(IValue left, IValue right, int currentAddress) =>
+            new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
+
+        private static IValue doSubstract(IValue left, IValue right, int currentAddress) =>
+            new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
+
+        private static IValue doFractionDivide(IValue left, IValue right, int currentAddress)
 		{
 			decimal divider = new decimal(left.GetValue(currentAddress));
 			divider *= fullWordModulusMask;
 			divider /= right.GetValue(currentAddress);
 			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
-		}
-
-		private static IValue doMultiply(IValue left, IValue right, int currentAddress)
-		{
-			return new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
-		}
-
-		private static IValue doSubstract(IValue left, IValue right, int currentAddress)
-		{
-			return new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
 		}
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)

@@ -13,12 +13,6 @@ namespace MixLib.Type
 		{
 		}
 
-		public static FieldSpec DefaultFieldSpec
-		{
-			get
-			{
-				return mDefaultFieldSpec;
-			}
-		}
+		public static FieldSpec DefaultFieldSpec => mDefaultFieldSpec;
 	}
 }

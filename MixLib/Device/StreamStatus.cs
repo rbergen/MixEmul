@@ -19,7 +19,9 @@ namespace MixLib.Device
 			Reset();
 		}
 
-		public void CloseStream()
+        private void onReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+
+        public void CloseStream()
 		{
 			if (mStream != null)
 			{
@@ -33,11 +35,6 @@ namespace MixLib.Device
 				mStream = null;
 			}
 		}
-
-		private void onReportingEvent(ReportingEventArgs args)
-		{
-            ReportingEvent?.Invoke(this, args);
-        }
 
 		public void Reset()
 		{

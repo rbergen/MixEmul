@@ -36,13 +36,7 @@ namespace MixLib.Instruction
 				Value = new FullWord(sign, magnitude);
 			}
 
-			public override InstructionBase Instruction
-			{
-				get
-				{
-					return mInstruction;
-				}
-			}
+			public override InstructionBase Instruction => mInstruction;
 		}
 
 		public enum Operations

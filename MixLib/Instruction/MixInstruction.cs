@@ -72,10 +72,7 @@ namespace MixLib.Instruction
 			mValidator = validator;
 		}
 
-		public Instance CreateInstance(IFullWord instructionWord)
-		{
-			return new Instance(this, instructionWord);
-		}
+		public Instance CreateInstance(IFullWord instructionWord) => new Instance(this, instructionWord);
 
         public class Instance : InstructionInstanceBase
 		{
@@ -100,15 +97,27 @@ namespace MixLib.Instruction
 				InstructionWord = instructionWord;
 			}
 
-			private int addressMagnitude(IWord word)
-			{
-				return (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
-			}
+            public int AddressValue => addressValue(InstructionWord);
 
-			private int addressValue(IWord word)
-			{
-				return (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
-			}
+            public int AddressMagnitude => addressMagnitude(InstructionWord);
+
+            public Word.Signs AddressSign => InstructionWord.Sign;
+
+            public FieldSpec FieldSpec => new FieldSpec(InstructionWord[FieldSpecByte]);
+
+            public byte Index => InstructionWord[IndexByte];
+
+            public override InstructionBase Instruction => MixInstruction;
+
+            public Word.Signs Sign => InstructionWord.Sign;
+
+            public InstanceValidationError[] Validate() => MixInstruction.mValidator == null ? null : MixInstruction.mValidator(this);
+
+            public override string ToString() => new InstructionText(this).InstanceText;
+
+            private int addressMagnitude(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+
+			private int addressValue(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
 
 			public bool Execute(ModuleBase module)
 			{
@@ -118,77 +127,6 @@ namespace MixLib.Instruction
 				}
 
 				return MixInstruction.mExecutor(module, this);
-			}
-
-			public InstanceValidationError[] Validate()
-			{
-				if (MixInstruction.mValidator == null)
-				{
-					return null;
-				}
-
-				return MixInstruction.mValidator(this);
-			}
-
-			public int AddressValue
-			{
-				get
-				{
-					return addressValue(InstructionWord);
-				}
-			}
-
-			public int AddressMagnitude
-			{
-				get
-				{
-					return addressMagnitude(InstructionWord);
-				}
-			}
-
-			public Word.Signs AddressSign
-			{
-				get
-				{
-					return InstructionWord.Sign;
-				}
-			}
-
-			public FieldSpec FieldSpec
-			{
-				get
-				{
-					return new FieldSpec(InstructionWord[FieldSpecByte]);
-				}
-			}
-
-			public byte Index
-			{
-				get
-				{
-					return InstructionWord[IndexByte];
-				}
-			}
-
-            public override InstructionBase Instruction
-			{
-				get
-				{
-					return MixInstruction;
-				}
-			}
-
-			public Word.Signs Sign
-			{
-				get
-				{
-					return InstructionWord.Sign;
-				}
-			}
-
-			public override string ToString()
-			{
-				return new InstructionText(this).InstanceText;
 			}
 		}
 

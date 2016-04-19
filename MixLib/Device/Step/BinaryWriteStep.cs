@@ -17,18 +17,9 @@ namespace MixLib.Device.Step
 			mRecordWordCount = recordWordCount;
 		}
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-		{
-			return new Instance(streamStatus, mRecordWordCount);
-		}
+        public override string StatusDescription => statusDescription;
 
-		public override string StatusDescription
-		{
-			get
-			{
-				return statusDescription;
-			}
-		}
+        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)
 		{

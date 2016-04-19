@@ -42,12 +42,6 @@ namespace MixAssembler.Instruction
             Comment = comment;
         }
 
-        public bool IsCommentLine
-        {
-            get
-            {
-                return LocationField == null;
-            }
-        }
+        public bool IsCommentLine => LocationField == null;
     }
 }

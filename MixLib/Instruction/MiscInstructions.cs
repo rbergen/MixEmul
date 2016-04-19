@@ -14,10 +14,15 @@ namespace MixLib.Instruction
 		private static SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
 		private const byte zeroCharValue = 30;
 
-		/// <summary>
-		/// Method for performing the CHAR instruction
-		/// </summary>
-		public static bool ConvertToChar(ModuleBase module, MixInstruction.Instance instance)
+        /// <summary>
+        /// Method for performing the NOP instruction
+        /// </summary>
+        public static bool Noop(ModuleBase module, MixInstruction.Instance instance) => true;
+
+        /// <summary>
+        /// Method for performing the CHAR instruction
+        /// </summary>
+        public static bool ConvertToChar(ModuleBase module, MixInstruction.Instance instance)
 		{
 			Register rA = module.Registers.rA;
 			long magnitudeLongValue = rA.MagnitudeLongValue;
@@ -184,14 +189,6 @@ namespace MixLib.Instruction
 		}
 
 		/// <summary>
-		/// Method for performing the NOP instruction
-		/// </summary>
-		public static bool Noop(ModuleBase module, MixInstruction.Instance instance)
-		{
-			return true;
-		}
-
-		/// <summary>
 		/// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
 		/// several ticks, the exact number of ticks depending on the number of words moved.
 		/// </summary>
@@ -214,10 +211,7 @@ namespace MixLib.Instruction
 				CurrentWordState = WordStates.BeforeMove;
 			}
 
-			public void NextWord()
-			{
-				CurrentWord++;
-			}
+			public void NextWord() => CurrentWord++;
 
             public enum WordStates
 			{

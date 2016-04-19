@@ -13,12 +13,7 @@ namespace MixAssembler.Finding
 			Error = error;
 		}
 
-		public override string Message
-		{
-			get
-			{
-				return Error.CompiledMessage;
-			}
-		}
+		public override string Message => Error.CompiledMessage;
+
 	}
 }

@@ -5,16 +5,9 @@ namespace MixLib.Type
 {
 	public interface IMixByteCollection : IEnumerable<MixByte>, ICloneable
 	{
-		MixByte this[int index]
-		{
-			get;
-			set;
-		}
+		MixByte this[int index] { get; set; }
 
-		int MaxByteCount
-		{
-			get;
-		}
+        int MaxByteCount { get; }
 
 		void Load(string text);
 

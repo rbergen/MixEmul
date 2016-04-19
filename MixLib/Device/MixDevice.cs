@@ -34,17 +34,19 @@ namespace MixLib.Device
 			CurrentStep = null;
 		}
 
-		protected virtual DeviceStep.Instance GetCurrentStepInstance()
-		{
-			return CurrentStep.CreateInstance();
-		}
+        public bool Busy => CurrentStep != null;
 
-		protected virtual void OnReportingEvent(ReportingEventArgs args)
-		{
-            ReportingEvent?.Invoke(this, args);
-        }
+        public string StatusDescription => Busy ? CurrentStep.StatusDescription : idleDescription;
 
-		public virtual void Reset()
+        protected virtual DeviceStep.Instance GetCurrentStepInstance() => CurrentStep.CreateInstance();
+
+        public override string ToString() => ShortName + ": " + Id.ToString();
+
+        protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+
+        private void stepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+
+        public virtual void Reset()
 		{
 			CurrentStep = null;
 			mCurrentStepInstance = null;
@@ -75,11 +77,6 @@ namespace MixLib.Device
 				mCurrentOperands = new InOutputOperands(memory, mValue, sector, callback);
 				CurrentStep = FirstOutputDeviceStep;
 			}
-		}
-
-		private void stepInstance_Reporting(object sender, ReportingEventArgs args)
-		{
-			OnReportingEvent(args);
 		}
 
 		public void Tick()
@@ -115,31 +112,6 @@ namespace MixLib.Device
 
 		public abstract void UpdateSettings();
 
-		public bool Busy
-		{
-			get
-			{
-				return (CurrentStep != null);
-			}
-		}
-
-        public string StatusDescription
-		{
-			get
-			{
-				if (!Busy)
-				{
-					return idleDescription;
-				}
-				return CurrentStep.StatusDescription;
-			}
-		}
-
-        public override string ToString()
-		{
-			return ShortName + ": " + Id.ToString();
-		}
-
 		protected class ReadFromMemoryStep : TickingStep
 		{
 			private bool mIncludeSign;
@@ -150,18 +122,9 @@ namespace MixLib.Device
 				mIncludeSign = includeSign;
 			}
 
-			protected override TickingStep.Instance CreateTickingInstance()
-			{
-				return new Instance(base.TickCount, mIncludeSign);
-			}
+            public override string StatusDescription => readingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return readingDescription;
-				}
-			}
+            protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
 
 			private new class Instance : TickingStep.Instance
 			{
@@ -183,7 +146,9 @@ namespace MixLib.Device
 					mBytesForReading = new MixByte[base.TickCount * mWordByteCount];
 				}
 
-				protected override void ProcessTick()
+                public override object OutputForNextStep => mBytesForReading;
+
+                protected override void ProcessTick()
 				{
 					int currentAddress = base.Operands.MValue + base.CurrentTick;
 
@@ -203,14 +168,6 @@ namespace MixLib.Device
 						}
 					}
 				}
-
-				public override object OutputForNextStep
-				{
-					get
-					{
-						return mBytesForReading;
-					}
-				}
 			}
 		}
 
@@ -224,18 +181,9 @@ namespace MixLib.Device
 				mIncludeSign = includeSign;
 			}
 
-			protected override TickingStep.Instance CreateTickingInstance()
-			{
-				return new Instance(base.TickCount, mIncludeSign);
-			}
+            public override string StatusDescription => writingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return writingDescription;
-				}
-			}
+            protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
 
 			private new class Instance : TickingStep.Instance
 			{

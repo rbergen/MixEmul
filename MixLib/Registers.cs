@@ -33,7 +33,29 @@ namespace MixLib
 			}
 		}
 
-		public int GetIndexedAddress(int mValue, int index)
+        public Register this[int offset] => mRegisters[offset];
+
+        public Register this[Offset offset] => this[(int)offset];
+
+        public Register rI1 => mRegisters[(int)Offset.rI1];
+
+        public Register rI2 => mRegisters[(int)Offset.rI2];
+
+        public Register rI3 => mRegisters[(int)Offset.rI3];
+
+        public Register rI4 => mRegisters[(int)Offset.rI4];
+
+        public Register rI5 => mRegisters[(int)Offset.rI5];
+
+        public Register rI6 => mRegisters[(int)Offset.rI6];
+
+        public Register rA => mRegisters[(int)Offset.rA];
+
+        public Register rJ => mrJ;
+
+        public Register rX => mRegisters[(int)Offset.rX];
+
+        public int GetIndexedAddress(int mValue, int index)
 		{
 			if (index == 0)
 			{
@@ -141,94 +163,6 @@ namespace MixLib
 			mrJ.Sign = Word.Signs.Positive;
 			CompareIndicator = CompValues.Equal;
 			OverflowIndicator = false;
-		}
-
-		public Register this[int offset]
-		{
-			get
-			{
-				return mRegisters[offset];
-			}
-		}
-
-		public Register this[Offset offset]
-		{
-			get
-			{
-				return this[(int)offset];
-			}
-		}
-
-		public Register rI1
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI1];
-			}
-		}
-
-		public Register rI2
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI2];
-			}
-		}
-
-		public Register rI3
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI3];
-			}
-		}
-
-		public Register rI4
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI4];
-			}
-		}
-
-		public Register rI5
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI5];
-			}
-		}
-
-		public Register rI6
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rI6];
-			}
-		}
-
-		public Register rA
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rA];
-			}
-		}
-
-		public Register rJ
-		{
-			get
-			{
-				return mrJ;
-			}
-		}
-
-		public Register rX
-		{
-			get
-			{
-				return mRegisters[(int)Offset.rX];
-			}
 		}
 
 		public enum CompValues

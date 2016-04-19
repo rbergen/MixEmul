@@ -22,15 +22,13 @@ namespace MixLib.Type
 			Index = index;
 		}
 
-		public override bool IsEmpty
-		{
-			get
-			{
-				return base.IsEmpty && SourceLine == null;
-			}
-		}
+		public override bool IsEmpty => base.IsEmpty && SourceLine == null;
 
-		public SearchResult FindMatch(SearchParameters options)
+        public void IncreaseProfilingTickCount(int ticks) => ProfilingTickCount += ticks;
+
+        public void IncreaseProfilingExecutionCount() => ProfilingExecutionCount++;
+
+        public SearchResult FindMatch(SearchParameters options)
 		{
 			int index;
 
@@ -79,17 +77,6 @@ namespace MixLib.Type
 			}
 
 			return null;
-		}
-
-
-		public void IncreaseProfilingTickCount(int ticks)
-		{
-			ProfilingTickCount += ticks;
-		}
-
-		public void IncreaseProfilingExecutionCount()
-		{
-			ProfilingExecutionCount++;
 		}
 
 		public void ResetProfilingCounts()

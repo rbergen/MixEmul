@@ -25,7 +25,15 @@ namespace MixLib.Type
 			mBytes = bytes;
 		}
 
-		public void Load(string text)
+        public int MaxByteCount => mMaxByteCount;
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => mBytes.GetEnumerator();
+
+        public IEnumerator<MixByte> GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+
+        public MixByte[] ToArray() => (MixByte[])mBytes.Clone();
+
+        public void Load(string text)
 		{
 			int count = text == null ? 0 : Math.Min(mMaxByteCount, text.Length);
 			int index = 0;
@@ -58,20 +66,6 @@ namespace MixLib.Type
 			return ToString();
 		}
 
-		#region IMixByteCollection Members
-
-		public int MaxByteCount
-		{
-			get
-			{
-				return mMaxByteCount;
-			}
-		}
-
-		#endregion
-
-		#region IMixByteCollection Members
-
 		public MixByte this[int index]
 		{
 			get
@@ -83,37 +77,6 @@ namespace MixLib.Type
 				mBytes[index] = value;
 			}
 		}
-
-		#endregion
-
-		#region IEnumerable<MixByte> Members
-
-		public IEnumerator<MixByte> GetEnumerator()
-		{
-			return ((IEnumerable<MixByte>)mBytes).GetEnumerator();
-		}
-
-		#endregion
-
-		#region IEnumerable Members
-
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return mBytes.GetEnumerator();
-			;
-		}
-
-		#endregion
-
-		#region IMixByteCollection Members
-
-
-		public MixByte[] ToArray()
-		{
-			return (MixByte[])mBytes.Clone();
-		}
-
-		#endregion
 
 		#region ICloneable Members
 

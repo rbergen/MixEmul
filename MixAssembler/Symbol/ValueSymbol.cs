@@ -21,25 +21,19 @@ namespace MixAssembler.Symbol
 			Sign = Word.Signs.Positive;
 		}
 
-		public override long GetValue(int currentAddress)
-		{
-			return Value;
-		}
+        public override bool IsSymbolDefined => mIsDefined;
 
-		public override long GetMagnitude(int currentAddress)
-		{
-			return Magnitude;
-		}
+        public long Value => Sign.ApplyTo(Magnitude);
 
-		public override Word.Signs GetSign(int currentAddress)
-		{
-			return Sign;
-		}
+        public static SymbolBase ParseDefinition(string text) => !IsValueSymbolName(text) ? null : new ValueSymbol(text);
 
-		public override bool IsValueDefined(int currentAddress)
-		{
-			return mIsDefined;
-		}
+        public override long GetValue(int currentAddress) => Value;
+
+		public override long GetMagnitude(int currentAddress) => Magnitude;
+
+		public override Word.Signs GetSign(int currentAddress) => Sign;
+
+        public override bool IsValueDefined(int currentAddress) => mIsDefined;
 
 		public static bool IsValueSymbolName(string text)
 		{
@@ -64,17 +58,6 @@ namespace MixAssembler.Symbol
 
 			return letterFound;
 		}
-
-		public static SymbolBase ParseDefinition(string text)
-		{
-			if (!IsValueSymbolName(text))
-			{
-				return null;
-			}
-
-			return new ValueSymbol(text);
-		}
-
 
 		public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
 		{
@@ -124,22 +107,6 @@ namespace MixAssembler.Symbol
 			Sign = sign;
 			Magnitude = magnitude;
 			mIsDefined = true;
-		}
-
-		public override bool IsSymbolDefined
-		{
-			get
-			{
-				return mIsDefined;
-			}
-		}
-
-		public long Value
-		{
-			get
-			{
-				return Sign.ApplyTo(Magnitude);
-			}
 		}
 	}
 }

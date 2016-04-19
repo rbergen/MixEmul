@@ -370,9 +370,11 @@ namespace MixGui.Components
                 LineTextIndex = lineTextIndex;
             }
 
-            public int CommentTextIndex => !SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
+            public int CommentTextIndex => 
+                !SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
 
-            public int LineTextLength => (SourceLine.Comment == "" ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
+            public int LineTextLength => 
+                (SourceLine.Comment == "" ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
 
             public int LocTextIndex => LineTextIndex;
 

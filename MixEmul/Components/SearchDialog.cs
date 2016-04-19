@@ -17,7 +17,8 @@ namespace MixGui.Components
 
         private void fieldCheckedChanged(object sender, EventArgs e) => setFindButtonEnabledState();
 
-        private void mSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => setFindButtonEnabledState();
+        private void mSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => 
+            setFindButtonEnabledState();
 
         public SearchParameters SearchParameters
 		{

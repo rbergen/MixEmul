@@ -73,6 +73,13 @@ namespace MixGui.Components
 
         public int? CaretIndex => null;
 
+        public Control EditorControl => this;
+
+        public bool Focus(FieldTypes? field, int? index) =>
+            ByteCount > 0 ? mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() : mSignButton.Focus();
+
+        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+
         private void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
 		{
 			Word oldValue = new Word(mWord.Magnitude, mWord.Sign);
@@ -121,8 +128,6 @@ namespace MixGui.Components
 			mFocusByteSelStart = box.SelectionStart;
 			mFocusByteSelLength = box.SelectionLength;
 		}
-
-		public bool Focus(FieldTypes? field, int? index) => ByteCount > 0 ? mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() : mSignButton.Focus();
 
 		private void initializeComponent()
 		{
@@ -265,8 +270,6 @@ namespace MixGui.Components
 			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
 		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
-
 		private void reinitializeComponent()
 		{
 			base.Controls.Clear();
@@ -378,8 +381,6 @@ namespace MixGui.Components
 				}
 			}
 		}
-
-		public Control EditorControl => this;
 
 		public FieldTypes? FocusedField
 		{

@@ -77,7 +77,34 @@ namespace MixLib
 			thread.Start();
 		}
 
-		private void setMemoryBounds()
+        public override Devices Devices => mDevices;
+
+        public bool IsError => Status == RunStatus.InvalidInstruction || Status == RunStatus.RuntimeError;
+
+        public bool IsExecuting => IsRunning || Status == RunStatus.Stepping;
+
+        public bool IsRunning => Status == RunStatus.Running || Status == RunStatus.Halted;
+
+        public override IMemory FullMemory => mFullMemory;
+
+        public override IMemory Memory => mMemory;
+
+        public override Registers Registers => mRegisters;
+
+        public override string ModuleName => moduleName;
+
+        public void QueueInterrupt(Interrupt interrupt) => mInterruptQueue.Enqueue(interrupt);
+
+        public void ContinueRun() => ContinueRun(new TimeSpan(0L));
+
+        public LogLine GetLogLine() => mLog.Count <= 0 ? null : (LogLine)mLog.Dequeue();
+
+        public void RequestStop() => RequestStop(true);
+
+        private void deviceReporting(object sender, DeviceReportingEventArgs args) =>
+            AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
+
+        private void setMemoryBounds()
 		{
 			mMemory.IndexOffset = 0;
 			mMemory.MinWordIndex = Mode == RunMode.Control ? mFullMemory.MinWordIndex : 0;
@@ -87,11 +114,6 @@ namespace MixLib
 			{
 				ProgramCounter = mMemory.MinWordIndex;
 			}
-		}
-
-		public void QueueInterrupt(Interrupt interrupt)
-		{
-			mInterruptQueue.Enqueue(interrupt);
 		}
 
 		public void SetFloatingPointModuleEnabled(bool enabled)
@@ -106,56 +128,23 @@ namespace MixLib
 			}
 		}
 
-		public override string ModuleName
-		{
-			get
-			{
-				return moduleName;
-			}
-		}
-
-		public override void AddLogLine(LogLine line)
+        public override void AddLogLine(LogLine line)
 		{
 			mLog.Enqueue(line);
 
             LogLineAdded?.Invoke(this, new EventArgs());
         }
 
-		public void ContinueRun()
-		{
-			ContinueRun(new TimeSpan(0L));
-		}
-
-		public void ContinueRun(TimeSpan runSpan)
+        public void ContinueRun(TimeSpan runSpan)
 		{
 			mRunSpan = runSpan;
 			mStartStep.Set();
 		}
 
-		private void deviceReporting(object sender, DeviceReportingEventArgs args)
-		{
-			AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
-		}
-
-		public LogLine GetLogLine()
-		{
-			if (mLog.Count <= 0)
-			{
-				return null;
-			}
-
-			return (LogLine)mLog.Dequeue();
-		}
-
-		public override void Halt(int code)
+        public override void Halt(int code)
 		{
 			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Halted", string.Format("System halted with code {0}", code)));
 			Status = RunStatus.Halted;
-		}
-
-		public void RequestStop()
-		{
-			RequestStop(true);
 		}
 
 		public void RequestStop(bool reportStop)
@@ -415,63 +404,6 @@ namespace MixLib
 		private void resetMode()
 		{
 			Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
-		}
-
-		public override Devices Devices
-		{
-			get
-			{
-				return mDevices;
-			}
-		}
-
-		public bool IsError
-		{
-			get
-			{
-				return Status == RunStatus.InvalidInstruction || Status == RunStatus.RuntimeError;
-			}
-		}
-
-
-		public bool IsExecuting
-		{
-			get
-			{
-				return IsRunning || Status == RunStatus.Stepping;
-			}
-		}
-
-		public bool IsRunning
-		{
-			get
-			{
-				return Status == RunStatus.Running || Status == RunStatus.Halted;
-			}
-		}
-
-		public override IMemory FullMemory
-		{
-			get
-			{
-				return mFullMemory;
-			}
-		}
-
-		public override IMemory Memory
-		{
-			get
-			{
-				return mMemory;
-			}
-		}
-
-		public override Registers Registers
-		{
-			get
-			{
-				return mRegisters;
-			}
 		}
 
 		public bool RunDetached

@@ -7,12 +7,13 @@ namespace MixLib.Instruction
 	{
 		public const int InvalidAddress = int.MinValue;
 
-		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex)
-		{
-			return GetValidIndexedAddress(module, addressBase, registerIndex, true);
-		}
+		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex) => 
+            GetValidIndexedAddress(module, addressBase, registerIndex, true);
 
-		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
+        public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance) =>
+            instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
+
+        public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
 		{
 			if (registerIndex < 0 || registerIndex > (int)Registers.Offset.rI6)
 			{
@@ -36,16 +37,6 @@ namespace MixLib.Instruction
 			}
 
 			return int.MinValue;
-		}
-
-		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance)
-		{
-			if (instance.Index > 6)
-			{
-				return new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) };
-			}
-
-			return null;
 		}
 
 		public static InstanceValidationError[] ValidateIndexAndFieldSpec(MixInstruction.Instance instance)

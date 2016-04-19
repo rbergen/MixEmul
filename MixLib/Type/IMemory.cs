@@ -9,11 +9,7 @@ namespace MixLib.Type
 
 		SearchResult FindMatch(SearchParameters options);
 
-		IMemoryFullWord this[int index]
-		{
-			get;
-			set;
-		}
+		IMemoryFullWord this[int index] { get; set; }
 
 		MemoryFullWord GetRealWord(int index);
 
@@ -21,31 +17,14 @@ namespace MixLib.Type
 
 		void ClearRealWordSourceLine(int index);
 
-		int WordCount
-		{
-			get;
-		}
+		int WordCount { get; }
 
-		int MinWordIndex
-		{
-			get;
-			set;
-		}
+		int MinWordIndex { get; set; }
 
-		int MaxWordIndex
-		{
-			get;
-			set;
-		}
+        int MaxWordIndex { get; set; }
 
-		long MaxProfilingTickCount
-		{
-			get;
-		}
+        long MaxProfilingTickCount { get; }
 
-		long MaxProfilingExecutionCount
-		{
-			get;
-		}
+		long MaxProfilingExecutionCount { get; }
 	}
 }

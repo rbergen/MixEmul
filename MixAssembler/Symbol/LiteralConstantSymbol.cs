@@ -21,32 +21,26 @@ namespace MixAssembler.Symbol
 			mValueDefined = false;
 		}
 
-		private static string getName(Word.Signs literalSign, long literalMagnitude, int count)
-		{
-			return string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
-		}
+        public override bool IsSymbolDefined => mValueDefined;
 
-		public override long GetValue(int currentAddress)
-		{
-			return mSign.ApplyTo(mMagnitude);
-		}
+        public override long MemoryWordMagnitude => mLiteralMagnitude;
 
-		public override long GetMagnitude(int currentAddress)
-		{
-			return mMagnitude;
-		}
+        public override Word.Signs MemoryWordSign => mLiteralSign;
 
-		public override Word.Signs GetSign(int currentAddress)
-		{
-			return mSign;
-		}
+        public override long MemoryWordValue => mLiteralSign.ApplyTo(mLiteralMagnitude);
 
-		public override bool IsValueDefined(int currentAddress)
-		{
-			return mValueDefined;
-		}
+        public override long GetValue(int currentAddress) => mSign.ApplyTo(mMagnitude);
 
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+		public override long GetMagnitude(int currentAddress) => mMagnitude;
+
+		public override Word.Signs GetSign(int currentAddress) => mSign;
+
+		public override bool IsValueDefined(int currentAddress) => mValueDefined;
+
+        private static string getName(Word.Signs literalSign, long literalMagnitude, int count) =>
+            string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
+
+        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=')
 			{
@@ -88,38 +82,6 @@ namespace MixAssembler.Symbol
 			mSign = sign;
 			mMagnitude = magnitude;
 			mValueDefined = true;
-		}
-
-		public override bool IsSymbolDefined
-		{
-			get
-			{
-				return mValueDefined;
-			}
-		}
-
-		public override long MemoryWordMagnitude
-		{
-			get
-			{
-				return mLiteralMagnitude;
-			}
-		}
-
-		public override Word.Signs MemoryWordSign
-		{
-			get
-			{
-				return mLiteralSign;
-			}
-		}
-
-		public override long MemoryWordValue
-		{
-			get
-			{
-				return mLiteralSign.ApplyTo(mLiteralMagnitude);
-			}
 		}
 	}
 }

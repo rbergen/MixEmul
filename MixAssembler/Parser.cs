@@ -27,7 +27,16 @@ namespace MixAssembler
 		private static InstructionSet mInstructionSet = new InstructionSet();
 		private static LoaderInstructions mLoaderInstructions = new LoaderInstructions();
 
-		private static int findFirstNonWhiteSpace(string sourceLine, int searchBeyondIndex)
+        private static bool isCommentLine(string sourceLine) => sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
+
+        /// <summary>
+        /// This method parses an "in-memory" instruction. That is: an instruction without a location field. 
+        /// </summary>
+        public static ParsedSourceLine ParseInstructionLine(string instructionLine, ParsingStatus status) =>
+            // add an empty location field, then parse as usual.
+            parseLine(" " + instructionLine, status);
+
+        private static int findFirstNonWhiteSpace(string sourceLine, int searchBeyondIndex)
 		{
 			for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
 			{
@@ -105,11 +114,6 @@ namespace MixAssembler
 			return false;
 		}
 
-		private static bool isCommentLine(string sourceLine)
-		{
-			return sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
-		}
-
 		private static void getMixOrLoaderInstructionAndParameters(string opField, string addressField, ParsingStatus status, out InstructionBase instruction, out IInstructionParameters instructionParameters)
 		{
 			status.LineSection = LineSection.AddressField;
@@ -131,15 +135,6 @@ namespace MixAssembler
 					status.LocationCounter++;
 				}
 			}
-		}
-
-		/// <summary>
-		/// This method parses an "in-memory" instruction. That is: an instruction without a location field. 
-		/// </summary>
-		public static ParsedSourceLine ParseInstructionLine(string instructionLine, ParsingStatus status)
-		{
-			// add an empty location field, then parse as usual.
-			return parseLine(" " + instructionLine, status);
 		}
 
 		private static ParsedSourceLine parseLine(string sourceLine, ParsingStatus status)
@@ -246,7 +241,7 @@ namespace MixAssembler
 
 			if (endLineNumber == -1)
 			{
-				status.Findings.Add(new AssemblyError(int.MinValue, LineSection.CommentField, 0, 0, new MixAssembler.Finding.ParsingError("END operation is mandatory but not included")));
+				status.Findings.Add(new AssemblyError(int.MinValue, LineSection.CommentField, 0, 0, new ParsingError("END operation is mandatory but not included")));
 			}
 			else
 			{

@@ -58,12 +58,27 @@ namespace MixLib.Type
 			}
 		}
 
-		public static long BytesToLong(params MixByte[] bytes)
-		{
-			return BytesToLong(Signs.Positive, bytes);
-		}
+        public virtual bool IsEmpty => MagnitudeLongValue == 0 && Sign.IsPositive();
 
-		public static long BytesToLong(Signs sign, params MixByte[] bytes)
+        public int MaxByteCount => ByteCount;
+
+        public int BitCount => ByteCount * MixByte.BitCount;
+
+        public long MaxMagnitude => (1 << BitCount) - 1;
+
+        public override string ToString() => ToString(false);
+
+        public IEnumerator GetEnumerator() => mBytes.GetEnumerator();
+
+        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+
+        public MixByte[] ToArray() => Magnitude;
+
+        public static long BytesToLong(params MixByte[] bytes) => BytesToLong(Signs.Positive, bytes);
+
+        protected void OnWordValueChanged() => WordValueChanged?.Invoke(this);
+
+        public static long BytesToLong(Signs sign, params MixByte[] bytes)
 		{
 			long longValue = 0L;
 
@@ -106,19 +121,6 @@ namespace MixLib.Type
 			}
 
 			return stringValue;
-		}
-
-		public override string ToString()
-		{
-			return ToString(false);
-		}
-
-		public int BitCount
-		{
-			get
-			{
-				return ByteCount * MixByte.BitCount;
-			}
 		}
 
 		public MixByte this[int index]
@@ -329,14 +331,6 @@ namespace MixLib.Type
 			}
 		}
 
-		public long MaxMagnitude
-		{
-			get
-			{
-				return (1 << BitCount) - 1;
-			}
-		}
-
 		public Signs Sign
 		{
 			get
@@ -380,11 +374,6 @@ namespace MixLib.Type
 			Negative
 		}
 
-		protected void OnWordValueChanged()
-		{
-            WordValueChanged?.Invoke(this);
-        }
-
 		public virtual Object Clone()
 		{
 			Word copy = new Word(ByteCount);
@@ -407,53 +396,5 @@ namespace MixLib.Type
 
 			target.mSign = mSign;
 		}
-
-		public virtual bool IsEmpty
-		{
-			get
-			{
-				return MagnitudeLongValue == 0 && Sign.IsPositive();
-			}
-		}
-
-		#region IEnumerable Members
-
-		public IEnumerator GetEnumerator()
-		{
-			return mBytes.GetEnumerator();
-		}
-
-		#endregion
-
-		#region IEnumerable<MixByte> Members
-
-		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
-		{
-			return ((IEnumerable<MixByte>)mBytes).GetEnumerator();
-		}
-
-		#endregion
-
-		#region IMixByteCollection Members
-
-		public int MaxByteCount
-		{
-			get
-			{
-				return ByteCount;
-			}
-		}
-
-		#endregion
-
-		#region IMixByteCollection Members
-
-
-		public MixByte[] ToArray()
-		{
-			return Magnitude;
-		}
-
-		#endregion
 	}
 }

@@ -7,14 +7,7 @@ namespace MixAssembler.Value
 	/// </summary>
 	public class LocationCounterValue
 	{
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
-		{
-			if (text != "*")
-			{
-				return null;
-			}
-
-			return new NumberValue(status.LocationCounter);
-		}
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status) => 
+            text != "*" ? null : new NumberValue(status.LocationCounter);
 	}
 }

@@ -21,20 +21,30 @@ namespace MixLib.Type
             MixByteValue = (8 * lowBound) + highBound;
 		}
 
-		public override bool Equals(object o)
-		{
-			return o != null && o is FieldSpec && ((FieldSpec)o).MixByteValue == MixByteValue;
-		}
+        public int HighBoundByteIndex => (HighBound >= FullWord.ByteCount + 1) ? FullWord.ByteCount - 1 : HighBound - 1;
 
-		public override int GetHashCode()
-		{
-			return MixByteValue.GetHashCode();
-		}
+        public bool IncludesSign => LowBound == 0;
 
-		public static bool IsValidFieldSpec(MixByte value)
-		{
-			return IsValidFieldSpec(value / 8, value % 8);
-		}
+        public bool IsValid => IsValidFieldSpec(MixByteValue);
+
+        public int LowBoundByteIndex => LowBound <= 0 ? 0 : (LowBound - 1);
+
+        public int ByteCount => HighBoundByteIndex - LowBoundByteIndex + 1;
+
+        public bool FloatingPoint => LowBound == 0 && HighBound == FullWord.ByteCount + 1;
+
+        public static bool operator ==(FieldSpec one, FieldSpec two) =>
+            (((object)one) == null && ((object)two) == null) || one.Equals(two);
+
+        public static bool operator !=(FieldSpec one, FieldSpec two) => !(one == two);
+
+        public override string ToString() => IsValid ? string.Concat("(", LowBound, ':', HighBound, ')') : "(" + MixByteValue + ')';
+
+        public override bool Equals(object o) => o != null && o is FieldSpec && ((FieldSpec)o).MixByteValue == MixByteValue;
+
+		public override int GetHashCode() => MixByteValue.GetHashCode();
+
+		public static bool IsValidFieldSpec(MixByte value) => IsValidFieldSpec(value / 8, value % 8);
 
 		public static bool IsValidFieldSpec(int lowBound, int highBound)
 		{
@@ -51,42 +61,6 @@ namespace MixLib.Type
 			return false;
 		}
 
-		public static bool operator ==(FieldSpec one, FieldSpec two)
-		{
-			return (((object)one) == null && ((object)two) == null) || one.Equals(two);
-		}
-
-		public static bool operator !=(FieldSpec one, FieldSpec two)
-		{
-			return !(one == two);
-		}
-
-		public override string ToString()
-		{
-			if (IsValid)
-			{
-				return string.Concat("(", LowBound, ':', HighBound, ')');
-			}
-
-			return ("(" + MixByteValue + ')');
-		}
-
-		public int ByteCount
-		{
-			get
-			{
-				return HighBoundByteIndex - LowBoundByteIndex + 1;
-			}
-		}
-
-		public bool FloatingPoint
-		{
-			get
-			{
-				return LowBound == 0 && HighBound == FullWord.ByteCount + 1;
-			}
-		}
-
 		public int HighBound
 		{
 			get
@@ -100,31 +74,7 @@ namespace MixLib.Type
 			}
 		}
 
-		public int HighBoundByteIndex
-		{
-			get
-			{
-				return (HighBound >= FullWord.ByteCount + 1) ? FullWord.ByteCount - 1 : HighBound - 1;
-			}
-		}
-
-		public bool IncludesSign
-		{
-			get
-			{
-				return LowBound == 0;
-			}
-		}
-
-		public bool IsValid
-		{
-			get
-			{
-				return IsValidFieldSpec(MixByteValue);
-			}
-		}
-
-		public int LowBound
+        public int LowBound
 		{
 			get
 			{
@@ -134,14 +84,6 @@ namespace MixLib.Type
 				}
 
 				return MixByteValue / 8;
-			}
-		}
-
-		public int LowBoundByteIndex
-		{
-			get
-			{
-				return LowBound <= 0 ? 0 : (LowBound - 1);
 			}
 		}
 	}

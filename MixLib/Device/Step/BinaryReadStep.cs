@@ -17,18 +17,9 @@ namespace MixLib.Device.Step
 			mRecordWordCount = recordWordCount;
 		}
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-		{
-			return new Instance(streamStatus, mRecordWordCount);
-		}
+        public override string StatusDescription => statusDescription;
 
-		public override string StatusDescription
-		{
-			get
-			{
-				return statusDescription;
-			}
-		}
+        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
 
 		public static MixByte[] ReadBytes(Stream stream, int wordCount)
 		{
@@ -88,7 +79,9 @@ namespace MixLib.Device.Step
 				mRecordWordCount = recordWordCount;
 			}
 
-			public override bool Tick()
+            public override object OutputForNextStep => mReadBytes;
+
+            public override bool Tick()
 			{
 				if (base.StreamStatus.Stream != null)
 				{
@@ -105,14 +98,6 @@ namespace MixLib.Device.Step
 				}
 
 				return true;
-			}
-
-			public override object OutputForNextStep
-			{
-				get
-				{
-					return mReadBytes;
-				}
 			}
 		}
 	}

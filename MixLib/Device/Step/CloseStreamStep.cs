@@ -6,18 +6,9 @@ namespace MixLib.Device.Step
 	{
 		private const string statusDescription = "Ending data transfer";
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-		{
-			return new Instance(streamStatus);
-		}
+        public override string StatusDescription => statusDescription;
 
-		public override string StatusDescription
-		{
-			get
-			{
-				return statusDescription;
-			}
-		}
+        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
 		private new class Instance : StreamStep.Instance
 		{

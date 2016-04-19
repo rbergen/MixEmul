@@ -19,7 +19,11 @@ namespace MixGui.Utils
 
 		private const int maxWordsPerCard = 7;
 
-		public static string[] LoaderCards
+        private static string getTransLine(int programCounter) => "TRANS0" + getAddressText(programCounter);
+
+        private static char getNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
+
+        public static string[] LoaderCards
 		{
 			get
 			{
@@ -137,12 +141,7 @@ namespace MixGui.Utils
 			}
 		}
 
-		private static string getTransLine(int programCounter)
-		{
-			return "TRANS0" + getAddressText(programCounter);
-		}
-
-		private static string getAddressText(int address)
+        private static string getAddressText(int address)
 		{
 			if (address < 0)
 			{
@@ -179,11 +178,6 @@ namespace MixGui.Utils
 			}
 
 			return lineBuilder.ToString();
-		}
-
-		private static char getNegativeDigit(char digit)
-		{
-			return MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
 		}
 	}
 }

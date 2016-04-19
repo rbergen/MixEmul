@@ -25,7 +25,15 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-		public override void UpdateSettings()
+        public override int RecordWordCount => recordWordCount;
+
+        public override string ShortName => shortName;
+
+        public override bool SupportsInput => false;
+
+        public override bool SupportsOutput => true;
+
+        public override void UpdateSettings()
 		{
 			base.FirstInputDeviceStep = null;
 
@@ -43,52 +51,11 @@ namespace MixLib.Device
 			base.FirstIocDeviceStep = null;
 		}
 
-		public override int RecordWordCount
-		{
-			get
-			{
-				return recordWordCount;
-			}
-		}
-
-		public override string ShortName
-		{
-			get
-			{
-				return shortName;
-			}
-		}
-
-		public override bool SupportsInput
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		public override bool SupportsOutput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		private class openStreamStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
-
-			public override string StatusDescription
-			{
-				get
-				{
-					return openingDescription;
-				}
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+	
+			public override string StatusDescription => openingDescription;
 
 			private new class Instance : StreamStep.Instance
 			{

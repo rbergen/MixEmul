@@ -5,7 +5,15 @@ namespace MixAssembler.Finding
 {
 	public class AssemblyFindingCollection : Collection<AssemblyFinding>
 	{
-		private bool contains(Severity severity)
+        public bool ContainsDebugs => contains(Severity.Debug);
+
+        public bool ContainsErrors => contains(Severity.Error);
+
+        public bool ContainsInfos => contains(Severity.Info);
+
+        public bool ContainsWarnings => contains(Severity.Warning);
+
+        private bool contains(Severity severity)
 		{
 			foreach (AssemblyFinding finding in base.Items)
 			{
@@ -15,38 +23,6 @@ namespace MixAssembler.Finding
 				}
 			}
 			return false;
-		}
-
-		public bool ContainsDebugs
-		{
-			get
-			{
-				return contains(Severity.Debug);
-			}
-		}
-
-		public bool ContainsErrors
-		{
-			get
-			{
-				return contains(Severity.Error);
-			}
-		}
-
-		public bool ContainsInfos
-		{
-			get
-			{
-				return contains(Severity.Info);
-			}
-		}
-
-		public bool ContainsWarnings
-		{
-			get
-			{
-				return contains(Severity.Warning);
-			}
 		}
 	}
 }

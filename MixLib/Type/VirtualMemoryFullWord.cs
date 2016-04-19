@@ -43,7 +43,34 @@ namespace MixLib.Type
 			Index = index;
 		}
 
-		private void fetchRealWordIfNotFetched()
+        public int BitCount => mDefaultWord.BitCount;
+
+        public int ByteCount => FullWord.ByteCount;
+
+        private FullWord activeWord => realWordFetched ? mRealWord : mDefaultWord;
+
+        public long MaxMagnitude => mDefaultWord.MaxMagnitude;
+
+        public long ProfilingTickCount => realWordFetched ? mRealWord.ProfilingTickCount : 0;
+
+        public long ProfilingExecutionCount => realWordFetched ? mRealWord.ProfilingExecutionCount : 0;
+
+        public IEnumerator GetEnumerator() => activeWord.GetEnumerator();
+
+        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)activeWord).GetEnumerator();
+
+        public int MaxByteCount => activeWord.MaxByteCount;
+
+        public bool IsEmpty => realWordFetched ? mRealWord.IsEmpty : true;
+
+        public MixByte[] ToArray() => activeWord.ToArray();
+
+        public object Clone() => activeWord.Clone();
+
+        public string ToString(bool asChars) =>
+            realWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
+
+        private void fetchRealWordIfNotFetched()
 		{
 			lock (mSyncRoot)
 			{
@@ -116,35 +143,6 @@ namespace MixLib.Type
 			fetchRealWordIfNotFetched();
 			mRealWord.InvertSign();
 		}
-
-		public string ToString(bool asChars)
-		{
-			return realWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
-		}
-
-		public int BitCount
-		{
-			get
-			{
-				return mDefaultWord.BitCount;
-			}
-		}
-
-		public int ByteCount
-		{
-			get
-			{
-				return FullWord.ByteCount;
-			}
-		}
-
-        private FullWord activeWord
-        {
-            get
-            {
-                return realWordFetched ? mRealWord : mDefaultWord;
-            }
-        }
 
 		public MixByte this[int index]
 		{
@@ -246,15 +244,7 @@ namespace MixLib.Type
 			}
 		}
 
-		public long MaxMagnitude
-		{
-			get
-			{
-				return mDefaultWord.MaxMagnitude;
-			}
-		}
-
-		public Word.Signs Sign
+        public Word.Signs Sign
 		{
 			get
 			{
@@ -266,43 +256,6 @@ namespace MixLib.Type
 				{
 					mRealWord.Sign = value;
 				}
-			}
-		}
-
-		public IEnumerator GetEnumerator()
-		{
-			return activeWord.GetEnumerator();
-		}
-
-		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
-		{
-			return ((IEnumerable<MixByte>)activeWord).GetEnumerator();
-		}
-
-
-		public int MaxByteCount
-		{
-			get
-			{
-				return activeWord.MaxByteCount;
-			}
-		}
-
-		public MixByte[] ToArray()
-		{
-			return activeWord.ToArray();
-		}
-
-		public object Clone()
-		{
-			return activeWord.Clone();
-		}
-
-		public bool IsEmpty
-		{
-			get
-			{
-				return realWordFetched ? mRealWord.IsEmpty : true;
 			}
 		}
 
@@ -366,22 +319,6 @@ namespace MixLib.Type
 
             return hashcode;
         }
-
-        public long ProfilingTickCount
-		{
-			get
-			{
-				return realWordFetched ? mRealWord.ProfilingTickCount : 0;
-			}
-		}
-
-		public long ProfilingExecutionCount
-		{
-			get
-			{
-				return realWordFetched ? mRealWord.ProfilingExecutionCount : 0;
-			}
-		}
 
 		public void IncreaseProfilingTickCount(int ticks)
 		{

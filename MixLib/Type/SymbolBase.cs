@@ -10,7 +10,15 @@ namespace MixLib.Type
 			Name = name;
 		}
 
-		public abstract long GetValue(int currentAddress);
+        public virtual long MemoryWordValue => 0L;
+
+        public virtual long MemoryWordMagnitude => 0L;
+
+        public virtual Word.Signs MemoryWordSign => Word.Signs.Positive;
+
+        public virtual bool IsMultiValuedSymbol => false;
+
+        public abstract long GetValue(int currentAddress);
 
 		public abstract bool IsValueDefined(int currentAddress);
 
@@ -18,42 +26,7 @@ namespace MixLib.Type
 
 		public abstract void SetValue(Word.Signs sign, long magnitude);
 
-		public virtual bool IsMultiValuedSymbol
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		public abstract bool IsSymbolDefined
-		{
-			get;
-		}
-
-		public virtual long MemoryWordValue
-		{
-			get
-			{
-				return 0L;
-			}
-		}
-
-		public virtual long MemoryWordMagnitude
-		{
-			get
-			{
-				return 0L;
-			}
-		}
-
-		public virtual Word.Signs MemoryWordSign
-		{
-			get
-			{
-				return Word.Signs.Positive;
-			}
-		}
+		public abstract bool IsSymbolDefined { get; }
 
 		#region IValue Members
 

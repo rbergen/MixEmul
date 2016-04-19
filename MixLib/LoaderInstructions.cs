@@ -15,17 +15,9 @@ namespace MixLib
 			addInstruction("END", LoaderInstruction.Operations.SetProgramCounter, false);
 		}
 
-		private void addInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric)
-		{
-			mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
-		}
+        public LoaderInstruction this[string mnemonic] => mInstructions.ContainsKey(mnemonic) ? mInstructions[mnemonic] : null;
 
-		public LoaderInstruction this[string mnemonic]
-		{
-			get
-			{
-				return mInstructions.ContainsKey(mnemonic) ? mInstructions[mnemonic] : null;
-			}
-		}
+		private void addInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) => 
+            mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
 	}
 }

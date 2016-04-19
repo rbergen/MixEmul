@@ -45,44 +45,19 @@ namespace MixLib.Modules
 			mStatus = RunStatus.Idle;
 		}
 
-		public override void AddLogLine(Misc.LogLine line)
-		{
-			mMix.AddLogLine(line);
-		}
+		public override string ModuleName => moduleName;
 
-		public override string ModuleName
-		{
-			get
-			{
-				return moduleName;
-			}
-		}
+		public override IMemory Memory => mMemory;
 
-		public override IMemory Memory
-		{
-			get
-			{
-				return mMemory;
-			}
-		}
+		public override IMemory FullMemory => mFullMemory;
 
-		public override IMemory FullMemory
-		{
-			get
-			{
-				return mFullMemory;
-			}
-		}
+		public override Registers Registers => mMix.Registers;
 
-		public override Registers Registers
-		{
-			get
-			{
-				return mMix.Registers;
-			}
-		}
+        public override void AddLogLine(LogLine line) => mMix.AddLogLine(line);
 
-		public override RunStatus Status
+        public override void ResetProfilingCounts() => mFullMemory.ResetProfilingCounts();
+
+        public override RunStatus Status
 		{
 			get
 			{
@@ -340,11 +315,6 @@ namespace MixLib.Modules
 			}
 
 			return overflowDetected;
-		}
-
-		public override void ResetProfilingCounts()
-		{
-			mFullMemory.ResetProfilingCounts();
 		}
 	}
 }

@@ -88,11 +88,14 @@ namespace MixGui.Components
 
         public void UpdateLayout() => mTickCountBox.UpdateLayout();
 
-        private void mColorSelectionBox_SelectionChangeCommited(object sender, EventArgs e) => updateColorControls((colorComboBoxItem)mColorSelectionBox.SelectedItem);
+        private void mColorSelectionBox_SelectionChangeCommited(object sender, EventArgs e) => 
+            updateColorControls((colorComboBoxItem)mColorSelectionBox.SelectedItem);
 
-        private void mDeviceFileSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) => updateDeviceFileControls((deviceFileComboBoxItem)mDeviceFileSelectionBox.SelectedItem);
+        private void mDeviceFileSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) => 
+            updateDeviceFileControls((deviceFileComboBoxItem)mDeviceFileSelectionBox.SelectedItem);
 
-        private void mTickCountSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) => updateTickCountControls((tickCountComboBoxItem)mTickCountSelectionBox.SelectedItem);
+        private void mTickCountSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) => 
+            updateTickCountControls((tickCountComboBoxItem)mTickCountSelectionBox.SelectedItem);
 
         private void mTickCountSetButton_Click(object sender, EventArgs e) => setTickCountValue();
 

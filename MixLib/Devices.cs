@@ -44,20 +44,16 @@ namespace MixLib
             }
         }
 
-        private void device_Reporting(object sender, ReportingEventArgs args)
-        {
+        public int Count => mDevices.Length;
+
+        public MixDevice this[int index] => mDevices[index];
+
+        public IEnumerator GetEnumerator() => mDevices.GetEnumerator();
+
+        protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) => DeviceReportingEvent?.Invoke(this, args);
+
+        private void device_Reporting(object sender, ReportingEventArgs args) =>
             OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return mDevices.GetEnumerator();
-        }
-
-        protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args)
-        {
-            DeviceReportingEvent?.Invoke(this, args);
-        }
 
         public void Reset()
         {
@@ -83,14 +79,6 @@ namespace MixLib
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return mDevices.Length;
-            }
-        }
-
         public bool IsAnyBusy
         {
             get
@@ -104,14 +92,6 @@ namespace MixLib
                 }
 
                 return false;
-            }
-        }
-
-        public MixDevice this[int index]
-        {
-            get
-            {
-                return mDevices[index];
             }
         }
     }

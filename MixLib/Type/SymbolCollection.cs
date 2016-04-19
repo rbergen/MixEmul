@@ -8,7 +8,23 @@ namespace MixLib.Type
 	{
 		private SortedList<string, SymbolBase> mList = new SortedList<string, SymbolBase>();
 
-		public void Add(SymbolBase value)
+        public int Count => mList.Count;
+
+        public bool Contains(SymbolBase value) => Contains(value.Name);
+
+        public bool Contains(string value) => mList.ContainsKey(value);
+
+        private IEnumerator<SymbolBase> getEnumerator() => mList.Values.GetEnumerator();
+
+        public void Remove(SymbolBase value) => Remove(value.Name);
+
+        public void Remove(string name) => mList.Remove(name);
+
+        IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator() => getEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
+
+        public void Add(SymbolBase value)
 		{
 			if (Contains(value))
 			{
@@ -16,49 +32,6 @@ namespace MixLib.Type
 			}
 
 			mList.Add(value.Name, value);
-		}
-
-		public bool Contains(SymbolBase value)
-		{
-			return Contains(value.Name);
-		}
-
-		public bool Contains(string value)
-		{
-			return mList.ContainsKey(value);
-		}
-
-		private IEnumerator<SymbolBase> getEnumerator()
-		{
-			return mList.Values.GetEnumerator();
-		}
-
-		public void Remove(SymbolBase value)
-		{
-			Remove(value.Name);
-		}
-
-		public void Remove(string name)
-		{
-			mList.Remove(name);
-		}
-
-		IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator()
-		{
-			return getEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return getEnumerator();
-		}
-
-		public int Count
-		{
-			get
-			{
-				return mList.Count;
-			}
 		}
 
 		public SymbolBase this[string name]

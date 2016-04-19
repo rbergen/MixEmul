@@ -27,7 +27,19 @@ namespace MixLib.Type
 			mIndexOffset = indexOffset;
 		}
 
-		private void validateParameters(int minIndex, int maxIndex, int offset)
+        public int WordCount => mMaxIndex - mMinIndex + 1;
+
+        public long MaxProfilingTickCount => SourceMemory.MaxProfilingTickCount;
+
+        public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
+
+        public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
+
+        public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
+
+        public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
+
+        private void validateParameters(int minIndex, int maxIndex, int offset)
 		{
 			if (minIndex + offset < SourceMemory.MinWordIndex)
 			{
@@ -46,11 +58,6 @@ namespace MixLib.Type
 			{
 				ClearRealWordSourceLine(index);
 			}
-		}
-
-		public void ClearRealWordSourceLine(int index)
-		{
-			SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
 		}
 
 		public void Reset()
@@ -107,11 +114,6 @@ namespace MixLib.Type
 			return result != null && (result.WordIndex -= mIndexOffset) < options.SearchFromWordIndex ? result : null;
 		}
 
-		public void ResetRealWord(int index)
-		{
-			SourceMemory.ResetRealWord(index + mIndexOffset);
-		}
-
 		public IMemoryFullWord this[int index]
 		{
 			get
@@ -121,19 +123,6 @@ namespace MixLib.Type
 			set
 			{
 				SourceMemory[index + mIndexOffset] = value;
-			}
-		}
-
-		public MemoryFullWord GetRealWord(int index)
-		{
-			return SourceMemory.GetRealWord(index + mIndexOffset);
-		}
-
-		public int WordCount
-		{
-			get
-			{
-				return mMaxIndex - mMinIndex + 1;
 			}
 		}
 
@@ -176,22 +165,6 @@ namespace MixLib.Type
 				validateParameters(mMinIndex, mMaxIndex, value);
 
 				mIndexOffset = value;
-			}
-		}
-
-		public long MaxProfilingTickCount
-		{
-			get
-			{
-				return SourceMemory.MaxProfilingTickCount;
-			}
-		}
-
-		public long MaxProfilingExecutionCount
-		{
-			get
-			{
-				return SourceMemory.MaxProfilingExecutionCount;
 			}
 		}
 	}

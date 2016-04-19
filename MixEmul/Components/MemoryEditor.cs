@@ -81,7 +81,8 @@ namespace MixGui.Components
 
         private void addressSelected(object sender, AddressSelectedEventArgs args) => MakeAddressVisible(args.SelectedAddress);
 	
-		private void addressDoubleClick(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
+		private void addressDoubleClick(object sender, EventArgs e) => 
+            OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
 
         void MemoryEditor_SizeChanged(object sender, EventArgs e) => setUpDownButtonStates(navigationDirection.None);
 

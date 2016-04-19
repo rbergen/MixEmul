@@ -16,28 +16,22 @@ namespace MixLib.Modules
         public abstract RunStatus Status { get; protected set; }
         public abstract RunMode Mode { get; set; }
 
+        public virtual Devices Devices => null;
+
+        protected bool IsBreakpointSet(int address) => BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
+
+        private void reportLoadError(int locationCounter, string message) =>
+            AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
+
         public abstract void ResetProfilingCounts();
 
-		protected bool IsBreakpointSet(int address)
-		{
-			return BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
-		}
-
-		public void ReportBreakpointReached()
+        public void ReportBreakpointReached()
 		{
 			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Breakpoint", "Reached breakpoint"));
 			Status = RunStatus.BreakpointReached;
 		}
 
 		public abstract void AddLogLine(LogLine line);
-
-		public virtual Devices Devices
-		{
-			get
-			{
-				return null;
-			}
-		}
 
 		public int ProgramCounter
 		{
@@ -173,11 +167,6 @@ namespace MixLib.Modules
 		{
 			AddLogLine(new LogLine(ModuleName, Severity.Error, ProgramCounter, "Invalid instruction", message));
 			Status = RunStatus.InvalidInstruction;
-		}
-
-		private void reportLoadError(int locationCounter, string message)
-		{
-			AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
 		}
 
 		private void reportLoadInstanceErrors(int counter, InstanceValidationError[] errors)

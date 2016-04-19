@@ -9,6 +9,10 @@ x: Bugfix
 
 =========================================
 
+0.3.5953.39333 (2016-04-19)
+* Refactored the code to use C# 6.0 features
+x "No instruction" text would not be shown when (shift-)tabbing out of the instruction editor
+
 0.3.5951.23459 (2016-04-17)
 * More mascara modifications to the sources
 * Updated the documentation to reflect the fact that the source is now on github

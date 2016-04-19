@@ -250,17 +250,13 @@ namespace MixLib
 			addInstruction("INT", 5, new FieldSpec(9), 2, executor, null);
 		}
 
-		private void addInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
-		{
-			addInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
-		}
+        private void addInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
+            addInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
 
-		private void addInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
-		{
-			addInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
-		}
+        private void addInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
+            addInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
 
-		private void addInstruction(string mnemonic, MixInstruction instruction)
+        private void addInstruction(string mnemonic, MixInstruction instruction)
 		{
 			mMnemonicInstructionMap.Add(mnemonic, instruction);
 			List<MixInstruction> list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);

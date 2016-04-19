@@ -259,7 +259,30 @@ namespace MixGui
 			base.LocationChanged += this_LocationChanged;
 		}
 
-		void mDevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)
+        private MemoryEditor activeMemoryEditor => mMemoryEditors[mMemoryTabControl.SelectedIndex];
+
+        private void findNext() => activeMemoryEditor.FindMatch(mSearchOptions);
+
+        private int calculateIndexedAddress(int address, int index) => 
+            InstructionHelpers.GetValidIndexedAddress(mMix, address, index, false);
+
+        private void mExitMenuItem_Click(object sender, EventArgs e) => Close();
+
+        private static void application_ThreadException(object sender, ThreadExceptionEventArgs e) => handleException(e.Exception);
+
+        private static void currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) => 
+            handleException((Exception)e.ExceptionObject);
+
+        private void mRunItem_Click(object sender, EventArgs e) => switchRunningState();
+
+        private void mShowPCButton_Click(object sender, EventArgs e) => mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter);
+
+        private void mTeletypeItem_Click(object sender, EventArgs e) => switchTeletypeVisibility();
+
+        void mFloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args) => 
+            implementFloatingPointPCChange(args.SelectedAddress);
+
+        void mDevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)
 		{
 			if (e.Device is TeletypeDevice)
 			{
@@ -280,14 +303,6 @@ namespace MixGui
 			}
 
 			mDeviceEditor.BringToFront();
-		}
-
-		private MemoryEditor activeMemoryEditor
-		{
-			get
-			{
-				return mMemoryEditors[mMemoryTabControl.SelectedIndex];
-			}
 		}
 
 		void mModeCycleButton_ValueChanged(object sender, EventArgs e)
@@ -380,16 +395,6 @@ namespace MixGui
 		{
 			mDeviceEditorButton.Text = mDeviceEditor.Visible ? "Hide E&ditor" : "Show E&ditor";
 			mDeviceEditorToolStripMenuItem.Text = mDeviceEditor.Visible ? "Hide &Device Editor" : "Show &Device Editor";
-		}
-
-		private static void application_ThreadException(object sender, ThreadExceptionEventArgs e)
-		{
-			handleException(e.Exception);
-		}
-
-		private static void currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			handleException((Exception)e.ExceptionObject);
 		}
 
 		private bool disableTeletypeOnTop()
@@ -1366,11 +1371,6 @@ namespace MixGui
 			}
 		}
 
-		private int calculateIndexedAddress(int address, int index)
-		{
-			return InstructionHelpers.GetValidIndexedAddress(mMix, address, index, false);
-		}
-
 		private void mAboutMenuItem_Click(object sender, EventArgs e)
 		{
 			if (mAboutForm == null)
@@ -1402,11 +1402,6 @@ namespace MixGui
 			mMix.RunDetached = !mMix.RunDetached;
 			mDetachToolStripButton.Text = mMix.RunDetached ? "Attac&h" : "Detac&h";
 			mDetachToolStripMenuItem.Text = mMix.RunDetached ? "&Attach" : "&Detach";
-		}
-
-		private void mExitMenuItem_Click(object sender, EventArgs e)
-		{
-			base.Close();
 		}
 
 		private void listViews_addressSelected(object sender, AddressSelectedEventArgs args)
@@ -1576,11 +1571,6 @@ namespace MixGui
 			mTicksToolStripTextBox.Text = mMix.TickCounter.ToString();
 		}
 
-		private void mRunItem_Click(object sender, EventArgs e)
-		{
-			switchRunningState();
-		}
-
 		private void switchRunningState()
 		{
 			if (mSteppingState == steppingState.Idle)
@@ -1596,11 +1586,6 @@ namespace MixGui
 			}
 		}
 
-		private void mShowPCButton_Click(object sender, EventArgs e)
-		{
-			mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter);
-		}
-
 		private void mStepItem_Click(object sender, EventArgs e)
 		{
 			setSteppingState(steppingState.Stepping);
@@ -1613,12 +1598,7 @@ namespace MixGui
 			mTeletypeToolStripMenuItem.Text = mTeletype.Visible ? "&Hide Teletype" : "&Show Teletype";
 		}
 
-		private void mTeletypeItem_Click(object sender, EventArgs e)
-		{
-			switchTeletypeVisibility();
-		}
-
-		private void mTickItem_Click(object sender, EventArgs e)
+        private void mTickItem_Click(object sender, EventArgs e)
 		{
 			mMix.Tick();
 			Update();
@@ -1946,11 +1926,6 @@ namespace MixGui
 			}
 		}
 
-		void mFloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args)
-		{
-			implementFloatingPointPCChange(args.SelectedAddress);
-		}
-
 		private void implementFloatingPointPCChange(int address)
 		{
 			if (mFloatingPointMemoryEditor != null && mFloatingPointMemoryEditor.IsAddressVisible(mMix.FloatingPointModule.ProgramCounter))
@@ -1987,11 +1962,6 @@ namespace MixGui
 
 				findNext();
 			}
-		}
-
-		private void findNext()
-		{
-			activeMemoryEditor.FindMatch(mSearchOptions);
 		}
 
 		private void mFindNextMenuItem_Click(object sender, EventArgs e)

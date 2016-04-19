@@ -23,43 +23,29 @@ namespace MixAssembler.Symbol
             mAddresses = new List<long>();
         }
 
+        public override bool IsMultiValuedSymbol => true;
+
+        public override bool IsSymbolDefined => true;
+
+        public override void SetValue(long address) => mAddresses.Add(address);
+
+        private static bool isBackwardReferenceChar(char c) => c == 'B';
+
+        private static bool isDefinitionChar(char c) => c == 'H';
+
+        private static bool isForwardReferenceChar(char c) => c == 'F';
+
+        private static bool isLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) ? isLocalSymbolChar(text[1]) : false;
+
+        private static bool isLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
+
+        public override bool IsValueDefined(int currentAddress) => false;
+
+        public override void SetValue(Word.Signs sign, long magnitude) => mAddresses.Add(magnitude);
+
         public override long GetValue(int currentAddress)
         {
             throw new NotImplementedException();
-        }
-
-        private static bool isBackwardReferenceChar(char c)
-        {
-            return c == 'B';
-        }
-
-        private static bool isDefinitionChar(char c)
-        {
-            return c == 'H';
-        }
-
-        private static bool isForwardReferenceChar(char c)
-        {
-            return c == 'F';
-        }
-
-        private static bool isLocalSymbol(string text)
-        {
-            if (text.Length == 2 && char.IsNumber(text[0]))
-            {
-                return isLocalSymbolChar(text[1]);
-            }
-            return false;
-        }
-
-        private static bool isLocalSymbolChar(char c)
-        {
-            return "BHF".IndexOf(c) >= 0;
-        }
-
-        public override bool IsValueDefined(int currentAddress)
-        {
-            return false;
         }
 
         public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
@@ -119,11 +105,6 @@ namespace MixAssembler.Symbol
             return new reference((LocalSymbol)symbol, isForwardReferenceChar(text[1]) ? reference.Directions.Forwards : reference.Directions.Backwards);
         }
 
-        public override void SetValue(long address)
-        {
-            mAddresses.Add(address);
-        }
-
         public ICollection<long> Addresses
         {
             get
@@ -133,20 +114,14 @@ namespace MixAssembler.Symbol
             }
         }
 
-        public override bool IsMultiValuedSymbol
+        public override long GetMagnitude(int currentAddress)
         {
-            get
-            {
-                return true;
-            }
+            throw new NotImplementedException();
         }
 
-        public override bool IsSymbolDefined
+        public override Word.Signs GetSign(int currentAddress)
         {
-            get
-            {
-                return true;
-            }
+            throw new NotImplementedException();
         }
 
         private class reference : IValue
@@ -159,6 +134,12 @@ namespace MixAssembler.Symbol
                 mReferee = referee;
                 mDirection = direction;
             }
+
+            public long GetMagnitude(int currentAddress) => GetValue(currentAddress);
+
+            public Word.Signs GetSign(int currentAddress) => Word.Signs.Positive;
+
+            public bool IsValueDefined(int currentAddress) => GetValue(currentAddress) != -1L;
 
             /// <summary>
             /// Try to locate the symbol (i.e. address) that this reference refers to. 
@@ -193,46 +174,11 @@ namespace MixAssembler.Symbol
                 return -1L;
             }
 
-            public bool IsValueDefined(int currentAddress)
-            {
-                return GetValue(currentAddress) != -1L;
-            }
-
             public enum Directions
             {
                 Backwards,
                 Forwards
             }
-
-            #region IValue Members
-
-
-            public long GetMagnitude(int currentAddress)
-            {
-                return GetValue(currentAddress);
-            }
-
-            public Word.Signs GetSign(int currentAddress)
-            {
-                return Word.Signs.Positive;
-            }
-
-            #endregion
-        }
-
-        public override void SetValue(Word.Signs sign, long magnitude)
-        {
-            mAddresses.Add(magnitude);
-        }
-
-        public override long GetMagnitude(int currentAddress)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Word.Signs GetSign(int currentAddress)
-        {
-            throw new NotImplementedException();
         }
     }
 }

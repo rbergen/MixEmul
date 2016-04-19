@@ -9,47 +9,29 @@ namespace MixLib.Device.Step
 			TickCount = tickCount;
 		}
 
-		public sealed override DeviceStep.Instance CreateInstance()
-		{
-			return CreateTickingInstance();
-		}
-
+		public sealed override DeviceStep.Instance CreateInstance() => CreateTickingInstance();
+	
 		protected abstract Instance CreateTickingInstance();
 
 		protected abstract new class Instance : DeviceStep.Instance
 		{
-			private int mCurrentTick;
-			private int mTickCount;
+			protected int CurrentTick { get; private set; }
+			protected int TickCount { get; private set; }
 
 			public Instance(int tickCount)
 			{
-				mTickCount = tickCount;
-				mCurrentTick = 0;
+				TickCount = tickCount;
+				CurrentTick = 0;
 			}
 
 			protected abstract void ProcessTick();
-			public sealed override bool Tick()
+
+            public sealed override bool Tick()
 			{
 				ProcessTick();
-				mCurrentTick = CurrentTick + 1;
+				CurrentTick++;
 
-				return (CurrentTick >= mTickCount);
-			}
-
-			protected int CurrentTick
-			{
-				get
-				{
-					return mCurrentTick;
-				}
-			}
-
-			protected int TickCount
-			{
-				get
-				{
-					return mTickCount;
-				}
+				return (CurrentTick >= TickCount);
 			}
 		}
 	}

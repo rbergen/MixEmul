@@ -29,10 +29,21 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-		public void AddInputLine(string line)
-		{
-			mInputBuffer.Enqueue(line);
-		}
+        public override int RecordWordCount => recordWordCount;
+
+        public override string ShortName => shortName;
+
+        public override bool SupportsInput => true;
+
+        public override bool SupportsOutput => true;
+
+        public void AddInputLine(string line) => mInputBuffer.Enqueue(line);
+
+        public string GetOutputLine() => mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
+
+        private void inputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
+
+        private void outputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
 
 		protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
@@ -54,26 +65,6 @@ namespace MixLib.Device
 
 			return base.GetCurrentStepInstance();
 		}
-
-		public string GetOutputLine()
-		{
-			if (mOutputBuffer.Count <= 0)
-			{
-				return null;
-			}
-
-			return (string)mOutputBuffer.Dequeue();
-		}
-
-		private void inputRequired(object sender, EventArgs e)
-		{
-            InputRequired?.Invoke(this, e);
-        }
-
-		private void outputAdded(object sender, EventArgs e)
-		{
-            OutputAdded?.Invoke(this, e);
-        }
 
 		public override void UpdateSettings()
 		{
@@ -99,38 +90,6 @@ namespace MixLib.Device
 			base.FirstIocDeviceStep = null;
 		}
 
-		public override int RecordWordCount
-		{
-			get
-			{
-				return recordWordCount;
-			}
-		}
-
-		public override string ShortName
-		{
-			get
-			{
-				return shortName;
-			}
-		}
-
-		public override bool SupportsInput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		public override bool SupportsOutput
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		private class readLineStep : DeviceStep
 		{
 			private Queue mInputBuffer;
@@ -140,18 +99,9 @@ namespace MixLib.Device
 				mInputBuffer = inputBuffer;
 			}
 
-			public override DeviceStep.Instance CreateInstance()
-			{
-				return new Instance(mInputBuffer);
-			}
+            public override string StatusDescription => readingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return readingDescription;
-				}
-			}
+            public override DeviceStep.Instance CreateInstance() => new Instance(mInputBuffer);
 
 			public new class Instance : DeviceStep.Instance
 			{
@@ -165,7 +115,9 @@ namespace MixLib.Device
 					mInputBuffer = inputBuffer;
 				}
 
-				public override bool Tick()
+                public override object OutputForNextStep => mReadBytes;
+
+                public override bool Tick()
 				{
 					if (mInputBuffer.Count == 0)
 					{
@@ -193,14 +145,6 @@ namespace MixLib.Device
 
 					return true;
 				}
-
-				public override object OutputForNextStep
-				{
-					get
-					{
-						return mReadBytes;
-					}
-				}
 			}
 		}
 
@@ -213,18 +157,9 @@ namespace MixLib.Device
 				mOutputBuffer = outputBuffer;
 			}
 
-			public override DeviceStep.Instance CreateInstance()
-			{
-				return new Instance(mOutputBuffer);
-			}
+            public override string StatusDescription => writingDescription;
 
-			public override string StatusDescription
-			{
-				get
-				{
-					return writingDescription;
-				}
-			}
+            public override DeviceStep.Instance CreateInstance() => new Instance(mOutputBuffer);
 
 			public new class Instance : DeviceStep.Instance
 			{

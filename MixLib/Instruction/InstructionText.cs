@@ -11,7 +11,13 @@ namespace MixLib.Instruction
 			mInstance = instance;
 		}
 
-		private string getFieldText()
+        public string Index => mInstance.Index != 0 ? "," + mInstance.Index : "";
+
+        public string InstanceText => Mnemonic + " " + Address + Index + Field;
+
+        public string Mnemonic => mInstance.MixInstruction.Mnemonic;
+
+        private string getFieldText()
 		{
 			FieldSpec fieldSpec = mInstance.FieldSpec;
 			if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
@@ -58,34 +64,6 @@ namespace MixLib.Instruction
 					return ("(" + str + ")");
 				}
 				return "";
-			}
-		}
-
-		public string Index
-		{
-			get
-			{
-				if (mInstance.Index != 0)
-				{
-					return ("," + mInstance.Index);
-				}
-				return "";
-			}
-		}
-
-		public string InstanceText
-		{
-			get
-			{
-				return (Mnemonic + " " + Address + Index + Field);
-			}
-		}
-
-		public string Mnemonic
-		{
-			get
-			{
-				return mInstance.MixInstruction.Mnemonic;
 			}
 		}
 	}
