@@ -19,7 +19,7 @@ namespace MixLib.Device.Step
 
 			public override bool Tick()
 			{
-				base.StreamStatus.CloseStream();
+                StreamStatus.CloseStream();
 				return true;
 			}
 		}

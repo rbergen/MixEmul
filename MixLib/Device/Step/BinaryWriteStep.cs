@@ -66,16 +66,16 @@ namespace MixLib.Device.Step
 
 			public override bool Tick()
 			{
-				if (base.StreamStatus.Stream != null && mWriteBytes != null)
+				if (StreamStatus.Stream != null && mWriteBytes != null)
 				{
 					try
 					{
-						WriteBytes(base.StreamStatus.Stream, mRecordWordCount, mWriteBytes);
-						base.StreamStatus.UpdatePosition();
+						WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
+                        StreamStatus.UpdatePosition();
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 				}
 

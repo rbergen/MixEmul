@@ -41,7 +41,7 @@ namespace MixLib.Device
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstInputDeviceStep = nextStep;
+            FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new seekStep();
@@ -50,12 +50,12 @@ namespace MixLib.Device
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new MixDevice.WriteToMemoryStep(true, WordsPerSector);
+			nextStep.NextStep = new WriteToMemoryStep(true, WordsPerSector);
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new MixDevice.ReadFromMemoryStep(true, WordsPerSector);
+            FirstOutputDeviceStep = nextStep;
+			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerSector);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
@@ -67,7 +67,7 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstIocDeviceStep = nextStep;
+            FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new seekStep();
 			nextStep.NextStep.NextStep = null;
 		}
@@ -105,18 +105,18 @@ namespace MixLib.Device
 				{
 					try
 					{
-						FileStream stream = DiskDevice.OpenStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+						FileStream stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-						if (!base.StreamStatus.PositionSet)
+						if (!StreamStatus.PositionSet)
 						{
 							stream.Position = 0L;
 						}
 
-						base.StreamStatus.Stream = stream;
+                        StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					return true;
@@ -143,8 +143,8 @@ namespace MixLib.Device
 
 				public override bool Tick()
 				{
-					long desiredPosition = CalculateBytePosition(base.Operands.Sector);
-					if (desiredPosition != base.StreamStatus.Position)
+					long desiredPosition = CalculateBytePosition(Operands.Sector);
+					if (desiredPosition != StreamStatus.Position)
 					{
 						if (mTicksLeft == unset)
 						{
@@ -162,12 +162,12 @@ namespace MixLib.Device
 						{
 							desiredPosition = 0L;
 						}
-						else if (base.Operands.Sector >= SectorCount)
+						else if (Operands.Sector >= SectorCount)
 						{
 							desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
 						}
 
-						base.StreamStatus.Position = desiredPosition;
+                        StreamStatus.Position = desiredPosition;
 					}
 					return true;
 				}

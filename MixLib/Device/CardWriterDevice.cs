@@ -35,11 +35,11 @@ namespace MixLib.Device
 
         public override void UpdateSettings()
 		{
-			base.FirstInputDeviceStep = null;
+            FirstInputDeviceStep = null;
 
 			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardWriterInitialization), initializationDescription);
-			base.FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new MixDevice.ReadFromMemoryStep(false, recordWordCount);
+            FirstOutputDeviceStep = nextStep;
+			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
@@ -48,7 +48,7 @@ namespace MixLib.Device
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep.NextStep.NextStep = null;
 
-			base.FirstIocDeviceStep = null;
+            FirstIocDeviceStep = null;
 		}
 
 		private class openStreamStep : StreamStep
@@ -68,17 +68,17 @@ namespace MixLib.Device
 				{
 					try
 					{
-						FileStream stream = new FileStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-						if (!base.StreamStatus.PositionSet)
+						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+						if (!StreamStatus.PositionSet)
 						{
 							stream.Position = stream.Length;
 						}
 
-						base.StreamStatus.Stream = stream;
+                        StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					return true;

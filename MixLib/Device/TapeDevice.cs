@@ -44,19 +44,19 @@ namespace MixLib.Device
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstInputDeviceStep = nextStep;
+            FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new BinaryReadStep(WordsPerRecord);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new MixDevice.WriteToMemoryStep(true, WordsPerRecord);
+			nextStep.NextStep = new WriteToMemoryStep(true, WordsPerRecord);
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new MixDevice.ReadFromMemoryStep(true, WordsPerRecord);
+            FirstOutputDeviceStep = nextStep;
+			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerRecord);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
@@ -66,7 +66,7 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstIocDeviceStep = nextStep;
+            FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new seekStep();
 			nextStep.NextStep.NextStep = null;
 		}
@@ -88,16 +88,16 @@ namespace MixLib.Device
 				{
 					try
 					{
-						FileStream stream = OpenStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-						if (!base.StreamStatus.PositionSet)
+						FileStream stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+						if (!StreamStatus.PositionSet)
 						{
 							stream.Position = stream.Length;
 						}
-						base.StreamStatus.Stream = stream;
+                        StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 					return true;
 				}
@@ -125,21 +125,21 @@ namespace MixLib.Device
 				{
 					if (mTicksLeft == unset)
 					{
-						if (!base.StreamStatus.PositionSet)
+						if (!StreamStatus.PositionSet)
 						{
 							try
 							{
-								FileStream stream = File.OpenRead(base.StreamStatus.FileName);
-								base.StreamStatus.Position = stream.Length;
+								FileStream stream = File.OpenRead(StreamStatus.FileName);
+                                StreamStatus.Position = stream.Length;
 								stream.Close();
 							}
 							catch (Exception exception)
 							{
-								OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + base.StreamStatus.FileName + ": " + exception.Message));
+								OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + StreamStatus.FileName + ": " + exception.Message));
 							}
 						}
 
-						mTicksLeft = (base.Operands.MValue == 0 ? (base.StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(base.Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
+						mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
 					mTicksLeft -= 1L;
@@ -148,19 +148,19 @@ namespace MixLib.Device
 						return false;
 					}
 
-					if (base.Operands.MValue == 0)
+					if (Operands.MValue == 0)
 					{
-						base.StreamStatus.Position = 0L;
+                        StreamStatus.Position = 0L;
 						return true;
 					}
 
-					long currentPosition = base.StreamStatus.Position + base.Operands.MValue * WordsPerRecord * (FullWord.ByteCount + 1);
+					long currentPosition = StreamStatus.Position + Operands.MValue * WordsPerRecord * (FullWord.ByteCount + 1);
 					if (currentPosition < 0L)
 					{
 						currentPosition = 0L;
 					}
 
-					base.StreamStatus.Position = currentPosition;
+                    StreamStatus.Position = currentPosition;
 
 					return true;
 				}

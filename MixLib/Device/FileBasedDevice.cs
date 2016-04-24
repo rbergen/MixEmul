@@ -14,14 +14,14 @@ namespace MixLib.Device
 		private string mFileNamePrefix;
 		private string mFilePath;
 
-		protected MixLib.Device.StreamStatus StreamStatus { get; set; }
+		protected StreamStatus StreamStatus { get; set; }
 
 		protected FileBasedDevice(int id, string fileNamePrefix)
 			: base(id)
 		{
 			mFileNamePrefix = fileNamePrefix;
 			mFilePath = null;
-			StreamStatus = new MixLib.Device.StreamStatus();
+			StreamStatus = new StreamStatus();
 			StreamStatus.ReportingEvent += new ReportingEventHandler(streamStatus_Reporting);
 		}
 

@@ -83,16 +83,16 @@ namespace MixLib.Device.Step
 
             public override bool Tick()
 			{
-				if (base.StreamStatus.Stream != null)
+				if (StreamStatus.Stream != null)
 				{
 					try
 					{
-						mReadBytes = ReadBytes(base.StreamStatus.Stream, mRecordWordCount);
-						base.StreamStatus.UpdatePosition();
+						mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
+                        StreamStatus.UpdatePosition();
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
 						mReadBytes = new MixByte[0];
 					}
 				}

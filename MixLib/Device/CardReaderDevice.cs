@@ -25,7 +25,7 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-        public override int RecordWordCount => 16;
+        public override int RecordWordCount => recordWordCount;
 
         public override string ShortName => shortName;
 
@@ -36,19 +36,19 @@ namespace MixLib.Device
         public override void UpdateSettings()
 		{
 			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardReaderInitialization), initializationDescription);
-			base.FirstInputDeviceStep = nextStep;
+            FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new TextReadStep(recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new MixDevice.WriteToMemoryStep(false, recordWordCount);
+			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
 			nextStep.NextStep.NextStep = null;
 
-			base.FirstOutputDeviceStep = null;
+            FirstOutputDeviceStep = null;
 
-			base.FirstIocDeviceStep = null;
+            FirstIocDeviceStep = null;
 		}
 
 		private class openStreamStep : StreamStep
@@ -68,18 +68,18 @@ namespace MixLib.Device
 				{
 					try
 					{
-						FileStream stream = new FileStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
 
-						if (!base.StreamStatus.PositionSet)
+						if (!StreamStatus.PositionSet)
 						{
 							stream.Position = 0L;
 						}
 
-						base.StreamStatus.Stream = stream;
+                        StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					return true;

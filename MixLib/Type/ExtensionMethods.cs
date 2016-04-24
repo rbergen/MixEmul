@@ -32,9 +32,6 @@
         {
             switch (current)
             {
-                case Registers.CompValues.Less:
-                    return Registers.CompValues.Equal;
-
                 case Registers.CompValues.Equal:
                     return Registers.CompValues.Greater;
 

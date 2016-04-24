@@ -40,11 +40,11 @@ namespace MixLib.Device
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PrinterInitialization);
 
-			base.FirstInputDeviceStep = null;
+            FirstInputDeviceStep = null;
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new MixDevice.ReadFromMemoryStep(false, recordWordCount);
+            FirstOutputDeviceStep = nextStep;
+			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
@@ -54,7 +54,7 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstIocDeviceStep = nextStep;
+            FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new pageForwardStep();
@@ -80,18 +80,18 @@ namespace MixLib.Device
 				{
 					try
 					{
-						FileStream stream = new FileStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 
-						if (!base.StreamStatus.PositionSet)
+						if (!StreamStatus.PositionSet)
 						{
 							stream.Position = stream.Length;
 						}
 
-						base.StreamStatus.Stream = stream;
+                        StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					return true;
@@ -114,20 +114,20 @@ namespace MixLib.Device
 
 				public override bool Tick()
 				{
-					if (base.StreamStatus.Stream != null)
+					if (StreamStatus.Stream != null)
 					{
 						try
 						{
-							StreamWriter writer = new StreamWriter(base.StreamStatus.Stream, Encoding.ASCII);
+							StreamWriter writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
 							writer.WriteLine();
 							writer.WriteLine("===================== PAGE BREAK ===================== PAGE BREAK ===================== PAGE BREAK =====================");
 							writer.WriteLine();
 							writer.Flush();
-							base.StreamStatus.UpdatePosition();
+                            StreamStatus.UpdatePosition();
 						}
 						catch (Exception exception)
 						{
-							OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + base.StreamStatus.FileName + ": " + exception.Message));
+							OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
 						}
 					}
 

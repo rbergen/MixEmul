@@ -72,20 +72,20 @@ namespace MixLib.Device.Step
 
             public override bool Tick()
 			{
-				if (base.StreamStatus.Stream != null)
+				if (StreamStatus.Stream != null)
 				{
 					string readText = null;
 					try
 					{
-						readText = new StreamReader(base.StreamStatus.Stream, Encoding.ASCII).ReadLine();
+						readText = new StreamReader(StreamStatus.Stream, Encoding.ASCII).ReadLine();
 						if (readText != null)
 						{
-							base.StreamStatus.Position = Math.Min(base.StreamStatus.Stream.Length, (base.StreamStatus.Position + readText.Length) + Environment.NewLine.Length);
+                            StreamStatus.Position = Math.Min(StreamStatus.Stream.Length, StreamStatus.Position + readText.Length + Environment.NewLine.Length);
 						}
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					mReadBytes = processReadText(readText, mRecordWordCount * FullWord.ByteCount);

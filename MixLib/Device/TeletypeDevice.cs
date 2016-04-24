@@ -74,20 +74,20 @@ namespace MixLib.Device
 			mOutputBuffer = Queue.Synchronized(new Queue());
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstInputDeviceStep = nextStep;
+            FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new readLineStep(mInputBuffer);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new MixDevice.WriteToMemoryStep(false, recordWordCount);
+			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
 			nextStep.NextStep.NextStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new MixDevice.ReadFromMemoryStep(false, recordWordCount);
+            FirstOutputDeviceStep = nextStep;
+			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new writeLineStep(mOutputBuffer);
 			nextStep.NextStep.NextStep = null;
 
-			base.FirstIocDeviceStep = null;
+            FirstIocDeviceStep = null;
 		}
 
 		private class readLineStep : DeviceStep

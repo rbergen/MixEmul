@@ -39,20 +39,20 @@ namespace MixLib.Device
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PaperTapeInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstInputDeviceStep = nextStep;
+            FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new openStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new TextReadStep(recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new MixDevice.WriteToMemoryStep(false, recordWordCount);
+			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
 			nextStep.NextStep.NextStep = null;
 
-			base.FirstOutputDeviceStep = null;
+            FirstOutputDeviceStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
-			base.FirstIocDeviceStep = nextStep;
+            FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new rewindStep();
 			nextStep.NextStep.NextStep = null;
 		}
@@ -74,11 +74,11 @@ namespace MixLib.Device
 				{
 					try
 					{
-						base.StreamStatus.Stream = new FileStream(base.StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+                        StreamStatus.Stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
 					}
 					catch (Exception exception)
 					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + base.StreamStatus.FileName + ": " + exception.Message));
+						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
 					}
 
 					return true;
@@ -107,7 +107,7 @@ namespace MixLib.Device
 				{
 					if (mTicksLeft == unset)
 					{
-						mTicksLeft = ((base.StreamStatus.Position / (recordWordCount * FullWord.ByteCount + Environment.NewLine.Length)) + 1L) * DeviceSettings.GetTickCount("PaperTapeRecordWind");
+						mTicksLeft = ((StreamStatus.Position / (recordWordCount * FullWord.ByteCount + Environment.NewLine.Length)) + 1L) * DeviceSettings.GetTickCount("PaperTapeRecordWind");
 					}
 
 					mTicksLeft -= 1L;
@@ -116,7 +116,7 @@ namespace MixLib.Device
 						return false;
 					}
 
-					base.StreamStatus.Position = 0L;
+                    StreamStatus.Position = 0L;
 
 					return true;
 				}

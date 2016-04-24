@@ -81,33 +81,43 @@ namespace MixLib.Device
 
 		public void Tick()
 		{
-			if (CurrentStep != null)
-			{
-				if (mCurrentStepInstance == null)
-				{
-					mCurrentStepInstance = GetCurrentStepInstance();
-					mCurrentStepInstance.Operands = mCurrentOperands;
-					mCurrentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
-				}
-				if (mCurrentStepInstance.Tick())
-				{
-					CurrentStep = CurrentStep.NextStep;
-					if (CurrentStep == null)
-					{
-						mCurrentStepInstance = null;
+            // If no I/O step is set, we're idle
+            if (CurrentStep == null)
+            {
+                return;
+            }
 
-                        mCurrentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
-                    }
-					else
-					{
-						DeviceStep.Instance currentStepInstance = GetCurrentStepInstance();
-						currentStepInstance.Operands = mCurrentOperands;
-						currentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
-						currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;
-						mCurrentStepInstance = currentStepInstance;
-					}
-				}
+            // At I/O start, the step instance is unset
+            if (mCurrentStepInstance == null)
+			{
+				mCurrentStepInstance = GetCurrentStepInstance();
+				mCurrentStepInstance.Operands = mCurrentOperands;
+				mCurrentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
 			}
+
+            // Current step still busy? If so, we're done here
+            if (!mCurrentStepInstance.Tick())
+            {
+                return;
+            }
+
+			CurrentStep = CurrentStep.NextStep;
+
+            // Have we reached the end of the I/O step chain? If so, trigger interrupt and quit
+            if (CurrentStep == null)
+			{
+				mCurrentStepInstance = null;
+                mCurrentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
+
+                return;
+            }
+
+            // Move on to next I/O step
+            DeviceStep.Instance currentStepInstance = GetCurrentStepInstance();
+			currentStepInstance.Operands = mCurrentOperands;
+			currentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
+			currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;
+			mCurrentStepInstance = currentStepInstance;
 		}
 
 		public abstract void UpdateSettings();
@@ -143,28 +153,28 @@ namespace MixLib.Device
 						mWordByteCount++;
 					}
 
-					mBytesForReading = new MixByte[base.TickCount * mWordByteCount];
+					mBytesForReading = new MixByte[TickCount * mWordByteCount];
 				}
 
                 public override object OutputForNextStep => mBytesForReading;
 
                 protected override void ProcessTick()
 				{
-					int currentAddress = base.Operands.MValue + base.CurrentTick;
+					int currentAddress = Operands.MValue + CurrentTick;
 
-					if (currentAddress <= base.Operands.Memory.MaxWordIndex)
+					if (currentAddress <= Operands.Memory.MaxWordIndex)
 					{
-						int currentByte = mWordByteCount * base.CurrentTick;
+						int currentByte = mWordByteCount * CurrentTick;
 
 						if (mIncludeSign)
 						{
-							mBytesForReading[currentByte] = base.Operands.Memory[currentAddress].Sign.ToChar();
+							mBytesForReading[currentByte] = Operands.Memory[currentAddress].Sign.ToChar();
 							currentByte++;
 						}
 
 						for (int index = 0; index < FullWord.ByteCount; index++)
 						{
-							mBytesForReading[currentByte + index] = base.Operands.Memory[currentAddress][index];
+							mBytesForReading[currentByte + index] = Operands.Memory[currentAddress][index];
 						}
 					}
 				}
@@ -202,30 +212,30 @@ namespace MixLib.Device
 						mWordByteCount++;
 					}
 
-					mBytesForWriting = new MixByte[base.TickCount * mWordByteCount];
+					mBytesForWriting = new MixByte[TickCount * mWordByteCount];
 				}
 
 				protected override void ProcessTick()
 				{
-					int currentAddress = base.Operands.MValue + base.CurrentTick;
+					int currentAddress = Operands.MValue + CurrentTick;
 
-					if (currentAddress < base.Operands.Memory.MaxWordIndex)
+					if (currentAddress < Operands.Memory.MaxWordIndex)
 					{
-						int currentByte = mWordByteCount * base.CurrentTick;
+						int currentByte = mWordByteCount * CurrentTick;
 
 						if (mIncludeSign)
 						{
-							base.Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
+                            Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
 							currentByte++;
 						}
 						else
 						{
-							base.Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
+                            Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
 						}
 
 						for (int index = 0; index < FullWord.ByteCount; index++)
 						{
-							base.Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
+                            Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
 						}
 					}
 				}

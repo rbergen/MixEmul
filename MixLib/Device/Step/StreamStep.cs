@@ -14,7 +14,7 @@ namespace MixLib.Device.Step
 
         public abstract new class Instance : DeviceStep.Instance
         {
-            protected StreamStatus StreamStatus { get; set; }
+            protected StreamStatus StreamStatus { get; private set; }
 
 			public Instance(StreamStatus streamStatus)
 			{
