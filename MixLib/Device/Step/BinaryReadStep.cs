@@ -9,10 +9,10 @@ namespace MixLib.Device.Step
 {
 	public class BinaryReadStep : StreamStep
 	{
-		private int mRecordWordCount;
-		private const string statusDescription = "Reading binary data";
+        int mRecordWordCount;
+        const string statusDescription = "Reading binary data";
 
-		public BinaryReadStep(int recordWordCount)
+        public BinaryReadStep(int recordWordCount)
 		{
 			mRecordWordCount = recordWordCount;
 		}
@@ -68,37 +68,37 @@ namespace MixLib.Device.Step
 			return readWords;
 		}
 
-		private new class Instance : StreamStep.Instance
-		{
-			private MixByte[] mReadBytes;
-			private int mRecordWordCount;
+        new class Instance : StreamStep.Instance
+        {
+            MixByte[] mReadBytes;
+            readonly int mRecordWordCount;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount)
-				: base(streamStatus)
-			{
-				mRecordWordCount = recordWordCount;
-			}
+            public Instance(StreamStatus streamStatus, int recordWordCount)
+                : base(streamStatus)
+            {
+                mRecordWordCount = recordWordCount;
+            }
 
             public override object OutputForNextStep => mReadBytes;
 
             public override bool Tick()
-			{
-				if (StreamStatus.Stream != null)
-				{
-					try
-					{
-						mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
+            {
+                if (StreamStatus.Stream != null)
+                {
+                    try
+                    {
+                        mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
                         StreamStatus.UpdatePosition();
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-						mReadBytes = new MixByte[0];
-					}
-				}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
+                        mReadBytes = new MixByte[0];
+                    }
+                }
 
-				return true;
-			}
-		}
-	}
+                return true;
+            }
+        }
+    }
 }

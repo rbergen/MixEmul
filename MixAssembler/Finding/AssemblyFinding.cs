@@ -13,7 +13,7 @@ namespace MixAssembler.Finding
 
         public const int NoNumber = int.MinValue;
 
-        public AssemblyFinding(Severity severity, int lineNumber, LineSection section, int startCharIndex, int length)
+        protected AssemblyFinding(Severity severity, int lineNumber, LineSection section, int startCharIndex, int length)
         {
             LineSection = section;
             StartCharIndex = startCharIndex;

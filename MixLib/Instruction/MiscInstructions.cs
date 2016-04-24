@@ -9,10 +9,10 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing miscellaneous MIX instructions
 	/// </summary>
-	public class MiscInstructions
+	public static class MiscInstructions
 	{
-		private static SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
-		private const byte zeroCharValue = 30;
+        static SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
+        const byte zeroCharValue = 30;
 
         /// <summary>
         /// Method for performing the NOP instruction
@@ -188,12 +188,12 @@ namespace MixLib.Instruction
 			return false;
 		}
 
-		/// <summary>
-		/// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
-		/// several ticks, the exact number of ticks depending on the number of words moved.
-		/// </summary>
-		private class moveStatus
-		{
+        /// <summary>
+        /// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
+        /// several ticks, the exact number of ticks depending on the number of words moved.
+        /// </summary>
+        class moveStatus
+        {
             public int CurrentWord { get; private set; }
             public WordStates CurrentWordState { get; set; }
             public int FromAddress { get; private set; }
@@ -202,23 +202,23 @@ namespace MixLib.Instruction
             public byte WordCount { get; private set; }
 
             public moveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
-			{
-				ProgramCounter = programCounter;
-				FromAddress = fromAddress;
-				ToAddress = toAddress;
-				WordCount = wordCount;
-				CurrentWord = 0;
-				CurrentWordState = WordStates.BeforeMove;
-			}
+            {
+                ProgramCounter = programCounter;
+                FromAddress = fromAddress;
+                ToAddress = toAddress;
+                WordCount = wordCount;
+                CurrentWord = 0;
+                CurrentWordState = WordStates.BeforeMove;
+            }
 
-			public void NextWord() => CurrentWord++;
+            public void NextWord() => CurrentWord++;
 
             public enum WordStates
-			{
-				BeforeMove,
-				Moved,
-				RegisterIncreased
-			}
-		}
-	}
+            {
+                BeforeMove,
+                Moved,
+                RegisterIncreased
+            }
+        }
+    }
 }

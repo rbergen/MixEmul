@@ -33,7 +33,7 @@ namespace MixGui.Components
 			InitializeComponent();
             AutoSize = false;
             Size = Control.Size;
-			Control.SizeChanged += new EventHandler(Control_SizeChanged);
+			Control.SizeChanged += Control_SizeChanged;
 		}
 
 		public LongValueToolStripTextBox(LongValueTextBox innerBox)
@@ -42,7 +42,7 @@ namespace MixGui.Components
 			InitializeComponent();
             AutoSize = false;
             Size = innerBox.Size;
-			Control.SizeChanged += new EventHandler(Control_SizeChanged);
+			Control.SizeChanged += Control_SizeChanged;
 		}
 
 		public LongValueTextBox LongValueTextBox => (LongValueTextBox)Control;

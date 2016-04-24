@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Assembler.cs" />
     <Compile Include="AssemblingStatus.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LineSection.cs" />
     <Compile Include="Instruction\IInstructionParameters.cs" />
     <Compile Include="Instruction\LoaderInstructionParameters.cs" />

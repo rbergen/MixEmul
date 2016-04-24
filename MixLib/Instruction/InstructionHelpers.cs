@@ -3,7 +3,7 @@ using MixLib.Modules;
 
 namespace MixLib.Instruction
 {
-	public class InstructionHelpers
+	public static class InstructionHelpers
 	{
 		public const int InvalidAddress = int.MinValue;
 

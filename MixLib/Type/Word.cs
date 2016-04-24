@@ -11,9 +11,9 @@ namespace MixLib.Type
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
-		private ReaderWriterLock mAccessLock;
-		private MixByte[] mBytes;
-		private Signs mSign;
+        ReaderWriterLock mAccessLock;
+        readonly MixByte[] mBytes;
+        Signs mSign;
 
         public int ByteCount { get; private set; }
 
@@ -35,15 +35,15 @@ namespace MixLib.Type
 			}
 		}
 
-		private Word(int byteCount, Signs sign)
-		{
-			ByteCount = byteCount;
-			mSign = sign;
-			mBytes = new MixByte[byteCount];
-			mAccessLock = new ReaderWriterLock();
-		}
+        Word(int byteCount, Signs sign)
+        {
+            ByteCount = byteCount;
+            mSign = sign;
+            mBytes = new MixByte[byteCount];
+            mAccessLock = new ReaderWriterLock();
+        }
 
-		public void Load(string text)
+        public void Load(string text)
 		{
 			int count = text == null ? 0 : Math.Min(ByteCount, text.Length);
 			int index = 0;
@@ -150,7 +150,7 @@ namespace MixLib.Type
 				{
 					MixByte oldValue = mBytes[index];
 
-					mBytes[index] = (value != null) ? value : new MixByte();
+					mBytes[index] = value ?? new MixByte();
 
 					if (oldValue.ByteValue == mBytes[index].ByteValue)
 					{
@@ -207,27 +207,27 @@ namespace MixLib.Type
 			}
 		}
 
-		private long setMagnitudeLongValue(long magnitude)
-		{
-			long oldValue = MagnitudeLongValue;
+        long setMagnitudeLongValue(long magnitude)
+        {
+            long oldValue = MagnitudeLongValue;
 
             magnitude = magnitude.GetMagnitude();
 
-			if (oldValue == magnitude)
-			{
-				return magnitude;
-			}
+            if (oldValue == magnitude)
+            {
+                return magnitude;
+            }
 
-			for (int i = ByteCount - 1; i >= 0; i--)
-			{
-				mBytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
-				magnitude = magnitude >> MixByte.BitCount;
-			}
+            for (int i = ByteCount - 1; i >= 0; i--)
+            {
+                mBytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
+                magnitude = magnitude >> MixByte.BitCount;
+            }
 
-			return oldValue;
-		}
+            return oldValue;
+        }
 
-		public MixByte[] Magnitude
+        public MixByte[] Magnitude
 		{
 			get
 			{
@@ -376,7 +376,7 @@ namespace MixLib.Type
 
 		public virtual Object Clone()
 		{
-			Word copy = new Word(ByteCount);
+			var copy = new Word(ByteCount);
 			CopyTo(copy);
 
 			return copy;
@@ -386,7 +386,7 @@ namespace MixLib.Type
 		{
 			if (target.ByteCount != ByteCount)
 			{
-				throw new ArgumentException("Target Word must have same bytecount as this Word", "target");
+				throw new ArgumentException("Target Word must have same bytecount as this Word", nameof(target));
 			}
 
 			for (int i = 0; i < ByteCount; i++)

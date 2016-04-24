@@ -15,31 +15,31 @@ namespace MixLib
 {
 	public class Mix : ModuleBase, IDisposable
 	{
-		private const string moduleName = "Mix";
-		private const int loaderStartAddress = 16;
-		private const int memoryMinIndex = -3999;
-		private const int memoryMaxIndex = 3999;
-		private const int timerMemoryAddress = -10;
-		private static readonly long[] loaderInstructionValues = { 1060, 4457506, 103 };
+        const string moduleName = "Mix";
+        const int loaderStartAddress = 16;
+        const int memoryMinIndex = -3999;
+        const int memoryMaxIndex = 3999;
+        const int timerMemoryAddress = -10;
+        static readonly long[] loaderInstructionValues = { 1060, 4457506, 103 };
 
-		private Devices mDevices = new Devices();
-		private Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);
-		private Registers mRegisters = new Registers();
-		private MemoryView mMemory;
-		private Queue<Interrupt> mInterruptQueue = new Queue<Interrupt>();
+        Devices mDevices = new Devices();
+        Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);
+        Registers mRegisters = new Registers();
+        MemoryView mMemory;
+        Queue<Interrupt> mInterruptQueue = new Queue<Interrupt>();
 
-		private int mCurrentInstructionAddress;
-		private int mCurrentInstructionTicksLeft;
-		private string mCurrentInstructionMnemonic;
+        int mCurrentInstructionAddress;
+        int mCurrentInstructionTicksLeft;
+        string mCurrentInstructionMnemonic;
 
-		private Queue mLog;
-		private bool mRunDetached;
-		private TimeSpan mRunSpan;
-		private AutoResetEvent mStartStep;
-		private RunStatus mStatus;
-		private RunMode mMode;
-		private bool mInterruptExecuted;
-		private object mSyncRoot = new object();
+        Queue mLog;
+        bool mRunDetached;
+        TimeSpan mRunSpan;
+        AutoResetEvent mStartStep;
+        RunStatus mStatus;
+        RunMode mMode;
+        bool mInterruptExecuted;
+        object mSyncRoot = new object();
 
         public FloatingPointModule FloatingPointModule { get; private set; }
         public long TickCounter { get; private set; }
@@ -71,7 +71,7 @@ namespace MixLib
 			mStartStep = new AutoResetEvent(false);
 			mRunDetached = false;
 
-			Thread thread = new Thread(stepRunEntryPoint);
+			var thread = new Thread(stepRunEntryPoint);
 			thread.IsBackground = true;
 			thread.Name = "Run thread";
 			thread.Start();
@@ -101,22 +101,22 @@ namespace MixLib
 
         public void RequestStop() => RequestStop(true);
 
-        private void deviceReporting(object sender, DeviceReportingEventArgs args) =>
+        void deviceReporting(object sender, DeviceReportingEventArgs args) =>
             AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
 
-        private void setMemoryBounds()
-		{
-			mMemory.IndexOffset = 0;
-			mMemory.MinWordIndex = Mode == RunMode.Control ? mFullMemory.MinWordIndex : 0;
-			mMemory.MaxWordIndex = mFullMemory.MaxWordIndex;
+        void setMemoryBounds()
+        {
+            mMemory.IndexOffset = 0;
+            mMemory.MinWordIndex = Mode == RunMode.Control ? mFullMemory.MinWordIndex : 0;
+            mMemory.MaxWordIndex = mFullMemory.MaxWordIndex;
 
-			if (ProgramCounter < mMemory.MinWordIndex)
-			{
-				ProgramCounter = mMemory.MinWordIndex;
-			}
-		}
+            if (ProgramCounter < mMemory.MinWordIndex)
+            {
+                ProgramCounter = mMemory.MinWordIndex;
+            }
+        }
 
-		public void SetFloatingPointModuleEnabled(bool enabled)
+        public void SetFloatingPointModuleEnabled(bool enabled)
 		{
 			if (enabled && FloatingPointModule == null)
 			{
@@ -196,58 +196,58 @@ namespace MixLib
 			mStartStep.Set();
 		}
 
-		private void stepRunEntryPoint()
+        void stepRunEntryPoint()
+        {
+            var stepStartTime = new DateTime();
+            bool suspendRun = true;
+
+            while (true)
+            {
+                if (suspendRun)
+                {
+                    mStartStep.WaitOne();
+                    stepStartTime = DateTime.Now;
+                }
+                else
+                {
+                    mStartStep.Reset();
+                }
+
+                do
+                {
+                    Tick();
+                }
+                while ((mCurrentInstructionAddress == ProgramCounter) && IsExecuting);
+
+                suspendRun = !IsRunning || (DateTime.Now - stepStartTime > mRunSpan && !RunDetached);
+
+                if (suspendRun && StepPerformed != null)
+                {
+                    StepPerformed(this, new EventArgs());
+                }
+            }
+        }
+
+        void increaseTickCounter()
+        {
+            TickCounter++;
+            if (TickCounter % 1000 == 0)
+            {
+                long timerValue = mFullMemory[timerMemoryAddress].LongValue;
+                if (timerValue > 0)
+                {
+                    mFullMemory[timerMemoryAddress].LongValue = timerValue - 1;
+
+                    QueueInterrupt(new Interrupt(Interrupt.Types.Timer));
+                }
+            }
+
+            mDevices.Tick();
+        }
+
+        public void PrepareLoader()
 		{
-			DateTime stepStartTime = new DateTime();
-			bool suspendRun = true;
-
-			while (true)
-			{
-				if (suspendRun)
-				{
-					mStartStep.WaitOne();
-					stepStartTime = DateTime.Now;
-				}
-				else
-				{
-					mStartStep.Reset();
-				}
-
-				do
-				{
-					Tick();
-				}
-				while ((mCurrentInstructionAddress == ProgramCounter) && IsExecuting);
-
-				suspendRun = !IsRunning || (DateTime.Now - stepStartTime > mRunSpan && !RunDetached);
-
-				if (suspendRun && StepPerformed != null)
-				{
-					StepPerformed(this, new EventArgs());
-				}
-			}
-		}
-
-		private void increaseTickCounter()
-		{
-			TickCounter++;
-			if (TickCounter % 1000 == 0)
-			{
-				long timerValue = mFullMemory[timerMemoryAddress].LongValue;
-				if (timerValue > 0)
-				{
-					mFullMemory[timerMemoryAddress].LongValue = timerValue - 1;
-
-					QueueInterrupt(new Interrupt(Interrupt.Types.Timer));
-				}
-			}
-
-			mDevices.Tick();
-		}
-
-		public void PrepareLoader()
-		{
-			FullWord word = new FullWord(1060);
+			var word = new FullWord(1060);
 			MixInstruction instruction = InstructionSet.Instance.GetInstruction(IOInstructions.INOpCode, new FieldSpec(Devices.CardReaderUnitCode));
 			MixInstruction.Instance instance = instruction.CreateInstance(word);
 
@@ -401,12 +401,12 @@ namespace MixLib
 			}
 		}
 
-		private void resetMode()
-		{
-			Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
-		}
+        void resetMode()
+        {
+            Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
+        }
 
-		public bool RunDetached
+        public bool RunDetached
 		{
 			get
 			{
@@ -472,7 +472,7 @@ namespace MixLib
 		}
 
         #region IDisposable Support
-        private bool disposedValue = false;
+        bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {

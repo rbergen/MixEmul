@@ -39,20 +39,20 @@ namespace MixLib.Type
 
         public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
 
-        private void validateParameters(int minIndex, int maxIndex, int offset)
-		{
-			if (minIndex + offset < SourceMemory.MinWordIndex)
-			{
-				throw new IndexOutOfRangeException("MinWordIndex + IndexOffset must be greater than or equal to the MinWordIndex of SourceMemory");
-			}
+        void validateParameters(int minIndex, int maxIndex, int offset)
+        {
+            if (minIndex + offset < SourceMemory.MinWordIndex)
+            {
+                throw new IndexOutOfRangeException("MinWordIndex + IndexOffset must be greater than or equal to the MinWordIndex of SourceMemory");
+            }
 
-			if (maxIndex + offset > SourceMemory.MaxWordIndex)
-			{
-				throw new IndexOutOfRangeException("MaxWordIndex + IndexOffset must be less than or equal to the MaxWordIndex of SourceMemory");
-			}
-		}
+            if (maxIndex + offset > SourceMemory.MaxWordIndex)
+            {
+                throw new IndexOutOfRangeException("MaxWordIndex + IndexOffset must be less than or equal to the MaxWordIndex of SourceMemory");
+            }
+        }
 
-		public void ClearSourceLines()
+        public void ClearSourceLines()
 		{
 			for (int index = mMinIndex; index <= mMaxIndex; index++)
 			{
@@ -75,7 +75,7 @@ namespace MixLib.Type
 				return null;
 			}
 
-			SearchParameters filteredOptions = new SearchParameters()
+			var filteredOptions = new SearchParameters
 			{
 				SearchText = options.SearchText,
 				SearchFields = options.SearchFields,

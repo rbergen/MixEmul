@@ -25,8 +25,8 @@ namespace MixLib.Instruction
 		public const int FieldSpecByte = IndexByte + 1;
 		public const int OpcodeByte = FieldSpecByte + 1;
 
-		private Executor mExecutor;
-        private Validator mValidator;
+        Executor mExecutor;
+        Validator mValidator;
 
         public FieldSpec FieldSpec { get; private set; }
         public MetaFieldSpec MetaFieldSpec { get; private set; }
@@ -50,29 +50,29 @@ namespace MixLib.Instruction
 		{
 		}
 
-		private MixInstruction(byte opcode, FieldSpec fieldSpec, MetaFieldSpec metaFieldSpec, string mnemonic, int tickCount, Executor executor, Validator validator)
-			: base(mnemonic)
-		{
-			if (executor == null)
-			{
-				throw new ArgumentNullException("executor");
-			}
+        MixInstruction(byte opcode, FieldSpec fieldSpec, MetaFieldSpec metaFieldSpec, string mnemonic, int tickCount, Executor executor, Validator validator)
+            : base(mnemonic)
+        {
+            if (executor == null)
+            {
+                throw new ArgumentNullException(nameof(executor));
+            }
 
-			// if the MetaFieldSpec Presence is Forbidden then an instruction fieldspec must be specified. Likewise, if an instruction fieldspec is provided, the MetaFieldSpec Presence must be Forbidden.
-			if ((fieldSpec == null && metaFieldSpec.Presence == Instruction.MetaFieldSpec.Presences.Forbidden) || (metaFieldSpec.Presence != Instruction.MetaFieldSpec.Presences.Forbidden && fieldSpec != null))
-			{
-				throw new ArgumentException("forbidden fieldspec presence makes instruction fieldspec mandatory and vice versa");
-			}
+            // if the MetaFieldSpec Presence is Forbidden then an instruction fieldspec must be specified. Likewise, if an instruction fieldspec is provided, the MetaFieldSpec Presence must be Forbidden.
+            if ((fieldSpec == null && metaFieldSpec.Presence == Instruction.MetaFieldSpec.Presences.Forbidden) || (metaFieldSpec.Presence != Instruction.MetaFieldSpec.Presences.Forbidden && fieldSpec != null))
+            {
+                throw new ArgumentException("forbidden fieldspec presence makes instruction fieldspec mandatory and vice versa");
+            }
 
-			Opcode = opcode;
-			FieldSpec = fieldSpec;
-			MetaFieldSpec = metaFieldSpec;
-			TickCount = tickCount;
-			mExecutor = executor;
-			mValidator = validator;
-		}
+            Opcode = opcode;
+            FieldSpec = fieldSpec;
+            MetaFieldSpec = metaFieldSpec;
+            TickCount = tickCount;
+            mExecutor = executor;
+            mValidator = validator;
+        }
 
-		public Instance CreateInstance(IFullWord instructionWord) => new Instance(this, instructionWord);
+        public Instance CreateInstance(IFullWord instructionWord) => new Instance(this, instructionWord);
 
         public class Instance : InstructionInstanceBase
 		{
@@ -84,13 +84,13 @@ namespace MixLib.Instruction
 				// check if this instruction word is actually encoding the instruction it is provided with...
 				if (instructionWord[OpcodeByte] != instruction.Opcode)
 				{
-					throw new ArgumentException("opcode in word doesn't match instruction opcode", "instructionWord");
+					throw new ArgumentException("opcode in word doesn't match instruction opcode", nameof(instructionWord));
 				}
 
 				// ... and include the instruction fieldspec if there is one
 				if (instruction.FieldSpec != null && instructionWord[FieldSpecByte] != instruction.FieldSpec.MixByteValue)
 				{
-					throw new ArgumentException("fieldspec in word doesn't match instruction fieldspec", "instructionWord");
+					throw new ArgumentException("fieldspec in word doesn't match instruction fieldspec", nameof(instructionWord));
 				}
 
 				MixInstruction = instruction;
@@ -115,15 +115,15 @@ namespace MixLib.Instruction
 
             public override string ToString() => new InstructionText(this).InstanceText;
 
-            private int addressMagnitude(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+            int addressMagnitude(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
 
-			private int addressValue(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
+            int addressValue(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
 
-			public bool Execute(ModuleBase module)
+            public bool Execute(ModuleBase module)
 			{
 				if (Validate() != null)
 				{
-					throw new ArgumentException("instance not valid for instruction", "instance");
+					throw new ArgumentException("instance not valid for instruction");
 				}
 
 				return MixInstruction.mExecutor(module, this);

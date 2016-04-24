@@ -31,8 +31,8 @@ namespace MixGui.Settings
 		public const string TeletypeOutputText = "TeletypeOutputText";
 		public const string WarningText = "WarningText";
 
-		private static Dictionary<string, Color> mDefaultColors;
-		private static Dictionary<string, Font> mDefaultFonts;
+        static Dictionary<string, Color> mDefaultColors;
+        static Dictionary<string, Font> mDefaultFonts;
 
         public static Dictionary<string, Color> Colors { private get; set; }
         public static ProfilingInfoType ShowProfilingInfo { get; set; }

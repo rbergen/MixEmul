@@ -5,9 +5,9 @@ namespace MixAssembler
 {
 	public class AssemblingStatus
 	{
-		private AssemblyFindingCollection mFindings = new AssemblyFindingCollection();
-		private int mLineNumber = 0;
-		private int mLocationCounter = 0;
+        AssemblyFindingCollection mFindings = new AssemblyFindingCollection();
+        int mLineNumber;
+        int mLocationCounter;
 
         public AssemblyFindingCollection Findings => mFindings;
 

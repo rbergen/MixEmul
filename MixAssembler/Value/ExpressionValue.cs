@@ -7,15 +7,15 @@ namespace MixAssembler.Value
 	/// <summary>
 	/// This class represents a MIX expression value
 	/// </summary>
-	public class ExpressionValue
+	public static class ExpressionValue
 	{
-		private const int fullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
-		private const long fullWordModulusMask = 1L << fullWordBitCount;
+        const int fullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
+        const long fullWordModulusMask = 1L << fullWordBitCount;
 
-		// Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-		private static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new operationComparator());
+        // Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
+        static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new operationComparator());
 
-		static ExpressionValue()
+        static ExpressionValue()
 		{
 			mBinaryOperations["+"] = doAdd;
 			mBinaryOperations["-"] = doSubstract;
@@ -25,30 +25,30 @@ namespace MixAssembler.Value
 			mBinaryOperations[":"] = doCalculateField;
 		}
 
-		private static IValue doAdd(IValue left, IValue right, int currentAddress) =>
+        static IValue doAdd(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-		private static IValue doCalculateField(IValue left, IValue right, int currentAddress) =>
+        static IValue doCalculateField(IValue left, IValue right, int currentAddress) =>
             new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-		private static IValue doDivide(IValue left, IValue right, int currentAddress) =>
+        static IValue doDivide(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        private static IValue doMultiply(IValue left, IValue right, int currentAddress) =>
+        static IValue doMultiply(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        private static IValue doSubstract(IValue left, IValue right, int currentAddress) =>
+        static IValue doSubstract(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        private static IValue doFractionDivide(IValue left, IValue right, int currentAddress)
-		{
-			decimal divider = new decimal(left.GetValue(currentAddress));
-			divider *= fullWordModulusMask;
-			divider /= right.GetValue(currentAddress);
-			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
-		}
+        static IValue doFractionDivide(IValue left, IValue right, int currentAddress)
+        {
+            var divider = new decimal(left.GetValue(currentAddress));
+            divider *= fullWordModulusMask;
+            divider /= right.GetValue(currentAddress);
+            return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
+        }
 
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length != 0)
 			{
@@ -87,7 +87,7 @@ namespace MixAssembler.Value
 					{
 						string currentOperator = pair.Key;
 
-						int operatorIndex = text.LastIndexOf(currentOperator, text.Length - 2, text.Length - 2);
+						int operatorIndex = text.LastIndexOf(currentOperator, text.Length - 2, text.Length - 2, StringComparison.Ordinal);
 						// this find only counts if it is closer to the end of the expression than the previous find
 						if (operatorIndex > (operatorPosition + 1))
 						{
@@ -119,21 +119,21 @@ namespace MixAssembler.Value
 			return null;
 		}
 
-		// compare operators. Longer operators end up higher than shorter ones
-		private class operationComparator : IComparer<string>
-		{
-			public int Compare(string left, string right)
-			{
-				int lengthComparison = left.Length.CompareTo(right.Length);
+        // compare operators. Longer operators end up higher than shorter ones
+        class operationComparator : IComparer<string>
+        {
+            public int Compare(string left, string right)
+            {
+                int lengthComparison = left.Length.CompareTo(right.Length);
 
-				if (lengthComparison == 0)
-				{
-					return left.CompareTo(right);
-				}
-				return -lengthComparison;
-			}
-		}
+                if (lengthComparison == 0)
+                {
+                    return string.Compare(left, right, StringComparison.Ordinal);
+                }
+                return -lengthComparison;
+            }
+        }
 
-		private delegate IValue operationDelegate(IValue left, IValue right, int currentAddress);
-	}
+        delegate IValue operationDelegate(IValue left, IValue right, int currentAddress);
+    }
 }

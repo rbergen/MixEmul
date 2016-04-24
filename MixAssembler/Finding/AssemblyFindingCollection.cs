@@ -13,16 +13,16 @@ namespace MixAssembler.Finding
 
         public bool ContainsWarnings => contains(Severity.Warning);
 
-        private bool contains(Severity severity)
-		{
-			foreach (AssemblyFinding finding in base.Items)
-			{
-				if (finding.Severity == severity)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-	}
+        bool contains(Severity severity)
+        {
+            foreach (AssemblyFinding finding in Items)
+            {
+                if (finding.Severity == severity)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

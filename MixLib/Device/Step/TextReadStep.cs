@@ -11,10 +11,10 @@ namespace MixLib.Device.Step
 {
 	public class TextReadStep : StreamStep
 	{
-		private int mRecordWordCount;
-		private const string statusDescription = "Reading textual data";
+        int mRecordWordCount;
+        const string statusDescription = "Reading textual data";
 
-		public TextReadStep(int recordWordCount)
+        public TextReadStep(int recordWordCount)
 		{
 			mRecordWordCount = recordWordCount;
 		}
@@ -25,10 +25,10 @@ namespace MixLib.Device.Step
 
 		public static List<IMixByteCollection> ReadBytes(Stream stream, int bytesPerRecord)
 		{
-			StreamReader reader = new StreamReader(stream, Encoding.ASCII);
+			var reader = new StreamReader(stream, Encoding.ASCII);
 
 			string readText;
-			List<IMixByteCollection> readBytes = new List<IMixByteCollection>();
+			var readBytes = new List<IMixByteCollection>();
 
 			while ((readText = reader.ReadLine()) != null)
 			{
@@ -38,60 +38,60 @@ namespace MixLib.Device.Step
 			return readBytes;
 		}
 
-		private static MixByte[] processReadText(string readText, int resultByteCount)
-		{
-			MixByte[] readBytes = new MixByte[resultByteCount];
-			int readByteCount = (readText == null) ? 0 : Math.Min(readText.Length, resultByteCount);
-			int index = 0;
+        static MixByte[] processReadText(string readText, int resultByteCount)
+        {
+            MixByte[] readBytes = new MixByte[resultByteCount];
+            int readByteCount = (readText == null) ? 0 : Math.Min(readText.Length, resultByteCount);
+            int index = 0;
 
-			for (; index < readByteCount; index++)
-			{
-				readBytes[index] = readText[index];
-			}
+            for (; index < readByteCount; index++)
+            {
+                readBytes[index] = readText[index];
+            }
 
-			for (; index < readBytes.Length; index++)
-			{
-				readBytes[index] = 0;
-			}
+            for (; index < readBytes.Length; index++)
+            {
+                readBytes[index] = 0;
+            }
 
-			return readBytes;
-		}
+            return readBytes;
+        }
 
-		private new class Instance : StreamStep.Instance
-		{
-			private MixByte[] mReadBytes;
-			private int mRecordWordCount;
+        new class Instance : StreamStep.Instance
+        {
+            MixByte[] mReadBytes;
+            readonly int mRecordWordCount;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount)
-				: base(streamStatus)
-			{
-				mRecordWordCount = recordWordCount;
-			}
+            public Instance(StreamStatus streamStatus, int recordWordCount)
+                : base(streamStatus)
+            {
+                mRecordWordCount = recordWordCount;
+            }
 
             public override object OutputForNextStep => mReadBytes;
 
             public override bool Tick()
-			{
-				if (StreamStatus.Stream != null)
-				{
-					string readText = null;
-					try
-					{
-						readText = new StreamReader(StreamStatus.Stream, Encoding.ASCII).ReadLine();
-						if (readText != null)
-						{
+            {
+                if (StreamStatus.Stream != null)
+                {
+                    string readText = null;
+                    try
+                    {
+                        readText = new StreamReader(StreamStatus.Stream, Encoding.ASCII).ReadLine();
+                        if (readText != null)
+                        {
                             StreamStatus.Position = Math.Min(StreamStatus.Stream.Length, StreamStatus.Position + readText.Length + Environment.NewLine.Length);
-						}
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-					}
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
 
-					mReadBytes = processReadText(readText, mRecordWordCount * FullWord.ByteCount);
-				}
-				return true;
-			}
-		}
-	}
+                    mReadBytes = processReadText(readText, mRecordWordCount * FullWord.ByteCount);
+                }
+                return true;
+            }
+        }
+    }
 }

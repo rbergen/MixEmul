@@ -10,13 +10,13 @@ namespace MixGui.Components
 
 	public class DeviceMixByteCollectionEditor : UserControl, IMixByteCollectionEditor, INavigableControl
 	{
-		private Label mMixByteCollectionIndexLabel;
-		private MixByteCollectionCharTextBox mCharTextBox;
-		private int mMixByteCollectionIndex;
-		private IMixByteCollection mDeviceMixByteCollection;
-		private int mIndexCharCount = 2;
+        Label mMixByteCollectionIndexLabel;
+        MixByteCollectionCharTextBox mCharTextBox;
+        int mMixByteCollectionIndex;
+        IMixByteCollection mDeviceMixByteCollection;
+        int mIndexCharCount = 2;
 
-		public event KeyEventHandler NavigationKeyDown;
+        public event KeyEventHandler NavigationKeyDown;
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 
 		public DeviceMixByteCollectionEditor()
@@ -49,58 +49,58 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        private void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) => 
+        void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
             OnValueChanged(args);
 
-		private void initializeComponent()
-		{
-			base.SuspendLayout();
+        void initializeComponent()
+        {
+            SuspendLayout();
 
-			mMixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mMixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mMixByteCollectionIndexLabel.Location = new Point(0, 0);
-			mMixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
-			mMixByteCollectionIndexLabel.Size = new Size(30, 13);
-			mMixByteCollectionIndexLabel.AutoSize = true;
-			mMixByteCollectionIndexLabel.TabIndex = 0;
-			mMixByteCollectionIndexLabel.Text = "00:";
+            mMixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+            mMixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+            mMixByteCollectionIndexLabel.Location = new Point(0, 0);
+            mMixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
+            mMixByteCollectionIndexLabel.Size = new Size(30, 13);
+            mMixByteCollectionIndexLabel.AutoSize = true;
+            mMixByteCollectionIndexLabel.TabIndex = 0;
+            mMixByteCollectionIndexLabel.Text = "00:";
 
-			mCharTextBox.Location = new Point(mMixByteCollectionIndexLabel.Right, 0);
-			mCharTextBox.Name = "mCharTextBox";
-			mCharTextBox.TabIndex = 1;
-			mCharTextBox.ValueChanged += new MixByteCollectionEditorValueChangedEventHandler(mMixByteCollectionEditor_ValueChanged);
-			mCharTextBox.NavigationKeyDown += new KeyEventHandler(keyDown);
-			mCharTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			mCharTextBox.BorderStyle = BorderStyle.None;
-			mCharTextBox.Height = 13;
+            mCharTextBox.Location = new Point(mMixByteCollectionIndexLabel.Right, 0);
+            mCharTextBox.Name = "mCharTextBox";
+            mCharTextBox.TabIndex = 1;
+            mCharTextBox.ValueChanged += mMixByteCollectionEditor_ValueChanged;
+            mCharTextBox.NavigationKeyDown += keyDown;
+            mCharTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            mCharTextBox.BorderStyle = BorderStyle.None;
+            mCharTextBox.Height = 13;
 
-			base.Controls.Add(mMixByteCollectionIndexLabel);
-			base.Controls.Add(mCharTextBox);
-			base.Name = "DeviceMixByteCollectionEditor";
-			base.Size = new Size(mCharTextBox.Right, mCharTextBox.Height);
-			base.KeyDown += new KeyEventHandler(keyDown);
-			base.ResumeLayout(false);
-		}
+            Controls.Add(mMixByteCollectionIndexLabel);
+            Controls.Add(mCharTextBox);
+            Name = "DeviceMixByteCollectionEditor";
+            Size = new Size(mCharTextBox.Right, mCharTextBox.Height);
+            KeyDown += keyDown;
+            ResumeLayout(false);
+        }
 
-		private void keyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Modifiers != Keys.None)
-			{
-				return;
-			}
+        void keyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers != Keys.None)
+            {
+                return;
+            }
 
-			switch (e.KeyCode)
-			{
-				case Keys.Prior:
-				case Keys.Next:
-				case Keys.Up:
-				case Keys.Down:
+            switch (e.KeyCode)
+            {
+                case Keys.Prior:
+                case Keys.Next:
+                case Keys.Up:
+                case Keys.Down:
                     NavigationKeyDown?.Invoke(this, e);
                     break;
-			}
-		}
+            }
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			mCharTextBox.Update();
 			base.Update();
@@ -131,12 +131,12 @@ namespace MixGui.Components
 			}
 		}
 
-		private void setIndexLabelText()
-		{
-			mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
-		}
+        void setIndexLabelText()
+        {
+            mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
+        }
 
-		public int IndexCharCount
+        public int IndexCharCount
 		{
 			get
 			{
@@ -168,7 +168,7 @@ namespace MixGui.Components
 			{
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "DeviceMixByteCollection may not be set to null");
+					throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
 				}
 
 				mDeviceMixByteCollection = value;

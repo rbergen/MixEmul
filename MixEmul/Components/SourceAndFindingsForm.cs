@@ -11,40 +11,29 @@ namespace MixGui.Components
 {
 	public class SourceAndFindingsForm : Form
 	{
-		private Container components = null;
-		private Button mCloseButton;
-		private AssemblyFindingListView mFindingListView;
-		private Panel mListPanel;
-		private Button mLoadButton;
-		private SourceCodeControl mSourceControl;
-		private Splitter mSplitter;
-		private StatusBar mStatusBar;
-		private Button mExportButton;
-		private SaveFileDialog mSaveExportFileDialog;
-		private StatusBarPanel mStatusBarPanel;
-		private InstructionInstanceBase[] mInstances;
+        Button mCloseButton;
+        AssemblyFindingListView mFindingListView;
+        Panel mListPanel;
+        Button mLoadButton;
+        SourceCodeControl mSourceControl;
+        Splitter mSplitter;
+        StatusBar mStatusBar;
+        Button mExportButton;
+        SaveFileDialog mSaveExportFileDialog;
+        StatusBarPanel mStatusBarPanel;
+        InstructionInstanceBase[] mInstances;
 
-		public SourceAndFindingsForm()
+        public SourceAndFindingsForm()
 		{
 			InitializeComponent();
-			mFindingListView.SelectionChanged += new AssemblyFindingListView.SelectionChangedHandler(mFindingListView_SelectionChanged);
+			mFindingListView.SelectionChanged += mFindingListView_SelectionChanged;
 		}
 
         public void UpdateLayout() => mSourceControl.UpdateLayout();
 
-        protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				components?.Dispose();
-			}
-
-			base.Dispose(disposing);
-		}
-
-		private void InitializeComponent()
-		{
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(SourceAndFindingsForm));
+        void InitializeComponent()
+        {
+            var resources = new ComponentResourceManager(typeof(SourceAndFindingsForm));
             mStatusBar = new System.Windows.Forms.StatusBar();
             mStatusBarPanel = new System.Windows.Forms.StatusBarPanel();
             mListPanel = new System.Windows.Forms.Panel();
@@ -55,7 +44,7 @@ namespace MixGui.Components
             mSplitter = new System.Windows.Forms.Splitter();
             mSaveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
             mSourceControl = new MixGui.Components.SourceCodeControl();
-			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
             mListPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -105,7 +94,7 @@ namespace MixGui.Components
             mExportButton.Size = new System.Drawing.Size(62, 23);
             mExportButton.TabIndex = 2;
             mExportButton.Text = "&Export...";
-            mExportButton.Click += new EventHandler(mExportButton_Click);
+            mExportButton.Click += mExportButton_Click;
             // 
             // mLoadButton
             // 
@@ -169,18 +158,18 @@ namespace MixGui.Components
             Name = "SourceAndFindingsForm";
             ShowInTaskbar = false;
             Text = "Assembly result";
-			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
             mListPanel.ResumeLayout(false);
             ResumeLayout(false);
 
-		}
+        }
 
-		private void mFindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args)
-		{
-			mSourceControl.MarkedFinding = args.SelectedFinding;
-		}
+        void mFindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args)
+        {
+            mSourceControl.MarkedFinding = args.SelectedFinding;
+        }
 
-		public void SetInstructionsAndFindings(PreInstruction[] instructions, InstructionInstanceBase[] instances, AssemblyFindingCollection findings)
+        public void SetInstructionsAndFindings(PreInstruction[] instructions, InstructionInstanceBase[] instances, AssemblyFindingCollection findings)
 		{
 			mSourceControl.Instructions = instructions;
 			mSourceControl.Findings = findings;
@@ -191,57 +180,57 @@ namespace MixGui.Components
 			mExportButton.Enabled = mLoadButton.Enabled;
 		}
 
-		private void setStatusBarText(AssemblyFindingCollection findings)
-		{
-			string[] severityNames = Enum.GetNames(typeof(Severity));
-			int[] severityCounts = new int[severityNames.Length];
+        void setStatusBarText(AssemblyFindingCollection findings)
+        {
+            string[] severityNames = Enum.GetNames(typeof(Severity));
+            int[] severityCounts = new int[severityNames.Length];
 
-			foreach (AssemblyFinding finding in findings)
-			{
-				severityCounts[(int)finding.Severity]++;
-			}
+            foreach (AssemblyFinding finding in findings)
+            {
+                severityCounts[(int)finding.Severity]++;
+            }
 
-			string message = "0";
-			int currentSeverityIndex = 0;
+            string message = "0";
+            int currentSeverityIndex = 0;
 
-			for (int i = 0; i < severityCounts.Length; i++)
-			{
-				if (severityCounts[i] <= 0)
-				{
-					continue;
-				}
+            for (int i = 0; i < severityCounts.Length; i++)
+            {
+                if (severityCounts[i] <= 0)
+                {
+                    continue;
+                }
 
-				string severityText = severityCounts[i].ToString() + " " + severityNames[i].ToLower();
+                string severityText = severityCounts[i] + " " + severityNames[i].ToLower();
 
-				switch (currentSeverityIndex)
-				{
-					case 0:
-						message = severityText;
-						break;
+                switch (currentSeverityIndex)
+                {
+                    case 0:
+                        message = severityText;
+                        break;
 
-					case 1:
-						message = severityText + " and " + message;
-						break;
+                    case 1:
+                        message = severityText + " and " + message;
+                        break;
 
-					default:
-						message = severityText + ", " + message;
-						break;
-				}
+                    default:
+                        message = severityText + ", " + message;
+                        break;
+                }
 
-				currentSeverityIndex++;
-			}
+                currentSeverityIndex++;
+            }
 
-			message = "Showing " + message + " message";
+            message = "Showing " + message + " message";
 
-			if (findings.Count != 1)
-			{
-				message = message + 's';
-			}
+            if (findings.Count != 1)
+            {
+                message = message + 's';
+            }
 
-			mStatusBarPanel.Text = message;
-		}
+            mStatusBarPanel.Text = message;
+        }
 
-		public ImageList SeverityImageList
+        public ImageList SeverityImageList
 		{
 			get
 			{
@@ -253,20 +242,20 @@ namespace MixGui.Components
 			}
 		}
 
-		private void mExportButton_Click(object sender, EventArgs e)
-		{
-			if (mSaveExportFileDialog.ShowDialog(this) == DialogResult.OK)
-			{
-				try
-				{
-					CardDeckExporter.ExportInstructions(mSaveExportFileDialog.FileName, mInstances);
-					MessageBox.Show(this, "Program successfully exported.", "Export successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(this, "Error while exporting program: " + ex.Message, "Error while exporting", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-				}
-			}
-		}
-	}
+        void mExportButton_Click(object sender, EventArgs e)
+        {
+            if (mSaveExportFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                try
+                {
+                    CardDeckExporter.ExportInstructions(mSaveExportFileDialog.FileName, mInstances);
+                    MessageBox.Show(this, "Program successfully exported.", "Export successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Error while exporting program: " + ex.Message, "Error while exporting", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
+        }
+    }
 }

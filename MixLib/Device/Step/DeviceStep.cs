@@ -17,7 +17,7 @@ namespace MixLib.Device.Step
 
 		public abstract class Instance
 		{
-			private object mPassthrough;
+            object mPassthrough;
 
             public InOutputOperands Operands { get; set; }
 

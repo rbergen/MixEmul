@@ -8,12 +8,12 @@ namespace MixLib.Modules.Settings
 		public const string FloatingPointProgramFileDefault = "floatingpoint.mixal";
 		public const string ControlProgramFileDefault = "control.mixal";
 
-		private static bool? mFloatingPointEnabled;
-		private static string mFloatingPointProgramFile;
-		private static string mControlProgramFile;
-		private static int? mFloatingPointMemoryWordCount;
+        static bool? mFloatingPointEnabled;
+        static string mFloatingPointProgramFile;
+        static string mControlProgramFile;
+        static int? mFloatingPointMemoryWordCount;
 
-		public static bool FloatingPointEnabled
+        public static bool FloatingPointEnabled
 		{
 			get
 			{

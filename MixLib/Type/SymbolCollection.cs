@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace MixLib.Type
 {
-	public class SymbolCollection : IEnumerable<SymbolBase>, IEnumerable
+	public sealed class SymbolCollection : IEnumerable<SymbolBase>, IEnumerable
 	{
-		private SortedList<string, SymbolBase> mList = new SortedList<string, SymbolBase>();
+        readonly SortedList<string, SymbolBase> mList = new SortedList<string, SymbolBase>();
 
         public int Count => mList.Count;
 
@@ -14,7 +14,7 @@ namespace MixLib.Type
 
         public bool Contains(string value) => mList.ContainsKey(value);
 
-        private IEnumerator<SymbolBase> getEnumerator() => mList.Values.GetEnumerator();
+        IEnumerator<SymbolBase> getEnumerator() => mList.Values.GetEnumerator();
 
         public void Remove(SymbolBase value) => Remove(value.Name);
 
@@ -28,7 +28,7 @@ namespace MixLib.Type
 		{
 			if (Contains(value))
 			{
-				throw new ArgumentException("symbol already exists", "value");
+				throw new ArgumentException("symbol already exists", nameof(value));
 			}
 
 			mList.Add(value.Name, value);

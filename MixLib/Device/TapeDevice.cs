@@ -10,18 +10,18 @@ namespace MixLib.Device
 {
 	public class TapeDevice : FileBasedDevice
 	{
-		private const string shortName = "TAP";
-		private const string fileNamePrefix = "tape";
+        const string shortName = "TAP";
+        const string fileNamePrefix = "tape";
 
-		private const string initializationDescription = "Initializing tape device";
-		private const string openingDescription = "Starting data transfer with tape";
-		private const string windingDescription = "Winding tape";
+        const string initializationDescription = "Initializing tape device";
+        const string openingDescription = "Starting data transfer with tape";
+        const string windingDescription = "Winding tape";
 
-		public const int WordsPerRecord = 100;
+        public const int WordsPerRecord = 100;
 
-		private const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
+        const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
 
-		public TapeDevice(int id)
+        public TapeDevice(int id)
 			: base(id, fileNamePrefix)
 		{
 			UpdateSettings();
@@ -39,7 +39,7 @@ namespace MixLib.Device
 
         public static long CalculateRecordCount(FileStream stream) => stream.Length / bytesPerRecord;
 
-        public override void UpdateSettings()
+        public sealed override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
 
@@ -71,100 +71,100 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 		}
 
-		private class openStreamStep : StreamStep
-		{
+        class openStreamStep : StreamStep
+        {
             public override string StatusDescription => openingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
-	
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
 
-				public override bool Tick()
-				{
-					try
-					{
-						FileStream stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-						if (!StreamStatus.PositionSet)
-						{
-							stream.Position = stream.Length;
-						}
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
+
+                public override bool Tick()
+                {
+                    try
+                    {
+                        FileStream stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        if (!StreamStatus.PositionSet)
+                        {
+                            stream.Position = stream.Length;
+                        }
                         StreamStatus.Stream = stream;
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
-					}
-					return true;
-				}
-			}
-		}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
+                    return true;
+                }
+            }
+        }
 
-		private class seekStep : StreamStep
-		{
+        class seekStep : StreamStep
+        {
             public override string StatusDescription => windingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				private long mTicksLeft;
-				private const long unset = long.MinValue;
+            new class Instance : StreamStep.Instance
+            {
+                long mTicksLeft;
+                const long unset = long.MinValue;
 
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-					mTicksLeft = unset;
-				}
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                    mTicksLeft = unset;
+                }
 
-				public override bool Tick()
-				{
-					if (mTicksLeft == unset)
-					{
-						if (!StreamStatus.PositionSet)
-						{
-							try
-							{
-								FileStream stream = File.OpenRead(StreamStatus.FileName);
+                public override bool Tick()
+                {
+                    if (mTicksLeft == unset)
+                    {
+                        if (!StreamStatus.PositionSet)
+                        {
+                            try
+                            {
+                                FileStream stream = File.OpenRead(StreamStatus.FileName);
                                 StreamStatus.Position = stream.Length;
-								stream.Close();
-							}
-							catch (Exception exception)
-							{
-								OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + StreamStatus.FileName + ": " + exception.Message));
-							}
-						}
+                                stream.Close();
+                            }
+                            catch (Exception exception)
+                            {
+                                OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + StreamStatus.FileName + ": " + exception.Message));
+                            }
+                        }
 
-						mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
-					}
+                        mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
+                    }
 
-					mTicksLeft -= 1L;
-					if (mTicksLeft > 0L)
-					{
-						return false;
-					}
+                    mTicksLeft -= 1L;
+                    if (mTicksLeft > 0L)
+                    {
+                        return false;
+                    }
 
-					if (Operands.MValue == 0)
-					{
+                    if (Operands.MValue == 0)
+                    {
                         StreamStatus.Position = 0L;
-						return true;
-					}
+                        return true;
+                    }
 
-					long currentPosition = StreamStatus.Position + Operands.MValue * WordsPerRecord * (FullWord.ByteCount + 1);
-					if (currentPosition < 0L)
-					{
-						currentPosition = 0L;
-					}
+                    long currentPosition = StreamStatus.Position + Operands.MValue * WordsPerRecord * (FullWord.ByteCount + 1);
+                    if (currentPosition < 0L)
+                    {
+                        currentPosition = 0L;
+                    }
 
                     StreamStatus.Position = currentPosition;
 
-					return true;
-				}
-			}
-		}
-	}
+                    return true;
+                }
+            }
+        }
+    }
 }

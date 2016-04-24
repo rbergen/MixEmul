@@ -4,15 +4,15 @@ namespace MixLib.Type
 {
 	public class WordField : Word
 	{
-		private FieldSpec mFieldSpec;
+        FieldSpec mFieldSpec;
 
-		private WordField(FieldSpec fieldSpec, int byteCount)
-			: base(byteCount)
-		{
-			mFieldSpec = fieldSpec;
-		}
+        WordField(FieldSpec fieldSpec, int byteCount)
+            : base(byteCount)
+        {
+            mFieldSpec = fieldSpec;
+        }
 
-		public void ApplyToFullWord(IFullWord word)
+        public void ApplyToFullWord(IFullWord word)
 		{
 			int byteCount = mFieldSpec.ByteCount;
 			int lowBoundByteIndex = mFieldSpec.LowBoundByteIndex;
@@ -24,7 +24,7 @@ namespace MixLib.Type
 
 			if (mFieldSpec.IncludesSign)
 			{
-				word.Sign = base.Sign;
+				word.Sign = Sign;
 			}
 		}
 
@@ -33,7 +33,7 @@ namespace MixLib.Type
 			int fieldSpecByteCount = mFieldSpec.ByteCount;
 			if (fieldSpecByteCount > register.ByteCountWithPadding)
 			{
-				throw new ArgumentOutOfRangeException("register", register, "bytecount too large for this register");
+				throw new ArgumentOutOfRangeException(nameof(register), register, "bytecount too large for this register");
 			}
 
 			int paddingByteCount = register.ByteCount - fieldSpecByteCount;
@@ -51,14 +51,14 @@ namespace MixLib.Type
 				fieldSpecByteCount--;
 			}
 
-			register.Sign = base.Sign;
+			register.Sign = Sign;
 		}
 
 		public int CompareTo(IFullWord toCompare)
 		{
 			WordField field = LoadFromFullWord(mFieldSpec, toCompare);
 
-			long wordValue = base.LongValue;
+			long wordValue = LongValue;
 			long fieldValue = field.LongValue;
 
 			return wordValue.CompareTo(fieldValue);
@@ -68,7 +68,7 @@ namespace MixLib.Type
 		{
 			int fieldSpecByteCount = fieldSpec.ByteCount;
 
-			WordField field = new WordField(fieldSpec, fieldSpecByteCount);
+			var field = new WordField(fieldSpec, fieldSpecByteCount);
 			int lowBoundByteIndex = fieldSpec.LowBoundByteIndex;
 
 			for (int i = 0; i < fieldSpecByteCount; i++)
@@ -89,10 +89,10 @@ namespace MixLib.Type
 			int fieldSpecByteCount = fieldSpec.ByteCount;
 			if (fieldSpecByteCount > register.ByteCountWithPadding)
 			{
-				throw new ArgumentOutOfRangeException("fieldSpec", fieldSpec, "bytecount too large for this register");
+				throw new ArgumentOutOfRangeException(nameof(fieldSpec), fieldSpec, "bytecount too large for this register");
 			}
 
-			WordField field = new WordField(fieldSpec, fieldSpecByteCount);
+			var field = new WordField(fieldSpec, fieldSpecByteCount);
 			int fromRegisterStartIndex = register.ByteCountWithPadding - fieldSpecByteCount;
 			fieldSpecByteCount--;
 

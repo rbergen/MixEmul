@@ -50,14 +50,14 @@ namespace MixLib.Instruction
 		{
 		}
 
-		private MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
-		{
-			Presence = presence;
-			FieldIsRange = fieldIsRange;
-			DefaultFieldSpec = defaultFieldSpec;
-		}
+        MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
+        {
+            Presence = presence;
+            FieldIsRange = fieldIsRange;
+            DefaultFieldSpec = defaultFieldSpec;
+        }
 
-		public enum Presences
+        public enum Presences
 		{
 			Forbidden,
 			Optional,

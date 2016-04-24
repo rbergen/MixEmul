@@ -11,10 +11,10 @@ namespace MixLib.Device
 	{
 		public const string FileNameExtension = "mixdev";
 
-		private string mFileNamePrefix;
-		private string mFilePath;
+        string mFileNamePrefix;
+        string mFilePath;
 
-		protected StreamStatus StreamStatus { get; set; }
+        protected StreamStatus StreamStatus { get; set; }
 
 		protected FileBasedDevice(int id, string fileNamePrefix)
 			: base(id)
@@ -22,23 +22,23 @@ namespace MixLib.Device
 			mFileNamePrefix = fileNamePrefix;
 			mFilePath = null;
 			StreamStatus = new StreamStatus();
-			StreamStatus.ReportingEvent += new ReportingEventHandler(streamStatus_Reporting);
+			StreamStatus.ReportingEvent += streamStatus_Reporting;
 		}
 
-        public string DefaultFileName => mFileNamePrefix + base.Id + "." + FileNameExtension;
+        public string DefaultFileName => mFileNamePrefix + Id + "." + FileNameExtension;
 
         public static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare) =>
             new FileStream(fileName, fileMode, fileAccess, fileShare);
 
         public void CloseStream() => StreamStatus.CloseStream();
 
-        private void streamStatus_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+        void streamStatus_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
 
         protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
-			if (base.CurrentStep is StreamStep)
+			if (CurrentStep is StreamStep)
 			{
-				return ((StreamStep)base.CurrentStep).CreateStreamInstance(StreamStatus);
+				return ((StreamStep)CurrentStep).CreateStreamInstance(StreamStatus);
 			}
 			return base.GetCurrentStepInstance();
 		}
@@ -71,7 +71,7 @@ namespace MixLib.Device
 		{
 			get
 			{
-				string str = (mFilePath == null) ? DefaultFileName : mFilePath;
+				string str = mFilePath ?? DefaultFileName;
 				return Path.Combine(DeviceSettings.DeviceFilesDirectory, str);
 			}
 			set

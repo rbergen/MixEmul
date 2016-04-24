@@ -17,29 +17,29 @@ namespace MixGui.Components
 {
 	public class InstructionInstanceTextBox : RichTextBox, IWordEditor, IEscapeConsumer
 	{
-		private const long unrendered = long.MinValue;
+        const long unrendered = long.MinValue;
 
-		private Color mEditingTextColor;
-		private Color mErrorTextColor;
-		private Color mImmutableTextColor;
-		private Color mRenderedTextColor;
-		private Color mEditorBackgroundColor;
-		private Color mLoadedInstructionTextColor;
-		private Color mLoadedInstructionBackgroundColor;
+        Color mEditingTextColor;
+        Color mErrorTextColor;
+        Color mImmutableTextColor;
+        Color mRenderedTextColor;
+        Color mEditorBackgroundColor;
+        Color mLoadedInstructionTextColor;
+        Color mLoadedInstructionBackgroundColor;
 
-		private bool mEditMode;
-		private IFullWord mInstructionWord;
-		private long mLastRenderedMagnitude;
-		private Word.Signs mLastRenderedSign;
-        private ToolTip mToolTip;
-		private bool mNoInstructionRendered;
-		private bool mUpdating;
-		private string mLastRenderedSourceLine;
-		private string mCaption;
+        bool mEditMode;
+        IFullWord mInstructionWord;
+        long mLastRenderedMagnitude;
+        Word.Signs mLastRenderedSign;
+        ToolTip mToolTip;
+        bool mNoInstructionRendered;
+        bool mUpdating;
+        string mLastRenderedSourceLine;
+        string mCaption;
 
-		private MenuItem mShowAddressMenuItem;
-		private MenuItem mShowIndexedAddressMenuItem;
-		private ContextMenu mContextMenu;
+        MenuItem mShowAddressMenuItem;
+        MenuItem mShowIndexedAddressMenuItem;
+        ContextMenu mContextMenu;
 
         public int MemoryMinIndex { get; set; }
         public int MemoryMaxIndex { get; set; }
@@ -66,13 +66,13 @@ namespace MixGui.Components
 
 			UpdateLayout();
 
-			base.DetectUrls = false;
-			base.TextChanged += this_TextChanged;
-			base.KeyPress += this_KeyPress;
-			base.KeyDown += this_KeyDown;
-			base.LostFocus += this_LostFocus;
-			base.Enter += this_Enter;
-			base.ReadOnlyChanged += this_ReadOnlyChanged;
+			DetectUrls = false;
+			TextChanged += this_TextChanged;
+			KeyPress += this_KeyPress;
+			KeyDown += this_KeyDown;
+			LostFocus += this_LostFocus;
+			Enter += this_Enter;
+			ReadOnlyChanged += this_ReadOnlyChanged;
 
 			mShowAddressMenuItem = new MenuItem("Show address", showAddressMenuItem_Click);
 
@@ -107,274 +107,274 @@ namespace MixGui.Components
 
         protected void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
-        private void this_Enter(object sender, EventArgs e) => checkContentsEditable();
+        void this_Enter(object sender, EventArgs e) => checkContentsEditable();
 
-        private void showIndexedAddressMenuItem_Click(object sender, EventArgs e) => 
+        void showIndexedAddressMenuItem_Click(object sender, EventArgs e) =>
             OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(getAddress(), mInstructionWord[MixInstruction.IndexByte])));
 
-        private void showAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(getAddress()));
+        void showAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(getAddress()));
 
-        private void addTextElement(string element, bool markAsError)
-		{
-			if (element != "")
-			{
-				int textLength = TextLength;
-				base.AppendText(element);
-				base.Select(textLength, element.Length);
-				base.SelectionColor = markAsError ? mErrorTextColor : ForeColor;
-			}
-		}
+        void addTextElement(string element, bool markAsError)
+        {
+            if (element != "")
+            {
+                int textLength = TextLength;
+                AppendText(element);
+                Select(textLength, element.Length);
+                SelectionColor = markAsError ? mErrorTextColor : ForeColor;
+            }
+        }
 
-		private string getAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
-		{
-			string caption = "";
-			int findingNumber = 1;
+        string getAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
+        {
+            string caption = "";
+            int findingNumber = 1;
 
-			foreach (AssemblyFinding finding in findings)
-			{
-				string fieldLabel = "";
+            foreach (AssemblyFinding finding in findings)
+            {
+                string fieldLabel = "";
 
-				if (finding.Severity == Severity.Error)
-				{
-					switch (finding.LineSection)
-					{
-						case LineSection.OpField:
-							markAssemblyError(finding.StartCharIndex, finding.Length);
-							fieldLabel = "mnemonic";
+                if (finding.Severity == Severity.Error)
+                {
+                    switch (finding.LineSection)
+                    {
+                        case LineSection.OpField:
+                            markAssemblyError(finding.StartCharIndex, finding.Length);
+                            fieldLabel = "mnemonic";
 
-							break;
+                            break;
 
-						case LineSection.AddressField:
-							if (finding.Length != 0)
-							{
-								markAssemblyError((line.OpField.Length + finding.StartCharIndex) + 1, finding.Length);
-							}
-							else
-							{
-								markAssemblyError(line.OpField.Length + 1, line.AddressField.Length);
-							}
-							fieldLabel = "address";
+                        case LineSection.AddressField:
+                            if (finding.Length != 0)
+                            {
+                                markAssemblyError((line.OpField.Length + finding.StartCharIndex) + 1, finding.Length);
+                            }
+                            else
+                            {
+                                markAssemblyError(line.OpField.Length + 1, line.AddressField.Length);
+                            }
+                            fieldLabel = "address";
 
-							break;
+                            break;
 
-						case LineSection.CommentField:
+                        case LineSection.CommentField:
 
-							continue;
+                            continue;
 
-						case LineSection.EntireLine:
-							markAssemblyError(0, TextLength);
-							fieldLabel = "instruction";
+                        case LineSection.EntireLine:
+                            markAssemblyError(0, TextLength);
+                            fieldLabel = "instruction";
 
-							break;
-					}
-				}
+                            break;
+                    }
+                }
 
-				if (findingNumber != 1)
-				{
-					caption = string.Concat(caption, Environment.NewLine, findingNumber, ". ");
-				}
+                if (findingNumber != 1)
+                {
+                    caption = string.Concat(caption, Environment.NewLine, findingNumber, ". ");
+                }
 
-				if (findingNumber == 2)
-				{
-					caption = "1. " + caption;
-				}
+                if (findingNumber == 2)
+                {
+                    caption = "1. " + caption;
+                }
 
-				caption = caption + fieldLabel + ": " + finding.Message;
+                caption = caption + fieldLabel + ": " + finding.Message;
 
-				findingNumber++;
-			}
+                findingNumber++;
+            }
 
-			return findingNumber == 2
-				? string.Concat("Instruction error: ", caption)
-				: string.Concat("Instruction errors:", Environment.NewLine, caption);
-		}
+            return findingNumber == 2
+                ? string.Concat("Instruction error: ", caption)
+                : string.Concat("Instruction errors:", Environment.NewLine, caption);
+        }
 
-		private bool assembleInstruction(bool markErrors)
-		{
-			AssemblyFindingCollection findings;
-			ParsedSourceLine line;
-			mEditMode = false;
+        bool assembleInstruction(bool markErrors)
+        {
+            AssemblyFindingCollection findings;
+            ParsedSourceLine line;
+            mEditMode = false;
 
-			InstructionInstanceBase instance = Assembler.Assemble(Text, MemoryAddress, out line, Symbols, out findings);
+            InstructionInstanceBase instance = Assembler.Assemble(Text, MemoryAddress, out line, Symbols, out findings);
 
-			if (instance != null && !(instance is MixInstruction.Instance))
-			{
-				findings.Add(new AssemblyError(0, LineSection.OpField, 0, line.OpField.Length, new ValidationError("only MIX instruction mnemonics supported")));
-				instance = null;
-			}
+            if (instance != null && !(instance is MixInstruction.Instance))
+            {
+                findings.Add(new AssemblyError(0, LineSection.OpField, 0, line.OpField.Length, new ValidationError("only MIX instruction mnemonics supported")));
+                instance = null;
+            }
 
-			if (markErrors && findings.Count > 0)
-			{
-				mUpdating = true;
+            if (markErrors && findings.Count > 0)
+            {
+                mUpdating = true;
 
-				int selectionStart = base.SelectionStart;
-				int selectionLength = SelectionLength;
+                int selectionStart = SelectionStart;
+                int selectionLength = SelectionLength;
 
-				base.SuspendLayout();
+                SuspendLayout();
 
-				base.Text = line.OpField + " " + line.AddressField;
+                base.Text = line.OpField + " " + line.AddressField;
 
-				mCaption = getAssemblyErrorsCaption(line, findings);
-				mToolTip?.SetToolTip(this, mCaption);
+                mCaption = getAssemblyErrorsCaption(line, findings);
+                mToolTip?.SetToolTip(this, mCaption);
 
-				base.Select(selectionStart, selectionLength);
-				base.ResumeLayout();
+                Select(selectionStart, selectionLength);
+                ResumeLayout();
 
-				mUpdating = false;
-			}
+                mUpdating = false;
+            }
 
-			if (instance == null)
-			{
-				return false;
-			}
+            if (instance == null)
+            {
+                return false;
+            }
 
-			FullWord oldValue = new FullWord(mInstructionWord.LongValue);
-			mInstructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
+            var oldValue = new FullWord(mInstructionWord.LongValue);
+            mInstructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
 
-			Update();
+            Update();
 
-			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new FullWord(mInstructionWord.LongValue)));
+            OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new FullWord(mInstructionWord.LongValue)));
 
-			return true;
-		}
+            return true;
+        }
 
-		private bool checkContentsEditable()
-		{
-			if (!base.ReadOnly && (mNoInstructionRendered || mInstructionWord.IsEmpty))
-			{
-				base.Text = "";
-				setEditMode();
+        bool checkContentsEditable()
+        {
+            if (!ReadOnly && (mNoInstructionRendered || mInstructionWord.IsEmpty))
+            {
+                base.Text = "";
+                setEditMode();
 
-				return false;
-			}
+                return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		private bool itemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item)
-		{
-			if (errors != null)
-			{
-				foreach (InstanceValidationError error in errors)
-				{
-					if (error.Source == item)
-					{
-						return true;
-					}
-				}
-			}
+        bool itemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item)
+        {
+            if (errors != null)
+            {
+                foreach (InstanceValidationError error in errors)
+                {
+                    if (error.Source == item)
+                    {
+                        return true;
+                    }
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		private void markAssemblyError(int startCharIndex, int length)
-		{
-			int selectionStart = base.SelectionStart;
-			int selectionLength = SelectionLength;
+        void markAssemblyError(int startCharIndex, int length)
+        {
+            int selectionStart = SelectionStart;
+            int selectionLength = SelectionLength;
 
-			if (length != 0)
-			{
-				base.Select(startCharIndex, length);
-				base.SelectionColor = mErrorTextColor;
-				base.Select(selectionStart, selectionLength);
-			}
-		}
+            if (length != 0)
+            {
+                Select(startCharIndex, length);
+                SelectionColor = mErrorTextColor;
+                Select(selectionStart, selectionLength);
+            }
+        }
 
-		private void setEditMode()
-		{
-			base.SuspendLayout();
+        void setEditMode()
+        {
+            SuspendLayout();
 
-			ForeColor = mEditingTextColor;
+            ForeColor = mEditingTextColor;
 
-			if (TextLength > 0)
-			{
-				int selectionStart = base.SelectionStart;
-				int selectionLength = SelectionLength;
+            if (TextLength > 0)
+            {
+                int selectionStart = SelectionStart;
+                int selectionLength = SelectionLength;
 
-				base.Select(0, TextLength);
-				base.SelectionColor = ForeColor;
-				base.Select(selectionStart, selectionLength);
-			}
+                Select(0, TextLength);
+                SelectionColor = ForeColor;
+                Select(selectionStart, selectionLength);
+            }
 
-			base.ResumeLayout();
+            ResumeLayout();
 
-			mCaption = null;
+            mCaption = null;
             mToolTip?.SetToolTip(this, null);
 
-			ContextMenu = null;
+            ContextMenu = null;
 
-			mLastRenderedMagnitude = unrendered;
-			mLastRenderedSign = Word.Signs.Positive;
-			mEditMode = true;
-		}
+            mLastRenderedMagnitude = unrendered;
+            mLastRenderedSign = Word.Signs.Positive;
+            mEditMode = true;
+        }
 
-		private void showNonInstruction(string text)
-		{
-			mNoInstructionRendered = true;
+        void showNonInstruction(string text)
+        {
+            mNoInstructionRendered = true;
 
-			if (!Focused || checkContentsEditable())
-			{
-				base.SuspendLayout();
-				base.Text = text;
-				base.Select(0, TextLength);
-				base.SelectionFont = new Font(Font.Name, Font.Size, FontStyle.Italic, Font.Unit, Font.GdiCharSet);
+            if (!Focused || checkContentsEditable())
+            {
+                SuspendLayout();
+                base.Text = text;
+                Select(0, TextLength);
+                SelectionFont = new Font(Font.Name, Font.Size, FontStyle.Italic, Font.Unit, Font.GdiCharSet);
 
-				ForeColor = mImmutableTextColor;
-				SelectionLength = 0;
+                ForeColor = mImmutableTextColor;
+                SelectionLength = 0;
 
-				base.Select(0, 0);
-				base.ResumeLayout();
-			}
-		}
+                Select(0, 0);
+                ResumeLayout();
+            }
+        }
 
-		private void this_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				if (mEditMode)
-				{
-					assembleInstruction(true);
-				}
-				e.Handled = true;
-			}
-		}
+        void this_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (mEditMode)
+                {
+                    assembleInstruction(true);
+                }
+                e.Handled = true;
+            }
+        }
 
-		private void this_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == (char)Keys.Escape)
-			{
-				e.Handled = true;
-				mEditMode = false;
-				Update();
-			}
-		}
+        void this_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                e.Handled = true;
+                mEditMode = false;
+                Update();
+            }
+        }
 
-		private void this_LostFocus(object sender, EventArgs e)
-		{
-			if (!mEditMode || !assembleInstruction(false))
-			{
-				mEditMode = false;
-				Update();
-			}
-		}
+        void this_LostFocus(object sender, EventArgs e)
+        {
+            if (!mEditMode || !assembleInstruction(false))
+            {
+                mEditMode = false;
+                Update();
+            }
+        }
 
-		private void this_ReadOnlyChanged(object sender, EventArgs e)
-		{
-			if (Focused)
-			{
-				checkContentsEditable();
-			}
-		}
+        void this_ReadOnlyChanged(object sender, EventArgs e)
+        {
+            if (Focused)
+            {
+                checkContentsEditable();
+            }
+        }
 
-		private void this_TextChanged(object sender, EventArgs e)
-		{
-			if (!mUpdating && !mEditMode)
-			{
-				setEditMode();
-			}
-		}
+        void this_TextChanged(object sender, EventArgs e)
+        {
+            if (!mUpdating && !mEditMode)
+            {
+                setEditMode();
+            }
+        }
 
-		public new string Text
+        public new string Text
 		{
 			get
 			{
@@ -390,49 +390,49 @@ namespace MixGui.Components
 			}
 		}
 
-		private int getAddress()
-		{
-			MixByte[] addressBytes = new MixByte[MixInstruction.AddressByteCount];
+        int getAddress()
+        {
+            MixByte[] addressBytes = new MixByte[MixInstruction.AddressByteCount];
 
-			for (int i = 0; i < MixInstruction.AddressByteCount; i++)
-			{
-				addressBytes[i] = mInstructionWord[i];
-			}
+            for (int i = 0; i < MixInstruction.AddressByteCount; i++)
+            {
+                addressBytes[i] = mInstructionWord[i];
+            }
 
-			int address = (int)Word.BytesToLong(addressBytes);
+            var address = (int)Word.BytesToLong(addressBytes);
 
-			if (mInstructionWord.Sign.IsNegative())
-			{
-				address = -address;
-			}
+            if (mInstructionWord.Sign.IsNegative())
+            {
+                address = -address;
+            }
 
-			return address;
-		}
+            return address;
+        }
 
-		private void handleNoInstructionSet()
-		{
-			showNonInstruction("No instructionset loaded");
+        void handleNoInstructionSet()
+        {
+            showNonInstruction("No instructionset loaded");
 
-			ContextMenu = null;
-			mUpdating = false;
-			mLastRenderedMagnitude = unrendered;
-			mLastRenderedSign = Word.Signs.Positive;
-		}
+            ContextMenu = null;
+            mUpdating = false;
+            mLastRenderedMagnitude = unrendered;
+            mLastRenderedSign = Word.Signs.Positive;
+        }
 
-		private void handleNoInstruction(string caption)
-		{
-			showNonInstruction("No instruction");
+        void handleNoInstruction(string caption)
+        {
+            showNonInstruction("No instruction");
 
-			mCaption = caption;
+            mCaption = caption;
             mToolTip?.SetToolTip(this, caption);
 
-			ContextMenu = null;
-			mUpdating = false;
-		}
+            ContextMenu = null;
+            mUpdating = false;
+        }
 
-		public new void Update()
+        public new void Update()
 		{
-			IMemoryFullWord memoryFullWord = mInstructionWord as IMemoryFullWord;
+			var memoryFullWord = mInstructionWord as IMemoryFullWord;
 			string sourceLine = memoryFullWord != null ? memoryFullWord.SourceLine : null;
 
 			if (mEditMode || (mLastRenderedMagnitude == mInstructionWord.MagnitudeLongValue
@@ -465,9 +465,9 @@ namespace MixGui.Components
 
 			MixInstruction.Instance instance = instruction.CreateInstance(mInstructionWord);
 			InstanceValidationError[] errors = instance.Validate();
-			InstructionText text = new InstructionText(instance);
+			var text = new InstructionText(instance);
 
-			base.SuspendLayout();
+			SuspendLayout();
 			base.Text = "";
 
 			ForeColor = mLastRenderedSourceLine != null ? mLoadedInstructionTextColor : mRenderedTextColor;
@@ -478,7 +478,7 @@ namespace MixGui.Components
 
 			if (TextLength > 0)
 			{
-				base.Select(TextLength, 0);
+				Select(TextLength, 0);
 			}
 
 			string caption = getAddressErrorsCaption(errors);
@@ -497,37 +497,37 @@ namespace MixGui.Components
 			ContextMenu = mContextMenu;
 
 			base.Update();
-			base.ResumeLayout();
+			ResumeLayout();
 
 			mNoInstructionRendered = false;
 			mUpdating = false;
 		}
 
-		private string getAddressErrorsCaption(InstanceValidationError[] errors)
-		{
-			if (errors == null)
-			{
-				return null;
-			}
+        string getAddressErrorsCaption(InstanceValidationError[] errors)
+        {
+            if (errors == null)
+            {
+                return null;
+            }
 
-			StringBuilder captionBuilder = new StringBuilder();
-			int errorNumber = 1;
+            var captionBuilder = new StringBuilder();
+            int errorNumber = 1;
 
-			foreach (InstanceValidationError error in errors)
-			{
-				if (errorNumber != 1)
-				{
+            foreach (InstanceValidationError error in errors)
+            {
+                if (errorNumber != 1)
+                {
                     captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
-				}
+                }
 
-				if (errorNumber == 2)
-				{
-					captionBuilder.Insert(0, "1. ");
-				}
+                if (errorNumber == 2)
+                {
+                    captionBuilder.Insert(0, "1. ");
+                }
 
                 captionBuilder.AppendFormat("address: {0}", error.CompiledMessage);
-				errorNumber++;
-			}
+                errorNumber++;
+            }
 
             if (errorNumber == 2)
             {
@@ -539,11 +539,11 @@ namespace MixGui.Components
             }
 
             return captionBuilder.ToString();
-		}
+        }
 
-		public void UpdateLayout()
+        public void UpdateLayout()
 		{
-			base.SuspendLayout();
+			SuspendLayout();
 			mUpdating = true;
 
 			Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
@@ -558,7 +558,7 @@ namespace MixGui.Components
 			BackColor = mLastRenderedSourceLine != null ? mLoadedInstructionBackgroundColor : mEditorBackgroundColor;
 
 			mUpdating = false;
-			base.ResumeLayout();
+			ResumeLayout();
 		}
 
 		public IFullWord InstructionWord

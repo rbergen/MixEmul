@@ -3,7 +3,7 @@ using MixLib.Type;
 namespace MixAssembler.Value
 {
 	// This class represents the fieldspec part of an instruction's address section
-	public class FPartValue
+	public static class FPartValue
 	{
 		public const long Default = long.MinValue;
 		public const char TagCharacter = '(';

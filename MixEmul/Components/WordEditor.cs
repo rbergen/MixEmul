@@ -9,19 +9,18 @@ namespace MixGui.Components
 {
 	public class WordEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
 	{
-		private const long unrendered = long.MinValue;
+        const long unrendered = long.MinValue;
 
-		private Container components = null;
-		private MixByteTextBox[] mByteTextBoxes;
-		private int mFocusByte;
-		private int mFocusByteSelLength;
-		private int mFocusByteSelStart;
-		private bool mIncludeSign;
-		private long mLastRenderedMagnitude;
-		private Word.Signs mLastRenderedSign;
-		private bool mReadOnly;
-		private Button mSignButton;
-		private IWord mWord;
+        MixByteTextBox[] mByteTextBoxes;
+        int mFocusByte;
+        int mFocusByteSelLength;
+        int mFocusByteSelStart;
+        bool mIncludeSign;
+        long mLastRenderedMagnitude;
+        Word.Signs mLastRenderedSign;
+        bool mReadOnly;
+        Button mSignButton;
+        IWord mWord;
 
         public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
@@ -64,9 +63,9 @@ namespace MixGui.Components
 			mSignButton.Text = "" + mWord.Sign.ToChar();
 			mSignButton.FlatStyle = FlatStyle.Flat;
 			mSignButton.Enabled = !ReadOnly;
-			mSignButton.Click += new EventHandler(mSignButton_Click);
-			mSignButton.KeyPress += new KeyPressEventHandler(editor_keyPress);
-			mSignButton.KeyDown += new KeyEventHandler(keyDown);
+			mSignButton.Click += mSignButton_Click;
+			mSignButton.KeyPress += editor_keyPress;
+			mSignButton.KeyDown += keyDown;
 
 			initializeComponent();
 		}
@@ -80,209 +79,200 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        private void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
-		{
-			Word oldValue = new Word(mWord.Magnitude, mWord.Sign);
-			mWord[textBox.Index] = args.NewValue;
-			mLastRenderedMagnitude = mWord.MagnitudeLongValue;
-			mLastRenderedSign = mWord.Sign;
+        void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
+        {
+            var oldValue = new Word(mWord.Magnitude, mWord.Sign);
+            mWord[textBox.Index] = args.NewValue;
+            mLastRenderedMagnitude = mWord.MagnitudeLongValue;
+            mLastRenderedSign = mWord.Sign;
 
-			Word newValue = new Word(mWord.Magnitude, mWord.Sign);
-			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
-		}
+            var newValue = new Word(mWord.Magnitude, mWord.Sign);
+            OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
+        }
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				components?.Dispose();
-			}
 
-			base.Dispose(disposing);
-		}
+        void editor_Click(object sender, EventArgs e)
+        {
+            var box = (MixByteTextBox)sender;
 
-		private void editor_Click(object sender, EventArgs e)
-		{
-			MixByteTextBox box = (MixByteTextBox)sender;
+            if (box.SelectionLength == 0)
+            {
+                box.Select(0, 2);
+            }
+        }
 
-			if (box.SelectionLength == 0)
-			{
-				box.Select(0, 2);
-			}
-		}
+        void editor_keyPress(object sender, KeyPressEventArgs e)
+        {
+            char keyChar = e.KeyChar;
 
-		private void editor_keyPress(object sender, KeyPressEventArgs e)
-		{
-			char keyChar = e.KeyChar;
+            if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative())))
+            {
+                negateSign();
+            }
+        }
 
-			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative())))
-			{
-				negateSign();
-			}
-		}
+        void editor_Leave(object sender, EventArgs e)
+        {
+            var box = (MixByteTextBox)sender;
+            mFocusByte = box.Index;
+            mFocusByteSelStart = box.SelectionStart;
+            mFocusByteSelLength = box.SelectionLength;
+        }
 
-		private void editor_Leave(object sender, EventArgs e)
-		{
-			MixByteTextBox box = (MixByteTextBox)sender;
-			mFocusByte = box.Index;
-			mFocusByteSelStart = box.SelectionStart;
-			mFocusByteSelLength = box.SelectionLength;
-		}
+        void initializeComponent()
+        {
+            mFocusByte = 0;
+            mFocusByteSelStart = 0;
+            mFocusByteSelLength = 0;
+            int tabIndex = 0;
+            int width = 0;
 
-		private void initializeComponent()
-		{
-			mFocusByte = 0;
-			mFocusByteSelStart = 0;
-			mFocusByteSelLength = 0;
-			int tabIndex = 0;
-			int width = 0;
+            SuspendLayout();
+            if (IncludeSign)
+            {
+                Controls.Add(mSignButton);
+                tabIndex++;
+                width += mSignButton.Width - 1;
+            }
 
-			base.SuspendLayout();
-			if (IncludeSign)
-			{
-				base.Controls.Add(mSignButton);
-				tabIndex++;
-				width += mSignButton.Width - 1;
-			}
+            mByteTextBoxes = new MixByteTextBox[ByteCount];
+            for (int i = 0; i < ByteCount; i++)
+            {
+                var box = new MixByteTextBox(i);
+                box.Location = new Point(width, 0);
+                box.Name = "MixByteEditor" + i;
+                box.MixByteValue = mWord[i];
+                box.ReadOnly = ReadOnly;
+                box.TabIndex = tabIndex;
+                box.ValueChanged += byteValueChanged;
+                box.Click += editor_Click;
+                box.Leave += editor_Leave;
+                box.KeyPress += editor_keyPress;
+                box.KeyDown += keyDown;
 
-			mByteTextBoxes = new MixByteTextBox[ByteCount];
-			for (int i = 0; i < ByteCount; i++)
-			{
-				MixByteTextBox box = new MixByteTextBox(i);
-				box.Location = new Point(width, 0);
-				box.Name = "MixByteEditor" + i;
-				box.MixByteValue = mWord[i];
-				box.ReadOnly = ReadOnly;
-				box.TabIndex = tabIndex;
-				box.ValueChanged += new MixByteTextBox.ValueChangedEventHandler(byteValueChanged);
-				box.Click += new EventHandler(editor_Click);
-				box.Leave += new EventHandler(editor_Leave);
-				box.KeyPress += new KeyPressEventHandler(editor_keyPress);
-				box.KeyDown += new KeyEventHandler(keyDown);
+                mByteTextBoxes[i] = box;
 
-				mByteTextBoxes[i] = box;
+                Controls.Add(box);
 
-				base.Controls.Add(box);
+                tabIndex++;
+                width += box.Width - 1;
+            }
 
-				tabIndex++;
-				width += box.Width - 1;
-			}
+            Name = "WordEditor";
+            Size = new Size(width + 1, 21);
+            ResumeLayout(false);
+            Update();
+        }
 
-			base.Name = "WordEditor";
-			base.Size = new Size(width + 1, 21);
-			base.ResumeLayout(false);
-			Update();
-		}
+        void keyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers != Keys.None)
+            {
+                return;
+            }
 
-		private void keyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Modifiers != Keys.None)
-			{
-				return;
-			}
+            MixByteTextBox box;
 
-			MixByteTextBox box;
-
-			switch (e.KeyCode)
-			{
-				case Keys.Prior:
-				case Keys.Next:
-				case Keys.Up:
-				case Keys.Down:
+            switch (e.KeyCode)
+            {
+                case Keys.Prior:
+                case Keys.Next:
+                case Keys.Up:
+                case Keys.Down:
                     NavigationKeyDown?.Invoke(this, e);
                     break;
 
-				case Keys.Right:
-					if (sender == mSignButton && ByteCount > 0)
-					{
-						mByteTextBoxes[0].Focus();
-						mByteTextBoxes[0].Select(0, 2);
-						break;
-					}
+                case Keys.Right:
+                    if (sender == mSignButton && ByteCount > 0)
+                    {
+                        mByteTextBoxes[0].Focus();
+                        mByteTextBoxes[0].Select(0, 2);
+                        break;
+                    }
 
-					box = (MixByteTextBox)sender;
-					if (box.SelectionStart + box.SelectionLength == box.TextLength)
-					{
+                    box = (MixByteTextBox)sender;
+                    if (box.SelectionStart + box.SelectionLength == box.TextLength)
+                    {
 
-						int byteIndex = Array.IndexOf(mByteTextBoxes, box);
-						if (byteIndex < ByteCount - 1)
-						{
-							mByteTextBoxes[byteIndex + 1].Focus();
-							mByteTextBoxes[byteIndex + 1].Select(0, 2);
-						}
-						else
+                        int byteIndex = Array.IndexOf(mByteTextBoxes, box);
+                        if (byteIndex < ByteCount - 1)
+                        {
+                            mByteTextBoxes[byteIndex + 1].Focus();
+                            mByteTextBoxes[byteIndex + 1].Select(0, 2);
+                        }
+                        else
                         {
                             NavigationKeyDown?.Invoke(this, e);
                         }
                     }
 
-					break;
+                    break;
 
-				case Keys.Left:
-					if (sender == mSignButton)
-					{
+                case Keys.Left:
+                    if (sender == mSignButton)
+                    {
                         NavigationKeyDown?.Invoke(this, e);
 
                         e.Handled = true;
-						break;
-					}
+                        break;
+                    }
 
-					box = (MixByteTextBox)sender;
-					if (box.SelectionStart + box.SelectionLength == 0)
-					{
-						int byteIndex = Array.IndexOf(mByteTextBoxes, box);
-						if (byteIndex > 0)
-						{
-							mByteTextBoxes[byteIndex - 1].Focus();
-							mByteTextBoxes[byteIndex - 1].Select(0, 2);
-						}
-						else
-						{
-							mSignButton.Focus();
-						}
-					}
+                    box = (MixByteTextBox)sender;
+                    if (box.SelectionStart + box.SelectionLength == 0)
+                    {
+                        int byteIndex = Array.IndexOf(mByteTextBoxes, box);
+                        if (byteIndex > 0)
+                        {
+                            mByteTextBoxes[byteIndex - 1].Focus();
+                            mByteTextBoxes[byteIndex - 1].Select(0, 2);
+                        }
+                        else
+                        {
+                            mSignButton.Focus();
+                        }
+                    }
 
-					break;
-			}
-		}
+                    break;
+            }
+        }
 
-		private void mSignButton_Click(object sender, EventArgs e)
-		{
-			negateSign();
-			if (mByteTextBoxes.Length > 0)
-			{
-				mByteTextBoxes[mFocusByte].Focus();
-				mByteTextBoxes[mFocusByte].SelectionStart = mFocusByteSelStart;
-				mByteTextBoxes[mFocusByte].SelectionLength = mFocusByteSelLength;
-			}
-		}
+        void mSignButton_Click(object sender, EventArgs e)
+        {
+            negateSign();
+            if (mByteTextBoxes.Length > 0)
+            {
+                mByteTextBoxes[mFocusByte].Focus();
+                mByteTextBoxes[mFocusByte].SelectionStart = mFocusByteSelStart;
+                mByteTextBoxes[mFocusByte].SelectionLength = mFocusByteSelLength;
+            }
+        }
 
-		private void negateSign()
-		{
-			Word.Signs sign = mWord.Sign;
-			mWord.InvertSign();
-			mLastRenderedMagnitude = mWord.MagnitudeLongValue;
-			mLastRenderedSign = mWord.Sign;
+        void negateSign()
+        {
+            Word.Signs sign = mWord.Sign;
+            mWord.InvertSign();
+            mLastRenderedMagnitude = mWord.MagnitudeLongValue;
+            mLastRenderedSign = mWord.Sign;
             mSignButton.Text = "" + mWord.Sign.ToChar();
 
-			Word oldValue = new Word(mWord.Magnitude, sign);
-			Word newValue = new Word(mWord.Magnitude, mWord.Sign);
-			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
-		}
+            var oldValue = new Word(mWord.Magnitude, sign);
+            var newValue = new Word(mWord.Magnitude, mWord.Sign);
+            OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
+        }
 
-		private void reinitializeComponent()
-		{
-			base.Controls.Clear();
+        void reinitializeComponent()
+        {
+            Controls.Clear();
 
-			foreach (MixByteTextBox box in mByteTextBoxes)
-			{
-				box.Dispose();
-			}
+            foreach (MixByteTextBox box in mByteTextBoxes)
+            {
+                box.Dispose();
+            }
 
-			initializeComponent();
-		}
+            initializeComponent();
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			if (mLastRenderedMagnitude != mWord.MagnitudeLongValue || mLastRenderedSign != mWord.Sign || mLastRenderedMagnitude == unrendered)
 			{

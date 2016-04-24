@@ -6,7 +6,7 @@ namespace MixAssembler.Value
 	/// <summary>
 	/// This class represents an atomic expression (number, location counter or value symbol)
 	/// </summary>
-	public class AtomicExpressionValue
+	public static class AtomicExpressionValue
 	{
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{

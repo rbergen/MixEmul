@@ -8,24 +8,24 @@ namespace MixGui.Components
 {
 	public class LogListView : UserControl
 	{
-		private const int moduleFieldIndex = 1;
-		private const int addressFieldIndex = 2;
-		private const int noAddress = -1;
+        const int moduleFieldIndex = 1;
+        const int addressFieldIndex = 2;
+        const int noAddress = -1;
 
-		private ColumnHeader mSeverityColumn = new ColumnHeader();
-		private ColumnHeader mModuleColumn = new ColumnHeader();
-		private ColumnHeader mAddressColumn = new ColumnHeader();
-		private ColumnHeader mTitleColumn = new ColumnHeader();
-		private ColumnHeader mMessageColumn = new ColumnHeader();
+        ColumnHeader mSeverityColumn = new ColumnHeader();
+        ColumnHeader mModuleColumn = new ColumnHeader();
+        ColumnHeader mAddressColumn = new ColumnHeader();
+        ColumnHeader mTitleColumn = new ColumnHeader();
+        ColumnHeader mMessageColumn = new ColumnHeader();
 
-		private Button mClearButton = new Button();
-		private ListView mListView = new ListView();
+        Button mClearButton = new Button();
+        readonly ListView mListView = new ListView();
 
-		public event AddressSelectedHandler AddressSelected;
+        public event AddressSelectedHandler AddressSelected;
 
 		public LogListView()
 		{
-			base.SuspendLayout();
+			SuspendLayout();
 
 			mSeverityColumn.Text = "Severity";
 			mSeverityColumn.Width = 70;
@@ -53,22 +53,22 @@ namespace MixGui.Components
 			mListView.TabIndex = 0;
 			mListView.View = View.Details;
 			mListView.BorderStyle = BorderStyle.FixedSingle;
-			mListView.DoubleClick += new EventHandler(doubleClick);
-			mListView.KeyPress += new KeyPressEventHandler(mListView_KeyPress);
+			mListView.DoubleClick += doubleClick;
+			mListView.KeyPress += mListView_KeyPress;
 
 			mClearButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
 			mClearButton.Name = "mClearButton";
 			mClearButton.TabIndex = 1;
 			mClearButton.Text = "&Clear";
-			mClearButton.Location = new Point(base.Width - mClearButton.Width, 0);
-			mClearButton.Click += new EventHandler(mClearButton_Click);
+			mClearButton.Location = new Point(Width - mClearButton.Width, 0);
+			mClearButton.Click += mClearButton_Click;
 
-			mListView.Size = new Size(mClearButton.Width - 8, base.Size.Height);
+			mListView.Size = new Size(mClearButton.Width - 8, Size.Height);
 
-			base.Controls.Add(mListView);
-			base.Controls.Add(mClearButton);
-			base.Name = "mLogListView";
-			base.ResumeLayout(false);
+			Controls.Add(mListView);
+			Controls.Add(mClearButton);
+			Name = "mLogListView";
+			ResumeLayout(false);
 		}
 
         public void AddLogLine(LogLine line) => 
@@ -76,9 +76,9 @@ namespace MixGui.Components
 
         protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
-        private void doubleClick(object sender, EventArgs args) => addressSelected();
+        void doubleClick(object sender, EventArgs args) => addressSelected();
 
-        private void mClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
+        void mClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
 
         void mListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
@@ -89,16 +89,16 @@ namespace MixGui.Components
 			}
 		}
 
-		private void addressSelected()
-		{
-			int selectedAddress = SelectedAddress;
-			if (selectedAddress != noAddress)
-			{
-				OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
-			}
-		}
+        void addressSelected()
+        {
+            int selectedAddress = SelectedAddress;
+            if (selectedAddress != noAddress)
+            {
+                OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
+            }
+        }
 
-		public string SelectedModule
+        public string SelectedModule
 		{
 			get
 			{

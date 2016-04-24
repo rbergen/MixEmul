@@ -6,10 +6,10 @@ namespace MixLib.Type
 {
 	public class MixByteCollection : IMixByteCollection
 	{
-		private int mMaxByteCount;
-		private MixByte[] mBytes;
+        readonly int mMaxByteCount;
+        readonly MixByte[] mBytes;
 
-		public MixByteCollection(int maxByteCount)
+        public MixByteCollection(int maxByteCount)
 		{
 			mMaxByteCount = maxByteCount;
 			mBytes = new MixByte[mMaxByteCount];
@@ -53,7 +53,7 @@ namespace MixLib.Type
 			if (asChars)
 			{
 
-				StringBuilder builder = new StringBuilder();
+				var builder = new StringBuilder();
 
 				foreach (MixByte mixByte in mBytes)
 				{
@@ -82,7 +82,7 @@ namespace MixLib.Type
 
 		public object Clone()
 		{
-			MixByteCollection clone = new MixByteCollection(mMaxByteCount);
+			var clone = new MixByteCollection(mMaxByteCount);
 			for (int i = 0; i < mMaxByteCount; i++)
 			{
 				clone.mBytes[i] = mBytes[i].ByteValue;

@@ -9,12 +9,12 @@ namespace MixGui.Components
 {
 	public class DeviceWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private Label mWordIndexLabel;
-		private FullWordEditor mFullWordEditor;
-		private int mWordIndex;
-		private IFullWord mDeviceWord;
+        Label mWordIndexLabel;
+        FullWordEditor mFullWordEditor;
+        int mWordIndex;
+        IFullWord mDeviceWord;
 
-		public event KeyEventHandler NavigationKeyDown;
+        public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
 		public DeviceWordEditor()
@@ -47,51 +47,51 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        private void mFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
+        void mFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
 
-        private void initializeComponent()
-		{
-			base.SuspendLayout();
+        void initializeComponent()
+        {
+            SuspendLayout();
 
-			mWordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mWordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mWordIndexLabel.Location = new Point(0, 4);
-			mWordIndexLabel.Name = "mWordIndexLabel";
-			mWordIndexLabel.Size = new Size(30, 13);
-			mWordIndexLabel.TabIndex = 0;
-			mWordIndexLabel.Text = "00:";
+            mWordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+            mWordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+            mWordIndexLabel.Location = new Point(0, 4);
+            mWordIndexLabel.Name = "mWordIndexLabel";
+            mWordIndexLabel.Size = new Size(30, 13);
+            mWordIndexLabel.TabIndex = 0;
+            mWordIndexLabel.Text = "00:";
 
-			mFullWordEditor.Location = new Point(mWordIndexLabel.Right, 2);
-			mFullWordEditor.Name = "mFullWordEditor";
-			mFullWordEditor.TabIndex = 1;
-			mFullWordEditor.ValueChanged += new WordEditorValueChangedEventHandler(mFullWordEditor_ValueChanged);
-			mFullWordEditor.NavigationKeyDown += new KeyEventHandler(keyDown);
+            mFullWordEditor.Location = new Point(mWordIndexLabel.Right, 2);
+            mFullWordEditor.Name = "mFullWordEditor";
+            mFullWordEditor.TabIndex = 1;
+            mFullWordEditor.ValueChanged += mFullWordEditor_ValueChanged;
+            mFullWordEditor.NavigationKeyDown += keyDown;
 
-			base.Controls.Add(mWordIndexLabel);
-			base.Controls.Add(mFullWordEditor);
-			base.Name = "DeviceWordEditor";
-			base.Size = new Size(mFullWordEditor.Right + 2, mFullWordEditor.Height + 3);
-			base.KeyDown += new KeyEventHandler(keyDown);
-			base.ResumeLayout(false);
-		}
+            Controls.Add(mWordIndexLabel);
+            Controls.Add(mFullWordEditor);
+            Name = "DeviceWordEditor";
+            Size = new Size(mFullWordEditor.Right + 2, mFullWordEditor.Height + 3);
+            KeyDown += keyDown;
+            ResumeLayout(false);
+        }
 
-		private void keyDown(object sender, KeyEventArgs e)
-		{
-			switch (e.KeyCode)
-			{
-				case Keys.Prior:
-				case Keys.Next:
-				case Keys.Up:
-				case Keys.Down:
+        void keyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Prior:
+                case Keys.Next:
+                case Keys.Up:
+                case Keys.Down:
                     NavigationKeyDown?.Invoke(this, e);
                     break;
 
-				case Keys.Right:
-					break;
-			}
-		}
+                case Keys.Right:
+                    break;
+            }
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			mFullWordEditor.Update();
 			base.Update();
@@ -127,7 +127,7 @@ namespace MixGui.Components
 			{
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "DeviceWord may not be set to null");
+					throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
 				}
 
 				mDeviceWord = value;

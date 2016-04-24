@@ -9,9 +9,8 @@ namespace MixLib
 	public class Memory : IMemory, IEnumerable
 	{
 		public static readonly FieldSpec DefaultFieldSpec = new FieldSpec(0, 5);
-
-		private SortedDictionary<int, MemoryFullWord> mWords;
-		private object mSyncRoot;
+        readonly SortedDictionary<int, MemoryFullWord> mWords;
+        readonly object mSyncRoot;
 
         public int MinWordIndex { get; set; }
         public int MaxWordIndex { get; set; }
@@ -95,10 +94,7 @@ namespace MixLib
 						return result;
 					}
 
-					if (index != startIndex)
-					{
-						virtualSearchPerformed = true;
-					}
+					virtualSearchPerformed |= index != startIndex;
 				}
 
 				if (!virtualSearchPerformed)
@@ -166,7 +162,7 @@ namespace MixLib
 			{
 				if (index < MinWordIndex || index > MaxWordIndex)
 				{
-					throw new IndexOutOfRangeException(string.Format("index must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
+					throw new ArgumentOutOfRangeException(nameof(index), string.Format("value must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
 				}
 
 				MemoryFullWord word;

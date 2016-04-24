@@ -8,16 +8,16 @@ namespace MixGui.Components
 {
 	public class AssemblyFindingListView : UserControl
 	{
-		private ListView mFindingsListView = new ListView();
-		private ColumnHeader mLineNumberColumn = new ColumnHeader();
-		private ColumnHeader mMessageColumn = new ColumnHeader();
-		private ColumnHeader mSeverityColumn = new ColumnHeader();
+        ListView mFindingsListView = new ListView();
+        ColumnHeader mLineNumberColumn = new ColumnHeader();
+        ColumnHeader mMessageColumn = new ColumnHeader();
+        ColumnHeader mSeverityColumn = new ColumnHeader();
 
-		public event SelectionChangedHandler SelectionChanged;
+        public event SelectionChangedHandler SelectionChanged;
 
 		public AssemblyFindingListView()
 		{
-			base.SuspendLayout();
+			SuspendLayout();
 
 			mSeverityColumn.Text = "Severity";
 			mSeverityColumn.Width = 70;
@@ -35,28 +35,28 @@ namespace MixGui.Components
 			mFindingsListView.Location = new Point(0, 0);
 			mFindingsListView.MultiSelect = false;
 			mFindingsListView.Name = "mFindingsListView";
-			mFindingsListView.Size = base.Size;
+			mFindingsListView.Size = Size;
 			mFindingsListView.TabIndex = 0;
 			mFindingsListView.View = View.Details;
-			mFindingsListView.SelectedIndexChanged += new EventHandler(selectedIndexChanged);
+			mFindingsListView.SelectedIndexChanged += selectedIndexChanged;
 
-			base.Controls.Add(mFindingsListView);
-			base.Name = "AssemblyFindingListView";
-			base.ResumeLayout(false);
+			Controls.Add(mFindingsListView);
+			Name = "AssemblyFindingListView";
+			ResumeLayout(false);
 		}
 
         protected void OnSelectionChanged(SelectionChangedEventArgs args) => SelectionChanged?.Invoke(this, args);
 
-        private void selectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
+        void selectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
 
-        private void addFinding(AssemblyFinding finding)
-		{
-			ListViewItem item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity);
-			item.Tag = finding;
-			mFindingsListView.Items.Add(item);
-		}
+        void addFinding(AssemblyFinding finding)
+        {
+            var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity);
+            item.Tag = finding;
+            mFindingsListView.Items.Add(item);
+        }
 
-		public AssemblyFindingCollection Findings
+        public AssemblyFindingCollection Findings
 		{
 			set
 			{
@@ -64,7 +64,7 @@ namespace MixGui.Components
 
 				if (value != null)
 				{
-					List<AssemblyFinding> list = new List<AssemblyFinding>(value);
+					var list = new List<AssemblyFinding>(value);
 					list.Sort(new findingComparer());
 
 					foreach (AssemblyFinding finding in list)
@@ -106,37 +106,37 @@ namespace MixGui.Components
 			}
 		}
 
-		private class findingComparer : IComparer<AssemblyFinding>
+        class findingComparer : IComparer<AssemblyFinding>
+        {
+            public int Compare(AssemblyFinding x, AssemblyFinding y)
+            {
+                int comparison = y.Severity - x.Severity;
+                if (comparison != 0)
+                {
+                    return comparison;
+                }
+
+                comparison = x.LineNumber - y.LineNumber;
+                if (comparison != 0)
+                {
+                    return comparison;
+                }
+
+                comparison = x.LineSection - y.LineSection;
+                if (comparison != 0)
+                {
+                    return comparison;
+                }
+
+                return string.Compare(x.Message, y.Message, StringComparison.Ordinal);
+            }
+        }
+
+        public class SelectionChangedEventArgs : EventArgs
 		{
-			public int Compare(AssemblyFinding x, AssemblyFinding y)
-			{
-				int comparison = y.Severity - x.Severity;
-				if (comparison != 0)
-				{
-					return comparison;
-				}
+            readonly AssemblyFinding mSelectedFinding;
 
-				comparison = x.LineNumber - y.LineNumber;
-				if (comparison != 0)
-				{
-					return comparison;
-				}
-
-				comparison = x.LineSection - y.LineSection;
-				if (comparison != 0)
-				{
-					return comparison;
-				}
-
-				return x.Message.CompareTo(y.Message);
-			}
-		}
-
-		public class SelectionChangedEventArgs : EventArgs
-		{
-			private AssemblyFinding mSelectedFinding;
-
-			public SelectionChangedEventArgs(AssemblyFinding finding)
+            public SelectionChangedEventArgs(AssemblyFinding finding)
 			{
 				mSelectedFinding = finding;
 			}

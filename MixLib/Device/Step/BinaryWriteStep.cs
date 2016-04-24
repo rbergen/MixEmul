@@ -9,10 +9,10 @@ namespace MixLib.Device.Step
 {
 	public class BinaryWriteStep : StreamStep
 	{
-		private int mRecordWordCount;
-		private const string statusDescription = "Writing binary data";
+        int mRecordWordCount;
+        const string statusDescription = "Writing binary data";
 
-		public BinaryWriteStep(int recordWordCount)
+        public BinaryWriteStep(int recordWordCount)
 		{
 			mRecordWordCount = recordWordCount;
 		}
@@ -53,42 +53,42 @@ namespace MixLib.Device.Step
 			stream.Flush();
 		}
 
-		private new class Instance : StreamStep.Instance
-		{
-			private int mRecordWordCount;
-			private MixByte[] mWriteBytes;
+        new class Instance : StreamStep.Instance
+        {
+            int mRecordWordCount;
+            MixByte[] mWriteBytes;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount)
-				: base(streamStatus)
-			{
-				mRecordWordCount = recordWordCount;
-			}
+            public Instance(StreamStatus streamStatus, int recordWordCount)
+                : base(streamStatus)
+            {
+                mRecordWordCount = recordWordCount;
+            }
 
-			public override bool Tick()
-			{
-				if (StreamStatus.Stream != null && mWriteBytes != null)
-				{
-					try
-					{
-						WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
+            public override bool Tick()
+            {
+                if (StreamStatus.Stream != null && mWriteBytes != null)
+                {
+                    try
+                    {
+                        WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
                         StreamStatus.UpdatePosition();
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-					}
-				}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
+                }
 
-				return true;
-			}
+                return true;
+            }
 
-			public override object InputFromPreviousStep
-			{
-				set
-				{
-					mWriteBytes = (MixByte[])value;
-				}
-			}
-		}
-	}
+            public override object InputFromPreviousStep
+            {
+                set
+                {
+                    mWriteBytes = (MixByte[])value;
+                }
+            }
+        }
+    }
 }

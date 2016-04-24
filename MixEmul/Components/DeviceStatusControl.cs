@@ -8,16 +8,16 @@ namespace MixGui.Components
 {
 	public class DeviceStatusControl : UserControl
 	{
-		private ContextMenu mContextMenu;
-		private MenuItem mContextSeparator;
-		private MixDevice mDevice;
-		private Label mIndexLabel;
-		private MenuItem mInputMenuItem;
-		private MenuItem mOutputMenuItem;
-		private MenuItem mResetMenuItem;
-		private Label mStatusLabel;
+        ContextMenu mContextMenu;
+        MenuItem mContextSeparator;
+        MixDevice mDevice;
+        Label mIndexLabel;
+        MenuItem mInputMenuItem;
+        MenuItem mOutputMenuItem;
+        MenuItem mResetMenuItem;
+        Label mStatusLabel;
 
-		public ToolTip ToolTip { get; set; }
+        public ToolTip ToolTip { get; set; }
 
 		public DeviceStatusControl()
 			: this(null)
@@ -36,7 +36,7 @@ namespace MixGui.Components
 			mContextSeparator = new MenuItem();
 			mResetMenuItem = new MenuItem();
 
-			base.SuspendLayout();
+			SuspendLayout();
 
 			mIndexLabel.Location = new Point(0, 0);
 			mIndexLabel.Name = "mIndexLabel";
@@ -67,36 +67,36 @@ namespace MixGui.Components
 			mResetMenuItem.DefaultItem = true;
 			mResetMenuItem.Index = 3;
 			mResetMenuItem.Text = "Reset";
-			mResetMenuItem.Click += new EventHandler(mResetMenuItem_Click);
+			mResetMenuItem.Click += mResetMenuItem_Click;
 
 			mContextMenu.MenuItems.AddRange(new MenuItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
 			ContextMenu = mContextMenu;
 
-			base.Controls.Add(mIndexLabel);
-			base.Controls.Add(mStatusLabel);
-			base.Name = "DeviceStatusControl";
-			base.Size = new Size(mIndexLabel.Width + mStatusLabel.Width, 16);
-			base.ResumeLayout(false);
+			Controls.Add(mIndexLabel);
+			Controls.Add(mStatusLabel);
+			Name = "DeviceStatusControl";
+			Size = new Size(mIndexLabel.Width + mStatusLabel.Width, 16);
+			ResumeLayout(false);
 
 			UpdateLayout();
 		}
 
         void control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
 
-        private void mResetMenuItem_Click(object sender, EventArgs e)
-		{
-			if (mDevice != null)
-			{
-				mDevice.Reset();
-				Update();
-			}
-		}
+        void mResetMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mDevice != null)
+            {
+                mDevice.Reset();
+                Update();
+            }
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			if (Device == null)
 			{
-				base.SuspendLayout();
+				SuspendLayout();
 
 				mIndexLabel.Text = "";
 				mStatusLabel.BackColor = Color.Gray;
@@ -109,11 +109,11 @@ namespace MixGui.Components
 				mInputMenuItem.Checked = false;
 				mOutputMenuItem.Checked = false;
 
-				base.ResumeLayout();
+				ResumeLayout();
 			}
 			else
 			{
-				base.SuspendLayout();
+				SuspendLayout();
 
 				mIndexLabel.Text = Device.Id + ":";
 				mStatusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
@@ -125,7 +125,7 @@ namespace MixGui.Components
 				mInputMenuItem.Checked = Device.SupportsInput;
 				mOutputMenuItem.Checked = Device.SupportsOutput;
 
-				base.ResumeLayout();
+				ResumeLayout();
 			}
 		}
 

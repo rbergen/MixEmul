@@ -7,14 +7,14 @@ namespace MixLib
 {
 	public class InstructionSet
 	{
-		private SortedDictionary<string, MixInstruction> mMnemonicInstructionMap = new SortedDictionary<string, MixInstruction>();
-		private SortedDictionary<byte, List<MixInstruction>> mOpcodeInstructionMap = new SortedDictionary<byte, List<MixInstruction>>();
-		private static InstructionSet mInstance;
+        readonly SortedDictionary<string, MixInstruction> mMnemonicInstructionMap = new SortedDictionary<string, MixInstruction>();
+        SortedDictionary<byte, List<MixInstruction>> mOpcodeInstructionMap = new SortedDictionary<byte, List<MixInstruction>>();
+        static InstructionSet mInstance;
 
-		public InstructionSet()
+        public InstructionSet()
 		{
-			MetaFieldSpec fullWordMetaSpec = new MetaFieldSpec(true, FullWordRegister.DefaultFieldSpec);
-			MetaFieldSpec indexMetaSpec = new MetaFieldSpec(true, IndexRegister.DefaultFieldSpec);
+			var fullWordMetaSpec = new MetaFieldSpec(true, FullWordRegister.DefaultFieldSpec);
+			var indexMetaSpec = new MetaFieldSpec(true, IndexRegister.DefaultFieldSpec);
 
 			FieldSpec[] rangeSpecs = new FieldSpec[8];
 			for (int i = 0; i < rangeSpecs.Length; i++)
@@ -203,7 +203,7 @@ namespace MixLib
 			executor = MiscInstructions.Move;
 			addInstruction("MOVE", 7, new MetaFieldSpec(false, rangeSpecs[1]), 1, executor, validator);
 
-			MetaFieldSpec ioMetaSpec = new MetaFieldSpec(MetaFieldSpec.Presences.Mandatory, false);
+			var ioMetaSpec = new MetaFieldSpec(MetaFieldSpec.Presences.Mandatory, false);
 			executor = IOInstructions.JumpIfBusy;
 			validator = IOInstructions.InstanceValid;
 			addInstruction("JBUS", 34, ioMetaSpec, 1, executor, validator);
@@ -250,27 +250,27 @@ namespace MixLib
 			addInstruction("INT", 5, new FieldSpec(9), 2, executor, null);
 		}
 
-        private void addInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
+        void addInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
             addInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
 
-        private void addInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
+        void addInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) =>
             addInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
 
-        private void addInstruction(string mnemonic, MixInstruction instruction)
-		{
-			mMnemonicInstructionMap.Add(mnemonic, instruction);
-			List<MixInstruction> list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);
-			if (instruction.FieldSpec == null)
-			{
-				list.Insert(0, instruction);
-			}
-			else
-			{
-				list.Add(instruction);
-			}
-		}
+        void addInstruction(string mnemonic, MixInstruction instruction)
+        {
+            mMnemonicInstructionMap.Add(mnemonic, instruction);
+            List<MixInstruction> list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);
+            if (instruction.FieldSpec == null)
+            {
+                list.Insert(0, instruction);
+            }
+            else
+            {
+                list.Add(instruction);
+            }
+        }
 
-		public static InstructionSet Instance
+        public static InstructionSet Instance
 		{
 			get
 			{
@@ -328,7 +328,7 @@ namespace MixLib
 		{
 			get
 			{
-				List<MixInstruction> list = new List<MixInstruction>();
+				var list = new List<MixInstruction>();
 
 				foreach (MixInstruction instruction in mMnemonicInstructionMap.Values)
 				{

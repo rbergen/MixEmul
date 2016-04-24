@@ -9,7 +9,7 @@ namespace MixAssembler.Symbol
 		public const long MinValue = -MaxValue;
 		public const int MaxNameLength = 10;
 
-		private bool mIsDefined;
+        bool mIsDefined;
 
         public long Magnitude { get; private set; }
         public Word.Signs Sign { get; private set; }

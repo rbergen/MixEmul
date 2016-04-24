@@ -21,7 +21,8 @@
     <Win32Resource>
     </Win32Resource>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <RootNamespace>MixGui</RootNamespace>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileUpgradeFlags>

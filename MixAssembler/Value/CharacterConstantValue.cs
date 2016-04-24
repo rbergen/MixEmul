@@ -2,7 +2,7 @@ using MixLib.Type;
 
 namespace MixAssembler.Value
 {
-	public class CharacterConstantValue
+	public static class CharacterConstantValue
 	{
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
@@ -26,7 +26,7 @@ namespace MixAssembler.Value
 				text = text + new string(' ', FullWord.ByteCount - text.Length);
 			}
 
-			FullWord word = new FullWord();
+			var word = new FullWord();
 			for (int i = 0; i < FullWord.ByteCount; i++)
 			{
 				word[i] = text[i];

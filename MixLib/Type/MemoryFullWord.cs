@@ -11,7 +11,6 @@ namespace MixLib.Type
         public long ProfilingExecutionCount { get; private set; }
 
         public MemoryFullWord(int index)
-			: base()
 		{
 			Index = index;
 		}
@@ -40,7 +39,7 @@ namespace MixLib.Type
 
 				if (index >= 0)
 				{
-					return new SearchResult() { Field = FieldTypes.Value, FieldIndex = index };
+					return new SearchResult { Field = FieldTypes.Value, FieldIndex = index };
 				}
 			}
 
@@ -50,7 +49,7 @@ namespace MixLib.Type
 
 				if (index >= 0)
 				{
-					return new SearchResult() { Field = FieldTypes.Chars, FieldIndex = index };
+					return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
 				}
 			}
 
@@ -72,7 +71,7 @@ namespace MixLib.Type
 
 				if (index >= 0)
 				{
-					return new SearchResult() { Field = FieldTypes.Instruction, FieldIndex = index };
+					return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
 				}
 			}
 

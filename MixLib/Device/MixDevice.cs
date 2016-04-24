@@ -8,12 +8,12 @@ namespace MixLib.Device
 {
 	public abstract class MixDevice
 	{
-		private const string idleDescription = "Idle";
-		private const string readingDescription = "Reading from memory";
-		private const string writingDescription = "Writing to memory";
+        const string idleDescription = "Idle";
+        const string readingDescription = "Reading from memory";
+        const string writingDescription = "Writing to memory";
 
-		private InOutputOperands mCurrentOperands;
-		private DeviceStep.Instance mCurrentStepInstance;
+        InOutputOperands mCurrentOperands;
+        DeviceStep.Instance mCurrentStepInstance;
 
         protected DeviceStep CurrentStep { get; private set; }
         protected DeviceStep FirstInputDeviceStep { get; set; }
@@ -40,11 +40,11 @@ namespace MixLib.Device
 
         protected virtual DeviceStep.Instance GetCurrentStepInstance() => CurrentStep.CreateInstance();
 
-        public override string ToString() => ShortName + ": " + Id.ToString();
+        public override string ToString() => ShortName + ": " + Id;
 
         protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
-        private void stepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+        void stepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
 
         public virtual void Reset()
 		{
@@ -92,7 +92,7 @@ namespace MixLib.Device
 			{
 				mCurrentStepInstance = GetCurrentStepInstance();
 				mCurrentStepInstance.Operands = mCurrentOperands;
-				mCurrentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
+				mCurrentStepInstance.ReportingEvent += stepInstance_Reporting;
 			}
 
             // Current step still busy? If so, we're done here
@@ -115,7 +115,7 @@ namespace MixLib.Device
             // Move on to next I/O step
             DeviceStep.Instance currentStepInstance = GetCurrentStepInstance();
 			currentStepInstance.Operands = mCurrentOperands;
-			currentStepInstance.ReportingEvent += new ReportingEventHandler(stepInstance_Reporting);
+			currentStepInstance.ReportingEvent += stepInstance_Reporting;
 			currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;
 			mCurrentStepInstance = currentStepInstance;
 		}
@@ -124,9 +124,9 @@ namespace MixLib.Device
 
 		protected class ReadFromMemoryStep : TickingStep
 		{
-			private bool mIncludeSign;
+            bool mIncludeSign;
 
-			public ReadFromMemoryStep(bool includeSign, int recordWordCount)
+            public ReadFromMemoryStep(bool includeSign, int recordWordCount)
 				: base(recordWordCount)
 			{
 				mIncludeSign = includeSign;
@@ -136,56 +136,56 @@ namespace MixLib.Device
 
             protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
 
-			private new class Instance : TickingStep.Instance
-			{
-				private MixByte[] mBytesForReading;
-				private bool mIncludeSign;
-				private int mWordByteCount;
+            new class Instance : TickingStep.Instance
+            {
+                readonly MixByte[] mBytesForReading;
+                readonly bool mIncludeSign;
+                readonly int mWordByteCount;
 
-				public Instance(int tickCount, bool includeSign)
-					: base(tickCount)
-				{
-					mIncludeSign = includeSign;
-					mWordByteCount = FullWord.ByteCount;
+                public Instance(int tickCount, bool includeSign)
+                    : base(tickCount)
+                {
+                    mIncludeSign = includeSign;
+                    mWordByteCount = FullWord.ByteCount;
 
-					if (includeSign)
-					{
-						mWordByteCount++;
-					}
+                    if (includeSign)
+                    {
+                        mWordByteCount++;
+                    }
 
-					mBytesForReading = new MixByte[TickCount * mWordByteCount];
-				}
+                    mBytesForReading = new MixByte[TickCount * mWordByteCount];
+                }
 
                 public override object OutputForNextStep => mBytesForReading;
 
                 protected override void ProcessTick()
-				{
-					int currentAddress = Operands.MValue + CurrentTick;
+                {
+                    int currentAddress = Operands.MValue + CurrentTick;
 
-					if (currentAddress <= Operands.Memory.MaxWordIndex)
-					{
-						int currentByte = mWordByteCount * CurrentTick;
+                    if (currentAddress <= Operands.Memory.MaxWordIndex)
+                    {
+                        int currentByte = mWordByteCount * CurrentTick;
 
-						if (mIncludeSign)
-						{
-							mBytesForReading[currentByte] = Operands.Memory[currentAddress].Sign.ToChar();
-							currentByte++;
-						}
+                        if (mIncludeSign)
+                        {
+                            mBytesForReading[currentByte] = Operands.Memory[currentAddress].Sign.ToChar();
+                            currentByte++;
+                        }
 
-						for (int index = 0; index < FullWord.ByteCount; index++)
-						{
-							mBytesForReading[currentByte + index] = Operands.Memory[currentAddress][index];
-						}
-					}
-				}
-			}
-		}
+                        for (int index = 0; index < FullWord.ByteCount; index++)
+                        {
+                            mBytesForReading[currentByte + index] = Operands.Memory[currentAddress][index];
+                        }
+                    }
+                }
+            }
+        }
 
 		protected class WriteToMemoryStep : TickingStep
 		{
-			private bool mIncludeSign;
+            bool mIncludeSign;
 
-			public WriteToMemoryStep(bool includeSign, int recordWordCount)
+            public WriteToMemoryStep(bool includeSign, int recordWordCount)
 				: base(recordWordCount)
 			{
 				mIncludeSign = includeSign;
@@ -195,60 +195,60 @@ namespace MixLib.Device
 
             protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
 
-			private new class Instance : TickingStep.Instance
-			{
-				private MixByte[] mBytesForWriting;
-				private bool mIncludeSign;
-				private int mWordByteCount;
+            new class Instance : TickingStep.Instance
+            {
+                readonly MixByte[] mBytesForWriting;
+                bool mIncludeSign;
+                int mWordByteCount;
 
-				public Instance(int tickCount, bool includeSign)
-					: base(tickCount)
-				{
-					mIncludeSign = includeSign;
-					mWordByteCount = FullWord.ByteCount;
+                public Instance(int tickCount, bool includeSign)
+                    : base(tickCount)
+                {
+                    mIncludeSign = includeSign;
+                    mWordByteCount = FullWord.ByteCount;
 
-					if (includeSign)
-					{
-						mWordByteCount++;
-					}
+                    if (includeSign)
+                    {
+                        mWordByteCount++;
+                    }
 
-					mBytesForWriting = new MixByte[TickCount * mWordByteCount];
-				}
+                    mBytesForWriting = new MixByte[TickCount * mWordByteCount];
+                }
 
-				protected override void ProcessTick()
-				{
-					int currentAddress = Operands.MValue + CurrentTick;
+                protected override void ProcessTick()
+                {
+                    int currentAddress = Operands.MValue + CurrentTick;
 
-					if (currentAddress < Operands.Memory.MaxWordIndex)
-					{
-						int currentByte = mWordByteCount * CurrentTick;
+                    if (currentAddress < Operands.Memory.MaxWordIndex)
+                    {
+                        int currentByte = mWordByteCount * CurrentTick;
 
-						if (mIncludeSign)
-						{
+                        if (mIncludeSign)
+                        {
                             Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
-							currentByte++;
-						}
-						else
-						{
+                            currentByte++;
+                        }
+                        else
+                        {
                             Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
-						}
+                        }
 
-						for (int index = 0; index < FullWord.ByteCount; index++)
-						{
+                        for (int index = 0; index < FullWord.ByteCount; index++)
+                        {
                             Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
-						}
-					}
-				}
+                        }
+                    }
+                }
 
-				public override object InputFromPreviousStep
-				{
-					set
-					{
-						MixByte[] sourceArray = (MixByte[])value;
-						Array.Copy(sourceArray, mBytesForWriting, (sourceArray.Length > mBytesForWriting.Length) ? mBytesForWriting.Length : sourceArray.Length);
-					}
-				}
-			}
-		}
+                public override object InputFromPreviousStep
+                {
+                    set
+                    {
+                        var sourceArray = (MixByte[])value;
+                        Array.Copy(sourceArray, mBytesForWriting, (sourceArray.Length > mBytesForWriting.Length) ? mBytesForWriting.Length : sourceArray.Length);
+                    }
+                }
+            }
+        }
 	}
 }

@@ -14,21 +14,21 @@ namespace MixLib.Type
 		public FullWord(long value)
 			: this()
 		{
-			base.LongValue = value;
+			LongValue = value;
 		}
 
 		public FullWord(Word.Signs sign, long magnitude)
 			: this()
 		{
-			base.MagnitudeLongValue = magnitude;
-			base.Sign = sign;
+			MagnitudeLongValue = magnitude;
+			Sign = sign;
 		}
 
 		public static implicit operator FullWord(long value) => new FullWord(value);
 
 		public override Object Clone()
 		{
-			FullWord copy = new FullWord();
+			var copy = new FullWord();
 			CopyTo(copy);
 
 			return copy;

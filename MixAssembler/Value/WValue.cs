@@ -5,7 +5,7 @@ namespace MixAssembler.Value
 	/// <summary>
 	/// This class represents a MIX W-value. 
 	/// </summary>
-	public class WValue
+	public static class WValue
 	{
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
@@ -13,8 +13,8 @@ namespace MixAssembler.Value
 			string[] textParts = text.Split(new char[] { ',' });
 			int currentIndex = 0;
 
-			FullWordRegister register = new FullWordRegister();
-			FullWord word = new FullWord(0);
+			var register = new FullWordRegister();
+			var word = new FullWord(0);
 
 			// parse and apply each component to the word that contains the result
 			foreach (string part in textParts)
@@ -58,7 +58,7 @@ namespace MixAssembler.Value
 				}
 
 				// use the fieldspec value to create and check an actual fieldspec
-				FieldSpec fieldSpec = new FieldSpec(fieldValue);
+				var fieldSpec = new FieldSpec(fieldValue);
 				if (!fieldSpec.IsValid)
 				{
 					status.ReportParsingError((sectionCharIndex + currentIndex) + braceIndex, part.Length - braceIndex, "field must be a fieldspec");

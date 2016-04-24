@@ -20,7 +20,7 @@ namespace MixLib.Type
 		{
 			if (value > MaxValue)
 			{
-				throw new ArgumentException("value too large for MixByte", "value");
+				throw new ArgumentException("value too large for MixByte", nameof(value));
 			}
 
 			ByteValue = value;
@@ -68,7 +68,7 @@ namespace MixLib.Type
 
 		public override string ToString() => ByteValue.ToString("D2");
 
-        public override bool Equals(object o) => o is MixByte && ByteValue == ((MixByte)o).ByteValue;
+        public override bool Equals(object obj) => obj is MixByte && ByteValue == ((MixByte)obj).ByteValue;
 
         public override int GetHashCode() => ByteValue.GetHashCode();
 	}

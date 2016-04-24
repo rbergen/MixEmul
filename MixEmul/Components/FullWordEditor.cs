@@ -8,13 +8,13 @@ namespace MixGui.Components
 {
 	public class FullWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private Label mEqualsLabel;
-		private IFullWord mFullWord;
-		private bool mReadOnly;
-		private MixByteCollectionCharTextBox mWordCharTextBox;
-		private WordValueEditor mWordValueEditor;
+        Label mEqualsLabel;
+        IFullWord mFullWord;
+        bool mReadOnly;
+        readonly MixByteCollectionCharTextBox mWordCharTextBox;
+        readonly WordValueEditor mWordValueEditor;
 
-		public event KeyEventHandler NavigationKeyDown;
+        public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
 		public FullWordEditor()
@@ -48,102 +48,102 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        private void initializeComponent()
-		{
-			base.SuspendLayout();
+        void initializeComponent()
+        {
+            SuspendLayout();
 
-			mWordValueEditor.Location = new Point(0, 0);
-			mWordValueEditor.Name = "mWordValueEditor";
-			mWordValueEditor.TabIndex = 2;
-			mWordValueEditor.ValueChanged += mWordValueEditor_ValueChanged;
-			mWordValueEditor.NavigationKeyDown += keyDown;
+            mWordValueEditor.Location = new Point(0, 0);
+            mWordValueEditor.Name = "mWordValueEditor";
+            mWordValueEditor.TabIndex = 2;
+            mWordValueEditor.ValueChanged += mWordValueEditor_ValueChanged;
+            mWordValueEditor.NavigationKeyDown += keyDown;
 
-			mEqualsLabel.Location = new Point(mWordValueEditor.Right, mWordValueEditor.Top + 2);
-			mEqualsLabel.Name = "mFirstEqualsLabel";
-			mEqualsLabel.Size = new Size(10, mWordValueEditor.Height - 2);
-			mEqualsLabel.TabIndex = 3;
-			mEqualsLabel.Text = "=";
+            mEqualsLabel.Location = new Point(mWordValueEditor.Right, mWordValueEditor.Top + 2);
+            mEqualsLabel.Name = "mFirstEqualsLabel";
+            mEqualsLabel.Size = new Size(10, mWordValueEditor.Height - 2);
+            mEqualsLabel.TabIndex = 3;
+            mEqualsLabel.Text = "=";
 
-			mWordCharTextBox.Location = new Point(mEqualsLabel.Right, mWordValueEditor.Top);
-			mWordCharTextBox.Name = "mWordCharTextBox";
-			mWordCharTextBox.Size = new Size(45, mWordValueEditor.Height);
-			mWordCharTextBox.TabIndex = 4;
-			mWordCharTextBox.ValueChanged += mWordCharTextBox_ValueChanged;
-			mWordCharTextBox.NavigationKeyDown += keyDown;
+            mWordCharTextBox.Location = new Point(mEqualsLabel.Right, mWordValueEditor.Top);
+            mWordCharTextBox.Name = "mWordCharTextBox";
+            mWordCharTextBox.Size = new Size(45, mWordValueEditor.Height);
+            mWordCharTextBox.TabIndex = 4;
+            mWordCharTextBox.ValueChanged += mWordCharTextBox_ValueChanged;
+            mWordCharTextBox.NavigationKeyDown += keyDown;
 
-			base.Controls.Add(mWordValueEditor);
-			base.Controls.Add(mEqualsLabel);
-			base.Controls.Add(mWordCharTextBox);
-			base.Name = "FullWordEditor";
-			base.Size = new Size(mWordCharTextBox.Right, mWordCharTextBox.Height);
-			base.KeyDown += keyDown;
-			base.ResumeLayout(false);
-		}
+            Controls.Add(mWordValueEditor);
+            Controls.Add(mEqualsLabel);
+            Controls.Add(mWordCharTextBox);
+            Name = "FullWordEditor";
+            Size = new Size(mWordCharTextBox.Right, mWordCharTextBox.Height);
+            KeyDown += keyDown;
+            ResumeLayout(false);
+        }
 
-		private void keyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Modifiers != Keys.None)
-			{
-				return;
-			}
+        void keyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers != Keys.None)
+            {
+                return;
+            }
 
-			FieldTypes editorField = FieldTypes.Chars;
-			int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;
+            FieldTypes editorField = FieldTypes.Chars;
+            int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;
 
-			if (e is FieldKeyEventArgs)
-			{
-				editorField = ((FieldKeyEventArgs)e).Field;
-				index = ((FieldKeyEventArgs)e).Index;
-			}
+            if (e is FieldKeyEventArgs)
+            {
+                editorField = ((FieldKeyEventArgs)e).Field;
+                index = ((FieldKeyEventArgs)e).Index;
+            }
 
-			switch (e.KeyCode)
-			{
-				case Keys.Prior:
-				case Keys.Next:
-				case Keys.Up:
-				case Keys.Down:
+            switch (e.KeyCode)
+            {
+                case Keys.Prior:
+                case Keys.Next:
+                case Keys.Up:
+                case Keys.Down:
                     NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
                     break;
 
-				case Keys.Right:
-					if (sender == mWordValueEditor)
-					{
-						mWordCharTextBox.Focus();
-					}
-					else if (sender == mWordCharTextBox && NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
+                case Keys.Right:
+                    if (sender == mWordValueEditor)
+                    {
+                        mWordCharTextBox.Focus();
+                    }
+                    else if (sender == mWordCharTextBox && NavigationKeyDown != null)
+                    {
+                        NavigationKeyDown(this, e);
+                    }
 
-					break;
+                    break;
 
-				case Keys.Left:
-					if (sender == mWordCharTextBox)
-					{
-						mWordValueEditor.Focus(FieldTypes.Value, null);
-					}
-					else if (sender == mWordValueEditor && NavigationKeyDown != null)
-					{
-						NavigationKeyDown(this, e);
-					}
+                case Keys.Left:
+                    if (sender == mWordCharTextBox)
+                    {
+                        mWordValueEditor.Focus(FieldTypes.Value, null);
+                    }
+                    else if (sender == mWordValueEditor && NavigationKeyDown != null)
+                    {
+                        NavigationKeyDown(this, e);
+                    }
 
-					break;
-			}
-		}
+                    break;
+            }
+        }
 
-		private void mWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			mWordValueEditor.Update();
-			OnValueChanged(new WordEditorValueChangedEventArgs((Word)args.OldValue, (Word)args.NewValue));
-		}
+        void mWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
+        {
+            mWordValueEditor.Update();
+            OnValueChanged(new WordEditorValueChangedEventArgs((Word)args.OldValue, (Word)args.NewValue));
+        }
 
-		private void mWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
-		{
-			mWordCharTextBox.Update();
-			OnValueChanged(args);
-		}
+        void mWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+        {
+            mWordCharTextBox.Update();
+            OnValueChanged(args);
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			mWordValueEditor.Update();
 			mWordCharTextBox.Update();
@@ -166,7 +166,7 @@ namespace MixGui.Components
 			{
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "FullWord may not be set to null");
+					throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
 				}
 
 				mFullWord = value;

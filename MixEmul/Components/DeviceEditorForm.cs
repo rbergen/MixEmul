@@ -8,19 +8,19 @@ namespace MixGui.Components
 {
 	public partial class DeviceEditorForm : Form
 	{
-		private const int tapesTabIndex = 0;
-		private const int disksTabIndex = 1;
-		private const int cardReaderTabIndex = 2;
-		private const int cardWriterTabIndex = 3;
-		private const int printerTabIndex = 4;
-		private const int paperTapeTabIndex = 5;
+        const int tapesTabIndex = 0;
+        const int disksTabIndex = 1;
+        const int cardReaderTabIndex = 2;
+        const int cardWriterTabIndex = 3;
+        const int printerTabIndex = 4;
+        const int paperTapeTabIndex = 5;
 
-		private Devices mDevices;
-		private int mLastSelectedDisk;
-		private int mLastSelectedTape;
-		private int mLastSelectedDeviceTab;
+        Devices mDevices;
+        int mLastSelectedDisk;
+        int mLastSelectedTape;
+        int mLastSelectedDeviceTab;
 
-		public DeviceEditorForm()
+        public DeviceEditorForm()
 			: this(null)
 		{
 		}
@@ -41,58 +41,58 @@ namespace MixGui.Components
 			mLastSelectedDeviceTab = 0;
 		}
 
-        private void mCloseButton_Click(object sender, EventArgs e) => Hide();
+        void mCloseButton_Click(object sender, EventArgs e) => Hide();
 
-        private void mTapeDeleteButton_Click(object sender, EventArgs e) => 
+        void mTapeDeleteButton_Click(object sender, EventArgs e) =>
             deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
 
-        private void mDiskDeleteButton_Click(object sender, EventArgs e) => 
+        void mDiskDeleteButton_Click(object sender, EventArgs e) =>
             deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
 
-        private void mCardReaderDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card reader", mCardReaderEditor);
+        void mCardReaderDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card reader", mCardReaderEditor);
 
-        private void mCardPunchDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card punch", mCardWriterEditor);
+        void mCardPunchDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card punch", mCardWriterEditor);
 
-        private void mPrinterDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("printer", mPrinterEditor);
+        void mPrinterDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("printer", mPrinterEditor);
 
-        private void mPaperTapeDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("paper tape", mPaperTapeEditor);
+        void mPaperTapeDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("paper tape", mPaperTapeEditor);
 
-        private void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex)
-			{
-				return;
-			}
+        void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex)
+            {
+                return;
+            }
 
-			if (updateDiskControls())
-			{
-				mLastSelectedDisk = mDiskSelectorComboBox.SelectedIndex;
-			}
-			else
-			{
-				mDiskSelectorComboBox.SelectedIndex = mLastSelectedDisk;
-			}
-		}
+            if (updateDiskControls())
+            {
+                mLastSelectedDisk = mDiskSelectorComboBox.SelectedIndex;
+            }
+            else
+            {
+                mDiskSelectorComboBox.SelectedIndex = mLastSelectedDisk;
+            }
+        }
 
-		private void mTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex)
-			{
-				return;
-			}
+        void mTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex)
+            {
+                return;
+            }
 
-			if (updateTapeControls())
-			{
-				mLastSelectedTape = mTapeSelectorComboBox.SelectedIndex;
-			}
-			else
-			{
-				mTapeSelectorComboBox.SelectedIndex = mLastSelectedTape;
-			}
+            if (updateTapeControls())
+            {
+                mLastSelectedTape = mTapeSelectorComboBox.SelectedIndex;
+            }
+            else
+            {
+                mTapeSelectorComboBox.SelectedIndex = mLastSelectedTape;
+            }
 
-		}
+        }
 
-		public new void Hide()
+        public new void Hide()
 		{
 			if (saveCurrentTabRecord())
 			{
@@ -162,25 +162,25 @@ namespace MixGui.Components
 					}
 					else if (device is CardReaderDevice)
 					{
-						FileBasedDevice fileDevice = (FileBasedDevice)device;
+						var fileDevice = (FileBasedDevice)device;
 						mCardReaderEditor.SetDevice(fileDevice);
 						mCardReaderPathBox.Text = fileDevice.FilePath;
 					}
 					else if (device is CardWriterDevice)
 					{
-						FileBasedDevice fileDevice = (FileBasedDevice)device;
+						var fileDevice = (FileBasedDevice)device;
 						mCardWriterEditor.SetDevice(fileDevice);
 						mCardWriterPathBox.Text = fileDevice.FilePath;
 					}
 					else if (device is PrinterDevice)
 					{
-						FileBasedDevice fileDevice = (FileBasedDevice)device;
+						var fileDevice = (FileBasedDevice)device;
 						mPrinterEditor.SetDevice(fileDevice);
 						mPrinterPathBox.Text = fileDevice.FilePath;
 					}
 					else if (device is PaperTapeDevice)
 					{
-						FileBasedDevice fileDevice = (FileBasedDevice)device;
+						var fileDevice = (FileBasedDevice)device;
 						mPaperTapeEditor.SetDevice(fileDevice);
 						mPaperTapePathBox.Text = fileDevice.FilePath;
 					}
@@ -223,30 +223,30 @@ namespace MixGui.Components
 			mPaperTapePathBox.Text = mPaperTapeEditor.Device.FilePath;
 		}
 
-		private bool updateDiskControls()
-		{
-			bool success = true;
+        bool updateDiskControls()
+        {
+            bool success = true;
 
-			if (mLastSelectedDisk != mDiskSelectorComboBox.SelectedIndex)
-			{
-				success = mDiskEditor.SaveCurrentSector();
-			}
+            if (mLastSelectedDisk != mDiskSelectorComboBox.SelectedIndex)
+            {
+                success = mDiskEditor.SaveCurrentSector();
+            }
 
-			if (success)
-			{
-				DiskDevice selectedDisk = (DiskDevice)mDiskSelectorComboBox.SelectedItem;
-				success = mDiskEditor.SetDevice(selectedDisk);
+            if (success)
+            {
+                var selectedDisk = (DiskDevice)mDiskSelectorComboBox.SelectedItem;
+                success = mDiskEditor.SetDevice(selectedDisk);
 
-				if (success)
-				{
-					mDiskPathBox.Text = selectedDisk.FilePath;
-				}
-			}
+                if (success)
+                {
+                    mDiskPathBox.Text = selectedDisk.FilePath;
+                }
+            }
 
-			return success;
-		}
+            return success;
+        }
 
-		public void UpdateLayout()
+        public void UpdateLayout()
 		{
 			mTapeEditor.UpdateLayout();
 			mDiskEditor.UpdateLayout();
@@ -256,129 +256,129 @@ namespace MixGui.Components
 			mPaperTapeEditor.UpdateLayout();
 		}
 
-		private bool updateTapeControls()
-		{
-			bool success = true;
+        bool updateTapeControls()
+        {
+            bool success = true;
 
-			if (mLastSelectedTape != mTapeSelectorComboBox.SelectedIndex)
-			{
-				success = mTapeEditor.SaveCurrentSector();
-			}
+            if (mLastSelectedTape != mTapeSelectorComboBox.SelectedIndex)
+            {
+                success = mTapeEditor.SaveCurrentSector();
+            }
 
-			if (success)
-			{
-				TapeDevice selectedTape = (TapeDevice)mTapeSelectorComboBox.SelectedItem;
-				success = mTapeEditor.SetDevice(selectedTape);
+            if (success)
+            {
+                var selectedTape = (TapeDevice)mTapeSelectorComboBox.SelectedItem;
+                success = mTapeEditor.SetDevice(selectedTape);
 
-				if (success)
-				{
-					mTapePathBox.Text = selectedTape.FilePath;
-				}
-			}
+                if (success)
+                {
+                    mTapePathBox.Text = selectedTape.FilePath;
+                }
+            }
 
-			return success;
-		}
+            return success;
+        }
 
-		private void DeviceEditorForm_ResizeBegin(object sender, EventArgs e)
-		{
-			mDiskEditor.ResizeInProgress = true;
-			mTapeEditor.ResizeInProgress = true;
-			mCardReaderEditor.ResizeInProgress = true;
-			mCardWriterEditor.ResizeInProgress = true;
-			mPrinterEditor.ResizeInProgress = true;
-			mPaperTapeEditor.ResizeInProgress = true;
-		}
+        void DeviceEditorForm_ResizeBegin(object sender, EventArgs e)
+        {
+            mDiskEditor.ResizeInProgress = true;
+            mTapeEditor.ResizeInProgress = true;
+            mCardReaderEditor.ResizeInProgress = true;
+            mCardWriterEditor.ResizeInProgress = true;
+            mPrinterEditor.ResizeInProgress = true;
+            mPaperTapeEditor.ResizeInProgress = true;
+        }
 
-		private void DeviceEditorForm_ResizeEnd(object sender, EventArgs e)
-		{
-			mDiskEditor.ResizeInProgress = false;
-			mTapeEditor.ResizeInProgress = false;
-			mCardReaderEditor.ResizeInProgress = false;
-			mCardWriterEditor.ResizeInProgress = false;
-			mPrinterEditor.ResizeInProgress = false;
-			mPaperTapeEditor.ResizeInProgress = false;
-		}
+        void DeviceEditorForm_ResizeEnd(object sender, EventArgs e)
+        {
+            mDiskEditor.ResizeInProgress = false;
+            mTapeEditor.ResizeInProgress = false;
+            mCardReaderEditor.ResizeInProgress = false;
+            mCardWriterEditor.ResizeInProgress = false;
+            mPrinterEditor.ResizeInProgress = false;
+            mPaperTapeEditor.ResizeInProgress = false;
+        }
 
-		private void DeviceEditorForm_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			e.Cancel = true;
+        void DeviceEditorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
 
-			Hide();
-		}
+            Hide();
+        }
 
-		private void mDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab)
-			{
-				return;
-			}
+        void mDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab)
+            {
+                return;
+            }
 
-			if (saveCurrentTabRecord())
-			{
-				mLastSelectedDeviceTab = mDeviceTypeTabs.SelectedIndex;
-			}
-			else
-			{
-				mDeviceTypeTabs.SelectedIndex = mLastSelectedDeviceTab;
-			}
-		}
+            if (saveCurrentTabRecord())
+            {
+                mLastSelectedDeviceTab = mDeviceTypeTabs.SelectedIndex;
+            }
+            else
+            {
+                mDeviceTypeTabs.SelectedIndex = mLastSelectedDeviceTab;
+            }
+        }
 
-		private bool saveCurrentTabRecord()
-		{
-			bool success = true;
+        bool saveCurrentTabRecord()
+        {
+            bool success = true;
 
-			switch (mLastSelectedDeviceTab)
-			{
-				case tapesTabIndex:
-					success = mTapeEditor.SaveCurrentSector();
-					break;
+            switch (mLastSelectedDeviceTab)
+            {
+                case tapesTabIndex:
+                    success = mTapeEditor.SaveCurrentSector();
+                    break;
 
-				case disksTabIndex:
-					success = mDiskEditor.SaveCurrentSector();
-					break;
+                case disksTabIndex:
+                    success = mDiskEditor.SaveCurrentSector();
+                    break;
 
-				case cardReaderTabIndex:
-					success = mCardReaderEditor.Save();
-					break;
+                case cardReaderTabIndex:
+                    success = mCardReaderEditor.Save();
+                    break;
 
-				case cardWriterTabIndex:
-					success = mCardReaderEditor.Save();
-					break;
+                case cardWriterTabIndex:
+                    success = mCardReaderEditor.Save();
+                    break;
 
-				case printerTabIndex:
-					success = mCardReaderEditor.Save();
-					break;
+                case printerTabIndex:
+                    success = mCardReaderEditor.Save();
+                    break;
 
-				case paperTapeTabIndex:
-					success = mCardReaderEditor.Save();
-					break;
-			}
+                case paperTapeTabIndex:
+                    success = mCardReaderEditor.Save();
+                    break;
+            }
 
-			return success;
-		}
+            return success;
+        }
 
-		private void deleteBinaryDeviceFile(string deviceName, BinaryFileDeviceEditor editor)
-		{
-			if (MessageBox.Show(this, "Are you sure you want to delete the file for device " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-			{
-				editor.DeleteDeviceFile();
-			}
-		}
+        void deleteBinaryDeviceFile(string deviceName, BinaryFileDeviceEditor editor)
+        {
+            if (MessageBox.Show(this, "Are you sure you want to delete the file for device " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                editor.DeleteDeviceFile();
+            }
+        }
 
-		private void deleteTextDeviceFile(string deviceName, TextFileDeviceEditor editor)
-		{
-			if (MessageBox.Show(this, "Are you sure you want to delete the device file for the " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-			{
-				editor.DeleteDeviceFile();
-			}
-		}
+        void deleteTextDeviceFile(string deviceName, TextFileDeviceEditor editor)
+        {
+            if (MessageBox.Show(this, "Are you sure you want to delete the device file for the " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                editor.DeleteDeviceFile();
+            }
+        }
 
-		private void mCardReaderLoadButton_Click(object sender, EventArgs e)
-		{
-			if (mCardReaderLoadFileDialog.ShowDialog(this) == DialogResult.OK)
-			{
-				mCardReaderEditor.LoadDeviceFile(mCardReaderLoadFileDialog.FileName);
-			}
-		}
-	}
+        void mCardReaderLoadButton_Click(object sender, EventArgs e)
+        {
+            if (mCardReaderLoadFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                mCardReaderEditor.LoadDeviceFile(mCardReaderLoadFileDialog.FileName);
+            }
+        }
+    }
 }

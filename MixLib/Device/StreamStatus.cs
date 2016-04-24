@@ -6,9 +6,9 @@ namespace MixLib.Device
 {
 	public class StreamStatus
 	{
-		private string mFileName;
-		private long mPosition;
-		private System.IO.Stream mStream;
+        string mFileName;
+        long mPosition;
+        System.IO.Stream mStream;
 
         public bool PositionSet { get; private set; }
 
@@ -19,20 +19,13 @@ namespace MixLib.Device
 			Reset();
 		}
 
-        private void onReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+        void onReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
         public void CloseStream()
 		{
 			if (mStream != null)
 			{
-				try
-				{
-					mStream.Close();
-				}
-				catch (Exception)
-				{
-				}
-				mStream = null;
+                mStream.Close();
 			}
 		}
 
@@ -109,7 +102,7 @@ namespace MixLib.Device
 			{
 				if (value == null)
 				{
-					throw new ArgumentNullException("value", "stream may not be set to null");
+					throw new ArgumentNullException(nameof(value), "stream may not be set to null");
 				}
 
 				if (mStream != null)

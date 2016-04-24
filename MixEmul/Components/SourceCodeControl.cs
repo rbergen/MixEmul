@@ -12,44 +12,43 @@ namespace MixGui.Components
 {
     public class SourceCodeControl : UserControl
     {
-        private const string lineNumberSeparator = " │ ";
+        const string lineNumberSeparator = " │ ";
 
-        private static readonly Color[] findingColors = new Color[]
-        {
+        static readonly Color[] findingColors = {
             GuiSettings.GetColor(GuiSettings.DebugText),
             GuiSettings.GetColor(GuiSettings.InfoText),
             GuiSettings.GetColor(GuiSettings.WarningText),
             GuiSettings.GetColor(GuiSettings.ErrorText)
         };
 
-        private Color mAddressColor;
-        private Color mCommentColor;
-        private bool mFindingsColored;
-        private List<processedSourceLine> mInstructions;
-        private Color mLineNumberColor;
-        private int mLineNumberLength;
-        private Color mLineNumberSeparatorColor;
-        private Color mLocColor;
-        private AssemblyFinding mMarkedFinding;
-        private Color mOpColor;
-        private RichTextBox mSourceBox = new RichTextBox();
+        Color mAddressColor;
+        Color mCommentColor;
+        bool mFindingsColored;
+        List<processedSourceLine> mInstructions;
+        Color mLineNumberColor;
+        int mLineNumberLength;
+        Color mLineNumberSeparatorColor;
+        Color mLocColor;
+        AssemblyFinding mMarkedFinding;
+        Color mOpColor;
+        RichTextBox mSourceBox = new RichTextBox();
 
         public SourceCodeControl()
         {
-            base.SuspendLayout();
+            SuspendLayout();
 
             mSourceBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
             mSourceBox.Location = new Point(0, 0);
             mSourceBox.Name = "mSourceBox";
             mSourceBox.ReadOnly = true;
-            mSourceBox.Size = base.Size;
+            mSourceBox.Size = Size;
             mSourceBox.TabIndex = 0;
             mSourceBox.Text = "";
             mSourceBox.DetectUrls = false;
 
-            base.Controls.Add(mSourceBox);
-            base.Name = "SourceCodeControl";
-            base.ResumeLayout(false);
+            Controls.Add(mSourceBox);
+            Name = "SourceCodeControl";
+            ResumeLayout(false);
 
             UpdateLayout();
 
@@ -58,7 +57,7 @@ namespace MixGui.Components
             mFindingsColored = false;
         }
 
-        private void addLine(ParsedSourceLine sourceLine)
+        void addLine(ParsedSourceLine sourceLine)
         {
             int count = mInstructions.Count;
             if (mSourceBox.TextLength != 0)
@@ -69,7 +68,7 @@ namespace MixGui.Components
             string lineNumberText = (count + 1).ToString();
             mSourceBox.AppendText(new string(' ', mLineNumberLength - lineNumberText.Length) + lineNumberText + lineNumberSeparator);
 
-            processedSourceLine processedLine = new processedSourceLine(sourceLine, mSourceBox.TextLength);
+            var processedLine = new processedSourceLine(sourceLine, mSourceBox.TextLength);
             mInstructions.Add(processedLine);
 
             if (sourceLine.IsCommentLine)
@@ -93,7 +92,7 @@ namespace MixGui.Components
             applySyntaxColoring(processedLine);
         }
 
-        private void applyFindingColoring(AssemblyFinding finding, markOperation mark)
+        void applyFindingColoring(AssemblyFinding finding, markOperation mark)
         {
             if (finding != null && finding.LineNumber != int.MinValue && finding.LineNumber >= 0 && finding.LineNumber < mInstructions.Count)
             {
@@ -188,7 +187,7 @@ namespace MixGui.Components
             }
         }
 
-        private void applyFindingColoring(AssemblyFindingCollection findings, Severity severity)
+        void applyFindingColoring(AssemblyFindingCollection findings, Severity severity)
         {
             foreach (AssemblyFinding finding in findings)
             {
@@ -199,7 +198,7 @@ namespace MixGui.Components
             }
         }
 
-        private void applySyntaxColoring(processedSourceLine processedLine)
+        void applySyntaxColoring(processedSourceLine processedLine)
         {
             mSourceBox.SelectionStart = (processedLine.LineTextIndex - lineNumberSeparator.Length) - mLineNumberLength;
             mSourceBox.SelectionLength = mLineNumberLength;
@@ -309,13 +308,13 @@ namespace MixGui.Components
                     int lineCount = value.Length;
                     mLineNumberLength = lineCount.ToString().Length;
 
-                    SortedList<int, ParsedSourceLine> parsedLines = new SortedList<int, ParsedSourceLine>();
+                    var parsedLines = new SortedList<int, ParsedSourceLine>();
 
                     foreach (PreInstruction instruction in value)
                     {
                         if (instruction is ParsedSourceLine)
                         {
-                            ParsedSourceLine parsedLine = (ParsedSourceLine)instruction;
+                            var parsedLine = (ParsedSourceLine)instruction;
                             parsedLines.Add(parsedLine.LineNumber, parsedLine);
                         }
                     }
@@ -352,14 +351,14 @@ namespace MixGui.Components
             }
         }
 
-        private enum markOperation
+        enum markOperation
         {
             Unmark,
             None,
             Mark
         }
 
-        private class processedSourceLine
+        class processedSourceLine
         {
             public ParsedSourceLine SourceLine { get; private set; }
             public int LineTextIndex { get; private set; }
@@ -370,10 +369,10 @@ namespace MixGui.Components
                 LineTextIndex = lineTextIndex;
             }
 
-            public int CommentTextIndex => 
+            public int CommentTextIndex =>
                 !SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
 
-            public int LineTextLength => 
+            public int LineTextLength =>
                 (SourceLine.Comment == "" ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
 
             public int LocTextIndex => LineTextIndex;

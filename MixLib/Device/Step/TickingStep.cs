@@ -4,7 +4,7 @@ namespace MixLib.Device.Step
 	{
 		protected int TickCount { get; private set; }
 
-		public TickingStep(int tickCount)
+		protected TickingStep(int tickCount)
 		{
 			TickCount = tickCount;
 		}
@@ -18,7 +18,7 @@ namespace MixLib.Device.Step
 			protected int CurrentTick { get; private set; }
 			protected int TickCount { get; private set; }
 
-			public Instance(int tickCount)
+			protected Instance(int tickCount)
 			{
 				TickCount = tickCount;
 				CurrentTick = 0;

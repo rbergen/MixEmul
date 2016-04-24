@@ -6,15 +6,15 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX store instructions
 	/// </summary>
-	public class StoreInstructions
+	public static class StoreInstructions
 	{
-		private const byte storeOpcodeBase = 24;
-		private const byte storeJOpcode = 32;
+        const byte storeOpcodeBase = 24;
+        const byte storeJOpcode = 32;
 
-		/// <summary>
-		/// Method for performing STx instructions
-		/// </summary>
-		public static bool StoreRegister(ModuleBase module, MixInstruction.Instance instance)
+        /// <summary>
+        /// Method for performing STx instructions
+        /// </summary>
+        public static bool StoreRegister(ModuleBase module, MixInstruction.Instance instance)
 		{
 			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress != int.MinValue)
@@ -45,7 +45,7 @@ namespace MixLib.Instruction
 
 			if (indexedAddress != int.MinValue)
 			{
-				FullWord word = new FullWord();
+				var word = new FullWord();
 				WordField.LoadFromFullWord(instance.FieldSpec, word).ApplyToFullWord(module.Memory[indexedAddress]);
 			}
 

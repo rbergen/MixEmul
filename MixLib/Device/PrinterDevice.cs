@@ -11,15 +11,15 @@ namespace MixLib.Device
 {
 	public class PrinterDevice : FileBasedDevice
 	{
-		private const string shortName = "PRN";
-		private const string fileNamePrefix = "prn";
+        const string shortName = "PRN";
+        const string fileNamePrefix = "prn";
 
-		private const string initializationDescription = "Initializing printer";
-		private const string openingDescription = "Starting write to printer";
-		private const string nextPageDescription = "Skipping to next page";
+        const string initializationDescription = "Initializing printer";
+        const string openingDescription = "Starting write to printer";
+        const string nextPageDescription = "Skipping to next page";
 
-		private const int recordWordCount = 24;
-		public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
+        const int recordWordCount = 24;
+        public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
 
 
 		public PrinterDevice(int id)
@@ -36,7 +36,7 @@ namespace MixLib.Device
 
         public override bool SupportsOutput => true;
 
-        public override void UpdateSettings()
+        public sealed override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PrinterInitialization);
 
@@ -63,77 +63,77 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 		}
 
-		private class openStreamStep : StreamStep
-		{
+        class openStreamStep : StreamStep
+        {
             public override string StatusDescription => openingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
 
-				public override bool Tick()
-				{
-					try
-					{
-						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+                public override bool Tick()
+                {
+                    try
+                    {
+                        var stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 
-						if (!StreamStatus.PositionSet)
-						{
-							stream.Position = stream.Length;
-						}
+                        if (!StreamStatus.PositionSet)
+                        {
+                            stream.Position = stream.Length;
+                        }
 
                         StreamStatus.Stream = stream;
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
-					}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
 
-					return true;
-				}
-			}
-		}
+                    return true;
+                }
+            }
+        }
 
-		private class pageForwardStep : StreamStep
-		{
+        class pageForwardStep : StreamStep
+        {
             public override string StatusDescription => nextPageDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
 
-				public override bool Tick()
-				{
-					if (StreamStatus.Stream != null)
-					{
-						try
-						{
-							StreamWriter writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
-							writer.WriteLine();
-							writer.WriteLine("===================== PAGE BREAK ===================== PAGE BREAK ===================== PAGE BREAK =====================");
-							writer.WriteLine();
-							writer.Flush();
+                public override bool Tick()
+                {
+                    if (StreamStatus.Stream != null)
+                    {
+                        try
+                        {
+                            var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
+                            writer.WriteLine();
+                            writer.WriteLine("===================== PAGE BREAK ===================== PAGE BREAK ===================== PAGE BREAK =====================");
+                            writer.WriteLine();
+                            writer.Flush();
                             StreamStatus.UpdatePosition();
-						}
-						catch (Exception exception)
-						{
-							OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-						}
-					}
+                        }
+                        catch (Exception exception)
+                        {
+                            OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
+                        }
+                    }
 
-					return true;
-				}
-			}
-		}
-	}
+                    return true;
+                }
+            }
+        }
+    }
 }

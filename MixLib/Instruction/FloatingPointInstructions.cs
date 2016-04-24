@@ -7,17 +7,17 @@ namespace MixLib.Instruction
 {
 	public static class FloatingPointInstructions
 	{
-		private const int faddOpcode = 1;
-		private const int fsubOpcode = 2;
-		private const int fmulOpcode = 3;
-		private const int fdivOpcode = 4;
-		private const int fcmpOpcode = 56;
-		public const string FcmpMnemonic = "FCMP";
+        const int faddOpcode = 1;
+        const int fsubOpcode = 2;
+        const int fmulOpcode = 3;
+        const int fdivOpcode = 4;
+        const int fcmpOpcode = 56;
+        public const string FcmpMnemonic = "FCMP";
 
-		private static executionStatus mExecutionStatus;
-		private static int[] mPrenormOpcodes = { faddOpcode, fsubOpcode, fmulOpcode, fdivOpcode };
+        static executionStatus mExecutionStatus;
+        static int[] mPrenormOpcodes = { faddOpcode, fsubOpcode, fmulOpcode, fdivOpcode };
 
-		public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
+        public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
 		{
 			if (!(module is Mix))
 			{
@@ -25,7 +25,7 @@ namespace MixLib.Instruction
 				return false;
 			}
 
-			Mix mix = (Mix)module;
+			var mix = (Mix)module;
 
 			FloatingPointModule floatingPointModule = mix.FloatingPointModule;
 			if (floatingPointModule == null)
@@ -99,10 +99,7 @@ namespace MixLib.Instruction
 				}
 			}
 
-			if (floatingPointModule.Tick())
-			{
-				mExecutionStatus.OverflowDetected = true;
-			}
+			mExecutionStatus.OverflowDetected |= floatingPointModule.Tick();
 
 			switch (floatingPointModule.Status)
 			{
@@ -177,8 +174,8 @@ namespace MixLib.Instruction
 			return false;
 		}
 
-		private class executionStatus
-		{
+        class executionStatus
+        {
             public ModuleBase.RunMode Mode { get; private set; }
             public string Mnemonic { get; private set; }
             public int ProgramCounter { get; private set; }
@@ -188,21 +185,21 @@ namespace MixLib.Instruction
             public bool OverflowDetected { get; set; }
 
             public executionStatus(ModuleBase.RunMode mode, int programCounter, string mnemonic)
-			{
-				Mode = mode;
-				ProgramCounter = programCounter;
-				Mnemonic = mnemonic;
-				CurrentStep = Step.Initialize;
-				OverflowDetected = false;
-			}
+            {
+                Mode = mode;
+                ProgramCounter = programCounter;
+                Mnemonic = mnemonic;
+                CurrentStep = Step.Initialize;
+                OverflowDetected = false;
+            }
 
-			public enum Step
-			{
-				Initialize,
-				PrenormRA,
-				PrenormParameter,
-				ExecuteInstruction
-			}
-		}
-	}
+            public enum Step
+            {
+                Initialize,
+                PrenormRA,
+                PrenormParameter,
+                ExecuteInstruction
+            }
+        }
+    }
 }

@@ -10,14 +10,14 @@ namespace MixLib.Device
 {
 	public class CardReaderDevice : FileBasedDevice
 	{
-		private const string shortName = "CRD";
-		private const string fileNamePrefix = "crdin";
+        const string shortName = "CRD";
+        const string fileNamePrefix = "crdin";
 
-		private const string initializationDescription = "Initializing card reader";
-		private const string openingDescription = "Starting read from card reader";
+        const string initializationDescription = "Initializing card reader";
+        const string openingDescription = "Starting read from card reader";
 
-		private const int recordWordCount = 16;
-		public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
+        const int recordWordCount = 16;
+        public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
 
 		public CardReaderDevice(int id)
 			: base(id, fileNamePrefix)
@@ -33,7 +33,7 @@ namespace MixLib.Device
 
         public override bool SupportsOutput => false;
 
-        public override void UpdateSettings()
+        public sealed override void UpdateSettings()
 		{
 			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardReaderInitialization), initializationDescription);
             FirstInputDeviceStep = nextStep;
@@ -51,40 +51,40 @@ namespace MixLib.Device
             FirstIocDeviceStep = null;
 		}
 
-		private class openStreamStep : StreamStep
-		{
+        class openStreamStep : StreamStep
+        {
             public override string StatusDescription => openingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
-	
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
 
-				public override bool Tick()
-				{
-					try
-					{
-						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
 
-						if (!StreamStatus.PositionSet)
-						{
-							stream.Position = 0L;
-						}
+                public override bool Tick()
+                {
+                    try
+                    {
+                        var stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
+
+                        if (!StreamStatus.PositionSet)
+                        {
+                            stream.Position = 0L;
+                        }
 
                         StreamStatus.Stream = stream;
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
-					}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
 
-					return true;
-				}
-			}
-		}
-	}
+                    return true;
+                }
+            }
+        }
+    }
 }

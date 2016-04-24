@@ -10,14 +10,14 @@ namespace MixLib.Device
 {
 	public class DiskDevice : FileBasedDevice
 	{
-		private const string shortName = "DSK";
-		private const string fileNamePrefix = "disk";
+        const string shortName = "DSK";
+        const string fileNamePrefix = "disk";
 
-		private const string initializationDescription = "Initializing disk";
-		private const string openingDescription = "Starting data transfer with disk";
-		private const string seekingDescription = "Seeking sector";
+        const string initializationDescription = "Initializing disk";
+        const string openingDescription = "Starting data transfer with disk";
+        const string seekingDescription = "Seeking sector";
 
-		public const long SectorCount = 4096;
+        public const long SectorCount = 4096;
 		public const int WordsPerSector = 100;
 
 		public DiskDevice(int id)
@@ -36,7 +36,7 @@ namespace MixLib.Device
 
         public static long CalculateBytePosition(long sector) => sector * WordsPerSector * (FullWord.ByteCount + 1);
 
-        public override void UpdateSettings()
+        public sealed override void UpdateSettings()
 		{
 			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
 
@@ -77,7 +77,7 @@ namespace MixLib.Device
 			FileStream stream = FileBasedDevice.OpenStream(fileName, fileMode, fileAccess, fileShare);
 			long byteCount = SectorCount * WordsPerSector * (FullWord.ByteCount + 1);
 
-			int bytesToWrite = (int)(byteCount - stream.Length);
+			var bytesToWrite = (int)(byteCount - stream.Length);
 			if (bytesToWrite > 0)
 			{
 				stream.Position = stream.Length;
@@ -88,90 +88,90 @@ namespace MixLib.Device
 			return stream;
 		}
 
-		private class openStreamStep : StreamStep
-		{
+        class openStreamStep : StreamStep
+        {
             public override string StatusDescription => openingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
 
-				public override bool Tick()
-				{
-					try
-					{
-						FileStream stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                public override bool Tick()
+                {
+                    try
+                    {
+                        FileStream stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-						if (!StreamStatus.PositionSet)
-						{
-							stream.Position = 0L;
-						}
+                        if (!StreamStatus.PositionSet)
+                        {
+                            stream.Position = 0L;
+                        }
 
                         StreamStatus.Stream = stream;
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
-					}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
 
-					return true;
-				}
-			}
-		}
+                    return true;
+                }
+            }
+        }
 
-		private class seekStep : StreamStep
-		{
+        class seekStep : StreamStep
+        {
             public override string StatusDescription => seekingDescription;
 
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				private long mTicksLeft;
-				private const long unset = long.MinValue;
+            new class Instance : StreamStep.Instance
+            {
+                long mTicksLeft;
+                const long unset = long.MinValue;
 
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-					mTicksLeft = unset;
-				}
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                    mTicksLeft = unset;
+                }
 
-				public override bool Tick()
-				{
-					long desiredPosition = CalculateBytePosition(Operands.Sector);
-					if (desiredPosition != StreamStatus.Position)
-					{
-						if (mTicksLeft == unset)
-						{
-							mTicksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
-						}
+                public override bool Tick()
+                {
+                    long desiredPosition = CalculateBytePosition(Operands.Sector);
+                    if (desiredPosition != StreamStatus.Position)
+                    {
+                        if (mTicksLeft == unset)
+                        {
+                            mTicksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
+                        }
 
-						mTicksLeft -= 1L;
+                        mTicksLeft -= 1L;
 
-						if (mTicksLeft > 0L)
-						{
-							return false;
-						}
+                        if (mTicksLeft > 0L)
+                        {
+                            return false;
+                        }
 
-						if (desiredPosition < 0L)
-						{
-							desiredPosition = 0L;
-						}
-						else if (Operands.Sector >= SectorCount)
-						{
-							desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
-						}
+                        if (desiredPosition < 0L)
+                        {
+                            desiredPosition = 0L;
+                        }
+                        else if (Operands.Sector >= SectorCount)
+                        {
+                            desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
+                        }
 
                         StreamStatus.Position = desiredPosition;
-					}
-					return true;
-				}
-			}
-		}
-	}
+                    }
+                    return true;
+                }
+            }
+        }
+    }
 }

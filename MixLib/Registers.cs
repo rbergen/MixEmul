@@ -8,12 +8,12 @@ namespace MixLib
 		public const int MaxOffset = 7;
 		public const int RegisterCount = MaxOffset + 2;
 
-		private const int addressByteIndex = 0;
-		private const int flagsByteIndex = 2;
-		private const int rJByteIndex = 3;
+        const int addressByteIndex = 0;
+        const int flagsByteIndex = 2;
+        const int rJByteIndex = 3;
 
-		private Register[] mRegisters = new Register[RegisterCount - 1];
-		private Register mrJ;
+        Register[] mRegisters = new Register[RegisterCount - 1];
+        Register mrJ;
 
         public CompValues CompareIndicator { get; set; }
         public bool OverflowIndicator { get; set; }
@@ -64,7 +64,7 @@ namespace MixLib
 
 			if (index < (int)Offset.rI1 || index > (int)Offset.rI6)
 			{
-				throw new ArgumentException("index must be between 0 and " + (int)Offset.rI6, "index");
+				throw new ArgumentException("index must be between 0 and " + (int)Offset.rI6, nameof(index));
 			}
 
 			return mValue + (int)mRegisters[index].LongValue;
@@ -130,7 +130,7 @@ namespace MixLib
 				addressValue = addressValue.GetMagnitude();
 			}
 
-			flagValues flags = (flagValues)(byte)composedWord[flagsByteIndex];
+			var flags = (flagValues)(byte)composedWord[flagsByteIndex];
 			OverflowIndicator = (flags & flagValues.Overflow) == flagValues.Overflow;
 			if ((flags & flagValues.Greater) == flagValues.Greater)
 			{
@@ -172,25 +172,25 @@ namespace MixLib
 			Greater
 		}
 
-        public enum Offset : int
-		{
-			rA = 0,
-			rI1 = 1,
-			rI2 = 2,
-			rI3 = 3,
-			rI4 = 4,
-			rI5 = 5,
-			rI6 = 6,
-			rX = 7
-		}
+        public enum Offset
+        {
+            rA = 0,
+            rI1 = 1,
+            rI2 = 2,
+            rI3 = 3,
+            rI4 = 4,
+            rI5 = 5,
+            rI6 = 6,
+            rX = 7
+        }
 
-		[Flags]
-		private enum flagValues : byte
-		{
-			None = 0,
-			Less = 1,
-			Greater = 2,
-			Overflow = 4
-		}
-	}
+        [Flags]
+        enum flagValues : byte
+        {
+            None = 0,
+            Less = 1,
+            Greater = 2,
+            Overflow = 4
+        }
+    }
 }

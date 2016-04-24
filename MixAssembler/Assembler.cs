@@ -9,12 +9,12 @@ using MixLib.Type;
 
 namespace MixAssembler
 {
-    public class Assembler
+    public static class Assembler
     {
         public static InstructionInstanceBase[] Assemble(string[] sourceLines, out PreInstruction[] preInstructions, out SymbolCollection symbols, out AssemblyFindingCollection findings)
         {
-            List<InstructionInstanceBase> list = new List<InstructionInstanceBase>();
-            ParsingStatus status = new ParsingStatus();
+            var list = new List<InstructionInstanceBase>();
+            var status = new ParsingStatus();
 
             preInstructions = Parser.ParseSource(sourceLines, status);
             findings = status.Findings;
@@ -34,7 +34,7 @@ namespace MixAssembler
             {
                 if (instruction.IsDefined)
                 {
-                    ParsedSourceLine parsedSourceLine = instruction as ParsedSourceLine;
+                    var parsedSourceLine = instruction as ParsedSourceLine;
 
                     status.LineNumber = parsedSourceLine != null ? parsedSourceLine.LineNumber : sourceLines.Length;
                     InstructionInstanceBase instructionInstance = instruction.CreateInstance(status);
@@ -53,7 +53,7 @@ namespace MixAssembler
 
                     if (instructionInstance != null && instructionInstance.Instruction is LoaderInstruction)
                     {
-                        LoaderInstruction loaderInstruction = (LoaderInstruction)instructionInstance.Instruction;
+                        var loaderInstruction = (LoaderInstruction)instructionInstance.Instruction;
 
                         if (loaderInstruction.Operation == LoaderInstruction.Operations.SetLocationCounter)
                         {
@@ -93,7 +93,7 @@ namespace MixAssembler
 
         public static InstructionInstanceBase Assemble(string instructionLine, int locationCounter, out ParsedSourceLine parsedLine, SymbolCollection symbols, out AssemblyFindingCollection findings)
         {
-            ParsingStatus status = new ParsingStatus(symbols);
+            var status = new ParsingStatus(symbols);
             status.LocationCounter = locationCounter;
             status.LineNumber = 0;
 

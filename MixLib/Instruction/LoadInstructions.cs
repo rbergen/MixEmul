@@ -6,35 +6,35 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX load instructions
 	/// </summary>
-	public class LoadInstructions
+	public static class LoadInstructions
 	{
-		private const byte loadOpcodeBase = 8;
-		private const byte loadNegOpcodeBase = 16;
+        const byte loadOpcodeBase = 8;
+        const byte loadNegOpcodeBase = 16;
 
-		private static bool doLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
-		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue)
-			{
-				return false;
-			}
+        static bool doLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
+        {
+            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+            if (indexedAddress == int.MinValue)
+            {
+                return false;
+            }
 
-			WordField memoryField = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]);
+            WordField memoryField = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]);
 
-			if (negateSign)
-			{
-				memoryField.InvertSign();
-			}
+            if (negateSign)
+            {
+                memoryField.InvertSign();
+            }
 
-			memoryField.ApplyToRegister(module.Registers[registerIndex]);
+            memoryField.ApplyToRegister(module.Registers[registerIndex]);
 
-			return true;
-		}
+            return true;
+        }
 
-		/// <summary>
-		/// Method for performing LDx instructions
-		/// </summary>
-		public static bool Load(ModuleBase module, MixInstruction.Instance instance)
+        /// <summary>
+        /// Method for performing LDx instructions
+        /// </summary>
+        public static bool Load(ModuleBase module, MixInstruction.Instance instance)
 		{
 			int registerIndex = instance.MixInstruction.Opcode - loadOpcodeBase;
 

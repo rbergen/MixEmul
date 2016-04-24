@@ -10,7 +10,7 @@ namespace MixAssembler.Symbol
     /// </summary>
     public class LocalSymbol : SymbolBase
     {
-        private List<long> mAddresses;
+        List<long> mAddresses;
 
         public LocalSymbol(int index)
           : base(index.ToString())
@@ -27,17 +27,17 @@ namespace MixAssembler.Symbol
 
         public override bool IsSymbolDefined => true;
 
-        public override void SetValue(long address) => mAddresses.Add(address);
+        public override void SetValue(long value) => mAddresses.Add(value);
 
-        private static bool isBackwardReferenceChar(char c) => c == 'B';
+        static bool isBackwardReferenceChar(char c) => c == 'B';
 
-        private static bool isDefinitionChar(char c) => c == 'H';
+        static bool isDefinitionChar(char c) => c == 'H';
 
-        private static bool isForwardReferenceChar(char c) => c == 'F';
+        static bool isForwardReferenceChar(char c) => c == 'F';
 
-        private static bool isLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) ? isLocalSymbolChar(text[1]) : false;
+        static bool isLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) && isLocalSymbolChar(text[1]);
 
-        private static bool isLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
+        static bool isLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
 
         public override bool IsValueDefined(int currentAddress) => false;
 
@@ -124,10 +124,10 @@ namespace MixAssembler.Symbol
             throw new NotImplementedException();
         }
 
-        private class reference : IValue
+        class reference : IValue
         {
-            private Directions mDirection;
-            private LocalSymbol mReferee;
+            Directions mDirection;
+            LocalSymbol mReferee;
 
             public reference(LocalSymbol referee, Directions direction)
             {

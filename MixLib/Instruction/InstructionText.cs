@@ -4,9 +4,9 @@ namespace MixLib.Instruction
 {
 	public class InstructionText
 	{
-		private MixInstruction.Instance mInstance;
+        readonly MixInstruction.Instance mInstance;
 
-		public InstructionText(MixInstruction.Instance instance)
+        public InstructionText(MixInstruction.Instance instance)
 		{
 			mInstance = instance;
 		}
@@ -17,17 +17,17 @@ namespace MixLib.Instruction
 
         public string Mnemonic => mInstance.MixInstruction.Mnemonic;
 
-        private string getFieldText()
-		{
-			FieldSpec fieldSpec = mInstance.FieldSpec;
-			if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
-			{
-				return (fieldSpec.LowBound.ToString() + ":" + fieldSpec.HighBound.ToString());
-			}
-			return fieldSpec.MixByteValue.ByteValue.ToString();
-		}
+        string getFieldText()
+        {
+            FieldSpec fieldSpec = mInstance.FieldSpec;
+            if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
+            {
+                return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
+            }
+            return fieldSpec.MixByteValue.ByteValue.ToString();
+        }
 
-		public string Address
+        public string Address
 		{
 			get
 			{

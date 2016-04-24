@@ -6,7 +6,7 @@ namespace MixAssembler.Value
     /// <summary>
     /// This class represents the absolute address part of an instruction's address section 
     /// </summary>
-    public class APartValue
+    public static class APartValue
     {
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
         {

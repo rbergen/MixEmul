@@ -7,15 +7,14 @@ namespace MixGui.Components
 {
 	public class AboutForm : Form
 	{
-		private Container components = null;
-		private Button mCloseButton;
-		private Label mCopyrightLabel;
-		private Label mFullVersionLabel;
-		private PictureBox mLogoBox;
-		private Label mProductAndVersionLabel;
-		private string mVersionString;
+        Button mCloseButton;
+        Label mCopyrightLabel;
+        Label mFullVersionLabel;
+        PictureBox mLogoBox;
+        Label mProductAndVersionLabel;
+        string mVersionString;
 
-		public AboutForm()
+        public AboutForm()
 		{
 			InitializeComponent();
 
@@ -51,29 +50,19 @@ namespace MixGui.Components
 			mCopyrightLabel.Text = copyright;
 		}
 
-        private void mFullVersionLabel_Click(object sender, EventArgs e) => Clipboard.SetText(mVersionString);
+        void mFullVersionLabel_Click(object sender, EventArgs e) => Clipboard.SetText(mVersionString);
 
-        private void mFullVersionLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(mVersionString.Replace('.', '_'));
+        void mFullVersionLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(mVersionString.Replace('.', '_'));
 
-        protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				components?.Dispose();
-			}
-
-			base.Dispose(disposing);
-		}
-
-		private void InitializeComponent()
-		{
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(AboutForm));
+        void InitializeComponent()
+        {
+            var resources = new ComponentResourceManager(typeof(AboutForm));
             mLogoBox = new System.Windows.Forms.PictureBox();
             mCopyrightLabel = new Label();
             mProductAndVersionLabel = new Label();
             mCloseButton = new Button();
             mFullVersionLabel = new Label();
-			((System.ComponentModel.ISupportInitialize)(mLogoBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(mLogoBox)).BeginInit();
             SuspendLayout();
             // 
             // mLogoBox
@@ -120,8 +109,8 @@ namespace MixGui.Components
             mFullVersionLabel.TabIndex = 1;
             mFullVersionLabel.Text = "Full version number: ";
             mFullVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            mFullVersionLabel.Click += new EventHandler(mFullVersionLabel_Click);
-            mFullVersionLabel.DoubleClick += new EventHandler(mFullVersionLabel_DoubleClick);
+            mFullVersionLabel.Click += mFullVersionLabel_Click;
+            mFullVersionLabel.DoubleClick += mFullVersionLabel_DoubleClick;
             // 
             // AboutForm
             // 
@@ -140,19 +129,19 @@ namespace MixGui.Components
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "About";
-            KeyPress += new KeyPressEventHandler(this_KeyPress);
-			((System.ComponentModel.ISupportInitialize)(mLogoBox)).EndInit();
+            KeyPress += this_KeyPress;
+            ((System.ComponentModel.ISupportInitialize)(mLogoBox)).EndInit();
             ResumeLayout(false);
 
-		}
+        }
 
-		private void this_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == (char)Keys.Escape)
-			{
-				base.DialogResult = DialogResult.Cancel;
-				base.Hide();
-			}
-		}
-	}
+        void this_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                DialogResult = DialogResult.Cancel;
+                Hide();
+            }
+        }
+    }
 }

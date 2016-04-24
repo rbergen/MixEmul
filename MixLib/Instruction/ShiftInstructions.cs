@@ -6,21 +6,21 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX shift instructions
 	/// </summary>
-	public class ShiftInstructions
+	public static class ShiftInstructions
 	{
-		private const byte slaField = 0;
-		private const byte sraField = 1;
-		private const byte slaxField = 2;
-		private const byte sraxField = 3;
-		private const byte slcField = 4;
-		private const byte srcField = 5;
-		private const byte slbField = 6;
-		private const byte srbField = 7;
+        const byte slaField = 0;
+        const byte sraField = 1;
+        const byte slaxField = 2;
+        const byte sraxField = 3;
+        const byte slcField = 4;
+        const byte srcField = 5;
+        const byte slbField = 6;
+        const byte srbField = 7;
 
-		/// <summary>
-		/// Method for performing SLA and SRA instructions
-		/// </summary>
-		public static bool ShiftA(ModuleBase module, MixInstruction.Instance instance)
+        /// <summary>
+        /// Method for performing SLA and SRA instructions
+        /// </summary>
+        public static bool ShiftA(ModuleBase module, MixInstruction.Instance instance)
 		{
 			int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			if (indexedAddress < 0)
@@ -286,44 +286,44 @@ namespace MixLib.Instruction
 			return true;
 		}
 
-		private static void shiftRegistersLeft(FullWordRegister left, FullWordRegister right, int shiftCount)
-		{
-			shiftWordLeft(left, shiftCount);
+        static void shiftRegistersLeft(FullWordRegister left, FullWordRegister right, int shiftCount)
+        {
+            shiftWordLeft(left, shiftCount);
 
-			for (int i = 0; i < shiftCount; i++)
-			{
-				left[(FullWordRegister.RegisterByteCount - shiftCount) + i] = right[i];
-			}
+            for (int i = 0; i < shiftCount; i++)
+            {
+                left[(FullWordRegister.RegisterByteCount - shiftCount) + i] = right[i];
+            }
 
-			shiftWordLeft(right, shiftCount);
-		}
+            shiftWordLeft(right, shiftCount);
+        }
 
-		private static void shiftRegistersRight(FullWordRegister left, FullWordRegister right, int shiftCount)
-		{
-			shiftWordRight(right, shiftCount);
+        static void shiftRegistersRight(FullWordRegister left, FullWordRegister right, int shiftCount)
+        {
+            shiftWordRight(right, shiftCount);
 
-			for (int i = shiftCount - 1; i >= 0; i--)
-			{
-				right[i] = left[(FullWordRegister.RegisterByteCount - shiftCount) + i];
-			}
+            for (int i = shiftCount - 1; i >= 0; i--)
+            {
+                right[i] = left[(FullWordRegister.RegisterByteCount - shiftCount) + i];
+            }
 
-			shiftWordRight(left, shiftCount);
-		}
+            shiftWordRight(left, shiftCount);
+        }
 
-		private static void shiftWordLeft(Word word, int shiftCount)
-		{
-			for (int i = shiftCount; i < word.ByteCount; i++)
-			{
-				word[i - shiftCount] = word[i];
-			}
-		}
+        static void shiftWordLeft(Word word, int shiftCount)
+        {
+            for (int i = shiftCount; i < word.ByteCount; i++)
+            {
+                word[i - shiftCount] = word[i];
+            }
+        }
 
-		private static void shiftWordRight(Word word, int shiftCount)
-		{
-			for (int i = (word.ByteCount - shiftCount) - 1; i >= 0; i--)
-			{
-				word[i + shiftCount] = word[i];
-			}
-		}
-	}
+        static void shiftWordRight(Word word, int shiftCount)
+        {
+            for (int i = (word.ByteCount - shiftCount) - 1; i >= 0; i--)
+            {
+                word[i + shiftCount] = word[i];
+            }
+        }
+    }
 }

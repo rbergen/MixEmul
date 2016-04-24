@@ -13,15 +13,15 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-		private int mTextLength;
-		private IValue mValue;
+        int mTextLength;
+        IValue mValue;
 
-		/// <summary>
-		/// Constructor for this class. 
-		/// </summary>
-		/// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
-		/// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
-		public LoaderInstructionParameters(IValue value, int textLength)
+        /// <summary>
+        /// Constructor for this class. 
+        /// </summary>
+        /// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
+        /// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
+        public LoaderInstructionParameters(IValue value, int textLength)
 		{
 			mValue = value;
 			mTextLength = textLength;
@@ -37,10 +37,10 @@ namespace MixAssembler.Instruction
 		{
 			if (!(instruction is LoaderInstruction))
 			{
-				throw new ArgumentException("instruction must be a LoaderInstruction", "instruction");
+				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 			}
 
-			LoaderInstruction loaderInstruction = (LoaderInstruction)instruction;
+			var loaderInstruction = (LoaderInstruction)instruction;
 			if (!mValue.IsValueDefined(status.LocationCounter))
 			{
 				status.ReportParsingError(LineSection.AddressField, 0, mTextLength, "value is not defined");
@@ -61,10 +61,10 @@ namespace MixAssembler.Instruction
 		{
 			if (!(instruction is LoaderInstruction))
 			{
-				throw new ArgumentException("instruction must be a LoaderInstruction", "instruction");
+				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 			}
 
-			LoaderInstruction loaderInstruction = (LoaderInstruction)instruction;
+			var loaderInstruction = (LoaderInstruction)instruction;
 			IValue address = loaderInstruction.Alphanumeric ? CharacterConstantValue.ParseValue(addressField, 0, status) : WValue.ParseValue(addressField, 0, status);
 			if (address == null)
 			{

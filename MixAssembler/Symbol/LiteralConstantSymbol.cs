@@ -5,21 +5,21 @@ namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-		private long mLiteralMagnitude;
-		private Word.Signs mLiteralSign;
-		private long mMagnitude;
-		private Word.Signs mSign;
-		private bool mValueDefined;
+        long mLiteralMagnitude;
+        Word.Signs mLiteralSign;
+        long mMagnitude;
+        Word.Signs mSign;
+        bool mValueDefined;
 
-		private LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name)
-			: base(name)
-		{
-			mLiteralSign = literalSign;
-			mLiteralMagnitude = literalMagnitude;
-			mMagnitude = -1L;
-			mSign = Word.Signs.Positive;
-			mValueDefined = false;
-		}
+        LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name)
+            : base(name)
+        {
+            mLiteralSign = literalSign;
+            mLiteralMagnitude = literalMagnitude;
+            mMagnitude = -1L;
+            mSign = Word.Signs.Positive;
+            mValueDefined = false;
+        }
 
         public override bool IsSymbolDefined => mValueDefined;
 
@@ -37,7 +37,7 @@ namespace MixAssembler.Symbol
 
 		public override bool IsValueDefined(int currentAddress) => mValueDefined;
 
-        private static string getName(Word.Signs literalSign, long literalMagnitude, int count) =>
+        static string getName(Word.Signs literalSign, long literalMagnitude, int count) =>
             string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
 
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)

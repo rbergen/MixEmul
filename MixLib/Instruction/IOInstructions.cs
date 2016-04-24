@@ -9,7 +9,7 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX I/O instructions
 	/// </summary>
-	public class IOInstructions
+	public static class IOInstructions
 	{
 		public const byte INOpCode = 36;
 

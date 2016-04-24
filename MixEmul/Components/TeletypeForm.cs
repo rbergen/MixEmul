@@ -9,19 +9,18 @@ namespace MixGui.Components
 {
 	public class TeletypeForm : Form
 	{
-		private Container components = null;
-		private Button mClearButton;
-		private CheckBox mEchoInputCheckBox;
-		private TextBox mInputTextBox;
-		private CheckBox mOnTopCheckBox;
-		private TextBox mOutputTextBox;
-		private Label mPromptLabel;
-		private Button mSendButton;
-		private StatusBar mStatusBar;
-		private StatusBarPanel mStatusBarPanel;
-		private MixLib.Device.TeletypeDevice mTeletypeDevice;
+        Button mClearButton;
+        CheckBox mEchoInputCheckBox;
+        TextBox mInputTextBox;
+        CheckBox mOnTopCheckBox;
+        TextBox mOutputTextBox;
+        Label mPromptLabel;
+        Button mSendButton;
+        StatusBar mStatusBar;
+        StatusBarPanel mStatusBarPanel;
+        MixLib.Device.TeletypeDevice mTeletypeDevice;
 
-		public TeletypeForm(MixLib.Device.TeletypeDevice teleType)
+        public TeletypeForm(MixLib.Device.TeletypeDevice teleType)
 		{
 			InitializeComponent();
 			UpdateLayout();
@@ -30,21 +29,21 @@ namespace MixGui.Components
 			TeletypeDevice = teleType;
 		}
 
-        private void mClearButton_Click(object sender, EventArgs e) => ClearOutput();
+        void mClearButton_Click(object sender, EventArgs e) => ClearOutput();
 
-        private void mSendButton_Click(object sender, EventArgs e) => sendInput();
+        void mSendButton_Click(object sender, EventArgs e) => sendInput();
 
-        private void activated(object sender, EventArgs e)
-		{
-			mOutputTextBox.Select(mOutputTextBox.TextLength, 0);
-			mOutputTextBox.Focus();
-			mOutputTextBox.ScrollToCaret();
-			mInputTextBox.Focus();
-		}
+        void activated(object sender, EventArgs e)
+        {
+            mOutputTextBox.Select(mOutputTextBox.TextLength, 0);
+            mOutputTextBox.Focus();
+            mOutputTextBox.ScrollToCaret();
+            mInputTextBox.Focus();
+        }
 
-		private delegate void addOutputTextDelegate(string textToAdd);
+        delegate void addOutputTextDelegate(string textToAdd);
 
-		public void AddOutputText(string textToAdd)
+        public void AddOutputText(string textToAdd)
 		{
 			if (mOutputTextBox.InvokeRequired)
 			{
@@ -61,7 +60,7 @@ namespace MixGui.Components
 
 			while (mOutputTextBox.TextLength + textToAdd.Length - startIndex > mOutputTextBox.MaxLength)
 			{
-				startIndex = mOutputTextBox.Text.IndexOf(Environment.NewLine, startIndex) + Environment.NewLine.Length;
+				startIndex = mOutputTextBox.Text.IndexOf(Environment.NewLine, startIndex, StringComparison.Ordinal) + Environment.NewLine.Length;
 			}
 
 			if (startIndex > 0)
@@ -74,25 +73,15 @@ namespace MixGui.Components
 			}
 		}
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				components?.Dispose();
-			}
-
-			base.Dispose(disposing);
-		}
-
-		private void formClosing(object sender, FormClosingEventArgs e)
-		{
-			e.Cancel = true;
+        void formClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
             Visible = false;
-		}
+        }
 
-		private void InitializeComponent()
-		{
-            ComponentResourceManager resources = new ComponentResourceManager(typeof(TeletypeForm));
+        void InitializeComponent()
+        {
+            var resources = new ComponentResourceManager(typeof(TeletypeForm));
             mOutputTextBox = new TextBox();
             mPromptLabel = new Label();
             mInputTextBox = new TextBox();
@@ -102,7 +91,7 @@ namespace MixGui.Components
             mSendButton = new Button();
             mOnTopCheckBox = new CheckBox();
             mEchoInputCheckBox = new CheckBox();
-			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
             SuspendLayout();
             // 
             // mOutputTextBox
@@ -139,7 +128,7 @@ namespace MixGui.Components
             mInputTextBox.Name = "mInputTextBox";
             mInputTextBox.Size = new Size(512, 20);
             mInputTextBox.TabIndex = 3;
-            mInputTextBox.KeyPress += new KeyPressEventHandler(keyPress);
+            mInputTextBox.KeyPress += keyPress;
             // 
             // mStatusBar
             // 
@@ -166,7 +155,7 @@ namespace MixGui.Components
             mClearButton.Size = new Size(75, 23);
             mClearButton.TabIndex = 1;
             mClearButton.Text = "&Clear";
-            mClearButton.Click += new EventHandler(mClearButton_Click);
+            mClearButton.Click += mClearButton_Click;
             // 
             // mSendButton
             // 
@@ -176,7 +165,7 @@ namespace MixGui.Components
             mSendButton.Size = new Size(75, 23);
             mSendButton.TabIndex = 4;
             mSendButton.Text = "&Send";
-            mSendButton.Click += new EventHandler(mSendButton_Click);
+            mSendButton.Click += mSendButton_Click;
             // 
             // mOnTopCheckBox
             // 
@@ -186,7 +175,7 @@ namespace MixGui.Components
             mOnTopCheckBox.Size = new Size(72, 24);
             mOnTopCheckBox.TabIndex = 6;
             mOnTopCheckBox.Text = "&On top";
-            mOnTopCheckBox.CheckedChanged += new EventHandler(mOnTopCheckBox_CheckedChanged);
+            mOnTopCheckBox.CheckedChanged += mOnTopCheckBox_CheckedChanged;
             // 
             // mEchoInputCheckBox
             // 
@@ -216,30 +205,30 @@ namespace MixGui.Components
             StartPosition = FormStartPosition.CenterParent;
             Text = "Teletype";
             TopMost = true;
-            Activated += new EventHandler(activated);
-            VisibleChanged += new EventHandler(visibleChanged);
-            FormClosing += new System.Windows.Forms.FormClosingEventHandler(formClosing);
-			((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
+            Activated += activated;
+            VisibleChanged += visibleChanged;
+            FormClosing += formClosing;
+            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
-		}
+        }
 
-		private void keyPress(object sender, KeyPressEventArgs args)
-		{
-			char keyChar = args.KeyChar;
-			if (keyChar == (char)Keys.Enter)
-			{
-				sendInput();
-				args.Handled = true;
-			}
-			else
-			{
-				args.Handled = !char.IsControl(keyChar) && (MixByte.MixChars.IndexOf(char.ToUpper(keyChar)) < 0);
-			}
-		}
+        void keyPress(object sender, KeyPressEventArgs args)
+        {
+            char keyChar = args.KeyChar;
+            if (keyChar == (char)Keys.Enter)
+            {
+                sendInput();
+                args.Handled = true;
+            }
+            else
+            {
+                args.Handled = !char.IsControl(keyChar) && (MixByte.MixChars.IndexOf(char.ToUpper(keyChar)) < 0);
+            }
+        }
 
-		public void ClearOutput()
+        public void ClearOutput()
 		{
 			if (mOutputTextBox.InvokeRequired)
 			{
@@ -250,57 +239,57 @@ namespace MixGui.Components
 			mOutputTextBox.Text = "";
 		}
 
-		private void mOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			TopMost = mOnTopCheckBox.Checked;
-		}
+        void mOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            TopMost = mOnTopCheckBox.Checked;
+        }
 
-		private void outputAdded(object sender, EventArgs e)
-		{
-			if (InvokeRequired)
-			{
+        void outputAdded(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
                 Invoke(new EventHandler(outputAdded));
-			}
-			else
-			{
-				string outputLine;
-				string textToAdd = "";
+            }
+            else
+            {
+                string outputLine;
+                string textToAdd = "";
 
-				while ((outputLine = mTeletypeDevice.GetOutputLine()) != null)
-				{
-					if (textToAdd.Length != 0)
-					{
-						textToAdd = textToAdd + Environment.NewLine;
-					}
-					textToAdd = textToAdd + outputLine;
-				}
+                while ((outputLine = mTeletypeDevice.GetOutputLine()) != null)
+                {
+                    if (textToAdd.Length != 0)
+                    {
+                        textToAdd = textToAdd + Environment.NewLine;
+                    }
+                    textToAdd = textToAdd + outputLine;
+                }
 
-				AddOutputText(textToAdd);
-				mStatusBarPanel.Text = "Received output from Mix";
+                AddOutputText(textToAdd);
+                mStatusBarPanel.Text = "Received output from Mix";
 
-				if (Visible)
-				{
-					mOutputTextBox.Select(mOutputTextBox.TextLength, 0);
-					mOutputTextBox.Focus();
-					mOutputTextBox.ScrollToCaret();
-					mInputTextBox.Focus();
-				}
-			}
-		}
+                if (Visible)
+                {
+                    mOutputTextBox.Select(mOutputTextBox.TextLength, 0);
+                    mOutputTextBox.Focus();
+                    mOutputTextBox.ScrollToCaret();
+                    mInputTextBox.Focus();
+                }
+            }
+        }
 
-		private void sendInput()
-		{
-			if (EchoInput)
-			{
-				AddOutputText("> " + mInputTextBox.Text);
-			}
+        void sendInput()
+        {
+            if (EchoInput)
+            {
+                AddOutputText("> " + mInputTextBox.Text);
+            }
 
-			mTeletypeDevice.AddInputLine(mInputTextBox.Text);
-			mInputTextBox.Text = "";
-			mStatusBarPanel.Text = "Sent input to Mix";
-		}
+            mTeletypeDevice.AddInputLine(mInputTextBox.Text);
+            mInputTextBox.Text = "";
+            mStatusBarPanel.Text = "Sent input to Mix";
+        }
 
-		public void UpdateLayout()
+        public void UpdateLayout()
 		{
 			Font font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			Color color = GuiSettings.GetColor(GuiSettings.TeletypeInputText);
@@ -317,15 +306,15 @@ namespace MixGui.Components
 			mOutputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputBackground);
 		}
 
-		private void visibleChanged(object sender, EventArgs e)
-		{
-			if (!Visible)
-			{
-				mStatusBarPanel.Text = "Idle";
-			}
-		}
+        void visibleChanged(object sender, EventArgs e)
+        {
+            if (!Visible)
+            {
+                mStatusBarPanel.Text = "Idle";
+            }
+        }
 
-		public bool EchoInput
+        public bool EchoInput
 		{
 			get
 			{
@@ -359,7 +348,7 @@ namespace MixGui.Components
 
 					if (mTeletypeDevice != null)
 					{
-						mTeletypeDevice.OutputAdded += new EventHandler(outputAdded);
+						mTeletypeDevice.OutputAdded += outputAdded;
 					}
 				}
 			}

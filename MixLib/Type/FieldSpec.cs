@@ -40,7 +40,7 @@ namespace MixLib.Type
 
         public override string ToString() => IsValid ? string.Concat("(", LowBound, ':', HighBound, ')') : "(" + MixByteValue + ')';
 
-        public override bool Equals(object o) => o != null && o is FieldSpec && ((FieldSpec)o).MixByteValue == MixByteValue;
+        public override bool Equals(object obj) => obj != null && obj is FieldSpec && ((FieldSpec)obj).MixByteValue == MixByteValue;
 
 		public override int GetHashCode() => MixByteValue.GetHashCode();
 

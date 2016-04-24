@@ -16,7 +16,7 @@ namespace MixLib.Utils
 				startIndex = 0;
 			}
 
-			int index = text.IndexOf(options.SearchText, startIndex);
+			int index = text.IndexOf(options.SearchText, startIndex, System.StringComparison.Ordinal);
 
 			while (index >= 0)
 			{
@@ -28,7 +28,7 @@ namespace MixLib.Utils
 					return index;
 				}
 
-				index = text.IndexOf(options.SearchText, index + 1);
+				index = text.IndexOf(options.SearchText, index + 1, System.StringComparison.Ordinal);
 			}
 
 			return -1;

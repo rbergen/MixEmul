@@ -8,30 +8,30 @@ namespace MixLib.Modules
 {
 	public class FloatingPointModule : ModuleBase
 	{
-		private const string moduleName = "Float";
+        const string moduleName = "Float";
 
-		private const string accSymbol = "ACC";
-		private const string prenormSymbol = "PRENORM";
-		private const string exitSymbol = "EXIT";
-		private const string unexpectedOverflowSymbol = "OFLO";
-		private const string exponentUnderflowSymbol = "EXPUN";
-		private const string exponentOverflowSymbol = "EXPOV";
-		private const string fixOverflowSymbol = "FIXOV";
-		private const string divisionByZeroSymbol = "DIVZRO";
+        const string accSymbol = "ACC";
+        const string prenormSymbol = "PRENORM";
+        const string exitSymbol = "EXIT";
+        const string unexpectedOverflowSymbol = "OFLO";
+        const string exponentUnderflowSymbol = "EXPUN";
+        const string exponentOverflowSymbol = "EXPOV";
+        const string fixOverflowSymbol = "FIXOV";
+        const string divisionByZeroSymbol = "DIVZRO";
 
-		private Mix mMix;
-		private Memory mFullMemory;
-		private IMemory mMemory;
-		private Registers mRegisters;
-		private RunStatus mStatus;
-		private int? mAccAddress;
-		private int? mPrenormAddress;
-		private int? mExitAddress;
-		private int? mUnexpectedOverflowAddress;
-		private int? mExponentOverflowAddress;
-		private int? mExponentUnderflowAddress;
-		private int? mFixOverflowAddress;
-		private int? mDivisionByZeroAddress;
+        Mix mMix;
+        Memory mFullMemory;
+        readonly IMemory mMemory;
+        Registers mRegisters;
+        RunStatus mStatus;
+        int? mAccAddress;
+        int? mPrenormAddress;
+        int? mExitAddress;
+        int? mUnexpectedOverflowAddress;
+        int? mExponentOverflowAddress;
+        int? mExponentUnderflowAddress;
+        int? mFixOverflowAddress;
+        int? mDivisionByZeroAddress;
 
         public SymbolCollection Symbols { get; private set; }
 
@@ -85,18 +85,18 @@ namespace MixLib.Modules
 			Status = RunStatus.Idle;
 		}
 
-		private int? getSymbolAddress(string name)
-		{
-			if (Symbols == null)
-			{
-				return null;
-			}
+        int? getSymbolAddress(string name)
+        {
+            if (Symbols == null)
+            {
+                return null;
+            }
 
-			IValueSymbol symbol = Symbols[name] as IValueSymbol;
-			return symbol == null ? null : (int?)symbol.Value;
-		}
+            var symbol = Symbols[name] as IValueSymbol;
+            return symbol == null ? null : (int?)symbol.Value;
+        }
 
-		public override bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
+        public override bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
 		{
 			mMemory.Reset();
 			Symbols = null;
@@ -129,29 +129,29 @@ namespace MixLib.Modules
 			return true;
 		}
 
-		private bool validateAddress(Severity severity, string name, int address)
-		{
-			if (address < 0 || address >= ModuleSettings.FloatingPointMemoryWordCount)
-			{
-				AddLogLine(new LogLine(moduleName, severity, "Address invalid", string.Format("Symbol {0} contains invalid address value {1}", name, address)));
-				return false;
-			}
+        bool validateAddress(Severity severity, string name, int address)
+        {
+            if (address < 0 || address >= ModuleSettings.FloatingPointMemoryWordCount)
+            {
+                AddLogLine(new LogLine(moduleName, severity, "Address invalid", string.Format("Symbol {0} contains invalid address value {1}", name, address)));
+                return false;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		private bool validateAddresses(Severity severity)
-		{
-			if (mAccAddress == null || mPrenormAddress == null || mExitAddress == null)
-			{
-				AddLogLine(new LogLine(moduleName, severity, "Symbols unset", string.Format("Symbols {0}, {1} and/or {2} are unset", accSymbol, prenormSymbol, exitSymbol)));
-				return false;
-			}
+        bool validateAddresses(Severity severity)
+        {
+            if (mAccAddress == null || mPrenormAddress == null || mExitAddress == null)
+            {
+                AddLogLine(new LogLine(moduleName, severity, "Symbols unset", string.Format("Symbols {0}, {1} and/or {2} are unset", accSymbol, prenormSymbol, exitSymbol)));
+                return false;
+            }
 
-			return validateAddress(severity, accSymbol, mAccAddress.Value) && validateAddress(severity, prenormSymbol, mPrenormAddress.Value) && validateAddress(severity, exitSymbol, mExitAddress.Value);
-		}
+            return validateAddress(severity, accSymbol, mAccAddress.Value) && validateAddress(severity, prenormSymbol, mPrenormAddress.Value) && validateAddress(severity, exitSymbol, mExitAddress.Value);
+        }
 
-		public bool ValidateCall(string mnemonic)
+        public bool ValidateCall(string mnemonic)
 		{
 			if (!validateAddresses(Severity.Error))
 			{
@@ -187,20 +187,20 @@ namespace MixLib.Modules
 			return false;
 		}
 
-		private bool prepareCall(string mnemonic)
-		{
-			ProgramCounter = getSymbolAddress(mnemonic).Value;
+        bool prepareCall(string mnemonic)
+        {
+            ProgramCounter = getSymbolAddress(mnemonic).Value;
 
-			if (IsBreakpointSet(ProgramCounter))
-			{
-				ReportBreakpointReached();
-				return true;
-			}
+            if (IsBreakpointSet(ProgramCounter))
+            {
+                ReportBreakpointReached();
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool PrepareCall(string mnemonic, IFullWord rAValue)
+        public bool PrepareCall(string mnemonic, IFullWord rAValue)
 		{
 			Registers.rA.LongValue = rAValue.LongValue;
 

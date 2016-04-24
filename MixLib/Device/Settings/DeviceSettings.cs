@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MixLib.Device.Settings
 {
-	public sealed class DeviceSettings
+	public static class DeviceSettings
 	{
 		public const string CardReaderInitialization = "CardReaderInitialization";
 		public const string CardWriterInitialization = "CardWriterInitialization";
@@ -17,10 +17,10 @@ namespace MixLib.Device.Settings
 		public const int DefaultDeviceReloadInterval = 500;
 		public const int UnsetDeviceReloadInterval = int.MinValue;
 
-		private static string mDefaultDeviceFilesDirectory;
-		private static string mDeviceFilesDirectory;
-		private static int mDeviceReloadInterval;
-		private static Dictionary<string, int> mDefaultTickCounts;
+        static string mDefaultDeviceFilesDirectory;
+        static string mDeviceFilesDirectory;
+        static int mDeviceReloadInterval;
+        static readonly Dictionary<string, int> mDefaultTickCounts;
 
         public static Dictionary<string, int> TickCounts { private get; set; }
 

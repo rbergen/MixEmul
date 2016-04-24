@@ -10,14 +10,14 @@ namespace MixLib.Device
 {
 	public class CardWriterDevice : FileBasedDevice
 	{
-		private const string shortName = "CWR";
-		private const string fileNamePrefix = "crdout";
+        const string shortName = "CWR";
+        const string fileNamePrefix = "crdout";
 
-		private const string initializationDescription = "Initializing card punch";
-		private const string openingDescription = "Starting write to card punch";
+        const string initializationDescription = "Initializing card punch";
+        const string openingDescription = "Starting write to card punch";
 
-		private const int recordWordCount = 16;
-		public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
+        const int recordWordCount = 16;
+        public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
 
 		public CardWriterDevice(int id)
 			: base(id, fileNamePrefix)
@@ -33,7 +33,7 @@ namespace MixLib.Device
 
         public override bool SupportsOutput => true;
 
-        public override void UpdateSettings()
+        public sealed override void UpdateSettings()
 		{
             FirstInputDeviceStep = null;
 
@@ -51,39 +51,39 @@ namespace MixLib.Device
             FirstIocDeviceStep = null;
 		}
 
-		private class openStreamStep : StreamStep
-		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
-	
-			public override string StatusDescription => openingDescription;
+        class openStreamStep : StreamStep
+        {
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
-			{
-				public Instance(StreamStatus streamStatus)
-					: base(streamStatus)
-				{
-				}
+            public override string StatusDescription => openingDescription;
 
-				public override bool Tick()
-				{
-					try
-					{
-						FileStream stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-						if (!StreamStatus.PositionSet)
-						{
-							stream.Position = stream.Length;
-						}
+            new class Instance : StreamStep.Instance
+            {
+                public Instance(StreamStatus streamStatus)
+                    : base(streamStatus)
+                {
+                }
+
+                public override bool Tick()
+                {
+                    try
+                    {
+                        var stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+                        if (!StreamStatus.PositionSet)
+                        {
+                            stream.Position = stream.Length;
+                        }
 
                         StreamStatus.Stream = stream;
-					}
-					catch (Exception exception)
-					{
-						OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
-					}
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
 
-					return true;
-				}
-			}
-		}
-	}
+                    return true;
+                }
+            }
+        }
+    }
 }

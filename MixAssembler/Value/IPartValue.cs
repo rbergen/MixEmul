@@ -5,7 +5,7 @@ namespace MixAssembler.Value
 	/// <summary>
 	/// This class represents the index part of an instruction's address section
 	/// </summary>
-	public class IPartValue
+	public static class IPartValue
 	{
 		public const char TagCharacter = ',';
 

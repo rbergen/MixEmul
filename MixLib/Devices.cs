@@ -8,8 +8,7 @@ namespace MixLib
     {
         public const int DeviceCount = 21;
         public const byte CardReaderUnitCode = 16;
-
-        private MixDevice[] mDevices = new MixDevice[DeviceCount];
+        readonly MixDevice[] mDevices = new MixDevice[DeviceCount];
 
         public TeletypeDevice Teletype { get; private set; }
 
@@ -40,7 +39,7 @@ namespace MixLib
 
             foreach (MixDevice device in mDevices)
             {
-                device.ReportingEvent += new ReportingEventHandler(device_Reporting);
+                device.ReportingEvent += device_Reporting;
             }
         }
 
@@ -52,7 +51,7 @@ namespace MixLib
 
         protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) => DeviceReportingEvent?.Invoke(this, args);
 
-        private void device_Reporting(object sender, ReportingEventArgs args) =>
+        void device_Reporting(object sender, ReportingEventArgs args) =>
             OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
 
         public void Reset()

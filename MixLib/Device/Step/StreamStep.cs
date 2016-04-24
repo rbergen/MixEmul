@@ -16,7 +16,7 @@ namespace MixLib.Device.Step
         {
             protected StreamStatus StreamStatus { get; private set; }
 
-			public Instance(StreamStatus streamStatus)
+			protected Instance(StreamStatus streamStatus)
 			{
 				StreamStatus = streamStatus;
 			}

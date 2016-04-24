@@ -6,44 +6,44 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX jump instructions
 	/// </summary>
-	public class JumpInstructions
+	public static class JumpInstructions
 	{
-		private const byte jmpField = 0;
-		private const byte jsjField = 1;
-		private const byte jovField = 2;
-		private const byte jnovField = 3;
-		private const byte jlField = 4;
-		private const byte jeField = 5;
-		private const byte jgField = 6;
-		private const byte jgeField = 7;
-		private const byte jneField = 8;
-		private const byte jleField = 9;
+        const byte jmpField = 0;
+        const byte jsjField = 1;
+        const byte jovField = 2;
+        const byte jnovField = 3;
+        const byte jlField = 4;
+        const byte jeField = 5;
+        const byte jgField = 6;
+        const byte jgeField = 7;
+        const byte jneField = 8;
+        const byte jleField = 9;
 
-		private const byte regJumpOpcodeBase = 40;
+        const byte regJumpOpcodeBase = 40;
 
-		private const byte regJumpNegField = 0;
-		private const byte regJumpZeroField = 1;
-		private const byte regJumpPosField = 2;
-		private const byte regJumpNonNegField = 3;
-		private const byte regJumpNonZeroField = 4;
-		private const byte regJumpNonPosField = 5;
-		private const byte regJumpEvenField = 6;
-		private const byte regJumpOddField = 7;
+        const byte regJumpNegField = 0;
+        const byte regJumpZeroField = 1;
+        const byte regJumpPosField = 2;
+        const byte regJumpNonNegField = 3;
+        const byte regJumpNonZeroField = 4;
+        const byte regJumpNonPosField = 5;
+        const byte regJumpEvenField = 6;
+        const byte regJumpOddField = 7;
 
-		private static void doJump(ModuleBase module, int indexedAddress, bool saveJ)
-		{
-			if (!saveJ)
-			{
-				module.Registers.rJ.LongValue = module.ProgramCounter + 1;
-			}
+        static void doJump(ModuleBase module, int indexedAddress, bool saveJ)
+        {
+            if (!saveJ)
+            {
+                module.Registers.rJ.LongValue = module.ProgramCounter + 1;
+            }
 
-			module.ProgramCounter = indexedAddress;
-		}
+            module.ProgramCounter = indexedAddress;
+        }
 
-		/// <summary>
-		/// Public jump method for use by other classes
-		/// </summary>
-		public static void Jump(ModuleBase module, int indexedAddress)
+        /// <summary>
+        /// Public jump method for use by other classes
+        /// </summary>
+        public static void Jump(ModuleBase module, int indexedAddress)
 		{
 			doJump(module, indexedAddress, false);
 		}

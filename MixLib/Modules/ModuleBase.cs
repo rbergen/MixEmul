@@ -6,9 +6,9 @@ namespace MixLib.Modules
 {
 	public abstract class ModuleBase
 	{
-		private int mProgramCounter;
+        int mProgramCounter;
 
-		public IBreakpointManager BreakpointManager { protected get; set; }
+        public IBreakpointManager BreakpointManager { protected get; set; }
         public abstract string ModuleName { get; }
         public abstract IMemory FullMemory { get; }
         public abstract IMemory Memory { get; }
@@ -20,7 +20,7 @@ namespace MixLib.Modules
 
         protected bool IsBreakpointSet(int address) => BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
 
-        private void reportLoadError(int locationCounter, string message) =>
+        void reportLoadError(int locationCounter, string message) =>
             AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
 
         public abstract void ResetProfilingCounts();
@@ -59,70 +59,70 @@ namespace MixLib.Modules
 			}
 		}
 
-		private int loadInstructionInstance(LoaderInstruction.Instance instance, int locationCounter)
-		{
-			FullMemory[locationCounter].SourceLine = instance.SourceLine;
+        int loadInstructionInstance(LoaderInstruction.Instance instance, int locationCounter)
+        {
+            FullMemory[locationCounter].SourceLine = instance.SourceLine;
 
-			switch (((LoaderInstruction)instance.Instruction).Operation)
-			{
-				case LoaderInstruction.Operations.SetLocationCounter:
-					{
-						int desiredLC = (int)instance.Value.LongValue;
-						if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex)
-						{
-							return desiredLC;
-						}
+            switch (((LoaderInstruction)instance.Instruction).Operation)
+            {
+                case LoaderInstruction.Operations.SetLocationCounter:
+                    {
+                        var desiredLC = (int)instance.Value.LongValue;
+                        if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex)
+                        {
+                            return desiredLC;
+                        }
 
-						reportLoadError(locationCounter, string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
+                        reportLoadError(locationCounter, string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
 
-						return locationCounter;
-					}
-				case LoaderInstruction.Operations.SetMemoryWord:
-					FullMemory[locationCounter].MagnitudeLongValue = instance.Value.MagnitudeLongValue;
-					FullMemory[locationCounter].Sign = instance.Value.Sign;
+                        return locationCounter;
+                    }
+                case LoaderInstruction.Operations.SetMemoryWord:
+                    FullMemory[locationCounter].MagnitudeLongValue = instance.Value.MagnitudeLongValue;
+                    FullMemory[locationCounter].Sign = instance.Value.Sign;
 
-					return (locationCounter + 1);
+                    return (locationCounter + 1);
 
-				case LoaderInstruction.Operations.SetProgramCounter:
-					{
-						int desiredPC = (int)instance.Value.LongValue;
-						if (desiredPC < 0 && Mode != RunMode.Control)
-						{
-							AddLogLine(new LogLine(ModuleName, Severity.Info, "Mode switch", "Attempting to switch to Control mode to set program counter to negative value"));
-							Mode = RunMode.Control;
-						}
+                case LoaderInstruction.Operations.SetProgramCounter:
+                    {
+                        var desiredPC = (int)instance.Value.LongValue;
+                        if (desiredPC < 0 && Mode != RunMode.Control)
+                        {
+                            AddLogLine(new LogLine(ModuleName, Severity.Info, "Mode switch", "Attempting to switch to Control mode to set program counter to negative value"));
+                            Mode = RunMode.Control;
+                        }
 
-						if (desiredPC >= Memory.MinWordIndex && desiredPC <= Memory.MaxWordIndex)
-						{
-							ProgramCounter = desiredPC;
-							return locationCounter;
-						}
+                        if (desiredPC >= Memory.MinWordIndex && desiredPC <= Memory.MaxWordIndex)
+                        {
+                            ProgramCounter = desiredPC;
+                            return locationCounter;
+                        }
 
-						reportLoadError(locationCounter, string.Format("Attempt to set program counter to invalid value {0}", desiredPC));
+                        reportLoadError(locationCounter, string.Format("Attempt to set program counter to invalid value {0}", desiredPC));
 
-						return locationCounter;
-					}
-			}
+                        return locationCounter;
+                    }
+            }
 
-			return locationCounter;
-		}
+            return locationCounter;
+        }
 
-		private int loadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
-		{
-			InstanceValidationError[] validationErrors = instance.Validate();
-			if (validationErrors != null)
-			{
-				reportLoadInstanceErrors(locationCounter, validationErrors);
-			}
+        int loadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
+        {
+            InstanceValidationError[] validationErrors = instance.Validate();
+            if (validationErrors != null)
+            {
+                reportLoadInstanceErrors(locationCounter, validationErrors);
+            }
 
-			FullMemory[locationCounter].MagnitudeLongValue = instance.InstructionWord.MagnitudeLongValue;
-			FullMemory[locationCounter].Sign = instance.InstructionWord.Sign;
-			FullMemory[locationCounter].SourceLine = instance.SourceLine;
+            FullMemory[locationCounter].MagnitudeLongValue = instance.InstructionWord.MagnitudeLongValue;
+            FullMemory[locationCounter].Sign = instance.InstructionWord.Sign;
+            FullMemory[locationCounter].SourceLine = instance.SourceLine;
 
-			return (locationCounter + 1);
-		}
+            return (locationCounter + 1);
+        }
 
-		public virtual bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
+        public virtual bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
 		{
 			Memory.ClearSourceLines();
 			ResetProfilingCounts();
@@ -169,15 +169,15 @@ namespace MixLib.Modules
 			Status = RunStatus.InvalidInstruction;
 		}
 
-		private void reportLoadInstanceErrors(int counter, InstanceValidationError[] errors)
-		{
-			foreach (InstanceValidationError error in errors)
-			{
-				AddLogLine(new LogLine(ModuleName, Severity.Warning, counter, "Loaded invalid instruction", error.CompiledMessage));
-			}
-		}
+        void reportLoadInstanceErrors(int counter, InstanceValidationError[] errors)
+        {
+            foreach (InstanceValidationError error in errors)
+            {
+                AddLogLine(new LogLine(ModuleName, Severity.Warning, counter, "Loaded invalid instruction", error.CompiledMessage));
+            }
+        }
 
-		public void ReportOverflow()
+        public void ReportOverflow()
 		{
 			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Overflow", "Overflow occured"));
 			Registers.OverflowIndicator = true;

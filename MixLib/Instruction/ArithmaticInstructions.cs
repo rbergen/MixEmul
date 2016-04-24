@@ -6,14 +6,14 @@ namespace MixLib.Instruction
 	/// <summary>
 	/// Methods for performing MIX arithmatic instructions
 	/// </summary>
-	public class ArithmaticInstructions
+	public static class ArithmaticInstructions
 	{
-		private const byte substractOpcode = 2;
+        const byte substractOpcode = 2;
 
-		/// <summary>
-		/// Method for performing ADD and SUB instructions
-		/// </summary>
-		public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
+        /// <summary>
+        /// Method for performing ADD and SUB instructions
+        /// </summary>
+        public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
 		{
 			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue)
@@ -114,8 +114,8 @@ namespace MixLib.Instruction
 			rA.Sign = rX.Sign = result.GetSign();
 			result = result.GetMagnitude();
 
-			long rXResultValue = (long)(result % ((long)1 << rX.BitCount));
-			long rAResultValue = (long)decimal.Truncate(result / ((long)1 << rX.BitCount));
+			var rXResultValue = (long)(result % ((long)1 << rX.BitCount));
+			var rAResultValue = (long)decimal.Truncate(result / ((long)1 << rX.BitCount));
 
 			rA.MagnitudeLongValue = rAResultValue;
 			rX.MagnitudeLongValue = rXResultValue;
