@@ -74,10 +74,7 @@ namespace MixLib.Type
         {
             lock (mSyncRoot)
             {
-                if (mRealWord == null)
-                {
-                    fetchRealWord();
-                }
+                if (mRealWord == null) fetchRealWord();
             }
         }
 
@@ -103,10 +100,7 @@ namespace MixLib.Type
             {
                 if (mRealWord == null)
                 {
-                    if (!condition())
-                    {
-                        return false;
-                    }
+                    if (!condition()) return false;
 
                     fetchRealWord();
                 }
@@ -132,10 +126,7 @@ namespace MixLib.Type
 
 		public void Load(string text)
 		{
-			if (fetchRealWordConditionally(() => text != mDefaultCharString))
-			{
-				mRealWord.Load(text);
-			}
+			if (fetchRealWordConditionally(() => text != mDefaultCharString)) mRealWord.Load(text);
 		}
 
 		public void InvertSign()
@@ -184,7 +175,6 @@ namespace MixLib.Type
 			{
 				if (fetchRealWordConditionally(() =>
 				{
-
 					bool valueDifferent = false;
 					int thisStartIndex = 0;
 					int valueStartIndex = 0;
@@ -221,7 +211,6 @@ namespace MixLib.Type
 					}
 
 					return valueDifferent;
-
 				}))
 				{
 					mRealWord.Magnitude = value;
@@ -267,30 +256,21 @@ namespace MixLib.Type
 			{
 				index = mDefaultLongValue.ToString().FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Value ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Value, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Value, FieldIndex = index };
 			}
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Chars) && (options.SearchFields & FieldTypes.Chars) == FieldTypes.Chars)
 			{
 				index = mDefaultCharString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Chars ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
 			}
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Instruction) && (options.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction)
 			{
 				index = mDefaultInstructionString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Instruction ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
 			}
 
 			return null;

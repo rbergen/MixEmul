@@ -17,8 +17,7 @@ namespace MixLib.Type
 
         public int ByteCount { get; private set; }
 
-        public Word(int byteCount)
-			: this(byteCount, Signs.Positive)
+        public Word(int byteCount) : this(byteCount, Signs.Positive)
 		{
 			for (int i = 0; i < byteCount; i++)
 			{
@@ -26,8 +25,7 @@ namespace MixLib.Type
 			}
 		}
 
-		public Word(MixByte[] bytes, Signs sign)
-			: this(bytes.Length, sign)
+		public Word(MixByte[] bytes, Signs sign) : this(bytes.Length, sign)
 		{
 			for (int i = 0; i < ByteCount; i++)
 			{
@@ -152,10 +150,7 @@ namespace MixLib.Type
 
 					mBytes[index] = value ?? new MixByte();
 
-					if (oldValue.ByteValue == mBytes[index].ByteValue)
-					{
-						return;
-					}
+					if (oldValue.ByteValue == mBytes[index].ByteValue) return;
 				}
 				finally
 				{
@@ -190,10 +185,7 @@ namespace MixLib.Type
 
 				try
 				{
-					if (value == LongValue)
-					{
-						return;
-					}
+					if (value == LongValue) return;
 
 					setMagnitudeLongValue(value);
 					mSign = value.GetSign();
@@ -213,10 +205,7 @@ namespace MixLib.Type
 
             magnitude = magnitude.GetMagnitude();
 
-            if (oldValue == magnitude)
-            {
-                return magnitude;
-            }
+            if (oldValue == magnitude) return magnitude;
 
             for (int i = ByteCount - 1; i >= 0; i--)
             {
@@ -278,10 +267,7 @@ namespace MixLib.Type
 						valueStartIndex++;
 					}
 
-					if (oldValue == MagnitudeLongValue)
-					{
-						return;
-					}
+					if (oldValue == MagnitudeLongValue) return;
 				}
 				finally
 				{
@@ -317,10 +303,7 @@ namespace MixLib.Type
 
 				try
 				{
-					if (setMagnitudeLongValue(value) == value.GetMagnitude())
-					{
-						return;
-					}
+					if (setMagnitudeLongValue(value) == value.GetMagnitude()) return;
 				}
 				finally
 				{
@@ -352,10 +335,7 @@ namespace MixLib.Type
 
 				try
 				{
-					if (value == mSign)
-					{
-						return;
-					}
+					if (value == mSign) return;
 
 					mSign = value;
 				}
@@ -374,7 +354,7 @@ namespace MixLib.Type
 			Negative
 		}
 
-		public virtual Object Clone()
+		public virtual object Clone()
 		{
 			var copy = new Word(ByteCount);
 			CopyTo(copy);

@@ -239,15 +239,9 @@ namespace MixGui.Components
 
         void updateProfilingLayout()
 		{
-			if (ExecutionSettings.ProfilingEnabled)
-			{
-				updateProfilingCount();
-			}
+			if (ExecutionSettings.ProfilingEnabled) updateProfilingCount();
 
-			if (mProfileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
-			{
-				return;
-			}
+			if (mProfileLabel.Enabled == ExecutionSettings.ProfilingEnabled) return;
 
 			if (!ExecutionSettings.ProfilingEnabled)
 			{
@@ -291,10 +285,7 @@ namespace MixGui.Components
 
         void keyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers != Keys.None)
-            {
-                return;
-            }
+            if (e.Modifiers != Keys.None) return;
 
             FieldTypes editorField = FieldTypes.Instruction;
             int? index = mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength;
@@ -360,10 +351,8 @@ namespace MixGui.Components
 		{
 			mFullWordEditor.Update();
 			mInstructionTextBox.Update();
-			if (mProfileLabel.Enabled)
-			{
-				updateProfilingCount();
-			}
+			if (mProfileLabel.Enabled) updateProfilingCount();
+
 			base.Update();
 		}
 
@@ -449,10 +438,7 @@ namespace MixGui.Components
 				mInstructionTextBox.MemoryAddress = mMemoryWord.Index;
 				mFullWordEditor.WordValue = mMemoryWord;
 				mInstructionTextBox.InstructionWord = mMemoryWord;
-				if (mProfileLabel.Enabled)
-				{
-					updateProfilingCount();
-				}
+				if (mProfileLabel.Enabled) updateProfilingCount();
 			}
 		}
 

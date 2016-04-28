@@ -87,10 +87,7 @@ namespace MixLib.Modules
 
         int? getSymbolAddress(string name)
         {
-            if (Symbols == null)
-            {
-                return null;
-            }
+            if (Symbols == null) return null;
 
             var symbol = Symbols[name] as IValueSymbol;
             return symbol == null ? null : (int?)symbol.Value;
@@ -109,10 +106,7 @@ namespace MixLib.Modules
 			mFixOverflowAddress = null;
 			mDivisionByZeroAddress = null;
 
-			if (!base.LoadInstructionInstances(instances, symbols))
-			{
-				return false;
-			}
+			if (!base.LoadInstructionInstances(instances, symbols)) return false;
 
 			Symbols = symbols;
 			mAccAddress = getSymbolAddress(accSymbol);
@@ -153,10 +147,7 @@ namespace MixLib.Modules
 
         public bool ValidateCall(string mnemonic)
 		{
-			if (!validateAddresses(Severity.Error))
-			{
-				return false;
-			}
+			if (!validateAddresses(Severity.Error)) return false;
 
 			long? instructionValue = getSymbolAddress(mnemonic);
 			if (instructionValue == null)
@@ -165,12 +156,7 @@ namespace MixLib.Modules
 				return false;
 			}
 
-			if (!validateAddress(Severity.Error, mnemonic, (int)instructionValue.Value))
-			{
-				return false;
-			}
-
-			return true;
+            return validateAddress(Severity.Error, mnemonic, (int)instructionValue.Value);
 		}
 
 		public bool PreparePrenorm(IFullWord rAValue)
@@ -235,38 +221,40 @@ namespace MixLib.Modules
 		{
 			bool overflowDetected = false;
 
-			if (ProgramCounter == mExitAddress.Value)
-			{
-				Status = RunStatus.Idle;
-				return false;
-			}
-			else if (mUnexpectedOverflowAddress != null && ProgramCounter == mUnexpectedOverflowAddress.Value)
-			{
-				ReportRuntimeError(string.Format("Overflow set at instruction start"));
-				return true;
-			}
-			else if (mExponentOverflowAddress != null && ProgramCounter == mExponentOverflowAddress.Value)
-			{
-				AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Exponent overflow detected"));
-				overflowDetected = true;
-			}
-			else if (mExponentUnderflowAddress != null && ProgramCounter == mExponentUnderflowAddress.Value)
-			{
-				AddLogLine(new LogLine(moduleName, Severity.Info, "Underflow", "Exponent underflow detected"));
-				overflowDetected = true;
-			}
-			else if (mFixOverflowAddress != null && ProgramCounter == mFixOverflowAddress.Value)
-			{
-				AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Float to fix overflow detected"));
-				overflowDetected = true;
-			}
-			else if (mDivisionByZeroAddress != null && ProgramCounter == mDivisionByZeroAddress.Value)
-			{
-				AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Division by zero detected"));
-				overflowDetected = true;
-			}
+            if (ProgramCounter == mExitAddress.Value)
+            {
+                Status = RunStatus.Idle;
+                return false;
+            }
 
-			Status = RunStatus.Running;
+            if (mUnexpectedOverflowAddress != null && ProgramCounter == mUnexpectedOverflowAddress.Value)
+            {
+                ReportRuntimeError(string.Format("Overflow set at instruction start"));
+                return true;
+            }
+
+            if (mExponentOverflowAddress != null && ProgramCounter == mExponentOverflowAddress.Value)
+            {
+                AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Exponent overflow detected"));
+                overflowDetected = true;
+            }
+            else if (mExponentUnderflowAddress != null && ProgramCounter == mExponentUnderflowAddress.Value)
+            {
+                AddLogLine(new LogLine(moduleName, Severity.Info, "Underflow", "Exponent underflow detected"));
+                overflowDetected = true;
+            }
+            else if (mFixOverflowAddress != null && ProgramCounter == mFixOverflowAddress.Value)
+            {
+                AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Float to fix overflow detected"));
+                overflowDetected = true;
+            }
+            else if (mDivisionByZeroAddress != null && ProgramCounter == mDivisionByZeroAddress.Value)
+            {
+                AddLogLine(new LogLine(moduleName, Severity.Info, "Overflow", "Division by zero detected"));
+                overflowDetected = true;
+            }
+
+            Status = RunStatus.Running;
 
 			IMemoryFullWord instructionWord = Memory[ProgramCounter];
 			MixInstruction instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
@@ -295,10 +283,7 @@ namespace MixLib.Modules
 
 			int programCounter = ProgramCounter;
 
-			if (increasePC)
-			{
-				programCounter++;
-			}
+			if (increasePC) programCounter++;
 
 			if (programCounter > mMemory.MaxWordIndex)
 			{
@@ -308,10 +293,7 @@ namespace MixLib.Modules
 			else
 			{
 				ProgramCounter = programCounter;
-				if (Status == RunStatus.Running && IsBreakpointSet(programCounter))
-				{
-					ReportBreakpointReached();
-				}
+				if (Status == RunStatus.Running && IsBreakpointSet(programCounter)) ReportBreakpointReached();
 			}
 
 			return overflowDetected;

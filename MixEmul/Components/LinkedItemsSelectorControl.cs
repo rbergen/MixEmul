@@ -73,10 +73,7 @@ namespace MixGui.Components
 
 		public void AddItem(T currentItem, T newItem)
 		{
-			if (currentItem.Equals(newItem))
-			{
-				return;
-			}
+			if (currentItem.Equals(newItem)) return;
 
 			addItem(currentItem);
 			addItem(newItem);
@@ -115,10 +112,7 @@ namespace MixGui.Components
 
         void addItem(T item)
         {
-            if (item == null)
-            {
-                return;
-            }
+            if (item == null) return;
 
             if (mFirstItem == null)
             {
@@ -128,10 +122,7 @@ namespace MixGui.Components
             }
             else
             {
-                if (mCurrentItem.Item.Equals(item))
-                {
-                    return;
-                }
+                if (mCurrentItem.Item.Equals(item)) return;
 
                 if (mCurrentItem.Next != null)
                 {
@@ -181,10 +172,7 @@ namespace MixGui.Components
 
         LinkedItem<T> insertItem(LinkedItem<T> insertBefore, T item)
         {
-            if (insertBefore == null || item == null)
-            {
-                return null;
-            }
+            if (insertBefore == null || item == null) return null;
 
             var insertee = new LinkedItem<T>(item);
 

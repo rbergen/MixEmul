@@ -18,16 +18,14 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Input(ModuleBase module, MixInstruction.Instance instance)
 		{
-			if (module.Devices == null)
-			{
-				module.ReportRuntimeError("Module does not provide devices");
-			}
+            if (module.Devices == null)
+            {
+                module.ReportRuntimeError("Module does not provide devices");
+                return false;
+            }
 
 			int mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (mValue == int.MinValue)
-			{
-				return false;
-			}
+			if (mValue == int.MinValue) return false;
 
 			int byteValue = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[byteValue];
@@ -37,10 +35,7 @@ namespace MixLib.Instruction
 				return false;
 			}
 
-			if (device.Busy)
-			{
-				return false;
-			}
+			if (device.Busy) return false;
 
 			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartInput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
@@ -65,15 +60,8 @@ namespace MixLib.Instruction
 				index++;
 			}
 
-			if (index == 1)
-			{
-				return new InstanceValidationError[] { errorArray[0] };
-			}
-
-			if (index == 2)
-			{
-				return errorArray;
-			}
+			if (index == 1) return new InstanceValidationError[] { errorArray[0] };
+			if (index == 2) return errorArray;
 
 			return null;
 		}
@@ -83,19 +71,17 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool IOControl(ModuleBase module, MixInstruction.Instance instance)
 		{
-			if (module.Devices == null)
-			{
-				module.ReportRuntimeError("Module does not provide devices");
-			}
+            if (module.Devices == null)
+            {
+                module.ReportRuntimeError("Module does not provide devices");
+                return false;
+            }
 
-			int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+            int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
 
-			if (device.Busy)
-			{
-				return false;
-			}
+			if (device.Busy) return false;
 
 			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartIoc(indexedAddress, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
@@ -108,23 +94,20 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool JumpIfBusy(ModuleBase module, MixInstruction.Instance instance)
 		{
-			if (module.Devices == null)
-			{
-				module.ReportRuntimeError("Module does not provide devices");
-			}
+            if (module.Devices == null)
+            {
+                module.ReportRuntimeError("Module does not provide devices");
+                return false;
+            }
 
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue)
-			{
-				return false;
-			}
+            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
 			if (device.Busy)
 			{
 				JumpInstructions.Jump(module, indexedAddress);
-
 				return false;
 			}
 
@@ -136,23 +119,20 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool JumpIfReady(ModuleBase module, MixInstruction.Instance instance)
 		{
-			if (module.Devices == null)
-			{
-				module.ReportRuntimeError("Module does not provide devices");
-			}
+            if (module.Devices == null)
+            {
+                module.ReportRuntimeError("Module does not provide devices");
+                return false;
+            }
 
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue)
-			{
-				return false;
-			}
+            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
 			if (!device.Busy)
 			{
 				JumpInstructions.Jump(module, indexedAddress);
-
 				return false;
 			}
 
@@ -164,11 +144,14 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Output(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (mValue == int.MinValue)
-			{
-				return false;
-			}
+            if (module.Devices == null)
+            {
+                module.ReportRuntimeError("Module does not provide devices");
+                return false;
+            }
+
+            int mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			if (mValue == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
@@ -176,14 +159,10 @@ namespace MixLib.Instruction
 			if (!device.SupportsOutput)
 			{
 				module.ReportRuntimeError("Device " + deviceIndex + " doesn't support output");
-
 				return false;
 			}
 
-			if (device.Busy)
-			{
-				return false;
-			}
+			if (device.Busy) return false;
 
 			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartOutput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);

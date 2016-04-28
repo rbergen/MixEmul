@@ -57,10 +57,7 @@ namespace MixLib
 
         public int GetIndexedAddress(int mValue, int index)
 		{
-			if (index == 0)
-			{
-				return mValue;
-			}
+			if (index == 0) return mValue;
 
 			if (index < (int)Offset.rI1 || index > (int)Offset.rI6)
 			{

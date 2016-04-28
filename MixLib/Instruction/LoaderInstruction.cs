@@ -15,8 +15,7 @@ namespace MixLib.Instruction
         public bool Alphanumeric { get; private set; }
         public Operations Operation { get; private set; }
 
-        public LoaderInstruction(string mnemonic, Operations operation, bool alphanumeric)
-			: base(mnemonic)
+        public LoaderInstruction(string mnemonic, Operations operation, bool alphanumeric) : base(mnemonic)
 		{
 			Operation = operation;
 			Alphanumeric = alphanumeric;

@@ -40,10 +40,7 @@ namespace MixAssembler
         {
             for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
             {
-                if (!char.IsWhiteSpace(sourceLine, i))
-                {
-                    return i;
-                }
+                if (!char.IsWhiteSpace(sourceLine, i)) return i;
             }
 
             return -1;
@@ -53,10 +50,7 @@ namespace MixAssembler
         {
             for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
             {
-                if (char.IsWhiteSpace(sourceLine, i))
-                {
-                    return i;
-                }
+                if (char.IsWhiteSpace(sourceLine, i)) return i;
             }
 
             return -1;
@@ -142,10 +136,7 @@ namespace MixAssembler
             IInstructionParameters instructionParameters;
             InstructionBase instruction;
 
-            if (isCommentLine(sourceLine))
-            {
-                return new ParsedSourceLine(status.LineNumber, sourceLine);
-            }
+            if (isCommentLine(sourceLine)) return new ParsedSourceLine(status.LineNumber, sourceLine);
 
             string[] lineFields = splitLine(sourceLine);
             lineFields[locFieldIndex] = lineFields[locFieldIndex].ToUpper();
@@ -160,11 +151,8 @@ namespace MixAssembler
             }
 
             SymbolBase symbol = parseLocField(lineFields[locFieldIndex], status);
-            if (symbol != null)
-            {
-                // if the location field contains a symbol name, set its value to the location counter
-                symbol.SetValue(status.LocationCounter);
-            }
+            // if the location field contains a symbol name, set its value to the location counter
+            symbol?.SetValue(status.LocationCounter);
 
             getMixOrLoaderInstructionAndParameters(lineFields[opFieldIndex], lineFields[addressFieldIndex], status, out instruction, out instructionParameters);
 
@@ -182,10 +170,7 @@ namespace MixAssembler
 
         static SymbolBase parseLocField(string locField, ParsingStatus status)
         {
-            if (locField == "")
-            {
-                return null;
-            }
+            if (locField == "") return null;
 
             status.LineSection = LineSection.LocationField;
 
@@ -269,16 +254,10 @@ namespace MixAssembler
         {
             int addressFieldEnd;
             int searchBeyondIndex = findFirstWhiteSpace(sourceLine, -1);
-            if (searchBeyondIndex == -1)
-            {
-                return new string[] { sourceLine, "", "", "" };
-            }
+            if (searchBeyondIndex == -1) return new string[] { sourceLine, "", "", "" };
 
             int opFieldStart = findFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
-            if (opFieldStart == -1)
-            {
-                return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
-            }
+            if (opFieldStart == -1) return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
 
             int opFieldEnd = findFirstWhiteSpace(sourceLine, opFieldStart);
             if (opFieldEnd == -1)

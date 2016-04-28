@@ -98,10 +98,7 @@ namespace MixGui.Components
 				return;
 			}
 
-			if (e.Modifiers != Keys.None)
-			{
-				return;
-			}
+			if (e.Modifiers != Keys.None) return;
 
 			switch (e.KeyCode)
 			{
@@ -277,14 +274,7 @@ namespace MixGui.Components
                     return;
             }
 
-            if (keyChar == '-')
-            {
-                changeSign();
-            }
-            else if (keyChar == '+' && Text.Length > 0 && Text[0] == '-')
-            {
-                changeSign();
-            }
+            if (keyChar == '-' || (keyChar == '+' && Text.Length > 0 && Text[0] == '-')) changeSign();
 
             e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
         }
@@ -294,10 +284,7 @@ namespace MixGui.Components
             int selectionStart = SelectionStart;
             int selectionLength = SelectionLength;
 
-            if (!SupportSign)
-            {
-                return;
-            }
+            if (!SupportSign) return;
 
             if (TextLength == 0)
             {
@@ -316,14 +303,10 @@ namespace MixGui.Components
             else
             {
                 base.Text = Text.Substring(1);
-                if (selectionStart > 0)
-                {
-                    selectionStart--;
-                }
-                if (selectionLength > TextLength)
-                {
-                    selectionLength--;
-                }
+
+                if (selectionStart > 0) selectionStart--;
+                if (selectionLength > TextLength) selectionLength--;
+
                 SelectionLength = selectionLength;
                 SelectionStart = selectionStart;
             }
@@ -337,19 +320,13 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (mSign != value)
-				{
-					checkAndUpdateValue(value, mMagnitude, true);
-				}
+				if (mSign != value) checkAndUpdateValue(value, mMagnitude, true);
 			}
 		}
 
         void this_TextChanged(object sender, EventArgs e)
         {
-            if (mUpdating)
-            {
-                return;
-            }
+            if (mUpdating) return;
 
             bool textIsValid = true;
 
@@ -417,10 +394,7 @@ namespace MixGui.Components
 					value = -value;
 				}
 
-				if (sign != mSign || value != mMagnitude)
-				{
-					checkAndUpdateValue(sign, value, true);
-				}
+				if (sign != mSign || value != mMagnitude) checkAndUpdateValue(sign, value, true);
 			}
 		}
 
@@ -432,15 +406,9 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (value < 0)
-				{
-					value = -value;
-				}
+				value = value.GetMagnitude();
 
-				if (mMagnitude != value)
-				{
-					checkAndUpdateValue(mSign, value, true);
-				}
+				if (mMagnitude != value) checkAndUpdateValue(mSign, value, true);
 			}
 		}
 

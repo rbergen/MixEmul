@@ -54,27 +54,25 @@ namespace MixLib.Device.Step
             int mRecordWordCount;
             MixByte[] mWriteBytes;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount)
-                : base(streamStatus)
+            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
             {
                 mRecordWordCount = recordWordCount;
             }
 
             public override bool Tick()
             {
-                if (StreamStatus.Stream != null && mWriteBytes != null)
+                if (StreamStatus.Stream == null || mWriteBytes == null) return true;
+
+                try
                 {
-                    try
-                    {
-                        var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
-                        writer.WriteLine(createStringFromBytes(mWriteBytes, mRecordWordCount * FullWord.ByteCount));
-                        writer.Flush();
-                        StreamStatus.UpdatePosition();
-                    }
-                    catch (Exception exception)
-                    {
-                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-                    }
+                    var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
+                    writer.WriteLine(createStringFromBytes(mWriteBytes, mRecordWordCount * FullWord.ByteCount));
+                    writer.Flush();
+                    StreamStatus.UpdatePosition();
+                }
+                catch (Exception exception)
+                {
+                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
                 }
 
                 return true;

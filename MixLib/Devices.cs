@@ -56,26 +56,17 @@ namespace MixLib
 
         public void Reset()
         {
-            foreach (MixDevice device in mDevices)
-            {
-                device.Reset();
-            }
+            foreach (MixDevice device in mDevices) device.Reset();
         }
 
         public void Tick()
         {
-            foreach (MixDevice device in mDevices)
-            {
-                device.Tick();
-            }
+            foreach (MixDevice device in mDevices) device.Tick();
         }
 
         public void UpdateSettings()
         {
-            foreach (MixDevice device in mDevices)
-            {
-                device.UpdateSettings();
-            }
+            foreach (MixDevice device in mDevices) device.UpdateSettings();
         }
 
         public bool IsAnyBusy
@@ -84,10 +75,7 @@ namespace MixLib
             {
                 foreach (MixDevice device in mDevices)
                 {
-                    if (device.Busy)
-                    {
-                        return true;
-                    }
+                    if (device.Busy) return true;
                 }
 
                 return false;

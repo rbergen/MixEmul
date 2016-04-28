@@ -23,8 +23,7 @@ namespace MixLib.Device
 
 		public event EventHandler OutputAdded;
 
-		public TeletypeDevice(int id)
-			: base(id)
+		public TeletypeDevice(int id) : base(id)
 		{
 			UpdateSettings();
 		}
@@ -57,10 +56,10 @@ namespace MixLib.Device
 
 			if (CurrentStep is writeLineStep)
 			{
-				var instance2 = (writeLineStep.Instance)((writeLineStep)CurrentStep).CreateInstance();
-				instance2.OutputAdded += outputAdded;
+				var instance = (writeLineStep.Instance)((writeLineStep)CurrentStep).CreateInstance();
+				instance.OutputAdded += outputAdded;
 
-				return instance2;
+				return instance;
 			}
 
 			return base.GetCurrentStepInstance();
@@ -175,28 +174,28 @@ namespace MixLib.Device
 
                 public override bool Tick()
                 {
-                    if (mWriteBytes != null)
+                    if (mWriteBytes == null) return true;
+
+                    char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
+                    int bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
+                    int index = 0;
+
+                    while (index < bytesToWriteCount)
                     {
-                        char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
-                        int bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
-                        int index = 0;
-
-                        while (index < bytesToWriteCount)
-                        {
-                            charsToWrite[index] = mWriteBytes[index];
-                            index++;
-                        }
-
-                        while (index < charsToWrite.Length)
-                        {
-                            charsToWrite[index] = ' ';
-                            index++;
-                        }
-
-                        mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(new char[0]));
-
-                        OutputAdded(this, new EventArgs());
+                        charsToWrite[index] = mWriteBytes[index];
+                        index++;
                     }
+
+                    while (index < charsToWrite.Length)
+                    {
+                        charsToWrite[index] = ' ';
+                        index++;
+                    }
+
+                    mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(new char[0]));
+
+                    OutputAdded(this, new EventArgs());
+
                     return true;
                 }
 

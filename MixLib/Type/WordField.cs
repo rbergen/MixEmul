@@ -6,8 +6,7 @@ namespace MixLib.Type
 	{
         FieldSpec mFieldSpec;
 
-        WordField(FieldSpec fieldSpec, int byteCount)
-            : base(byteCount)
+        WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount)
         {
             mFieldSpec = fieldSpec;
         }

@@ -7,9 +7,7 @@ namespace MixLib.Device.Step
 	{
 		public DeviceStep NextStep { get; set; }
 
-		protected DeviceStep()
-		{
-		}
+		protected DeviceStep() { }
 
 		public abstract Instance CreateInstance();
 
@@ -27,9 +25,7 @@ namespace MixLib.Device.Step
 
             protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
-            protected Instance()
-			{
-			}
+            protected Instance() { }
 
 			public abstract bool Tick();
 

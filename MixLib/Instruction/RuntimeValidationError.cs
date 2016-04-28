@@ -14,9 +14,7 @@ namespace MixLib.Instruction
 		}
 
 		public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, int validLowerBound, int validUpperBound, int actualValue)
-			: this(programCounter, instance, null, validLowerBound, validUpperBound, actualValue)
-		{
-		}
+			: this(programCounter, instance, null, validLowerBound, validUpperBound, actualValue) { }
 
 		public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, string message, int validLowerBound, int validUpperBound, int actualValue)
 			: base(message, validLowerBound, validUpperBound)

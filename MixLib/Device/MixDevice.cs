@@ -82,10 +82,7 @@ namespace MixLib.Device
 		public void Tick()
 		{
             // If no I/O step is set, we're idle
-            if (CurrentStep == null)
-            {
-                return;
-            }
+            if (CurrentStep == null) return;
 
             // At I/O start, the step instance is unset
             if (mCurrentStepInstance == null)
@@ -96,10 +93,7 @@ namespace MixLib.Device
 			}
 
             // Current step still busy? If so, we're done here
-            if (!mCurrentStepInstance.Tick())
-            {
-                return;
-            }
+            if (!mCurrentStepInstance.Tick()) return;
 
 			CurrentStep = CurrentStep.NextStep;
 
@@ -126,8 +120,7 @@ namespace MixLib.Device
 		{
             bool mIncludeSign;
 
-            public ReadFromMemoryStep(bool includeSign, int recordWordCount)
-				: base(recordWordCount)
+            public ReadFromMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
 			{
 				mIncludeSign = includeSign;
 			}
@@ -142,8 +135,7 @@ namespace MixLib.Device
                 readonly bool mIncludeSign;
                 readonly int mWordByteCount;
 
-                public Instance(int tickCount, bool includeSign)
-                    : base(tickCount)
+                public Instance(int tickCount, bool includeSign) : base(tickCount)
                 {
                     mIncludeSign = includeSign;
                     mWordByteCount = FullWord.ByteCount;
@@ -185,8 +177,7 @@ namespace MixLib.Device
 		{
             bool mIncludeSign;
 
-            public WriteToMemoryStep(bool includeSign, int recordWordCount)
-				: base(recordWordCount)
+            public WriteToMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
 			{
 				mIncludeSign = includeSign;
 			}
@@ -201,8 +192,7 @@ namespace MixLib.Device
                 bool mIncludeSign;
                 int mWordByteCount;
 
-                public Instance(int tickCount, bool includeSign)
-                    : base(tickCount)
+                public Instance(int tickCount, bool includeSign) : base(tickCount)
                 {
                     mIncludeSign = includeSign;
                     mWordByteCount = FullWord.ByteCount;
@@ -219,24 +209,23 @@ namespace MixLib.Device
                 {
                     int currentAddress = Operands.MValue + CurrentTick;
 
-                    if (currentAddress < Operands.Memory.MaxWordIndex)
+                    if (currentAddress >= Operands.Memory.MaxWordIndex) return;
+
+                    int currentByte = mWordByteCount * CurrentTick;
+
+                    if (mIncludeSign)
                     {
-                        int currentByte = mWordByteCount * CurrentTick;
+                        Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
+                        currentByte++;
+                    }
+                    else
+                    {
+                        Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
+                    }
 
-                        if (mIncludeSign)
-                        {
-                            Operands.Memory[currentAddress].Sign = mBytesForWriting[currentByte].ToSign();
-                            currentByte++;
-                        }
-                        else
-                        {
-                            Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
-                        }
-
-                        for (int index = 0; index < FullWord.ByteCount; index++)
-                        {
-                            Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
-                        }
+                    for (int index = 0; index < FullWord.ByteCount; index++)
+                    {
+                        Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
                     }
                 }
 

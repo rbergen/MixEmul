@@ -8,10 +8,7 @@ namespace MixLib.Type
 
         static readonly FieldSpec mDefaultFieldSpec = new FieldSpec(0, FullWord.ByteCount);
 
-        public IndexRegister()
-			: base(RegisterByteCount, PaddingByteCount)
-		{
-		}
+        public IndexRegister() : base(RegisterByteCount, PaddingByteCount) { }
 
 		public static FieldSpec DefaultFieldSpec => mDefaultFieldSpec;
 	}

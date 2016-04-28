@@ -5,8 +5,7 @@ namespace MixLib.Type
 	{
         readonly int mPaddingByteCount;
 
-        protected Register(int byteCount, int paddingByteCount)
-			: base(byteCount)
+        protected Register(int byteCount, int paddingByteCount) : base(byteCount)
 		{
 			mPaddingByteCount = paddingByteCount;
 		}

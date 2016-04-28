@@ -1,7 +1,5 @@
 ﻿
 namespace MixLib.Type
 {
-	public interface IFullWord : IWord
-	{
-	}
+	public interface IFullWord : IWord { }
 }

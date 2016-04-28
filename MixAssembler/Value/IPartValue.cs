@@ -12,10 +12,7 @@ namespace MixAssembler.Value
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			// an empty index is equal to 0
-			if (text.Length == 0)
-			{
-				return new NumberValue(0L);
-			}
+			if (text.Length == 0) return new NumberValue(0L);
 
 			// it can only be an index if it starts with a comma
 			if (text[0] == TagCharacter)
@@ -23,18 +20,12 @@ namespace MixAssembler.Value
 				// the actual fieldspec can be any expression...
 				IValue expression = ExpressionValue.ParseValue(text.Substring(1), sectionCharIndex + 1, status);
 
-				if (expression == null)
-				{
-					return null;
-				}
+				if (expression == null) return null;
 
 				long value = expression.GetValue(status.LocationCounter);
 
 				// ... as long as it is within the range of valid MIX byte values
-				if (value >= MixByte.MinValue && value <= MixByte.MaxValue)
-				{
-					return expression;
-				}
+				if (value >= MixByte.MinValue && value <= MixByte.MaxValue) return expression;
 
 				status.ReportParsingError(sectionCharIndex, text.Length, "index value invalid");
 			}

@@ -73,8 +73,7 @@ namespace MixLib.Device.Step
             MixByte[] mReadBytes;
             readonly int mRecordWordCount;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount)
-                : base(streamStatus)
+            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
             {
                 mRecordWordCount = recordWordCount;
             }
@@ -83,18 +82,17 @@ namespace MixLib.Device.Step
 
             public override bool Tick()
             {
-                if (StreamStatus.Stream != null)
+                if (StreamStatus.Stream == null) return true;
+
+                try
                 {
-                    try
-                    {
-                        mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
-                        StreamStatus.UpdatePosition();
-                    }
-                    catch (Exception exception)
-                    {
-                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-                        mReadBytes = new MixByte[0];
-                    }
+                    mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
+                    StreamStatus.UpdatePosition();
+                }
+                catch (Exception exception)
+                {
+                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
+                    mReadBytes = new MixByte[0];
                 }
 
                 return true;

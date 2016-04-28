@@ -17,10 +17,7 @@ namespace MixLib.Instruction
 		{
 			if (registerIndex < 0 || registerIndex > (int)Registers.Offset.rI6)
 			{
-				if (reportErrors)
-				{
-					module.ReportRuntimeError("Register index invalid: " + registerIndex);
-				}
+				if (reportErrors) module.ReportRuntimeError("Register index invalid: " + registerIndex);
 
 				return int.MinValue;
 			}
@@ -31,10 +28,7 @@ namespace MixLib.Instruction
 				return indexedAddress;
 			}
 
-			if (reportErrors)
-			{
-				module.ReportRuntimeError("Indexed memory address invalid: " + indexedAddress);
-			}
+			if (reportErrors) module.ReportRuntimeError("Indexed memory address invalid: " + indexedAddress);
 
 			return int.MinValue;
 		}
@@ -56,17 +50,10 @@ namespace MixLib.Instruction
 				index++;
 			}
 
-			if (index == 1)
-			{
-				return new InstanceValidationError[] { errorArray[0] };
-			}
+			if (index == 1) return new InstanceValidationError[] { errorArray[0] };
+			if (index == 2) return errorArray;
 
-			if (index == 2)
-			{
-				return errorArray;
-			}
-
-			return null;
+            return null;
 		}
 	}
 }

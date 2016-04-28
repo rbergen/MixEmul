@@ -16,8 +16,7 @@ namespace MixLib.Device
 
         protected StreamStatus StreamStatus { get; set; }
 
-		protected FileBasedDevice(int id, string fileNamePrefix)
-			: base(id)
+		protected FileBasedDevice(int id, string fileNamePrefix) : base(id)
 		{
 			mFileNamePrefix = fileNamePrefix;
 			mFilePath = null;
@@ -34,14 +33,9 @@ namespace MixLib.Device
 
         void streamStatus_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
 
-        protected override DeviceStep.Instance GetCurrentStepInstance()
-		{
-			if (CurrentStep is StreamStep)
-			{
-				return ((StreamStep)CurrentStep).CreateStreamInstance(StreamStatus);
-			}
-			return base.GetCurrentStepInstance();
-		}
+        protected override DeviceStep.Instance GetCurrentStepInstance() =>
+			CurrentStep is StreamStep ? ((StreamStep)CurrentStep).CreateStreamInstance(StreamStatus) 
+            : base.GetCurrentStepInstance();
 
 		public override void Reset()
 		{

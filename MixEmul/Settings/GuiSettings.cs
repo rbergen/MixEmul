@@ -75,30 +75,22 @@ namespace MixGui.Settings
 
         public static Color GetColor(string name)
 		{
-			if (Colors.ContainsKey(name))
-			{
-				return Colors[name];
-			}
+			if (Colors.ContainsKey(name)) return Colors[name];
 
 			return GetDefaultColor(name);
 		}
 
 		public static Color GetDefaultColor(string name)
 		{
-			if (mDefaultColors.ContainsKey(name))
-			{
-				return mDefaultColors[name];
-			}
+			if (mDefaultColors.ContainsKey(name)) return mDefaultColors[name];
 
 			return SystemColors.WindowText;
 		}
 
 		public static Font GetFont(string name)
 		{
-			if (mDefaultFonts.ContainsKey(name))
-			{
-				return mDefaultFonts[name];
-			}
+			if (mDefaultFonts.ContainsKey(name)) return mDefaultFonts[name];
+
 			IEnumerator<Font> enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
 			enumerator.MoveNext();
 			return enumerator.Current;

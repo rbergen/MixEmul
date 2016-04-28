@@ -31,7 +31,7 @@ namespace MixLib.Device.Step
 				ProcessTick();
 				CurrentTick++;
 
-				return (CurrentTick >= TickCount);
+				return CurrentTick >= TickCount;
 			}
 		}
 	}

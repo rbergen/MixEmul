@@ -81,7 +81,6 @@ namespace MixLib.Instruction
 			if (!(module is Mix))
 			{
 				module.ReportRuntimeError(string.Format("The {0} instruction is only available in Mix", instance.Instruction.Mnemonic));
-
 				return false;
 			}
 
@@ -119,18 +118,10 @@ namespace MixLib.Instruction
 			if (status == null)
 			{
 				int fromAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-
-				if (fromAddress == int.MinValue)
-				{
-					return false;
-				}
+				if (fromAddress == int.MinValue) return false;
 
 				int toAddress = InstructionHelpers.GetValidIndexedAddress(module, 0, 1);
-
-				if (toAddress == int.MinValue)
-				{
-					return false;
-				}
+                if (toAddress == int.MinValue) return false;
 
 				status = new moveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
 				mMoveStatuses[module.ModuleName] = status;
@@ -144,44 +135,40 @@ namespace MixLib.Instruction
 				// ... during one of those, the actual move is performed...
 				case moveStatus.WordStates.BeforeMove:
 				case moveStatus.WordStates.RegisterIncreased:
+					IMemory memory = module.Memory;
+					int currentFromAddress = status.FromAddress + status.CurrentWord;
+					int currentToAddress = status.ToAddress + status.CurrentWord;
+
+					if (currentFromAddress > memory.MaxWordIndex || currentToAddress > memory.MaxWordIndex)
 					{
-						IMemory memory = module.Memory;
-						int currentFromAddress = status.FromAddress + status.CurrentWord;
-						int currentToAddress = status.ToAddress + status.CurrentWord;
+						module.ReportRuntimeError("Source or target address overflow");
+						status = null;
+						mMoveStatuses.Remove(module.ModuleName);
 
-						if (currentFromAddress > memory.MaxWordIndex || currentToAddress > memory.MaxWordIndex)
-						{
-							module.ReportRuntimeError("Source or target address overflow");
-							status = null;
-							mMoveStatuses.Remove(module.ModuleName);
-
-							return false;
-						}
-
-						memory[currentToAddress] = memory[currentFromAddress];
-						status.CurrentWordState = moveStatus.WordStates.Moved;
-
-						break;
+						return false;
 					}
+
+					memory[currentToAddress] = memory[currentFromAddress];
+					status.CurrentWordState = moveStatus.WordStates.Moved;
+
+					break;
 
 				// ... during the other, the value of rI1 is increased
 				case moveStatus.WordStates.Moved:
+					Register rI1 = module.Registers.rI1;
+					rI1.LongValue++;
+					status.NextWord();
+
+					if (status.CurrentWord >= status.WordCount)
 					{
-						Register rI1 = module.Registers.rI1;
-						rI1.LongValue++;
-						status.NextWord();
-
-						if (status.CurrentWord >= status.WordCount)
-						{
-							status = null;
-							mMoveStatuses.Remove(module.ModuleName);
-							return true;
-						}
-
-						status.CurrentWordState = moveStatus.WordStates.RegisterIncreased;
-
-						break;
+						status = null;
+						mMoveStatuses.Remove(module.ModuleName);
+						return true;
 					}
+
+					status.CurrentWordState = moveStatus.WordStates.RegisterIncreased;
+
+					break;
 			}
 
 			// return false to prevent the PC from increasing

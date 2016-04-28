@@ -48,15 +48,9 @@ namespace MixLib.Type
 
 		public static bool IsValidFieldSpec(int lowBound, int highBound)
 		{
-			if (lowBound >= 0 && highBound <= FullWord.ByteCount && lowBound <= highBound)
-			{
-				return true;
-			}
+			if (lowBound >= 0 && highBound <= FullWord.ByteCount && lowBound <= highBound) return true;
 
-			if (lowBound == 0)
-			{
-				return highBound == FullWord.ByteCount + 1;
-			}
+			if (lowBound == 0) return highBound == FullWord.ByteCount + 1;
 
 			return false;
 		}

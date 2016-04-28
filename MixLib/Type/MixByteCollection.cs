@@ -52,13 +52,9 @@ namespace MixLib.Type
 		{
 			if (asChars)
 			{
-
 				var builder = new StringBuilder();
 
-				foreach (MixByte mixByte in mBytes)
-				{
-					builder.Append((char)mixByte);
-				}
+				foreach (MixByte mixByte in mBytes) builder.Append((char)mixByte);
 
 				return builder.ToString().TrimEnd();
 			}

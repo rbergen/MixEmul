@@ -12,13 +12,9 @@ namespace MixAssembler.Symbol
     {
         List<long> mAddresses;
 
-        public LocalSymbol(int index)
-          : base(index.ToString())
+        public LocalSymbol(int index) : base(index.ToString())
         {
-            if (index < 0 || index > 9)
-            {
-                throw new ArgumentException("index must be between 0 and 9");
-            }
+            if (index < 0 || index > 9) throw new ArgumentException("index must be between 0 and 9");
 
             mAddresses = new List<long>();
         }
@@ -50,10 +46,7 @@ namespace MixAssembler.Symbol
 
         public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
         {
-            if (!isLocalSymbol(text))
-            {
-                return null;
-            }
+            if (!isLocalSymbol(text)) return null;
 
             if (!isDefinitionChar(text[1]))
             {
@@ -62,24 +55,19 @@ namespace MixAssembler.Symbol
 
             char localSymbolChar = text[0];
             SymbolBase symbol = status.Symbols[localSymbolChar.ToString()];
-            if (symbol == null)
-            {
-                return new LocalSymbol(localSymbolChar - '0');
-            }
+            if (symbol == null) return new LocalSymbol(localSymbolChar - '0');
 
             if (!(symbol is LocalSymbol))
             {
                 status.ReportParsingError(sectionCharIndex, 1, "non-local symbol named " + localSymbolChar + " already defined");
             }
+
             return symbol;
         }
 
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
         {
-            if (!isLocalSymbol(text))
-            {
-                return null;
-            }
+            if (!isLocalSymbol(text)) return null;
 
             char localSymbolChar = text[0];
             SymbolBase symbol = status.Symbols[new string(localSymbolChar, 1)];
@@ -166,10 +154,7 @@ namespace MixAssembler.Symbol
                     }
                 }
 
-                if (mDirection == Directions.Backwards)
-                {
-                    return followingAddress;
-                }
+                if (mDirection == Directions.Backwards) return followingAddress;
 
                 return -1L;
             }

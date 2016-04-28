@@ -20,8 +20,7 @@ namespace MixLib.Device
         public const long SectorCount = 4096;
 		public const int WordsPerSector = 100;
 
-		public DiskDevice(int id)
-			: base(id, fileNamePrefix)
+		public DiskDevice(int id) : base(id, fileNamePrefix)
 		{
 			UpdateSettings();
 		}
@@ -96,10 +95,7 @@ namespace MixLib.Device
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {
@@ -135,8 +131,7 @@ namespace MixLib.Device
                 long mTicksLeft;
                 const long unset = long.MinValue;
 
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
+                public Instance(StreamStatus streamStatus) : base(streamStatus)
                 {
                     mTicksLeft = unset;
                 }
@@ -144,31 +139,28 @@ namespace MixLib.Device
                 public override bool Tick()
                 {
                     long desiredPosition = CalculateBytePosition(Operands.Sector);
-                    if (desiredPosition != StreamStatus.Position)
+                    if (desiredPosition == StreamStatus.Position) return true;
+
+                    if (mTicksLeft == unset)
                     {
-                        if (mTicksLeft == unset)
-                        {
-                            mTicksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
-                        }
-
-                        mTicksLeft -= 1L;
-
-                        if (mTicksLeft > 0L)
-                        {
-                            return false;
-                        }
-
-                        if (desiredPosition < 0L)
-                        {
-                            desiredPosition = 0L;
-                        }
-                        else if (Operands.Sector >= SectorCount)
-                        {
-                            desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
-                        }
-
-                        StreamStatus.Position = desiredPosition;
+                        mTicksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
                     }
+
+                    mTicksLeft -= 1L;
+
+                    if (mTicksLeft > 0L) return false;
+
+                    if (desiredPosition < 0L)
+                    {
+                        desiredPosition = 0L;
+                    }
+                    else if (Operands.Sector >= SectorCount)
+                    {
+                        desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
+                    }
+
+                    StreamStatus.Position = desiredPosition;
+
                     return true;
                 }
             }

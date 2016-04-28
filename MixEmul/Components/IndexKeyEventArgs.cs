@@ -6,8 +6,7 @@ namespace MixGui.Components
 	{
 		public int? Index { get; private set; }
 
-		public IndexKeyEventArgs(Keys keyData, int? index)
-			: base(keyData)
+		public IndexKeyEventArgs(Keys keyData, int? index) : base(keyData)
 		{
 			Index = index;
 		}

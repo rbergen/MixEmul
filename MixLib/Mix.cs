@@ -10,6 +10,7 @@ using MixLib.Modules;
 using MixLib.Modules.Settings;
 using MixLib.Settings;
 using MixLib.Type;
+using MixLib.Device;
 
 namespace MixLib
 {
@@ -221,10 +222,7 @@ namespace MixLib
 
                 suspendRun = !IsRunning || (DateTime.Now - stepStartTime > mRunSpan && !RunDetached);
 
-                if (suspendRun && StepPerformed != null)
-                {
-                    StepPerformed(this, new EventArgs());
-                }
+                if (suspendRun) StepPerformed?.Invoke(this, new EventArgs());
             }
         }
 
@@ -247,22 +245,19 @@ namespace MixLib
 
         public void PrepareLoader()
 		{
-			var word = new FullWord(1060);
 			MixInstruction instruction = InstructionSet.Instance.GetInstruction(IOInstructions.INOpCode, new FieldSpec(Devices.CardReaderUnitCode));
-			MixInstruction.Instance instance = instruction.CreateInstance(word);
+
+            var instructionWord = new FullWord();
+            instructionWord[MixInstruction.OpcodeByte] = IOInstructions.INOpCode;
+            instructionWord[MixInstruction.FieldSpecByte] = Devices.CardReaderUnitCode;
+            MixInstruction.Instance instance = instruction.CreateInstance(instructionWord);
 
 			int ticksLeft = instruction.TickCount;
-			while (ticksLeft-- > 0)
-			{
-				increaseTickCounter();
-			}
+			while (ticksLeft-- > 0) increaseTickCounter();
 
 			instance.Execute(this);
 
-			while (mDevices[Devices.CardReaderUnitCode].Busy)
-			{
-				increaseTickCounter();
-			}
+			while (mDevices[Devices.CardReaderUnitCode].Busy) increaseTickCounter();
 
 			ProgramCounter = 0;
 
@@ -281,10 +276,7 @@ namespace MixLib
 		public override void ResetProfilingCounts()
 		{
 			mFullMemory.ResetProfilingCounts();
-			if (FloatingPointModule != null)
-			{
-				FloatingPointModule.ResetProfilingCounts();
-			}
+			if (FloatingPointModule != null) FloatingPointModule.ResetProfilingCounts();
 		}
 
 		public void Tick()
@@ -321,10 +313,7 @@ namespace MixLib
 			if (instruction == null)
 			{
 				ReportInvalidInstruction("Opcode (and field) do not encode an instruction");
-				if (Mode == RunMode.Module)
-				{
-					resetMode();
-				}
+				if (Mode == RunMode.Module) resetMode();
 
 				return;
 			}
@@ -334,10 +323,7 @@ namespace MixLib
 			if (errors != null)
 			{
 				ReportInvalidInstruction(errors);
-				if (Mode == RunMode.Module)
-				{
-					resetMode();
-				}
+				if (Mode == RunMode.Module) resetMode();
 
 				return;
 			}
@@ -347,20 +333,14 @@ namespace MixLib
 				mCurrentInstructionAddress = ProgramCounter;
 				mCurrentInstructionTicksLeft = instruction.TickCount;
 				mCurrentInstructionMnemonic = instruction.Mnemonic;
-				if (Mode == RunMode.Module)
-				{
-					resetMode();
-				}
+				if (Mode == RunMode.Module) resetMode();
 			}
 
 			if (Mode != RunMode.Module && mCurrentInstructionTicksLeft > 0)
 			{
 				mCurrentInstructionTicksLeft--;
 
-				if (ExecutionSettings.ProfilingEnabled)
-				{
-					instructionWord.IncreaseProfilingTickCount(1);
-				}
+				if (ExecutionSettings.ProfilingEnabled) instructionWord.IncreaseProfilingTickCount(1);
 			}
 
 			int programCounter;
@@ -394,10 +374,7 @@ namespace MixLib
 			else
 			{
 				ProgramCounter = programCounter;
-				if (Status == RunStatus.Running && IsBreakpointSet(programCounter))
-				{
-					ReportBreakpointReached();
-				}
+				if (Status == RunStatus.Running && IsBreakpointSet(programCounter)) ReportBreakpointReached();
 			}
 		}
 
@@ -478,10 +455,7 @@ namespace MixLib
         {
             if (!disposedValue)
             {
-                if (disposing)
-                {
-                    mStartStep?.Dispose();
-                }
+                if (disposing) mStartStep?.Dispose();
 
                 disposedValue = true;
             }

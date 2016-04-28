@@ -10,6 +10,8 @@ namespace MixLib.Type
 
         public int Count => mList.Count;
 
+        public SymbolBase this[string name] => mList.ContainsKey(name) ? mList[name] : null;
+
         public bool Contains(SymbolBase value) => Contains(value.Name);
 
         public bool Contains(string value) => mList.ContainsKey(value);
@@ -26,25 +28,9 @@ namespace MixLib.Type
 
         public void Add(SymbolBase value)
 		{
-			if (Contains(value))
-			{
-				throw new ArgumentException("symbol already exists", nameof(value));
-			}
+			if (Contains(value)) throw new ArgumentException("symbol already exists", nameof(value));
 
 			mList.Add(value.Name, value);
-		}
-
-		public SymbolBase this[string name]
-		{
-			get
-			{
-				if (!mList.ContainsKey(name))
-				{
-					return null;
-				}
-
-				return mList[name];
-			}
 		}
 	}
 }

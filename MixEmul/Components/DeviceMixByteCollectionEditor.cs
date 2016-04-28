@@ -84,10 +84,7 @@ namespace MixGui.Components
 
         void keyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers != Keys.None)
-            {
-                return;
-            }
+            if (e.Modifiers != Keys.None) return;
 
             switch (e.KeyCode)
             {
@@ -144,10 +141,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (mIndexCharCount == value)
-				{
-					return;
-				}
+				if (mIndexCharCount == value) return;
 
 				mIndexCharCount = value;
 				setIndexLabelText();

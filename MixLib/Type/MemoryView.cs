@@ -54,26 +54,17 @@ namespace MixLib.Type
 
         public void ClearSourceLines()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++)
-			{
-				ClearRealWordSourceLine(index);
-			}
-		}
+			for (int index = mMinIndex; index <= mMaxIndex; index++) ClearRealWordSourceLine(index);
+        }
 
 		public void Reset()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++)
-			{
-				ResetRealWord(index);
-			}
+			for (int index = mMinIndex; index <= mMaxIndex; index++) ResetRealWord(index);
 		}
 
 		public SearchResult FindMatch(SearchParameters options)
 		{
-			if (options.SearchFromWordIndex < mMinIndex || options.SearchFromWordIndex > mMaxIndex)
-			{
-				return null;
-			}
+			if (options.SearchFromWordIndex < mMinIndex || options.SearchFromWordIndex > mMaxIndex) return null;
 
 			var filteredOptions = new SearchParameters
 			{
@@ -89,22 +80,13 @@ namespace MixLib.Type
 
 			SearchResult result = SourceMemory.FindMatch(filteredOptions);
 
-			if (result == null)
-			{
-				return null;
-			}
+			if (result == null) return null;
 
 			result.WordIndex -= mIndexOffset;
 
-			if (result.WordIndex >= mMinIndex && result.WordIndex <= mMaxIndex)
-			{
-				return result;
-			}
+			if (result.WordIndex >= mMinIndex && result.WordIndex <= mMaxIndex) return result;
 
-			if (!options.WrapSearch || options.SearchFromWordIndex == mMinIndex)
-			{
-				return null;
-			}
+			if (!options.WrapSearch || options.SearchFromWordIndex == mMinIndex) return null;
 
 			filteredOptions.SearchFromWordIndex = mMinIndex + mIndexOffset;
 			filteredOptions.WrapSearch = false;

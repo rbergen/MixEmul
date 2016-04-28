@@ -17,8 +17,7 @@ namespace MixAssembler.Instruction
         /// <summary>
         /// Creates a instance of this class that represents a comment line.
         /// </summary>
-        public ParsedSourceLine(int lineNumber, string comment)
-          : base(null, null)
+        public ParsedSourceLine(int lineNumber, string comment) : base(null, null)
         {
             LineNumber = lineNumber;
             LocationField = null;

@@ -23,10 +23,7 @@ namespace MixLib.Device
 
         public void CloseStream()
 		{
-			if (mStream != null)
-			{
-                mStream.Close();
-			}
+            mStream?.Close();
 		}
 
 		public void Reset()
@@ -38,17 +35,16 @@ namespace MixLib.Device
 
 		public void UpdatePosition()
 		{
-			if (mStream != null)
+            if (mStream == null) return;
+
+			try
 			{
-				try
-				{
-					Position = mStream.Position;
-					PositionSet = true;
-				}
-				catch (Exception exception)
-				{
-					onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while getting position in file " + FileName + ":" + exception.Message));
-				}
+				Position = mStream.Position;
+				PositionSet = true;
+			}
+			catch (Exception exception)
+			{
+				onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while getting position in file " + FileName + ":" + exception.Message));
 			}
 		}
 
@@ -75,21 +71,20 @@ namespace MixLib.Device
 				return mPosition;
 			}
 			set
-			{
-				mPosition = value;
-				PositionSet = true;
-				if (mStream != null)
-				{
-					try
-					{
-						mStream.Position = mPosition;
-					}
-					catch (Exception exception)
-					{
-						onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
-					}
-				}
-			}
+            {
+                mPosition = value;
+                PositionSet = true;
+                if (mStream == null) return;
+
+                try
+                {
+                    mStream.Position = mPosition;
+                }
+                catch (Exception exception)
+                {
+                    onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
+                }
+            }
 		}
 
 		public System.IO.Stream Stream

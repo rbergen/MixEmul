@@ -223,10 +223,7 @@ namespace MixGui.Components
                 mUpdating = false;
             }
 
-            if (instance == null)
-            {
-                return false;
-            }
+            if (instance == null) return false;
 
             var oldValue = new FullWord(mInstructionWord.LongValue);
             mInstructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
@@ -257,10 +254,7 @@ namespace MixGui.Components
             {
                 foreach (InstanceValidationError error in errors)
                 {
-                    if (error.Source == item)
-                    {
-                        return true;
-                    }
+                    if (error.Source == item) return true;
                 }
             }
 
@@ -331,10 +325,8 @@ namespace MixGui.Components
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (mEditMode)
-                {
-                    assembleInstruction(true);
-                }
+                if (mEditMode) assembleInstruction(true);
+
                 e.Handled = true;
             }
         }
@@ -360,18 +352,12 @@ namespace MixGui.Components
 
         void this_ReadOnlyChanged(object sender, EventArgs e)
         {
-            if (Focused)
-            {
-                checkContentsEditable();
-            }
+            if (Focused) checkContentsEditable();
         }
 
         void this_TextChanged(object sender, EventArgs e)
         {
-            if (!mUpdating && !mEditMode)
-            {
-                setEditMode();
-            }
+            if (!mUpdating && !mEditMode) setEditMode();
         }
 
         public new string Text
@@ -383,10 +369,7 @@ namespace MixGui.Components
 			set
 			{
 				base.Text = value;
-				if (Focused)
-				{
-					checkContentsEditable();
-				}
+				if (Focused) checkContentsEditable();
 			}
 		}
 
@@ -476,10 +459,7 @@ namespace MixGui.Components
 			addTextElement(text.Index, itemInErrors(errors, InstanceValidationError.Sources.Index));
 			addTextElement(text.Field, itemInErrors(errors, InstanceValidationError.Sources.FieldSpec));
 
-			if (TextLength > 0)
-			{
-				Select(TextLength, 0);
-			}
+			if (TextLength > 0) Select(TextLength, 0);
 
 			string caption = getAddressErrorsCaption(errors);
 
@@ -505,26 +485,15 @@ namespace MixGui.Components
 
         string getAddressErrorsCaption(InstanceValidationError[] errors)
         {
-            if (errors == null)
-            {
-                return null;
-            }
+            if (errors == null) return null;
 
             var captionBuilder = new StringBuilder();
             int errorNumber = 1;
 
             foreach (InstanceValidationError error in errors)
             {
-                if (errorNumber != 1)
-                {
-                    captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
-                }
-
-                if (errorNumber == 2)
-                {
-                    captionBuilder.Insert(0, "1. ");
-                }
-
+                if (errorNumber != 1) captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
+                if (errorNumber == 2) captionBuilder.Insert(0, "1. ");
                 captionBuilder.AppendFormat("address: {0}", error.CompiledMessage);
                 errorNumber++;
             }
@@ -576,10 +545,7 @@ namespace MixGui.Components
 
 					Update();
 
-					if (Focused)
-					{
-						checkContentsEditable();
-					}
+					if (Focused) checkContentsEditable();
 				}
 			}
 		}
@@ -605,10 +571,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (!(value is IFullWord))
-				{
-					throw new ArgumentException("value must be an IFullWord");
-				}
+				if (!(value is IFullWord)) throw new ArgumentException("value must be an IFullWord");
 
 				InstructionWord = (IFullWord)value;
 			}

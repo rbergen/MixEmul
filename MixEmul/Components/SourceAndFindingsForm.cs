@@ -34,17 +34,17 @@ namespace MixGui.Components
         void InitializeComponent()
         {
             var resources = new ComponentResourceManager(typeof(SourceAndFindingsForm));
-            mStatusBar = new System.Windows.Forms.StatusBar();
-            mStatusBarPanel = new System.Windows.Forms.StatusBarPanel();
-            mListPanel = new System.Windows.Forms.Panel();
+            mStatusBar = new StatusBar();
+            mStatusBarPanel = new StatusBarPanel();
+            mListPanel = new Panel();
             mCloseButton = new Button();
             mExportButton = new Button();
             mLoadButton = new Button();
-            mFindingListView = new MixGui.Components.AssemblyFindingListView();
-            mSplitter = new System.Windows.Forms.Splitter();
-            mSaveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
-            mSourceControl = new MixGui.Components.SourceCodeControl();
-            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
+            mFindingListView = new AssemblyFindingListView();
+            mSplitter = new Splitter();
+            mSaveExportFileDialog = new SaveFileDialog();
+            mSourceControl = new SourceCodeControl();
+            ((ISupportInitialize)(mStatusBarPanel)).BeginInit();
             mListPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -52,7 +52,7 @@ namespace MixGui.Components
             // 
             mStatusBar.Location = new System.Drawing.Point(0, 383);
             mStatusBar.Name = "mStatusBar";
-            mStatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+            mStatusBar.Panels.AddRange(new StatusBarPanel[] {
             mStatusBarPanel});
             mStatusBar.ShowPanels = true;
             mStatusBar.Size = new System.Drawing.Size(568, 22);
@@ -60,7 +60,7 @@ namespace MixGui.Components
             // 
             // mStatusBarPanel
             // 
-            mStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            mStatusBarPanel.AutoSize = StatusBarPanelAutoSize.Spring;
             mStatusBarPanel.Name = "mStatusBarPanel";
             mStatusBarPanel.Width = 551;
             // 
@@ -70,7 +70,7 @@ namespace MixGui.Components
             mListPanel.Controls.Add(mExportButton);
             mListPanel.Controls.Add(mLoadButton);
             mListPanel.Controls.Add(mFindingListView);
-            mListPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            mListPanel.Dock = DockStyle.Bottom;
             mListPanel.Location = new System.Drawing.Point(0, 303);
             mListPanel.Name = "mListPanel";
             mListPanel.Size = new System.Drawing.Size(568, 80);
@@ -120,7 +120,7 @@ namespace MixGui.Components
             // mSplitter
             // 
             mSplitter.BorderStyle = BorderStyle.Fixed3D;
-            mSplitter.Dock = System.Windows.Forms.DockStyle.Bottom;
+            mSplitter.Dock = DockStyle.Bottom;
             mSplitter.Location = new System.Drawing.Point(0, 295);
             mSplitter.MinExtra = 100;
             mSplitter.MinSize = 80;
@@ -137,7 +137,7 @@ namespace MixGui.Components
             // 
             // mSourceControl
             // 
-            mSourceControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            mSourceControl.Dock = DockStyle.Fill;
             mSourceControl.Location = new System.Drawing.Point(0, 0);
             mSourceControl.MarkedFinding = null;
             mSourceControl.Name = "mSourceControl";
@@ -158,7 +158,7 @@ namespace MixGui.Components
             Name = "SourceAndFindingsForm";
             ShowInTaskbar = false;
             Text = "Assembly result";
-            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
+            ((ISupportInitialize)(mStatusBarPanel)).EndInit();
             mListPanel.ResumeLayout(false);
             ResumeLayout(false);
 
@@ -185,20 +185,14 @@ namespace MixGui.Components
             string[] severityNames = Enum.GetNames(typeof(Severity));
             int[] severityCounts = new int[severityNames.Length];
 
-            foreach (AssemblyFinding finding in findings)
-            {
-                severityCounts[(int)finding.Severity]++;
-            }
+            foreach (AssemblyFinding finding in findings) severityCounts[(int)finding.Severity]++;
 
             string message = "0";
             int currentSeverityIndex = 0;
 
             for (int i = 0; i < severityCounts.Length; i++)
             {
-                if (severityCounts[i] <= 0)
-                {
-                    continue;
-                }
+                if (severityCounts[i] <= 0) continue;
 
                 string severityText = severityCounts[i] + " " + severityNames[i].ToLower();
 
@@ -224,7 +218,7 @@ namespace MixGui.Components
 
             if (findings.Count != 1)
             {
-                message = message + 's';
+                message += 's';
             }
 
             mStatusBarPanel.Text = message;

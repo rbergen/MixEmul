@@ -95,20 +95,14 @@ namespace MixGui.Components
         {
             var box = (MixByteTextBox)sender;
 
-            if (box.SelectionLength == 0)
-            {
-                box.Select(0, 2);
-            }
+            if (box.SelectionLength == 0) box.Select(0, 2);
         }
 
         void editor_keyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
 
-            if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative())))
-            {
-                negateSign();
-            }
+            if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative()))) negateSign();
         }
 
         void editor_Leave(object sender, EventArgs e)
@@ -166,10 +160,7 @@ namespace MixGui.Components
 
         void keyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers != Keys.None)
-            {
-                return;
-            }
+            if (e.Modifiers != Keys.None) return;
 
             MixByteTextBox box;
 
@@ -193,7 +184,6 @@ namespace MixGui.Components
                     box = (MixByteTextBox)sender;
                     if (box.SelectionStart + box.SelectionLength == box.TextLength)
                     {
-
                         int byteIndex = Array.IndexOf(mByteTextBoxes, box);
                         if (byteIndex < ByteCount - 1)
                         {
@@ -264,10 +254,7 @@ namespace MixGui.Components
         {
             Controls.Clear();
 
-            foreach (MixByteTextBox box in mByteTextBoxes)
-            {
-                box.Dispose();
-            }
+            foreach (MixByteTextBox box in mByteTextBoxes) box.Dispose();
 
             initializeComponent();
         }
@@ -291,10 +278,7 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (MixByteTextBox box in mByteTextBoxes)
-			{
-				box.UpdateLayout();
-			}
+			foreach (MixByteTextBox box in mByteTextBoxes) box.UpdateLayout();
 		}
 
 		public int ByteCount
@@ -376,17 +360,11 @@ namespace MixGui.Components
 		{
 			get
 			{
-				if (mSignButton.Focused)
-				{
-					return FieldTypes.Word;
-				}
+				if (mSignButton.Focused) return FieldTypes.Word;
 
 				foreach (MixByteTextBox byteBox in mByteTextBoxes)
 				{
-					if (byteBox.Focused)
-					{
-						return FieldTypes.Word;
-					}
+					if (byteBox.Focused) return FieldTypes.Word;
 				}
 
 				return null;

@@ -17,10 +17,7 @@ namespace MixAssembler.Finding
         {
             foreach (AssemblyFinding finding in Items)
             {
-                if (finding.Severity == severity)
-                {
-                    return true;
-                }
+                if (finding.Severity == severity) return true;
             }
             return false;
         }

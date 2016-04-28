@@ -70,10 +70,7 @@ namespace MixGui.Components
 
         void SearchDialog_VisibleChanged(object sender, EventArgs e)
         {
-            if (Visible)
-            {
-                fillControls();
-            }
+            if (Visible) fillControls();
         }
 
         void fillControls()

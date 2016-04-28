@@ -11,8 +11,7 @@ namespace MixAssembler.Symbol
         Word.Signs mSign;
         bool mValueDefined;
 
-        LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name)
-            : base(name)
+        LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
         {
             mLiteralSign = literalSign;
             mLiteralMagnitude = literalMagnitude;
@@ -42,16 +41,10 @@ namespace MixAssembler.Symbol
 
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=')
-			{
-				return null;
-			}
+			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=') return null;
 
 			IValue expressionValue = WValue.ParseValue(text.Substring(1, text.Length - 2), sectionCharIndex + 1, status);
-			if (expressionValue == null)
-			{
-				return null;
-			}
+			if (expressionValue == null) return null;
 
 			long literalMagnitude = expressionValue.GetMagnitude(status.LocationCounter);
 			Word.Signs literalSign = expressionValue.GetSign(status.LocationCounter);

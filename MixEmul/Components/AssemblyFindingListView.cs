@@ -85,10 +85,7 @@ namespace MixGui.Components
 			get
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mFindingsListView.SelectedItems;
-				if (selectedItems.Count == 0)
-				{
-					return null;
-				}
+				if (selectedItems.Count == 0) return null;
 
 				return (AssemblyFinding)selectedItems[0].Tag;
 			}
@@ -111,22 +108,13 @@ namespace MixGui.Components
             public int Compare(AssemblyFinding x, AssemblyFinding y)
             {
                 int comparison = y.Severity - x.Severity;
-                if (comparison != 0)
-                {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
 
                 comparison = x.LineNumber - y.LineNumber;
-                if (comparison != 0)
-                {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
 
                 comparison = x.LineSection - y.LineSection;
-                if (comparison != 0)
-                {
-                    return comparison;
-                }
+                if (comparison != 0) return comparison;
 
                 return string.Compare(x.Message, y.Message, StringComparison.Ordinal);
             }

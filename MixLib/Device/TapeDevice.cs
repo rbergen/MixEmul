@@ -21,8 +21,7 @@ namespace MixLib.Device
 
         const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
 
-        public TapeDevice(int id)
-			: base(id, fileNamePrefix)
+        public TapeDevice(int id) : base(id, fileNamePrefix)
 		{
 			UpdateSettings();
 		}
@@ -79,10 +78,7 @@ namespace MixLib.Device
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {
@@ -115,8 +111,7 @@ namespace MixLib.Device
                 long mTicksLeft;
                 const long unset = long.MinValue;
 
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
+                public Instance(StreamStatus streamStatus) : base(streamStatus)
                 {
                     mTicksLeft = unset;
                 }
@@ -125,28 +120,14 @@ namespace MixLib.Device
                 {
                     if (mTicksLeft == unset)
                     {
-                        if (!StreamStatus.PositionSet)
-                        {
-                            try
-                            {
-                                FileStream stream = File.OpenRead(StreamStatus.FileName);
-                                StreamStatus.Position = stream.Length;
-                                stream.Close();
-                            }
-                            catch (Exception exception)
-                            {
-                                OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + StreamStatus.FileName + ": " + exception.Message));
-                            }
-                        }
+                        if (!StreamStatus.PositionSet) initiateStreamPosition();
 
                         mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
                     }
 
                     mTicksLeft -= 1L;
-                    if (mTicksLeft > 0L)
-                    {
-                        return false;
-                    }
+
+                    if (mTicksLeft > 0L) return false;
 
                     if (Operands.MValue == 0)
                     {
@@ -163,6 +144,20 @@ namespace MixLib.Device
                     StreamStatus.Position = currentPosition;
 
                     return true;
+                }
+
+                private void initiateStreamPosition()
+                {
+                    try
+                    {
+                        FileStream stream = File.OpenRead(StreamStatus.FileName);
+                        StreamStatus.Position = stream.Length;
+                        stream.Close();
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "Exception while determining length of file " + StreamStatus.FileName + ": " + exception.Message));
+                    }
                 }
             }
         }

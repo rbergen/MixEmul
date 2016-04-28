@@ -101,10 +101,7 @@ namespace MixGui.Components
 				mIndexLabel.Text = "";
 				mStatusLabel.BackColor = Color.Gray;
 				mStatusLabel.Text = "";
-				if (ToolTip != null)
-				{
-					ToolTip.SetToolTip(mStatusLabel, "No device connected");
-				}
+				ToolTip?.SetToolTip(mStatusLabel, "No device connected");
 
 				mInputMenuItem.Checked = false;
 				mOutputMenuItem.Checked = false;
@@ -118,10 +115,7 @@ namespace MixGui.Components
 				mIndexLabel.Text = Device.Id + ":";
 				mStatusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
 				mStatusLabel.Text = Device.ShortName;
-				if (ToolTip != null)
-				{
-					ToolTip.SetToolTip(mStatusLabel, Device.StatusDescription);
-				}
+				ToolTip?.SetToolTip(mStatusLabel, Device.StatusDescription);
 				mInputMenuItem.Checked = Device.SupportsInput;
 				mOutputMenuItem.Checked = Device.SupportsOutput;
 

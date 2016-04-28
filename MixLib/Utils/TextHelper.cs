@@ -6,12 +6,9 @@ namespace MixLib.Utils
 	{
 		public static int FindMatch(this string text, SearchParameters options, int startIndex)
 		{
-			if (text == null || startIndex >= text.Length)
-			{
-				return -1;
-			}
+			if (text == null || startIndex >= text.Length) return -1;
 
-			if (startIndex < 0)
+            if (startIndex < 0)
 			{
 				startIndex = 0;
 			}
@@ -22,8 +19,8 @@ namespace MixLib.Utils
 			{
 				if (!options.MatchWholeWord
 					|| (options.SearchText.Length == text.Length
-							|| ((index == 0 || !char.IsLetterOrDigit(text, index - 1))
-									&& (index + options.SearchText.Length == text.Length || !char.IsLetterOrDigit(text, index + options.SearchText.Length)))))
+						|| ((index == 0 || !char.IsLetterOrDigit(text, index - 1))
+							&& (index + options.SearchText.Length == text.Length || !char.IsLetterOrDigit(text, index + options.SearchText.Length)))))
 				{
 					return index;
 				}

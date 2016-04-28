@@ -85,10 +85,7 @@ namespace MixGui.Components
 
             mUpdating = false;
 
-            if (oldByteValue != mByteValue)
-            {
-                OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
-            }
+            if (oldByteValue != mByteValue) OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
         }
 
         void this_KeyDown(object sender, KeyEventArgs e)

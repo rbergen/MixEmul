@@ -59,10 +59,7 @@ namespace MixGui.Components
 
         void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex)
-            {
-                return;
-            }
+            if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex) return;
 
             if (updateDiskControls())
             {
@@ -76,10 +73,7 @@ namespace MixGui.Components
 
         void mTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex)
-            {
-                return;
-            }
+            if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex) return;
 
             if (updateTapeControls())
             {
@@ -94,10 +88,7 @@ namespace MixGui.Components
 
         public new void Hide()
 		{
-			if (saveCurrentTabRecord())
-			{
-				base.Hide();
-			}
+			if (saveCurrentTabRecord()) base.Hide();
 		}
 
 		public void ShowDevice(MixDevice device)
@@ -138,10 +129,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (value == null)
-				{
-					return;
-				}
+				if (value == null) return;
 
 				if (mDevices != null)
 				{
@@ -308,10 +296,7 @@ namespace MixGui.Components
 
         void mDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab)
-            {
-                return;
-            }
+            if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab) return;
 
             if (saveCurrentTabRecord())
             {

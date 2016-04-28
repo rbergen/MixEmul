@@ -75,10 +75,7 @@ namespace MixLib.Instruction
 			Register rX = module.Registers.rX;
 
 			int shiftCount = indexedAddress % (FullWordRegister.RegisterByteCount * 2);
-			if (shiftCount == 0)
-			{
-				return true;
-			}
+			if (shiftCount == 0) return true;
 
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
 			{
@@ -259,10 +256,7 @@ namespace MixLib.Instruction
 
 			int registerBitCount = FullWordRegister.RegisterByteCount * MixByte.BitCount;
 			int shiftCount = indexedAddress % (registerBitCount * 2);
-			if (shiftCount == 0)
-			{
-				return true;
-			}
+			if (shiftCount == 0) return true;
 
 			long rAlongValue = rA.MagnitudeLongValue;
 			long rXlongValue = rX.MagnitudeLongValue;

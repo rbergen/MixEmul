@@ -11,10 +11,7 @@ namespace MixLib.Type
 
         public byte ByteValue { get; private set; }
 
-        public MixByte()
-			: this(0)
-		{
-		}
+        public MixByte() : this(0) { }
 
 		public MixByte(byte value)
 		{

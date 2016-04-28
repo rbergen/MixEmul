@@ -18,8 +18,7 @@ namespace MixGui.Components
 
         public event EventHandler ValueChanged;
 
-		public ToolStripCycleButton(IContainer container)
-			: this()
+		public ToolStripCycleButton(IContainer container) : this()
 		{
 			container.Add(this);
 		}

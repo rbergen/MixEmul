@@ -48,10 +48,7 @@ namespace MixAssembler.Value
 				// all characters must be numeric for this to be a literal numeric value
 				for (int i = 0; i < text.Length; i++)
 				{
-					if (!char.IsNumber(text[i]))
-					{
-						return null;
-					}
+					if (!char.IsNumber(text[i])) return null;
 				}
 
 				// it seems to be numeric, so we just parse it

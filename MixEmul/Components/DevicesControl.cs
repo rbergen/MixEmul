@@ -132,10 +132,7 @@ namespace MixGui.Components
             }
             else
             {
-                for (int i = 0; i < mDeviceControls.Length; i++)
-                {
-                    addDeviceControl(i);
-                }
+                for (int i = 0; i < mDeviceControls.Length; i++) addDeviceControl(i);
             }
 
             ResumeLayout(false);
@@ -149,20 +146,14 @@ namespace MixGui.Components
 
         public new void Update()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls)
-			{
-				control.Update();
-			}
+			foreach (DeviceStatusControl control in mDeviceControls) control.Update();
 
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls)
-			{
-				control.UpdateLayout();
-			}
+			foreach (DeviceStatusControl control in mDeviceControls) control.UpdateLayout();
 		}
 
 		public MixLib.Devices Devices
@@ -269,14 +260,8 @@ namespace MixGui.Components
 				}
 				set
 				{
-					if (mLayoutList.ContainsKey(location))
-					{
-						mLayoutList.Remove(location);
-					}
-					if (value != DevicesControl.Breaks.None)
-					{
-						mLayoutList.Add(location, value);
-					}
+					if (mLayoutList.ContainsKey(location)) mLayoutList.Remove(location);
+					if (value != DevicesControl.Breaks.None) mLayoutList.Add(location, value);
 				}
 			}
 		}

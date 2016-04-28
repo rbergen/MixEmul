@@ -6,19 +6,14 @@ namespace MixLib.Type
 	{
 		public new const int ByteCount = 5;
 
-		public FullWord()
-			: base(ByteCount)
-		{
-		}
+		public FullWord() : base(ByteCount) { }
 
-		public FullWord(long value)
-			: this()
+		public FullWord(long value) : this()
 		{
 			LongValue = value;
 		}
 
-		public FullWord(Word.Signs sign, long magnitude)
-			: this()
+		public FullWord(Word.Signs sign, long magnitude) : this()
 		{
 			MagnitudeLongValue = magnitude;
 			Sign = sign;
@@ -26,7 +21,7 @@ namespace MixLib.Type
 
 		public static implicit operator FullWord(long value) => new FullWord(value);
 
-		public override Object Clone()
+		public override object Clone()
 		{
 			var copy = new FullWord();
 			CopyTo(copy);

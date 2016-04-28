@@ -8,9 +8,6 @@ namespace MixLib.Type
 
 		public static FieldSpec DefaultFieldSpec { get; private set; } = new FieldSpec(0, RegisterByteCount);
 
-		public FullWordRegister()
-			: base(RegisterByteCount, PaddingByteCount)
-		{
-		}
+		public FullWordRegister() : base(RegisterByteCount, PaddingByteCount) { }
 	}
 }

@@ -71,10 +71,7 @@ namespace MixLib.Device
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {
@@ -107,28 +104,24 @@ namespace MixLib.Device
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {
-                    if (StreamStatus.Stream != null)
+                    if (StreamStatus.Stream == null) return true;
+
+                    try
                     {
-                        try
-                        {
-                            var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
-                            writer.WriteLine();
-                            writer.WriteLine("===================== PAGE BREAK ===================== PAGE BREAK ===================== PAGE BREAK =====================");
-                            writer.WriteLine();
-                            writer.Flush();
-                            StreamStatus.UpdatePosition();
-                        }
-                        catch (Exception exception)
-                        {
-                            OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-                        }
+                        var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
+                        writer.WriteLine();
+                        writer.WriteLine("===================== PAGE BREAK ===================== PAGE BREAK ===================== PAGE BREAK =====================");
+                        writer.WriteLine();
+                        writer.Flush();
+                        StreamStatus.UpdatePosition();
+                    }
+                    catch (Exception exception)
+                    {
+                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
                     }
 
                     return true;

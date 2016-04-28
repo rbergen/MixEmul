@@ -20,8 +20,7 @@ namespace MixLib.Device
         const int recordWordCount = 14;
         public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
 
-		public PaperTapeDevice(int id)
-			: base(id, fileNamePrefix)
+		public PaperTapeDevice(int id) : base(id, fileNamePrefix)
 		{
 			UpdateSettings();
 		}
@@ -65,10 +64,7 @@ namespace MixLib.Device
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {
@@ -97,8 +93,7 @@ namespace MixLib.Device
                 long mTicksLeft;
                 const long unset = long.MinValue;
 
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
+                public Instance(StreamStatus streamStatus) : base(streamStatus)
                 {
                     mTicksLeft = unset;
                 }
@@ -111,10 +106,7 @@ namespace MixLib.Device
                     }
 
                     mTicksLeft -= 1L;
-                    if (mTicksLeft > 0L)
-                    {
-                        return false;
-                    }
+                    if (mTicksLeft > 0L) return false;
 
                     StreamStatus.Position = 0L;
 

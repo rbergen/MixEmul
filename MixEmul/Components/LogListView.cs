@@ -92,10 +92,7 @@ namespace MixGui.Components
         void addressSelected()
         {
             int selectedAddress = SelectedAddress;
-            if (selectedAddress != noAddress)
-            {
-                OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
-            }
+            if (selectedAddress != noAddress) OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
         }
 
         public string SelectedModule
@@ -104,10 +101,7 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0)
-				{
-					return null;
-				}
+				if (selectedItems.Count == 0) return null;
 
 				string module = selectedItems[0].SubItems[moduleFieldIndex].Text;
 
@@ -121,10 +115,7 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0 || selectedItems[0].SubItems[addressFieldIndex].Text == "")
-				{
-					return noAddress;
-				}
+				if (selectedItems.Count == 0 || selectedItems[0].SubItems[addressFieldIndex].Text == "") return noAddress;
 
 				int address = noAddress;
 				try

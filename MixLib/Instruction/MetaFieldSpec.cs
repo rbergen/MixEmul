@@ -25,19 +25,13 @@ namespace MixLib.Instruction
         /// <summary>
         /// Creates a MetaFieldSpec that describes that a fieldspec is forbidden
         /// </summary>
-        public MetaFieldSpec()
-			: this(Presences.Forbidden, false, null)
-		{
-		}
+        public MetaFieldSpec() : this(Presences.Forbidden, false, null) { }
 
 		/// <summary>
 		/// Creates a MetaFieldSpec with a specified presence (Optional, Mandatory or Forbidden, of which only the first two make sense).
 		/// It can also specifies if the fieldspec is a range, like (0:5), or a value, like (19).
 		/// </summary>
-		public MetaFieldSpec(Presences presence, bool fieldIsRange)
-			: this(presence, fieldIsRange, null)
-		{
-		}
+		public MetaFieldSpec(Presences presence, bool fieldIsRange) : this(presence, fieldIsRange, null) { }
 
 		/// <summary>
 		/// Creates a MetaFieldSpec that describes an Optional fieldspec, with a specified default value.
@@ -45,8 +39,8 @@ namespace MixLib.Instruction
 		/// </summary>
 		/// <param name="fieldIsRange"></param>
 		/// <param name="defaultFieldSpec"></param>
-		public MetaFieldSpec(bool fieldIsRange, FieldSpec defaultFieldSpec)
-			: this(Presences.Optional, fieldIsRange, defaultFieldSpec)
+		public MetaFieldSpec(bool fieldIsRange, FieldSpec defaultFieldSpec) 
+            : this(Presences.Optional, fieldIsRange, defaultFieldSpec)
 		{
 		}
 

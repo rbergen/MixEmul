@@ -4,8 +4,7 @@ namespace MixLib.Device.Step
 	{
         string mStatusDescription;
 
-        public NoOpStep(int tickCount, string statusDescription)
-			: base(tickCount)
+        public NoOpStep(int tickCount, string statusDescription) : base(tickCount)
 		{
 			mStatusDescription = statusDescription;
 		}
@@ -16,14 +15,9 @@ namespace MixLib.Device.Step
 
 		protected new class Instance : TickingStep.Instance
 		{
-			public Instance(int tickCount)
-				: base(tickCount)
-			{
-			}
+			public Instance(int tickCount) : base(tickCount) { }
 
-			protected override void ProcessTick()
-			{
-			}
+			protected override void ProcessTick() { }
 		}
 	}
 }

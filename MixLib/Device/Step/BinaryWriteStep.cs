@@ -19,7 +19,8 @@ namespace MixLib.Device.Step
 
         public override string StatusDescription => statusDescription;
 
-        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
+        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => 
+            new Instance(streamStatus, mRecordWordCount);
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)
 		{
@@ -58,25 +59,23 @@ namespace MixLib.Device.Step
             int mRecordWordCount;
             MixByte[] mWriteBytes;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount)
-                : base(streamStatus)
+            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
             {
                 mRecordWordCount = recordWordCount;
             }
 
             public override bool Tick()
             {
-                if (StreamStatus.Stream != null && mWriteBytes != null)
+                if (StreamStatus.Stream == null || mWriteBytes == null) return true;
+
+                try
                 {
-                    try
-                    {
-                        WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
-                        StreamStatus.UpdatePosition();
-                    }
-                    catch (Exception exception)
-                    {
-                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-                    }
+                    WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
+                    StreamStatus.UpdatePosition();
+                }
+                catch (Exception exception)
+                {
+                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
                 }
 
                 return true;

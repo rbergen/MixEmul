@@ -289,10 +289,7 @@ namespace MixGui.Components
 
         public new void Update()
 		{
-			foreach (WordValueEditor editor in mEditors)
-			{
-				editor.Update();
-			}
+			foreach (WordValueEditor editor in mEditors) editor.Update();
 
 			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
 			mOverflowBox.Checked = mRegisters.OverflowIndicator;
@@ -302,10 +299,7 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (WordValueEditor editor in mEditors)
-			{
-				editor.UpdateLayout();
-			}
+			foreach (WordValueEditor editor in mEditors) editor.UpdateLayout();
 		}
 
 		public bool ReadOnly

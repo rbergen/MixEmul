@@ -32,11 +32,8 @@
         {
             switch (current)
             {
-                case Registers.CompValues.Equal:
-                    return Registers.CompValues.Greater;
-
-                case Registers.CompValues.Greater:
-                    return Registers.CompValues.Less;
+                case Registers.CompValues.Equal: return Registers.CompValues.Greater;
+                case Registers.CompValues.Greater: return Registers.CompValues.Less;
             }
 
             return Registers.CompValues.Equal;
@@ -46,14 +43,9 @@
         {
             switch (compValue)
             {
-                case Registers.CompValues.Less:
-                    return '<';
-
-                case Registers.CompValues.Equal:
-                    return '=';
-
-                case Registers.CompValues.Greater:
-                    return '>';
+                case Registers.CompValues.Less: return '<';
+                case Registers.CompValues.Equal: return '=';
+                case Registers.CompValues.Greater: return '>';
             }
 
             return '?';
@@ -61,14 +53,8 @@
 
         public static Registers.CompValues ToCompValue(this int comparisonValue)
         {
-            if (comparisonValue < 0)
-            {
-                return Registers.CompValues.Less;
-            }
-            else if (comparisonValue > 0)
-            {
-                return Registers.CompValues.Greater;
-            }
+            if (comparisonValue < 0) return Registers.CompValues.Less;
+            if (comparisonValue > 0) return Registers.CompValues.Greater;
 
             return Registers.CompValues.Equal;
         }

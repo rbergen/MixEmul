@@ -16,6 +16,7 @@ namespace MixLib.Device.Settings
 		public const string TeletypeInitialization = "TeletypeInitialization";
 		public const int DefaultDeviceReloadInterval = 500;
 		public const int UnsetDeviceReloadInterval = int.MinValue;
+        public const int DefaultDefaultTickCount = 50;
 
         static string mDefaultDeviceFilesDirectory;
         static string mDeviceFilesDirectory;
@@ -45,25 +46,11 @@ namespace MixLib.Device.Settings
 
         public static bool IsKnownTickCount(string name) => mDefaultTickCounts.ContainsKey(name);
 
-        public static int GetDefaultTickCount(string name)
-		{
-			if (mDefaultTickCounts.ContainsKey(name))
-			{
-				return mDefaultTickCounts[name];
-			}
+        public static int GetDefaultTickCount(string name) => 
+            IsKnownTickCount(name) ? mDefaultTickCounts[name] : DefaultDefaultTickCount;
 
-			return 50;
-		}
-
-		public static int GetTickCount(string name)
-		{
-			if (TickCounts.ContainsKey(name))
-			{
-				return TickCounts[name];
-			}
-
-			return GetDefaultTickCount(name);
-		}
+		public static int GetTickCount(string name) => 
+            TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
 
 		public static string DefaultDeviceFilesDirectory
 		{

@@ -85,13 +85,13 @@ namespace MixGui.Components
             mOutputTextBox = new TextBox();
             mPromptLabel = new Label();
             mInputTextBox = new TextBox();
-            mStatusBar = new System.Windows.Forms.StatusBar();
-            mStatusBarPanel = new System.Windows.Forms.StatusBarPanel();
+            mStatusBar = new StatusBar();
+            mStatusBarPanel = new StatusBarPanel();
             mClearButton = new Button();
             mSendButton = new Button();
             mOnTopCheckBox = new CheckBox();
             mEchoInputCheckBox = new CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).BeginInit();
+            ((ISupportInitialize)(mStatusBarPanel)).BeginInit();
             SuspendLayout();
             // 
             // mOutputTextBox
@@ -134,7 +134,7 @@ namespace MixGui.Components
             // 
             mStatusBar.Location = new Point(0, 287);
             mStatusBar.Name = "mStatusBar";
-            mStatusBar.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+            mStatusBar.Panels.AddRange(new StatusBarPanel[] {
             mStatusBarPanel});
             mStatusBar.ShowPanels = true;
             mStatusBar.Size = new Size(616, 22);
@@ -142,7 +142,7 @@ namespace MixGui.Components
             // 
             // mStatusBarPanel
             // 
-            mStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            mStatusBarPanel.AutoSize = StatusBarPanelAutoSize.Spring;
             mStatusBarPanel.Name = "mStatusBarPanel";
             mStatusBarPanel.Text = "Idle";
             mStatusBarPanel.Width = 600;
@@ -208,7 +208,7 @@ namespace MixGui.Components
             Activated += activated;
             VisibleChanged += visibleChanged;
             FormClosing += formClosing;
-            ((System.ComponentModel.ISupportInitialize)(mStatusBarPanel)).EndInit();
+            ((ISupportInitialize)(mStatusBarPanel)).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
@@ -279,10 +279,7 @@ namespace MixGui.Components
 
         void sendInput()
         {
-            if (EchoInput)
-            {
-                AddOutputText("> " + mInputTextBox.Text);
-            }
+            if (EchoInput) AddOutputText("> " + mInputTextBox.Text);
 
             mTeletypeDevice.AddInputLine(mInputTextBox.Text);
             mInputTextBox.Text = "";

@@ -287,10 +287,7 @@ namespace MixLib
 		{
 			List<MixInstruction> instructions;
 
-			if (!mOpcodeInstructionMap.TryGetValue(opcode, out instructions))
-			{
-				return null;
-			}
+			if (!mOpcodeInstructionMap.TryGetValue(opcode, out instructions)) return null;
 
 			int startIndex = 0;
 			MixInstruction defaultInstruction = null;
@@ -303,26 +300,14 @@ namespace MixLib
 
 			for (int index = startIndex; index < instructions.Count; index++)
 			{
-				if (instructions[index].FieldSpec == fieldSpec)
-				{
-					return instructions[index];
-				}
+				if (instructions[index].FieldSpec == fieldSpec) return instructions[index];
 			}
 
 			return defaultInstruction;
 		}
 
-		public MixInstruction this[string mnemonic]
-		{
-			get
-			{
-				if (!mMnemonicInstructionMap.ContainsKey(mnemonic))
-				{
-					return null;
-				}
-				return mMnemonicInstructionMap[mnemonic];
-			}
-		}
+		public MixInstruction this[string mnemonic] => 
+            mMnemonicInstructionMap.ContainsKey(mnemonic) ? mMnemonicInstructionMap[mnemonic] : null;
 
 		public MixInstruction[] this[byte opcode]
 		{
@@ -336,10 +321,7 @@ namespace MixLib
 					{
 						list.Add(instruction);
 
-						if (instruction.FieldSpec == null)
-						{
-							break;
-						}
+						if (instruction.FieldSpec == null) break;
 					}
 				}
 

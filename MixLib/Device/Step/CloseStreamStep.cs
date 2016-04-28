@@ -12,10 +12,7 @@ namespace MixLib.Device.Step
 
         new class Instance : StreamStep.Instance
         {
-            public Instance(StreamStatus streamStatus)
-                : base(streamStatus)
-            {
-            }
+            public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
             public override bool Tick()
             {

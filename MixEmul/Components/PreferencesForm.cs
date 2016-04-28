@@ -120,10 +120,7 @@ namespace MixGui.Components
 
 		void keyDown(object sender, KeyEventArgs e)
 		{
-			if (!(sender is MixByteCollectionCharTextBox) || e.Modifiers != Keys.None)
-			{
-				return;
-			}
+			if (!(sender is MixByteCollectionCharTextBox) || e.Modifiers != Keys.None) return;
 
 			var senderTextBox = (MixByteCollectionCharTextBox)sender;
 			MixByteCollectionCharTextBox targetTextBox;
@@ -139,10 +136,7 @@ namespace MixGui.Components
 					{
 						targetTextBox = mLoaderCardTextBoxes[index - 1];
 						targetTextBox.Focus();
-						if (caretPos.HasValue)
-						{
-							targetTextBox.Select(caretPos.Value, 0);
-						}
+						if (caretPos.HasValue) targetTextBox.Select(caretPos.Value, 0);
 					}
 
 					break;
@@ -153,10 +147,7 @@ namespace MixGui.Components
 					{
 						targetTextBox = mLoaderCardTextBoxes[index + 1];
 						targetTextBox.Focus();
-						if (caretPos.HasValue)
-						{
-							targetTextBox.Select(caretPos.Value, 0);
-						}
+						if (caretPos.HasValue) targetTextBox.Select(caretPos.Value, 0);
 					}
 
 					break;
@@ -204,10 +195,7 @@ namespace MixGui.Components
             var list = new List<deviceFileComboBoxItem>();
             foreach (MixDevice device in mDevices)
             {
-                if (!(device is FileBasedDevice))
-                {
-                    continue;
-                }
+                if (!(device is FileBasedDevice)) continue;
 
                 var item = new deviceFileComboBoxItem((FileBasedDevice)device);
 
@@ -307,10 +295,7 @@ namespace MixGui.Components
 
             foreach (colorComboBoxItem item in mColorSelectionBox.Items)
             {
-                if (item.Name == matchingColorName)
-                {
-                    return item.Color;
-                }
+                if (item.Name == matchingColorName) return item.Color;
             }
 
             return GuiSettings.GetDefaultColor(name);
@@ -364,7 +349,7 @@ namespace MixGui.Components
             mDeviceReloadIntervalDefaultButton = new Button();
             mLoaderCardsGroupBox = new GroupBox();
             mLoaderCardsDefaultButton = new Button();
-            mLoaderCardsPanel = new System.Windows.Forms.Panel();
+            mLoaderCardsPanel = new Panel();
             mFloatingPointGroupBox = new GroupBox();
             mFloatingPointMemoryWordCountLabel = new Label();
             mFloatingPointMemoryWordCountDefaultButton = new Button();
@@ -938,22 +923,13 @@ namespace MixGui.Components
 
         void mDefaultsButton_Click(object sender, EventArgs e)
         {
-            foreach (colorComboBoxItem colorItem in mColorSelectionBox.Items)
-            {
-                colorItem.ResetDefault();
-            }
+            foreach (colorComboBoxItem colorItem in mColorSelectionBox.Items) colorItem.ResetDefault();
 
             mColorProfilingCountsCheckBox.Checked = true;
 
-            foreach (deviceFileComboBoxItem deviceFileItem in mDeviceFileSelectionBox.Items)
-            {
-                deviceFileItem.ResetDefault();
-            }
+            foreach (deviceFileComboBoxItem deviceFileItem in mDeviceFileSelectionBox.Items) deviceFileItem.ResetDefault();
 
-            foreach (tickCountComboBoxItem tickCountItem in mTickCountSelectionBox.Items)
-            {
-                tickCountItem.ResetDefault();
-            }
+            foreach (tickCountComboBoxItem tickCountItem in mTickCountSelectionBox.Items) tickCountItem.ResetDefault();
 
             mDeviceFilesDirectory = null;
             mDeviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
@@ -1035,10 +1011,7 @@ namespace MixGui.Components
             mConfiguration.Colors.Clear();
             foreach (colorComboBoxItem colorItem in mColorSelectionBox.Items)
             {
-                if (!colorItem.IsDefault)
-                {
-                    mConfiguration.Colors.Add(colorItem.Name, colorItem.Color);
-                }
+                if (!colorItem.IsDefault) mConfiguration.Colors.Add(colorItem.Name, colorItem.Color);
             }
 
             mConfiguration.ColorProfilingCounts = mColorProfilingCountsCheckBox.Checked;
@@ -1446,10 +1419,7 @@ namespace MixGui.Components
 
             public override string ToString()
             {
-                if (MilliSeconds < 1000)
-                {
-                    return MilliSeconds.ToString("##0 ms");
-                }
+                if (MilliSeconds < 1000) return MilliSeconds.ToString("##0 ms");
 
                 float seconds = MilliSeconds / 1000f;
                 return seconds.ToString("0.## s");

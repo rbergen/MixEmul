@@ -83,10 +83,7 @@ namespace MixGui.Components
                 return;
             }
 
-            if (e.Modifiers != Keys.None)
-            {
-                return;
-            }
+            if (e.Modifiers != Keys.None) return;
 
             switch (e.KeyCode)
             {
@@ -190,27 +187,13 @@ namespace MixGui.Components
 
         bool arraysEqual(MixByte[] one, MixByte[] two)
         {
-            if ((one == null && two != null) || (one != null && two == null))
-            {
-                return false;
-            }
-
-            if (one == null && two == null)
-            {
-                return true;
-            }
-
-            if (one.Length != two.Length)
-            {
-                return false;
-            }
+            if ((one == null && two != null) || (one != null && two == null)) return false;
+            if (one == null && two == null) return true;
+            if (one.Length != two.Length) return false;
 
             for (int i = 0; i < one.Length; i++)
             {
-                if (one[i] != two[i])
-                {
-                    return false;
-                }
+                if (one[i] != two[i]) return false;
             }
 
             return true;

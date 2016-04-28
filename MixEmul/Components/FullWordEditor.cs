@@ -82,10 +82,7 @@ namespace MixGui.Components
 
         void keyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers != Keys.None)
-            {
-                return;
-            }
+            if (e.Modifiers != Keys.None) return;
 
             FieldTypes editorField = FieldTypes.Chars;
             int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;

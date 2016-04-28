@@ -35,10 +35,7 @@ namespace MixGui.Components
 					product = ((AssemblyProductAttribute)attribute).Product;
 				}
 
-				if (copyright != null && product != null)
-				{
-					break;
-				}
+				if (copyright != null && product != null) break;
 			}
 
 			Version version = executingAssembly.GetName().Version;
@@ -57,18 +54,18 @@ namespace MixGui.Components
         void InitializeComponent()
         {
             var resources = new ComponentResourceManager(typeof(AboutForm));
-            mLogoBox = new System.Windows.Forms.PictureBox();
+            mLogoBox = new PictureBox();
             mCopyrightLabel = new Label();
             mProductAndVersionLabel = new Label();
             mCloseButton = new Button();
             mFullVersionLabel = new Label();
-            ((System.ComponentModel.ISupportInitialize)(mLogoBox)).BeginInit();
+            ((ISupportInitialize)(mLogoBox)).BeginInit();
             SuspendLayout();
             // 
             // mLogoBox
             // 
             mLogoBox.BorderStyle = BorderStyle.FixedSingle;
-            mLogoBox.Image = global::MixGui.Properties.Resources.AboutFormLogoBoxImage;
+            mLogoBox.Image = Properties.Resources.AboutFormLogoBoxImage;
             mLogoBox.Location = new System.Drawing.Point(68, 104);
             mLogoBox.Name = "mLogoBox";
             mLogoBox.Size = new System.Drawing.Size(135, 135);
@@ -130,7 +127,7 @@ namespace MixGui.Components
             StartPosition = FormStartPosition.CenterScreen;
             Text = "About";
             KeyPress += this_KeyPress;
-            ((System.ComponentModel.ISupportInitialize)(mLogoBox)).EndInit();
+            ((ISupportInitialize)(mLogoBox)).EndInit();
             ResumeLayout(false);
 
         }

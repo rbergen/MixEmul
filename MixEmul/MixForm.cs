@@ -286,22 +286,13 @@ namespace MixGui
 		{
 			if (e.Device is TeletypeDevice)
 			{
-				if (!mTeletype.Visible)
-				{
-					mTeletype.Show();
-				}
-
+				if (!mTeletype.Visible) mTeletype.Show();
 				mTeletype.BringToFront();
 				return;
 			}
 
 			mDeviceEditor.ShowDevice(e.Device);
-
-			if (!mDeviceEditor.Visible)
-			{
-				mDeviceEditor.Show();
-			}
-
+			if (!mDeviceEditor.Visible) mDeviceEditor.Show();
 			mDeviceEditor.BringToFront();
 		}
 
@@ -315,7 +306,7 @@ namespace MixGui
 			{
 				if (mMainMemoryEditor.IsAddressVisible(pc))
 				{
-					mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == Mix.RunStatus.Idle);
+					mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == ModuleBase.RunStatus.Idle);
 				}
 
 				mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
@@ -342,10 +333,7 @@ namespace MixGui
         {
             string controlProgramFileName = ModuleSettings.ControlProgramFile;
 
-            if (string.IsNullOrEmpty(controlProgramFileName) || !File.Exists(controlProgramFileName))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(controlProgramFileName) || !File.Exists(controlProgramFileName)) return;
 
             loadModuleProgram(mMix, controlProgramFileName, "control");
             mMix.FullMemory.ClearSourceLines();
@@ -474,7 +462,7 @@ namespace MixGui
         {
             if (mMainMemoryEditor.IsAddressVisible(mMix.ProgramCounter))
             {
-                mMainMemoryEditor.MakeAddressVisible(address, mMix.Status == Mix.RunStatus.Idle);
+                mMainMemoryEditor.MakeAddressVisible(address, mMix.Status == ModuleBase.RunStatus.Idle);
             }
 
             mMix.ProgramCounter = address;
@@ -484,88 +472,88 @@ namespace MixGui
 
         void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            System.Windows.Forms.ToolStripSeparator fileMenuToolStripSeparator;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-            System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+            components = new Container();
+            ToolStripSeparator fileMenuToolStripSeparator;
+            ToolStripSeparator toolStripSeparator1;
+            ToolStripSeparator toolStripSeparator2;
+            ToolStripSeparator toolStripSeparator3;
+            ToolStripSeparator toolStripSeparator4;
+            ToolStripSeparator toolStripSeparator5;
+            ToolStripSeparator toolStripSeparator6;
+            ToolStripSeparator toolStripSeparator7;
             var resources = new ComponentResourceManager(typeof(MixForm));
             var registers1 = new Registers();
-            mSeverityImageList = new System.Windows.Forms.ImageList(components);
-            mMainMenuStrip = new System.Windows.Forms.MenuStrip();
-            mFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mOpenProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mTeletypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mDeviceEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            mFindMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mFindNextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mTickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mRunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mGoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mDetachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mClearBreakpointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mPreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            mProfilingEnabledMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mProfilingShowTickCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mAboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            mToolStripContainer = new System.Windows.Forms.ToolStripContainer();
-            mStatusStrip = new System.Windows.Forms.StatusStrip();
-            mModeToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            mModeCycleButton = new MixGui.Components.ToolStripCycleButton(components);
-            mStatusToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            mToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            mSplitContainer = new System.Windows.Forms.SplitContainer();
+            mSeverityImageList = new ImageList(components);
+            mMainMenuStrip = new MenuStrip();
+            mFileToolStripMenuItem = new ToolStripMenuItem();
+            mOpenProgramToolStripMenuItem = new ToolStripMenuItem();
+            mExitToolStripMenuItem = new ToolStripMenuItem();
+            mViewToolStripMenuItem = new ToolStripMenuItem();
+            mTeletypeToolStripMenuItem = new ToolStripMenuItem();
+            mDeviceEditorToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator8 = new ToolStripSeparator();
+            mFindMenuItem = new ToolStripMenuItem();
+            mFindNextMenuItem = new ToolStripMenuItem();
+            mActionsToolStripMenuItem = new ToolStripMenuItem();
+            mTickToolStripMenuItem = new ToolStripMenuItem();
+            mStepToolStripMenuItem = new ToolStripMenuItem();
+            mRunToolStripMenuItem = new ToolStripMenuItem();
+            mGoToolStripMenuItem = new ToolStripMenuItem();
+            mDetachToolStripMenuItem = new ToolStripMenuItem();
+            mClearBreakpointsToolStripMenuItem = new ToolStripMenuItem();
+            mResetToolStripMenuItem = new ToolStripMenuItem();
+            mToolsToolStripMenuItem = new ToolStripMenuItem();
+            mPreferencesToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator9 = new ToolStripSeparator();
+            mProfilingEnabledMenuItem = new ToolStripMenuItem();
+            mProfilingShowTickCountsMenuItem = new ToolStripMenuItem();
+            mHelpToolStripMenuItem = new ToolStripMenuItem();
+            mAboutToolStripMenuItem = new ToolStripMenuItem();
+            mToolStripContainer = new ToolStripContainer();
+            mStatusStrip = new StatusStrip();
+            mModeToolStripStatusLabel = new ToolStripStatusLabel();
+            mModeCycleButton = new ToolStripCycleButton(components);
+            mStatusToolStripStatusLabel = new ToolStripStatusLabel();
+            mToolStripStatusLabel = new ToolStripStatusLabel();
+            mSplitContainer = new SplitContainer();
             mMemoryGroup = new GroupBox();
-            mMemoryTabControl = new System.Windows.Forms.TabControl();
-            mMainMemoryTab = new System.Windows.Forms.TabPage();
-            mMainMemoryEditor = new MixGui.Components.MemoryEditor();
-            mFloatingPointMemoryTab = new System.Windows.Forms.TabPage();
+            mMemoryTabControl = new TabControl();
+            mMainMemoryTab = new TabPage();
+            mMainMemoryEditor = new MemoryEditor();
+            mFloatingPointMemoryTab = new TabPage();
             mRegistersGroup = new GroupBox();
-            mRegistersEditor = new MixGui.Components.RegistersEditor();
+            mRegistersEditor = new RegistersEditor();
             mDevicesGroup = new GroupBox();
             mDeviceEditorButton = new Button();
-            mDevicesControl = new MixGui.Components.DevicesControl();
+            mDevicesControl = new DevicesControl();
             mSymbolGroup = new GroupBox();
-            mSymbolListView = new MixGui.Components.SymbolListView();
+            mSymbolListView = new SymbolListView();
             mLogListGroup = new GroupBox();
-            mLogListView = new MixGui.Components.LogListView();
-            mControlToolStrip = new System.Windows.Forms.ToolStrip();
-            mPCToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            mShowPCToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mTicksToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            mTicksToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
-            mResetTicksToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mTickToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mStepToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mRunToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mGoToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mDetachToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mClearBreakpointsToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mResetToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mTeletypeToolStripButton = new System.Windows.Forms.ToolStripButton();
-            mToolTip = new System.Windows.Forms.ToolTip(components);
-            mProfilingResetCountsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            fileMenuToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            mLogListView = new LogListView();
+            mControlToolStrip = new ToolStrip();
+            mPCToolStripLabel = new ToolStripLabel();
+            mShowPCToolStripButton = new ToolStripButton();
+            mTicksToolStripLabel = new ToolStripLabel();
+            mTicksToolStripTextBox = new ToolStripTextBox();
+            mResetTicksToolStripButton = new ToolStripButton();
+            mTickToolStripButton = new ToolStripButton();
+            mStepToolStripButton = new ToolStripButton();
+            mRunToolStripButton = new ToolStripButton();
+            mGoToolStripButton = new ToolStripButton();
+            mDetachToolStripButton = new ToolStripButton();
+            mClearBreakpointsToolStripButton = new ToolStripButton();
+            mResetToolStripButton = new ToolStripButton();
+            mTeletypeToolStripButton = new ToolStripButton();
+            mToolTip = new ToolTip(components);
+            mProfilingResetCountsMenuItem = new ToolStripMenuItem();
+            fileMenuToolStripSeparator = new ToolStripSeparator();
+            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripSeparator2 = new ToolStripSeparator();
+            toolStripSeparator3 = new ToolStripSeparator();
+            toolStripSeparator4 = new ToolStripSeparator();
+            toolStripSeparator5 = new ToolStripSeparator();
+            toolStripSeparator6 = new ToolStripSeparator();
+            toolStripSeparator7 = new ToolStripSeparator();
             mMainMenuStrip.SuspendLayout();
             mToolStripContainer.BottomToolStripPanel.SuspendLayout();
             mToolStripContainer.ContentPanel.SuspendLayout();
@@ -627,7 +615,7 @@ namespace MixGui
             // 
             // mSeverityImageList
             // 
-            mSeverityImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
+            mSeverityImageList.ImageStream = ((ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
             mSeverityImageList.TransparentColor = Color.Transparent;
             mSeverityImageList.Images.SetKeyName(0, "");
             mSeverityImageList.Images.SetKeyName(1, "");
@@ -636,8 +624,8 @@ namespace MixGui
             // 
             // mMainMenuStrip
             // 
-            mMainMenuStrip.Dock = System.Windows.Forms.DockStyle.None;
-            mMainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mMainMenuStrip.Dock = DockStyle.None;
+            mMainMenuStrip.Items.AddRange(new ToolStripItem[] {
             mFileToolStripMenuItem,
             mViewToolStripMenuItem,
             mActionsToolStripMenuItem,
@@ -651,7 +639,7 @@ namespace MixGui
             // 
             // mFileToolStripMenuItem
             // 
-            mFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mFileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
             mOpenProgramToolStripMenuItem,
             fileMenuToolStripSeparator,
             mExitToolStripMenuItem});
@@ -661,9 +649,9 @@ namespace MixGui
             // 
             // mOpenProgramToolStripMenuItem
             // 
-            mOpenProgramToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
+            mOpenProgramToolStripMenuItem.Image = ((Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
             mOpenProgramToolStripMenuItem.Name = "mOpenProgramToolStripMenuItem";
-            mOpenProgramToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O);
+            mOpenProgramToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.O);
             mOpenProgramToolStripMenuItem.Size = new Size(204, 22);
             mOpenProgramToolStripMenuItem.Text = "&Open program...";
             mOpenProgramToolStripMenuItem.Click += mOpenProgramMenuItem_Click;
@@ -677,7 +665,7 @@ namespace MixGui
             // 
             // mViewToolStripMenuItem
             // 
-            mViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mViewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
             mTeletypeToolStripMenuItem,
             mDeviceEditorToolStripMenuItem,
             toolStripSeparator8,
@@ -689,18 +677,18 @@ namespace MixGui
             // 
             // mTeletypeToolStripMenuItem
             // 
-            mTeletypeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
+            mTeletypeToolStripMenuItem.Image = ((Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
             mTeletypeToolStripMenuItem.Name = "mTeletypeToolStripMenuItem";
-            mTeletypeToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T);
+            mTeletypeToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.T);
             mTeletypeToolStripMenuItem.Size = new Size(215, 22);
             mTeletypeToolStripMenuItem.Text = "&Show Teletype";
             mTeletypeToolStripMenuItem.Click += mTeletypeItem_Click;
             // 
             // mDeviceEditorToolStripMenuItem
             // 
-            mDeviceEditorToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
+            mDeviceEditorToolStripMenuItem.Image = ((Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
             mDeviceEditorToolStripMenuItem.Name = "mDeviceEditorToolStripMenuItem";
-            mDeviceEditorToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E);
+            mDeviceEditorToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.E);
             mDeviceEditorToolStripMenuItem.Size = new Size(215, 22);
             mDeviceEditorToolStripMenuItem.Text = "Show &Device Editor";
             mDeviceEditorToolStripMenuItem.Click += mDeviceEditorItem_Click;
@@ -712,9 +700,9 @@ namespace MixGui
             // 
             // mFindMenuItem
             // 
-            mFindMenuItem.Image = global::MixGui.Properties.Resources.Find_5650;
+            mFindMenuItem.Image = Properties.Resources.Find_5650;
             mFindMenuItem.Name = "mFindMenuItem";
-            mFindMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F);
+            mFindMenuItem.ShortcutKeys = (Keys.Control | Keys.F);
             mFindMenuItem.Size = new Size(215, 22);
             mFindMenuItem.Text = "Find in memory...";
             mFindMenuItem.Click += mFindMenuItem_Click;
@@ -722,14 +710,14 @@ namespace MixGui
             // mFindNextMenuItem
             // 
             mFindNextMenuItem.Name = "mFindNextMenuItem";
-            mFindNextMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
+            mFindNextMenuItem.ShortcutKeys = Keys.F3;
             mFindNextMenuItem.Size = new Size(215, 22);
             mFindNextMenuItem.Text = "Find next";
             mFindNextMenuItem.Click += mFindNextMenuItem_Click;
             // 
             // mActionsToolStripMenuItem
             // 
-            mActionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
             mTickToolStripMenuItem,
             mStepToolStripMenuItem,
             mRunToolStripMenuItem,
@@ -745,36 +733,36 @@ namespace MixGui
             // 
             // mTickToolStripMenuItem
             // 
-            mTickToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
+            mTickToolStripMenuItem.Image = ((Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
             mTickToolStripMenuItem.Name = "mTickToolStripMenuItem";
-            mTickToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            mTickToolStripMenuItem.ShortcutKeys = Keys.F11;
             mTickToolStripMenuItem.Size = new Size(207, 22);
             mTickToolStripMenuItem.Text = "T&ick";
             mTickToolStripMenuItem.Click += mTickItem_Click;
             // 
             // mStepToolStripMenuItem
             // 
-            mStepToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
+            mStepToolStripMenuItem.Image = ((Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
             mStepToolStripMenuItem.Name = "mStepToolStripMenuItem";
-            mStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            mStepToolStripMenuItem.ShortcutKeys = Keys.F10;
             mStepToolStripMenuItem.Size = new Size(207, 22);
             mStepToolStripMenuItem.Text = "&Step";
             mStepToolStripMenuItem.Click += mStepItem_Click;
             // 
             // mRunToolStripMenuItem
             // 
-            mRunToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
+            mRunToolStripMenuItem.Image = ((Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
             mRunToolStripMenuItem.Name = "mRunToolStripMenuItem";
-            mRunToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            mRunToolStripMenuItem.ShortcutKeys = Keys.F5;
             mRunToolStripMenuItem.Size = new Size(207, 22);
             mRunToolStripMenuItem.Text = "R&un";
             mRunToolStripMenuItem.Click += mRunItem_Click;
             // 
             // mGoToolStripMenuItem
             // 
-            mGoToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
+            mGoToolStripMenuItem.Image = ((Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
             mGoToolStripMenuItem.Name = "mGoToolStripMenuItem";
-            mGoToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5);
+            mGoToolStripMenuItem.ShortcutKeys = (Keys.Shift | Keys.F5);
             mGoToolStripMenuItem.Size = new Size(207, 22);
             mGoToolStripMenuItem.Text = "&Go";
             mGoToolStripMenuItem.Click += mGoItem_Click;
@@ -782,32 +770,32 @@ namespace MixGui
             // mDetachToolStripMenuItem
             // 
             mDetachToolStripMenuItem.Name = "mDetachToolStripMenuItem";
-            mDetachToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D);
+            mDetachToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.D);
             mDetachToolStripMenuItem.Size = new Size(207, 22);
             mDetachToolStripMenuItem.Text = "&Detach";
             mDetachToolStripMenuItem.Click += mDetachItem_Click;
             // 
             // mClearBreakpointsToolStripMenuItem
             // 
-            mClearBreakpointsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
+            mClearBreakpointsToolStripMenuItem.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
             mClearBreakpointsToolStripMenuItem.Name = "mClearBreakpointsToolStripMenuItem";
-            mClearBreakpointsToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B);
+            mClearBreakpointsToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.B);
             mClearBreakpointsToolStripMenuItem.Size = new Size(207, 22);
             mClearBreakpointsToolStripMenuItem.Text = "Clear &Breakpoints";
             mClearBreakpointsToolStripMenuItem.Click += mClearBreakpointsItem_Click;
             // 
             // mResetToolStripMenuItem
             // 
-            mResetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
+            mResetToolStripMenuItem.Image = ((Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
             mResetToolStripMenuItem.Name = "mResetToolStripMenuItem";
-            mResetToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R);
+            mResetToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.R);
             mResetToolStripMenuItem.Size = new Size(207, 22);
             mResetToolStripMenuItem.Text = "&Reset";
             mResetToolStripMenuItem.Click += mResetItem_Click;
             // 
             // mToolsToolStripMenuItem
             // 
-            mToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
             mPreferencesToolStripMenuItem,
             toolStripSeparator9,
             mProfilingEnabledMenuItem,
@@ -819,9 +807,9 @@ namespace MixGui
             // 
             // mPreferencesToolStripMenuItem
             // 
-            mPreferencesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
+            mPreferencesToolStripMenuItem.Image = ((Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
             mPreferencesToolStripMenuItem.Name = "mPreferencesToolStripMenuItem";
-            mPreferencesToolStripMenuItem.ShortcutKeys = (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P);
+            mPreferencesToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.P);
             mPreferencesToolStripMenuItem.Size = new Size(185, 22);
             mPreferencesToolStripMenuItem.Text = "&Preferences...";
             mPreferencesToolStripMenuItem.Click += mPreferencesMenuItem_Click;
@@ -849,7 +837,7 @@ namespace MixGui
             // 
             // mHelpToolStripMenuItem
             // 
-            mHelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mHelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
             mAboutToolStripMenuItem});
             mHelpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
             mHelpToolStripMenuItem.Size = new Size(44, 20);
@@ -857,7 +845,7 @@ namespace MixGui
             // 
             // mAboutToolStripMenuItem
             // 
-            mAboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
+            mAboutToolStripMenuItem.Image = ((Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
             mAboutToolStripMenuItem.Name = "mAboutToolStripMenuItem";
             mAboutToolStripMenuItem.Size = new Size(116, 22);
             mAboutToolStripMenuItem.Text = "&About...";
@@ -874,7 +862,7 @@ namespace MixGui
             // 
             mToolStripContainer.ContentPanel.Controls.Add(mSplitContainer);
             mToolStripContainer.ContentPanel.Size = new Size(804, 491);
-            mToolStripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            mToolStripContainer.Dock = DockStyle.Fill;
             mToolStripContainer.LeftToolStripPanelVisible = false;
             mToolStripContainer.Location = new Point(0, 0);
             mToolStripContainer.Name = "mToolStripContainer";
@@ -890,8 +878,8 @@ namespace MixGui
             // 
             // mStatusStrip
             // 
-            mStatusStrip.Dock = System.Windows.Forms.DockStyle.None;
-            mStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mStatusStrip.Dock = DockStyle.None;
+            mStatusStrip.Items.AddRange(new ToolStripItem[] {
             mModeToolStripStatusLabel,
             mModeCycleButton,
             mStatusToolStripStatusLabel,
@@ -928,12 +916,12 @@ namespace MixGui
             // 
             // mSplitContainer
             // 
-            mSplitContainer.BackColor = System.Drawing.SystemColors.Control;
-            mSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            mSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            mSplitContainer.BackColor = SystemColors.Control;
+            mSplitContainer.Dock = DockStyle.Fill;
+            mSplitContainer.FixedPanel = FixedPanel.Panel2;
             mSplitContainer.Location = new Point(0, 0);
             mSplitContainer.Name = "mSplitContainer";
-            mSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            mSplitContainer.Orientation = Orientation.Horizontal;
             // 
             // mSplitContainer.Panel1
             // 
@@ -1130,9 +1118,9 @@ namespace MixGui
             // 
             // mControlToolStrip
             // 
-            mControlToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            mControlToolStrip.Dock = DockStyle.None;
             mControlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            mControlToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mControlToolStrip.Items.AddRange(new ToolStripItem[] {
             mPCToolStripLabel,
             mShowPCToolStripButton,
             toolStripSeparator3,
@@ -1164,8 +1152,8 @@ namespace MixGui
             // 
             // mShowPCToolStripButton
             // 
-            mShowPCToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            mShowPCToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mShowPCToolStripButton.Image")));
+            mShowPCToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            mShowPCToolStripButton.Image = ((Image)(resources.GetObject("mShowPCToolStripButton.Image")));
             mShowPCToolStripButton.ImageTransparentColor = Color.Magenta;
             mShowPCToolStripButton.Name = "mShowPCToolStripButton";
             mShowPCToolStripButton.Size = new Size(40, 22);
@@ -1189,8 +1177,8 @@ namespace MixGui
             // 
             // mResetTicksToolStripButton
             // 
-            mResetTicksToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            mResetTicksToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
+            mResetTicksToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            mResetTicksToolStripButton.Image = ((Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
             mResetTicksToolStripButton.ImageTransparentColor = Color.Magenta;
             mResetTicksToolStripButton.Name = "mResetTicksToolStripButton";
             mResetTicksToolStripButton.Size = new Size(39, 22);
@@ -1200,7 +1188,7 @@ namespace MixGui
             // 
             // mTickToolStripButton
             // 
-            mTickToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTickToolStripButton.Image")));
+            mTickToolStripButton.Image = ((Image)(resources.GetObject("mTickToolStripButton.Image")));
             mTickToolStripButton.ImageTransparentColor = Color.Magenta;
             mTickToolStripButton.Name = "mTickToolStripButton";
             mTickToolStripButton.Size = new Size(49, 22);
@@ -1210,7 +1198,7 @@ namespace MixGui
             // 
             // mStepToolStripButton
             // 
-            mStepToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mStepToolStripButton.Image")));
+            mStepToolStripButton.Image = ((Image)(resources.GetObject("mStepToolStripButton.Image")));
             mStepToolStripButton.ImageTransparentColor = Color.Magenta;
             mStepToolStripButton.Name = "mStepToolStripButton";
             mStepToolStripButton.Size = new Size(50, 22);
@@ -1220,7 +1208,7 @@ namespace MixGui
             // 
             // mRunToolStripButton
             // 
-            mRunToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mRunToolStripButton.Image")));
+            mRunToolStripButton.Image = ((Image)(resources.GetObject("mRunToolStripButton.Image")));
             mRunToolStripButton.ImageTransparentColor = Color.Magenta;
             mRunToolStripButton.Name = "mRunToolStripButton";
             mRunToolStripButton.Size = new Size(48, 22);
@@ -1230,7 +1218,7 @@ namespace MixGui
             // 
             // mGoToolStripButton
             // 
-            mGoToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mGoToolStripButton.Image")));
+            mGoToolStripButton.Image = ((Image)(resources.GetObject("mGoToolStripButton.Image")));
             mGoToolStripButton.ImageTransparentColor = Color.Magenta;
             mGoToolStripButton.Name = "mGoToolStripButton";
             mGoToolStripButton.Size = new Size(42, 22);
@@ -1240,8 +1228,8 @@ namespace MixGui
             // 
             // mDetachToolStripButton
             // 
-            mDetachToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            mDetachToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mDetachToolStripButton.Image")));
+            mDetachToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            mDetachToolStripButton.Image = ((Image)(resources.GetObject("mDetachToolStripButton.Image")));
             mDetachToolStripButton.ImageTransparentColor = Color.Magenta;
             mDetachToolStripButton.Name = "mDetachToolStripButton";
             mDetachToolStripButton.Size = new Size(48, 22);
@@ -1251,7 +1239,7 @@ namespace MixGui
             // 
             // mClearBreakpointsToolStripButton
             // 
-            mClearBreakpointsToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
+            mClearBreakpointsToolStripButton.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
             mClearBreakpointsToolStripButton.ImageTransparentColor = Color.Magenta;
             mClearBreakpointsToolStripButton.Name = "mClearBreakpointsToolStripButton";
             mClearBreakpointsToolStripButton.Size = new Size(119, 22);
@@ -1261,7 +1249,7 @@ namespace MixGui
             // 
             // mResetToolStripButton
             // 
-            mResetToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mResetToolStripButton.Image")));
+            mResetToolStripButton.Image = ((Image)(resources.GetObject("mResetToolStripButton.Image")));
             mResetToolStripButton.ImageTransparentColor = Color.Magenta;
             mResetToolStripButton.Name = "mResetToolStripButton";
             mResetToolStripButton.Size = new Size(55, 22);
@@ -1271,7 +1259,7 @@ namespace MixGui
             // 
             // mTeletypeToolStripButton
             // 
-            mTeletypeToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
+            mTeletypeToolStripButton.Image = ((Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
             mTeletypeToolStripButton.ImageTransparentColor = Color.Magenta;
             mTeletypeToolStripButton.Name = "mTeletypeToolStripButton";
             mTeletypeToolStripButton.Size = new Size(104, 22);
@@ -1336,10 +1324,7 @@ namespace MixGui
 
         void loadProgram(string filePath)
         {
-            if (filePath == null)
-            {
-                return;
-            }
+            if (filePath == null) return;
 
             PreInstruction[] instructions;
             AssemblyFindingCollection findings;
@@ -1356,10 +1341,7 @@ namespace MixGui
 
                 mSourceAndFindingsForm.SetInstructionsAndFindings(instructions, instances, findings);
 
-                if (mSourceAndFindingsForm.ShowDialog(this) != DialogResult.OK)
-                {
-                    return;
-                }
+                if (mSourceAndFindingsForm.ShowDialog(this) != DialogResult.OK) return;
             }
 
             if (instances != null)
@@ -1412,31 +1394,28 @@ namespace MixGui
 
         void mMemoryEditor_addressSelected(object sender, AddressSelectedEventArgs args)
         {
-            if (!mReadOnly)
-            {
-                implementPCChange(args.SelectedAddress);
-            }
+            if (!mReadOnly) implementPCChange(args.SelectedAddress);
         }
 
-        private void mMix_InputRequired(object sender, EventArgs e)
-		{
-			if (InvokeRequired)
-			{
+        void mMix_InputRequired(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
                 Invoke(new EventHandler(mMix_InputRequired));
-			}
-			else
-			{
-				mMix.RequestStop();
-				mTeletype.StatusText = "Teletype input required";
+            }
+            else
+            {
+                mMix.RequestStop();
+                mTeletype.StatusText = "Teletype input required";
 
-				if (!mTeletype.Visible)
-				{
-					switchTeletypeVisibility();
-				}
+                if (!mTeletype.Visible)
+                {
+                    switchTeletypeVisibility();
+                }
 
-				mTeletype.Activate();
-			}
-		}
+                mTeletype.Activate();
+            }
+        }
 
         void mMix_LogLineAdded(object sender, EventArgs e)
         {
@@ -1462,10 +1441,7 @@ namespace MixGui
             }
             else
             {
-                if (!mRunning)
-                {
-                    mMix.RequestStop(false);
-                }
+                if (!mRunning) mMix.RequestStop(false);
 
                 DateTime updateStartTime = DateTime.Now;
                 Update();
@@ -1597,10 +1573,7 @@ namespace MixGui
 
         void pcChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
         {
-            if (!mUpdating)
-            {
-                implementPCChange((int)args.NewValue);
-            }
+            if (!mUpdating) implementPCChange((int)args.NewValue);
         }
 
         void setSteppingState(steppingState state)
@@ -1714,7 +1687,7 @@ namespace MixGui
 
 			if (pcVisible)
 			{
-				mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == Mix.RunStatus.Idle);
+				mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == ModuleBase.RunStatus.Idle);
 			}
 
 			mMix.NeutralizeStatus();
@@ -1723,10 +1696,7 @@ namespace MixGui
 
 			mRegistersEditor.Update();
 			mMainMemoryEditor.Update();
-			if (mFloatingPointMemoryEditor != null)
-			{
-				mFloatingPointMemoryEditor.Update();
-			}
+			mFloatingPointMemoryEditor?.Update();
 			mDevicesControl.Update();
 			base.Update();
 			mUpdating = false;
@@ -1741,10 +1711,7 @@ namespace MixGui
 
             foreach (MixDevice device in mMix.Devices)
             {
-                if (!(device is FileBasedDevice))
-                {
-                    continue;
-                }
+                if (!(device is FileBasedDevice)) continue;
 
                 var fileBasedDevice = (FileBasedDevice)device;
 
@@ -1764,25 +1731,10 @@ namespace MixGui
 			mPCBox.UpdateLayout();
 			mTeletype.UpdateLayout();
 			mRegistersEditor.UpdateLayout();
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
-				if (editor != null)
-				{
-					editor.UpdateLayout();
-				}
-			}
-			mDevicesControl.UpdateLayout();
-
-			if (mSourceAndFindingsForm != null)
-			{
-				mSourceAndFindingsForm.UpdateLayout();
-			}
-
-			if (mPreferencesForm != null)
-			{
-				mPreferencesForm.UpdateLayout();
-			}
-
+			foreach (MemoryEditor editor in mMemoryEditors) editor?.UpdateLayout();
+            mDevicesControl.UpdateLayout();
+			mSourceAndFindingsForm?.UpdateLayout();
+			mPreferencesForm?.UpdateLayout();
 			mDeviceEditor.UpdateLayout();
 		}
 
@@ -1839,26 +1791,20 @@ namespace MixGui
             }
         }
 
-        private void MixForm_ResizeEnd(object sender, EventArgs e)
-		{
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
-				if (editor != null)
-				{
-					editor.ResizeInProgress = false;
-				}
-			}
-		}
-
-        void mClearBreakpointsItem_Click(object sender, EventArgs e)
+        void MixForm_ResizeEnd(object sender, EventArgs e)
         {
             foreach (MemoryEditor editor in mMemoryEditors)
             {
                 if (editor != null)
                 {
-                    editor.ClearBreakpoints();
+                    editor.ResizeInProgress = false;
                 }
             }
+        }
+
+        void mClearBreakpointsItem_Click(object sender, EventArgs e)
+        {
+            foreach (MemoryEditor editor in mMemoryEditors) editor?.ClearBreakpoints();
         }
 
         void mDeviceEditorItem_Click(object sender, EventArgs e)
@@ -1921,7 +1867,7 @@ namespace MixGui
         {
             if (mFloatingPointMemoryEditor != null && mFloatingPointMemoryEditor.IsAddressVisible(mMix.FloatingPointModule.ProgramCounter))
             {
-                mFloatingPointMemoryEditor.MakeAddressVisible(address, mMix.Status == Mix.RunStatus.Idle);
+                mFloatingPointMemoryEditor.MakeAddressVisible(address, mMix.Status == ModuleBase.RunStatus.Idle);
             }
 
             mMix.FloatingPointModule.ProgramCounter = address;
@@ -1974,13 +1920,7 @@ namespace MixGui
             mProfilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
             mProfilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
 
-            foreach (MemoryEditor editor in mMemoryEditors)
-            {
-                if (editor != null)
-                {
-                    editor.UpdateLayout();
-                }
-            }
+            foreach (MemoryEditor editor in mMemoryEditors) editor?.UpdateLayout();
         }
 
         void mProfilingShowTickCountsMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -1988,25 +1928,13 @@ namespace MixGui
             GuiSettings.ShowProfilingInfo = mProfilingShowTickCountsMenuItem.Checked ? GuiSettings.ProfilingInfoType.Tick : GuiSettings.ProfilingInfoType.Execution;
             mConfiguration.ShowProfilingInfo = GuiSettings.ShowProfilingInfo;
 
-            foreach (MemoryEditor editor in mMemoryEditors)
-            {
-                if (editor != null)
-                {
-                    editor.UpdateLayout();
-                }
-            }
+            foreach (MemoryEditor editor in mMemoryEditors) editor?.UpdateLayout();
         }
 
         void mProfilingResetCountsMenuItem_Click(object sender, EventArgs e)
         {
             mMix.ResetProfilingCounts();
-            foreach (MemoryEditor editor in mMemoryEditors)
-            {
-                if (editor != null)
-                {
-                    editor.Update();
-                }
-            }
+            foreach (MemoryEditor editor in mMemoryEditors) editor?.Update();
         }
     }
 }

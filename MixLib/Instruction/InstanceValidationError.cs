@@ -6,8 +6,7 @@ namespace MixLib.Instruction
 	{
         public Sources Source { get; private set; }
 
-        public InstanceValidationError(Sources source, string message)
-			: base(message)
+        public InstanceValidationError(Sources source, string message) : base(message)
 		{
 			Source = source;
 		}
@@ -30,11 +29,7 @@ namespace MixLib.Instruction
 			{
 				string baseMessage = Source.ToString().ToLower() + " invalid";
 				string compiledMessage = base.CompiledMessage;
-				if (compiledMessage.Length != 0)
-				{
-					return (baseMessage + ", " + compiledMessage);
-				}
-				return baseMessage;
+				return compiledMessage.Length != 0 ? baseMessage + ", " + compiledMessage : baseMessage;
 			}
 		}
 

@@ -15,8 +15,7 @@ namespace MixLib.Type
 			Index = index;
 		}
 
-		public MemoryFullWord(int index, long value)
-			: base(value)
+		public MemoryFullWord(int index, long value) : base(value)
 		{
 			Index = index;
 		}
@@ -37,42 +36,27 @@ namespace MixLib.Type
 			{
 				index = LongValue.ToString().FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Value ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Value, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Value, FieldIndex = index };
 			}
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Chars) && (options.SearchFields & FieldTypes.Chars) == FieldTypes.Chars)
 			{
 				index = ToString(true).FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Chars ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
 			}
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Instruction) && (options.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction)
 			{
 				MixInstruction instruction = InstructionSet.Instance.GetInstruction(this[MixInstruction.OpcodeByte], new FieldSpec(this[MixInstruction.FieldSpecByte]));
-				if (instruction == null)
-				{
-					return null;
-				}
+				if (instruction == null) return null;
 
 				MixInstruction.Instance instance = instruction.CreateInstance(this);
-				if (instance == null)
-				{
-					return null;
-				}
+				if (instance == null) return null;
 
 				index = new InstructionText(instance).InstanceText.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Instruction ? options.SearchFromFieldIndex : 0);
 
-				if (index >= 0)
-				{
-					return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
-				}
+				if (index >= 0) return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
 			}
 
 			return null;

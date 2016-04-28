@@ -14,8 +14,7 @@ namespace MixAssembler.Symbol
         public long Magnitude { get; private set; }
         public Word.Signs Sign { get; private set; }
 
-        public ValueSymbol(string name)
-			: base(name)
+        public ValueSymbol(string name) : base(name)
 		{
 			mIsDefined = false;
 			Sign = Word.Signs.Positive;
@@ -37,10 +36,7 @@ namespace MixAssembler.Symbol
 
 		public static bool IsValueSymbolName(string text)
 		{
-			if (text.Length == 0 || text.Length > MaxNameLength)
-			{
-				return false;
-			}
+			if (text.Length == 0 || text.Length > MaxNameLength) return false;
 
 			bool letterFound = false;
 
@@ -50,10 +46,7 @@ namespace MixAssembler.Symbol
 				{
 					letterFound = true;
 				}
-				else if (!char.IsNumber(text[i]))
-				{
-					return false;
-				}
+				else if (!char.IsNumber(text[i])) return false;
 			}
 
 			return letterFound;
@@ -63,10 +56,7 @@ namespace MixAssembler.Symbol
 		{
 			SymbolBase symbol = LocalSymbol.ParseDefinition(text, sectionCharIndex, status);
 
-			if (symbol != null)
-			{
-				return symbol;
-			}
+			if (symbol != null) return symbol;
 
 			return ParseDefinition(text);
 		}
@@ -75,15 +65,9 @@ namespace MixAssembler.Symbol
 		{
 			IValue symbolValue = LocalSymbol.ParseValue(text, sectionCharIndex, status);
 
-			if (symbolValue != null)
-			{
-				return symbolValue;
-			}
+			if (symbolValue != null) return symbolValue;
 
-			if (!IsValueSymbolName(text))
-			{
-				return null;
-			}
+			if (!IsValueSymbolName(text)) return null;
 
 			SymbolBase symbol = status.Symbols[text];
 			if (symbol == null)

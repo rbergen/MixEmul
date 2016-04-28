@@ -59,11 +59,8 @@ namespace MixLib.Instruction
 						str = getFieldText();
 						break;
 				}
-				if (str != null)
-				{
-					return ("(" + str + ")");
-				}
-				return "";
+
+				return str != null ? "(" + str + ")" : "";
 			}
 		}
 	}

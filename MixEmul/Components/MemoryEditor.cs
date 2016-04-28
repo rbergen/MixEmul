@@ -352,10 +352,7 @@ namespace MixGui.Components
         {
             var memory = mMemory as Memory;
 
-            if (memory == null || mWordEditorList == null)
-            {
-                return;
-            }
+            if (memory == null || mWordEditorList == null) return;
 
             if (direction != navigationDirection.Up || (mPrevDataIndex.HasValue && mPrevDataIndex.Value >= mWordEditorList.FirstVisibleIndex))
             {
@@ -674,10 +671,7 @@ namespace MixGui.Components
             exportDialog.ToAddress = mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount - 1;
             exportDialog.ProgramCounter = mMarkedAddress;
 
-            if (exportDialog.ShowDialog(this) != DialogResult.OK)
-            {
-                return;
-            }
+            if (exportDialog.ShowDialog(this) != DialogResult.OK) return;
 
             if (mSaveExportFileDialog == null)
             {

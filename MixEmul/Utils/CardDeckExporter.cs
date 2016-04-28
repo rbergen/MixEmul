@@ -41,10 +41,7 @@ namespace MixGui.Utils
 
             foreach (string loaderCard in LoaderCards)
             {
-                if (loaderCard != null && loaderCard.TrimEnd() != string.Empty)
-                {
-                    writer.WriteLine(loaderCard);
-                }
+                if (loaderCard != null && loaderCard.TrimEnd() != string.Empty) writer.WriteLine(loaderCard);
             }
 
             return writer;
@@ -69,10 +66,7 @@ namespace MixGui.Utils
 				}
 			}
 
-			if (words.Count > 0)
-			{
-				writer.WriteLine(getInformationLine(firstWordLocation, words));
-			}
+			if (words.Count > 0) writer.WriteLine(getInformationLine(firstWordLocation, words));
 
 			writer.WriteLine(getTransLine(programCounter));
 			writer.Close();

@@ -38,25 +38,18 @@ namespace MixLib.Instruction
 		/// The instruction's MetaFieldSpec will indicate that for this instruction, fieldspecs are forbidden in the MIXAL code.
 		/// </summary>
 		public MixInstruction(byte opcode, FieldSpec fieldSpec, string mnemonic, int tickCount, Executor executor, Validator validator)
-			: this(opcode, fieldSpec, new MetaFieldSpec(), mnemonic, tickCount, executor, validator)
-		{
-		}
+			: this(opcode, fieldSpec, new MetaFieldSpec(), mnemonic, tickCount, executor, validator) { }
 
 		/// <summary>
 		/// Create a MIX instruction with the specified opcode, MetaFieldSpec, mnemonic, tickCount, executor and validator.
 		/// </summary>
 		public MixInstruction(byte opcode, string mnemonic, MetaFieldSpec metaFieldSpec, int tickCount, Executor executor, Validator validator)
-			: this(opcode, null, metaFieldSpec, mnemonic, tickCount, executor, validator)
-		{
-		}
+			: this(opcode, null, metaFieldSpec, mnemonic, tickCount, executor, validator) { }
 
         MixInstruction(byte opcode, FieldSpec fieldSpec, MetaFieldSpec metaFieldSpec, string mnemonic, int tickCount, Executor executor, Validator validator)
             : base(mnemonic)
         {
-            if (executor == null)
-            {
-                throw new ArgumentNullException(nameof(executor));
-            }
+            if (executor == null) throw new ArgumentNullException(nameof(executor));
 
             // if the MetaFieldSpec Presence is Forbidden then an instruction fieldspec must be specified. Likewise, if an instruction fieldspec is provided, the MetaFieldSpec Presence must be Forbidden.
             if ((fieldSpec == null && metaFieldSpec.Presence == Instruction.MetaFieldSpec.Presences.Forbidden) || (metaFieldSpec.Presence != Instruction.MetaFieldSpec.Presences.Forbidden && fieldSpec != null))
@@ -121,10 +114,7 @@ namespace MixLib.Instruction
 
             public bool Execute(ModuleBase module)
 			{
-				if (Validate() != null)
-				{
-					throw new ArgumentException("instance not valid for instruction");
-				}
+				if (Validate() != null) throw new ArgumentException("instance not valid for instruction");
 
 				return MixInstruction.mExecutor(module, this);
 			}

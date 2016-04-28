@@ -76,10 +76,7 @@ namespace MixGui.Components
 
 			set
 			{
-				if (mSymbols == value)
-				{
-					return;
-				}
+				if (mSymbols == value) return;
 
 				mSymbols = value;
 
@@ -99,7 +96,8 @@ namespace MixGui.Components
 
 					ResumeLayout();
 				}
-				mListView.EndUpdate();
+
+                mListView.EndUpdate();
 			}
 		}
 
@@ -150,10 +148,7 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0)
-				{
-					return long.MinValue;
-				}
+				if (selectedItems.Count == 0) return long.MinValue;
 
 				long value = long.MinValue;
 				try
@@ -202,10 +197,7 @@ namespace MixGui.Components
             if (symbol != null)
             {
                 valueSymbol = symbol as ValueSymbol;
-                if (valueSymbol == null)
-                {
-                    return;
-                }
+                if (valueSymbol == null) return;
 
                 valueSymbol.SetValue(symbolSign, symbolMagnitude);
                 string valueText = symbolMagnitude.ToString();
@@ -220,10 +212,7 @@ namespace MixGui.Components
             {
                 valueSymbol = ValueSymbol.ParseDefinition(symbolName) as ValueSymbol;
 
-                if (valueSymbol == null)
-                {
-                    return;
-                }
+                if (valueSymbol == null) return;
 
                 valueSymbol.SetValue(symbolSign, symbolMagnitude);
 
@@ -236,10 +225,7 @@ namespace MixGui.Components
 
         void mUnsetButton_Click(object sender, EventArgs e)
         {
-            if (mSymbols == null)
-            {
-                return;
-            }
+            if (mSymbols == null) return;
 
             string symbolName = mSymbolNameTextBox.Text;
             mSymbols.Remove(symbolName);
@@ -252,10 +238,7 @@ namespace MixGui.Components
         {
             ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-            if (selectedItems.Count == 0)
-            {
-                return;
-            }
+            if (selectedItems.Count == 0) return;
 
             ListViewItem selectedItem = selectedItems[0];
             mSymbolNameTextBox.Text = selectedItem.SubItems[nameFieldIndex].Text;

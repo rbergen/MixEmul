@@ -36,10 +36,7 @@ namespace MixGui.Utils
 			while (container != null)
 			{
 				activeControl = container.ActiveControl;
-				if (activeControl == control)
-				{
-					return true;
-				}
+				if (activeControl == control) return true;
 
 				container = activeControl as ContainerControl;
 			}

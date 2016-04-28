@@ -19,8 +19,7 @@ namespace MixLib.Device
         const int recordWordCount = 16;
         public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
 
-		public CardReaderDevice(int id)
-			: base(id, fileNamePrefix)
+		public CardReaderDevice(int id) : base(id, fileNamePrefix)
 		{
 			UpdateSettings();
 		}
@@ -47,7 +46,6 @@ namespace MixLib.Device
 			nextStep.NextStep.NextStep = null;
 
             FirstOutputDeviceStep = null;
-
             FirstIocDeviceStep = null;
 		}
 
@@ -55,14 +53,12 @@ namespace MixLib.Device
         {
             public override string StatusDescription => openingDescription;
 
-            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+            public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) =>
+                new Instance(streamStatus);
 
             new class Instance : StreamStep.Instance
             {
-                public Instance(StreamStatus streamStatus)
-                    : base(streamStatus)
-                {
-                }
+                public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
                 public override bool Tick()
                 {

@@ -62,8 +62,7 @@ namespace MixLib.Device.Step
             MixByte[] mReadBytes;
             readonly int mRecordWordCount;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount)
-                : base(streamStatus)
+            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
             {
                 mRecordWordCount = recordWordCount;
             }
@@ -72,24 +71,24 @@ namespace MixLib.Device.Step
 
             public override bool Tick()
             {
-                if (StreamStatus.Stream != null)
-                {
-                    string readText = null;
-                    try
-                    {
-                        readText = new StreamReader(StreamStatus.Stream, Encoding.ASCII).ReadLine();
-                        if (readText != null)
-                        {
-                            StreamStatus.Position = Math.Min(StreamStatus.Stream.Length, StreamStatus.Position + readText.Length + Environment.NewLine.Length);
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-                    }
+                if (StreamStatus.Stream == null) return true;
 
-                    mReadBytes = processReadText(readText, mRecordWordCount * FullWord.ByteCount);
+                string readText = null;
+                try
+                {
+                    readText = new StreamReader(StreamStatus.Stream, Encoding.ASCII).ReadLine();
+                    if (readText != null)
+                    {
+                        StreamStatus.Position = Math.Min(StreamStatus.Stream.Length, StreamStatus.Position + readText.Length + Environment.NewLine.Length);
+                    }
                 }
+                catch (Exception exception)
+                {
+                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
+                }
+
+                mReadBytes = processReadText(readText, mRecordWordCount * FullWord.ByteCount);
+
                 return true;
             }
         }

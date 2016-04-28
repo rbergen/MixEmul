@@ -60,10 +60,7 @@ namespace MixGui.Components
         void addLine(ParsedSourceLine sourceLine)
         {
             int count = mInstructions.Count;
-            if (mSourceBox.TextLength != 0)
-            {
-                mSourceBox.AppendText(Environment.NewLine);
-            }
+            if (mSourceBox.TextLength != 0) mSourceBox.AppendText(Environment.NewLine);
 
             string lineNumberText = (count + 1).ToString();
             mSourceBox.AppendText(new string(' ', mLineNumberLength - lineNumberText.Length) + lineNumberText + lineNumberSeparator);
@@ -73,20 +70,14 @@ namespace MixGui.Components
 
             if (sourceLine.IsCommentLine)
             {
-                if (sourceLine.Comment.Length > 0)
-                {
-                    mSourceBox.AppendText(sourceLine.Comment);
-                }
+                if (sourceLine.Comment.Length > 0) mSourceBox.AppendText(sourceLine.Comment);
             }
             else
             {
                 mSourceBox.AppendText(sourceLine.LocationField + new string(' ', (processedLine.LocTextLength - sourceLine.LocationField.Length) + Parser.FieldSpacing));
                 mSourceBox.AppendText(sourceLine.OpField + new string(' ', (processedLine.OpTextLength - sourceLine.OpField.Length) + Parser.FieldSpacing));
                 mSourceBox.AppendText(sourceLine.AddressField + new string(' ', (processedLine.AddressTextLength - sourceLine.AddressField.Length) + Parser.FieldSpacing));
-                if (sourceLine.Comment.Length > 0)
-                {
-                    mSourceBox.AppendText(sourceLine.Comment);
-                }
+                if (sourceLine.Comment.Length > 0) mSourceBox.AppendText(sourceLine.Comment);
             }
 
             applySyntaxColoring(processedLine);
@@ -191,10 +182,7 @@ namespace MixGui.Components
         {
             foreach (AssemblyFinding finding in findings)
             {
-                if (finding.Severity == severity)
-                {
-                    applyFindingColoring(finding, markOperation.None);
-                }
+                if (finding.Severity == severity) applyFindingColoring(finding, markOperation.None);
             }
         }
 
@@ -260,31 +248,13 @@ namespace MixGui.Components
 
                 if (mFindingsColored)
                 {
-                    foreach (processedSourceLine line in mInstructions)
-                    {
-                        applySyntaxColoring(line);
-                    }
+                    foreach (processedSourceLine line in mInstructions) applySyntaxColoring(line);
                 }
 
-                if (value.ContainsDebugs)
-                {
-                    applyFindingColoring(value, Severity.Debug);
-                }
-
-                if (value.ContainsInfos)
-                {
-                    applyFindingColoring(value, Severity.Info);
-                }
-
-                if (value.ContainsWarnings)
-                {
-                    applyFindingColoring(value, Severity.Warning);
-                }
-
-                if (value.ContainsErrors)
-                {
-                    applyFindingColoring(value, Severity.Error);
-                }
+                if (value.ContainsDebugs) applyFindingColoring(value, Severity.Debug);
+                if (value.ContainsInfos) applyFindingColoring(value, Severity.Info);
+                if (value.ContainsWarnings) applyFindingColoring(value, Severity.Warning);
+                if (value.ContainsErrors) applyFindingColoring(value, Severity.Error);
 
                 mFindingsColored = true;
             }
@@ -389,10 +359,7 @@ namespace MixGui.Components
             {
                 get
                 {
-                    if (SourceLine.IsCommentLine)
-                    {
-                        return 0;
-                    }
+                    if (SourceLine.IsCommentLine) return 0;
 
                     if (SourceLine.Comment != "")
                     {

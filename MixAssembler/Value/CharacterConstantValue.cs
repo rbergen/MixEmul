@@ -11,10 +11,7 @@ namespace MixAssembler.Value
 				int length = text.Length - 1;
 
 				// a character constant can (but is not required to) end with a double quote
-				if (text[length] == '"')
-				{
-					length--;
-				}
+				if (text[length] == '"') length--;
 
 				text = text.Substring(1, length);
 				sectionCharIndex++;

@@ -10,8 +10,7 @@ namespace MixLib.Device
         public int Sector { get; private set; }
         public InterruptQueueCallback InterruptQueueCallback { get; private set; }
 
-        public InOutputOperands(IMemory memory, int memAddress, int sector)
-			: this(memory, memAddress, sector, null) { }
+        public InOutputOperands(IMemory memory, int memAddress, int sector) : this(memory, memAddress, sector, null) { }
 
 		public InOutputOperands(IMemory memory, int memAddress, int sector, InterruptQueueCallback callback)
 		{

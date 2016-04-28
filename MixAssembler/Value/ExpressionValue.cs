@@ -54,16 +54,10 @@ namespace MixAssembler.Value
 			{
 				// check if this expression is an atomic expression
 				IValue value = AtomicExpressionValue.ParseValue(text, sectionCharIndex, status);
-				if (value != null)
-				{
-					return value;
-				}
+				if (value != null) return value;
 
 				// if the expression is not an atomic one, it must be longer than 1 character
-				if (text.Length == 1)
-				{
-					return null;
-				}
+				if (text.Length == 1) return null;
 
 				// check if this expression is an atomic expression preceded by a numeric sign
 				if (text[0] == '+' || text[0] == '-')
@@ -97,11 +91,7 @@ namespace MixAssembler.Value
 						}
 					}
 
-					if (operatorPosition == -1)
-					{
-						// no operator found
-						return null;
-					}
+					if (operatorPosition == -1) return null;
 
 					int rightTermStartIndex = operatorPosition + operatorText.Length;
 					// the left term can itself be an expression, so parse it as one (recursively)
@@ -126,10 +116,8 @@ namespace MixAssembler.Value
             {
                 int lengthComparison = left.Length.CompareTo(right.Length);
 
-                if (lengthComparison == 0)
-                {
-                    return string.Compare(left, right, StringComparison.Ordinal);
-                }
+                if (lengthComparison == 0) return string.Compare(left, right, StringComparison.Ordinal);
+
                 return -lengthComparison;
             }
         }
