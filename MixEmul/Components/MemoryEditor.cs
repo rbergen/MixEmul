@@ -574,22 +574,27 @@ namespace MixGui.Components
 			set
 			{
 				if (mMarkedAddress != value)
-				{
-					int firstVisibleIndex = mWordEditorList.FirstVisibleIndex;
+                {
+                    setAddressMarkIfVisible(false);
 
-					if (mMarkedAddress >= firstVisibleIndex && mMarkedAddress < firstVisibleIndex + mWordEditorList.EditorCount)
-					{
-						((MemoryWordEditor)mWordEditorList[mMarkedAddress - firstVisibleIndex]).Marked = false;
-					}
+                    mMarkedAddress = value;
 
-					mMarkedAddress = value;
-
-					((MemoryWordEditor)mWordEditorList[mMarkedAddress - firstVisibleIndex]).Marked |= (mMarkedAddress >= firstVisibleIndex && mMarkedAddress < firstVisibleIndex + mWordEditorList.EditorCount);
-				}
-			}
+                    setAddressMarkIfVisible(true);
+                }
+            }
 		}
 
-		public IMemory Memory
+        void setAddressMarkIfVisible(bool mark)
+        {
+            int firstVisibleIndex = mWordEditorList.FirstVisibleIndex;
+
+            if (mMarkedAddress >= firstVisibleIndex && mMarkedAddress < firstVisibleIndex + mWordEditorList.EditorCount)
+            {
+                ((MemoryWordEditor)mWordEditorList[mMarkedAddress - firstVisibleIndex]).Marked = mark;
+            }
+        }
+
+        public IMemory Memory
 		{
 			get
 			{

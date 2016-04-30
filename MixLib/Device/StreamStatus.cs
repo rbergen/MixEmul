@@ -24,6 +24,7 @@ namespace MixLib.Device
         public void CloseStream()
 		{
             mStream?.Close();
+            mStream = null;
 		}
 
 		public void Reset()
