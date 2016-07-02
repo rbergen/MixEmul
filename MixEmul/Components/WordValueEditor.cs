@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
@@ -7,7 +6,7 @@ using MixLib.Type;
 
 namespace MixGui.Components
 {
-	public class WordValueEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
+    public class WordValueEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
 	{
         Label mEqualsLabel;
         bool mIncludeSign;

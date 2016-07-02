@@ -10,11 +10,10 @@ using MixLib.Modules;
 using MixLib.Modules.Settings;
 using MixLib.Settings;
 using MixLib.Type;
-using MixLib.Device;
 
 namespace MixLib
 {
-	public class Mix : ModuleBase, IDisposable
+    public class Mix : ModuleBase, IDisposable
 	{
         const string moduleName = "Mix";
         const int loaderStartAddress = 16;

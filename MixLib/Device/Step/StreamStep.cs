@@ -1,8 +1,6 @@
-using MixLib.Device;
-
 namespace MixLib.Device.Step
 {
-	public abstract class StreamStep : DeviceStep
+    public abstract class StreamStep : DeviceStep
 	{
 		protected StreamStep() { }
 

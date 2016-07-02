@@ -1,9 +1,8 @@
-using MixLib;
 using MixLib.Modules;
 
 namespace MixLib.Instruction
 {
-	public static class InstructionHelpers
+    public static class InstructionHelpers
 	{
 		public const int InvalidAddress = int.MinValue;
 

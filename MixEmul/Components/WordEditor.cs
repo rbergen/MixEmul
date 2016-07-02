@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
@@ -7,7 +6,7 @@ using MixLib.Type;
 
 namespace MixGui.Components
 {
-	public class WordEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
+    public class WordEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
 	{
         const long unrendered = long.MinValue;
 

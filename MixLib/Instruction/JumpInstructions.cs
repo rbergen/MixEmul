@@ -1,12 +1,11 @@
-using MixLib;
 using MixLib.Modules;
 
 namespace MixLib.Instruction
 {
-	/// <summary>
-	/// Methods for performing MIX jump instructions
-	/// </summary>
-	public static class JumpInstructions
+    /// <summary>
+    /// Methods for performing MIX jump instructions
+    /// </summary>
+    public static class JumpInstructions
 	{
         const byte jmpField = 0;
         const byte jsjField = 1;

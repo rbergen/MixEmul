@@ -203,6 +203,9 @@
     <Compile Include="MixForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MixForm.handlers.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Settings\Configuration.cs" />
     <Compile Include="Settings\GuiSettings.cs" />
     <Compile Include="TestForm.cs">
@@ -330,6 +333,7 @@
     <Content Include="Sample programs\primes.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Documentation\MixEmul Documentation 0.3.4.docx" />
     <Content Include="Documentation\MixEmul Documentation 0.3.4.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

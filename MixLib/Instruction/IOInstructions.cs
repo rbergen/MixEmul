@@ -1,4 +1,3 @@
-using MixLib;
 using MixLib.Device;
 using MixLib.Interrupts;
 using MixLib.Modules;
@@ -6,10 +5,10 @@ using MixLib.Type;
 
 namespace MixLib.Instruction
 {
-	/// <summary>
-	/// Methods for performing MIX I/O instructions
-	/// </summary>
-	public static class IOInstructions
+    /// <summary>
+    /// Methods for performing MIX I/O instructions
+    /// </summary>
+    public static class IOInstructions
 	{
 		public const byte INOpCode = 36;
 

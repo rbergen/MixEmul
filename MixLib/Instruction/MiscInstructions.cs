@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using MixLib;
 using MixLib.Interrupts;
 using MixLib.Modules;
 using MixLib.Type;
 
 namespace MixLib.Instruction
 {
-	/// <summary>
-	/// Methods for performing miscellaneous MIX instructions
-	/// </summary>
-	public static class MiscInstructions
+    /// <summary>
+    /// Methods for performing miscellaneous MIX instructions
+    /// </summary>
+    public static class MiscInstructions
 	{
         static SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
         const byte zeroCharValue = 30;

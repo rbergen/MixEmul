@@ -1,7 +1,4 @@
 namespace MixGui.Events
 {
-	using System;
-	using System.Runtime.CompilerServices;
-
-	public delegate void AddressSelectedHandler(object sender, AddressSelectedEventArgs e);
+    public delegate void AddressSelectedHandler(object sender, AddressSelectedEventArgs e);
 }

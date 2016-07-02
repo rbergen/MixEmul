@@ -1,8 +1,6 @@
-using MixLib.Device;
-
 namespace MixLib.Device.Step
 {
-	public class CloseStreamStep : StreamStep
+    public class CloseStreamStep : StreamStep
 	{
         const string statusDescription = "Ending data transfer";
 

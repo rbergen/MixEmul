@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MixLib.Device;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
-	public class TextReadStep : StreamStep
+    public class TextReadStep : StreamStep
 	{
         int mRecordWordCount;
         const string statusDescription = "Reading textual data";

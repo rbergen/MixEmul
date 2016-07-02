@@ -1,13 +1,12 @@
-using MixLib;
 using MixLib.Modules;
 using MixLib.Type;
 
 namespace MixLib.Instruction
 {
-	/// <summary>
-	/// Methods for performing MIX comparison instructions
-	/// </summary>
-	public static class ComparisonInstructions
+    /// <summary>
+    /// Methods for performing MIX comparison instructions
+    /// </summary>
+    public static class ComparisonInstructions
 	{
         const int opcodeBase = 56;
 

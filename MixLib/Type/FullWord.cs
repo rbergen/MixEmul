@@ -1,8 +1,6 @@
-using System;
-
 namespace MixLib.Type
 {
-	public class FullWord : Word, IFullWord
+    public class FullWord : Word, IFullWord
 	{
 		public new const int ByteCount = 5;
 

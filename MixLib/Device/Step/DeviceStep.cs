@@ -1,9 +1,8 @@
-using MixLib.Device;
 using MixLib.Events;
 
 namespace MixLib.Device.Step
 {
-	public abstract class DeviceStep
+    public abstract class DeviceStep
 	{
 		public DeviceStep NextStep { get; set; }
 

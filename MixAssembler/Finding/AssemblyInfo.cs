@@ -1,5 +1,3 @@
-using MixAssembler;
-
 namespace MixAssembler.Finding
 {
     public class AssemblyInfo : AssemblyFinding

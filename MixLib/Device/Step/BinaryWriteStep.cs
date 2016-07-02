@@ -1,13 +1,12 @@
 using System;
 using System.IO;
-using MixLib.Device;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
-	public class BinaryWriteStep : StreamStep
+    public class BinaryWriteStep : StreamStep
 	{
         int mRecordWordCount;
         const string statusDescription = "Writing binary data";

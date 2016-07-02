@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using MixLib.Events;
-using MixLib.Utils;
 
 namespace MixLib.Type
 {
-	public class Word : ICloneable, IWord
+    public class Word : ICloneable, IWord
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
