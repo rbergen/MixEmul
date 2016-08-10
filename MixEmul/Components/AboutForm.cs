@@ -18,8 +18,8 @@ namespace MixGui.Components
 		{
 			InitializeComponent();
 
-			Assembly executingAssembly = Assembly.GetExecutingAssembly();
-			object[] customAttributes = executingAssembly.GetCustomAttributes(false);
+			var executingAssembly = Assembly.GetExecutingAssembly();
+			var customAttributes = executingAssembly.GetCustomAttributes(false);
 
 			string product = null;
 			string copyright = null;

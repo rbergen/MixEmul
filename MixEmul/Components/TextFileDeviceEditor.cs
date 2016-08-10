@@ -270,7 +270,7 @@ namespace MixGui.Components
 			Device = device;
 			initDeviceFileWatcher();
 
-			bool success = loadRecords(loadErrorHandlingMode.AbortOnError);
+			var success = loadRecords(loadErrorHandlingMode.AbortOnError);
 
 			if (!success)
 			{

@@ -75,7 +75,7 @@ namespace MixGui
                 mAboutForm = new AboutForm();
             }
 
-            bool teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = disableTeletypeOnTop();
 
             mAboutForm.ShowDialog(this);
 
@@ -165,7 +165,7 @@ namespace MixGui
 
         void mOpenProgramMenuItem_Click(object sender, EventArgs e)
         {
-            bool teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = disableTeletypeOnTop();
 
             if (mOpenProgramFileDialog == null)
             {
@@ -199,7 +199,7 @@ namespace MixGui
                 mPreferencesForm = new PreferencesForm(mConfiguration, mMix.Devices, mDefaultDirectory);
             }
 
-            bool teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = disableTeletypeOnTop();
 
             if (mPreferencesForm.ShowDialog(this) == DialogResult.OK)
             {

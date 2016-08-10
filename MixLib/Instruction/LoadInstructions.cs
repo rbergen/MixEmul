@@ -13,10 +13,10 @@ namespace MixLib.Instruction
 
         static bool doLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
-            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+            var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
             if (indexedAddress == int.MinValue) return false;
 
-            WordField memoryField = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]);
+            var memoryField = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]);
 
             if (negateSign) memoryField.InvertSign();
 

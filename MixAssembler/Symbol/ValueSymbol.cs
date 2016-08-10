@@ -54,7 +54,7 @@ namespace MixAssembler.Symbol
 
 		public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			SymbolBase symbol = LocalSymbol.ParseDefinition(text, sectionCharIndex, status);
+			var symbol = LocalSymbol.ParseDefinition(text, sectionCharIndex, status);
 
 			if (symbol != null) return symbol;
 
@@ -63,7 +63,7 @@ namespace MixAssembler.Symbol
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			IValue symbolValue = LocalSymbol.ParseValue(text, sectionCharIndex, status);
+			var symbolValue = LocalSymbol.ParseValue(text, sectionCharIndex, status);
 
 			if (symbolValue != null) return symbolValue;
 

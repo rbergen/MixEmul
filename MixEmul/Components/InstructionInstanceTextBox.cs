@@ -195,7 +195,7 @@ namespace MixGui.Components
             ParsedSourceLine line;
             mEditMode = false;
 
-            InstructionInstanceBase instance = Assembler.Assemble(Text, MemoryAddress, out line, Symbols, out findings);
+            var instance = Assembler.Assemble(Text, MemoryAddress, out line, Symbols, out findings);
 
             if (instance != null && !(instance is MixInstruction.Instance))
             {
@@ -438,7 +438,7 @@ namespace MixGui.Components
 
 			mLastRenderedMagnitude = mInstructionWord.MagnitudeLongValue;
 			mLastRenderedSign = mInstructionWord.Sign;
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction(mInstructionWord[MixInstruction.OpcodeByte], new FieldSpec(mInstructionWord[MixInstruction.FieldSpecByte]));
+			var instruction = InstructionSet.Instance.GetInstruction(mInstructionWord[MixInstruction.OpcodeByte], new FieldSpec(mInstructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -446,8 +446,8 @@ namespace MixGui.Components
 				return;
 			}
 
-			MixInstruction.Instance instance = instruction.CreateInstance(mInstructionWord);
-			InstanceValidationError[] errors = instance.Validate();
+			var instance = instruction.CreateInstance(mInstructionWord);
+			var errors = instance.Validate();
 			var text = new InstructionText(instance);
 
 			SuspendLayout();
@@ -461,7 +461,7 @@ namespace MixGui.Components
 
 			if (TextLength > 0) Select(TextLength, 0);
 
-			string caption = getAddressErrorsCaption(errors);
+			var caption = getAddressErrorsCaption(errors);
 
 			if (sourceCaption != null)
 			{
@@ -471,7 +471,7 @@ namespace MixGui.Components
 			mCaption = caption;
 			mToolTip?.SetToolTip(this, caption);
 
-			int address = getAddress();
+			var address = getAddress();
 			mShowAddressMenuItem.Enabled = address >= MemoryMinIndex && address <= MemoryMaxIndex;
 			mShowIndexedAddressMenuItem.Enabled = IndexedAddressCalculatorCallback?.Invoke(address, mInstructionWord[MixInstruction.IndexByte]) != int.MinValue;
 			ContextMenu = mContextMenu;

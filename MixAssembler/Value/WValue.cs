@@ -10,7 +10,7 @@ namespace MixAssembler.Value
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			// split the text to parse in its W-value components
-			string[] textParts = text.Split(new char[] { ',' });
+			var textParts = text.Split(new char[] { ',' });
 			int currentIndex = 0;
 
 			var register = new FullWordRegister();
@@ -20,13 +20,13 @@ namespace MixAssembler.Value
 			foreach (string part in textParts)
 			{
 				// parse the address part...
-				int braceIndex = part.IndexOf('(');
-				IValue address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part.Substring(0, braceIndex), sectionCharIndex + currentIndex, status);
+				var braceIndex = part.IndexOf('(');
+				var address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part.Substring(0, braceIndex), sectionCharIndex + currentIndex, status);
                 if (address == null) return null;
 
 				// ... and check if it is valid
-				Word.Signs addressSign = address.GetSign(status.LocationCounter);
-				long addressMagnitude = address.GetMagnitude(status.LocationCounter);
+				var addressSign = address.GetSign(status.LocationCounter);
+				var addressMagnitude = address.GetMagnitude(status.LocationCounter);
 				if (addressMagnitude > register.MaxMagnitude)
 				{
 					status.ReportParsingError(sectionCharIndex + currentIndex, (braceIndex == -1) ? part.Length : braceIndex, "W-value field value invalid");
@@ -41,7 +41,7 @@ namespace MixAssembler.Value
 				if (braceIndex >= 0)
 				{
 					// ... parse its value...
-					IValue field = FPartValue.ParseValue(part.Substring(braceIndex), (sectionCharIndex + currentIndex) + braceIndex, status);
+					var field = FPartValue.ParseValue(part.Substring(braceIndex), (sectionCharIndex + currentIndex) + braceIndex, status);
 					if (field == null) return null;
 
 					// ... and check if it is valid

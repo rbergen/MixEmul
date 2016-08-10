@@ -257,7 +257,7 @@ namespace MixLib.Modules
             Status = RunStatus.Running;
 
 			IMemoryFullWord instructionWord = Memory[ProgramCounter];
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
+			var instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -265,15 +265,15 @@ namespace MixLib.Modules
 				return false;
 			}
 
-			MixInstruction.Instance instance = instruction.CreateInstance(instructionWord);
-			InstanceValidationError[] errors = instance.Validate();
+			var instance = instruction.CreateInstance(instructionWord);
+			var errors = instance.Validate();
 			if (errors != null)
 			{
 				ReportInvalidInstruction(errors);
 				return false;
 			}
 
-			bool increasePC = instance.Execute(this);
+			var increasePC = instance.Execute(this);
 
 			if (ExecutionSettings.ProfilingEnabled)
 			{

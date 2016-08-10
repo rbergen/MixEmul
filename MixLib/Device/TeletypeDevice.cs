@@ -67,7 +67,7 @@ namespace MixLib.Device
 
 		public sealed override void UpdateSettings()
 		{
-			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.TeletypeInitialization);
+			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.TeletypeInitialization);
 
 			mInputBuffer = Queue.Synchronized(new Queue());
 			mOutputBuffer = Queue.Synchronized(new Queue());
@@ -127,7 +127,7 @@ namespace MixLib.Device
                     string stringToRead = (mInputBuffer.Count == 0) ? "" : ((string)mInputBuffer.Dequeue());
                     mReadBytes = new MixByte[FullWord.ByteCount * recordWordCount];
 
-                    int bytesToReadCount = Math.Min(stringToRead.Length, mReadBytes.Length);
+                    var bytesToReadCount = Math.Min(stringToRead.Length, mReadBytes.Length);
                     int index = 0;
 
                     while (index < bytesToReadCount)
@@ -177,7 +177,7 @@ namespace MixLib.Device
                     if (mWriteBytes == null) return true;
 
                     char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
-                    int bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
+                    var bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
                     int index = 0;
 
                     while (index < bytesToWriteCount)

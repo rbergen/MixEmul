@@ -18,11 +18,11 @@ namespace MixAssembler.Value
 			if (text[0] == TagCharacter)
 			{
 				// the actual fieldspec can be any expression...
-				IValue expression = ExpressionValue.ParseValue(text.Substring(1), sectionCharIndex + 1, status);
+				var expression = ExpressionValue.ParseValue(text.Substring(1), sectionCharIndex + 1, status);
 
 				if (expression == null) return null;
 
-				long value = expression.GetValue(status.LocationCounter);
+				var value = expression.GetValue(status.LocationCounter);
 
 				// ... as long as it is within the range of valid MIX byte values
 				if (value >= MixByte.MinValue && value <= MixByte.MaxValue) return expression;

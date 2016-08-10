@@ -116,10 +116,10 @@ namespace MixLib.Instruction
 
 			if (status == null)
 			{
-				int fromAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+				var fromAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 				if (fromAddress == int.MinValue) return false;
 
-				int toAddress = InstructionHelpers.GetValidIndexedAddress(module, 0, 1);
+				var toAddress = InstructionHelpers.GetValidIndexedAddress(module, 0, 1);
                 if (toAddress == int.MinValue) return false;
 
 				status = new moveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);

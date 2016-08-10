@@ -143,7 +143,7 @@ namespace MixGui.Components
 
                     if (text != "")
                     {
-                        byte byteValue = byte.Parse(text);
+                        var byteValue = byte.Parse(text);
                         textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;
                     }
                 }

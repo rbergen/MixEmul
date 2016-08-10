@@ -155,7 +155,7 @@ namespace MixGui.Components
         {
             if (mGetCurrentItem != null)
             {
-                T item = mGetCurrentItem();
+                var item = mGetCurrentItem();
 
                 if (item != null && !mCurrentItem.Item.Equals(item) && !mCurrentItem.Previous.Item.Equals(item))
                 {
@@ -199,7 +199,7 @@ namespace MixGui.Components
         {
             if (mGetCurrentItem != null)
             {
-                T item = mGetCurrentItem();
+                var item = mGetCurrentItem();
 
                 if (item != null && !mCurrentItem.Item.Equals(item) && !mCurrentItem.Next.Item.Equals(item))
                 {

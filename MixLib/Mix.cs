@@ -244,12 +244,12 @@ namespace MixLib
 
         public void PrepareLoader()
 		{
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction(IOInstructions.INOpCode, new FieldSpec(Devices.CardReaderUnitCode));
+			var instruction = InstructionSet.Instance.GetInstruction(IOInstructions.INOpCode, new FieldSpec(Devices.CardReaderUnitCode));
 
             var instructionWord = new FullWord();
             instructionWord[MixInstruction.OpcodeByte] = IOInstructions.INOpCode;
             instructionWord[MixInstruction.FieldSpecByte] = Devices.CardReaderUnitCode;
-            MixInstruction.Instance instance = instruction.CreateInstance(instructionWord);
+            var instance = instruction.CreateInstance(instructionWord);
 
 			int ticksLeft = instruction.TickCount;
 			while (ticksLeft-- > 0) increaseTickCounter();
@@ -307,7 +307,7 @@ namespace MixLib
 			}
 
 			IMemoryFullWord instructionWord = Memory[ProgramCounter];
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
+			var instruction = InstructionSet.Instance.GetInstruction(instructionWord[MixInstruction.OpcodeByte], new FieldSpec(instructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -317,8 +317,8 @@ namespace MixLib
 				return;
 			}
 
-			MixInstruction.Instance instance = instruction.CreateInstance(instructionWord);
-			InstanceValidationError[] errors = instance.Validate();
+			var instance = instruction.CreateInstance(instructionWord);
+			var errors = instance.Validate();
 			if (errors != null)
 			{
 				ReportInvalidInstruction(errors);
@@ -346,7 +346,7 @@ namespace MixLib
 
 			if (Mode == RunMode.Module || mCurrentInstructionTicksLeft == 0)
 			{
-				bool increasePC = instance.Execute(this);
+				var increasePC = instance.Execute(this);
 
 				programCounter = ProgramCounter;
 

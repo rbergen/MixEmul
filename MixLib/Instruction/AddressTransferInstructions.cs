@@ -18,7 +18,7 @@ namespace MixLib.Instruction
 
         static bool doEnter(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
-            int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+            var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
             Register register = module.Registers[registerIndex];
 
             if (negateSign)
@@ -38,7 +38,7 @@ namespace MixLib.Instruction
 
         static bool doIncrease(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
-            int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+            var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
             Register register = module.Registers[registerIndex];
             long longValue = register.LongValue;
 

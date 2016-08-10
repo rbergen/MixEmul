@@ -135,7 +135,7 @@ namespace MixGui.Components
                 }
             }
 
-            int index = MixByte.MixChars.IndexOf(char.ToUpper(keyChar));
+            var index = MixByte.MixChars.IndexOf(char.ToUpper(keyChar));
 
             e.Handled = (index < 0 || index == MixByte.MixChars.Length - 2) && !char.IsControl(keyChar);
         }
@@ -201,14 +201,14 @@ namespace MixGui.Components
 
         public new void Update()
 		{
-			MixByte[] byteCollectionBytes = mByteCollection.ToArray();
+			var byteCollectionBytes = mByteCollection.ToArray();
 
 			if (mEditMode || mLastRenderedBytes == null || !arraysEqual(mLastRenderedBytes, byteCollectionBytes))
 			{
 				mEditMode = false;
 				mLastRenderedBytes = byteCollectionBytes;
 
-				string textValue = mByteCollection.ToString(true).TrimEnd();
+				var textValue = mByteCollection.ToString(true).TrimEnd();
 
 				mUpdating = true;
 				SuspendLayout();

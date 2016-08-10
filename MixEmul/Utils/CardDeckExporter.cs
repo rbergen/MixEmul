@@ -52,7 +52,7 @@ namespace MixGui.Utils
 		{
 			var words = new List<IFullWord>();
 
-			StreamWriter writer = prepareWriter(filePath);
+			var writer = prepareWriter(filePath);
 
 			foreach (IFullWord word in wordsToWrite)
 			{
@@ -80,7 +80,7 @@ namespace MixGui.Utils
 			LoaderInstruction.Instance loaderInstance;
 			MixInstruction.Instance mixInstance;
 
-			StreamWriter writer = prepareWriter(filePath);
+			var writer = prepareWriter(filePath);
 
 			foreach (InstructionInstanceBase instance in instances)
 			{
@@ -140,7 +140,7 @@ namespace MixGui.Utils
             if (address < 0)
             {
                 address = -address;
-                string addressText = address.ToString("0000");
+                var addressText = address.ToString("0000");
                 return addressText.Substring(0, 3) + getNegativeDigit(addressText[3]);
             }
 

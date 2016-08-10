@@ -37,7 +37,7 @@ namespace MixLib.Device
 
         public sealed override void UpdateSettings()
 		{
-			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
+			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
@@ -73,7 +73,7 @@ namespace MixLib.Device
 
 		public new static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 		{
-			FileStream stream = FileBasedDevice.OpenStream(fileName, fileMode, fileAccess, fileShare);
+			var stream = FileBasedDevice.OpenStream(fileName, fileMode, fileAccess, fileShare);
 			long byteCount = SectorCount * WordsPerSector * (FullWord.ByteCount + 1);
 
 			var bytesToWrite = (int)(byteCount - stream.Length);
@@ -101,7 +101,7 @@ namespace MixLib.Device
                 {
                     try
                     {
-                        FileStream stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        var stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
                         if (!StreamStatus.PositionSet)
                         {
@@ -138,7 +138,7 @@ namespace MixLib.Device
 
                 public override bool Tick()
                 {
-                    long desiredPosition = CalculateBytePosition(Operands.Sector);
+                    var desiredPosition = CalculateBytePosition(Operands.Sector);
                     if (desiredPosition == StreamStatus.Position) return true;
 
                     if (mTicksLeft == unset)

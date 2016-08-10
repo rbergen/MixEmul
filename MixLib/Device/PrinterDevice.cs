@@ -38,7 +38,7 @@ namespace MixLib.Device
 
         public sealed override void UpdateSettings()
 		{
-			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PrinterInitialization);
+			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.PrinterInitialization);
 
             FirstInputDeviceStep = null;
 

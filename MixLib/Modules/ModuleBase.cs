@@ -100,7 +100,7 @@ namespace MixLib.Modules
 
         int loadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
         {
-            InstanceValidationError[] validationErrors = instance.Validate();
+            var validationErrors = instance.Validate();
             if (validationErrors != null) reportLoadInstanceErrors(locationCounter, validationErrors);
 
             FullMemory[locationCounter].MagnitudeLongValue = instance.InstructionWord.MagnitudeLongValue;

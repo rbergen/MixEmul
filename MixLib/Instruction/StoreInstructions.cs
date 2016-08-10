@@ -16,7 +16,7 @@ namespace MixLib.Instruction
         /// </summary>
         public static bool StoreRegister(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress != int.MinValue)
 			{
 				Register sourceRegister;
@@ -41,7 +41,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool StoreZero(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 
 			if (indexedAddress != int.MinValue)
 			{

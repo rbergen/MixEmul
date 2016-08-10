@@ -62,7 +62,7 @@ namespace MixGui.Components
             int count = mInstructions.Count;
             if (mSourceBox.TextLength != 0) mSourceBox.AppendText(Environment.NewLine);
 
-            string lineNumberText = (count + 1).ToString();
+            var lineNumberText = (count + 1).ToString();
             mSourceBox.AppendText(new string(' ', mLineNumberLength - lineNumberText.Length) + lineNumberText + lineNumberSeparator);
 
             var processedLine = new processedSourceLine(sourceLine, mSourceBox.TextLength);

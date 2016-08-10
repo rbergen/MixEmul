@@ -23,7 +23,7 @@ namespace MixLib.Instruction
                 return false;
             }
 
-			int mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (mValue == int.MinValue) return false;
 
 			int byteValue = instance.FieldSpec.MixByteValue.ByteValue;
@@ -36,7 +36,7 @@ namespace MixLib.Instruction
 
 			if (device.Busy) return false;
 
-			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
+			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartInput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
 
 			return true;
@@ -76,13 +76,13 @@ namespace MixLib.Instruction
                 return false;
             }
 
-            int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+            var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
 
 			if (device.Busy) return false;
 
-			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
+			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartIoc(indexedAddress, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
 
 			return true;
@@ -99,7 +99,7 @@ namespace MixLib.Instruction
                 return false;
             }
 
-            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+            var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
@@ -124,7 +124,7 @@ namespace MixLib.Instruction
                 return false;
             }
 
-            int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+            var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
@@ -149,7 +149,7 @@ namespace MixLib.Instruction
                 return false;
             }
 
-            int mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+            var mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (mValue == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
@@ -163,7 +163,7 @@ namespace MixLib.Instruction
 
 			if (device.Busy) return false;
 
-			WordField field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
+			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.rX);
 			device.StartOutput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
 
 			return true;

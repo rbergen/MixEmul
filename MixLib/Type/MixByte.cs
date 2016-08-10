@@ -25,7 +25,7 @@ namespace MixLib.Type
 
 		public MixByte(char value)
 		{
-			int index = MixChars.IndexOf(value);
+			var index = MixChars.IndexOf(value);
 			ByteValue = (index >= 0 && index <= MixChars.Length - 1) ? (byte)index : MaxValue;
 		}
 

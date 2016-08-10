@@ -70,7 +70,7 @@ namespace MixAssembler.Instruction
 
 			if (!areValuesDefined(status)) return null;
 
-			long addressMagnitude = mAddress.GetMagnitude(status.LocationCounter);
+			var addressMagnitude = mAddress.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
 			if (addressMagnitude > word.MaxMagnitude)
 			{
@@ -79,7 +79,7 @@ namespace MixAssembler.Instruction
 			}
 
 			word.MagnitudeLongValue = addressMagnitude;
-			MixByte fieldSpecValue = getFieldSpecValue(status, mixInstruction);
+			var fieldSpecValue = getFieldSpecValue(status, mixInstruction);
 			if (fieldSpecValue == null) return null;
 
 			var instructionWord = new FullWord();
@@ -93,7 +93,7 @@ namespace MixAssembler.Instruction
 			instructionWord[MixInstruction.FieldSpecByte] = fieldSpecValue;
 			instructionWord[MixInstruction.OpcodeByte] = mixInstruction.Opcode;
 
-			MixInstruction.Instance instance = mixInstruction.CreateInstance(instructionWord);
+			var instance = mixInstruction.CreateInstance(instructionWord);
 			reportInstanceErrors(status, instance);
 
 			return instance;
@@ -101,7 +101,7 @@ namespace MixAssembler.Instruction
 
         MixByte getFieldSpecValue(AssemblingStatus status, MixInstruction mixInstruction)
         {
-            long fieldValue = mField.GetValue(status.LocationCounter);
+            var fieldValue = mField.GetValue(status.LocationCounter);
 
             switch (mixInstruction.MetaFieldSpec.Presence)
             {
@@ -137,8 +137,8 @@ namespace MixAssembler.Instruction
         /// <returns></returns>
         public static IInstructionParameters ParseAddressField(InstructionBase instruction, string addressField, ParsingStatus status)
 		{
-			int indexCharIndex = addressField.IndexOf(',');
-			int sectionCharIndex = addressField.IndexOf('(', Math.Max(indexCharIndex, 0));
+			var indexCharIndex = addressField.IndexOf(',');
+			var sectionCharIndex = addressField.IndexOf('(', Math.Max(indexCharIndex, 0));
 
 			if (sectionCharIndex == -1)
 			{
@@ -150,21 +150,21 @@ namespace MixAssembler.Instruction
 				indexCharIndex = sectionCharIndex;
 			}
 
-			IValue address = APartValue.ParseValue(addressField.Substring(0, indexCharIndex), 0, status);
+			var address = APartValue.ParseValue(addressField.Substring(0, indexCharIndex), 0, status);
 			if (address == null)
 			{
 				status.ReportParsingError(0, indexCharIndex, "unable to parse address");
 				return null;
 			}
 
-			IValue index = IPartValue.ParseValue(addressField.Substring(indexCharIndex, sectionCharIndex - indexCharIndex), indexCharIndex, status);
+			var index = IPartValue.ParseValue(addressField.Substring(indexCharIndex, sectionCharIndex - indexCharIndex), indexCharIndex, status);
 			if (index == null)
 			{
 				status.ReportParsingError(indexCharIndex, sectionCharIndex - indexCharIndex, "unable to parse index");
 				return null;
 			}
 
-			IValue field = FPartValue.ParseValue(addressField.Substring(sectionCharIndex), sectionCharIndex, status);
+			var field = FPartValue.ParseValue(addressField.Substring(sectionCharIndex), sectionCharIndex, status);
 			if (field == null)
 			{
 				status.ReportParsingError(sectionCharIndex, addressField.Length - sectionCharIndex, "unable to parse field");
@@ -176,7 +176,7 @@ namespace MixAssembler.Instruction
 
         void reportInstanceErrors(AssemblingStatus status, MixInstruction.Instance instance)
         {
-            InstanceValidationError[] errorArray = instance.Validate();
+            var errorArray = instance.Validate();
             if (errorArray != null)
             {
                 int causeStartIndex = 0;

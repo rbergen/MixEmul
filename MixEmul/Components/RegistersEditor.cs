@@ -268,7 +268,7 @@ namespace MixGui.Components
                 index = ((FieldKeyEventArgs)e).Index;
             }
 
-            int editorIndex = mEditors.IndexOf((WordValueEditor)sender);
+            var editorIndex = mEditors.IndexOf((WordValueEditor)sender);
 
             if (e.KeyCode == Keys.Down && editorIndex < mEditors.Count - 1)
             {
@@ -282,7 +282,7 @@ namespace MixGui.Components
 
         void mCompareButton_Click(object sender, EventArgs e)
         {
-            MixLib.Registers.CompValues compValue = mRegisters.CompareIndicator.Next();
+            var compValue = mRegisters.CompareIndicator.Next();
             mRegisters.CompareIndicator = compValue;
             mCompareButton.Text = "" + compValue.ToChar();
         }

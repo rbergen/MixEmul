@@ -44,7 +44,7 @@ namespace MixLib.Device.Step
 
 		public static IFullWord[] ReadWords(Stream stream, int wordCount)
 		{
-			MixByte[] readBytes = ReadBytes(stream, wordCount);
+			var readBytes = ReadBytes(stream, wordCount);
 
 			IFullWord[] readWords = new IFullWord[wordCount];
 			IFullWord currentWord;

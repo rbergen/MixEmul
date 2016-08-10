@@ -178,7 +178,7 @@ namespace MixLib
 					throw new IndexOutOfRangeException(string.Format("index must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
 				}
 
-                MemoryFullWord word = GetRealWord(index);
+                var word = GetRealWord(index);
 
 				for (int byteIndex = 0; byteIndex < value.ByteCount; byteIndex++)
 				{

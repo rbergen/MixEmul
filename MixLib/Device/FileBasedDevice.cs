@@ -11,7 +11,7 @@ namespace MixLib.Device
 	{
 		public const string FileNameExtension = "mixdev";
 
-        string mFileNamePrefix;
+        readonly string mFileNamePrefix;
         string mFilePath;
 
         protected StreamStatus StreamStatus { get; set; }

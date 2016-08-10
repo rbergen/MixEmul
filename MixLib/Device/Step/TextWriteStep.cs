@@ -10,7 +10,7 @@ namespace MixLib.Device.Step
 {
 	public class TextWriteStep : StreamStep
 	{
-        int mRecordWordCount;
+        readonly int mRecordWordCount;
         const string statusDescription = "Writing textual data";
 
         public TextWriteStep(int recordWordCount)
@@ -36,7 +36,7 @@ namespace MixLib.Device.Step
 
         static string createStringFromBytes(MixByte[] bytes, int maxByteCount)
         {
-            int charsToWriteCount = Math.Min(maxByteCount, bytes.Length);
+            var charsToWriteCount = Math.Min(maxByteCount, bytes.Length);
             char[] charsToWrite = new char[charsToWriteCount];
             int index = 0;
 
@@ -51,7 +51,7 @@ namespace MixLib.Device.Step
 
         new class Instance : StreamStep.Instance
         {
-            int mRecordWordCount;
+            readonly int mRecordWordCount;
             MixByte[] mWriteBytes;
 
             public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)

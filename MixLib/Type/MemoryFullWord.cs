@@ -48,10 +48,10 @@ namespace MixLib.Type
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Instruction) && (options.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction)
 			{
-				MixInstruction instruction = InstructionSet.Instance.GetInstruction(this[MixInstruction.OpcodeByte], new FieldSpec(this[MixInstruction.FieldSpecByte]));
+				var instruction = InstructionSet.Instance.GetInstruction(this[MixInstruction.OpcodeByte], new FieldSpec(this[MixInstruction.FieldSpecByte]));
 				if (instruction == null) return null;
 
-				MixInstruction.Instance instance = instruction.CreateInstance(this);
+				var instance = instruction.CreateInstance(this);
 				if (instance == null) return null;
 
 				index = new InstructionText(instance).InstanceText.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Instruction ? options.SearchFromFieldIndex : 0);

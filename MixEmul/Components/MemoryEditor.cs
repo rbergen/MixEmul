@@ -290,7 +290,7 @@ namespace MixGui.Components
 
             if (mWordEditorList.FirstVisibleIndex != mMemory.MinWordIndex)
             {
-                int firstIndex = Math.Max(mMemory.MinWordIndex, mWordEditorList.FirstVisibleIndex - mWordEditorList.VisibleEditorCount);
+                var firstIndex = Math.Max(mMemory.MinWordIndex, mWordEditorList.FirstVisibleIndex - mWordEditorList.VisibleEditorCount);
 
                 for (int index = firstIndex; index < mWordEditorList.FirstVisibleIndex; index++)
                 {
@@ -303,7 +303,7 @@ namespace MixGui.Components
 
                 if (mPrevDataIndex == null)
                 {
-                    int? lastPreviousDataIndex = memory.LastAddressWithContentsBefore(firstIndex);
+                    var lastPreviousDataIndex = memory.LastAddressWithContentsBefore(firstIndex);
                     if (lastPreviousDataIndex != null)
                     {
                         mPrevDataIndex = lastPreviousDataIndex.Value;
@@ -328,7 +328,7 @@ namespace MixGui.Components
 
             if (mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount <= mMemory.MaxWordIndex)
             {
-                int lastIndex = Math.Min(mMemory.MaxWordIndex, mWordEditorList.FirstVisibleIndex + (2 * mWordEditorList.VisibleEditorCount) - 1);
+                var lastIndex = Math.Min(mMemory.MaxWordIndex, mWordEditorList.FirstVisibleIndex + (2 * mWordEditorList.VisibleEditorCount) - 1);
 
                 for (int index = mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount; index <= lastIndex; index++)
                 {
@@ -421,7 +421,7 @@ namespace MixGui.Components
 		{
 			if (trackChange)
 			{
-				EditorListViewInfo oldViewInfo = GetCurrentListViewInfo();
+				var oldViewInfo = GetCurrentListViewInfo();
 
 				mWordEditorList.MakeIndexVisible(address);
 
@@ -550,7 +550,7 @@ namespace MixGui.Components
 				options.SearchFromFieldIndex = 0;
 			}
 
-			SearchResult result = mMemory.FindMatch(options);
+			var result = mMemory.FindMatch(options);
 
 			if (result != null)
 			{

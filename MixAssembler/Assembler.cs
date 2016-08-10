@@ -34,7 +34,7 @@ namespace MixAssembler
                     var parsedSourceLine = instruction as ParsedSourceLine;
 
                     status.LineNumber = parsedSourceLine != null ? parsedSourceLine.LineNumber : sourceLines.Length;
-                    InstructionInstanceBase instructionInstance = instruction.CreateInstance(status);
+                    var instructionInstance = instruction.CreateInstance(status);
 
                     if (parsedSourceLine != null && instructionInstance != null)
                     {
@@ -102,7 +102,7 @@ namespace MixAssembler
 
             status.LocationCounter = locationCounter;
             status.LineNumber = 0;
-            InstructionInstanceBase instructionInstance = parsedLine.CreateInstance(status);
+            var instructionInstance = parsedLine.CreateInstance(status);
 
             // if errors were found while assembling, don't return the instruction instance: it would be useless anyway
             if (status.Findings.ContainsErrors) return null;

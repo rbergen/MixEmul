@@ -288,8 +288,8 @@ namespace MixGui.Components
 
         public void UpdateLayout()
 		{
-			Font font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			Color color = GuiSettings.GetColor(GuiSettings.TeletypeInputText);
+			var font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			var color = GuiSettings.GetColor(GuiSettings.TeletypeInputText);
 
 			mPromptLabel.Font = font;
 			mPromptLabel.ForeColor = color;

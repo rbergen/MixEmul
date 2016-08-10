@@ -10,7 +10,7 @@ namespace MixLib.Device.Step
 {
     public class TextReadStep : StreamStep
 	{
-        int mRecordWordCount;
+        readonly int mRecordWordCount;
         const string statusDescription = "Reading textual data";
 
         public TextReadStep(int recordWordCount)

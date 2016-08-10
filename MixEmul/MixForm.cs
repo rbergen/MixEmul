@@ -232,8 +232,8 @@ namespace MixGui
 			mSymbolListView.Symbols = symbols;
 			mMainMemoryEditor.Symbols = symbols;
 
-			ToolStripCycleButton.Step controlStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Control);
-			ToolStripCycleButton.Step normalStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Normal, controlStep);
+			var controlStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Control);
+			var normalStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Normal, controlStep);
 			mModeCycleButton.AddStep(ModuleBase.RunMode.Module, normalStep);
 			controlStep.NextStep = normalStep;
 
@@ -298,7 +298,7 @@ namespace MixGui
                 AssemblyFindingCollection findings;
                 SymbolCollection symbols;
 
-                InstructionInstanceBase[] instances = Assembler.Assemble(File.ReadAllLines(fileName), out instructions, out symbols, out findings);
+                var instances = Assembler.Assemble(File.ReadAllLines(fileName), out instructions, out symbols, out findings);
                 if (instances != null)
                 {
                     if (!module.LoadInstructionInstances(instances, symbols))
@@ -355,7 +355,7 @@ namespace MixGui
         static void handleException(Exception exception)
         {
             Exception handlingException = null;
-            string path = Path.Combine(Environment.CurrentDirectory, "exception.log");
+            var path = Path.Combine(Environment.CurrentDirectory, "exception.log");
 
             try
             {
@@ -387,7 +387,7 @@ namespace MixGui
                 handlingException = ex;
             }
 
-            string text = string.Concat(new object[] { "I'm sorry, MixEmul seems to have encountered a fatal problem.\nAn unhandled error of type ", exception.GetType().Name, " occured, with message: ", exception.Message, '\n' });
+            var text = string.Concat(new object[] { "I'm sorry, MixEmul seems to have encountered a fatal problem.\nAn unhandled error of type ", exception.GetType().Name, " occured, with message: ", exception.Message, '\n' });
 
             if (handlingException == null)
             {
@@ -1275,7 +1275,7 @@ namespace MixGui
             AssemblyFindingCollection findings;
             SymbolCollection symbols;
 
-            InstructionInstanceBase[] instances = Assembler.Assemble(File.ReadAllLines(filePath), out instructions, out symbols, out findings);
+            var instances = Assembler.Assemble(File.ReadAllLines(filePath), out instructions, out symbols, out findings);
             if (instructions != null && findings != null)
             {
                 if (mSourceAndFindingsForm == null)
@@ -1364,13 +1364,13 @@ namespace MixGui
         public new void Update()
 		{
 			mUpdating = true;
-			bool pcVisible = mMainMemoryEditor.IsAddressVisible((int)mPCBox.LongValue);
+			var pcVisible = mMainMemoryEditor.IsAddressVisible((int)mPCBox.LongValue);
 			setPCBoxBounds();
 			mPCBox.LongValue = mMix.ProgramCounter;
 			mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
 			if (mFloatingPointMemoryEditor != null)
 			{
-				bool floatPcVisible = mFloatingPointMemoryEditor.IsAddressVisible(mFloatingPointMemoryEditor.MarkedAddress);
+				var floatPcVisible = mFloatingPointMemoryEditor.IsAddressVisible(mFloatingPointMemoryEditor.MarkedAddress);
 				mFloatingPointMemoryEditor.MarkedAddress = mMix.FloatingPointModule.ProgramCounter;
 				if (floatPcVisible)
 				{

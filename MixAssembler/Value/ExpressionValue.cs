@@ -53,7 +53,7 @@ namespace MixAssembler.Value
 			if (text.Length != 0)
 			{
 				// check if this expression is an atomic expression
-				IValue value = AtomicExpressionValue.ParseValue(text, sectionCharIndex, status);
+				var value = AtomicExpressionValue.ParseValue(text, sectionCharIndex, status);
 				if (value != null) return value;
 
 				// if the expression is not an atomic one, it must be longer than 1 character
@@ -81,7 +81,7 @@ namespace MixAssembler.Value
 					{
 						string currentOperator = pair.Key;
 
-						int operatorIndex = text.LastIndexOf(currentOperator, text.Length - 2, text.Length - 2, StringComparison.Ordinal);
+						var operatorIndex = text.LastIndexOf(currentOperator, text.Length - 2, text.Length - 2, StringComparison.Ordinal);
 						// this find only counts if it is closer to the end of the expression than the previous find
 						if (operatorIndex > (operatorPosition + 1))
 						{
@@ -95,9 +95,9 @@ namespace MixAssembler.Value
 
 					int rightTermStartIndex = operatorPosition + operatorText.Length;
 					// the left term can itself be an expression, so parse it as one (recursively)
-					IValue left = ParseValue(text.Substring(0, operatorPosition), sectionCharIndex, status);
+					var left = ParseValue(text.Substring(0, operatorPosition), sectionCharIndex, status);
 					// the right term must be an atomic expression
-					IValue right = AtomicExpressionValue.ParseValue(text.Substring(rightTermStartIndex), sectionCharIndex + rightTermStartIndex, status);
+					var right = AtomicExpressionValue.ParseValue(text.Substring(rightTermStartIndex), sectionCharIndex + rightTermStartIndex, status);
 
 					if (left != null && right != null)
 					{
@@ -114,7 +114,7 @@ namespace MixAssembler.Value
         {
             public int Compare(string left, string right)
             {
-                int lengthComparison = left.Length.CompareTo(right.Length);
+                var lengthComparison = left.Length.CompareTo(right.Length);
 
                 if (lengthComparison == 0) return string.Compare(left, right, StringComparison.Ordinal);
 

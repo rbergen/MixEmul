@@ -138,7 +138,7 @@ namespace MixAssembler
 
             if (isCommentLine(sourceLine)) return new ParsedSourceLine(status.LineNumber, sourceLine);
 
-            string[] lineFields = splitLine(sourceLine);
+            var lineFields = splitLine(sourceLine);
             lineFields[locFieldIndex] = lineFields[locFieldIndex].ToUpper();
             lineFields[opFieldIndex] = lineFields[opFieldIndex].ToUpper();
             lineFields[addressFieldIndex] = lineFields[addressFieldIndex].ToUpper();
@@ -150,14 +150,14 @@ namespace MixAssembler
                 return new ParsedSourceLine(status.LineNumber, lineFields[0], "", "", "", null, null);
             }
 
-            SymbolBase symbol = parseLocField(lineFields[locFieldIndex], status);
+            var symbol = parseLocField(lineFields[locFieldIndex], status);
             // if the location field contains a symbol name, set its value to the location counter
             symbol?.SetValue(status.LocationCounter);
 
             getMixOrLoaderInstructionAndParameters(lineFields[opFieldIndex], lineFields[addressFieldIndex], status, out instruction, out instructionParameters);
 
             // the following call must be made even if a MIX or loader instruction was found, as some loader instructions require the assembler to act, as well
-            bool assemblyInstructionHandled = handleAssemblyInstruction(lineFields[opFieldIndex], lineFields[addressFieldIndex], symbol, status);
+            var assemblyInstructionHandled = handleAssemblyInstruction(lineFields[opFieldIndex], lineFields[addressFieldIndex], symbol, status);
 
             // if the line isn't a comment or a MIX or loader instruction, it must be an assembler instruction. If not, we don't know the mnemonic
             if (instruction == null && !assemblyInstructionHandled)
@@ -174,7 +174,7 @@ namespace MixAssembler
 
             status.LineSection = LineSection.LocationField;
 
-            SymbolBase symbol = ValueSymbol.ParseDefinition(locField, 0, status);
+            var symbol = ValueSymbol.ParseDefinition(locField, 0, status);
             if (symbol == null)
             {
                 status.ReportParsingError(0, locField.Length, "invalid symbol name");
@@ -215,7 +215,7 @@ namespace MixAssembler
 				}
 				else
 				{
-					ParsedSourceLine parsedLine = parseLine(sourceLines[lineNumber], status);
+					var parsedLine = parseLine(sourceLines[lineNumber], status);
 					preInstructions.Add(parsedLine);
 					if (parsedLine.OpField == "END")
 					{
@@ -253,20 +253,20 @@ namespace MixAssembler
         static string[] splitLine(string sourceLine)
         {
             int addressFieldEnd;
-            int searchBeyondIndex = findFirstWhiteSpace(sourceLine, -1);
+            var searchBeyondIndex = findFirstWhiteSpace(sourceLine, -1);
             if (searchBeyondIndex == -1) return new string[] { sourceLine, "", "", "" };
 
-            int opFieldStart = findFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
+            var opFieldStart = findFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
             if (opFieldStart == -1) return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
 
-            int opFieldEnd = findFirstWhiteSpace(sourceLine, opFieldStart);
+            var opFieldEnd = findFirstWhiteSpace(sourceLine, opFieldStart);
             if (opFieldEnd == -1)
             {
                 return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart), "", "" };
             }
 
             int opFieldLength = opFieldEnd - opFieldStart;
-            int addressFieldStart = findFirstNonWhiteSpace(sourceLine, opFieldEnd);
+            var addressFieldStart = findFirstNonWhiteSpace(sourceLine, opFieldEnd);
             if (addressFieldStart == -1)
             {
                 return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), "", "" };
@@ -295,7 +295,7 @@ namespace MixAssembler
             }
 
             int addressFieldLength = addressFieldEnd - addressFieldStart;
-            int commentFieldStart = findFirstNonWhiteSpace(sourceLine, addressFieldEnd);
+            var commentFieldStart = findFirstNonWhiteSpace(sourceLine, addressFieldEnd);
             if (commentFieldStart == -1)
             {
                 return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };

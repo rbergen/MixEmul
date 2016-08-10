@@ -42,7 +42,7 @@ namespace MixLib.Device.Step
 		public static void WriteBytes(Stream stream, int wordCount, MixByte[] writeBytes)
 		{
 			byte[] buffer = new byte[wordCount * (FullWord.ByteCount + 1)];
-			int bytesToWriteCount = Math.Min(buffer.Length, writeBytes.Length);
+			var bytesToWriteCount = Math.Min(buffer.Length, writeBytes.Length);
 
 			for (int index = 0; index < bytesToWriteCount; index++)
 			{

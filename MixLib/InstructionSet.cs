@@ -21,7 +21,7 @@ namespace MixLib
 			{
 				rangeSpecs[i] = new FieldSpec(i);
 			}
-
+            
 			MixInstruction.Executor executor = LoadInstructions.Load;
 			MixInstruction.Validator validator = InstructionHelpers.ValidateIndexAndFieldSpec;
 			addInstruction("LDA", 8, fullWordMetaSpec, 2, executor, validator);
@@ -259,7 +259,7 @@ namespace MixLib
         void addInstruction(string mnemonic, MixInstruction instruction)
         {
             mMnemonicInstructionMap.Add(mnemonic, instruction);
-            List<MixInstruction> list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);
+            var list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);
             if (instruction.FieldSpec == null)
             {
                 list.Insert(0, instruction);

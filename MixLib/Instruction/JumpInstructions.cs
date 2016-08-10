@@ -52,7 +52,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool NonRegJump(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
@@ -137,7 +137,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool RegJump(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int registerIndex = instance.MixInstruction.Opcode - regJumpOpcodeBase;

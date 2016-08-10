@@ -213,9 +213,9 @@ namespace MixGui.Components
 
         Color interpolate(Color color1, Color color2, double fraction)
         {
-            int r = roundForArgb(interpolate(color1.R, color2.R, fraction));
-            int g = roundForArgb(interpolate(color1.G, color2.G, fraction));
-            int b = roundForArgb(interpolate(color1.B, color2.B, fraction));
+            var r = roundForArgb(interpolate(color1.R, color2.R, fraction));
+            var g = roundForArgb(interpolate(color1.G, color2.G, fraction));
+            var b = roundForArgb(interpolate(color1.B, color2.B, fraction));
             return Color.FromArgb(r, g, b);
         }
 
@@ -231,7 +231,7 @@ namespace MixGui.Components
             }
             else
             {
-                Color backColor = getBlendedColor((double)count / max);
+                var backColor = getBlendedColor((double)count / max);
                 mProfileLabel.BackColor = backColor;
                 mProfileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
             }
@@ -425,7 +425,7 @@ namespace MixGui.Components
 				}
 
 				mMemoryWord = value;
-				string text = mMemoryWord.Index.ToString("D4");
+				var text = mMemoryWord.Index.ToString("D4");
 				if (mMemoryWord.Index == 0)
 				{
 					text = " " + text;

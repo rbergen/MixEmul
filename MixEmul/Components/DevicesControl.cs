@@ -45,11 +45,11 @@ namespace MixGui.Components
 
         void addDeviceControl(int index)
         {
-            Orientations orientation = getOrientation();
+            var orientation = getOrientation();
             Breaks breaks = mStructure != null && index > 0 ? mStructure[index] : Breaks.None;
 
-            int horizontalSpacing = getHorizontalSpacing();
-            int verticalSpacing = getVerticalSpacing();
+            var horizontalSpacing = getHorizontalSpacing();
+            var verticalSpacing = getVerticalSpacing();
 
             if (index == 0)
             {

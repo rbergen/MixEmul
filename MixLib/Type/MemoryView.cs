@@ -78,7 +78,7 @@ namespace MixLib.Type
 				SearchFromFieldIndex = options.SearchFromFieldIndex
 			};
 
-			SearchResult result = SourceMemory.FindMatch(filteredOptions);
+			var result = SourceMemory.FindMatch(filteredOptions);
 
 			if (result == null) return null;
 

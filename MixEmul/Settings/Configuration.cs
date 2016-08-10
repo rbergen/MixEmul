@@ -104,7 +104,7 @@ namespace MixGui.Settings
 		{
 			try
 			{
-				string path = Path.Combine(directory, fileName);
+				var path = Path.Combine(directory, fileName);
 
 				if (File.Exists(path))
 				{

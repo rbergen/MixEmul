@@ -183,7 +183,7 @@ namespace MixGui.Components
                     box = (MixByteTextBox)sender;
                     if (box.SelectionStart + box.SelectionLength == box.TextLength)
                     {
-                        int byteIndex = Array.IndexOf(mByteTextBoxes, box);
+                        var byteIndex = Array.IndexOf(mByteTextBoxes, box);
                         if (byteIndex < ByteCount - 1)
                         {
                             mByteTextBoxes[byteIndex + 1].Focus();
@@ -209,7 +209,7 @@ namespace MixGui.Components
                     box = (MixByteTextBox)sender;
                     if (box.SelectionStart + box.SelectionLength == 0)
                     {
-                        int byteIndex = Array.IndexOf(mByteTextBoxes, box);
+                        var byteIndex = Array.IndexOf(mByteTextBoxes, box);
                         if (byteIndex > 0)
                         {
                             mByteTextBoxes[byteIndex - 1].Focus();

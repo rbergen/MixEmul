@@ -35,7 +35,7 @@ namespace MixLib.Device
 
         public sealed override void UpdateSettings()
 		{
-			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.PaperTapeInitialization);
+			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.PaperTapeInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;

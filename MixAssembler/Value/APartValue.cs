@@ -13,7 +13,7 @@ namespace MixAssembler.Value
             if (text.Length == 0) return new NumberValue(0L);
 
             // it can be either a literal value...
-            IValue value = ValueSymbol.ParseValue(text, sectionCharIndex, status);
+            var value = ValueSymbol.ParseValue(text, sectionCharIndex, status);
             if (value != null) return value;
 
             // ... a literal constant...

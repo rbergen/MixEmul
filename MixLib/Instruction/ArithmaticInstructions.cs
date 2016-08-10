@@ -15,7 +15,7 @@ namespace MixLib.Instruction
         /// </summary>
         public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			Register rA = module.Registers.rA;
@@ -51,7 +51,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Divide(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
@@ -92,7 +92,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Multiply(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			Register rA = module.Registers.rA;
@@ -101,7 +101,7 @@ namespace MixLib.Instruction
 			long rAValue = rA.LongValue;
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 
-			decimal result = decimal.Multiply(rAValue, memoryWordValue);
+			var result = decimal.Multiply(rAValue, memoryWordValue);
 			rA.Sign = rX.Sign = result.GetSign();
 			result = result.GetMagnitude();
 

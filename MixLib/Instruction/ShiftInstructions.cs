@@ -22,7 +22,7 @@ namespace MixLib.Instruction
         /// </summary>
         public static bool ShiftA(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+			var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			if (indexedAddress < 0)
 			{
 				module.ReportRuntimeError("Indexed value must be nonnegative: " + indexedAddress);
@@ -64,7 +64,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool ShiftAX(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+			var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			if (indexedAddress < 0)
 			{
 				module.ReportRuntimeError("Indexed value must be nonnegative: " + indexedAddress);
@@ -244,7 +244,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool ShiftAXBinary(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+			var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			if (indexedAddress < 0)
 			{
 				module.ReportRuntimeError("Indexed value must be nonnegative: " + indexedAddress);

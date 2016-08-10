@@ -15,7 +15,7 @@ namespace MixLib.Instruction
         /// </summary>
         public static bool Compare(ModuleBase module, MixInstruction.Instance instance)
 		{
-			int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int registerIndex = instance.MixInstruction.Opcode - opcodeBase;

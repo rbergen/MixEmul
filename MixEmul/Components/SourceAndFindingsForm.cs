@@ -182,7 +182,7 @@ namespace MixGui.Components
 
         void setStatusBarText(AssemblyFindingCollection findings)
         {
-            string[] severityNames = Enum.GetNames(typeof(Severity));
+            var severityNames = Enum.GetNames(typeof(Severity));
             int[] severityCounts = new int[severityNames.Length];
 
             foreach (AssemblyFinding finding in findings) severityCounts[(int)finding.Severity]++;

@@ -53,7 +53,7 @@ namespace MixLib.Instruction
 
 				if (prenormInstruction || fcmpInstruction)
 				{
-					int indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+					var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 					if (indexedAddress == int.MinValue)
 					{
 						mExecutionStatus = null;

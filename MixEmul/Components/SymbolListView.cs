@@ -119,7 +119,7 @@ namespace MixGui.Components
 
             if (valueSymbol != null)
             {
-                string valueText = valueSymbol.Magnitude.ToString();
+                var valueText = valueSymbol.Magnitude.ToString();
                 if (valueSymbol.Sign.IsNegative())
                 {
                     valueText = '-' + valueText;
@@ -200,7 +200,7 @@ namespace MixGui.Components
                 if (valueSymbol == null) return;
 
                 valueSymbol.SetValue(symbolSign, symbolMagnitude);
-                string valueText = symbolMagnitude.ToString();
+                var valueText = symbolMagnitude.ToString();
                 if (symbolSign.IsNegative())
                 {
                     valueText = '-' + valueText;

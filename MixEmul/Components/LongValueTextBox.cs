@@ -168,7 +168,7 @@ namespace MixGui.Components
         void checkAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
         {
             mEditMode = false;
-            long newValue = newSign.ApplyTo(newMagnitude);
+            var newValue = newSign.ApplyTo(newMagnitude);
 
             if (newValue < MinValue)
             {
@@ -335,7 +335,7 @@ namespace MixGui.Components
                 string text = Text;
                 if (text != "" && (!SupportSign || text != "-"))
                 {
-                    long num = long.Parse(text);
+                    var num = long.Parse(text);
                     textIsValid = ((num >= MinValue) && (num <= MaxValue)) && (SupportSign || (num >= 0L));
                 }
             }

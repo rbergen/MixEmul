@@ -2,7 +2,7 @@ namespace MixLib.Device.Step
 {
 	public class NoOpStep : TickingStep
 	{
-        string mStatusDescription;
+        readonly string mStatusDescription;
 
         public NoOpStep(int tickCount, string statusDescription) : base(tickCount)
 		{

@@ -26,10 +26,10 @@ namespace MixLib.Type
 			mDefaultCharString = mDefaultWord.ToString(true);
 			mDefaultNonCharString = mDefaultWord.ToString(false);
 
-			MixInstruction instruction = InstructionSet.Instance.GetInstruction(mDefaultWord[MixInstruction.OpcodeByte], new FieldSpec(mDefaultWord[MixInstruction.FieldSpecByte]));
+			var instruction = InstructionSet.Instance.GetInstruction(mDefaultWord[MixInstruction.OpcodeByte], new FieldSpec(mDefaultWord[MixInstruction.FieldSpecByte]));
 			if (instruction != null)
 			{
-				MixInstruction.Instance instance = instruction.CreateInstance(mDefaultWord);
+				var instance = instruction.CreateInstance(mDefaultWord);
 				if (instance != null)
 				{
 					mDefaultInstructionString = new InstructionText(instance).InstanceText;
@@ -285,7 +285,7 @@ namespace MixLib.Type
 
         public override int GetHashCode()
         {
-            int hashcode = Index.GetHashCode();
+            var hashcode = Index.GetHashCode();
 
             if (mMemory != null)
             {

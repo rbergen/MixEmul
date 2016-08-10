@@ -43,14 +43,14 @@ namespace MixAssembler.Symbol
 		{
 			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=') return null;
 
-			IValue expressionValue = WValue.ParseValue(text.Substring(1, text.Length - 2), sectionCharIndex + 1, status);
+			var expressionValue = WValue.ParseValue(text.Substring(1, text.Length - 2), sectionCharIndex + 1, status);
 			if (expressionValue == null) return null;
 
-			long literalMagnitude = expressionValue.GetMagnitude(status.LocationCounter);
-			Word.Signs literalSign = expressionValue.GetSign(status.LocationCounter);
+			var literalMagnitude = expressionValue.GetMagnitude(status.LocationCounter);
+			var literalSign = expressionValue.GetSign(status.LocationCounter);
 
 			int count = 0;
-			string name = getName(literalSign, literalMagnitude, count);
+			var name = getName(literalSign, literalMagnitude, count);
 
 			while (status.Symbols[name] != null)
 			{

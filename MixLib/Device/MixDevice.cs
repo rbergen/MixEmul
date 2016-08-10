@@ -107,7 +107,7 @@ namespace MixLib.Device
             }
 
             // Move on to next I/O step
-            DeviceStep.Instance currentStepInstance = GetCurrentStepInstance();
+            var currentStepInstance = GetCurrentStepInstance();
 			currentStepInstance.Operands = mCurrentOperands;
 			currentStepInstance.ReportingEvent += stepInstance_Reporting;
 			currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;

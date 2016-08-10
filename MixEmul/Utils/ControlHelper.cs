@@ -9,10 +9,10 @@ namespace MixGui.Utils
 
         public static void SuspendDrawing(this Control control)
 		{
-			Message msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero,
+			var msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero,
 					IntPtr.Zero);
 
-			NativeWindow window = NativeWindow.FromHandle(control.Handle);
+			var window = NativeWindow.FromHandle(control.Handle);
 			window.DefWndProc(ref msgSuspendUpdate);
 		}
 
@@ -20,10 +20,10 @@ namespace MixGui.Utils
 		{
 			// Create a C "true" boolean as an IntPtr
 			var wparam = new IntPtr(1);
-			Message msgResumeUpdate = Message.Create(control.Handle, WM_SETREDRAW, wparam,
+			var msgResumeUpdate = Message.Create(control.Handle, WM_SETREDRAW, wparam,
 					IntPtr.Zero);
 
-			NativeWindow window = NativeWindow.FromHandle(control.Handle);
+			var window = NativeWindow.FromHandle(control.Handle);
 			window.DefWndProc(ref msgResumeUpdate);
 
 			control.Invalidate();

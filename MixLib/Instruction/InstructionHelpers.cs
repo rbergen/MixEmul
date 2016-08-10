@@ -21,7 +21,7 @@ namespace MixLib.Instruction
 				return int.MinValue;
 			}
 
-			int indexedAddress = module.Registers.GetIndexedAddress(addressBase, registerIndex);
+			var indexedAddress = module.Registers.GetIndexedAddress(addressBase, registerIndex);
 			if (indexedAddress >= module.Memory.MinWordIndex && indexedAddress <= module.Memory.MaxWordIndex)
 			{
 				return indexedAddress;

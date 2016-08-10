@@ -125,7 +125,7 @@ namespace MixGui.Components
 			{
 				if (value == null) return;
 
-				Step step = mSteps.FirstOrDefault(s => s.Value is IComparable ? ((IComparable)s.Value).CompareTo(value) == 0 : s.Value.Equals(value));
+				var step = mSteps.FirstOrDefault(s => s.Value is IComparable ? ((IComparable)s.Value).CompareTo(value) == 0 : s.Value.Equals(value));
 
 				if (step == null)
 				{

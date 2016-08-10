@@ -40,7 +40,7 @@ namespace MixLib.Device
 
         public sealed override void UpdateSettings()
 		{
-			int tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
+			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
@@ -84,7 +84,7 @@ namespace MixLib.Device
                 {
                     try
                     {
-                        FileStream stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        var stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                         if (!StreamStatus.PositionSet)
                         {
                             stream.Position = stream.Length;
@@ -150,7 +150,7 @@ namespace MixLib.Device
                 {
                     try
                     {
-                        FileStream stream = File.OpenRead(StreamStatus.FileName);
+                        var stream = File.OpenRead(StreamStatus.FileName);
                         StreamStatus.Position = stream.Length;
                         stream.Close();
                     }

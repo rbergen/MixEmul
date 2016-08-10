@@ -13,7 +13,7 @@ namespace MixLib.Utils
 				startIndex = 0;
 			}
 
-			int index = text.IndexOf(options.SearchText, startIndex, System.StringComparison.Ordinal);
+			var index = text.IndexOf(options.SearchText, startIndex, System.StringComparison.Ordinal);
 
 			while (index >= 0)
 			{

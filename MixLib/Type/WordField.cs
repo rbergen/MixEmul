@@ -41,7 +41,7 @@ namespace MixLib.Type
 				register[i] = 0;
 			}
 
-			int fromWordByteCount = Math.Max(0, -paddingByteCount);
+			var fromWordByteCount = Math.Max(0, -paddingByteCount);
 			fieldSpecByteCount--;
 
 			while (fieldSpecByteCount >= fromWordByteCount)
@@ -55,7 +55,7 @@ namespace MixLib.Type
 
 		public int CompareTo(IFullWord toCompare)
 		{
-			WordField field = LoadFromFullWord(mFieldSpec, toCompare);
+			var field = LoadFromFullWord(mFieldSpec, toCompare);
 
 			long wordValue = LongValue;
 			long fieldValue = field.LongValue;

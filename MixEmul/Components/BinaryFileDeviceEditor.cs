@@ -255,10 +255,7 @@ namespace MixGui.Components
         {
             if (Visible)
             {
-                if (mDevice != null)
-                {
-                    mDeviceFileWatcher.EnableRaisingEvents = true;
-                }
+                mDeviceFileWatcher.EnableRaisingEvents |= mDevice != null;
 
                 loadRecord();
             }
@@ -266,10 +263,7 @@ namespace MixGui.Components
             {
                 if (changesPending) writeRecord();
 
-                if (mDevice != null)
-                {
-                    mDeviceFileWatcher.EnableRaisingEvents = false;
-                }
+                mDeviceFileWatcher.EnableRaisingEvents &= mDevice == null;
             }
 
         }
@@ -420,7 +414,7 @@ namespace MixGui.Components
                 stream = mOpenStream(mDevice.FilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
                 stream.Position = mCalculateBytePosition(record);
 
-                IFullWord[] readWords = mReadWords(stream, mDevice.RecordWordCount);
+                var readWords = mReadWords(stream, mDevice.RecordWordCount);
 
                 stream.Close();
 

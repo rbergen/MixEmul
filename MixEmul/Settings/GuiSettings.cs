@@ -91,7 +91,7 @@ namespace MixGui.Settings
 		{
 			if (mDefaultFonts.ContainsKey(name)) return mDefaultFonts[name];
 
-			IEnumerator<Font> enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
+			var enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
 			enumerator.MoveNext();
 			return enumerator.Current;
 		}
