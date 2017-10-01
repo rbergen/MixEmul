@@ -334,10 +334,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="ClassDiagram1.cd" />
-    <None Include="Documentation\MixEmul Documentation 0.3.4.docx" />
-    <Content Include="Documentation\MixEmul Documentation 0.3.4.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Documentation\MixEmul Documentation 0.3.5.docx" />
+    <None Include="Documentation\MixEmul Documentation 0.3.5.pdf" />
     <None Include="Resources\Find_5650.png" />
     <None Include="Resources\Symbols_Up_16xLG - kopie.png" />
     <None Include="Resources\Symbols_Down_16xLG.png" />
