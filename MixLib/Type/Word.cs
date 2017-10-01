@@ -186,7 +186,7 @@ namespace MixLib.Type
 				{
 					if (value == LongValue) return;
 
-					setMagnitudeLongValue(value);
+					SetMagnitudeLongValue(value);
 					mSign = value.GetSign();
 				}
 				finally
@@ -198,7 +198,7 @@ namespace MixLib.Type
 			}
 		}
 
-        long setMagnitudeLongValue(long magnitude)
+        long SetMagnitudeLongValue(long magnitude)
         {
             long oldValue = MagnitudeLongValue;
 
@@ -302,7 +302,7 @@ namespace MixLib.Type
 
 				try
 				{
-					if (setMagnitudeLongValue(value) == value.GetMagnitude()) return;
+					if (SetMagnitudeLongValue(value) == value.GetMagnitude()) return;
 				}
 				finally
 				{

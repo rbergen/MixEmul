@@ -54,20 +54,22 @@ namespace MixGui.Components
 
 			mBreakpoints = SortedList.Synchronized(new SortedList());
 
-			mNoMemoryLabel = new Label();
-			mNoMemoryLabel.Location = new Point(0, 0);
-			mNoMemoryLabel.Name = "mNoMemoryLabel";
-			mNoMemoryLabel.Size = new Size(120, 16);
-			mNoMemoryLabel.TabIndex = 0;
-			mNoMemoryLabel.Text = "No memory connected";
-			mNoMemoryLabel.TextAlign = ContentAlignment.MiddleCenter;
+            mNoMemoryLabel = new Label
+            {
+                Location = new Point(0, 0),
+                Name = "mNoMemoryLabel",
+                Size = new Size(120, 16),
+                TabIndex = 0,
+                Text = "No memory connected",
+                TextAlign = ContentAlignment.MiddleCenter
+            };
 
-			Memory = memory;
+            Memory = memory;
 		}
 
         public ICollection Breakpoints => mBreakpoints.Values;
 
-        long getMaxProfilingCount(GuiSettings.ProfilingInfoType infoType) => mProfilingMaxCounts[(int)infoType];
+        long GetMaxProfilingCount(GuiSettings.ProfilingInfoType infoType) => mProfilingMaxCounts[(int)infoType];
 
         public bool IsBreakpointSet(int address) => mBreakpoints.Contains(address);
 
@@ -79,12 +81,12 @@ namespace MixGui.Components
 
         protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
-        void addressSelected(object sender, AddressSelectedEventArgs args) => MakeAddressVisible(args.SelectedAddress);
+        void This_AddressSelected(object sender, AddressSelectedEventArgs args) => MakeAddressVisible(args.SelectedAddress);
 
-        void addressDoubleClick(object sender, EventArgs e) =>
+        void AddressDoubleClick(object sender, EventArgs e) =>
             OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
 
-        void MemoryEditor_SizeChanged(object sender, EventArgs e) => setUpDownButtonStates(navigationDirection.None);
+        void MemoryEditor_SizeChanged(object sender, EventArgs e) => SetUpDownButtonStates(NavigationDirection.None);
 
         public ToolTip ToolTip
 		{
@@ -106,25 +108,27 @@ namespace MixGui.Components
 			}
 		}
 
-        IWordEditor createWordEditor(int address)
+        IWordEditor CreateWordEditor(int address)
         {
-            var editor = new MemoryWordEditor(address >= mMemory.MinWordIndex ? mMemory[address] : new MemoryFullWord(address));
-            editor.GetMaxProfilingCount = getMaxProfilingCount;
-            editor.MemoryMinIndex = mMemory.MinWordIndex;
-            editor.MemoryMaxIndex = mMemory.MaxWordIndex;
-            editor.IndexedAddressCalculatorCallback = mIndexedAddressCalculatorCallback;
-            editor.BreakPointChecked = mBreakpoints.Contains(address);
-            editor.Marked = mMarkedAddress == address;
-            editor.ToolTip = mToolTip;
-            editor.Symbols = mSymbols;
-            editor.BreakpointCheckedChanged += breakPointCheckedChanged;
-            editor.AddressDoubleClick += addressDoubleClick;
-            editor.AddressSelected += addressSelected;
+            var editor = new MemoryWordEditor(address >= mMemory.MinWordIndex ? mMemory[address] : new MemoryFullWord(address))
+            {
+                GetMaxProfilingCount = GetMaxProfilingCount,
+                MemoryMinIndex = mMemory.MinWordIndex,
+                MemoryMaxIndex = mMemory.MaxWordIndex,
+                IndexedAddressCalculatorCallback = mIndexedAddressCalculatorCallback,
+                BreakPointChecked = mBreakpoints.Contains(address),
+                Marked = mMarkedAddress == address,
+                ToolTip = mToolTip,
+                Symbols = mSymbols
+            };
+            editor.BreakpointCheckedChanged += BreakPointCheckedChanged;
+            editor.AddressDoubleClick += AddressDoubleClick;
+            editor.AddressSelected += This_AddressSelected;
 
             return editor;
         }
 
-        void loadWordEditor(IWordEditor editor, int address)
+        void LoadWordEditor(IWordEditor editor, int address)
         {
             var memoryEditor = (MemoryWordEditor)editor;
 
@@ -141,7 +145,7 @@ namespace MixGui.Components
             memoryEditor.Marked = mMarkedAddress == address;
         }
 
-        void breakPointCheckedChanged(object sender, EventArgs e)
+        void BreakPointCheckedChanged(object sender, EventArgs e)
         {
             if (!mWordEditorList.IsReloading)
             {
@@ -168,7 +172,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             SuspendLayout();
             Controls.Clear();
@@ -207,12 +211,12 @@ namespace MixGui.Components
                 mFirstAddressTextBox.Size = new Size(32, 20);
                 mFirstAddressTextBox.TabIndex = 1;
                 mFirstAddressTextBox.ClearZero = false;
-                mFirstAddressTextBox.ValueChanged += mFirstAddressTextBox_ValueChanged;
+                mFirstAddressTextBox.ValueChanged += MFirstAddressTextBox_ValueChanged;
 
                 mAddressHistorySelector.Location = new Point(mFirstAddressTextBox.Right + 4, 0);
                 mAddressHistorySelector.Name = "mAddressHistorySelector";
                 mAddressHistorySelector.TabIndex = 2;
-                mAddressHistorySelector.ItemSelected += mAddressHistorySelector_ItemSelected;
+                mAddressHistorySelector.ItemSelected += MAddressHistorySelector_ItemSelected;
 
                 mSetClipboardLabel.Location = new Point(mAddressHistorySelector.Right + 16, 0);
                 mSetClipboardLabel.Name = "mSetClipboardLabel";
@@ -230,7 +234,7 @@ namespace MixGui.Components
                 mExportButton.Size = new Size(62, 21);
                 mExportButton.TabIndex = 5;
                 mExportButton.Text = "&Export...";
-                mExportButton.Click += mExportButton_Click;
+                mExportButton.Click += MExportButton_Click;
 
                 mDownButton.Visible = mMemory is Memory;
                 mDownButton.Enabled = false;
@@ -241,7 +245,7 @@ namespace MixGui.Components
                 mDownButton.Size = new Size(21, 21);
                 mDownButton.Location = new Point(Width - mDownButton.Width, 0);
                 mDownButton.TabIndex = 7;
-                mDownButton.Click += mDownButton_Click;
+                mDownButton.Click += MDownButton_Click;
 
                 mUpButton.Visible = mMemory is Memory;
                 mUpButton.Enabled = false;
@@ -252,7 +256,7 @@ namespace MixGui.Components
                 mUpButton.Size = new Size(21, 21);
                 mUpButton.Location = new Point(mDownButton.Left - mUpButton.Width, 0);
                 mUpButton.TabIndex = 6;
-                mUpButton.Click += mUpButton_Click;
+                mUpButton.Click += MUpButton_Click;
 
                 mFirstAddressPanel.Controls.Add(mFirstAddressLabel);
                 mFirstAddressPanel.Controls.Add(mFirstAddressTextBox);
@@ -267,10 +271,12 @@ namespace MixGui.Components
                 mFirstAddressPanel.TabIndex = 0;
                 mFirstAddressPanel.Size = new Size(Width, mFirstAddressTextBox.Height + 2);
 
-                mWordEditorList = new WordEditorList(mMemory.MinWordIndex, mMemory.MaxWordIndex, createWordEditor, loadWordEditor);
-                mWordEditorList.Dock = DockStyle.Fill;
-                mWordEditorList.ReadOnly = mReadOnly;
-                mWordEditorList.FirstVisibleIndexChanged += mWordEditorList_FirstVisibleIndexChanged;
+                mWordEditorList = new WordEditorList(mMemory.MinWordIndex, mMemory.MaxWordIndex, CreateWordEditor, LoadWordEditor)
+                {
+                    Dock = DockStyle.Fill,
+                    ReadOnly = mReadOnly
+                };
+                mWordEditorList.FirstVisibleIndexChanged += MWordEditorList_FirstVisibleIndexChanged;
 
                 Controls.Add(mWordEditorList);
                 Controls.Add(mFirstAddressPanel);
@@ -280,11 +286,11 @@ namespace MixGui.Components
                 mFirstAddressPanel.ResumeLayout(false);
                 ResumeLayout(false);
 
-                setUpDownButtonStates(navigationDirection.None);
+                SetUpDownButtonStates(NavigationDirection.None);
             }
         }
 
-        void setUpButtonState(Memory memory)
+        void SetUpButtonState(Memory memory)
         {
             mPrevDataIndex = null;
 
@@ -322,7 +328,7 @@ namespace MixGui.Components
             mUpButton.Enabled = mPrevDataIndex.HasValue;
         }
 
-        void setDownButtonState(Memory memory)
+        void SetDownButtonState(Memory memory)
         {
             mNextDataIndex = null;
 
@@ -348,20 +354,20 @@ namespace MixGui.Components
             mDownButton.Enabled = mNextDataIndex.HasValue;
         }
 
-        void setUpDownButtonStates(navigationDirection direction)
+        void SetUpDownButtonStates(NavigationDirection direction)
         {
             var memory = mMemory as Memory;
 
             if (memory == null || mWordEditorList == null) return;
 
-            if (direction != navigationDirection.Up || (mPrevDataIndex.HasValue && mPrevDataIndex.Value >= mWordEditorList.FirstVisibleIndex))
+            if (direction != NavigationDirection.Up || (mPrevDataIndex.HasValue && mPrevDataIndex.Value >= mWordEditorList.FirstVisibleIndex))
             {
-                setUpButtonState(memory);
+                SetUpButtonState(memory);
             }
 
-            if (direction != navigationDirection.Down || (mNextDataIndex.HasValue && mNextDataIndex.Value <= mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount))
+            if (direction != NavigationDirection.Down || (mNextDataIndex.HasValue && mNextDataIndex.Value <= mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount))
             {
-                setDownButtonState(memory);
+                SetDownButtonState(memory);
             }
 
         }
@@ -379,7 +385,7 @@ namespace MixGui.Components
 			return viewInfo;
 		}
 
-        void mAddressHistorySelector_ItemSelected(object sender, ItemSelectedEventArgs<EditorListViewInfo> e)
+        void MAddressHistorySelector_ItemSelected(object sender, ItemSelectedEventArgs<EditorListViewInfo> e)
         {
             EditorListViewInfo viewInfo = e.SelectedItem;
 
@@ -403,15 +409,15 @@ namespace MixGui.Components
             }
         }
 
-        void mWordEditorList_FirstVisibleIndexChanged(EditorList<IWordEditor> sender, WordEditorList.FirstVisibleIndexChangedEventArgs args)
+        void MWordEditorList_FirstVisibleIndexChanged(EditorList<IWordEditor> sender, WordEditorList.FirstVisibleIndexChangedEventArgs args)
 		{
 			if (args.FirstVisibleIndex < mFirstAddressTextBox.LongValue)
 			{
-				setUpDownButtonStates(navigationDirection.Up);
+				SetUpDownButtonStates(NavigationDirection.Up);
 			}
 			else if (args.FirstVisibleIndex > mFirstAddressTextBox.LongValue)
 			{
-				setUpDownButtonStates(navigationDirection.Down);
+				SetUpDownButtonStates(NavigationDirection.Down);
 			}
 
 			mFirstAddressTextBox.LongValue = args.FirstVisibleIndex;
@@ -440,7 +446,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void mFirstAddressTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+        void MFirstAddressTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
         {
             var oldViewInfo = new EditorListViewInfo { FirstVisibleIndex = mWordEditorList.FirstVisibleIndex };
             int selectedEditorIndex = mWordEditorList.ActiveEditorIndex;
@@ -496,7 +502,7 @@ namespace MixGui.Components
 			mProfilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = mMemory.MaxProfilingExecutionCount;
 			mProfilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = mMemory.MaxProfilingTickCount;
 			mWordEditorList.Update();
-			setUpDownButtonStates(navigationDirection.None);
+			SetUpDownButtonStates(NavigationDirection.None);
 
 			base.Update();
 		}
@@ -575,16 +581,16 @@ namespace MixGui.Components
 			{
 				if (mMarkedAddress != value)
                 {
-                    setAddressMarkIfVisible(false);
+                    SetAddressMarkIfVisible(false);
 
                     mMarkedAddress = value;
 
-                    setAddressMarkIfVisible(true);
+                    SetAddressMarkIfVisible(true);
                 }
             }
 		}
 
-        void setAddressMarkIfVisible(bool mark)
+        void SetAddressMarkIfVisible(bool mark)
         {
             int firstVisibleIndex = mWordEditorList.FirstVisibleIndex;
 
@@ -605,7 +611,7 @@ namespace MixGui.Components
 				if (mMemory == null && value != null)
 				{
 					mMemory = value;
-					initializeComponent();
+					InitializeComponent();
 					mProfilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = mMemory.MaxProfilingExecutionCount;
 					mProfilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = mMemory.MaxProfilingTickCount;
 				}
@@ -651,7 +657,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void mUpButton_Click(object sender, EventArgs args)
+        void MUpButton_Click(object sender, EventArgs args)
         {
             if (mPrevDataIndex.HasValue)
             {
@@ -659,7 +665,7 @@ namespace MixGui.Components
             }
         }
 
-        void mDownButton_Click(object sender, EventArgs args)
+        void MDownButton_Click(object sender, EventArgs args)
         {
             if (mNextDataIndex.HasValue)
             {
@@ -667,23 +673,27 @@ namespace MixGui.Components
             }
         }
 
-        void mExportButton_Click(object sender, EventArgs args)
+        void MExportButton_Click(object sender, EventArgs args)
         {
-            var exportDialog = new MemoryExportDialog();
-            exportDialog.MinMemoryIndex = mMemory.MinWordIndex;
-            exportDialog.MaxMemoryIndex = mMemory.MaxWordIndex;
-            exportDialog.FromAddress = mWordEditorList.FirstVisibleIndex;
-            exportDialog.ToAddress = mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount - 1;
-            exportDialog.ProgramCounter = mMarkedAddress;
+            var exportDialog = new MemoryExportDialog
+            {
+                MinMemoryIndex = mMemory.MinWordIndex,
+                MaxMemoryIndex = mMemory.MaxWordIndex,
+                FromAddress = mWordEditorList.FirstVisibleIndex,
+                ToAddress = mWordEditorList.FirstVisibleIndex + mWordEditorList.VisibleEditorCount - 1,
+                ProgramCounter = mMarkedAddress
+            };
 
             if (exportDialog.ShowDialog(this) != DialogResult.OK) return;
 
             if (mSaveExportFileDialog == null)
             {
-                mSaveExportFileDialog = new SaveFileDialog();
-                mSaveExportFileDialog.DefaultExt = "mixdeck";
-                mSaveExportFileDialog.Filter = "MixEmul card deck files|*.mixdeck|All files|*.*";
-                mSaveExportFileDialog.Title = "Specify export file name";
+                mSaveExportFileDialog = new SaveFileDialog
+                {
+                    DefaultExt = "mixdeck",
+                    Filter = "MixEmul card deck files|*.mixdeck|All files|*.*",
+                    Title = "Specify export file name"
+                };
             }
 
             if (mSaveExportFileDialog.ShowDialog(this) == DialogResult.OK)
@@ -708,7 +718,7 @@ namespace MixGui.Components
             }
         }
 
-        enum navigationDirection
+        enum NavigationDirection
         {
             None,
             Up,

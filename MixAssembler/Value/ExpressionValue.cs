@@ -13,34 +13,34 @@ namespace MixAssembler.Value
         const long fullWordModulusMask = 1L << fullWordBitCount;
 
         // Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-        static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new operationComparator());
+        static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new OperationComparator());
 
         static ExpressionValue()
 		{
-			mBinaryOperations["+"] = doAdd;
-			mBinaryOperations["-"] = doSubstract;
-			mBinaryOperations["*"] = doMultiply;
-			mBinaryOperations["/"] = doDivide;
-			mBinaryOperations["//"] = doFractionDivide;
-			mBinaryOperations[":"] = doCalculateField;
+			mBinaryOperations["+"] = DoAdd;
+			mBinaryOperations["-"] = DoSubstract;
+			mBinaryOperations["*"] = DoMultiply;
+			mBinaryOperations["/"] = DoDivide;
+			mBinaryOperations["//"] = DoFractionDivide;
+			mBinaryOperations[":"] = DoCalculateField;
 		}
 
-        static IValue doAdd(IValue left, IValue right, int currentAddress) =>
+        static IValue DoAdd(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue doCalculateField(IValue left, IValue right, int currentAddress) =>
+        static IValue DoCalculateField(IValue left, IValue right, int currentAddress) =>
             new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue doDivide(IValue left, IValue right, int currentAddress) =>
+        static IValue DoDivide(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue doMultiply(IValue left, IValue right, int currentAddress) =>
+        static IValue DoMultiply(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue doSubstract(IValue left, IValue right, int currentAddress) =>
+        static IValue DoSubstract(IValue left, IValue right, int currentAddress) =>
             new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue doFractionDivide(IValue left, IValue right, int currentAddress)
+        static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
         {
             var divider = new decimal(left.GetValue(currentAddress));
             divider *= fullWordModulusMask;
@@ -110,7 +110,7 @@ namespace MixAssembler.Value
 		}
 
         // compare operators. Longer operators end up higher than shorter ones
-        class operationComparator : IComparer<string>
+        class OperationComparator : IComparer<string>
         {
             public int Compare(string left, string right)
             {

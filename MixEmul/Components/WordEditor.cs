@@ -53,20 +53,22 @@ namespace MixGui.Components
 			mLastRenderedMagnitude = unrendered;
 			mLastRenderedSign = Word.Signs.Positive;
 
-			mSignButton = new Button();
-			mSignButton.Location = new Point(0, 0);
-			mSignButton.Name = "SignButton";
-			mSignButton.Size = new Size(18, 21);
-			mSignButton.TabIndex = 0;
-			mSignButton.TabStop = false;
-			mSignButton.Text = "" + mWord.Sign.ToChar();
-			mSignButton.FlatStyle = FlatStyle.Flat;
-			mSignButton.Enabled = !ReadOnly;
-			mSignButton.Click += mSignButton_Click;
-			mSignButton.KeyPress += editor_keyPress;
-			mSignButton.KeyDown += keyDown;
+            mSignButton = new Button
+            {
+                Location = new Point(0, 0),
+                Name = "SignButton",
+                Size = new Size(18, 21),
+                TabIndex = 0,
+                TabStop = false,
+                Text = "" + mWord.Sign.ToChar(),
+                FlatStyle = FlatStyle.Flat,
+                Enabled = !ReadOnly
+            };
+            mSignButton.Click += MSignButton_Click;
+			mSignButton.KeyPress += Editor_KeyPress;
+			mSignButton.KeyDown += This_KeyDown;
 
-			initializeComponent();
+			InitializeComponent();
 		}
 
         public int? CaretIndex => null;
@@ -78,7 +80,7 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void byteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
+        void ByteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
         {
             var oldValue = new Word(mWord.Magnitude, mWord.Sign);
             mWord[textBox.Index] = args.NewValue;
@@ -90,21 +92,21 @@ namespace MixGui.Components
         }
 
 
-        void editor_Click(object sender, EventArgs e)
+        void Editor_Click(object sender, EventArgs e)
         {
             var box = (MixByteTextBox)sender;
 
             if (box.SelectionLength == 0) box.Select(0, 2);
         }
 
-        void editor_keyPress(object sender, KeyPressEventArgs e)
+        void Editor_KeyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
 
-            if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative()))) negateSign();
+            if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative()))) NegateSign();
         }
 
-        void editor_Leave(object sender, EventArgs e)
+        void Editor_Leave(object sender, EventArgs e)
         {
             var box = (MixByteTextBox)sender;
             mFocusByte = box.Index;
@@ -112,7 +114,7 @@ namespace MixGui.Components
             mFocusByteSelLength = box.SelectionLength;
         }
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             mFocusByte = 0;
             mFocusByteSelStart = 0;
@@ -131,17 +133,19 @@ namespace MixGui.Components
             mByteTextBoxes = new MixByteTextBox[ByteCount];
             for (int i = 0; i < ByteCount; i++)
             {
-                var box = new MixByteTextBox(i);
-                box.Location = new Point(width, 0);
-                box.Name = "MixByteEditor" + i;
-                box.MixByteValue = mWord[i];
-                box.ReadOnly = ReadOnly;
-                box.TabIndex = tabIndex;
-                box.ValueChanged += byteValueChanged;
-                box.Click += editor_Click;
-                box.Leave += editor_Leave;
-                box.KeyPress += editor_keyPress;
-                box.KeyDown += keyDown;
+                var box = new MixByteTextBox(i)
+                {
+                    Location = new Point(width, 0),
+                    Name = "MixByteEditor" + i,
+                    MixByteValue = mWord[i],
+                    ReadOnly = ReadOnly,
+                    TabIndex = tabIndex
+                };
+                box.ValueChanged += ByteValueChanged;
+                box.Click += Editor_Click;
+                box.Leave += Editor_Leave;
+                box.KeyPress += Editor_KeyPress;
+                box.KeyDown += This_KeyDown;
 
                 mByteTextBoxes[i] = box;
 
@@ -157,7 +161,7 @@ namespace MixGui.Components
             Update();
         }
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers != Keys.None) return;
 
@@ -225,9 +229,9 @@ namespace MixGui.Components
             }
         }
 
-        void mSignButton_Click(object sender, EventArgs e)
+        void MSignButton_Click(object sender, EventArgs e)
         {
-            negateSign();
+            NegateSign();
             if (mByteTextBoxes.Length > 0)
             {
                 mByteTextBoxes[mFocusByte].Focus();
@@ -236,7 +240,7 @@ namespace MixGui.Components
             }
         }
 
-        void negateSign()
+        void NegateSign()
         {
             Word.Signs sign = mWord.Sign;
             mWord.InvertSign();
@@ -249,13 +253,13 @@ namespace MixGui.Components
             OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
         }
 
-        void reinitializeComponent()
+        void ReinitializeComponent()
         {
             Controls.Clear();
 
             foreach (MixByteTextBox box in mByteTextBoxes) box.Dispose();
 
-            initializeComponent();
+            InitializeComponent();
         }
 
         public new void Update()
@@ -291,7 +295,7 @@ namespace MixGui.Components
 				if (ByteCount != value)
 				{
 					mWord = new Word(value);
-					reinitializeComponent();
+					ReinitializeComponent();
 				}
 			}
 		}
@@ -307,7 +311,7 @@ namespace MixGui.Components
 				if (mIncludeSign != value)
 				{
 					mIncludeSign = value;
-					reinitializeComponent();
+					ReinitializeComponent();
 				}
 			}
 		}
@@ -350,7 +354,7 @@ namespace MixGui.Components
 				}
 				else
 				{
-					reinitializeComponent();
+					ReinitializeComponent();
 				}
 			}
 		}

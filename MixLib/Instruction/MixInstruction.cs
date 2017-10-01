@@ -49,7 +49,6 @@ namespace MixLib.Instruction
         MixInstruction(byte opcode, FieldSpec fieldSpec, MetaFieldSpec metaFieldSpec, string mnemonic, int tickCount, Executor executor, Validator validator)
             : base(mnemonic)
         {
-            if (executor == null) throw new ArgumentNullException(nameof(executor));
 
             // if the MetaFieldSpec Presence is Forbidden then an instruction fieldspec must be specified. Likewise, if an instruction fieldspec is provided, the MetaFieldSpec Presence must be Forbidden.
             if ((fieldSpec == null && metaFieldSpec.Presence == Instruction.MetaFieldSpec.Presences.Forbidden) || (metaFieldSpec.Presence != Instruction.MetaFieldSpec.Presences.Forbidden && fieldSpec != null))
@@ -61,7 +60,7 @@ namespace MixLib.Instruction
             FieldSpec = fieldSpec;
             MetaFieldSpec = metaFieldSpec;
             TickCount = tickCount;
-            mExecutor = executor;
+            mExecutor = executor ?? throw new ArgumentNullException(nameof(executor));
             mValidator = validator;
         }
 
@@ -90,9 +89,9 @@ namespace MixLib.Instruction
 				InstructionWord = instructionWord;
 			}
 
-            public int AddressValue => addressValue(InstructionWord);
+            public int AddressValue => AddressValueFromWord(InstructionWord);
 
-            public int AddressMagnitude => addressMagnitude(InstructionWord);
+            public int AddressMagnitude => AddressMagnitudeFromWord(InstructionWord);
 
             public Word.Signs AddressSign => InstructionWord.Sign;
 
@@ -108,9 +107,9 @@ namespace MixLib.Instruction
 
             public override string ToString() => new InstructionText(this).InstanceText;
 
-            int addressMagnitude(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+            int AddressMagnitudeFromWord(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
 
-            int addressValue(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
+            int AddressValueFromWord(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
 
             public bool Execute(ModuleBase module)
 			{

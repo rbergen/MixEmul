@@ -85,7 +85,7 @@ namespace MixLib.Modules
 			Status = RunStatus.Idle;
 		}
 
-        int? getSymbolAddress(string name)
+        int? GetSymbolAddress(string name)
         {
             if (Symbols == null) return null;
 
@@ -109,21 +109,21 @@ namespace MixLib.Modules
 			if (!base.LoadInstructionInstances(instances, symbols)) return false;
 
 			Symbols = symbols;
-			mAccAddress = getSymbolAddress(accSymbol);
-			mPrenormAddress = getSymbolAddress(prenormSymbol);
-			mExitAddress = getSymbolAddress(exitSymbol);
-			mUnexpectedOverflowAddress = getSymbolAddress(unexpectedOverflowSymbol);
-			mExponentOverflowAddress = getSymbolAddress(exponentOverflowSymbol);
-			mExponentUnderflowAddress = getSymbolAddress(exponentUnderflowSymbol);
-			mFixOverflowAddress = getSymbolAddress(fixOverflowSymbol);
-			mDivisionByZeroAddress = getSymbolAddress(divisionByZeroSymbol);
+			mAccAddress = GetSymbolAddress(accSymbol);
+			mPrenormAddress = GetSymbolAddress(prenormSymbol);
+			mExitAddress = GetSymbolAddress(exitSymbol);
+			mUnexpectedOverflowAddress = GetSymbolAddress(unexpectedOverflowSymbol);
+			mExponentOverflowAddress = GetSymbolAddress(exponentOverflowSymbol);
+			mExponentUnderflowAddress = GetSymbolAddress(exponentUnderflowSymbol);
+			mFixOverflowAddress = GetSymbolAddress(fixOverflowSymbol);
+			mDivisionByZeroAddress = GetSymbolAddress(divisionByZeroSymbol);
 
-			validateAddresses(Severity.Warning);
+			ValidateAddresses(Severity.Warning);
 
 			return true;
 		}
 
-        bool validateAddress(Severity severity, string name, int address)
+        bool ValidateAddress(Severity severity, string name, int address)
         {
             if (address < 0 || address >= ModuleSettings.FloatingPointMemoryWordCount)
             {
@@ -134,7 +134,7 @@ namespace MixLib.Modules
             return true;
         }
 
-        bool validateAddresses(Severity severity)
+        bool ValidateAddresses(Severity severity)
         {
             if (mAccAddress == null || mPrenormAddress == null || mExitAddress == null)
             {
@@ -142,26 +142,26 @@ namespace MixLib.Modules
                 return false;
             }
 
-            return validateAddress(severity, accSymbol, mAccAddress.Value) && validateAddress(severity, prenormSymbol, mPrenormAddress.Value) && validateAddress(severity, exitSymbol, mExitAddress.Value);
+            return ValidateAddress(severity, accSymbol, mAccAddress.Value) && ValidateAddress(severity, prenormSymbol, mPrenormAddress.Value) && ValidateAddress(severity, exitSymbol, mExitAddress.Value);
         }
 
         public bool ValidateCall(string mnemonic)
 		{
-			if (!validateAddresses(Severity.Error)) return false;
+			if (!ValidateAddresses(Severity.Error)) return false;
 
-			long? instructionValue = getSymbolAddress(mnemonic);
+			long? instructionValue = GetSymbolAddress(mnemonic);
 			if (instructionValue == null)
 			{
 				AddLogLine(new LogLine(moduleName, Severity.Error, "Symbol unset", string.Format("Symbol for mnemonic {0} unset", mnemonic)));
 				return false;
 			}
 
-            return validateAddress(Severity.Error, mnemonic, (int)instructionValue.Value);
+            return ValidateAddress(Severity.Error, mnemonic, (int)instructionValue.Value);
 		}
 
 		public bool PreparePrenorm(IFullWord rAValue)
 		{
-			Registers.rA.LongValue = rAValue.LongValue;
+			Registers.RA.LongValue = rAValue.LongValue;
 			ProgramCounter = mPrenormAddress.Value;
 
 			if (IsBreakpointSet(ProgramCounter))
@@ -173,9 +173,9 @@ namespace MixLib.Modules
 			return false;
 		}
 
-        bool prepareCall(string mnemonic)
+        bool PrepareCall(string mnemonic)
         {
-            ProgramCounter = getSymbolAddress(mnemonic).Value;
+            ProgramCounter = GetSymbolAddress(mnemonic).Value;
 
             if (IsBreakpointSet(ProgramCounter))
             {
@@ -188,18 +188,18 @@ namespace MixLib.Modules
 
         public bool PrepareCall(string mnemonic, IFullWord rAValue)
 		{
-			Registers.rA.LongValue = rAValue.LongValue;
+			Registers.RA.LongValue = rAValue.LongValue;
 
-			return prepareCall(mnemonic);
+			return PrepareCall(mnemonic);
 		}
 
 		public bool PrepareCall(string mnemonic, IFullWord rAValue, IFullWord paramValue)
 		{
 
 			Memory[mAccAddress.Value].LongValue = rAValue.LongValue;
-			Registers.rA.LongValue = paramValue.LongValue;
+			Registers.RA.LongValue = paramValue.LongValue;
 
-			return prepareCall(mnemonic);
+			return PrepareCall(mnemonic);
 		}
 
 		public override RunMode Mode

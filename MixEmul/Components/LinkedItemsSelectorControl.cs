@@ -21,12 +21,12 @@ namespace MixGui.Components
 
         public LinkedItemsSelectorControl()
 		{
-			initializeComponent();
+			InitializeComponent();
 		}
 
         protected void OnItemSelected(ItemSelectedEventArgs<T> e) => ItemSelected?.Invoke(this, e);
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             mNavigateForwards = new Button();
             mNavigateBackwards = new Button();
@@ -41,7 +41,7 @@ namespace MixGui.Components
             mNavigateBackwards.Name = "mNavigateBackwards";
             mNavigateBackwards.Size = new Size(21, 21);
             mNavigateBackwards.TabIndex = 0;
-            mNavigateBackwards.Click += mNavigateBackwards_Click;
+            mNavigateBackwards.Click += MNavigateBackwards_Click;
             // 
             // mNavigateForwards
             // 
@@ -52,7 +52,7 @@ namespace MixGui.Components
             mNavigateForwards.Name = "mNavigateForwards";
             mNavigateForwards.Size = mNavigateBackwards.Size;
             mNavigateForwards.TabIndex = 1;
-            mNavigateForwards.Click += mNavigateForwards_Click;
+            mNavigateForwards.Click += MNavigateForwards_Click;
             // 
             // LinkedItemsSelectorControl
             // 
@@ -75,15 +75,15 @@ namespace MixGui.Components
 		{
 			if (currentItem.Equals(newItem)) return;
 
-			addItem(currentItem);
-			addItem(newItem);
+			AddItem(currentItem);
+			AddItem(newItem);
 
-			pruneToMaxItemCount();
+			PruneToMaxItemCount();
 
-			setEnabledState();
+			SetEnabledState();
 		}
 
-        void pruneToMaxItemCount()
+        void PruneToMaxItemCount()
         {
             while (mItemCount > maxItemCount)
             {
@@ -93,7 +93,7 @@ namespace MixGui.Components
             }
         }
 
-        void removeItem(LinkedItem<T> item)
+        void RemoveItem(LinkedItem<T> item)
         {
             if (item.Next != null)
             {
@@ -110,7 +110,7 @@ namespace MixGui.Components
             mItemCount--;
         }
 
-        void addItem(T item)
+        void AddItem(T item)
         {
             if (item == null) return;
 
@@ -145,13 +145,13 @@ namespace MixGui.Components
             }
         }
 
-        void setEnabledState()
+        void SetEnabledState()
         {
             mNavigateBackwards.Enabled = mCurrentItem != null && mCurrentItem.Previous != null;
             mNavigateForwards.Enabled = mCurrentItem != null && mCurrentItem.Next != null;
         }
 
-        void mNavigateBackwards_Click(object sender, EventArgs e)
+        void MNavigateBackwards_Click(object sender, EventArgs e)
         {
             if (mGetCurrentItem != null)
             {
@@ -159,7 +159,7 @@ namespace MixGui.Components
 
                 if (item != null && !mCurrentItem.Item.Equals(item) && !mCurrentItem.Previous.Item.Equals(item))
                 {
-                    mCurrentItem = insertItem(mCurrentItem, item);
+                    mCurrentItem = InsertItem(mCurrentItem, item);
                 }
             }
 
@@ -167,16 +167,17 @@ namespace MixGui.Components
 
             OnItemSelected(new ItemSelectedEventArgs<T>(mCurrentItem.Item));
 
-            setEnabledState();
+            SetEnabledState();
         }
 
-        LinkedItem<T> insertItem(LinkedItem<T> insertBefore, T item)
+        LinkedItem<T> InsertItem(LinkedItem<T> insertBefore, T item)
         {
             if (insertBefore == null || item == null) return null;
 
-            var insertee = new LinkedItem<T>(item);
-
-            insertee.Previous = insertBefore.Previous;
+            var insertee = new LinkedItem<T>(item)
+            {
+                Previous = insertBefore.Previous
+            };
             if (insertee.Previous != null)
             {
                 insertee.Previous.Next = insertee;
@@ -195,7 +196,7 @@ namespace MixGui.Components
             return insertee;
         }
 
-        void mNavigateForwards_Click(object sender, EventArgs e)
+        void MNavigateForwards_Click(object sender, EventArgs e)
         {
             if (mGetCurrentItem != null)
             {
@@ -203,7 +204,7 @@ namespace MixGui.Components
 
                 if (item != null && !mCurrentItem.Item.Equals(item) && !mCurrentItem.Next.Item.Equals(item))
                 {
-                    mCurrentItem = insertItem(mCurrentItem.Next, item);
+                    mCurrentItem = InsertItem(mCurrentItem.Next, item);
                 }
             }
 
@@ -211,7 +212,7 @@ namespace MixGui.Components
 
             OnItemSelected(new ItemSelectedEventArgs<T>(mCurrentItem.Item));
 
-            setEnabledState();
+            SetEnabledState();
         }
 
         public void Clear()
@@ -219,7 +220,7 @@ namespace MixGui.Components
 			mFirstItem = mCurrentItem = null;
 			mItemCount = 0;
 
-			setEnabledState();
+			SetEnabledState();
 		}
 	}
 

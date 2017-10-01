@@ -44,33 +44,39 @@ namespace MixLib.Device
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new BinaryReadStep(WordsPerRecord);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(true, WordsPerRecord);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteToMemoryStep(true, WordsPerRecord)
+            {
+                NextStep = null
+            };
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+            nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerRecord);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new BinaryWriteStep(WordsPerRecord);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new CloseStreamStep();
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new CloseStreamStep
+            {
+                NextStep = null
+            };
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+            nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstIocDeviceStep = nextStep;
-			nextStep.NextStep = new seekStep();
-			nextStep.NextStep.NextStep = null;
-		}
+            nextStep.NextStep = new SeekStep
+            {
+                NextStep = null
+            };
+        }
 
-        class openStreamStep : StreamStep
+        class OpenStreamStep : StreamStep
         {
             public override string StatusDescription => openingDescription;
 
@@ -100,7 +106,7 @@ namespace MixLib.Device
             }
         }
 
-        class seekStep : StreamStep
+        class SeekStep : StreamStep
         {
             public override string StatusDescription => windingDescription;
 
@@ -120,7 +126,7 @@ namespace MixLib.Device
                 {
                     if (mTicksLeft == unset)
                     {
-                        if (!StreamStatus.PositionSet) initiateStreamPosition();
+                        if (!StreamStatus.PositionSet) InitiateStreamPosition();
 
                         mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
                     }
@@ -146,7 +152,7 @@ namespace MixLib.Device
                     return true;
                 }
 
-                private void initiateStreamPosition()
+                private void InitiateStreamPosition()
                 {
                     try
                     {

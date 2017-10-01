@@ -14,9 +14,9 @@ namespace MixLib.Instruction
         /// Method for performing DECx instructions
         /// </summary>
         public static bool Decrease(ModuleBase module, MixInstruction.Instance instance) => 
-            doIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+            DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
 
-        static bool doEnter(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
+        static bool DoEnter(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
             var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
             Register register = module.Registers[registerIndex];
@@ -36,7 +36,7 @@ namespace MixLib.Instruction
             return true;
         }
 
-        static bool doIncrease(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
+        static bool DoIncrease(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
             var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
             Register register = module.Registers[registerIndex];
@@ -76,18 +76,18 @@ namespace MixLib.Instruction
         /// Method for performing ENTx instructions
         /// </summary>
         public static bool Enter(ModuleBase module, MixInstruction.Instance instance) => 
-            doEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+            DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
 
 		/// <summary>
 		/// Method for performing ENNx instructions
 		/// </summary>
 		public static bool EnterNegative(ModuleBase module, MixInstruction.Instance instance) => 
-            doEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+            DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
 
 		/// <summary>
 		/// Method for performing INCx instructions
 		/// </summary>
 		public static bool Increase(ModuleBase module, MixInstruction.Instance instance) => 
-            doIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+            DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
 	}
 }

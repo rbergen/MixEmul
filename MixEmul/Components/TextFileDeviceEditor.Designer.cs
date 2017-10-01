@@ -68,7 +68,7 @@ namespace MixGui.Components
 			this.mReadOnlyCheckBox.Size = new System.Drawing.Size(15, 14);
 			this.mReadOnlyCheckBox.TabIndex = 1;
 			this.mReadOnlyCheckBox.UseVisualStyleBackColor = true;
-			this.mReadOnlyCheckBox.CheckedChanged += new System.EventHandler(this.mReadOnlyCheckBox_CheckedChanged);
+			this.mReadOnlyCheckBox.CheckedChanged += new System.EventHandler(this.MReadOnlyCheckBox_CheckedChanged);
 			// 
 			// mReadOnlyLabel
 			// 
@@ -88,7 +88,7 @@ namespace MixGui.Components
 			this.mRevertButton.TabIndex = 10;
 			this.mRevertButton.Text = "&Revert";
 			this.mRevertButton.UseVisualStyleBackColor = true;
-			this.mRevertButton.Click += new System.EventHandler(this.mRevertButton_Click);
+			this.mRevertButton.Click += new System.EventHandler(this.MRevertButton_Click);
 			// 
 			// mSaveButton
 			// 
@@ -99,17 +99,17 @@ namespace MixGui.Components
 			this.mSaveButton.TabIndex = 10;
 			this.mSaveButton.Text = "&Save";
 			this.mSaveButton.UseVisualStyleBackColor = true;
-			this.mSaveButton.Click += new System.EventHandler(this.mSaveButton_Click);
+			this.mSaveButton.Click += new System.EventHandler(this.MSaveButton_Click);
 			// 
 			// mDeviceFileWatcher
 			// 
 			this.mDeviceFileWatcher.EnableRaisingEvents = true;
 			this.mDeviceFileWatcher.NotifyFilter = ((System.IO.NotifyFilters)((System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.LastWrite)));
 			this.mDeviceFileWatcher.SynchronizingObject = this;
-			this.mDeviceFileWatcher.Changed += new System.IO.FileSystemEventHandler(this.mDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Created += new System.IO.FileSystemEventHandler(this.mDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Deleted += new System.IO.FileSystemEventHandler(this.mDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Renamed += new System.IO.RenamedEventHandler(this.mDeviceFileWatcher_Renamed);
+			this.mDeviceFileWatcher.Changed += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
+			this.mDeviceFileWatcher.Created += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
+			this.mDeviceFileWatcher.Deleted += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
+			this.mDeviceFileWatcher.Renamed += new System.IO.RenamedEventHandler(this.MDeviceFileWatcher_Renamed);
 			// 
 			// mMixByteCollectionEditorList
 			// 
@@ -127,7 +127,7 @@ namespace MixGui.Components
 			this.mMixByteCollectionEditorList.ResizeInProgress = false;
 			this.mMixByteCollectionEditorList.Size = new System.Drawing.Size(278, 32);
 			this.mMixByteCollectionEditorList.TabIndex = 9;
-			this.mMixByteCollectionEditorList.FirstVisibleIndexChanged += new MixGui.Components.EditorList<MixGui.Components.IMixByteCollectionEditor>.FirstVisibleIndexChangedHandler(this.mMixByteCollectionEditorList_FirstVisibleIndexChanged);
+			this.mMixByteCollectionEditorList.FirstVisibleIndexChanged += new MixGui.Components.EditorList<MixGui.Components.IMixByteCollectionEditor>.FirstVisibleIndexChangedHandler(this.MMixByteCollectionEditorList_FirstVisibleIndexChanged);
 			// 
 			// mMixCharButtons
 			// 
@@ -153,12 +153,12 @@ namespace MixGui.Components
 			this.mFirstRecordTextBox.SupportNegativeZero = false;
 			this.mFirstRecordTextBox.TabIndex = 6;
 			this.mFirstRecordTextBox.Text = "0";
-			this.mFirstRecordTextBox.ValueChanged += new MixGui.Components.LongValueTextBox.ValueChangedEventHandler(this.mFirstRecordTextBox_ValueChanged);
+			this.mFirstRecordTextBox.ValueChanged += new MixGui.Components.LongValueTextBox.ValueChangedEventHandler(this.MFirstRecordTextBox_ValueChanged);
 			// 
 			// mIODelayTimer
 			// 
 			this.mIODelayTimer.Interval = 500;
-			this.mIODelayTimer.Tick += new System.EventHandler(this.mIODelayTimer_Tick);
+			this.mIODelayTimer.Tick += new System.EventHandler(this.MIODelayTimer_Tick);
 			// 
 			// mAppendButton
 			// 
@@ -169,7 +169,7 @@ namespace MixGui.Components
 			this.mAppendButton.TabIndex = 11;
 			this.mAppendButton.Text = "A&ppend";
 			this.mAppendButton.UseVisualStyleBackColor = true;
-			this.mAppendButton.Click += new System.EventHandler(this.mAppendButton_Click);
+			this.mAppendButton.Click += new System.EventHandler(this.MAppendButton_Click);
 			// 
 			// mTruncateButton
 			// 
@@ -180,7 +180,7 @@ namespace MixGui.Components
 			this.mTruncateButton.TabIndex = 11;
 			this.mTruncateButton.Text = "&Truncate";
 			this.mTruncateButton.UseVisualStyleBackColor = true;
-			this.mTruncateButton.Click += new System.EventHandler(this.mTruncateButton_Click);
+			this.mTruncateButton.Click += new System.EventHandler(this.MTruncateButton_Click);
 			// 
 			// TextFileDeviceEditor
 			// 

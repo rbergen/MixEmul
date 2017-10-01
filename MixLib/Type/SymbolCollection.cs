@@ -16,15 +16,15 @@ namespace MixLib.Type
 
         public bool Contains(string value) => mList.ContainsKey(value);
 
-        IEnumerator<SymbolBase> getEnumerator() => mList.Values.GetEnumerator();
+        IEnumerator<SymbolBase> GetEnumerator() => mList.Values.GetEnumerator();
 
         public void Remove(SymbolBase value) => Remove(value.Name);
 
         public void Remove(string name) => mList.Remove(name);
 
-        IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator() => getEnumerator();
+        IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator() => GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => getEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(SymbolBase value)
 		{

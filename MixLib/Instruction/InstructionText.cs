@@ -17,14 +17,17 @@ namespace MixLib.Instruction
 
         public string Mnemonic => mInstance.MixInstruction.Mnemonic;
 
-        string getFieldText()
+        string FieldText
         {
-            FieldSpec fieldSpec = mInstance.FieldSpec;
-            if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
+            get
             {
-                return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
+                FieldSpec fieldSpec = mInstance.FieldSpec;
+                if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
+                {
+                    return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
+                }
+                return fieldSpec.MixByteValue.ByteValue.ToString();
             }
-            return fieldSpec.MixByteValue.ByteValue.ToString();
         }
 
         public string Address
@@ -51,12 +54,12 @@ namespace MixLib.Instruction
 					case MetaFieldSpec.Presences.Optional:
 						if (mInstance.FieldSpec != mInstance.MixInstruction.MetaFieldSpec.DefaultFieldSpec)
 						{
-							str = getFieldText();
+							str = FieldText;
 						}
 						break;
 
 					case MetaFieldSpec.Presences.Mandatory:
-						str = getFieldText();
+						str = FieldText;
 						break;
 				}
 

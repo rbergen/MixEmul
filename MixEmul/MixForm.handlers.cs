@@ -16,19 +16,19 @@ namespace MixGui
     {
         void mExitMenuItem_Click(object sender, EventArgs e) => Close();
 
-        static void application_ThreadException(object sender, ThreadExceptionEventArgs e) => handleException(e.Exception);
+        static void application_ThreadException(object sender, ThreadExceptionEventArgs e) => HandleException(e.Exception);
 
         static void currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) =>
-            handleException((Exception)e.ExceptionObject);
+            HandleException((Exception)e.ExceptionObject);
 
-        void mRunItem_Click(object sender, EventArgs e) => switchRunningState();
+        void mRunItem_Click(object sender, EventArgs e) => SwitchRunningState();
 
         void mShowPCButton_Click(object sender, EventArgs e) => mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter);
 
-        void mTeletypeItem_Click(object sender, EventArgs e) => switchTeletypeVisibility();
+        void mTeletypeItem_Click(object sender, EventArgs e) => SwitchTeletypeVisibility();
 
         void mFloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args) =>
-            implementFloatingPointPCChange(args.SelectedAddress);
+            ImplementFloatingPointPCChange(args.SelectedAddress);
 
         void mDevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)
         {
@@ -48,7 +48,7 @@ namespace MixGui
         {
             int pc = mMix.ProgramCounter;
             mMix.Mode = (ModuleBase.RunMode)mModeCycleButton.Value;
-            setPCBoxBounds();
+            SetPCBoxBounds();
 
             if (pc != mMix.ProgramCounter)
             {
@@ -75,7 +75,7 @@ namespace MixGui
                 mAboutForm = new AboutForm();
             }
 
-            var teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = DisableTeletypeOnTop();
 
             mAboutForm.ShowDialog(this);
 
@@ -94,12 +94,12 @@ namespace MixGui
             {
                 mMemoryTabControl.SelectedIndex = mLogListView.SelectedModule == mMix.FloatingPointModule.ModuleName ? floatingPointMemoryEditorIndex : mainMemoryEditorIndex;
             }
-            activeMemoryEditor.MakeAddressVisible(args.SelectedAddress);
+            ActiveMemoryEditor.MakeAddressVisible(args.SelectedAddress);
         }
 
         void mMemoryEditor_addressSelected(object sender, AddressSelectedEventArgs args)
         {
-            if (!mReadOnly) implementPCChange(args.SelectedAddress);
+            if (!mReadOnly) ImplementPCChange(args.SelectedAddress);
         }
 
         void mMix_InputRequired(object sender, EventArgs e)
@@ -115,7 +115,7 @@ namespace MixGui
 
                 if (!mTeletype.Visible)
                 {
-                    switchTeletypeVisibility();
+                    SwitchTeletypeVisibility();
                 }
 
                 mTeletype.Activate();
@@ -158,14 +158,14 @@ namespace MixGui
                 else
                 {
                     mRunning = false;
-                    setSteppingState(steppingState.Idle);
+                    SetSteppingState(SteppingState.Idle);
                 }
             }
         }
 
         void mOpenProgramMenuItem_Click(object sender, EventArgs e)
         {
-            var teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = DisableTeletypeOnTop();
 
             if (mOpenProgramFileDialog == null)
             {
@@ -180,7 +180,7 @@ namespace MixGui
                 mLogListView.AddLogLine(new LogLine("Assembler", Severity.Info, "Parsing source", "File: " + mOpenProgramFileDialog.FileName));
                 try
                 {
-                    loadProgram(mOpenProgramFileDialog.FileName);
+                    LoadProgram(mOpenProgramFileDialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -199,13 +199,13 @@ namespace MixGui
                 mPreferencesForm = new PreferencesForm(mConfiguration, mMix.Devices, mDefaultDirectory);
             }
 
-            var teletypeWasOnTop = disableTeletypeOnTop();
+            var teletypeWasOnTop = DisableTeletypeOnTop();
 
             if (mPreferencesForm.ShowDialog(this) == DialogResult.OK)
             {
                 GuiSettings.ColorProfilingCounts = mConfiguration.ColorProfilingCounts;
                 UpdateLayout();
-                updateDeviceConfig();
+                UpdateDeviceConfig();
                 mDeviceEditor.UpdateSettings();
                 CardDeckExporter.LoaderCards = mConfiguration.LoaderCards;
             }
@@ -222,10 +222,10 @@ namespace MixGui
             mSymbolListView.Reset();
             mMainMemoryEditor.ClearBreakpoints();
             mMainMemoryEditor.Symbols = null;
-            loadControlProgram();
+            LoadControlProgram();
 
             mMix.FloatingPointModule.FullMemory.Reset();
-            applyFloatingPointSettings();
+            ApplyFloatingPointSettings();
             if (mFloatingPointMemoryEditor != null)
             {
                 mFloatingPointMemoryEditor.ClearBreakpoints();
@@ -245,7 +245,7 @@ namespace MixGui
 
         void mStepItem_Click(object sender, EventArgs e)
         {
-            setSteppingState(steppingState.Stepping);
+            SetSteppingState(SteppingState.Stepping);
             mMix.StartStep();
         }
 
@@ -340,10 +340,10 @@ namespace MixGui
 
         void mGoItem_Click(object sender, EventArgs e)
         {
-            if (mSteppingState == steppingState.Idle)
+            if (mSteppingState == SteppingState.Idle)
             {
                 mMix.PrepareLoader();
-                switchRunningState();
+                SwitchRunningState();
             }
         }
 
@@ -362,7 +362,7 @@ namespace MixGui
                     mFloatingPointMemoryEditor.Anchor = mMainMemoryEditor.Anchor;
                     mFloatingPointMemoryEditor.MarkedAddress = mMix.FloatingPointModule.ProgramCounter;
                     mFloatingPointMemoryEditor.FirstVisibleAddress = mFloatingPointMemoryEditor.MarkedAddress;
-                    mFloatingPointMemoryEditor.IndexedAddressCalculatorCallback = calculateIndexedAddress;
+                    mFloatingPointMemoryEditor.IndexedAddressCalculatorCallback = CalculateIndexedAddress;
                     mFloatingPointMemoryEditor.Location = mMainMemoryEditor.Location;
                     mFloatingPointMemoryEditor.Size = mFloatingPointMemoryTab.Size;
                     mFloatingPointMemoryEditor.Name = "mFloatingPointMemoryEditor";
@@ -383,7 +383,7 @@ namespace MixGui
 
         void mMemoryTabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MemoryEditor editor = activeMemoryEditor;
+            MemoryEditor editor = ActiveMemoryEditor;
             mSymbolListView.Symbols = editor.Symbols;
             mSymbolListView.MemoryMinIndex = editor.Memory.MinWordIndex;
             mSymbolListView.MemoryMaxIndex = editor.Memory.MaxWordIndex;
@@ -400,7 +400,7 @@ namespace MixGui
             {
                 mSearchOptions = mSearchDialog.SearchParameters;
 
-                findNext();
+                FindNext();
             }
         }
 
@@ -412,7 +412,7 @@ namespace MixGui
                 return;
             }
 
-            findNext();
+            FindNext();
         }
 
         void mProfilingEnabledMenuItem_CheckedChanged(object sender, EventArgs e)

@@ -20,7 +20,7 @@ namespace MixLib.Type
 		{
 			SourceMemory = sourceMemory;
 
-			validateParameters(minIndex, maxIndex, indexOffset);
+			ValidateParameters(minIndex, maxIndex, indexOffset);
 
 			mMinIndex = minIndex;
 			mMaxIndex = maxIndex;
@@ -39,7 +39,7 @@ namespace MixLib.Type
 
         public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
 
-        void validateParameters(int minIndex, int maxIndex, int offset)
+        void ValidateParameters(int minIndex, int maxIndex, int offset)
         {
             if (minIndex + offset < SourceMemory.MinWordIndex)
             {
@@ -116,7 +116,7 @@ namespace MixLib.Type
 			}
 			set
 			{
-				validateParameters(value, mMaxIndex, mIndexOffset);
+				ValidateParameters(value, mMaxIndex, mIndexOffset);
 
 				mMinIndex = value;
 			}
@@ -130,7 +130,7 @@ namespace MixLib.Type
 			}
 			set
 			{
-				validateParameters(mMinIndex, value, mIndexOffset);
+				ValidateParameters(mMinIndex, value, mIndexOffset);
 
 				mMaxIndex = value;
 			}
@@ -144,7 +144,7 @@ namespace MixLib.Type
 			}
 			set
 			{
-				validateParameters(mMinIndex, mMaxIndex, value);
+				ValidateParameters(mMinIndex, mMaxIndex, value);
 
 				mIndexOffset = value;
 			}

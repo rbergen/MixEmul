@@ -19,7 +19,7 @@ namespace MixLib.Device
 			Reset();
 		}
 
-        void onReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+        void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
         public void CloseStream()
 		{
@@ -45,7 +45,7 @@ namespace MixLib.Device
 			}
 			catch (Exception exception)
 			{
-				onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while getting position in file " + FileName + ":" + exception.Message));
+				OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while getting position in file " + FileName + ":" + exception.Message));
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace MixLib.Device
                 }
                 catch (Exception exception)
                 {
-                    onReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
+                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
                 }
             }
 		}
@@ -96,17 +96,12 @@ namespace MixLib.Device
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException(nameof(value), "stream may not be set to null");
-				}
-
-				if (mStream != null)
+                if (mStream != null)
 				{
 					throw new InvalidOperationException("can't replace open stream. Open stream must first be closed.");
 				}
 
-				mStream = value;
+				mStream = value ?? throw new ArgumentNullException(nameof(value), "stream may not be set to null");
 
 				if (PositionSet)
 				{

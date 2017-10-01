@@ -46,10 +46,10 @@ namespace MixGui.Components
 			Location = new Point(40, 16);
 			Size = new Size(48, 21);
 			BorderStyle = BorderStyle.FixedSingle;
-			KeyDown += this_KeyDown;
-			KeyPress += this_KeyPress;
-			Leave += this_Leave;
-			TextChanged += this_TextChanged;
+			KeyDown += This_KeyDown;
+			KeyPress += This_KeyPress;
+			Leave += This_Leave;
+			TextChanged += This_TextChanged;
 			//      base.MaxLength = mByteCollection.MaxByteCount;
 			ResumeLayout(false);
 
@@ -71,9 +71,9 @@ namespace MixGui.Components
 
         protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void this_Leave(object sender, EventArgs e) => updateValue();
+        void This_Leave(object sender, EventArgs e) => UpdateValue();
 
-        void this_KeyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
             {
@@ -114,7 +114,7 @@ namespace MixGui.Components
             }
         }
 
-        void this_KeyPress(object sender, KeyPressEventArgs e)
+        void This_KeyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
             if (mEditMode)
@@ -123,7 +123,7 @@ namespace MixGui.Components
                 {
                     case Keys.Enter:
                         e.Handled = true;
-                        updateValue();
+                        UpdateValue();
 
                         return;
 
@@ -140,7 +140,7 @@ namespace MixGui.Components
             e.Handled = (index < 0 || index == MixByte.MixChars.Length - 2) && !char.IsControl(keyChar);
         }
 
-        void this_TextChanged(object sender, EventArgs e)
+        void This_TextChanged(object sender, EventArgs e)
         {
             if (!mUpdating)
             {
@@ -166,7 +166,7 @@ namespace MixGui.Components
 
                     if (!UseEditMode)
                     {
-                        updateValue();
+                        UpdateValue();
                     }
                     else if (!mEditMode)
                     {
@@ -185,7 +185,7 @@ namespace MixGui.Components
             }
         }
 
-        bool arraysEqual(MixByte[] one, MixByte[] two)
+        bool ArraysEqual(MixByte[] one, MixByte[] two)
         {
             if ((one == null && two != null) || (one != null && two == null)) return false;
             if (one == null && two == null) return true;
@@ -203,7 +203,7 @@ namespace MixGui.Components
 		{
 			var byteCollectionBytes = mByteCollection.ToArray();
 
-			if (mEditMode || mLastRenderedBytes == null || !arraysEqual(mLastRenderedBytes, byteCollectionBytes))
+			if (mEditMode || mLastRenderedBytes == null || !ArraysEqual(mLastRenderedBytes, byteCollectionBytes))
 			{
 				mEditMode = false;
 				mLastRenderedBytes = byteCollectionBytes;
@@ -238,7 +238,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
-        void updateValue()
+        void UpdateValue()
         {
             int currentCharIndex = 0;
             var oldValue = (IMixByteCollection)mByteCollection.Clone();

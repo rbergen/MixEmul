@@ -47,9 +47,9 @@ namespace MixGui.Components
 			mCopyrightLabel.Text = copyright;
 		}
 
-        void mFullVersionLabel_Click(object sender, EventArgs e) => Clipboard.SetText(mVersionString);
+        void MFullVersionLabel_Click(object sender, EventArgs e) => Clipboard.SetText(mVersionString);
 
-        void mFullVersionLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(mVersionString.Replace('.', '_'));
+        void MFullVersionLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(mVersionString.Replace('.', '_'));
 
         void InitializeComponent()
         {
@@ -106,8 +106,8 @@ namespace MixGui.Components
             mFullVersionLabel.TabIndex = 1;
             mFullVersionLabel.Text = "Full version number: ";
             mFullVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            mFullVersionLabel.Click += mFullVersionLabel_Click;
-            mFullVersionLabel.DoubleClick += mFullVersionLabel_DoubleClick;
+            mFullVersionLabel.Click += MFullVersionLabel_Click;
+            mFullVersionLabel.DoubleClick += MFullVersionLabel_DoubleClick;
             // 
             // AboutForm
             // 
@@ -126,13 +126,13 @@ namespace MixGui.Components
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "About";
-            KeyPress += this_KeyPress;
+            KeyPress += This_KeyPress;
             ((ISupportInitialize)(mLogoBox)).EndInit();
             ResumeLayout(false);
 
         }
 
-        void this_KeyPress(object sender, KeyPressEventArgs e)
+        void This_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
             {

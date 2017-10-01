@@ -32,7 +32,7 @@ namespace MixGui.Components
 
 			mFullWordEditor = new FullWordEditor(mDeviceWord);
 			mWordIndexLabel = new Label();
-			initializeComponent();
+			InitializeComponent();
 		}
 
         public Control EditorControl => this;
@@ -47,9 +47,9 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void mFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
+        void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             SuspendLayout();
 
@@ -64,18 +64,18 @@ namespace MixGui.Components
             mFullWordEditor.Location = new Point(mWordIndexLabel.Right, 2);
             mFullWordEditor.Name = "mFullWordEditor";
             mFullWordEditor.TabIndex = 1;
-            mFullWordEditor.ValueChanged += mFullWordEditor_ValueChanged;
-            mFullWordEditor.NavigationKeyDown += keyDown;
+            mFullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
+            mFullWordEditor.NavigationKeyDown += This_KeyDown;
 
             Controls.Add(mWordIndexLabel);
             Controls.Add(mFullWordEditor);
             Name = "DeviceWordEditor";
             Size = new Size(mFullWordEditor.Right + 2, mFullWordEditor.Height + 3);
-            KeyDown += keyDown;
+            KeyDown += This_KeyDown;
             ResumeLayout(false);
         }
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -125,12 +125,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
-				}
-
-				mDeviceWord = value;
+                mDeviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
 				mFullWordEditor.WordValue = mDeviceWord;
 			}
 		}

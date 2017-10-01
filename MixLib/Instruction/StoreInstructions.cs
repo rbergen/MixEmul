@@ -23,7 +23,7 @@ namespace MixLib.Instruction
 
 				if (instance.MixInstruction.Opcode == storeJOpcode)
 				{
-					sourceRegister = module.Registers.rJ;
+					sourceRegister = module.Registers.RJ;
 				}
 				else
 				{

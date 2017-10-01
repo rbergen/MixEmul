@@ -52,14 +52,14 @@ namespace MixLib
 
 			mMemory = new MemoryView(mFullMemory);
 
-			mDevices.DeviceReportingEvent += deviceReporting;
+			mDevices.DeviceReportingEvent += DeviceReporting;
 			mLog = Queue.Synchronized(new Queue());
 			ProgramCounter = 0;
 			TickCounter = 0L;
 			mStatus = RunStatus.Idle;
 			mMode = RunMode.Normal;
 
-			setMemoryBounds();
+			SetMemoryBounds();
 
 			mCurrentInstructionAddress = int.MinValue;
 			mCurrentInstructionMnemonic = null;
@@ -70,10 +70,12 @@ namespace MixLib
 			mStartStep = new AutoResetEvent(false);
 			mRunDetached = false;
 
-			var thread = new Thread(stepRunEntryPoint);
-			thread.IsBackground = true;
-			thread.Name = "Run thread";
-			thread.Start();
+            var thread = new Thread(StepRunEntryPoint)
+            {
+                IsBackground = true,
+                Name = "Run thread"
+            };
+            thread.Start();
 		}
 
         public override Devices Devices => mDevices;
@@ -100,10 +102,10 @@ namespace MixLib
 
         public void RequestStop() => RequestStop(true);
 
-        void deviceReporting(object sender, DeviceReportingEventArgs args) =>
+        void DeviceReporting(object sender, DeviceReportingEventArgs args) =>
             AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
 
-        void setMemoryBounds()
+        void SetMemoryBounds()
         {
             mMemory.IndexOffset = 0;
             mMemory.MinWordIndex = Mode == RunMode.Control ? mFullMemory.MinWordIndex : 0;
@@ -195,7 +197,7 @@ namespace MixLib
 			mStartStep.Set();
 		}
 
-        void stepRunEntryPoint()
+        void StepRunEntryPoint()
         {
             var stepStartTime = new DateTime();
             bool suspendRun = true;
@@ -224,7 +226,7 @@ namespace MixLib
             }
         }
 
-        void increaseTickCounter()
+        void IncreaseTickCounter()
         {
             TickCounter++;
             if (TickCounter % 1000 == 0)
@@ -245,25 +247,27 @@ namespace MixLib
 		{
 			var instruction = InstructionSet.Instance.GetInstruction(IOInstructions.INOpCode, new FieldSpec(Devices.CardReaderUnitCode));
 
-            var instructionWord = new FullWord();
-            instructionWord[MixInstruction.OpcodeByte] = IOInstructions.INOpCode;
-            instructionWord[MixInstruction.FieldSpecByte] = Devices.CardReaderUnitCode;
+            var instructionWord = new FullWord
+            {
+                [MixInstruction.OpcodeByte] = IOInstructions.INOpCode,
+                [MixInstruction.FieldSpecByte] = Devices.CardReaderUnitCode
+            };
             var instance = instruction.CreateInstance(instructionWord);
 
 			int ticksLeft = instruction.TickCount;
-			while (ticksLeft-- > 0) increaseTickCounter();
+			while (ticksLeft-- > 0) IncreaseTickCounter();
 
 			instance.Execute(this);
 
-			while (mDevices[Devices.CardReaderUnitCode].Busy) increaseTickCounter();
+			while (mDevices[Devices.CardReaderUnitCode].Busy) IncreaseTickCounter();
 
 			ProgramCounter = 0;
 
-			increaseTickCounter();
+			IncreaseTickCounter();
 
-			mRegisters.rJ.LongValue = 0;
+			mRegisters.RJ.LongValue = 0;
 
-			increaseTickCounter();
+			IncreaseTickCounter();
 		}
 
 		public void SignalInterruptExecuted()
@@ -293,7 +297,7 @@ namespace MixLib
 					}
 				}
 
-				increaseTickCounter();
+				IncreaseTickCounter();
 
 				if (Status == RunStatus.Halted)
 				{
@@ -311,7 +315,7 @@ namespace MixLib
 			if (instruction == null)
 			{
 				ReportInvalidInstruction("Opcode (and field) do not encode an instruction");
-				if (Mode == RunMode.Module) resetMode();
+				if (Mode == RunMode.Module) ResetMode();
 
 				return;
 			}
@@ -321,7 +325,7 @@ namespace MixLib
 			if (errors != null)
 			{
 				ReportInvalidInstruction(errors);
-				if (Mode == RunMode.Module) resetMode();
+				if (Mode == RunMode.Module) ResetMode();
 
 				return;
 			}
@@ -331,7 +335,7 @@ namespace MixLib
 				mCurrentInstructionAddress = ProgramCounter;
 				mCurrentInstructionTicksLeft = instruction.TickCount;
 				mCurrentInstructionMnemonic = instruction.Mnemonic;
-				if (Mode == RunMode.Module) resetMode();
+				if (Mode == RunMode.Module) ResetMode();
 			}
 
 			if (Mode != RunMode.Module && mCurrentInstructionTicksLeft > 0)
@@ -376,10 +380,7 @@ namespace MixLib
 			}
 		}
 
-        void resetMode()
-        {
-            Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
-        }
+        void ResetMode() => Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
 
         public bool RunDetached
 		{
@@ -411,7 +412,7 @@ namespace MixLib
 				{
 					mMode = value;
 
-					setMemoryBounds();
+					SetMemoryBounds();
 				}
 			}
 		}

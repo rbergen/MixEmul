@@ -42,11 +42,13 @@ namespace MixGui.Components
 		{
 			if (string.IsNullOrEmpty(Text))
 			{
-				var stringFormat = new StringFormat();
-				stringFormat.Alignment = StringAlignment.Center;
-				stringFormat.LineAlignment = StringAlignment.Center;
+                var stringFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
 
-				e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
+                e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
 			}
 		}
 
@@ -54,7 +56,7 @@ namespace MixGui.Components
 		{
 			if (mCurrentStep == null || mCurrentStep.NextStep == null) return;
 
-			setCurrentStep(mCurrentStep.NextStep);
+			SetCurrentStep(mCurrentStep.NextStep);
 		}
 
 		void Control_SizeChanged(object sender, EventArgs e)
@@ -112,14 +114,14 @@ namespace MixGui.Components
 
 			mSteps.Add(step);
 
-			if (mCurrentStep == null) setCurrentStep(step);
+			if (mCurrentStep == null) SetCurrentStep(step);
 		}
 
 		public object Value
 		{
 			get
 			{
-				return mCurrentStep == null ? null : mCurrentStep.Value;
+				return mCurrentStep?.Value;
 			}
 			set
 			{
@@ -132,11 +134,11 @@ namespace MixGui.Components
 					throw new ArgumentException(string.Format("no step with Value {0} exists", value));
 				}
 
-				setCurrentStep(step);
+				SetCurrentStep(step);
 			}
 		}
 
-        void setCurrentStep(Step step)
+        void SetCurrentStep(Step step)
         {
             if (mCurrentStep == step) return;
 

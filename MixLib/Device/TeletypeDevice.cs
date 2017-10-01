@@ -40,24 +40,24 @@ namespace MixLib.Device
 
         public string GetOutputLine() => mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
 
-        void inputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
+        void This_InputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
 
-        void outputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
+        void This_OutputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
 
         protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
-			if (CurrentStep is readLineStep)
+			if (CurrentStep is ReadLineStep)
 			{
-				var instance = (readLineStep.Instance)((readLineStep)CurrentStep).CreateInstance();
-				instance.InputRequired += inputRequired;
+				var instance = (ReadLineStep.Instance)((ReadLineStep)CurrentStep).CreateInstance();
+				instance.InputRequired += This_InputRequired;
 
 				return instance;
 			}
 
-			if (CurrentStep is writeLineStep)
+			if (CurrentStep is WriteLineStep)
 			{
-				var instance = (writeLineStep.Instance)((writeLineStep)CurrentStep).CreateInstance();
-				instance.OutputAdded += outputAdded;
+				var instance = (WriteLineStep.Instance)((WriteLineStep)CurrentStep).CreateInstance();
+				instance.OutputAdded += This_OutputAdded;
 
 				return instance;
 			}
@@ -74,26 +74,30 @@ namespace MixLib.Device
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new readLineStep(mInputBuffer);
+			nextStep.NextStep = new ReadLineStep(mInputBuffer);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+            {
+                NextStep = null
+            };
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+            nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new writeLineStep(mOutputBuffer);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteLineStep(mOutputBuffer)
+            {
+                NextStep = null
+            };
 
             FirstIocDeviceStep = null;
 		}
 
-        class readLineStep : DeviceStep
+        class ReadLineStep : DeviceStep
         {
             Queue mInputBuffer;
 
-            public readLineStep(Queue inputBuffer)
+            public ReadLineStep(Queue inputBuffer)
             {
                 mInputBuffer = inputBuffer;
             }
@@ -147,11 +151,11 @@ namespace MixLib.Device
             }
         }
 
-        class writeLineStep : DeviceStep
+        class WriteLineStep : DeviceStep
         {
             Queue mOutputBuffer;
 
-            public writeLineStep(Queue outputBuffer)
+            public WriteLineStep(Queue outputBuffer)
             {
                 mOutputBuffer = outputBuffer;
             }

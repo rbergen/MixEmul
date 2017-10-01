@@ -66,7 +66,7 @@
 			this.mValueCheckBox.TabIndex = 0;
 			this.mValueCheckBox.Text = "&Numeric value";
 			this.mValueCheckBox.UseVisualStyleBackColor = true;
-			this.mValueCheckBox.CheckedChanged += new System.EventHandler(this.fieldCheckedChanged);
+			this.mValueCheckBox.CheckedChanged += new System.EventHandler(this.FieldCheckedChanged);
 			// 
 			// mCharsCheckBox
 			// 
@@ -79,7 +79,7 @@
 			this.mCharsCheckBox.TabIndex = 1;
 			this.mCharsCheckBox.Text = "&Characters";
 			this.mCharsCheckBox.UseVisualStyleBackColor = true;
-			this.mCharsCheckBox.CheckedChanged += new System.EventHandler(this.fieldCheckedChanged);
+			this.mCharsCheckBox.CheckedChanged += new System.EventHandler(this.FieldCheckedChanged);
 			// 
 			// mInstructionCheckBox
 			// 
@@ -92,7 +92,7 @@
 			this.mInstructionCheckBox.TabIndex = 2;
 			this.mInstructionCheckBox.Text = "&Instruction";
 			this.mInstructionCheckBox.UseVisualStyleBackColor = true;
-			this.mInstructionCheckBox.CheckedChanged += new System.EventHandler(this.fieldCheckedChanged);
+			this.mInstructionCheckBox.CheckedChanged += new System.EventHandler(this.FieldCheckedChanged);
 			// 
 			// mMatchWholeWordCheckBox
 			// 
@@ -127,7 +127,7 @@
 			this.mFindButton.TabIndex = 4;
 			this.mFindButton.Text = "&Find";
 			this.mFindButton.UseVisualStyleBackColor = true;
-			this.mFindButton.Click += new System.EventHandler(this.mFindButton_Click);
+			this.mFindButton.Click += new System.EventHandler(this.MFindButton_Click);
 			// 
 			// mCancelButton
 			// 
@@ -194,7 +194,7 @@
 			this.mSearchTextBox.Size = new System.Drawing.Size(103, 21);
 			this.mSearchTextBox.TabIndex = 1;
 			this.mSearchTextBox.UseEditMode = false;
-			this.mSearchTextBox.ValueChanged += new MixGui.Events.MixByteCollectionEditorValueChangedEventHandler(this.mSearchTextBox_ValueChanged);
+			this.mSearchTextBox.ValueChanged += new MixGui.Events.MixByteCollectionEditorValueChangedEventHandler(this.MSearchTextBox_ValueChanged);
 			// 
 			// SearchDialog
 			// 

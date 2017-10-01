@@ -53,7 +53,7 @@
 			this.mFromAddressUpDown.Name = "mFromAddressUpDown";
 			this.mFromAddressUpDown.Size = new System.Drawing.Size(59, 20);
 			this.mFromAddressUpDown.TabIndex = 1;
-			this.mFromAddressUpDown.ValueChanged += new System.EventHandler(this.mFromAddressUpDown_ValueChanged);
+			this.mFromAddressUpDown.ValueChanged += new System.EventHandler(this.MFromAddressUpDown_ValueChanged);
 			// 
 			// mToAddressLabel
 			// 
@@ -70,7 +70,7 @@
 			this.mToAddressUpDown.Name = "mToAddressUpDown";
 			this.mToAddressUpDown.Size = new System.Drawing.Size(59, 20);
 			this.mToAddressUpDown.TabIndex = 3;
-			this.mToAddressUpDown.ValueChanged += new System.EventHandler(this.mToAddressUpDown_ValueChanged);
+			this.mToAddressUpDown.ValueChanged += new System.EventHandler(this.MToAddressUpDown_ValueChanged);
 			// 
 			// mProgramCounterLabel
 			// 

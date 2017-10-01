@@ -30,26 +30,28 @@ namespace MixGui.Components
 		{
 			mStructure = layout;
 
-			mNoDevicesLabel = new Label();
-			mNoDevicesLabel.Location = new Point(0, 0);
-			mNoDevicesLabel.Name = "mNoDevicesLabel";
-			mNoDevicesLabel.Size = new Size(120, 16);
-			mNoDevicesLabel.TabIndex = 0;
-			mNoDevicesLabel.Text = "No devices connected";
-			mNoDevicesLabel.TextAlign = ContentAlignment.MiddleCenter;
+            mNoDevicesLabel = new Label
+            {
+                Location = new Point(0, 0),
+                Name = "mNoDevicesLabel",
+                Size = new Size(120, 16),
+                TabIndex = 0,
+                Text = "No devices connected",
+                TextAlign = ContentAlignment.MiddleCenter
+            };
 
-			Name = "DevicesControl";
+            Name = "DevicesControl";
 
 			Devices = devices;
 		}
 
-        void addDeviceControl(int index)
+        void AddDeviceControl(int index)
         {
-            var orientation = getOrientation();
+            var orientation = GetOrientation();
             Breaks breaks = mStructure != null && index > 0 ? mStructure[index] : Breaks.None;
 
-            var horizontalSpacing = getHorizontalSpacing();
-            var verticalSpacing = getVerticalSpacing();
+            var horizontalSpacing = GetHorizontalSpacing();
+            var verticalSpacing = GetVerticalSpacing();
 
             if (index == 0)
             {
@@ -121,7 +123,7 @@ namespace MixGui.Components
             Controls.Add(control);
         }
 
-        void addDeviceControls()
+        void AddDeviceControls()
         {
             SuspendLayout();
             Controls.Clear();
@@ -132,17 +134,17 @@ namespace MixGui.Components
             }
             else
             {
-                for (int i = 0; i < mDeviceControls.Length; i++) addDeviceControl(i);
+                for (int i = 0; i < mDeviceControls.Length; i++) AddDeviceControl(i);
             }
 
             ResumeLayout(false);
         }
 
-        int getHorizontalSpacing() => mStructure == null ? 0 : mStructure.HorizontalSpacing;
+        int GetHorizontalSpacing() => mStructure == null ? 0 : mStructure.HorizontalSpacing;
 
-        Orientations getOrientation() => mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
+        Orientations GetOrientation() => mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
 
-        int getVerticalSpacing() => mStructure == null ? 0 : mStructure.VerticalSpacing;
+        int GetVerticalSpacing() => mStructure == null ? 0 : mStructure.VerticalSpacing;
 
         public new void Update()
 		{
@@ -173,15 +175,17 @@ namespace MixGui.Components
 						DeviceStatusControl control;
 						foreach (MixDevice device in mDevices)
 						{
-							control = new DeviceStatusControl(device);
-							control.ToolTip = mToolTip;
-							control.DoubleClick += DevicesControl_DoubleClick;
+                            control = new DeviceStatusControl(device)
+                            {
+                                ToolTip = mToolTip
+                            };
+                            control.DoubleClick += DevicesControl_DoubleClick;
 
 							mDeviceControls[device.Id] = control;
 						}
 					}
 
-					addDeviceControls();
+					AddDeviceControls();
 				}
 			}
 		}
@@ -199,7 +203,7 @@ namespace MixGui.Components
 				if (value != null)
 				{
 					mStructure = value;
-					addDeviceControls();
+					AddDeviceControls();
 				}
 			}
 		}

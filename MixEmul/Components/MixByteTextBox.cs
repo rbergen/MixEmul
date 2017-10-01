@@ -50,20 +50,20 @@ namespace MixGui.Components
 
 			UpdateLayout();
 
-			Leave += this_Leave;
-			Enter += this_Enter;
-			KeyPress += this_KeyPress;
-			KeyDown += this_KeyDown;
-			TextChanged += this_TextChanged;
+			Leave += This_Leave;
+			Enter += This_Enter;
+			KeyPress += This_KeyPress;
+			KeyDown += This_KeyDown;
+			TextChanged += This_TextChanged;
 		}
 
         protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void this_Enter(object sender, EventArgs e) => Select(0, TextLength);
+        void This_Enter(object sender, EventArgs e) => Select(0, TextLength);
 
-        void this_Leave(object sender, EventArgs e) => checkAndUpdateValue(Text);
+        void This_Leave(object sender, EventArgs e) => CheckAndUpdateValue(Text);
 
-        void checkAndUpdateValue(byte byteValue)
+        void CheckAndUpdateValue(byte byteValue)
         {
             mEditMode = false;
 
@@ -88,7 +88,7 @@ namespace MixGui.Components
             if (oldByteValue != mByteValue) OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
         }
 
-        void this_KeyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
             {
@@ -98,18 +98,18 @@ namespace MixGui.Components
             }
         }
 
-        void checkAndUpdateValue(string newValue)
+        void CheckAndUpdateValue(string newValue)
         {
             try
             {
-                checkAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
+                CheckAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
             }
             catch (FormatException)
             {
             }
         }
 
-        void this_KeyPress(object sender, KeyPressEventArgs e)
+        void This_KeyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
 
@@ -117,13 +117,13 @@ namespace MixGui.Components
             {
                 case Keys.Enter:
                     e.Handled = true;
-                    checkAndUpdateValue(Text);
+                    CheckAndUpdateValue(Text);
 
                     return;
 
                 case Keys.Escape:
                     e.Handled = true;
-                    checkAndUpdateValue(mByteValue);
+                    CheckAndUpdateValue(mByteValue);
 
                     return;
             }
@@ -131,7 +131,7 @@ namespace MixGui.Components
             e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
         }
 
-        void this_TextChanged(object sender, EventArgs e)
+        void This_TextChanged(object sender, EventArgs e)
         {
             if (!mUpdating)
             {
@@ -195,7 +195,7 @@ namespace MixGui.Components
 			set
 			{
 				mByteValue = value;
-				checkAndUpdateValue(mByteValue);
+				CheckAndUpdateValue(mByteValue);
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				checkAndUpdateValue(value);
+				CheckAndUpdateValue(value);
 			}
 		}
 

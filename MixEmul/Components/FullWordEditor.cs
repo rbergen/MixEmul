@@ -34,7 +34,7 @@ namespace MixGui.Components
 			mWordValueEditor = new WordValueEditor(mFullWord);
 			mWordCharTextBox = new MixByteCollectionCharTextBox(mFullWord);
 			mEqualsLabel = new Label();
-			initializeComponent();
+			InitializeComponent();
 		}
 
         public Control EditorControl => this;
@@ -48,15 +48,15 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             SuspendLayout();
 
             mWordValueEditor.Location = new Point(0, 0);
             mWordValueEditor.Name = "mWordValueEditor";
             mWordValueEditor.TabIndex = 2;
-            mWordValueEditor.ValueChanged += mWordValueEditor_ValueChanged;
-            mWordValueEditor.NavigationKeyDown += keyDown;
+            mWordValueEditor.ValueChanged += MWordValueEditor_ValueChanged;
+            mWordValueEditor.NavigationKeyDown += This_KeyDown;
 
             mEqualsLabel.Location = new Point(mWordValueEditor.Right, mWordValueEditor.Top + 2);
             mEqualsLabel.Name = "mFirstEqualsLabel";
@@ -68,19 +68,19 @@ namespace MixGui.Components
             mWordCharTextBox.Name = "mWordCharTextBox";
             mWordCharTextBox.Size = new Size(45, mWordValueEditor.Height);
             mWordCharTextBox.TabIndex = 4;
-            mWordCharTextBox.ValueChanged += mWordCharTextBox_ValueChanged;
-            mWordCharTextBox.NavigationKeyDown += keyDown;
+            mWordCharTextBox.ValueChanged += MWordCharTextBox_ValueChanged;
+            mWordCharTextBox.NavigationKeyDown += This_KeyDown;
 
             Controls.Add(mWordValueEditor);
             Controls.Add(mEqualsLabel);
             Controls.Add(mWordCharTextBox);
             Name = "FullWordEditor";
             Size = new Size(mWordCharTextBox.Right, mWordCharTextBox.Height);
-            KeyDown += keyDown;
+            KeyDown += This_KeyDown;
             ResumeLayout(false);
         }
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers != Keys.None) return;
 
@@ -128,13 +128,13 @@ namespace MixGui.Components
             }
         }
 
-        void mWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
+        void MWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
         {
             mWordValueEditor.Update();
             OnValueChanged(new WordEditorValueChangedEventArgs((Word)args.OldValue, (Word)args.NewValue));
         }
 
-        void mWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+        void MWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
         {
             mWordCharTextBox.Update();
             OnValueChanged(args);
@@ -161,12 +161,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
-				}
-
-				mFullWord = value;
+                mFullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
 				mWordValueEditor.WordValue = mFullWord;
 				mWordCharTextBox.MixByteCollectionValue = mFullWord;
 			}

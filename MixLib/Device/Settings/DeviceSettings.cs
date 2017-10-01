@@ -27,19 +27,21 @@ namespace MixLib.Device.Settings
 
         static DeviceSettings()
 		{
-			mDefaultTickCounts = new Dictionary<string, int>();
-			mDefaultTickCounts.Add(CardReaderInitialization, 100);
-			mDefaultTickCounts.Add(CardWriterInitialization, 100);
-			mDefaultTickCounts.Add(DiskInitialization, 50);
-			mDefaultTickCounts.Add(DiskSectorSeek, 20);
-			mDefaultTickCounts.Add(PaperTapeInitialization, 100);
-			mDefaultTickCounts.Add(PaperTapeRecordWind, 5);
-			mDefaultTickCounts.Add(PrinterInitialization, 50);
-			mDefaultTickCounts.Add(TapeInitialization, 100);
-			mDefaultTickCounts.Add(TapeRecordWind, 10);
-			mDefaultTickCounts.Add(TeletypeInitialization, 25);
+            mDefaultTickCounts = new Dictionary<string, int>
+            {
+                { CardReaderInitialization, 100 },
+                { CardWriterInitialization, 100 },
+                { DiskInitialization, 50 },
+                { DiskSectorSeek, 20 },
+                { PaperTapeInitialization, 100 },
+                { PaperTapeRecordWind, 5 },
+                { PrinterInitialization, 50 },
+                { TapeInitialization, 100 },
+                { TapeRecordWind, 10 },
+                { TeletypeInitialization, 25 }
+            };
 
-			TickCounts = new Dictionary<string, int>();
+            TickCounts = new Dictionary<string, int>();
 
 			mDeviceReloadInterval = UnsetDeviceReloadInterval;
 		}

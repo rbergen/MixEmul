@@ -44,7 +44,7 @@ namespace MixLib.Device
 
         protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
-        void stepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+        void StepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
 
         public virtual void Reset()
 		{
@@ -89,7 +89,7 @@ namespace MixLib.Device
 			{
 				mCurrentStepInstance = GetCurrentStepInstance();
 				mCurrentStepInstance.Operands = mCurrentOperands;
-				mCurrentStepInstance.ReportingEvent += stepInstance_Reporting;
+				mCurrentStepInstance.ReportingEvent += StepInstance_Reporting;
 			}
 
             // Current step still busy? If so, we're done here
@@ -109,7 +109,7 @@ namespace MixLib.Device
             // Move on to next I/O step
             var currentStepInstance = GetCurrentStepInstance();
 			currentStepInstance.Operands = mCurrentOperands;
-			currentStepInstance.ReportingEvent += stepInstance_Reporting;
+			currentStepInstance.ReportingEvent += StepInstance_Reporting;
 			currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;
 			mCurrentStepInstance = currentStepInstance;
 		}

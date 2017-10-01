@@ -29,11 +29,11 @@ namespace MixLib.Instruction
         const byte regJumpEvenField = 6;
         const byte regJumpOddField = 7;
 
-        static void doJump(ModuleBase module, int indexedAddress, bool saveJ)
+        static void DoJump(ModuleBase module, int indexedAddress, bool saveJ)
         {
             if (!saveJ)
             {
-                module.Registers.rJ.LongValue = module.ProgramCounter + 1;
+                module.Registers.RJ.LongValue = module.ProgramCounter + 1;
             }
 
             module.ProgramCounter = indexedAddress;
@@ -44,7 +44,7 @@ namespace MixLib.Instruction
         /// </summary>
         public static void Jump(ModuleBase module, int indexedAddress)
 		{
-			doJump(module, indexedAddress, false);
+			DoJump(module, indexedAddress, false);
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace MixLib.Instruction
 					return false;
 
 				case jsjField:
-					doJump(module, indexedAddress, true);
+					DoJump(module, indexedAddress, true);
 					return false;
 
 				case jovField:

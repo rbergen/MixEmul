@@ -36,7 +36,7 @@ namespace MixAssembler.Symbol
 
 		public override bool IsValueDefined(int currentAddress) => mValueDefined;
 
-        static string getName(Word.Signs literalSign, long literalMagnitude, int count) =>
+        static string GetName(Word.Signs literalSign, long literalMagnitude, int count) =>
             string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
 
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
@@ -50,12 +50,12 @@ namespace MixAssembler.Symbol
 			var literalSign = expressionValue.GetSign(status.LocationCounter);
 
 			int count = 0;
-			var name = getName(literalSign, literalMagnitude, count);
+			var name = GetName(literalSign, literalMagnitude, count);
 
 			while (status.Symbols[name] != null)
 			{
 				count++;
-				name = getName(literalSign, literalMagnitude, count);
+				name = GetName(literalSign, literalMagnitude, count);
 			}
 
 			SymbolBase literalConstantSymbol = new LiteralConstantSymbol(literalSign, literalMagnitude, name);

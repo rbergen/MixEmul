@@ -19,9 +19,9 @@ namespace MixGui.Utils
 
         const int maxWordsPerCard = 7;
 
-        static string getTransLine(int programCounter) => "TRANS0" + getAddressText(programCounter);
+        static string GetTransLine(int programCounter) => "TRANS0" + GetAddressText(programCounter);
 
-        static char getNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
+        static char GetNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
 
         public static string[] LoaderCards
 		{
@@ -35,7 +35,7 @@ namespace MixGui.Utils
 			}
 		}
 
-        static StreamWriter prepareWriter(string filePath)
+        static StreamWriter PrepareWriter(string filePath)
         {
             var writer = new StreamWriter(filePath, false, Encoding.ASCII);
 
@@ -52,7 +52,7 @@ namespace MixGui.Utils
 		{
 			var words = new List<IFullWord>();
 
-			var writer = prepareWriter(filePath);
+			var writer = PrepareWriter(filePath);
 
 			foreach (IFullWord word in wordsToWrite)
 			{
@@ -60,15 +60,15 @@ namespace MixGui.Utils
 
 				if (words.Count == maxWordsPerCard)
 				{
-					writer.WriteLine(getInformationLine(firstWordLocation, words));
+					writer.WriteLine(GetInformationLine(firstWordLocation, words));
 					words.Clear();
 					firstWordLocation += maxWordsPerCard;
 				}
 			}
 
-			if (words.Count > 0) writer.WriteLine(getInformationLine(firstWordLocation, words));
+			if (words.Count > 0) writer.WriteLine(GetInformationLine(firstWordLocation, words));
 
-			writer.WriteLine(getTransLine(programCounter));
+			writer.WriteLine(GetTransLine(programCounter));
 			writer.Close();
 		}
 
@@ -80,7 +80,7 @@ namespace MixGui.Utils
 			LoaderInstruction.Instance loaderInstance;
 			MixInstruction.Instance mixInstance;
 
-			var writer = prepareWriter(filePath);
+			var writer = PrepareWriter(filePath);
 
 			foreach (InstructionInstanceBase instance in instances)
 			{
@@ -93,7 +93,7 @@ namespace MixGui.Utils
 						case LoaderInstruction.Operations.SetLocationCounter:
 							if (words.Count > 0)
 							{
-								writer.WriteLine(getInformationLine(firstWordLocation, words));
+								writer.WriteLine(GetInformationLine(firstWordLocation, words));
 							}
 
 							words.Clear();
@@ -110,10 +110,10 @@ namespace MixGui.Utils
 						case LoaderInstruction.Operations.SetProgramCounter:
 							if (words.Count > 0)
 							{
-								writer.WriteLine(getInformationLine(firstWordLocation, words));
+								writer.WriteLine(GetInformationLine(firstWordLocation, words));
 							}
 
-							writer.WriteLine(getTransLine((int)loaderInstance.Value.LongValue));
+							writer.WriteLine(GetTransLine((int)loaderInstance.Value.LongValue));
 							writer.Close();
 							return;
 					}
@@ -128,31 +128,31 @@ namespace MixGui.Utils
 
 				if (words.Count == maxWordsPerCard)
 				{
-					writer.WriteLine(getInformationLine(firstWordLocation, words));
+					writer.WriteLine(GetInformationLine(firstWordLocation, words));
 					words.Clear();
 					firstWordLocation = locationCounter;
 				}
 			}
 		}
 
-        static string getAddressText(int address)
+        static string GetAddressText(int address)
         {
             if (address < 0)
             {
                 address = -address;
                 var addressText = address.ToString("0000");
-                return addressText.Substring(0, 3) + getNegativeDigit(addressText[3]);
+                return addressText.Substring(0, 3) + GetNegativeDigit(addressText[3]);
             }
 
             return address.ToString("0000");
         }
 
-        static string getInformationLine(int firstWordLocation, List<IFullWord> words)
+        static string GetInformationLine(int firstWordLocation, List<IFullWord> words)
         {
             var lineBuilder = new StringBuilder("INFO ");
 
             lineBuilder.Append(words.Count.ToString());
-            lineBuilder.Append(getAddressText(firstWordLocation));
+            lineBuilder.Append(GetAddressText(firstWordLocation));
 
             string numberText;
 
@@ -167,7 +167,7 @@ namespace MixGui.Utils
                 else
                 {
                     lineBuilder.Append(numberText.Substring(0, 9));
-                    lineBuilder.Append(getNegativeDigit(numberText[9]));
+                    lineBuilder.Append(GetNegativeDigit(numberText[9]));
                 }
             }
 

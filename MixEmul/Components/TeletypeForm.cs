@@ -29,11 +29,11 @@ namespace MixGui.Components
 			TeletypeDevice = teleType;
 		}
 
-        void mClearButton_Click(object sender, EventArgs e) => ClearOutput();
+        void MClearButton_Click(object sender, EventArgs e) => ClearOutput();
 
-        void mSendButton_Click(object sender, EventArgs e) => sendInput();
+        void MSendButton_Click(object sender, EventArgs e) => SendInput();
 
-        void activated(object sender, EventArgs e)
+        void This_Activated(object sender, EventArgs e)
         {
             mOutputTextBox.Select(mOutputTextBox.TextLength, 0);
             mOutputTextBox.Focus();
@@ -73,7 +73,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void formClosing(object sender, FormClosingEventArgs e)
+        void This_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
             Visible = false;
@@ -128,7 +128,7 @@ namespace MixGui.Components
             mInputTextBox.Name = "mInputTextBox";
             mInputTextBox.Size = new Size(512, 20);
             mInputTextBox.TabIndex = 3;
-            mInputTextBox.KeyPress += keyPress;
+            mInputTextBox.KeyPress += This_KeyPress;
             // 
             // mStatusBar
             // 
@@ -155,7 +155,7 @@ namespace MixGui.Components
             mClearButton.Size = new Size(75, 23);
             mClearButton.TabIndex = 1;
             mClearButton.Text = "&Clear";
-            mClearButton.Click += mClearButton_Click;
+            mClearButton.Click += MClearButton_Click;
             // 
             // mSendButton
             // 
@@ -165,7 +165,7 @@ namespace MixGui.Components
             mSendButton.Size = new Size(75, 23);
             mSendButton.TabIndex = 4;
             mSendButton.Text = "&Send";
-            mSendButton.Click += mSendButton_Click;
+            mSendButton.Click += MSendButton_Click;
             // 
             // mOnTopCheckBox
             // 
@@ -175,7 +175,7 @@ namespace MixGui.Components
             mOnTopCheckBox.Size = new Size(72, 24);
             mOnTopCheckBox.TabIndex = 6;
             mOnTopCheckBox.Text = "&On top";
-            mOnTopCheckBox.CheckedChanged += mOnTopCheckBox_CheckedChanged;
+            mOnTopCheckBox.CheckedChanged += MOnTopCheckBox_CheckedChanged;
             // 
             // mEchoInputCheckBox
             // 
@@ -205,21 +205,21 @@ namespace MixGui.Components
             StartPosition = FormStartPosition.CenterParent;
             Text = "Teletype";
             TopMost = true;
-            Activated += activated;
-            VisibleChanged += visibleChanged;
-            FormClosing += formClosing;
+            Activated += This_Activated;
+            VisibleChanged += This_VisibleChanged;
+            FormClosing += This_FormClosing;
             ((ISupportInitialize)(mStatusBarPanel)).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
         }
 
-        void keyPress(object sender, KeyPressEventArgs args)
+        void This_KeyPress(object sender, KeyPressEventArgs args)
         {
             char keyChar = args.KeyChar;
             if (keyChar == (char)Keys.Enter)
             {
-                sendInput();
+                SendInput();
                 args.Handled = true;
             }
             else
@@ -239,16 +239,16 @@ namespace MixGui.Components
 			mOutputTextBox.Text = "";
 		}
 
-        void mOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
+        void MOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             TopMost = mOnTopCheckBox.Checked;
         }
 
-        void outputAdded(object sender, EventArgs e)
+        void OutputAdded(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new EventHandler(outputAdded));
+                Invoke(new EventHandler(OutputAdded));
             }
             else
             {
@@ -277,7 +277,7 @@ namespace MixGui.Components
             }
         }
 
-        void sendInput()
+        void SendInput()
         {
             if (EchoInput) AddOutputText("> " + mInputTextBox.Text);
 
@@ -303,7 +303,7 @@ namespace MixGui.Components
 			mOutputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputBackground);
 		}
 
-        void visibleChanged(object sender, EventArgs e)
+        void This_VisibleChanged(object sender, EventArgs e)
         {
             if (!Visible)
             {
@@ -345,7 +345,7 @@ namespace MixGui.Components
 
 					if (mTeletypeDevice != null)
 					{
-						mTeletypeDevice.OutputAdded += outputAdded;
+						mTeletypeDevice.OutputAdded += OutputAdded;
 					}
 				}
 			}

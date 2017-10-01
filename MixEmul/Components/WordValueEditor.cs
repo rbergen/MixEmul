@@ -55,8 +55,8 @@ namespace MixGui.Components
 			mWordEditor.ReadOnly = mReadOnly;
 			mWordEditor.TabIndex = 0;
 			mWordEditor.TabStop = true;
-			mWordEditor.ValueChanged += wordEditor_ValueChanged;
-			mWordEditor.NavigationKeyDown += keyDown;
+			mWordEditor.ValueChanged += WordEditor_ValueChanged;
+			mWordEditor.NavigationKeyDown += This_KeyDown;
 
 			mEqualsLabel.Name = "EqualsLabel";
 			mEqualsLabel.TabIndex = 1;
@@ -70,17 +70,17 @@ namespace MixGui.Components
 			mLongValueTextBox.TabIndex = 2;
 			mLongValueTextBox.TabStop = true;
 			mLongValueTextBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
-			mLongValueTextBox.ValueChanged += textBox_ValueChanged;
-			mLongValueTextBox.NavigationKeyDown += keyDown;
+			mLongValueTextBox.ValueChanged += TextBox_ValueChanged;
+			mLongValueTextBox.NavigationKeyDown += This_KeyDown;
 
 			SuspendLayout();
 			Controls.Add(mWordEditor);
 			Controls.Add(mEqualsLabel);
 			Controls.Add(mLongValueTextBox);
 			Name = "WordValueEditor";
-			KeyDown += keyDown;
+			KeyDown += This_KeyDown;
 
-			sizeComponent();
+			SizeComponent();
 		}
 
         public Control EditorControl => this;
@@ -99,7 +99,7 @@ namespace MixGui.Components
 		{
 		}
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers != Keys.None) return;
 
@@ -147,7 +147,7 @@ namespace MixGui.Components
             }
         }
 
-        void sizeComponent()
+        void SizeComponent()
         {
             SuspendLayout();
 
@@ -163,7 +163,7 @@ namespace MixGui.Components
             ResumeLayout(false);
         }
 
-        void textBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+        void TextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
         {
             IWord wordValue = mWordEditor.WordValue;
             IWord oldValue = new Word(wordValue.Magnitude, wordValue.Sign);
@@ -188,7 +188,7 @@ namespace MixGui.Components
 			mLongValueTextBox.UpdateLayout();
 		}
 
-        void wordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+        void WordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
         {
             mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
             mLongValueTextBox.Sign = mWordEditor.WordValue.Sign;
@@ -206,7 +206,7 @@ namespace MixGui.Components
 				if (ByteCount != value)
 				{
 					mWordEditor.ByteCount = value;
-					sizeComponent();
+					SizeComponent();
 				}
 			}
 		}
@@ -223,7 +223,7 @@ namespace MixGui.Components
 				{
 					mIncludeSign = value;
 					mWordEditor.IncludeSign = mIncludeSign;
-					sizeComponent();
+					SizeComponent();
 				}
 			}
 		}
@@ -256,7 +256,7 @@ namespace MixGui.Components
 				if (mTextBoxWidth != value)
 				{
 					mTextBoxWidth = value;
-					sizeComponent();
+					SizeComponent();
 				}
 			}
 		}
@@ -278,7 +278,7 @@ namespace MixGui.Components
 				}
 				else
 				{
-					sizeComponent();
+					SizeComponent();
 				}
 			}
 		}

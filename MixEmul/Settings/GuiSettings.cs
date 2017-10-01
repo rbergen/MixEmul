@@ -40,35 +40,39 @@ namespace MixGui.Settings
 
         static GuiSettings()
 		{
-			mDefaultColors = new Dictionary<string, Color>();
-			mDefaultColors.Add(ErrorText, Color.Red);
-			mDefaultColors.Add(WarningText, Color.DarkOrange);
-			mDefaultColors.Add(InfoText, Color.DarkGreen);
-			mDefaultColors.Add(DebugText, Color.DarkBlue);
-			mDefaultColors.Add(RenderedText, Color.Black);
-			mDefaultColors.Add(EditingText, Color.Blue);
-			mDefaultColors.Add(ImmutableText, Color.DarkGray);
-			mDefaultColors.Add(EditorBackground, Color.White);
-			mDefaultColors.Add(LoadedInstructionText, Color.Black);
-			mDefaultColors.Add(LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204));
-			mDefaultColors.Add(AddressText, Color.Black);
-			mDefaultColors.Add(ProgramCounterAddressBackground, Color.Yellow);
-			mDefaultColors.Add(DeviceIdle, Color.LawnGreen);
-			mDefaultColors.Add(DeviceBusy, Color.Yellow);
-			mDefaultColors.Add(LocationFieldText, Color.Black);
-			mDefaultColors.Add(OpFieldText, Color.Blue);
-			mDefaultColors.Add(AddressFieldText, Color.Black);
-			mDefaultColors.Add(CommentFieldText, Color.DarkGreen);
-			mDefaultColors.Add(LineNumberText, Color.DarkSeaGreen);
-			mDefaultColors.Add(LineNumberSeparator, Color.DarkGray);
-			mDefaultColors.Add(TeletypeInputText, Color.Black);
-			mDefaultColors.Add(TeletypeInputBackground, Color.White);
-			mDefaultColors.Add(TeletypeOutputText, Color.White);
-			mDefaultColors.Add(TeletypeOutputBackground, Color.Black);
-			Colors = new Dictionary<string, Color>();
-			mDefaultFonts = new Dictionary<string, Font>();
-			mDefaultFonts.Add(FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0));
-			ColorProfilingCounts = true;
+            mDefaultColors = new Dictionary<string, Color>
+            {
+                { ErrorText, Color.Red },
+                { WarningText, Color.DarkOrange },
+                { InfoText, Color.DarkGreen },
+                { DebugText, Color.DarkBlue },
+                { RenderedText, Color.Black },
+                { EditingText, Color.Blue },
+                { ImmutableText, Color.DarkGray },
+                { EditorBackground, Color.White },
+                { LoadedInstructionText, Color.Black },
+                { LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204) },
+                { AddressText, Color.Black },
+                { ProgramCounterAddressBackground, Color.Yellow },
+                { DeviceIdle, Color.LawnGreen },
+                { DeviceBusy, Color.Yellow },
+                { LocationFieldText, Color.Black },
+                { OpFieldText, Color.Blue },
+                { AddressFieldText, Color.Black },
+                { CommentFieldText, Color.DarkGreen },
+                { LineNumberText, Color.DarkSeaGreen },
+                { LineNumberSeparator, Color.DarkGray },
+                { TeletypeInputText, Color.Black },
+                { TeletypeInputBackground, Color.White },
+                { TeletypeOutputText, Color.White },
+                { TeletypeOutputBackground, Color.Black }
+            };
+            Colors = new Dictionary<string, Color>();
+            mDefaultFonts = new Dictionary<string, Font>
+            {
+                { FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
+            };
+            ColorProfilingCounts = true;
 		}
 
         public static bool IsKnownColor(string name) => mDefaultColors.ContainsKey(name);

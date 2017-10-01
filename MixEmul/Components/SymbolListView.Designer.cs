@@ -56,9 +56,9 @@ namespace MixGui.Components
       this.mListView.TabIndex = 4;
       this.mListView.UseCompatibleStateImageBehavior = false;
       this.mListView.View = System.Windows.Forms.View.Details;
-      this.mListView.DoubleClick += new System.EventHandler(this.mListView_DoubleClick);
-      this.mListView.SelectedIndexChanged += new System.EventHandler(this.mListView_SelectedIndexChanged);
-      this.mListView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.mListView_KeyPress);
+      this.mListView.DoubleClick += new System.EventHandler(this.MListView_DoubleClick);
+      this.mListView.SelectedIndexChanged += new System.EventHandler(this.MListView_SelectedIndexChanged);
+      this.mListView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MListView_KeyPress);
       // 
       // mNameColumnHeader
       // 
@@ -90,7 +90,7 @@ namespace MixGui.Components
       this.mSetButton.TabIndex = 2;
       this.mSetButton.Text = "&Set";
       this.mSetButton.UseVisualStyleBackColor = true;
-      this.mSetButton.Click += new System.EventHandler(this.mSetButton_Click);
+      this.mSetButton.Click += new System.EventHandler(this.MSetButton_Click);
       // 
       // mUnsetButton
       // 
@@ -102,7 +102,7 @@ namespace MixGui.Components
       this.mUnsetButton.TabIndex = 3;
       this.mUnsetButton.Text = "U&nset";
       this.mUnsetButton.UseVisualStyleBackColor = true;
-      this.mUnsetButton.Click += new System.EventHandler(this.mUnsetButton_Click);
+      this.mUnsetButton.Click += new System.EventHandler(this.MUnsetButton_Click);
       // 
       // mSymbolValueTextBox
       // 

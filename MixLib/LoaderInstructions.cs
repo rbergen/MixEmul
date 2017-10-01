@@ -9,15 +9,15 @@ namespace MixLib
 
         public LoaderInstructions()
 		{
-			addInstruction("ORIG", LoaderInstruction.Operations.SetLocationCounter, false);
-			addInstruction("CON", LoaderInstruction.Operations.SetMemoryWord, false);
-			addInstruction("ALF", LoaderInstruction.Operations.SetMemoryWord, true);
-			addInstruction("END", LoaderInstruction.Operations.SetProgramCounter, false);
+			AddInstruction("ORIG", LoaderInstruction.Operations.SetLocationCounter, false);
+			AddInstruction("CON", LoaderInstruction.Operations.SetMemoryWord, false);
+			AddInstruction("ALF", LoaderInstruction.Operations.SetMemoryWord, true);
+			AddInstruction("END", LoaderInstruction.Operations.SetProgramCounter, false);
 		}
 
         public LoaderInstruction this[string mnemonic] => mInstructions.ContainsKey(mnemonic) ? mInstructions[mnemonic] : null;
 
-        void addInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) =>
+        void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) =>
             mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
     }
 }

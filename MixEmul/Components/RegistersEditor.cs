@@ -60,18 +60,20 @@ namespace MixGui.Components
 			mCompareLabel = new Label();
 			mOverflowLabel = new Label();
 
-			mEditors = new List<WordValueEditor>();
-			mEditors.Add(mrAEditor = new WordValueEditor(mRegisters.rA));
-			mEditors.Add(mrXEditor = new WordValueEditor(mRegisters.rX));
-			mEditors.Add(mrI1Editor = new WordValueEditor(mRegisters.rI1));
-			mEditors.Add(mrI2Editor = new WordValueEditor(mRegisters.rI2));
-			mEditors.Add(mrI3Editor = new WordValueEditor(mRegisters.rI3));
-			mEditors.Add(mrI4Editor = new WordValueEditor(mRegisters.rI4));
-			mEditors.Add(mr5Editor = new WordValueEditor(mRegisters.rI5));
-			mEditors.Add(mrI6Editor = new WordValueEditor(mRegisters.rI6));
-			mEditors.Add(mrJEditor = new WordValueEditor(mRegisters.rJ, false));
+            mEditors = new List<WordValueEditor>
+            {
+                (mrAEditor = new WordValueEditor(mRegisters.RA)),
+                (mrXEditor = new WordValueEditor(mRegisters.RX)),
+                (mrI1Editor = new WordValueEditor(mRegisters.RI1)),
+                (mrI2Editor = new WordValueEditor(mRegisters.RI2)),
+                (mrI3Editor = new WordValueEditor(mRegisters.RI3)),
+                (mrI4Editor = new WordValueEditor(mRegisters.RI4)),
+                (mr5Editor = new WordValueEditor(mRegisters.RI5)),
+                (mrI6Editor = new WordValueEditor(mRegisters.RI6)),
+                (mrJEditor = new WordValueEditor(mRegisters.RJ, false))
+            };
 
-			mCompareButton = new Button();
+            mCompareButton = new Button();
 			mOverflowBox = new CheckBox();
 
 			SuspendLayout();
@@ -143,56 +145,56 @@ namespace MixGui.Components
 			mrAEditor.Name = "mrAEditor";
 			mrAEditor.TabIndex = 1;
 			mrAEditor.TextBoxWidth = 80;
-			mrAEditor.NavigationKeyDown += keyDown;
+			mrAEditor.NavigationKeyDown += This_KeyDown;
 
 			mrXEditor.Location = new Point(24, 24);
 			mrXEditor.Name = "mrXEditor";
 			mrXEditor.TabIndex = 3;
 			mrXEditor.TextBoxWidth = 80;
-			mrXEditor.NavigationKeyDown += keyDown;
+			mrXEditor.NavigationKeyDown += This_KeyDown;
 
 			mrI1Editor.Location = new Point(24, 48);
 			mrI1Editor.Name = "mr1Editor";
 			mrI1Editor.TabIndex = 5;
 			mrI1Editor.TextBoxWidth = 40;
-			mrI1Editor.NavigationKeyDown += keyDown;
+			mrI1Editor.NavigationKeyDown += This_KeyDown;
 
 			mrI2Editor.Location = new Point(24, 72);
 			mrI2Editor.Name = "mr2Editor";
 			mrI2Editor.TabIndex = 7;
 			mrI2Editor.TextBoxWidth = 40;
-			mrI2Editor.NavigationKeyDown += keyDown;
+			mrI2Editor.NavigationKeyDown += This_KeyDown;
 
 			mrI3Editor.Location = new Point(24, 96);
 			mrI3Editor.Name = "mr3Editor";
 			mrI3Editor.TabIndex = 9;
 			mrI3Editor.TextBoxWidth = 40;
-			mrI3Editor.NavigationKeyDown += keyDown;
+			mrI3Editor.NavigationKeyDown += This_KeyDown;
 
 			mrI4Editor.Location = new Point(24, 120);
 			mrI4Editor.Name = "mr4Editor";
 			mrI4Editor.TabIndex = 11;
 			mrI4Editor.TextBoxWidth = 40;
-			mrI4Editor.NavigationKeyDown += keyDown;
+			mrI4Editor.NavigationKeyDown += This_KeyDown;
 
 			mr5Editor.Location = new Point(24, 144);
 			mr5Editor.Name = "mr5Editor";
 			mr5Editor.TabIndex = 13;
 			mr5Editor.TextBoxWidth = 40;
-			mr5Editor.NavigationKeyDown += keyDown;
+			mr5Editor.NavigationKeyDown += This_KeyDown;
 
 			mrI6Editor.Location = new Point(24, 168);
 			mrI6Editor.Name = "mr6Editor";
 			mrI6Editor.TabIndex = 15;
 			mrI6Editor.TextBoxWidth = 40;
-			mrI6Editor.NavigationKeyDown += keyDown;
+			mrI6Editor.NavigationKeyDown += This_KeyDown;
 
 			mrJEditor.Location = new Point(41, 192);
 			mrJEditor.Name = "mrJEditor";
 			mrJEditor.ReadOnly = false;
 			mrJEditor.TabIndex = 17;
 			mrJEditor.TextBoxWidth = 40;
-			mrJEditor.NavigationKeyDown += keyDown;
+			mrJEditor.NavigationKeyDown += This_KeyDown;
 
 			mOverflowLabel.Name = "mOverflowLabel";
 			mOverflowLabel.Size = new Size(56, 21);
@@ -204,7 +206,7 @@ namespace MixGui.Components
 			mOverflowBox.Size = new Size(16, 21);
 			mOverflowBox.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mOverflowBox.Width, mrI6Editor.Top);
 			mOverflowBox.TabIndex = 19;
-			mOverflowBox.CheckedChanged += mOverflowBox_CheckedChanged;
+			mOverflowBox.CheckedChanged += MOverflowBox_CheckedChanged;
 
 			mCompareLabel.Name = "mCompareLabel";
 			mCompareLabel.Size = new Size(56, 21);
@@ -218,7 +220,7 @@ namespace MixGui.Components
 			mCompareButton.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mCompareButton.Width, mrJEditor.Top);
 			mCompareButton.TabIndex = 21;
 			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
-			mCompareButton.Click += mCompareButton_Click;
+			mCompareButton.Click += MCompareButton_Click;
 
 			mOverflowLabel.Location = new Point(Math.Min(mCompareButton.Left, mOverflowBox.Left) - Math.Max(mCompareLabel.Width, mOverflowLabel.Width), mOverflowBox.Top);
 
@@ -252,12 +254,12 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-        void mOverflowBox_CheckedChanged(object sender, EventArgs e)
+        void MOverflowBox_CheckedChanged(object sender, EventArgs e)
         {
             mRegisters.OverflowIndicator = mOverflowBox.Checked;
         }
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             FieldTypes? editorField = null;
             int? index = null;
@@ -280,7 +282,7 @@ namespace MixGui.Components
             }
         }
 
-        void mCompareButton_Click(object sender, EventArgs e)
+        void MCompareButton_Click(object sender, EventArgs e)
         {
             var compValue = mRegisters.CompareIndicator.Next();
             mRegisters.CompareIndicator = compValue;
@@ -336,15 +338,15 @@ namespace MixGui.Components
 				if (value != null && mRegisters != value)
 				{
 					mRegisters = value;
-					mrAEditor.WordValue = mRegisters.rA;
-					mrXEditor.WordValue = mRegisters.rX;
-					mrI1Editor.WordValue = mRegisters.rI1;
-					mrI2Editor.WordValue = mRegisters.rI2;
-					mrI3Editor.WordValue = mRegisters.rI3;
-					mrI4Editor.WordValue = mRegisters.rI4;
-					mr5Editor.WordValue = mRegisters.rI5;
-					mrI6Editor.WordValue = mRegisters.rI6;
-					mrJEditor.WordValue = mRegisters.rJ;
+					mrAEditor.WordValue = mRegisters.RA;
+					mrXEditor.WordValue = mRegisters.RX;
+					mrI1Editor.WordValue = mRegisters.RI1;
+					mrI2Editor.WordValue = mRegisters.RI2;
+					mrI3Editor.WordValue = mRegisters.RI3;
+					mrI4Editor.WordValue = mRegisters.RI4;
+					mr5Editor.WordValue = mRegisters.RI5;
+					mrI6Editor.WordValue = mRegisters.RI6;
+					mrJEditor.WordValue = mRegisters.RJ;
 				}
 			}
 		}

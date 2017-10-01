@@ -41,27 +41,27 @@ namespace MixGui.Components
 			mLastSelectedDeviceTab = 0;
 		}
 
-        void mCloseButton_Click(object sender, EventArgs e) => Hide();
+        void MCloseButton_Click(object sender, EventArgs e) => Hide();
 
-        void mTapeDeleteButton_Click(object sender, EventArgs e) =>
-            deleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
+        void MTapeDeleteButton_Click(object sender, EventArgs e) =>
+            DeleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
 
-        void mDiskDeleteButton_Click(object sender, EventArgs e) =>
-            deleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
+        void MDiskDeleteButton_Click(object sender, EventArgs e) =>
+            DeleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
 
-        void mCardReaderDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card reader", mCardReaderEditor);
+        void MCardReaderDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("card reader", mCardReaderEditor);
 
-        void mCardPunchDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("card punch", mCardWriterEditor);
+        void MCardPunchDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("card punch", mCardWriterEditor);
 
-        void mPrinterDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("printer", mPrinterEditor);
+        void MPrinterDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("printer", mPrinterEditor);
 
-        void mPaperTapeDeleteButton_Click(object sender, EventArgs e) => deleteTextDeviceFile("paper tape", mPaperTapeEditor);
+        void MPaperTapeDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("paper tape", mPaperTapeEditor);
 
-        void mDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        void MDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex) return;
 
-            if (updateDiskControls())
+            if (UpdateDiskControls())
             {
                 mLastSelectedDisk = mDiskSelectorComboBox.SelectedIndex;
             }
@@ -71,11 +71,11 @@ namespace MixGui.Components
             }
         }
 
-        void mTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        void MTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex) return;
 
-            if (updateTapeControls())
+            if (UpdateTapeControls())
             {
                 mLastSelectedTape = mTapeSelectorComboBox.SelectedIndex;
             }
@@ -88,7 +88,7 @@ namespace MixGui.Components
 
         public new void Hide()
 		{
-			if (saveCurrentTabRecord()) base.Hide();
+			if (SaveCurrentTabRecord()) base.Hide();
 		}
 
 		public void ShowDevice(MixDevice device)
@@ -181,7 +181,7 @@ namespace MixGui.Components
 					mDiskSelectorComboBox.SelectedIndex = 0;
 				}
 
-				updateDiskControls();
+				UpdateDiskControls();
 
 				mLastSelectedTape = 0;
 
@@ -190,7 +190,7 @@ namespace MixGui.Components
 					mTapeSelectorComboBox.SelectedIndex = 0;
 				}
 
-				updateTapeControls();
+				UpdateTapeControls();
 			}
 		}
 
@@ -203,15 +203,15 @@ namespace MixGui.Components
 			mPrinterEditor.UpdateSettings();
 			mPaperTapeEditor.UpdateSettings();
 
-			updateTapeControls();
-			updateDiskControls();
+			UpdateTapeControls();
+			UpdateDiskControls();
 			mCardReaderPathBox.Text = mCardReaderEditor.Device.FilePath;
 			mCardWriterPathBox.Text = mCardWriterEditor.Device.FilePath;
 			mPrinterPathBox.Text = mPrinterEditor.Device.FilePath;
 			mPaperTapePathBox.Text = mPaperTapeEditor.Device.FilePath;
 		}
 
-        bool updateDiskControls()
+        bool UpdateDiskControls()
         {
             bool success = true;
 
@@ -244,7 +244,7 @@ namespace MixGui.Components
 			mPaperTapeEditor.UpdateLayout();
 		}
 
-        bool updateTapeControls()
+        bool UpdateTapeControls()
         {
             bool success = true;
 
@@ -294,11 +294,11 @@ namespace MixGui.Components
             Hide();
         }
 
-        void mDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
+        void MDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab) return;
 
-            if (saveCurrentTabRecord())
+            if (SaveCurrentTabRecord())
             {
                 mLastSelectedDeviceTab = mDeviceTypeTabs.SelectedIndex;
             }
@@ -308,7 +308,7 @@ namespace MixGui.Components
             }
         }
 
-        bool saveCurrentTabRecord()
+        bool SaveCurrentTabRecord()
         {
             bool success = true;
 
@@ -342,7 +342,7 @@ namespace MixGui.Components
             return success;
         }
 
-        void deleteBinaryDeviceFile(string deviceName, BinaryFileDeviceEditor editor)
+        void DeleteBinaryDeviceFile(string deviceName, BinaryFileDeviceEditor editor)
         {
             if (MessageBox.Show(this, "Are you sure you want to delete the file for device " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -350,7 +350,7 @@ namespace MixGui.Components
             }
         }
 
-        void deleteTextDeviceFile(string deviceName, TextFileDeviceEditor editor)
+        void DeleteTextDeviceFile(string deviceName, TextFileDeviceEditor editor)
         {
             if (MessageBox.Show(this, "Are you sure you want to delete the device file for the " + deviceName + "?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -358,7 +358,7 @@ namespace MixGui.Components
             }
         }
 
-        void mCardReaderLoadButton_Click(object sender, EventArgs e)
+        void MCardReaderLoadButton_Click(object sender, EventArgs e)
         {
             if (mCardReaderLoadFileDialog.ShowDialog(this) == DialogResult.OK)
             {

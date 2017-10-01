@@ -38,7 +38,7 @@ namespace MixGui.Components
 			mFindingsListView.Size = Size;
 			mFindingsListView.TabIndex = 0;
 			mFindingsListView.View = View.Details;
-			mFindingsListView.SelectedIndexChanged += selectedIndexChanged;
+			mFindingsListView.SelectedIndexChanged += SelectedIndexChanged;
 
 			Controls.Add(mFindingsListView);
 			Name = "AssemblyFindingListView";
@@ -47,12 +47,14 @@ namespace MixGui.Components
 
         protected void OnSelectionChanged(SelectionChangedEventArgs args) => SelectionChanged?.Invoke(this, args);
 
-        void selectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
+        void SelectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
 
-        void addFinding(AssemblyFinding finding)
+        void AddFinding(AssemblyFinding finding)
         {
-            var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity);
-            item.Tag = finding;
+            var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity)
+            {
+                Tag = finding
+            };
             mFindingsListView.Items.Add(item);
         }
 
@@ -65,11 +67,11 @@ namespace MixGui.Components
 				if (value != null)
 				{
 					var list = new List<AssemblyFinding>(value);
-					list.Sort(new findingComparer());
+					list.Sort(new FindingComparer());
 
 					foreach (AssemblyFinding finding in list)
 					{
-						addFinding(finding);
+						AddFinding(finding);
 					}
 
 					if (mFindingsListView.Items.Count > 0)
@@ -103,7 +105,7 @@ namespace MixGui.Components
 			}
 		}
 
-        class findingComparer : IComparer<AssemblyFinding>
+        class FindingComparer : IComparer<AssemblyFinding>
         {
             public int Compare(AssemblyFinding x, AssemblyFinding y)
             {

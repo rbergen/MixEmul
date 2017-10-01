@@ -54,16 +54,16 @@ namespace MixGui.Components
 
 			UpdateLayout();
 
-			KeyDown += this_KeyDown;
-			KeyPress += this_KeyPress;
-			Leave += this_Leave;
-			TextChanged += this_TextChanged;
+			KeyDown += This_KeyDown;
+			KeyPress += This_KeyPress;
+			Leave += This_Leave;
+			TextChanged += This_TextChanged;
 			Enter += LongValueTextBox_Enter;
-			setMinValue(minValue);
-			setMaxValue(maxValue);
+			SetMinValue(minValue);
+			SetMaxValue(maxValue);
 
-			checkAndUpdateValue(sign, magnitude);
-			checkAndUpdateMaxLength();
+			CheckAndUpdateValue(sign, magnitude);
+			CheckAndUpdateMaxLength();
 
 			mUpdating = false;
 			mEditMode = false;
@@ -74,11 +74,11 @@ namespace MixGui.Components
 			mLastValidText = mMagnitude.ToString();
 		}
 
-        void checkAndUpdateValue(Word.Signs newSign, long newMagnitude) => checkAndUpdateValue(newSign, newMagnitude, false);
+        void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude) => CheckAndUpdateValue(newSign, newMagnitude, false);
 
         protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void this_Leave(object sender, EventArgs e) => checkAndUpdateValue(Text);
+        void This_Leave(object sender, EventArgs e) => CheckAndUpdateValue(Text);
 
         void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
@@ -88,7 +88,7 @@ namespace MixGui.Components
 			}
 		}
 
-		void this_KeyDown(object sender, KeyEventArgs e)
+		void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -125,12 +125,12 @@ namespace MixGui.Components
 			}
 		}
 
-        void checkAndUpdateMaxLength()
+        void CheckAndUpdateMaxLength()
         {
             MaxLength = Math.Max(mMinValue.ToString().Length, mMaxValue.ToString().Length);
         }
 
-        void checkAndUpdateValue(string newValue)
+        void CheckAndUpdateValue(string newValue)
         {
             try
             {
@@ -157,15 +157,15 @@ namespace MixGui.Components
                     magnitude = long.Parse(newValue.Substring(offset));
                 }
 
-                checkAndUpdateValue(sign, magnitude);
+                CheckAndUpdateValue(sign, magnitude);
             }
             catch (FormatException)
             {
-                checkAndUpdateValue(mLastValidText);
+                CheckAndUpdateValue(mLastValidText);
             }
         }
 
-        void checkAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
+        void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
         {
             mEditMode = false;
             var newValue = newSign.ApplyTo(newMagnitude);
@@ -229,7 +229,7 @@ namespace MixGui.Components
             }
         }
 
-        void setMaxValue(long value)
+        void SetMaxValue(long value)
         {
             mMaxValue = value;
 
@@ -244,7 +244,7 @@ namespace MixGui.Components
             }
         }
 
-        void setMinValue(long value)
+        void SetMinValue(long value)
         {
             mMinValue = value;
             if (mMinValue > mMaxValue)
@@ -255,7 +255,7 @@ namespace MixGui.Components
             SupportSign = mMinValue < 0L;
         }
 
-        void this_KeyPress(object sender, KeyPressEventArgs e)
+        void This_KeyPress(object sender, KeyPressEventArgs e)
         {
             char keyChar = e.KeyChar;
 
@@ -263,23 +263,23 @@ namespace MixGui.Components
             {
                 case Keys.Enter:
                     e.Handled = true;
-                    checkAndUpdateValue(Text);
+                    CheckAndUpdateValue(Text);
 
                     return;
 
                 case Keys.Escape:
                     e.Handled = true;
-                    checkAndUpdateValue(mSign, mMagnitude);
+                    CheckAndUpdateValue(mSign, mMagnitude);
 
                     return;
             }
 
-            if (keyChar == '-' || (keyChar == '+' && Text.Length > 0 && Text[0] == '-')) changeSign();
+            if (keyChar == '-' || (keyChar == '+' && Text.Length > 0 && Text[0] == '-')) ChangeSign();
 
             e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
         }
 
-        void changeSign()
+        void ChangeSign()
         {
             int selectionStart = SelectionStart;
             int selectionLength = SelectionLength;
@@ -320,11 +320,11 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (mSign != value) checkAndUpdateValue(value, mMagnitude, true);
+				if (mSign != value) CheckAndUpdateValue(value, mMagnitude, true);
 			}
 		}
 
-        void this_TextChanged(object sender, EventArgs e)
+        void This_TextChanged(object sender, EventArgs e)
         {
             if (mUpdating) return;
 
@@ -394,7 +394,7 @@ namespace MixGui.Components
 					value = -value;
 				}
 
-				if (sign != mSign || value != mMagnitude) checkAndUpdateValue(sign, value, true);
+				if (sign != mSign || value != mMagnitude) CheckAndUpdateValue(sign, value, true);
 			}
 		}
 
@@ -408,7 +408,7 @@ namespace MixGui.Components
 			{
 				value = value.GetMagnitude();
 
-				if (mMagnitude != value) checkAndUpdateValue(mSign, value, true);
+				if (mMagnitude != value) CheckAndUpdateValue(mSign, value, true);
 			}
 		}
 
@@ -422,9 +422,9 @@ namespace MixGui.Components
 			{
 				if (mMaxValue != value)
 				{
-					setMaxValue(value);
-					checkAndUpdateValue(mSign, mMagnitude);
-					checkAndUpdateMaxLength();
+					SetMaxValue(value);
+					CheckAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateMaxLength();
 				}
 			}
 		}
@@ -439,9 +439,9 @@ namespace MixGui.Components
 			{
 				if (mMinValue != value)
 				{
-					setMinValue(value);
-					checkAndUpdateValue(mSign, mMagnitude);
-					checkAndUpdateMaxLength();
+					SetMinValue(value);
+					CheckAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateMaxLength();
 				}
 			}
 		}
@@ -457,7 +457,7 @@ namespace MixGui.Components
 				if (mSupportNegativeZero != value)
 				{
 					mSupportNegativeZero = value;
-					checkAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateValue(mSign, mMagnitude);
 				}
 			}
 		}
@@ -470,7 +470,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				checkAndUpdateValue(value);
+				CheckAndUpdateValue(value);
 			}
 		}
 

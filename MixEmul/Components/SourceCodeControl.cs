@@ -24,7 +24,7 @@ namespace MixGui.Components
         Color mAddressColor;
         Color mCommentColor;
         bool mFindingsColored;
-        List<processedSourceLine> mInstructions;
+        List<ProcessedSourceLine> mInstructions;
         Color mLineNumberColor;
         int mLineNumberLength;
         Color mLineNumberSeparatorColor;
@@ -52,12 +52,12 @@ namespace MixGui.Components
 
             UpdateLayout();
 
-            mInstructions = new List<processedSourceLine>();
+            mInstructions = new List<ProcessedSourceLine>();
             mLineNumberLength = 0;
             mFindingsColored = false;
         }
 
-        void addLine(ParsedSourceLine sourceLine)
+        void AddLine(ParsedSourceLine sourceLine)
         {
             int count = mInstructions.Count;
             if (mSourceBox.TextLength != 0) mSourceBox.AppendText(Environment.NewLine);
@@ -65,7 +65,7 @@ namespace MixGui.Components
             var lineNumberText = (count + 1).ToString();
             mSourceBox.AppendText(new string(' ', mLineNumberLength - lineNumberText.Length) + lineNumberText + lineNumberSeparator);
 
-            var processedLine = new processedSourceLine(sourceLine, mSourceBox.TextLength);
+            var processedLine = new ProcessedSourceLine(sourceLine, mSourceBox.TextLength);
             mInstructions.Add(processedLine);
 
             if (sourceLine.IsCommentLine)
@@ -80,14 +80,14 @@ namespace MixGui.Components
                 if (sourceLine.Comment.Length > 0) mSourceBox.AppendText(sourceLine.Comment);
             }
 
-            applySyntaxColoring(processedLine);
+            ApplySyntaxColoring(processedLine);
         }
 
-        void applyFindingColoring(AssemblyFinding finding, markOperation mark)
+        void ApplyFindingColoring(AssemblyFinding finding, MarkOperation mark)
         {
             if (finding != null && finding.LineNumber != int.MinValue && finding.LineNumber >= 0 && finding.LineNumber < mInstructions.Count)
             {
-                processedSourceLine processedLine = mInstructions[finding.LineNumber];
+                ProcessedSourceLine processedLine = mInstructions[finding.LineNumber];
                 int lineTextIndex = processedLine.LineTextIndex;
                 int length = 0;
 
@@ -159,7 +159,7 @@ namespace MixGui.Components
 
                 if (length != 0)
                 {
-                    if (mark == markOperation.Mark)
+                    if (mark == MarkOperation.Mark)
                     {
                         Font font = mSourceBox.Font;
 
@@ -167,7 +167,7 @@ namespace MixGui.Components
                         mSourceBox.Focus();
                         mSourceBox.ScrollToCaret();
                     }
-                    else if (mark == markOperation.Unmark)
+                    else if (mark == MarkOperation.Unmark)
                     {
                         mSourceBox.SelectionFont = mSourceBox.Font;
                     }
@@ -178,15 +178,15 @@ namespace MixGui.Components
             }
         }
 
-        void applyFindingColoring(AssemblyFindingCollection findings, Severity severity)
+        void ApplyFindingColoring(AssemblyFindingCollection findings, Severity severity)
         {
             foreach (AssemblyFinding finding in findings)
             {
-                if (finding.Severity == severity) applyFindingColoring(finding, markOperation.None);
+                if (finding.Severity == severity) ApplyFindingColoring(finding, MarkOperation.None);
             }
         }
 
-        void applySyntaxColoring(processedSourceLine processedLine)
+        void ApplySyntaxColoring(ProcessedSourceLine processedLine)
         {
             mSourceBox.SelectionStart = (processedLine.LineTextIndex - lineNumberSeparator.Length) - mLineNumberLength;
             mSourceBox.SelectionLength = mLineNumberLength;
@@ -243,18 +243,18 @@ namespace MixGui.Components
         {
             set
             {
-                applyFindingColoring(mMarkedFinding, markOperation.Unmark);
+                ApplyFindingColoring(mMarkedFinding, MarkOperation.Unmark);
                 mMarkedFinding = null;
 
                 if (mFindingsColored)
                 {
-                    foreach (processedSourceLine line in mInstructions) applySyntaxColoring(line);
+                    foreach (ProcessedSourceLine line in mInstructions) ApplySyntaxColoring(line);
                 }
 
-                if (value.ContainsDebugs) applyFindingColoring(value, Severity.Debug);
-                if (value.ContainsInfos) applyFindingColoring(value, Severity.Info);
-                if (value.ContainsWarnings) applyFindingColoring(value, Severity.Warning);
-                if (value.ContainsErrors) applyFindingColoring(value, Severity.Error);
+                if (value.ContainsDebugs) ApplyFindingColoring(value, Severity.Debug);
+                if (value.ContainsInfos) ApplyFindingColoring(value, Severity.Info);
+                if (value.ContainsWarnings) ApplyFindingColoring(value, Severity.Warning);
+                if (value.ContainsErrors) ApplyFindingColoring(value, Severity.Error);
 
                 mFindingsColored = true;
             }
@@ -282,9 +282,8 @@ namespace MixGui.Components
 
                     foreach (PreInstruction instruction in value)
                     {
-                        if (instruction is ParsedSourceLine)
+                        if (instruction is ParsedSourceLine parsedLine)
                         {
-                            var parsedLine = (ParsedSourceLine)instruction;
                             parsedLines.Add(parsedLine.LineNumber, parsedLine);
                         }
                     }
@@ -293,10 +292,10 @@ namespace MixGui.Components
                     {
                         while (parsedLine.LineNumber > mInstructions.Count)
                         {
-                            addLine(new ParsedSourceLine(mInstructions.Count, ""));
+                            AddLine(new ParsedSourceLine(mInstructions.Count, ""));
                         }
 
-                        addLine(parsedLine);
+                        AddLine(parsedLine);
                     }
 
                     mSourceBox.SelectionStart = 0;
@@ -313,27 +312,27 @@ namespace MixGui.Components
             }
             set
             {
-                applyFindingColoring(mMarkedFinding, markOperation.Unmark);
+                ApplyFindingColoring(mMarkedFinding, MarkOperation.Unmark);
 
                 mMarkedFinding = value;
 
-                applyFindingColoring(mMarkedFinding, markOperation.Mark);
+                ApplyFindingColoring(mMarkedFinding, MarkOperation.Mark);
             }
         }
 
-        enum markOperation
+        enum MarkOperation
         {
             Unmark,
             None,
             Mark
         }
 
-        class processedSourceLine
+        class ProcessedSourceLine
         {
             public ParsedSourceLine SourceLine { get; private set; }
             public int LineTextIndex { get; private set; }
 
-            public processedSourceLine(ParsedSourceLine sourceLine, int lineTextIndex)
+            public ProcessedSourceLine(ParsedSourceLine sourceLine, int lineTextIndex)
             {
                 SourceLine = sourceLine;
                 LineTextIndex = lineTextIndex;

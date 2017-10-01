@@ -39,7 +39,7 @@ namespace MixLib
 
             foreach (MixDevice device in mDevices)
             {
-                device.ReportingEvent += device_Reporting;
+                device.ReportingEvent += Device_Reporting;
             }
         }
 
@@ -51,7 +51,7 @@ namespace MixLib
 
         protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) => DeviceReportingEvent?.Invoke(this, args);
 
-        void device_Reporting(object sender, ReportingEventArgs args) =>
+        void Device_Reporting(object sender, ReportingEventArgs args) =>
             OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
 
         public void Reset()

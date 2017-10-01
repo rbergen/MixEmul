@@ -23,9 +23,9 @@ namespace MixLib.Instruction
         /// </summary>
         public static bool ConvertToChar(ModuleBase module, MixInstruction.Instance instance)
 		{
-			Register rA = module.Registers.rA;
+			Register rA = module.Registers.RA;
 			long magnitudeLongValue = rA.MagnitudeLongValue;
-			Register rX = module.Registers.rX;
+			Register rX = module.Registers.RX;
 
 			for (int i = rX.ByteCount - 1; i >= 0; i--)
 			{
@@ -48,7 +48,7 @@ namespace MixLib.Instruction
 		public static bool ConvertToNumeric(ModuleBase module, MixInstruction.Instance instance)
 		{
 			decimal num = 0M;
-			Register rA = module.Registers.rA;
+			Register rA = module.Registers.RA;
 
 			for (int i = 0; i < rA.ByteCount; i++)
 			{
@@ -56,7 +56,7 @@ namespace MixLib.Instruction
 				num += rA[i] % 10;
 			}
 
-			Register rX = module.Registers.rX;
+			Register rX = module.Registers.RX;
 
 			for (int j = 0; j < rX.ByteCount; j++)
 			{
@@ -103,12 +103,11 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Move(ModuleBase module, MixInstruction.Instance instance)
 		{
-			moveStatus status;
 
-			mMoveStatuses.TryGetValue(module.ModuleName, out status);
+            mMoveStatuses.TryGetValue(module.ModuleName, out moveStatus status);
 
-			// if we have a move status, check if it applies to this instruction
-			if (status != null && status.ProgramCounter != module.ProgramCounter)
+            // if we have a move status, check if it applies to this instruction
+            if (status != null && status.ProgramCounter != module.ProgramCounter)
 			{
 				status = null;
 				mMoveStatuses.Remove(module.ModuleName);
@@ -154,7 +153,7 @@ namespace MixLib.Instruction
 
 				// ... during the other, the value of rI1 is increased
 				case moveStatus.WordStates.Moved:
-					Register rI1 = module.Registers.rI1;
+					Register rI1 = module.Registers.RI1;
 					rI1.LongValue++;
 					status.NextWord();
 

@@ -40,17 +40,19 @@ namespace MixLib.Device
             FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new TextWriteStep(recordWordCount);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new CloseStreamStep();
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new CloseStreamStep
+            {
+                NextStep = null
+            };
 
             FirstIocDeviceStep = null;
 		}
 
-        class openStreamStep : StreamStep
+        class OpenStreamStep : StreamStep
         {
             public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 

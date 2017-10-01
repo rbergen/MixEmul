@@ -11,7 +11,7 @@ namespace MixLib.Instruction
         const byte loadOpcodeBase = 8;
         const byte loadNegOpcodeBase = 16;
 
-        static bool doLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
+        static bool DoLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
         {
             var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
             if (indexedAddress == int.MinValue) return false;
@@ -32,7 +32,7 @@ namespace MixLib.Instruction
 		{
 			int registerIndex = instance.MixInstruction.Opcode - loadOpcodeBase;
 
-			return doLoad(module, instance, registerIndex, false);
+			return DoLoad(module, instance, registerIndex, false);
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace MixLib.Instruction
 		{
 			int registerIndex = instance.MixInstruction.Opcode - loadNegOpcodeBase;
 
-			return doLoad(module, instance, registerIndex, true);
+			return DoLoad(module, instance, registerIndex, true);
 		}
 	}
 }

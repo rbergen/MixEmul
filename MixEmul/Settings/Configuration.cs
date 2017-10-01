@@ -49,7 +49,7 @@ namespace MixGui.Settings
 			DeviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 			FloatingPointMemoryWordCount = null;
 			ColorProfilingCounts = true;
-			fillEmptyMembers();
+			FillEmptyMembers();
 		}
 
 		protected Configuration(SerializationInfo info, StreamingContext context)
@@ -57,7 +57,7 @@ namespace MixGui.Settings
 			mSerializationInfo = info;
 		}
 
-        void fillEmptyMembers()
+        void FillEmptyMembers()
         {
             if (Colors == null)
             {
@@ -284,7 +284,7 @@ namespace MixGui.Settings
             }
             catch (SystemException) { }
 
-			fillEmptyMembers();
+			FillEmptyMembers();
 		}
 	}
 }

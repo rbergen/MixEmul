@@ -47,38 +47,38 @@ namespace MixLib.Type
 
         public int ByteCount => FullWord.ByteCount;
 
-        FullWord activeWord => realWordFetched ? mRealWord : mDefaultWord;
+        FullWord ActiveWord => RealWordFetched ? mRealWord : mDefaultWord;
 
         public long MaxMagnitude => mDefaultWord.MaxMagnitude;
 
-        public long ProfilingTickCount => realWordFetched ? mRealWord.ProfilingTickCount : 0;
+        public long ProfilingTickCount => RealWordFetched ? mRealWord.ProfilingTickCount : 0;
 
-        public long ProfilingExecutionCount => realWordFetched ? mRealWord.ProfilingExecutionCount : 0;
+        public long ProfilingExecutionCount => RealWordFetched ? mRealWord.ProfilingExecutionCount : 0;
 
-        public IEnumerator GetEnumerator() => activeWord.GetEnumerator();
+        public IEnumerator GetEnumerator() => ActiveWord.GetEnumerator();
 
-        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)activeWord).GetEnumerator();
+        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)ActiveWord).GetEnumerator();
 
-        public int MaxByteCount => activeWord.MaxByteCount;
+        public int MaxByteCount => ActiveWord.MaxByteCount;
 
-        public bool IsEmpty => !realWordFetched || mRealWord.IsEmpty;
+        public bool IsEmpty => !RealWordFetched || mRealWord.IsEmpty;
 
-        public MixByte[] ToArray() => activeWord.ToArray();
+        public MixByte[] ToArray() => ActiveWord.ToArray();
 
-        public object Clone() => activeWord.Clone();
+        public object Clone() => ActiveWord.Clone();
 
         public string ToString(bool asChars) =>
-            realWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
+            RealWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
 
-        void fetchRealWordIfNotFetched()
+        void FetchRealWordIfNotFetched()
         {
             lock (mSyncRoot)
             {
-                if (mRealWord == null) fetchRealWord();
+                if (mRealWord == null) FetchRealWord();
             }
         }
 
-        bool realWordFetched
+        bool RealWordFetched
         {
             get
             {
@@ -89,12 +89,12 @@ namespace MixLib.Type
             }
         }
 
-        void fetchRealWord()
+        void FetchRealWord()
         {
             mRealWord = mMemory.GetRealWord(Index);
         }
 
-        bool fetchRealWordConditionally(Func<bool> condition)
+        bool FetchRealWordConditionally(Func<bool> condition)
         {
             lock (mSyncRoot)
             {
@@ -102,7 +102,7 @@ namespace MixLib.Type
                 {
                     if (!condition()) return false;
 
-                    fetchRealWord();
+                    FetchRealWord();
                 }
             }
 
@@ -113,11 +113,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return realWordFetched ? mRealWord.SourceLine : null;
+				return RealWordFetched ? mRealWord.SourceLine : null;
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() => value != null))
+				if (FetchRealWordConditionally(() => value != null))
 				{
 					mRealWord.SourceLine = value;
 				}
@@ -126,12 +126,12 @@ namespace MixLib.Type
 
 		public void Load(string text)
 		{
-			if (fetchRealWordConditionally(() => text != mDefaultCharString)) mRealWord.Load(text);
+			if (FetchRealWordConditionally(() => text != mDefaultCharString)) mRealWord.Load(text);
 		}
 
 		public void InvertSign()
 		{
-			fetchRealWordIfNotFetched();
+			FetchRealWordIfNotFetched();
 			mRealWord.InvertSign();
 		}
 
@@ -139,11 +139,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return activeWord[index];
+				return ActiveWord[index];
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() => mDefaultWord[index].ByteValue != value.ByteValue))
+				if (FetchRealWordConditionally(() => mDefaultWord[index].ByteValue != value.ByteValue))
 				{
 					mRealWord[index] = value;
 				}
@@ -154,11 +154,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return activeWord.LongValue;
+				return ActiveWord.LongValue;
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() => value != mDefaultLongValue))
+				if (FetchRealWordConditionally(() => value != mDefaultLongValue))
 				{
 					mRealWord.LongValue = value;
 				}
@@ -169,11 +169,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return activeWord.Magnitude;
+				return ActiveWord.Magnitude;
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() =>
+				if (FetchRealWordConditionally(() =>
 				{
 					bool valueDifferent = false;
 					int thisStartIndex = 0;
@@ -222,11 +222,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return activeWord.MagnitudeLongValue;
+				return ActiveWord.MagnitudeLongValue;
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() => value != mDefaultLongValue))
+				if (FetchRealWordConditionally(() => value != mDefaultLongValue))
 				{
 					mRealWord.MagnitudeLongValue = value;
 				}
@@ -237,11 +237,11 @@ namespace MixLib.Type
 		{
 			get
 			{
-				return activeWord.Sign;
+				return ActiveWord.Sign;
 			}
 			set
 			{
-				if (fetchRealWordConditionally(() => value != mDefaultWord.Sign))
+				if (FetchRealWordConditionally(() => value != mDefaultWord.Sign))
 				{
 					mRealWord.Sign = value;
 				}
@@ -302,14 +302,14 @@ namespace MixLib.Type
 
 		public void IncreaseProfilingTickCount(int ticks)
 		{
-			fetchRealWordIfNotFetched();
+			FetchRealWordIfNotFetched();
 
 			mRealWord.IncreaseProfilingTickCount(ticks);
 		}
 
 		public void IncreaseProfilingExecutionCount()
 		{
-			fetchRealWordIfNotFetched();
+			FetchRealWordIfNotFetched();
 
 			mRealWord.IncreaseProfilingExecutionCount();
 		}

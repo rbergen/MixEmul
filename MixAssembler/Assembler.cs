@@ -84,9 +84,11 @@ namespace MixAssembler
 
         public static InstructionInstanceBase Assemble(string instructionLine, int locationCounter, out ParsedSourceLine parsedLine, SymbolCollection symbols, out AssemblyFindingCollection findings)
         {
-            var status = new ParsingStatus(symbols);
-            status.LocationCounter = locationCounter;
-            status.LineNumber = 0;
+            var status = new ParsingStatus(symbols)
+            {
+                LocationCounter = locationCounter,
+                LineNumber = 0
+            };
 
             parsedLine = Parser.ParseInstructionLine(instructionLine, status);
             findings = status.Findings;

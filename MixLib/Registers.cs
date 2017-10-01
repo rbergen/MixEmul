@@ -37,23 +37,23 @@ namespace MixLib
 
         public Register this[Offset offset] => this[(int)offset];
 
-        public Register rI1 => mRegisters[(int)Offset.rI1];
+        public Register RI1 => mRegisters[(int)Offset.rI1];
 
-        public Register rI2 => mRegisters[(int)Offset.rI2];
+        public Register RI2 => mRegisters[(int)Offset.rI2];
 
-        public Register rI3 => mRegisters[(int)Offset.rI3];
+        public Register RI3 => mRegisters[(int)Offset.rI3];
 
-        public Register rI4 => mRegisters[(int)Offset.rI4];
+        public Register RI4 => mRegisters[(int)Offset.rI4];
 
-        public Register rI5 => mRegisters[(int)Offset.rI5];
+        public Register RI5 => mRegisters[(int)Offset.rI5];
 
-        public Register rI6 => mRegisters[(int)Offset.rI6];
+        public Register RI6 => mRegisters[(int)Offset.rI6];
 
-        public Register rA => mRegisters[(int)Offset.rA];
+        public Register RA => mRegisters[(int)Offset.rA];
 
-        public Register rJ => mrJ;
+        public Register RJ => mrJ;
 
-        public Register rX => mRegisters[(int)Offset.rX];
+        public Register RX => mRegisters[(int)Offset.rX];
 
         public int GetIndexedAddress(int mValue, int index)
 		{
@@ -91,23 +91,23 @@ namespace MixLib
 			composedWord[addressByteIndex] = (addressValue >> MixByte.BitCount) & MixByte.MaxValue;
 			composedWord[addressByteIndex + 1] = addressValue & MixByte.MaxValue;
 
-			flagValues flags = flagValues.None;
+			FlagValues flags = FlagValues.None;
 			if (OverflowIndicator)
 			{
-				flags |= flagValues.Overflow;
+				flags |= FlagValues.Overflow;
 			}
 			if (CompareIndicator == CompValues.Greater)
 			{
-				flags |= flagValues.Greater;
+				flags |= FlagValues.Greater;
 			}
 			else if (CompareIndicator == CompValues.Less)
 			{
-				flags |= flagValues.Less;
+				flags |= FlagValues.Less;
 			}
 			composedWord[flagsByteIndex] = (byte)flags;
 
-			composedWord[rJByteIndex] = rJ[0];
-			composedWord[rJByteIndex + 1] = rJ[1];
+			composedWord[rJByteIndex] = RJ[0];
+			composedWord[rJByteIndex + 1] = RJ[1];
 		}
 
 		public int LoadFromMemory(IMemory memory, int firstAddress)
@@ -127,13 +127,13 @@ namespace MixLib
 				addressValue = addressValue.GetMagnitude();
 			}
 
-			var flags = (flagValues)(byte)composedWord[flagsByteIndex];
-			OverflowIndicator = (flags & flagValues.Overflow) == flagValues.Overflow;
-			if ((flags & flagValues.Greater) == flagValues.Greater)
+			var flags = (FlagValues)(byte)composedWord[flagsByteIndex];
+			OverflowIndicator = (flags & FlagValues.Overflow) == FlagValues.Overflow;
+			if ((flags & FlagValues.Greater) == FlagValues.Greater)
 			{
 				CompareIndicator = CompValues.Greater;
 			}
-			else if ((flags & flagValues.Less) == flagValues.Less)
+			else if ((flags & FlagValues.Less) == FlagValues.Less)
 			{
 				CompareIndicator = CompValues.Less;
 			}
@@ -142,8 +142,8 @@ namespace MixLib
 				CompareIndicator = CompValues.Equal;
 			}
 
-			rJ[0] = composedWord[rJByteIndex];
-			rJ[1] = composedWord[rJByteIndex + 1];
+			RJ[0] = composedWord[rJByteIndex];
+			RJ[1] = composedWord[rJByteIndex + 1];
 
 			return addressValue;
 		}
@@ -182,7 +182,7 @@ namespace MixLib
         }
 
         [Flags]
-        enum flagValues : byte
+        enum FlagValues : byte
         {
             None = 0,
             Less = 1,

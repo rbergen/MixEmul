@@ -52,11 +52,12 @@ namespace MixLib.Device.Step
 
 			for (int i = 0; i < wordCount; i++)
 			{
-				currentWord = new FullWord();
+                currentWord = new FullWord
+                {
+                    Sign = readBytes[byteIndex++].ToSign()
+                };
 
-				currentWord.Sign = readBytes[byteIndex++].ToSign();
-
-				for (int j = 0; j < FullWord.ByteCount; j++)
+                for (int j = 0; j < FullWord.ByteCount; j++)
 				{
 					currentWord[j] = readBytes[byteIndex++];
 				}

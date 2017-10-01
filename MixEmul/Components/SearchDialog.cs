@@ -15,10 +15,10 @@ namespace MixGui.Components
 			mSearchTextBox.MixByteCollectionValue = new MixByteCollection(80);
 		}
 
-        void fieldCheckedChanged(object sender, EventArgs e) => setFindButtonEnabledState();
+        void FieldCheckedChanged(object sender, EventArgs e) => SetFindButtonEnabledState();
 
-        void mSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
-            setFindButtonEnabledState();
+        void MSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
+            SetFindButtonEnabledState();
 
         public SearchParameters SearchParameters
 		{
@@ -33,17 +33,17 @@ namespace MixGui.Components
 				{
 					mSearchParameters = value;
 
-					fillControls();
+					FillControls();
 				}
 			}
 		}
 
-        void setFindButtonEnabledState()
+        void SetFindButtonEnabledState()
         {
             mFindButton.Enabled = mSearchTextBox.MixByteCollectionValue.ToString(true).Trim() != string.Empty && (mValueCheckBox.Checked || mCharsCheckBox.Checked || mInstructionCheckBox.Checked);
         }
 
-        void mFindButton_Click(object sender, EventArgs e)
+        void MFindButton_Click(object sender, EventArgs e)
         {
             if (mSearchParameters == null)
             {
@@ -70,10 +70,10 @@ namespace MixGui.Components
 
         void SearchDialog_VisibleChanged(object sender, EventArgs e)
         {
-            if (Visible) fillControls();
+            if (Visible) FillControls();
         }
 
-        void fillControls()
+        void FillControls()
         {
             if (mSearchParameters != null)
             {

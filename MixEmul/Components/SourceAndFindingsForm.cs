@@ -26,7 +26,7 @@ namespace MixGui.Components
         public SourceAndFindingsForm()
 		{
 			InitializeComponent();
-			mFindingListView.SelectionChanged += mFindingListView_SelectionChanged;
+			mFindingListView.SelectionChanged += MFindingListView_SelectionChanged;
 		}
 
         public void UpdateLayout() => mSourceControl.UpdateLayout();
@@ -94,7 +94,7 @@ namespace MixGui.Components
             mExportButton.Size = new System.Drawing.Size(62, 23);
             mExportButton.TabIndex = 2;
             mExportButton.Text = "&Export...";
-            mExportButton.Click += mExportButton_Click;
+            mExportButton.Click += MExportButton_Click;
             // 
             // mLoadButton
             // 
@@ -164,7 +164,7 @@ namespace MixGui.Components
 
         }
 
-        void mFindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args)
+        void MFindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args)
         {
             mSourceControl.MarkedFinding = args.SelectedFinding;
         }
@@ -174,13 +174,13 @@ namespace MixGui.Components
 			mSourceControl.Instructions = instructions;
 			mSourceControl.Findings = findings;
 			mFindingListView.Findings = findings;
-			setStatusBarText(findings);
+			SetStatusBarText(findings);
 			mInstances = instances;
 			mLoadButton.Enabled = !findings.ContainsErrors;
 			mExportButton.Enabled = mLoadButton.Enabled;
 		}
 
-        void setStatusBarText(AssemblyFindingCollection findings)
+        void SetStatusBarText(AssemblyFindingCollection findings)
         {
             var severityNames = Enum.GetNames(typeof(Severity));
             int[] severityCounts = new int[severityNames.Length];
@@ -236,7 +236,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void mExportButton_Click(object sender, EventArgs e)
+        void MExportButton_Click(object sender, EventArgs e)
         {
             if (mSaveExportFileDialog.ShowDialog(this) == DialogResult.OK)
             {

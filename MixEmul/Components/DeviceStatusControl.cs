@@ -44,7 +44,7 @@ namespace MixGui.Components
 			mIndexLabel.TabIndex = 0;
 			mIndexLabel.Text = "00:";
 			mIndexLabel.TextAlign = ContentAlignment.MiddleRight;
-			mIndexLabel.DoubleClick += control_DoubleClick;
+			mIndexLabel.DoubleClick += Control_DoubleClick;
 
 			mStatusLabel.BorderStyle = BorderStyle.FixedSingle;
 			mStatusLabel.Location = new Point(20, 0);
@@ -53,7 +53,7 @@ namespace MixGui.Components
 			mStatusLabel.TabIndex = 1;
 			mStatusLabel.Text = "";
 			mStatusLabel.TextAlign = ContentAlignment.MiddleCenter;
-			mStatusLabel.DoubleClick += control_DoubleClick;
+			mStatusLabel.DoubleClick += Control_DoubleClick;
 
 			mInputMenuItem.Index = 0;
 			mInputMenuItem.Text = "Input device";
@@ -67,7 +67,7 @@ namespace MixGui.Components
 			mResetMenuItem.DefaultItem = true;
 			mResetMenuItem.Index = 3;
 			mResetMenuItem.Text = "Reset";
-			mResetMenuItem.Click += mResetMenuItem_Click;
+			mResetMenuItem.Click += MResetMenuItem_Click;
 
 			mContextMenu.MenuItems.AddRange(new MenuItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
 			ContextMenu = mContextMenu;
@@ -81,9 +81,9 @@ namespace MixGui.Components
 			UpdateLayout();
 		}
 
-        void control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
+        void Control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
 
-        void mResetMenuItem_Click(object sender, EventArgs e)
+        void MResetMenuItem_Click(object sender, EventArgs e)
         {
             if (mDevice != null)
             {

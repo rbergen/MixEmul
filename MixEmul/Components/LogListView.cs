@@ -53,15 +53,15 @@ namespace MixGui.Components
 			mListView.TabIndex = 0;
 			mListView.View = View.Details;
 			mListView.BorderStyle = BorderStyle.FixedSingle;
-			mListView.DoubleClick += doubleClick;
-			mListView.KeyPress += mListView_KeyPress;
+			mListView.DoubleClick += This_DoubleClick;
+			mListView.KeyPress += MListView_KeyPress;
 
 			mClearButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
 			mClearButton.Name = "mClearButton";
 			mClearButton.TabIndex = 1;
 			mClearButton.Text = "&Clear";
 			mClearButton.Location = new Point(Width - mClearButton.Width, 0);
-			mClearButton.Click += mClearButton_Click;
+			mClearButton.Click += MClearButton_Click;
 
 			mListView.Size = new Size(mClearButton.Width - 8, Size.Height);
 
@@ -76,20 +76,20 @@ namespace MixGui.Components
 
         protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
-        void doubleClick(object sender, EventArgs args) => addressSelected();
+        void This_DoubleClick(object sender, EventArgs args) => HandleAddressSelected();
 
-        void mClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
+        void MClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
 
-        void mListView_KeyPress(object sender, KeyPressEventArgs e)
+        void MListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter)
 			{
 				e.Handled = true;
-				addressSelected();
+				HandleAddressSelected();
 			}
 		}
 
-        void addressSelected()
+        void HandleAddressSelected()
         {
             int selectedAddress = SelectedAddress;
             if (selectedAddress != noAddress) OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));

@@ -5,15 +5,15 @@ namespace MixAssembler.Finding
 {
 	public class AssemblyFindingCollection : Collection<AssemblyFinding>
 	{
-        public bool ContainsDebugs => contains(Severity.Debug);
+        public bool ContainsDebugs => Contains(Severity.Debug);
 
-        public bool ContainsErrors => contains(Severity.Error);
+        public bool ContainsErrors => Contains(Severity.Error);
 
-        public bool ContainsInfos => contains(Severity.Info);
+        public bool ContainsInfos => Contains(Severity.Info);
 
-        public bool ContainsWarnings => contains(Severity.Warning);
+        public bool ContainsWarnings => Contains(Severity.Warning);
 
-        bool contains(Severity severity)
+        bool Contains(Severity severity)
         {
             foreach (AssemblyFinding finding in Items)
             {

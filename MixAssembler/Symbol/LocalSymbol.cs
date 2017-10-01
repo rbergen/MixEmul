@@ -25,15 +25,15 @@ namespace MixAssembler.Symbol
 
         public override void SetValue(long value) => mAddresses.Add(value);
 
-        static bool isBackwardReferenceChar(char c) => c == 'B';
+        static bool IsBackwardReferenceChar(char c) => c == 'B';
 
-        static bool isDefinitionChar(char c) => c == 'H';
+        static bool IsDefinitionChar(char c) => c == 'H';
 
-        static bool isForwardReferenceChar(char c) => c == 'F';
+        static bool IsForwardReferenceChar(char c) => c == 'F';
 
-        static bool isLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) && isLocalSymbolChar(text[1]);
+        static bool IsLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) && IsLocalSymbolChar(text[1]);
 
-        static bool isLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
+        static bool IsLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
 
         public override bool IsValueDefined(int currentAddress) => false;
 
@@ -46,9 +46,9 @@ namespace MixAssembler.Symbol
 
         public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
         {
-            if (!isLocalSymbol(text)) return null;
+            if (!IsLocalSymbol(text)) return null;
 
-            if (!isDefinitionChar(text[1]))
+            if (!IsDefinitionChar(text[1]))
             {
                 status.ReportParsingError(sectionCharIndex + 1, 1, "local symbol reference found where definition was expected");
             }
@@ -67,7 +67,7 @@ namespace MixAssembler.Symbol
 
         public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
         {
-            if (!isLocalSymbol(text)) return null;
+            if (!IsLocalSymbol(text)) return null;
 
             char localSymbolChar = text[0];
             SymbolBase symbol = status.Symbols[new string(localSymbolChar, 1)];
@@ -84,13 +84,13 @@ namespace MixAssembler.Symbol
                 return symbol;
             }
 
-            if (isDefinitionChar(text[1]))
+            if (IsDefinitionChar(text[1]))
             {
                 status.ReportParsingError(sectionCharIndex + 1, 1, "local symbol definition found where reference was expected");
                 return symbol;
             }
 
-            return new reference((LocalSymbol)symbol, isForwardReferenceChar(text[1]) ? reference.Directions.Forwards : reference.Directions.Backwards);
+            return new Reference((LocalSymbol)symbol, IsForwardReferenceChar(text[1]) ? Reference.Directions.Forwards : Reference.Directions.Backwards);
         }
 
         public ICollection<long> Addresses
@@ -112,12 +112,12 @@ namespace MixAssembler.Symbol
             throw new NotImplementedException();
         }
 
-        class reference : IValue
+        class Reference : IValue
         {
             Directions mDirection;
             LocalSymbol mReferee;
 
-            public reference(LocalSymbol referee, Directions direction)
+            public Reference(LocalSymbol referee, Directions direction)
             {
                 mReferee = referee;
                 mDirection = direction;

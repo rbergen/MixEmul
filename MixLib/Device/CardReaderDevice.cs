@@ -36,20 +36,22 @@ namespace MixLib.Device
 		{
 			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardReaderInitialization), initializationDescription);
             FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new TextReadStep(recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+            {
+                NextStep = null
+            };
 
             FirstOutputDeviceStep = null;
             FirstIocDeviceStep = null;
 		}
 
-        class openStreamStep : StreamStep
+        class OpenStreamStep : StreamStep
         {
             public override string StatusDescription => openingDescription;
 

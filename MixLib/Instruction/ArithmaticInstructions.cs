@@ -18,7 +18,7 @@ namespace MixLib.Instruction
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
-			Register rA = module.Registers.rA;
+			Register rA = module.Registers.RA;
 			long rALongValue = rA.LongValue;
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 
@@ -61,8 +61,8 @@ namespace MixLib.Instruction
 				return true;
 			}
 
-			Register rA = module.Registers.rA;
-			Register rX = module.Registers.rX;
+			Register rA = module.Registers.RA;
+			Register rX = module.Registers.RX;
 
 			long rAValue = rA.LongValue;
 			long rXValue = rX.LongValue;
@@ -95,8 +95,8 @@ namespace MixLib.Instruction
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
-			Register rA = module.Registers.rA;
-			Register rX = module.Registers.rX;
+			Register rA = module.Registers.RA;
+			Register rX = module.Registers.RX;
 
 			long rAValue = rA.LongValue;
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;

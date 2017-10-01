@@ -30,7 +30,7 @@ namespace MixAssembler.Instruction
             mTextLength = textLength;
         }
 
-        bool areValuesDefined(AssemblingStatus status)
+        bool AreValuesDefined(AssemblingStatus status)
         {
             if (!mAddress.IsValueDefined(status.LocationCounter))
             {
@@ -68,7 +68,7 @@ namespace MixAssembler.Instruction
 
 			var mixInstruction = (MixInstruction)instruction;
 
-			if (!areValuesDefined(status)) return null;
+			if (!AreValuesDefined(status)) return null;
 
 			var addressMagnitude = mAddress.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
@@ -79,12 +79,14 @@ namespace MixAssembler.Instruction
 			}
 
 			word.MagnitudeLongValue = addressMagnitude;
-			var fieldSpecValue = getFieldSpecValue(status, mixInstruction);
+			var fieldSpecValue = GetFieldSpecValue(status, mixInstruction);
 			if (fieldSpecValue == null) return null;
 
-			var instructionWord = new FullWord();
-			instructionWord.Sign = mAddress.GetSign(status.LocationCounter);
-			for (int i = 0; i < word.ByteCount; i++)
+            var instructionWord = new FullWord
+            {
+                Sign = mAddress.GetSign(status.LocationCounter)
+            };
+            for (int i = 0; i < word.ByteCount; i++)
 			{
 				instructionWord[i] = word[i];
 			}
@@ -94,12 +96,12 @@ namespace MixAssembler.Instruction
 			instructionWord[MixInstruction.OpcodeByte] = mixInstruction.Opcode;
 
 			var instance = mixInstruction.CreateInstance(instructionWord);
-			reportInstanceErrors(status, instance);
+			ReportInstanceErrors(status, instance);
 
 			return instance;
 		}
 
-        MixByte getFieldSpecValue(AssemblingStatus status, MixInstruction mixInstruction)
+        MixByte GetFieldSpecValue(AssemblingStatus status, MixInstruction mixInstruction)
         {
             var fieldValue = mField.GetValue(status.LocationCounter);
 
@@ -174,7 +176,7 @@ namespace MixAssembler.Instruction
 			return new MixInstructionParameters(address, indexCharIndex, index, sectionCharIndex, field, addressField.Length);
 		}
 
-        void reportInstanceErrors(AssemblingStatus status, MixInstruction.Instance instance)
+        void ReportInstanceErrors(AssemblingStatus status, MixInstruction.Instance instance)
         {
             var errorArray = instance.Validate();
             if (errorArray != null)

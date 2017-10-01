@@ -66,7 +66,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void mFromAddressUpDown_ValueChanged(object sender, EventArgs e)
+        void MFromAddressUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (mToAddressUpDown.Value < mFromAddressUpDown.Value)
             {
@@ -74,7 +74,7 @@ namespace MixGui.Components
             }
         }
 
-        void mToAddressUpDown_ValueChanged(object sender, EventArgs e)
+        void MToAddressUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (mFromAddressUpDown.Value > mToAddressUpDown.Value)
             {

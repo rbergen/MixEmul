@@ -34,7 +34,7 @@ namespace MixGui.Components
 
 			mCharTextBox = new MixByteCollectionCharTextBox(mDeviceMixByteCollection);
 			mMixByteCollectionIndexLabel = new Label();
-			initializeComponent();
+			InitializeComponent();
 		}
 
         public Control EditorControl => this;
@@ -49,10 +49,10 @@ namespace MixGui.Components
 
         protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void mMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
+        void MMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
             OnValueChanged(args);
 
-        void initializeComponent()
+        void InitializeComponent()
         {
             SuspendLayout();
 
@@ -68,8 +68,8 @@ namespace MixGui.Components
             mCharTextBox.Location = new Point(mMixByteCollectionIndexLabel.Right, 0);
             mCharTextBox.Name = "mCharTextBox";
             mCharTextBox.TabIndex = 1;
-            mCharTextBox.ValueChanged += mMixByteCollectionEditor_ValueChanged;
-            mCharTextBox.NavigationKeyDown += keyDown;
+            mCharTextBox.ValueChanged += MMixByteCollectionEditor_ValueChanged;
+            mCharTextBox.NavigationKeyDown += This_KeyDown;
             mCharTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             mCharTextBox.BorderStyle = BorderStyle.None;
             mCharTextBox.Height = 13;
@@ -78,11 +78,11 @@ namespace MixGui.Components
             Controls.Add(mCharTextBox);
             Name = "DeviceMixByteCollectionEditor";
             Size = new Size(mCharTextBox.Right, mCharTextBox.Height);
-            KeyDown += keyDown;
+            KeyDown += This_KeyDown;
             ResumeLayout(false);
         }
 
-        void keyDown(object sender, KeyEventArgs e)
+        void This_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers != Keys.None) return;
 
@@ -124,11 +124,11 @@ namespace MixGui.Components
 				}
 
 				mMixByteCollectionIndex = value;
-				setIndexLabelText();
+				SetIndexLabelText();
 			}
 		}
 
-        void setIndexLabelText()
+        void SetIndexLabelText()
         {
             mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
         }
@@ -144,7 +144,7 @@ namespace MixGui.Components
 				if (mIndexCharCount == value) return;
 
 				mIndexCharCount = value;
-				setIndexLabelText();
+				SetIndexLabelText();
 
 				int oldCharBoxLeft = mCharTextBox.Left;
 				mCharTextBox.Left = mMixByteCollectionIndexLabel.Right + 3;
@@ -160,12 +160,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
-				}
-
-				mDeviceMixByteCollection = value;
+                mDeviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
 				mCharTextBox.MixByteCollectionValue = mDeviceMixByteCollection;
 				mCharTextBox.Select(0, 0);
 			}

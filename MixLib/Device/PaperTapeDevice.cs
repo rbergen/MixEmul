@@ -39,24 +39,28 @@ namespace MixLib.Device
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new TextReadStep(recordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+            {
+                NextStep = null
+            };
 
             FirstOutputDeviceStep = null;
 
 			nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstIocDeviceStep = nextStep;
-			nextStep.NextStep = new rewindStep();
-			nextStep.NextStep.NextStep = null;
-		}
+            nextStep.NextStep = new RewindStep
+            {
+                NextStep = null
+            };
+        }
 
-        class openStreamStep : StreamStep
+        class OpenStreamStep : StreamStep
         {
             public override string StatusDescription => openingDescription;
 
@@ -82,7 +86,7 @@ namespace MixLib.Device
             }
         }
 
-        class rewindStep : StreamStep
+        class RewindStep : StreamStep
         {
             public override string StatusDescription => rewindingDescription;
 

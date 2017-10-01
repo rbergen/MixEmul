@@ -28,22 +28,22 @@ namespace MixGui.Components
 			mSymbolValueTextBox.MaxValue = ValueSymbol.MaxValue;
 			mSymbolNameTextBox.MaxLength = ValueSymbol.MaxNameLength;
 
-			mSymbolNameTextBox.TextChanged += mSymbolNameTextBox_TextChanged;
-			mSymbolValueTextBox.TextChanged += mSymbolValueTextBox_TextChanged;
-			mListView.SelectedIndexChanged += mListView_SelectedIndexChanged;
+			mSymbolNameTextBox.TextChanged += MSymbolNameTextBox_TextChanged;
+			mSymbolValueTextBox.TextChanged += MSymbolValueTextBox_TextChanged;
+			mListView.SelectedIndexChanged += MListView_SelectedIndexChanged;
 		}
 
-		void mSymbolValueTextBox_TextChanged(object sender, EventArgs e) => setEnabledStates();
+		void MSymbolValueTextBox_TextChanged(object sender, EventArgs e) => SetEnabledStates();
 
-		void mSymbolNameTextBox_TextChanged(object sender, EventArgs e) => setEnabledStates();
+		void MSymbolNameTextBox_TextChanged(object sender, EventArgs e) => SetEnabledStates();
 
-        void setEnabledStates() => setEnabledStates(true);
+        void SetEnabledStates() => SetEnabledStates(true);
 
-        void mListView_DoubleClick(object sender, EventArgs e) => valueSelected();
+        void MListView_DoubleClick(object sender, EventArgs e) => ValueSelected();
 
         protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
 
-        void setEnabledStates(bool updateSelectedItem)
+        void SetEnabledStates(bool updateSelectedItem)
         {
             string symbolName = mSymbolNameTextBox.Text;
             mSetButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && mSymbolValueTextBox.TextLength > 0;
@@ -91,7 +91,7 @@ namespace MixGui.Components
 
 					foreach (SymbolBase symbol in mSymbols)
 					{
-						showSymbol(symbol);
+						ShowSymbol(symbol);
 					}
 
 					ResumeLayout();
@@ -110,14 +110,12 @@ namespace MixGui.Components
 
 			mSymbols.Add(symbol);
 
-			showSymbol(symbol);
+			ShowSymbol(symbol);
 		}
 
-        void showSymbol(SymbolBase symbol)
+        void ShowSymbol(SymbolBase symbol)
         {
-            var valueSymbol = symbol as ValueSymbol;
-
-            if (valueSymbol != null)
+            if (symbol is ValueSymbol valueSymbol)
             {
                 var valueText = valueSymbol.Magnitude.ToString();
                 if (valueSymbol.Sign.IsNegative())
@@ -125,8 +123,10 @@ namespace MixGui.Components
                     valueText = '-' + valueText;
                 }
 
-                var viewItem = new ListViewItem(new string[] { valueSymbol.Name, valueText });
-                viewItem.Name = valueSymbol.Name;
+                var viewItem = new ListViewItem(new string[] { valueSymbol.Name, valueText })
+                {
+                    Name = valueSymbol.Name
+                };
                 mListView.Items.Add(viewItem);
             }
         }
@@ -163,7 +163,7 @@ namespace MixGui.Components
 			}
 		}
 
-        void valueSelected()
+        void ValueSelected()
         {
             long selectedValue = SelectedValue;
             if (selectedValue >= MemoryMinIndex && selectedValue <= MemoryMaxIndex)
@@ -172,16 +172,16 @@ namespace MixGui.Components
             }
         }
 
-        void mListView_KeyPress(object sender, KeyPressEventArgs e)
+        void MListView_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
                 e.Handled = true;
-                valueSelected();
+                ValueSelected();
             }
         }
 
-        void mSetButton_Click(object sender, EventArgs e)
+        void MSetButton_Click(object sender, EventArgs e)
         {
             if (mSymbols == null)
             {
@@ -217,13 +217,13 @@ namespace MixGui.Components
                 valueSymbol.SetValue(symbolSign, symbolMagnitude);
 
                 mSymbols.Add(valueSymbol);
-                showSymbol(valueSymbol);
+                ShowSymbol(valueSymbol);
             }
 
-            setEnabledStates();
+            SetEnabledStates();
         }
 
-        void mUnsetButton_Click(object sender, EventArgs e)
+        void MUnsetButton_Click(object sender, EventArgs e)
         {
             if (mSymbols == null) return;
 
@@ -231,10 +231,10 @@ namespace MixGui.Components
             mSymbols.Remove(symbolName);
             mListView.Items.RemoveByKey(symbolName);
 
-            setEnabledStates();
+            SetEnabledStates();
         }
 
-        void mListView_SelectedIndexChanged(object sender, EventArgs e)
+        void MListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
@@ -260,7 +260,7 @@ namespace MixGui.Components
 
             mSymbolValueTextBox.Magnitude = magnitude;
             mSymbolValueTextBox.Sign = sign;
-            setEnabledStates(false);
+            SetEnabledStates(false);
         }
     }
 }

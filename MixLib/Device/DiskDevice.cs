@@ -41,35 +41,41 @@ namespace MixLib.Device
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new seekStep();
+			nextStep.NextStep = new SeekStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new BinaryReadStep(WordsPerSector);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(true, WordsPerSector);
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new WriteToMemoryStep(true, WordsPerSector)
+            {
+                NextStep = null
+            };
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+            nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerSector);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new openStreamStep();
+			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new seekStep();
+			nextStep.NextStep = new SeekStep();
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new BinaryWriteStep(WordsPerSector);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new CloseStreamStep();
-			nextStep.NextStep.NextStep = null;
+            nextStep.NextStep = new CloseStreamStep
+            {
+                NextStep = null
+            };
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+            nextStep = new NoOpStep(tickCount, initializationDescription);
             FirstIocDeviceStep = nextStep;
-			nextStep.NextStep = new seekStep();
-			nextStep.NextStep.NextStep = null;
-		}
+            nextStep.NextStep = new SeekStep
+            {
+                NextStep = null
+            };
+        }
 
 		public new static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 		{
@@ -87,7 +93,7 @@ namespace MixLib.Device
 			return stream;
 		}
 
-        class openStreamStep : StreamStep
+        class OpenStreamStep : StreamStep
         {
             public override string StatusDescription => openingDescription;
 
@@ -120,7 +126,7 @@ namespace MixLib.Device
             }
         }
 
-        class seekStep : StreamStep
+        class SeekStep : StreamStep
         {
             public override string StatusDescription => seekingDescription;
 

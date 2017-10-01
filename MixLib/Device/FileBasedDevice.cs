@@ -21,7 +21,7 @@ namespace MixLib.Device
 			mFileNamePrefix = fileNamePrefix;
 			mFilePath = null;
 			StreamStatus = new StreamStatus();
-			StreamStatus.ReportingEvent += streamStatus_Reporting;
+			StreamStatus.ReportingEvent += StreamStatus_Reporting;
 		}
 
         public string DefaultFileName => mFileNamePrefix + Id + "." + FileNameExtension;
@@ -31,7 +31,7 @@ namespace MixLib.Device
 
         public void CloseStream() => StreamStatus.CloseStream();
 
-        void streamStatus_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+        void StreamStatus_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
 
         protected override DeviceStep.Instance GetCurrentStepInstance() =>
 			CurrentStep is StreamStep ? ((StreamStep)CurrentStep).CreateStreamInstance(StreamStatus) 
