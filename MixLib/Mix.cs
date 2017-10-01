@@ -20,7 +20,6 @@ namespace MixLib
         const int memoryMinIndex = -3999;
         const int memoryMaxIndex = 3999;
         const int timerMemoryAddress = -10;
-        static readonly long[] loaderInstructionValues = { 1060, 4457506, 103 };
 
         Devices mDevices = new Devices();
         Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);

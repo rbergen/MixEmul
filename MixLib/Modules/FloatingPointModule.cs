@@ -114,7 +114,7 @@ namespace MixLib.Modules
 			mExitAddress = getSymbolAddress(exitSymbol);
 			mUnexpectedOverflowAddress = getSymbolAddress(unexpectedOverflowSymbol);
 			mExponentOverflowAddress = getSymbolAddress(exponentOverflowSymbol);
-			mExponentUnderflowAddress = getSymbolAddress(exponentOverflowSymbol);
+			mExponentUnderflowAddress = getSymbolAddress(exponentUnderflowSymbol);
 			mFixOverflowAddress = getSymbolAddress(fixOverflowSymbol);
 			mDivisionByZeroAddress = getSymbolAddress(divisionByZeroSymbol);
 
