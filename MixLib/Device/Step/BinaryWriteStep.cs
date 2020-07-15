@@ -1,25 +1,25 @@
-using System;
-using System.IO;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
+using System;
+using System.IO;
 
 namespace MixLib.Device.Step
 {
-    public class BinaryWriteStep : StreamStep
+	public class BinaryWriteStep : StreamStep
 	{
-        int mRecordWordCount;
-        const string statusDescription = "Writing binary data";
+		int mRecordWordCount;
+		const string statusDescription = "Writing binary data";
 
-        public BinaryWriteStep(int recordWordCount)
+		public BinaryWriteStep(int recordWordCount)
 		{
 			mRecordWordCount = recordWordCount;
 		}
 
-        public override string StatusDescription => statusDescription;
+		public override string StatusDescription => statusDescription;
 
-        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => 
-            new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) =>
+				new Instance(streamStatus, mRecordWordCount);
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)
 		{
@@ -53,40 +53,40 @@ namespace MixLib.Device.Step
 			stream.Flush();
 		}
 
-        new class Instance : StreamStep.Instance
-        {
-            int mRecordWordCount;
-            MixByte[] mWriteBytes;
+		new class Instance : StreamStep.Instance
+		{
+			int mRecordWordCount;
+			MixByte[] mWriteBytes;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
-            {
-                mRecordWordCount = recordWordCount;
-            }
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
+			{
+				mRecordWordCount = recordWordCount;
+			}
 
-            public override bool Tick()
-            {
-                if (StreamStatus.Stream == null || mWriteBytes == null) return true;
+			public override bool Tick()
+			{
+				if (StreamStatus.Stream == null || mWriteBytes == null) return true;
 
-                try
-                {
-                    WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
-                    StreamStatus.UpdatePosition();
-                }
-                catch (Exception exception)
-                {
-                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
-                }
+				try
+				{
+					WriteBytes(StreamStatus.Stream, mRecordWordCount, mWriteBytes);
+					StreamStatus.UpdatePosition();
+				}
+				catch (Exception exception)
+				{
+					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while writing file " + StreamStatus.FileName + ": " + exception.Message));
+				}
 
-                return true;
-            }
+				return true;
+			}
 
-            public override object InputFromPreviousStep
-            {
-                set
-                {
-                    mWriteBytes = (MixByte[])value;
-                }
-            }
-        }
-    }
+			public override object InputFromPreviousStep
+			{
+				set
+				{
+					mWriteBytes = (MixByte[])value;
+				}
+			}
+		}
+	}
 }

@@ -2,7 +2,7 @@ using MixLib.Misc;
 
 namespace MixAssembler.Finding
 {
-    public class ValidationFinding : AssemblyFinding
+	public class ValidationFinding : AssemblyFinding
 	{
 		public ValidationError Error { get; private set; }
 

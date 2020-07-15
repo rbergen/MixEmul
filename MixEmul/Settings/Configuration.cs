@@ -1,3 +1,4 @@
+using MixLib.Device.Settings;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -5,39 +6,38 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using MixLib.Device.Settings;
 
 namespace MixGui.Settings
 {
 	[Serializable]
 	public class Configuration : ISerializable, IDeserializationCallback
 	{
-        const string fileName = "config.bin";
-        readonly SerializationInfo mSerializationInfo;
-        string mDeviceFilesDirectory;
+		const string fileName = "config.bin";
+		readonly SerializationInfo mSerializationInfo;
+		string mDeviceFilesDirectory;
 
-        public Dictionary<string, Color> Colors { get; private set; }
-        public Dictionary<int, string> DeviceFilePaths { get; private set; }
-        public string[] LoaderCards { get; set; }
-        public bool DeviceEditorVisible { get; set; }
-        public Point DeviceEditorWindowLocation { get; set; }
-        public Size DeviceEditorWindowSize { get; set; }
-        public Point MainWindowLocation { get; set; }
-        public Size MainWindowSize { get; set; }
-        public FormWindowState MainWindowState { get; set; }
-        public bool TeletypeEchoInput { get; set; }
-        public bool TeletypeOnTop { get; set; }
-        public bool TeletypeVisible { get; set; }
-        public Point TeletypeWindowLocation { get; set; }
-        public Size TeletypeWindowSize { get; set; }
-        public int DeviceReloadInterval { get; set; }
-        public int? FloatingPointMemoryWordCount { get; set; }
-        public bool ProfilingEnabled { get; set; }
-        public Dictionary<string, int> TickCounts { get; set; }
-        public GuiSettings.ProfilingInfoType ShowProfilingInfo { get; set; }
-        public bool ColorProfilingCounts { get; set; }
+		public Dictionary<string, Color> Colors { get; private set; }
+		public Dictionary<int, string> DeviceFilePaths { get; private set; }
+		public string[] LoaderCards { get; set; }
+		public bool DeviceEditorVisible { get; set; }
+		public Point DeviceEditorWindowLocation { get; set; }
+		public Size DeviceEditorWindowSize { get; set; }
+		public Point MainWindowLocation { get; set; }
+		public Size MainWindowSize { get; set; }
+		public FormWindowState MainWindowState { get; set; }
+		public bool TeletypeEchoInput { get; set; }
+		public bool TeletypeOnTop { get; set; }
+		public bool TeletypeVisible { get; set; }
+		public Point TeletypeWindowLocation { get; set; }
+		public Size TeletypeWindowSize { get; set; }
+		public int DeviceReloadInterval { get; set; }
+		public int? FloatingPointMemoryWordCount { get; set; }
+		public bool ProfilingEnabled { get; set; }
+		public Dictionary<string, int> TickCounts { get; set; }
+		public GuiSettings.ProfilingInfoType ShowProfilingInfo { get; set; }
+		public bool ColorProfilingCounts { get; set; }
 
-        public Configuration()
+		public Configuration()
 		{
 			TeletypeWindowSize = Size.Empty;
 			TeletypeWindowLocation = Point.Empty;
@@ -57,25 +57,25 @@ namespace MixGui.Settings
 			mSerializationInfo = info;
 		}
 
-        void FillEmptyMembers()
-        {
-            if (Colors == null)
-            {
-                Colors = new Dictionary<string, Color>();
-            }
+		void FillEmptyMembers()
+		{
+			if (Colors == null)
+			{
+				Colors = new Dictionary<string, Color>();
+			}
 
-            if (TickCounts == null)
-            {
-                TickCounts = new Dictionary<string, int>();
-            }
+			if (TickCounts == null)
+			{
+				TickCounts = new Dictionary<string, int>();
+			}
 
-            if (DeviceFilePaths == null)
-            {
-                DeviceFilePaths = new Dictionary<int, string>();
-            }
-        }
+			if (DeviceFilePaths == null)
+			{
+				DeviceFilePaths = new Dictionary<int, string>();
+			}
+		}
 
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("mColors", Colors);
 			info.AddValue("mTickCounts", TickCounts);
@@ -130,7 +130,7 @@ namespace MixGui.Settings
 			serializationStream.Close();
 		}
 
-        public string DeviceFilesDirectory
+		public string DeviceFilesDirectory
 		{
 			get
 			{
@@ -164,17 +164,17 @@ namespace MixGui.Settings
 			}
 			catch (SystemException) { }
 
-            try
-            {
-                TickCounts = (Dictionary<string, int>)mSerializationInfo.GetValue("mTickCounts", typeof(Dictionary<string, int>));
-            }
-            catch (SystemException) { }
+			try
+			{
+				TickCounts = (Dictionary<string, int>)mSerializationInfo.GetValue("mTickCounts", typeof(Dictionary<string, int>));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                DeviceFilePaths = (Dictionary<int, string>)mSerializationInfo.GetValue("mDeviceFiles", typeof(Dictionary<int, string>));
-            }
-            catch (SystemException) { }
+			try
+			{
+				DeviceFilePaths = (Dictionary<int, string>)mSerializationInfo.GetValue("mDeviceFiles", typeof(Dictionary<int, string>));
+			}
+			catch (SystemException) { }
 
 			try
 			{
@@ -182,107 +182,107 @@ namespace MixGui.Settings
 			}
 			catch (SystemException) { }
 
-            try
-            {
-                DeviceEditorWindowLocation = (Point)mSerializationInfo.GetValue("mDeviceEditorWindowLocation", typeof(Point));
-            }
-            catch (SystemException) { }
+			try
+			{
+				DeviceEditorWindowLocation = (Point)mSerializationInfo.GetValue("mDeviceEditorWindowLocation", typeof(Point));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                DeviceEditorWindowSize = (Size)mSerializationInfo.GetValue("mDeviceEditorWindowSize", typeof(Size));
-            }
-            catch (SystemException) { }
+			try
+			{
+				DeviceEditorWindowSize = (Size)mSerializationInfo.GetValue("mDeviceEditorWindowSize", typeof(Size));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                DeviceEditorVisible = mSerializationInfo.GetBoolean("mDeviceEditorVisible");
-            }
-            catch (SystemException) { }
+			try
+			{
+				DeviceEditorVisible = mSerializationInfo.GetBoolean("mDeviceEditorVisible");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                MainWindowLocation = (Point)mSerializationInfo.GetValue("mMainWindowLocation", typeof(Point));
-            }
-            catch (SystemException) { }
+			try
+			{
+				MainWindowLocation = (Point)mSerializationInfo.GetValue("mMainWindowLocation", typeof(Point));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                MainWindowSize = (Size)mSerializationInfo.GetValue("mMainWindowSize", typeof(Size));
-            }
-            catch (SystemException) { }
+			try
+			{
+				MainWindowSize = (Size)mSerializationInfo.GetValue("mMainWindowSize", typeof(Size));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                MainWindowState = (FormWindowState)mSerializationInfo.GetValue("mMainWindowState", typeof(FormWindowState));
-            }
-            catch (SystemException) { }
+			try
+			{
+				MainWindowState = (FormWindowState)mSerializationInfo.GetValue("mMainWindowState", typeof(FormWindowState));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                TeletypeOnTop = mSerializationInfo.GetBoolean("mTeletypeOnTop");
-            }
-            catch (SystemException) { }
+			try
+			{
+				TeletypeOnTop = mSerializationInfo.GetBoolean("mTeletypeOnTop");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                TeletypeWindowLocation = (Point)mSerializationInfo.GetValue("mTeletypeWindowLocation", typeof(Point));
-            }
-            catch (SystemException) { }
+			try
+			{
+				TeletypeWindowLocation = (Point)mSerializationInfo.GetValue("mTeletypeWindowLocation", typeof(Point));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                TeletypeWindowSize = (Size)mSerializationInfo.GetValue("mTeletypeWindowSize", typeof(Size));
-            }
-            catch (SystemException) { }
+			try
+			{
+				TeletypeWindowSize = (Size)mSerializationInfo.GetValue("mTeletypeWindowSize", typeof(Size));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                TeletypeVisible = mSerializationInfo.GetBoolean("mTeletypeVisible");
-            }
-            catch (SystemException) { }
+			try
+			{
+				TeletypeVisible = mSerializationInfo.GetBoolean("mTeletypeVisible");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                TeletypeEchoInput = mSerializationInfo.GetBoolean("mTeletypeEchoInput");
-            }
-            catch (SystemException) { }
+			try
+			{
+				TeletypeEchoInput = mSerializationInfo.GetBoolean("mTeletypeEchoInput");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                DeviceReloadInterval = mSerializationInfo.GetInt32("mDeviceReloadInterval");
-            }
-            catch (SystemException) { }
+			try
+			{
+				DeviceReloadInterval = mSerializationInfo.GetInt32("mDeviceReloadInterval");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                LoaderCards = (string[])mSerializationInfo.GetValue("mLoaderCards", typeof(string[]));
-            }
-            catch (SystemException) { }
+			try
+			{
+				LoaderCards = (string[])mSerializationInfo.GetValue("mLoaderCards", typeof(string[]));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                FloatingPointMemoryWordCount = (int?)mSerializationInfo.GetValue("mFloatingPointMemoryWordCount", typeof(int?));
-            }
-            catch (SystemException) { }
+			try
+			{
+				FloatingPointMemoryWordCount = (int?)mSerializationInfo.GetValue("mFloatingPointMemoryWordCount", typeof(int?));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                ProfilingEnabled = mSerializationInfo.GetBoolean("mProfilingEnabled");
-            }
-            catch (SystemException) { }
+			try
+			{
+				ProfilingEnabled = mSerializationInfo.GetBoolean("mProfilingEnabled");
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                ShowProfilingInfo = (GuiSettings.ProfilingInfoType)mSerializationInfo.GetValue("mShowProfilingInfo", typeof(GuiSettings.ProfilingInfoType));
-            }
-            catch (SystemException) { }
+			try
+			{
+				ShowProfilingInfo = (GuiSettings.ProfilingInfoType)mSerializationInfo.GetValue("mShowProfilingInfo", typeof(GuiSettings.ProfilingInfoType));
+			}
+			catch (SystemException) { }
 
-            try
-            {
-                ColorProfilingCounts = mSerializationInfo.GetBoolean("mColorProfilingCounts");
-            }
-            catch (SystemException) { }
+			try
+			{
+				ColorProfilingCounts = mSerializationInfo.GetBoolean("mColorProfilingCounts");
+			}
+			catch (SystemException) { }
 
 			FillEmptyMembers();
 		}

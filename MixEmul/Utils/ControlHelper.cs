@@ -5,9 +5,9 @@ namespace MixGui.Utils
 {
 	public static class ControlHelper
 	{
-        const int WM_SETREDRAW = 0x000B;
+		const int WM_SETREDRAW = 0x000B;
 
-        public static void SuspendDrawing(this Control control)
+		public static void SuspendDrawing(this Control control)
 		{
 			var msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero,
 					IntPtr.Zero);

@@ -1,23 +1,23 @@
+using MixGui.Settings;
+using MixLib.Device;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using MixGui.Settings;
-using MixLib.Device;
 
 namespace MixGui.Components
 {
 	public class DeviceStatusControl : UserControl
 	{
-        ContextMenu mContextMenu;
-        MenuItem mContextSeparator;
-        MixDevice mDevice;
-        Label mIndexLabel;
-        MenuItem mInputMenuItem;
-        MenuItem mOutputMenuItem;
-        MenuItem mResetMenuItem;
-        Label mStatusLabel;
+		ContextMenu mContextMenu;
+		MenuItem mContextSeparator;
+		MixDevice mDevice;
+		Label mIndexLabel;
+		MenuItem mInputMenuItem;
+		MenuItem mOutputMenuItem;
+		MenuItem mResetMenuItem;
+		Label mStatusLabel;
 
-        public ToolTip ToolTip { get; set; }
+		public ToolTip ToolTip { get; set; }
 
 		public DeviceStatusControl()
 			: this(null)
@@ -81,18 +81,18 @@ namespace MixGui.Components
 			UpdateLayout();
 		}
 
-        void Control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
+		void Control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
 
-        void MResetMenuItem_Click(object sender, EventArgs e)
-        {
-            if (mDevice != null)
-            {
-                mDevice.Reset();
-                Update();
-            }
-        }
+		void MResetMenuItem_Click(object sender, EventArgs e)
+		{
+			if (mDevice != null)
+			{
+				mDevice.Reset();
+				Update();
+			}
+		}
 
-        public new void Update()
+		public new void Update()
 		{
 			if (Device == null)
 			{

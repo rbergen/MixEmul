@@ -8,12 +8,12 @@ namespace MixLib.Modules.Settings
 		public const string FloatingPointProgramFileDefault = "floatingpoint.mixal";
 		public const string ControlProgramFileDefault = "control.mixal";
 
-        static bool? mFloatingPointEnabled;
-        static string mFloatingPointProgramFile;
-        static string mControlProgramFile;
-        static int? mFloatingPointMemoryWordCount;
+		static bool? mFloatingPointEnabled;
+		static string mFloatingPointProgramFile;
+		static string mControlProgramFile;
+		static int? mFloatingPointMemoryWordCount;
 
-        public static bool FloatingPointEnabled
+		public static bool FloatingPointEnabled
 		{
 			get
 			{
@@ -33,14 +33,14 @@ namespace MixLib.Modules.Settings
 			}
 			set
 			{
-                if (!value)
-                {
-                    mFloatingPointEnabled = null;
-                }
-                else if (mFloatingPointEnabled == null)
-                {
-                    mFloatingPointEnabled = FloatingPointEnabledDefault;
-                }
+				if (!value)
+				{
+					mFloatingPointEnabled = null;
+				}
+				else if (mFloatingPointEnabled == null)
+				{
+					mFloatingPointEnabled = FloatingPointEnabledDefault;
+				}
 			}
 		}
 
@@ -88,14 +88,14 @@ namespace MixLib.Modules.Settings
 			}
 			set
 			{
-                if (!value)
-                {
-                    mFloatingPointMemoryWordCount = null;
-                }
+				if (!value)
+				{
+					mFloatingPointMemoryWordCount = null;
+				}
 				else if (mFloatingPointMemoryWordCount == null)
-                {
-                    mFloatingPointMemoryWordCount = FloatingPointMemoryWordCountDefault;
-                }
+				{
+					mFloatingPointMemoryWordCount = FloatingPointMemoryWordCountDefault;
+				}
 			}
 		}
 	}

@@ -5,30 +5,30 @@ namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-        long mLiteralMagnitude;
-        Word.Signs mLiteralSign;
-        long mMagnitude;
-        Word.Signs mSign;
-        bool mValueDefined;
+		long mLiteralMagnitude;
+		Word.Signs mLiteralSign;
+		long mMagnitude;
+		Word.Signs mSign;
+		bool mValueDefined;
 
-        LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
-        {
-            mLiteralSign = literalSign;
-            mLiteralMagnitude = literalMagnitude;
-            mMagnitude = -1L;
-            mSign = Word.Signs.Positive;
-            mValueDefined = false;
-        }
+		LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
+		{
+			mLiteralSign = literalSign;
+			mLiteralMagnitude = literalMagnitude;
+			mMagnitude = -1L;
+			mSign = Word.Signs.Positive;
+			mValueDefined = false;
+		}
 
-        public override bool IsSymbolDefined => mValueDefined;
+		public override bool IsSymbolDefined => mValueDefined;
 
-        public override long MemoryWordMagnitude => mLiteralMagnitude;
+		public override long MemoryWordMagnitude => mLiteralMagnitude;
 
-        public override Word.Signs MemoryWordSign => mLiteralSign;
+		public override Word.Signs MemoryWordSign => mLiteralSign;
 
-        public override long MemoryWordValue => mLiteralSign.ApplyTo(mLiteralMagnitude);
+		public override long MemoryWordValue => mLiteralSign.ApplyTo(mLiteralMagnitude);
 
-        public override long GetValue(int currentAddress) => mSign.ApplyTo(mMagnitude);
+		public override long GetValue(int currentAddress) => mSign.ApplyTo(mMagnitude);
 
 		public override long GetMagnitude(int currentAddress) => mMagnitude;
 
@@ -36,10 +36,10 @@ namespace MixAssembler.Symbol
 
 		public override bool IsValueDefined(int currentAddress) => mValueDefined;
 
-        static string GetName(Word.Signs literalSign, long literalMagnitude, int count) =>
-            string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
+		static string GetName(Word.Signs literalSign, long literalMagnitude, int count) =>
+				string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
 
-        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=') return null;
 
@@ -65,7 +65,7 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-            mSign = value.GetSign();
+			mSign = value.GetSign();
 			mMagnitude = value.GetMagnitude();
 			mValueDefined = true;
 		}

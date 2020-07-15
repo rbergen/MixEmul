@@ -1,6 +1,6 @@
 namespace MixGui.Components
 {
-  public interface IEscapeConsumer
-  {
-  }
+	public interface IEscapeConsumer
+	{
+	}
 }

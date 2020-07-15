@@ -1,6 +1,6 @@
+using MixLib.Type;
 using System;
 using System.Collections.Generic;
-using MixLib.Type;
 
 namespace MixAssembler.Value
 {
@@ -9,13 +9,13 @@ namespace MixAssembler.Value
 	/// </summary>
 	public static class ExpressionValue
 	{
-        const int fullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
-        const long fullWordModulusMask = 1L << fullWordBitCount;
+		const int fullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
+		const long fullWordModulusMask = 1L << fullWordBitCount;
 
-        // Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-        static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new OperationComparator());
+		// Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
+		static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new OperationComparator());
 
-        static ExpressionValue()
+		static ExpressionValue()
 		{
 			mBinaryOperations["+"] = DoAdd;
 			mBinaryOperations["-"] = DoSubstract;
@@ -25,30 +25,30 @@ namespace MixAssembler.Value
 			mBinaryOperations[":"] = DoCalculateField;
 		}
 
-        static IValue DoAdd(IValue left, IValue right, int currentAddress) =>
-            new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoAdd(IValue left, IValue right, int currentAddress) =>
+				new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue DoCalculateField(IValue left, IValue right, int currentAddress) =>
-            new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoCalculateField(IValue left, IValue right, int currentAddress) =>
+				new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue DoDivide(IValue left, IValue right, int currentAddress) =>
-            new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoDivide(IValue left, IValue right, int currentAddress) =>
+				new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue DoMultiply(IValue left, IValue right, int currentAddress) =>
-            new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoMultiply(IValue left, IValue right, int currentAddress) =>
+				new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue DoSubstract(IValue left, IValue right, int currentAddress) =>
-            new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoSubstract(IValue left, IValue right, int currentAddress) =>
+				new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
 
-        static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
-        {
-            var divider = new decimal(left.GetValue(currentAddress));
-            divider *= fullWordModulusMask;
-            divider /= right.GetValue(currentAddress);
-            return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
-        }
+		static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
+		{
+			var divider = new decimal(left.GetValue(currentAddress));
+			divider *= fullWordModulusMask;
+			divider /= right.GetValue(currentAddress);
+			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
+		}
 
-        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length != 0)
 			{
@@ -109,19 +109,19 @@ namespace MixAssembler.Value
 			return null;
 		}
 
-        // compare operators. Longer operators end up higher than shorter ones
-        class OperationComparator : IComparer<string>
-        {
-            public int Compare(string left, string right)
-            {
-                var lengthComparison = left.Length.CompareTo(right.Length);
+		// compare operators. Longer operators end up higher than shorter ones
+		class OperationComparator : IComparer<string>
+		{
+			public int Compare(string left, string right)
+			{
+				var lengthComparison = left.Length.CompareTo(right.Length);
 
-                if (lengthComparison == 0) return string.Compare(left, right, StringComparison.Ordinal);
+				if (lengthComparison == 0) return string.Compare(left, right, StringComparison.Ordinal);
 
-                return -lengthComparison;
-            }
-        }
+				return -lengthComparison;
+			}
+		}
 
-        delegate IValue operationDelegate(IValue left, IValue right, int currentAddress);
-    }
+		delegate IValue operationDelegate(IValue left, IValue right, int currentAddress);
+	}
 }

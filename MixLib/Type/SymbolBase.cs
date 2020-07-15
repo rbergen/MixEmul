@@ -3,22 +3,22 @@ namespace MixLib.Type
 
 	public abstract class SymbolBase : IValue
 	{
-        public string Name { get; private set; }
+		public string Name { get; private set; }
 
-        protected SymbolBase(string name)
+		protected SymbolBase(string name)
 		{
 			Name = name;
 		}
 
-        public virtual long MemoryWordValue => 0L;
+		public virtual long MemoryWordValue => 0L;
 
-        public virtual long MemoryWordMagnitude => 0L;
+		public virtual long MemoryWordMagnitude => 0L;
 
-        public virtual Word.Signs MemoryWordSign => Word.Signs.Positive;
+		public virtual Word.Signs MemoryWordSign => Word.Signs.Positive;
 
-        public virtual bool IsMultiValuedSymbol => false;
+		public virtual bool IsMultiValuedSymbol => false;
 
-        public abstract long GetValue(int currentAddress);
+		public abstract long GetValue(int currentAddress);
 
 		public abstract bool IsValueDefined(int currentAddress);
 

@@ -22,7 +22,7 @@ namespace MixAssembler.Value
 				// parse the address part...
 				var braceIndex = part.IndexOf('(');
 				var address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part.Substring(0, braceIndex), sectionCharIndex + currentIndex, status);
-                if (address == null) return null;
+				if (address == null) return null;
 
 				// ... and check if it is valid
 				var addressSign = address.GetSign(status.LocationCounter);

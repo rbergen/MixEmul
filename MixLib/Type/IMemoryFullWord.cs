@@ -7,7 +7,7 @@ namespace MixLib.Type
 
 		string SourceLine { get; set; }
 
-        long ProfilingTickCount { get; }
+		long ProfilingTickCount { get; }
 
 		long ProfilingExecutionCount { get; }
 

@@ -1,7 +1,7 @@
-using System;
 using MixAssembler.Value;
 using MixLib.Instruction;
 using MixLib.Type;
+using System;
 
 namespace MixAssembler.Instruction
 {
@@ -13,15 +13,15 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-        int mTextLength;
-        IValue mValue;
+		int mTextLength;
+		IValue mValue;
 
-        /// <summary>
-        /// Constructor for this class. 
-        /// </summary>
-        /// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
-        /// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
-        public LoaderInstructionParameters(IValue value, int textLength)
+		/// <summary>
+		/// Constructor for this class. 
+		/// </summary>
+		/// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
+		/// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
+		public LoaderInstructionParameters(IValue value, int textLength)
 		{
 			mValue = value;
 			mTextLength = textLength;

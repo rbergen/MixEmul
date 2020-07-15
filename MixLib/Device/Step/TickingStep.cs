@@ -10,7 +10,7 @@ namespace MixLib.Device.Step
 		}
 
 		public sealed override DeviceStep.Instance CreateInstance() => CreateTickingInstance();
-	
+
 		protected abstract Instance CreateTickingInstance();
 
 		protected abstract new class Instance : DeviceStep.Instance
@@ -26,7 +26,7 @@ namespace MixLib.Device.Step
 
 			protected abstract void ProcessTick();
 
-            public sealed override bool Tick()
+			public sealed override bool Tick()
 			{
 				ProcessTick();
 				CurrentTick++;

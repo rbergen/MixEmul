@@ -7,7 +7,7 @@ namespace MixLib.Type
 	{
 		MixByte this[int index] { get; set; }
 
-        int MaxByteCount { get; }
+		int MaxByteCount { get; }
 
 		void Load(string text);
 

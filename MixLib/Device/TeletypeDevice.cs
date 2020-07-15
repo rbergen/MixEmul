@@ -1,25 +1,25 @@
-using System;
-using System.Collections;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Type;
+using System;
+using System.Collections;
 
 namespace MixLib.Device
 {
 	public class TeletypeDevice : MixDevice
 	{
-        const string shortName = "TTY";
+		const string shortName = "TTY";
 
-        const string initializationDescription = "Initializing teletype";
-        const string readingDescription = "Reading line from teletype";
-        const string writingDescription = "Writing line to teletype";
+		const string initializationDescription = "Initializing teletype";
+		const string readingDescription = "Reading line from teletype";
+		const string writingDescription = "Writing line to teletype";
 
-        const int recordWordCount = 14;
+		const int recordWordCount = 14;
 
-        Queue mInputBuffer;
-        Queue mOutputBuffer;
+		Queue mInputBuffer;
+		Queue mOutputBuffer;
 
-        public event EventHandler InputRequired;
+		public event EventHandler InputRequired;
 
 		public event EventHandler OutputAdded;
 
@@ -28,23 +28,23 @@ namespace MixLib.Device
 			UpdateSettings();
 		}
 
-        public override int RecordWordCount => recordWordCount;
+		public override int RecordWordCount => recordWordCount;
 
-        public override string ShortName => shortName;
+		public override string ShortName => shortName;
 
-        public override bool SupportsInput => true;
+		public override bool SupportsInput => true;
 
-        public override bool SupportsOutput => true;
+		public override bool SupportsOutput => true;
 
-        public void AddInputLine(string line) => mInputBuffer.Enqueue(line);
+		public void AddInputLine(string line) => mInputBuffer.Enqueue(line);
 
-        public string GetOutputLine() => mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
+		public string GetOutputLine() => mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
 
-        void This_InputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
+		void This_InputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
 
-        void This_OutputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
+		void This_OutputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
 
-        protected override DeviceStep.Instance GetCurrentStepInstance()
+		protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
 			if (CurrentStep is ReadLineStep)
 			{
@@ -73,144 +73,144 @@ namespace MixLib.Device
 			mOutputBuffer = Queue.Synchronized(new Queue());
 
 			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
-            FirstInputDeviceStep = nextStep;
+			FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadLineStep(mInputBuffer);
 			nextStep = nextStep.NextStep;
-            nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
-            {
-                NextStep = null
-            };
+			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+			{
+				NextStep = null
+			};
 
-            nextStep = new NoOpStep(tickCount, initializationDescription);
-            FirstOutputDeviceStep = nextStep;
+			nextStep = new NoOpStep(tickCount, initializationDescription);
+			FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
 			nextStep = nextStep.NextStep;
-            nextStep.NextStep = new WriteLineStep(mOutputBuffer)
-            {
-                NextStep = null
-            };
+			nextStep.NextStep = new WriteLineStep(mOutputBuffer)
+			{
+				NextStep = null
+			};
 
-            FirstIocDeviceStep = null;
+			FirstIocDeviceStep = null;
 		}
 
-        class ReadLineStep : DeviceStep
-        {
-            Queue mInputBuffer;
+		class ReadLineStep : DeviceStep
+		{
+			Queue mInputBuffer;
 
-            public ReadLineStep(Queue inputBuffer)
-            {
-                mInputBuffer = inputBuffer;
-            }
+			public ReadLineStep(Queue inputBuffer)
+			{
+				mInputBuffer = inputBuffer;
+			}
 
-            public override string StatusDescription => readingDescription;
+			public override string StatusDescription => readingDescription;
 
-            public override DeviceStep.Instance CreateInstance() => new Instance(mInputBuffer);
+			public override DeviceStep.Instance CreateInstance() => new Instance(mInputBuffer);
 
-            public new class Instance : DeviceStep.Instance
-            {
-                readonly Queue mInputBuffer;
-                MixByte[] mReadBytes;
+			public new class Instance : DeviceStep.Instance
+			{
+				readonly Queue mInputBuffer;
+				MixByte[] mReadBytes;
 
-                public event EventHandler InputRequired;
+				public event EventHandler InputRequired;
 
-                public Instance(Queue inputBuffer)
-                {
-                    mInputBuffer = inputBuffer;
-                }
+				public Instance(Queue inputBuffer)
+				{
+					mInputBuffer = inputBuffer;
+				}
 
-                public override object OutputForNextStep => mReadBytes;
+				public override object OutputForNextStep => mReadBytes;
 
-                public override bool Tick()
-                {
-                    if (mInputBuffer.Count == 0)
-                    {
-                        InputRequired(this, new EventArgs());
-                        return false;
-                    }
+				public override bool Tick()
+				{
+					if (mInputBuffer.Count == 0)
+					{
+						InputRequired(this, new EventArgs());
+						return false;
+					}
 
-                    string stringToRead = (mInputBuffer.Count == 0) ? "" : ((string)mInputBuffer.Dequeue());
-                    mReadBytes = new MixByte[FullWord.ByteCount * recordWordCount];
+					string stringToRead = (mInputBuffer.Count == 0) ? "" : ((string)mInputBuffer.Dequeue());
+					mReadBytes = new MixByte[FullWord.ByteCount * recordWordCount];
 
-                    var bytesToReadCount = Math.Min(stringToRead.Length, mReadBytes.Length);
-                    int index = 0;
+					var bytesToReadCount = Math.Min(stringToRead.Length, mReadBytes.Length);
+					int index = 0;
 
-                    while (index < bytesToReadCount)
-                    {
-                        mReadBytes[index] = stringToRead[index];
-                        index++;
-                    }
+					while (index < bytesToReadCount)
+					{
+						mReadBytes[index] = stringToRead[index];
+						index++;
+					}
 
-                    while (index < mReadBytes.Length)
-                    {
-                        mReadBytes[index] = 0;
-                        index++;
-                    }
+					while (index < mReadBytes.Length)
+					{
+						mReadBytes[index] = 0;
+						index++;
+					}
 
-                    return true;
-                }
-            }
-        }
+					return true;
+				}
+			}
+		}
 
-        class WriteLineStep : DeviceStep
-        {
-            Queue mOutputBuffer;
+		class WriteLineStep : DeviceStep
+		{
+			Queue mOutputBuffer;
 
-            public WriteLineStep(Queue outputBuffer)
-            {
-                mOutputBuffer = outputBuffer;
-            }
+			public WriteLineStep(Queue outputBuffer)
+			{
+				mOutputBuffer = outputBuffer;
+			}
 
-            public override string StatusDescription => writingDescription;
+			public override string StatusDescription => writingDescription;
 
-            public override DeviceStep.Instance CreateInstance() => new Instance(mOutputBuffer);
+			public override DeviceStep.Instance CreateInstance() => new Instance(mOutputBuffer);
 
-            public new class Instance : DeviceStep.Instance
-            {
-                Queue mOutputBuffer;
-                MixByte[] mWriteBytes;
+			public new class Instance : DeviceStep.Instance
+			{
+				Queue mOutputBuffer;
+				MixByte[] mWriteBytes;
 
-                public event EventHandler OutputAdded;
+				public event EventHandler OutputAdded;
 
-                public Instance(Queue outputBuffer)
-                {
-                    mOutputBuffer = outputBuffer;
-                }
+				public Instance(Queue outputBuffer)
+				{
+					mOutputBuffer = outputBuffer;
+				}
 
-                public override bool Tick()
-                {
-                    if (mWriteBytes == null) return true;
+				public override bool Tick()
+				{
+					if (mWriteBytes == null) return true;
 
-                    char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
-                    var bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
-                    int index = 0;
+					char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
+					var bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
+					int index = 0;
 
-                    while (index < bytesToWriteCount)
-                    {
-                        charsToWrite[index] = mWriteBytes[index];
-                        index++;
-                    }
+					while (index < bytesToWriteCount)
+					{
+						charsToWrite[index] = mWriteBytes[index];
+						index++;
+					}
 
-                    while (index < charsToWrite.Length)
-                    {
-                        charsToWrite[index] = ' ';
-                        index++;
-                    }
+					while (index < charsToWrite.Length)
+					{
+						charsToWrite[index] = ' ';
+						index++;
+					}
 
-                    mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(new char[0]));
+					mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(new char[0]));
 
-                    OutputAdded(this, new EventArgs());
+					OutputAdded(this, new EventArgs());
 
-                    return true;
-                }
+					return true;
+				}
 
-                public override object InputFromPreviousStep
-                {
-                    set
-                    {
-                        mWriteBytes = (MixByte[])value;
-                    }
-                }
-            }
-        }
-    }
+				public override object InputFromPreviousStep
+				{
+					set
+					{
+						mWriteBytes = (MixByte[])value;
+					}
+				}
+			}
+		}
+	}
 }

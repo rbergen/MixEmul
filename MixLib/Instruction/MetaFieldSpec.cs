@@ -7,25 +7,25 @@ namespace MixLib.Instruction
 	/// </summary>
 	public class MetaFieldSpec
 	{
-        /// <summary>
-        /// Default value for the fieldspec described by this instance, or null if there is none
-        /// </summary>
-        public FieldSpec DefaultFieldSpec { get; private set; }
+		/// <summary>
+		/// Default value for the fieldspec described by this instance, or null if there is none
+		/// </summary>
+		public FieldSpec DefaultFieldSpec { get; private set; }
 
-        /// <summary>
-        /// True if the field is a range, like (0:5), false if it is a value, like (19)
-        /// </summary>
-        public bool FieldIsRange { get; private set; }
+		/// <summary>
+		/// True if the field is a range, like (0:5), false if it is a value, like (19)
+		/// </summary>
+		public bool FieldIsRange { get; private set; }
 
-        /// <summary>
-        /// Indicates if the fieldspec described by this instance is Forbidden, Optional or Mandatory
-        /// </summary>
-        public Presences Presence { get; private set; }
+		/// <summary>
+		/// Indicates if the fieldspec described by this instance is Forbidden, Optional or Mandatory
+		/// </summary>
+		public Presences Presence { get; private set; }
 
-        /// <summary>
-        /// Creates a MetaFieldSpec that describes that a fieldspec is forbidden
-        /// </summary>
-        public MetaFieldSpec() : this(Presences.Forbidden, false, null) { }
+		/// <summary>
+		/// Creates a MetaFieldSpec that describes that a fieldspec is forbidden
+		/// </summary>
+		public MetaFieldSpec() : this(Presences.Forbidden, false, null) { }
 
 		/// <summary>
 		/// Creates a MetaFieldSpec with a specified presence (Optional, Mandatory or Forbidden, of which only the first two make sense).
@@ -39,19 +39,19 @@ namespace MixLib.Instruction
 		/// </summary>
 		/// <param name="fieldIsRange"></param>
 		/// <param name="defaultFieldSpec"></param>
-		public MetaFieldSpec(bool fieldIsRange, FieldSpec defaultFieldSpec) 
-            : this(Presences.Optional, fieldIsRange, defaultFieldSpec)
+		public MetaFieldSpec(bool fieldIsRange, FieldSpec defaultFieldSpec)
+						: this(Presences.Optional, fieldIsRange, defaultFieldSpec)
 		{
 		}
 
-        MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
-        {
-            Presence = presence;
-            FieldIsRange = fieldIsRange;
-            DefaultFieldSpec = defaultFieldSpec;
-        }
+		MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
+		{
+			Presence = presence;
+			FieldIsRange = fieldIsRange;
+			DefaultFieldSpec = defaultFieldSpec;
+		}
 
-        public enum Presences
+		public enum Presences
 		{
 			Forbidden,
 			Optional,

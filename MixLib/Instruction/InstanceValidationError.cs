@@ -4,9 +4,9 @@ namespace MixLib.Instruction
 {
 	public class InstanceValidationError : ValidationError
 	{
-        public Sources Source { get; private set; }
+		public Sources Source { get; private set; }
 
-        public InstanceValidationError(Sources source, string message) : base(message)
+		public InstanceValidationError(Sources source, string message) : base(message)
 		{
 			Source = source;
 		}

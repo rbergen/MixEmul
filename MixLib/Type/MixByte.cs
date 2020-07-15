@@ -9,9 +9,9 @@ namespace MixLib.Type
 		public const byte MinValue = 0;
 		public const string MixChars = " ABCDEFGHIΔJKLMNOPQRΣΠSTUVWXYZ0123456789.,()+-*/=$<>@;:'█";
 
-        public byte ByteValue { get; private set; }
+		public byte ByteValue { get; private set; }
 
-        public MixByte() : this(0) { }
+		public MixByte() : this(0) { }
 
 		public MixByte(byte value)
 		{
@@ -29,9 +29,9 @@ namespace MixLib.Type
 			ByteValue = (index >= 0 && index <= MixChars.Length - 1) ? (byte)index : MaxValue;
 		}
 
-        public char CharValue => ByteValue >= MixChars.Length ? MixChars[MixChars.Length - 1] : MixChars[ByteValue];
+		public char CharValue => ByteValue >= MixChars.Length ? MixChars[MixChars.Length - 1] : MixChars[ByteValue];
 
-        public static int operator +(MixByte mixbyte, byte delta) => mixbyte.ByteValue + delta;
+		public static int operator +(MixByte mixbyte, byte delta) => mixbyte.ByteValue + delta;
 
 		public static int operator /(MixByte mixbyte, byte divisor) => mixbyte.ByteValue / divisor;
 
@@ -65,8 +65,8 @@ namespace MixLib.Type
 
 		public override string ToString() => ByteValue.ToString("D2");
 
-        public override bool Equals(object obj) => obj is MixByte && ByteValue == ((MixByte)obj).ByteValue;
+		public override bool Equals(object obj) => obj is MixByte && ByteValue == ((MixByte)obj).ByteValue;
 
-        public override int GetHashCode() => ByteValue.GetHashCode();
+		public override int GetHashCode() => ByteValue.GetHashCode();
 	}
 }

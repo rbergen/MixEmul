@@ -1,41 +1,41 @@
+using MixLib.Type;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using MixLib.Type;
 
 namespace MixGui.Components
 {
 	public class RegistersEditor : UserControl
 	{
-        Button mCompareButton;
-        Label mCompareLabel;
-        List<WordValueEditor> mEditors;
-        CheckBox mOverflowBox;
-        Label mOverflowLabel;
-        readonly WordValueEditor mrI1Editor;
-        Label mrI1Label;
-        readonly WordValueEditor mrI2Editor;
-        Label mrI2Label;
-        readonly WordValueEditor mrI3Editor;
-        Label mrI3Label;
-        readonly WordValueEditor mrI4Editor;
-        Label mrI4Label;
-        readonly WordValueEditor mr5Editor;
-        Label mrI5Label;
-        readonly WordValueEditor mrI6Editor;
-        Label mrI6Label;
-        readonly WordValueEditor mrAEditor;
-        Label mrALabel;
-        bool mReadOnly;
-        MixLib.Registers mRegisters;
-        readonly WordValueEditor mrJEditor;
-        Label mrJLabel;
-        readonly WordValueEditor mrXEditor;
-        Label mrXLabel;
+		Button mCompareButton;
+		Label mCompareLabel;
+		List<WordValueEditor> mEditors;
+		CheckBox mOverflowBox;
+		Label mOverflowLabel;
+		readonly WordValueEditor mrI1Editor;
+		Label mrI1Label;
+		readonly WordValueEditor mrI2Editor;
+		Label mrI2Label;
+		readonly WordValueEditor mrI3Editor;
+		Label mrI3Label;
+		readonly WordValueEditor mrI4Editor;
+		Label mrI4Label;
+		readonly WordValueEditor mr5Editor;
+		Label mrI5Label;
+		readonly WordValueEditor mrI6Editor;
+		Label mrI6Label;
+		readonly WordValueEditor mrAEditor;
+		Label mrALabel;
+		bool mReadOnly;
+		MixLib.Registers mRegisters;
+		readonly WordValueEditor mrJEditor;
+		Label mrJLabel;
+		readonly WordValueEditor mrXEditor;
+		Label mrXLabel;
 
-        public RegistersEditor()
-			: this(null)
+		public RegistersEditor()
+	: this(null)
 		{
 		}
 
@@ -60,20 +60,20 @@ namespace MixGui.Components
 			mCompareLabel = new Label();
 			mOverflowLabel = new Label();
 
-            mEditors = new List<WordValueEditor>
-            {
-                (mrAEditor = new WordValueEditor(mRegisters.RA)),
-                (mrXEditor = new WordValueEditor(mRegisters.RX)),
-                (mrI1Editor = new WordValueEditor(mRegisters.RI1)),
-                (mrI2Editor = new WordValueEditor(mRegisters.RI2)),
-                (mrI3Editor = new WordValueEditor(mRegisters.RI3)),
-                (mrI4Editor = new WordValueEditor(mRegisters.RI4)),
-                (mr5Editor = new WordValueEditor(mRegisters.RI5)),
-                (mrI6Editor = new WordValueEditor(mRegisters.RI6)),
-                (mrJEditor = new WordValueEditor(mRegisters.RJ, false))
-            };
+			mEditors = new List<WordValueEditor>
+						{
+								(mrAEditor = new WordValueEditor(mRegisters.RA)),
+								(mrXEditor = new WordValueEditor(mRegisters.RX)),
+								(mrI1Editor = new WordValueEditor(mRegisters.RI1)),
+								(mrI2Editor = new WordValueEditor(mRegisters.RI2)),
+								(mrI3Editor = new WordValueEditor(mRegisters.RI3)),
+								(mrI4Editor = new WordValueEditor(mRegisters.RI4)),
+								(mr5Editor = new WordValueEditor(mRegisters.RI5)),
+								(mrI6Editor = new WordValueEditor(mRegisters.RI6)),
+								(mrJEditor = new WordValueEditor(mRegisters.RJ, false))
+						};
 
-            mCompareButton = new Button();
+			mCompareButton = new Button();
 			mOverflowBox = new CheckBox();
 
 			SuspendLayout();
@@ -254,42 +254,42 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-        void MOverflowBox_CheckedChanged(object sender, EventArgs e)
-        {
-            mRegisters.OverflowIndicator = mOverflowBox.Checked;
-        }
+		void MOverflowBox_CheckedChanged(object sender, EventArgs e)
+		{
+			mRegisters.OverflowIndicator = mOverflowBox.Checked;
+		}
 
-        void This_KeyDown(object sender, KeyEventArgs e)
-        {
-            FieldTypes? editorField = null;
-            int? index = null;
+		void This_KeyDown(object sender, KeyEventArgs e)
+		{
+			FieldTypes? editorField = null;
+			int? index = null;
 
-            if (e is FieldKeyEventArgs)
-            {
-                editorField = ((FieldKeyEventArgs)e).Field;
-                index = ((FieldKeyEventArgs)e).Index;
-            }
+			if (e is FieldKeyEventArgs)
+			{
+				editorField = ((FieldKeyEventArgs)e).Field;
+				index = ((FieldKeyEventArgs)e).Index;
+			}
 
-            var editorIndex = mEditors.IndexOf((WordValueEditor)sender);
+			var editorIndex = mEditors.IndexOf((WordValueEditor)sender);
 
-            if (e.KeyCode == Keys.Down && editorIndex < mEditors.Count - 1)
-            {
-                mEditors[editorIndex + 1].Focus(editorField, index);
-            }
-            else if (e.KeyCode == Keys.Up && editorIndex > 0)
-            {
-                mEditors[editorIndex - 1].Focus(editorField, index);
-            }
-        }
+			if (e.KeyCode == Keys.Down && editorIndex < mEditors.Count - 1)
+			{
+				mEditors[editorIndex + 1].Focus(editorField, index);
+			}
+			else if (e.KeyCode == Keys.Up && editorIndex > 0)
+			{
+				mEditors[editorIndex - 1].Focus(editorField, index);
+			}
+		}
 
-        void MCompareButton_Click(object sender, EventArgs e)
-        {
-            var compValue = mRegisters.CompareIndicator.Next();
-            mRegisters.CompareIndicator = compValue;
-            mCompareButton.Text = "" + compValue.ToChar();
-        }
+		void MCompareButton_Click(object sender, EventArgs e)
+		{
+			var compValue = mRegisters.CompareIndicator.Next();
+			mRegisters.CompareIndicator = compValue;
+			mCompareButton.Text = "" + compValue.ToChar();
+		}
 
-        public new void Update()
+		public new void Update()
 		{
 			foreach (WordValueEditor editor in mEditors) editor.Update();
 

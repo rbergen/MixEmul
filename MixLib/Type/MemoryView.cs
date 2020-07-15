@@ -8,10 +8,10 @@ namespace MixLib.Type
 		int mMaxIndex;
 		int mIndexOffset;
 
-        public IMemory SourceMemory { get; private set; }
+		public IMemory SourceMemory { get; private set; }
 
-        public MemoryView(IMemory sourceMemory)
-			: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, 0) { }
+		public MemoryView(IMemory sourceMemory)
+	: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, 0) { }
 
 		public MemoryView(IMemory sourceMemory, int indexOffset)
 			: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, indexOffset) { }
@@ -27,35 +27,35 @@ namespace MixLib.Type
 			mIndexOffset = indexOffset;
 		}
 
-        public int WordCount => mMaxIndex - mMinIndex + 1;
+		public int WordCount => mMaxIndex - mMinIndex + 1;
 
-        public long MaxProfilingTickCount => SourceMemory.MaxProfilingTickCount;
+		public long MaxProfilingTickCount => SourceMemory.MaxProfilingTickCount;
 
-        public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
+		public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
 
-        public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
+		public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
 
-        public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
+		public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
 
-        public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
+		public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
 
-        void ValidateParameters(int minIndex, int maxIndex, int offset)
-        {
-            if (minIndex + offset < SourceMemory.MinWordIndex)
-            {
-                throw new IndexOutOfRangeException("MinWordIndex + IndexOffset must be greater than or equal to the MinWordIndex of SourceMemory");
-            }
+		void ValidateParameters(int minIndex, int maxIndex, int offset)
+		{
+			if (minIndex + offset < SourceMemory.MinWordIndex)
+			{
+				throw new IndexOutOfRangeException("MinWordIndex + IndexOffset must be greater than or equal to the MinWordIndex of SourceMemory");
+			}
 
-            if (maxIndex + offset > SourceMemory.MaxWordIndex)
-            {
-                throw new IndexOutOfRangeException("MaxWordIndex + IndexOffset must be less than or equal to the MaxWordIndex of SourceMemory");
-            }
-        }
+			if (maxIndex + offset > SourceMemory.MaxWordIndex)
+			{
+				throw new IndexOutOfRangeException("MaxWordIndex + IndexOffset must be less than or equal to the MaxWordIndex of SourceMemory");
+			}
+		}
 
-        public void ClearSourceLines()
+		public void ClearSourceLines()
 		{
 			for (int index = mMinIndex; index <= mMaxIndex; index++) ClearRealWordSourceLine(index);
-        }
+		}
 
 		public void Reset()
 		{

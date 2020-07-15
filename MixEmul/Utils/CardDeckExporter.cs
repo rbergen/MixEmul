@@ -1,29 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using MixLib.Instruction;
+using MixLib.Type;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MixLib.Instruction;
-using MixLib.Type;
 
 namespace MixGui.Utils
 {
 	public static class CardDeckExporter
 	{
-		public static readonly string[] DefaultLoaderCards = 
+		public static readonly string[] DefaultLoaderCards =
 		{
 			" O O6 A O4 2 O6 C O4   BK 2DO6   BI G O4 3D-H M BB B  U 3DEH A  F F CF 0  E B LU",
 			" 3DIH M BB B EJ  CA. 2DEU B EH K BA B EU 5A-H M BB  C U 4AEH 5AEN    E  CLU  ABG",
 			" 2DEH K BB Q B. E  9"
 		};
 
-        static string[] mLoaderCards;
+		static string[] mLoaderCards;
 
-        const int maxWordsPerCard = 7;
+		const int maxWordsPerCard = 7;
 
-        static string GetTransLine(int programCounter) => "TRANS0" + GetAddressText(programCounter);
+		static string GetTransLine(int programCounter) => "TRANS0" + GetAddressText(programCounter);
 
-        static char GetNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
+		static char GetNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
 
-        public static string[] LoaderCards
+		public static string[] LoaderCards
 		{
 			get
 			{
@@ -35,20 +35,20 @@ namespace MixGui.Utils
 			}
 		}
 
-        static StreamWriter PrepareWriter(string filePath)
-        {
-            var writer = new StreamWriter(filePath, false, Encoding.ASCII);
+		static StreamWriter PrepareWriter(string filePath)
+		{
+			var writer = new StreamWriter(filePath, false, Encoding.ASCII);
 
-            foreach (string loaderCard in LoaderCards)
-            {
-                if (loaderCard != null && loaderCard.TrimEnd() != string.Empty) writer.WriteLine(loaderCard);
-            }
+			foreach (string loaderCard in LoaderCards)
+			{
+				if (loaderCard != null && loaderCard.TrimEnd() != string.Empty) writer.WriteLine(loaderCard);
+			}
 
-            return writer;
-        }
+			return writer;
+		}
 
 
-        public static void ExportFullWords(string filePath, IList<IFullWord> wordsToWrite, int firstWordLocation, int programCounter)
+		public static void ExportFullWords(string filePath, IList<IFullWord> wordsToWrite, int firstWordLocation, int programCounter)
 		{
 			var words = new List<IFullWord>();
 
@@ -135,43 +135,43 @@ namespace MixGui.Utils
 			}
 		}
 
-        static string GetAddressText(int address)
-        {
-            if (address < 0)
-            {
-                address = -address;
-                var addressText = address.ToString("0000");
-                return addressText.Substring(0, 3) + GetNegativeDigit(addressText[3]);
-            }
+		static string GetAddressText(int address)
+		{
+			if (address < 0)
+			{
+				address = -address;
+				var addressText = address.ToString("0000");
+				return addressText.Substring(0, 3) + GetNegativeDigit(addressText[3]);
+			}
 
-            return address.ToString("0000");
-        }
+			return address.ToString("0000");
+		}
 
-        static string GetInformationLine(int firstWordLocation, List<IFullWord> words)
-        {
-            var lineBuilder = new StringBuilder("INFO ");
+		static string GetInformationLine(int firstWordLocation, List<IFullWord> words)
+		{
+			var lineBuilder = new StringBuilder("INFO ");
 
-            lineBuilder.Append(words.Count.ToString());
-            lineBuilder.Append(GetAddressText(firstWordLocation));
+			lineBuilder.Append(words.Count.ToString());
+			lineBuilder.Append(GetAddressText(firstWordLocation));
 
-            string numberText;
+			string numberText;
 
-            foreach (IFullWord word in words)
-            {
-                numberText = word.MagnitudeLongValue.ToString("0000000000");
+			foreach (IFullWord word in words)
+			{
+				numberText = word.MagnitudeLongValue.ToString("0000000000");
 
-                if (word.Sign.IsPositive())
-                {
-                    lineBuilder.Append(numberText);
-                }
-                else
-                {
-                    lineBuilder.Append(numberText.Substring(0, 9));
-                    lineBuilder.Append(GetNegativeDigit(numberText[9]));
-                }
-            }
+				if (word.Sign.IsPositive())
+				{
+					lineBuilder.Append(numberText);
+				}
+				else
+				{
+					lineBuilder.Append(numberText.Substring(0, 9));
+					lineBuilder.Append(GetNegativeDigit(numberText[9]));
+				}
+			}
 
-            return lineBuilder.ToString();
-        }
-    }
+			return lineBuilder.ToString();
+		}
+	}
 }

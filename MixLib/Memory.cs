@@ -1,21 +1,21 @@
+using MixLib.Type;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MixLib.Type;
 
 namespace MixLib
 {
 	public class Memory : IMemory, IEnumerable
 	{
 		public static readonly FieldSpec DefaultFieldSpec = new FieldSpec(0, 5);
-        readonly SortedDictionary<int, MemoryFullWord> mWords;
-        readonly object mSyncRoot;
+		readonly SortedDictionary<int, MemoryFullWord> mWords;
+		readonly object mSyncRoot;
 
-        public int MinWordIndex { get; set; }
-        public int MaxWordIndex { get; set; }
+		public int MinWordIndex { get; set; }
+		public int MaxWordIndex { get; set; }
 
-        public Memory(int minIndex, int maxIndex)
+		public Memory(int minIndex, int maxIndex)
 		{
 			MinWordIndex = minIndex;
 			MaxWordIndex = maxIndex;
@@ -23,9 +23,9 @@ namespace MixLib
 			mSyncRoot = ((ICollection)mWords).SyncRoot;
 		}
 
-        public int WordCount => MaxWordIndex - MinWordIndex + 1;
+		public int WordCount => MaxWordIndex - MinWordIndex + 1;
 
-        public void ResetProfilingCounts()
+		public void ResetProfilingCounts()
 		{
 			lock (mSyncRoot)
 			{
@@ -178,7 +178,7 @@ namespace MixLib
 					throw new IndexOutOfRangeException(string.Format("index must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
 				}
 
-                var word = GetRealWord(index);
+				var word = GetRealWord(index);
 
 				for (int byteIndex = 0; byteIndex < value.ByteCount; byteIndex++)
 				{
@@ -255,5 +255,5 @@ namespace MixLib
 				}
 			}
 		}
-    }
+	}
 }

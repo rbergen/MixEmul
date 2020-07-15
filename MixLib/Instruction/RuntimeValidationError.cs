@@ -4,12 +4,12 @@ namespace MixLib.Instruction
 {
 	public class RuntimeValidationError : ValidationError
 	{
-        public int ActualValue { get; private set; }
-        public MixInstruction.Instance Instance { get; private set; }
-        public int ProgramCounter { get; private set; }
+		public int ActualValue { get; private set; }
+		public MixInstruction.Instance Instance { get; private set; }
+		public int ProgramCounter { get; private set; }
 
-        public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, string message)
-			: this(programCounter, instance, message, int.MinValue, int.MinValue, int.MinValue)
+		public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, string message)
+	: this(programCounter, instance, message, int.MinValue, int.MinValue, int.MinValue)
 		{
 		}
 
@@ -23,5 +23,5 @@ namespace MixLib.Instruction
 			ProgramCounter = programCounter;
 			ActualValue = actualValue;
 		}
-    }
+	}
 }

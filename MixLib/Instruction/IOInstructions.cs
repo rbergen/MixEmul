@@ -5,10 +5,10 @@ using MixLib.Type;
 
 namespace MixLib.Instruction
 {
-    /// <summary>
-    /// Methods for performing MIX I/O instructions
-    /// </summary>
-    public static class IOInstructions
+	/// <summary>
+	/// Methods for performing MIX I/O instructions
+	/// </summary>
+	public static class IOInstructions
 	{
 		public const byte INOpCode = 36;
 
@@ -17,11 +17,11 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Input(ModuleBase module, MixInstruction.Instance instance)
 		{
-            if (module.Devices == null)
-            {
-                module.ReportRuntimeError("Module does not provide devices");
-                return false;
-            }
+			if (module.Devices == null)
+			{
+				module.ReportRuntimeError("Module does not provide devices");
+				return false;
+			}
 
 			var mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (mValue == int.MinValue) return false;
@@ -70,13 +70,13 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool IOControl(ModuleBase module, MixInstruction.Instance instance)
 		{
-            if (module.Devices == null)
-            {
-                module.ReportRuntimeError("Module does not provide devices");
-                return false;
-            }
+			if (module.Devices == null)
+			{
+				module.ReportRuntimeError("Module does not provide devices");
+				return false;
+			}
 
-            var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
+			var indexedAddress = module.Registers.GetIndexedAddress(instance.AddressValue, instance.Index);
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
 			MixDevice device = module.Devices[deviceIndex];
 
@@ -93,13 +93,13 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool JumpIfBusy(ModuleBase module, MixInstruction.Instance instance)
 		{
-            if (module.Devices == null)
-            {
-                module.ReportRuntimeError("Module does not provide devices");
-                return false;
-            }
+			if (module.Devices == null)
+			{
+				module.ReportRuntimeError("Module does not provide devices");
+				return false;
+			}
 
-            var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
@@ -118,13 +118,13 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool JumpIfReady(ModuleBase module, MixInstruction.Instance instance)
 		{
-            if (module.Devices == null)
-            {
-                module.ReportRuntimeError("Module does not provide devices");
-                return false;
-            }
+			if (module.Devices == null)
+			{
+				module.ReportRuntimeError("Module does not provide devices");
+				return false;
+			}
 
-            var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;
@@ -143,13 +143,13 @@ namespace MixLib.Instruction
 		/// </summary>
 		public static bool Output(ModuleBase module, MixInstruction.Instance instance)
 		{
-            if (module.Devices == null)
-            {
-                module.ReportRuntimeError("Module does not provide devices");
-                return false;
-            }
+			if (module.Devices == null)
+			{
+				module.ReportRuntimeError("Module does not provide devices");
+				return false;
+			}
 
-            var mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+			var mValue = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (mValue == int.MinValue) return false;
 
 			int deviceIndex = instance.FieldSpec.MixByteValue.ByteValue;

@@ -9,30 +9,30 @@ namespace MixAssembler.Symbol
 		public const long MinValue = -MaxValue;
 		public const int MaxNameLength = 10;
 
-        bool mIsDefined;
+		bool mIsDefined;
 
-        public long Magnitude { get; private set; }
-        public Word.Signs Sign { get; private set; }
+		public long Magnitude { get; private set; }
+		public Word.Signs Sign { get; private set; }
 
-        public ValueSymbol(string name) : base(name)
+		public ValueSymbol(string name) : base(name)
 		{
 			mIsDefined = false;
 			Sign = Word.Signs.Positive;
 		}
 
-        public override bool IsSymbolDefined => mIsDefined;
+		public override bool IsSymbolDefined => mIsDefined;
 
-        public long Value => Sign.ApplyTo(Magnitude);
+		public long Value => Sign.ApplyTo(Magnitude);
 
-        public static SymbolBase ParseDefinition(string text) => !IsValueSymbolName(text) ? null : new ValueSymbol(text);
+		public static SymbolBase ParseDefinition(string text) => !IsValueSymbolName(text) ? null : new ValueSymbol(text);
 
-        public override long GetValue(int currentAddress) => Value;
+		public override long GetValue(int currentAddress) => Value;
 
 		public override long GetMagnitude(int currentAddress) => Magnitude;
 
 		public override Word.Signs GetSign(int currentAddress) => Sign;
 
-        public override bool IsValueDefined(int currentAddress) => mIsDefined;
+		public override bool IsValueDefined(int currentAddress) => mIsDefined;
 
 		public static bool IsValueSymbolName(string text)
 		{
@@ -81,7 +81,7 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-            Sign = value.GetSign();
+			Sign = value.GetSign();
 			Magnitude = value.GetMagnitude();
 			mIsDefined = true;
 		}

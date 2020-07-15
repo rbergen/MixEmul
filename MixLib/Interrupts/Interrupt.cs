@@ -4,10 +4,10 @@ namespace MixLib.Interrupts
 {
 	public class Interrupt
 	{
-        public Types Type { get; private set; }
-        public int DeviceID { get; private set; }
+		public Types Type { get; private set; }
+		public int DeviceID { get; private set; }
 
-        public Interrupt(Types type)
+		public Interrupt(Types type)
 		{
 			if (type == Types.Device)
 			{

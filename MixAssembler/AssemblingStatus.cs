@@ -5,14 +5,14 @@ namespace MixAssembler
 {
 	public class AssemblingStatus
 	{
-        AssemblyFindingCollection mFindings = new AssemblyFindingCollection();
-        int mLineNumber;
-        int mLocationCounter;
+		AssemblyFindingCollection mFindings = new AssemblyFindingCollection();
+		int mLineNumber;
+		int mLocationCounter;
 
-        public AssemblyFindingCollection Findings => mFindings;
+		public AssemblyFindingCollection Findings => mFindings;
 
-        public void ReportError(LineSection lineSection, int causeStartIndex, int causeLength, ValidationError error) =>
-			Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, error));
+		public void ReportError(LineSection lineSection, int causeStartIndex, int causeLength, ValidationError error) =>
+	Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, error));
 
 		public void ReportParsingError(LineSection lineSection, int causeStartIndex, int causeLength, string message) =>
 			Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, new ParsingError(message)));
@@ -20,7 +20,7 @@ namespace MixAssembler
 		public void ReportParsingError(LineSection lineSection, int causeStartIndex, int causeLength, string message, int lowerBound, int upperBound) =>
 			Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, new ParsingError(message, lowerBound, upperBound)));
 
-		public void ReportParsingWarning(LineSection lineSection, int causeStartIndex, int causeLength, string message) => 
+		public void ReportParsingWarning(LineSection lineSection, int causeStartIndex, int causeLength, string message) =>
 			Findings.Add(new AssemblyWarning(LineNumber, lineSection, causeStartIndex, causeLength, new ParsingError(message)));
 
 		public void ReportParsingWarning(LineSection lineSection, int causeStartIndex, int causeLength, string message, int lowerBound, int upperBound) =>

@@ -8,7 +8,7 @@ namespace MixLib.Utils
 		{
 			if (text == null || startIndex >= text.Length) return -1;
 
-            if (startIndex < 0)
+			if (startIndex < 0)
 			{
 				startIndex = 0;
 			}
@@ -17,13 +17,13 @@ namespace MixLib.Utils
 
 			while (index >= 0)
 			{
-                // if we're not doing a full word search or the search text is the full text, we have a match
-                if (!options.MatchWholeWord || options.SearchText.Length == text.Length) return index;
+				// if we're not doing a full word search or the search text is the full text, we have a match
+				if (!options.MatchWholeWord || options.SearchText.Length == text.Length) return index;
 
-                // ...otherwise check if the character before and after the search text (insofar present) are not alphanumeric
+				// ...otherwise check if the character before and after the search text (insofar present) are not alphanumeric
 				if ((index == 0 || !char.IsLetterOrDigit(text, index - 1))
-					&& (index + options.SearchText.Length == text.Length 
-                        || !char.IsLetterOrDigit(text, index + options.SearchText.Length)))
+					&& (index + options.SearchText.Length == text.Length
+												|| !char.IsLetterOrDigit(text, index + options.SearchText.Length)))
 				{
 					return index;
 				}

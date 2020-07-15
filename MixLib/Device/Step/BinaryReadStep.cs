@@ -1,24 +1,24 @@
-using System;
-using System.IO;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
+using System;
+using System.IO;
 
 namespace MixLib.Device.Step
 {
-    public class BinaryReadStep : StreamStep
+	public class BinaryReadStep : StreamStep
 	{
-        int mRecordWordCount;
-        const string statusDescription = "Reading binary data";
+		int mRecordWordCount;
+		const string statusDescription = "Reading binary data";
 
-        public BinaryReadStep(int recordWordCount)
+		public BinaryReadStep(int recordWordCount)
 		{
 			mRecordWordCount = recordWordCount;
 		}
 
-        public override string StatusDescription => statusDescription;
+		public override string StatusDescription => statusDescription;
 
-        public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
 
 		public static MixByte[] ReadBytes(Stream stream, int wordCount)
 		{
@@ -52,12 +52,12 @@ namespace MixLib.Device.Step
 
 			for (int i = 0; i < wordCount; i++)
 			{
-                currentWord = new FullWord
-                {
-                    Sign = readBytes[byteIndex++].ToSign()
-                };
+				currentWord = new FullWord
+				{
+					Sign = readBytes[byteIndex++].ToSign()
+				};
 
-                for (int j = 0; j < FullWord.ByteCount; j++)
+				for (int j = 0; j < FullWord.ByteCount; j++)
 				{
 					currentWord[j] = readBytes[byteIndex++];
 				}
@@ -68,35 +68,35 @@ namespace MixLib.Device.Step
 			return readWords;
 		}
 
-        new class Instance : StreamStep.Instance
-        {
-            MixByte[] mReadBytes;
-            readonly int mRecordWordCount;
+		new class Instance : StreamStep.Instance
+		{
+			MixByte[] mReadBytes;
+			readonly int mRecordWordCount;
 
-            public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
-            {
-                mRecordWordCount = recordWordCount;
-            }
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
+			{
+				mRecordWordCount = recordWordCount;
+			}
 
-            public override object OutputForNextStep => mReadBytes;
+			public override object OutputForNextStep => mReadBytes;
 
-            public override bool Tick()
-            {
-                if (StreamStatus.Stream == null) return true;
+			public override bool Tick()
+			{
+				if (StreamStatus.Stream == null) return true;
 
-                try
-                {
-                    mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
-                    StreamStatus.UpdatePosition();
-                }
-                catch (Exception exception)
-                {
-                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-                    mReadBytes = new MixByte[0];
-                }
+				try
+				{
+					mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
+					StreamStatus.UpdatePosition();
+				}
+				catch (Exception exception)
+				{
+					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
+					mReadBytes = new MixByte[0];
+				}
 
-                return true;
-            }
-        }
-    }
+				return true;
+			}
+		}
+	}
 }

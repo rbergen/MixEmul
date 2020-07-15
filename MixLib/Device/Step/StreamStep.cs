@@ -1,6 +1,6 @@
 namespace MixLib.Device.Step
 {
-    public abstract class StreamStep : DeviceStep
+	public abstract class StreamStep : DeviceStep
 	{
 		protected StreamStep() { }
 
@@ -8,9 +8,9 @@ namespace MixLib.Device.Step
 
 		public abstract Instance CreateStreamInstance(StreamStatus streamStatus);
 
-        public abstract new class Instance : DeviceStep.Instance
-        {
-            protected StreamStatus StreamStatus { get; private set; }
+		public abstract new class Instance : DeviceStep.Instance
+		{
+			protected StreamStatus StreamStatus { get; private set; }
 
 			protected Instance(StreamStatus streamStatus)
 			{

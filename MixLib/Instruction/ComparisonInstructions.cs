@@ -3,17 +3,17 @@ using MixLib.Type;
 
 namespace MixLib.Instruction
 {
-    /// <summary>
-    /// Methods for performing MIX comparison instructions
-    /// </summary>
-    public static class ComparisonInstructions
+	/// <summary>
+	/// Methods for performing MIX comparison instructions
+	/// </summary>
+	public static class ComparisonInstructions
 	{
-        const int opcodeBase = 56;
+		const int opcodeBase = 56;
 
-        /// <summary>
-        /// Method for performing CMPx instructions
-        /// </summary>
-        public static bool Compare(ModuleBase module, MixInstruction.Instance instance)
+		/// <summary>
+		/// Method for performing CMPx instructions
+		/// </summary>
+		public static bool Compare(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
@@ -21,9 +21,9 @@ namespace MixLib.Instruction
 			int registerIndex = instance.MixInstruction.Opcode - opcodeBase;
 			Register register = module.Registers[registerIndex];
 
-            module.Registers.CompareIndicator = WordField.LoadFromFullWord(instance.FieldSpec, register.FullWordValue).CompareTo(module.Memory[indexedAddress]).ToCompValue();
+			module.Registers.CompareIndicator = WordField.LoadFromFullWord(instance.FieldSpec, register.FullWordValue).CompareTo(module.Memory[indexedAddress]).ToCompValue();
 
- 			return true;
+			return true;
 		}
 	}
 }

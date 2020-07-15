@@ -1,22 +1,22 @@
+using MixLib.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using MixLib.Events;
 
 namespace MixLib.Type
 {
-    public class Word : ICloneable, IWord
+	public class Word : ICloneable, IWord
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
-        ReaderWriterLock mAccessLock;
-        readonly MixByte[] mBytes;
-        Signs mSign;
+		ReaderWriterLock mAccessLock;
+		readonly MixByte[] mBytes;
+		Signs mSign;
 
-        public int ByteCount { get; private set; }
+		public int ByteCount { get; private set; }
 
-        public Word(int byteCount) : this(byteCount, Signs.Positive)
+		public Word(int byteCount) : this(byteCount, Signs.Positive)
 		{
 			for (int i = 0; i < byteCount; i++)
 			{
@@ -32,15 +32,15 @@ namespace MixLib.Type
 			}
 		}
 
-        Word(int byteCount, Signs sign)
-        {
-            ByteCount = byteCount;
-            mSign = sign;
-            mBytes = new MixByte[byteCount];
-            mAccessLock = new ReaderWriterLock();
-        }
+		Word(int byteCount, Signs sign)
+		{
+			ByteCount = byteCount;
+			mSign = sign;
+			mBytes = new MixByte[byteCount];
+			mAccessLock = new ReaderWriterLock();
+		}
 
-        public void Load(string text)
+		public void Load(string text)
 		{
 			int count = text == null ? 0 : Math.Min(ByteCount, text.Length);
 			int index = 0;
@@ -55,27 +55,27 @@ namespace MixLib.Type
 			}
 		}
 
-        public virtual bool IsEmpty => MagnitudeLongValue == 0 && Sign.IsPositive();
+		public virtual bool IsEmpty => MagnitudeLongValue == 0 && Sign.IsPositive();
 
-        public int MaxByteCount => ByteCount;
+		public int MaxByteCount => ByteCount;
 
-        public int BitCount => ByteCount * MixByte.BitCount;
+		public int BitCount => ByteCount * MixByte.BitCount;
 
-        public long MaxMagnitude => (1 << BitCount) - 1;
+		public long MaxMagnitude => (1 << BitCount) - 1;
 
-        public override string ToString() => ToString(false);
+		public override string ToString() => ToString(false);
 
-        public IEnumerator GetEnumerator() => mBytes.GetEnumerator();
+		public IEnumerator GetEnumerator() => mBytes.GetEnumerator();
 
-        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
 
-        public MixByte[] ToArray() => Magnitude;
+		public MixByte[] ToArray() => Magnitude;
 
-        public static long BytesToLong(params MixByte[] bytes) => BytesToLong(Signs.Positive, bytes);
+		public static long BytesToLong(params MixByte[] bytes) => BytesToLong(Signs.Positive, bytes);
 
-        protected void OnWordValueChanged() => WordValueChanged?.Invoke(this);
+		protected void OnWordValueChanged() => WordValueChanged?.Invoke(this);
 
-        public static long BytesToLong(Signs sign, params MixByte[] bytes)
+		public static long BytesToLong(Signs sign, params MixByte[] bytes)
 		{
 			long longValue = 0L;
 
@@ -84,7 +84,7 @@ namespace MixLib.Type
 				longValue = (longValue << MixByte.BitCount) + bytes[i];
 			}
 
-            longValue = sign.ApplyTo(longValue);
+			longValue = sign.ApplyTo(longValue);
 
 			return longValue;
 		}
@@ -109,7 +109,7 @@ namespace MixLib.Type
 			}
 			else
 			{
-                stringValue = "" + Sign.ToChar();
+				stringValue = "" + Sign.ToChar();
 
 				foreach (MixByte mixByte in mBytes)
 				{
@@ -198,24 +198,24 @@ namespace MixLib.Type
 			}
 		}
 
-        long SetMagnitudeLongValue(long magnitude)
-        {
-            long oldValue = MagnitudeLongValue;
+		long SetMagnitudeLongValue(long magnitude)
+		{
+			long oldValue = MagnitudeLongValue;
 
-            magnitude = magnitude.GetMagnitude();
+			magnitude = magnitude.GetMagnitude();
 
-            if (oldValue == magnitude) return magnitude;
+			if (oldValue == magnitude) return magnitude;
 
-            for (int i = ByteCount - 1; i >= 0; i--)
-            {
-                mBytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
-                magnitude = magnitude >> MixByte.BitCount;
-            }
+			for (int i = ByteCount - 1; i >= 0; i--)
+			{
+				mBytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
+				magnitude = magnitude >> MixByte.BitCount;
+			}
 
-            return oldValue;
-        }
+			return oldValue;
+		}
 
-        public MixByte[] Magnitude
+		public MixByte[] Magnitude
 		{
 			get
 			{

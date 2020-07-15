@@ -5,6 +5,6 @@ namespace MixLib.Type
 	{
 		public int WordIndex { get; set; }
 		public FieldTypes Field { get; set; }
-        public int FieldIndex { get; set; }
+		public int FieldIndex { get; set; }
 	}
 }

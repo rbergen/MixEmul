@@ -31,53 +31,53 @@ namespace MixGui.Settings
 		public const string TeletypeOutputText = "TeletypeOutputText";
 		public const string WarningText = "WarningText";
 
-        static Dictionary<string, Color> mDefaultColors;
-        static Dictionary<string, Font> mDefaultFonts;
+		static Dictionary<string, Color> mDefaultColors;
+		static Dictionary<string, Font> mDefaultFonts;
 
-        public static Dictionary<string, Color> Colors { private get; set; }
-        public static ProfilingInfoType ShowProfilingInfo { get; set; }
-        public static bool ColorProfilingCounts { get; set; }
+		public static Dictionary<string, Color> Colors { private get; set; }
+		public static ProfilingInfoType ShowProfilingInfo { get; set; }
+		public static bool ColorProfilingCounts { get; set; }
 
-        static GuiSettings()
+		static GuiSettings()
 		{
-            mDefaultColors = new Dictionary<string, Color>
-            {
-                { ErrorText, Color.Red },
-                { WarningText, Color.DarkOrange },
-                { InfoText, Color.DarkGreen },
-                { DebugText, Color.DarkBlue },
-                { RenderedText, Color.Black },
-                { EditingText, Color.Blue },
-                { ImmutableText, Color.DarkGray },
-                { EditorBackground, Color.White },
-                { LoadedInstructionText, Color.Black },
-                { LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204) },
-                { AddressText, Color.Black },
-                { ProgramCounterAddressBackground, Color.Yellow },
-                { DeviceIdle, Color.LawnGreen },
-                { DeviceBusy, Color.Yellow },
-                { LocationFieldText, Color.Black },
-                { OpFieldText, Color.Blue },
-                { AddressFieldText, Color.Black },
-                { CommentFieldText, Color.DarkGreen },
-                { LineNumberText, Color.DarkSeaGreen },
-                { LineNumberSeparator, Color.DarkGray },
-                { TeletypeInputText, Color.Black },
-                { TeletypeInputBackground, Color.White },
-                { TeletypeOutputText, Color.White },
-                { TeletypeOutputBackground, Color.Black }
-            };
-            Colors = new Dictionary<string, Color>();
-            mDefaultFonts = new Dictionary<string, Font>
-            {
-                { FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
-            };
-            ColorProfilingCounts = true;
+			mDefaultColors = new Dictionary<string, Color>
+						{
+								{ ErrorText, Color.Red },
+								{ WarningText, Color.DarkOrange },
+								{ InfoText, Color.DarkGreen },
+								{ DebugText, Color.DarkBlue },
+								{ RenderedText, Color.Black },
+								{ EditingText, Color.Blue },
+								{ ImmutableText, Color.DarkGray },
+								{ EditorBackground, Color.White },
+								{ LoadedInstructionText, Color.Black },
+								{ LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204) },
+								{ AddressText, Color.Black },
+								{ ProgramCounterAddressBackground, Color.Yellow },
+								{ DeviceIdle, Color.LawnGreen },
+								{ DeviceBusy, Color.Yellow },
+								{ LocationFieldText, Color.Black },
+								{ OpFieldText, Color.Blue },
+								{ AddressFieldText, Color.Black },
+								{ CommentFieldText, Color.DarkGreen },
+								{ LineNumberText, Color.DarkSeaGreen },
+								{ LineNumberSeparator, Color.DarkGray },
+								{ TeletypeInputText, Color.Black },
+								{ TeletypeInputBackground, Color.White },
+								{ TeletypeOutputText, Color.White },
+								{ TeletypeOutputBackground, Color.Black }
+						};
+			Colors = new Dictionary<string, Color>();
+			mDefaultFonts = new Dictionary<string, Font>
+						{
+								{ FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
+						};
+			ColorProfilingCounts = true;
 		}
 
-        public static bool IsKnownColor(string name) => mDefaultColors.ContainsKey(name);
+		public static bool IsKnownColor(string name) => mDefaultColors.ContainsKey(name);
 
-        public static Color GetColor(string name)
+		public static Color GetColor(string name)
 		{
 			if (Colors.ContainsKey(name)) return Colors[name];
 

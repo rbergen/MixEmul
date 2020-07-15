@@ -12,10 +12,10 @@ namespace MixLib.Instruction
 	/// </summary>
 	public class LoaderInstruction : InstructionBase
 	{
-        public bool Alphanumeric { get; private set; }
-        public Operations Operation { get; private set; }
+		public bool Alphanumeric { get; private set; }
+		public Operations Operation { get; private set; }
 
-        public LoaderInstruction(string mnemonic, Operations operation, bool alphanumeric) : base(mnemonic)
+		public LoaderInstruction(string mnemonic, Operations operation, bool alphanumeric) : base(mnemonic)
 		{
 			Operation = operation;
 			Alphanumeric = alphanumeric;
@@ -26,10 +26,10 @@ namespace MixLib.Instruction
 		/// </summary>
 		public class Instance : InstructionInstanceBase
 		{
-            readonly LoaderInstruction mInstruction;
-            public FullWord Value { get; private set; }
+			readonly LoaderInstruction mInstruction;
+			public FullWord Value { get; private set; }
 
-            public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)
+			public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)
 			{
 				mInstruction = instruction;
 				Value = new FullWord(sign, magnitude);

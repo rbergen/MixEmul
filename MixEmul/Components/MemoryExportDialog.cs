@@ -66,20 +66,20 @@ namespace MixGui.Components
 			}
 		}
 
-        void MFromAddressUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            if (mToAddressUpDown.Value < mFromAddressUpDown.Value)
-            {
-                mToAddressUpDown.Value = mFromAddressUpDown.Value;
-            }
-        }
+		void MFromAddressUpDown_ValueChanged(object sender, EventArgs e)
+		{
+			if (mToAddressUpDown.Value < mFromAddressUpDown.Value)
+			{
+				mToAddressUpDown.Value = mFromAddressUpDown.Value;
+			}
+		}
 
-        void MToAddressUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            if (mFromAddressUpDown.Value > mToAddressUpDown.Value)
-            {
-                mFromAddressUpDown.Value = mToAddressUpDown.Value;
-            }
-        }
-    }
+		void MToAddressUpDown_ValueChanged(object sender, EventArgs e)
+		{
+			if (mFromAddressUpDown.Value > mToAddressUpDown.Value)
+			{
+				mFromAddressUpDown.Value = mToAddressUpDown.Value;
+			}
+		}
+	}
 }

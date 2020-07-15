@@ -4,14 +4,14 @@ namespace MixLib.Type
 {
 	public class WordField : Word
 	{
-        FieldSpec mFieldSpec;
+		FieldSpec mFieldSpec;
 
-        WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount)
-        {
-            mFieldSpec = fieldSpec;
-        }
+		WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount)
+		{
+			mFieldSpec = fieldSpec;
+		}
 
-        public void ApplyToFullWord(IFullWord word)
+		public void ApplyToFullWord(IFullWord word)
 		{
 			int byteCount = mFieldSpec.ByteCount;
 			int lowBoundByteIndex = mFieldSpec.LowBoundByteIndex;

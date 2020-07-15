@@ -31,29 +31,29 @@ namespace MixGui.Components
 			: base(new LongValueTextBox(supportsSign, minValue, maxValue, value))
 		{
 			InitializeComponent();
-            AutoSize = false;
-            Size = Control.Size;
+			AutoSize = false;
+			Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
 		}
 
 		public LongValueToolStripTextBox(LongValueTextBox innerBox) : base(innerBox)
 		{
 			InitializeComponent();
-            AutoSize = false;
-            Size = innerBox.Size;
+			AutoSize = false;
+			Size = innerBox.Size;
 			Control.SizeChanged += Control_SizeChanged;
 		}
 
 		public LongValueTextBox LongValueTextBox => (LongValueTextBox)Control;
 
-        public bool SupportSign => ((LongValueTextBox)Control).SupportSign;
+		public bool SupportSign => ((LongValueTextBox)Control).SupportSign;
 
-        void Control_SizeChanged(object sender, EventArgs e)
-        {
-            Size = Control.Size;
-        }
+		void Control_SizeChanged(object sender, EventArgs e)
+		{
+			Size = Control.Size;
+		}
 
-        public long LongValue
+		public long LongValue
 		{
 			get
 			{

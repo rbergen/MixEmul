@@ -1,30 +1,30 @@
-using System;
 using MixLib.Events;
 using MixLib.Misc;
+using System;
 
 namespace MixLib.Device
 {
 	public class StreamStatus
 	{
-        string mFileName;
-        long mPosition;
-        System.IO.Stream mStream;
+		string mFileName;
+		long mPosition;
+		System.IO.Stream mStream;
 
-        public bool PositionSet { get; private set; }
+		public bool PositionSet { get; private set; }
 
-        public event ReportingEventHandler ReportingEvent;
+		public event ReportingEventHandler ReportingEvent;
 
 		public StreamStatus()
 		{
 			Reset();
 		}
 
-        void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+		void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
-        public void CloseStream()
+		public void CloseStream()
 		{
-            mStream?.Close();
-            mStream = null;
+			mStream?.Close();
+			mStream = null;
 		}
 
 		public void Reset()
@@ -36,7 +36,7 @@ namespace MixLib.Device
 
 		public void UpdatePosition()
 		{
-            if (mStream == null) return;
+			if (mStream == null) return;
 
 			try
 			{
@@ -72,20 +72,20 @@ namespace MixLib.Device
 				return mPosition;
 			}
 			set
-            {
-                mPosition = value;
-                PositionSet = true;
-                if (mStream == null) return;
+			{
+				mPosition = value;
+				PositionSet = true;
+				if (mStream == null) return;
 
-                try
-                {
-                    mStream.Position = mPosition;
-                }
-                catch (Exception exception)
-                {
-                    OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
-                }
-            }
+				try
+				{
+					mStream.Position = mPosition;
+				}
+				catch (Exception exception)
+				{
+					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while opening file " + FileName + ":" + exception.Message));
+				}
+			}
 		}
 
 		public System.IO.Stream Stream
@@ -96,7 +96,7 @@ namespace MixLib.Device
 			}
 			set
 			{
-                if (mStream != null)
+				if (mStream != null)
 				{
 					throw new InvalidOperationException("can't replace open stream. Open stream must first be closed.");
 				}

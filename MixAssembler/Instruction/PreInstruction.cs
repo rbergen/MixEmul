@@ -17,12 +17,12 @@ namespace MixAssembler.Instruction
 			Parameters = parameters;
 		}
 
-        /// <summary>
-        /// This property indicates if the PreInstruction can actually generate an instruction instance. For this to be the case, both an instruction template and 
-        /// the instruction parameters must have been provided during construction of this PreInstruction.
-        /// </summary>
-        public bool IsDefined => Instruction != null && Parameters != null;
+		/// <summary>
+		/// This property indicates if the PreInstruction can actually generate an instruction instance. For this to be the case, both an instruction template and 
+		/// the instruction parameters must have been provided during construction of this PreInstruction.
+		/// </summary>
+		public bool IsDefined => Instruction != null && Parameters != null;
 
-        public InstructionInstanceBase CreateInstance(AssemblingStatus status) => Parameters.CreateInstance(Instruction, status);
+		public InstructionInstanceBase CreateInstance(AssemblingStatus status) => Parameters.CreateInstance(Instruction, status);
 	}
 }

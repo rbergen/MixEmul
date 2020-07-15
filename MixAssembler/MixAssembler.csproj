@@ -21,7 +21,7 @@
     </StartupObject>
     <RootNamespace>MixAssembler</RootNamespace>
     <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

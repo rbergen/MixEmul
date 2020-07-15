@@ -1,5 +1,5 @@
-using System;
 using MixLib.Type;
+using System;
 
 namespace MixLib
 {
@@ -8,17 +8,17 @@ namespace MixLib
 		public const int MaxOffset = 7;
 		public const int RegisterCount = MaxOffset + 2;
 
-        const int addressByteIndex = 0;
-        const int flagsByteIndex = 2;
-        const int rJByteIndex = 3;
+		const int addressByteIndex = 0;
+		const int flagsByteIndex = 2;
+		const int rJByteIndex = 3;
 
-        Register[] mRegisters = new Register[RegisterCount - 1];
-        Register mrJ;
+		Register[] mRegisters = new Register[RegisterCount - 1];
+		Register mrJ;
 
-        public CompValues CompareIndicator { get; set; }
-        public bool OverflowIndicator { get; set; }
+		public CompValues CompareIndicator { get; set; }
+		public bool OverflowIndicator { get; set; }
 
-        public Registers()
+		public Registers()
 		{
 			mRegisters[(int)Offset.rA] = new FullWordRegister();
 			mRegisters[(int)Offset.rX] = new FullWordRegister();
@@ -33,29 +33,29 @@ namespace MixLib
 			}
 		}
 
-        public Register this[int offset] => mRegisters[offset];
+		public Register this[int offset] => mRegisters[offset];
 
-        public Register this[Offset offset] => this[(int)offset];
+		public Register this[Offset offset] => this[(int)offset];
 
-        public Register RI1 => mRegisters[(int)Offset.rI1];
+		public Register RI1 => mRegisters[(int)Offset.rI1];
 
-        public Register RI2 => mRegisters[(int)Offset.rI2];
+		public Register RI2 => mRegisters[(int)Offset.rI2];
 
-        public Register RI3 => mRegisters[(int)Offset.rI3];
+		public Register RI3 => mRegisters[(int)Offset.rI3];
 
-        public Register RI4 => mRegisters[(int)Offset.rI4];
+		public Register RI4 => mRegisters[(int)Offset.rI4];
 
-        public Register RI5 => mRegisters[(int)Offset.rI5];
+		public Register RI5 => mRegisters[(int)Offset.rI5];
 
-        public Register RI6 => mRegisters[(int)Offset.rI6];
+		public Register RI6 => mRegisters[(int)Offset.rI6];
 
-        public Register RA => mRegisters[(int)Offset.rA];
+		public Register RA => mRegisters[(int)Offset.rA];
 
-        public Register RJ => mrJ;
+		public Register RJ => mrJ;
 
-        public Register RX => mRegisters[(int)Offset.rX];
+		public Register RX => mRegisters[(int)Offset.rX];
 
-        public int GetIndexedAddress(int mValue, int index)
+		public int GetIndexedAddress(int mValue, int index)
 		{
 			if (index == 0) return mValue;
 
@@ -169,25 +169,25 @@ namespace MixLib
 			Greater
 		}
 
-        public enum Offset
-        {
-            rA = 0,
-            rI1 = 1,
-            rI2 = 2,
-            rI3 = 3,
-            rI4 = 4,
-            rI5 = 5,
-            rI6 = 6,
-            rX = 7
-        }
+		public enum Offset
+		{
+			rA = 0,
+			rI1 = 1,
+			rI2 = 2,
+			rI3 = 3,
+			rI4 = 4,
+			rI5 = 5,
+			rI6 = 6,
+			rX = 7
+		}
 
-        [Flags]
-        enum FlagValues : byte
-        {
-            None = 0,
-            Less = 1,
-            Greater = 2,
-            Overflow = 4
-        }
-    }
+		[Flags]
+		enum FlagValues : byte
+		{
+			None = 0,
+			Less = 1,
+			Greater = 2,
+			Overflow = 4
+		}
+	}
 }

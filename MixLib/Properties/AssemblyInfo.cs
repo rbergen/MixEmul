@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Rutger van Bergen")]
 [assembly: AssemblyProduct("MixEmul")]
-[assembly: AssemblyCopyright("© Copyright 2017, Rutger van Bergen")]
+[assembly: AssemblyCopyright("© Copyright 2020, Rutger van Bergen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

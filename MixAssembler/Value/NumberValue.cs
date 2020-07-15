@@ -1,5 +1,5 @@
-using System;
 using MixLib.Type;
+using System;
 
 namespace MixAssembler.Value
 {
@@ -8,10 +8,10 @@ namespace MixAssembler.Value
 	/// </summary>
 	public class NumberValue : IValue
 	{
-        public long Magnitude { get; set; }
-        public Word.Signs Sign { get; set; }
+		public long Magnitude { get; set; }
+		public Word.Signs Sign { get; set; }
 
-        public NumberValue(long value)
+		public NumberValue(long value)
 		{
 			if (value < 0)
 			{
@@ -34,14 +34,14 @@ namespace MixAssembler.Value
 		}
 
 		public virtual long GetValue(int currentAddress) => Sign.ApplyTo(Magnitude);
-	
+
 		public virtual bool IsValueDefined(int currentAddress) => true;
 
-        public long GetMagnitude(int currentAddress) => Magnitude;
+		public long GetMagnitude(int currentAddress) => Magnitude;
 
-        public Word.Signs GetSign(int currentAddress) => Sign;
+		public Word.Signs GetSign(int currentAddress) => Sign;
 
-        public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length != 0 && text.Length <= 10)
 			{

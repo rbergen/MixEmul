@@ -9,6 +9,11 @@ x: Bugfix
 
 =========================================
 
+0.3.7502.648 (2020-07-16)
+* Upgraded target version of .NET Framework to 4.7.2
+* Overall code cleanup
+* Slight changes in visual appearance
+
 0.3.5953.39333 (2016-04-19)
 * Refactored the code to use C# 6.0 features
 x "No instruction" text would not be shown when (shift-)tabbing out of the instruction editor

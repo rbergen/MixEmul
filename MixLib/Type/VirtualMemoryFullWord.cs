@@ -1,26 +1,26 @@
-﻿using System;
+﻿using MixLib.Instruction;
+using MixLib.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using MixLib.Instruction;
-using MixLib.Utils;
 
 namespace MixLib.Type
 {
 	public class VirtualMemoryFullWord : IMemoryFullWord
 	{
-        static readonly string mDefaultCharString;
-        static readonly string mDefaultNonCharString;
-        static readonly string mDefaultInstructionString;
-        const long mDefaultLongValue = 0;
-        static readonly FullWord mDefaultWord;
+		static readonly string mDefaultCharString;
+		static readonly string mDefaultNonCharString;
+		static readonly string mDefaultInstructionString;
+		const long mDefaultLongValue = 0;
+		static readonly FullWord mDefaultWord;
 
-        MemoryFullWord mRealWord;
-        IMemory mMemory;
-        object mSyncRoot = new object();
+		MemoryFullWord mRealWord;
+		IMemory mMemory;
+		object mSyncRoot = new object();
 
-        public int Index { get; private set; }
+		public int Index { get; private set; }
 
-        static VirtualMemoryFullWord()
+		static VirtualMemoryFullWord()
 		{
 			mDefaultWord = new FullWord(mDefaultLongValue);
 			mDefaultCharString = mDefaultWord.ToString(true);
@@ -43,73 +43,73 @@ namespace MixLib.Type
 			Index = index;
 		}
 
-        public int BitCount => mDefaultWord.BitCount;
+		public int BitCount => mDefaultWord.BitCount;
 
-        public int ByteCount => FullWord.ByteCount;
+		public int ByteCount => FullWord.ByteCount;
 
-        FullWord ActiveWord => RealWordFetched ? mRealWord : mDefaultWord;
+		FullWord ActiveWord => RealWordFetched ? mRealWord : mDefaultWord;
 
-        public long MaxMagnitude => mDefaultWord.MaxMagnitude;
+		public long MaxMagnitude => mDefaultWord.MaxMagnitude;
 
-        public long ProfilingTickCount => RealWordFetched ? mRealWord.ProfilingTickCount : 0;
+		public long ProfilingTickCount => RealWordFetched ? mRealWord.ProfilingTickCount : 0;
 
-        public long ProfilingExecutionCount => RealWordFetched ? mRealWord.ProfilingExecutionCount : 0;
+		public long ProfilingExecutionCount => RealWordFetched ? mRealWord.ProfilingExecutionCount : 0;
 
-        public IEnumerator GetEnumerator() => ActiveWord.GetEnumerator();
+		public IEnumerator GetEnumerator() => ActiveWord.GetEnumerator();
 
-        IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)ActiveWord).GetEnumerator();
+		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)ActiveWord).GetEnumerator();
 
-        public int MaxByteCount => ActiveWord.MaxByteCount;
+		public int MaxByteCount => ActiveWord.MaxByteCount;
 
-        public bool IsEmpty => !RealWordFetched || mRealWord.IsEmpty;
+		public bool IsEmpty => !RealWordFetched || mRealWord.IsEmpty;
 
-        public MixByte[] ToArray() => ActiveWord.ToArray();
+		public MixByte[] ToArray() => ActiveWord.ToArray();
 
-        public object Clone() => ActiveWord.Clone();
+		public object Clone() => ActiveWord.Clone();
 
-        public string ToString(bool asChars) =>
-            RealWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
+		public string ToString(bool asChars) =>
+				RealWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
 
-        void FetchRealWordIfNotFetched()
-        {
-            lock (mSyncRoot)
-            {
-                if (mRealWord == null) FetchRealWord();
-            }
-        }
+		void FetchRealWordIfNotFetched()
+		{
+			lock (mSyncRoot)
+			{
+				if (mRealWord == null) FetchRealWord();
+			}
+		}
 
-        bool RealWordFetched
-        {
-            get
-            {
-                lock (mSyncRoot)
-                {
-                    return mRealWord != null;
-                }
-            }
-        }
+		bool RealWordFetched
+		{
+			get
+			{
+				lock (mSyncRoot)
+				{
+					return mRealWord != null;
+				}
+			}
+		}
 
-        void FetchRealWord()
-        {
-            mRealWord = mMemory.GetRealWord(Index);
-        }
+		void FetchRealWord()
+		{
+			mRealWord = mMemory.GetRealWord(Index);
+		}
 
-        bool FetchRealWordConditionally(Func<bool> condition)
-        {
-            lock (mSyncRoot)
-            {
-                if (mRealWord == null)
-                {
-                    if (!condition()) return false;
+		bool FetchRealWordConditionally(Func<bool> condition)
+		{
+			lock (mSyncRoot)
+			{
+				if (mRealWord == null)
+				{
+					if (!condition()) return false;
 
-                    FetchRealWord();
-                }
-            }
+					FetchRealWord();
+				}
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        public string SourceLine
+		public string SourceLine
 		{
 			get
 			{
@@ -233,7 +233,7 @@ namespace MixLib.Type
 			}
 		}
 
-        public Word.Signs Sign
+		public Word.Signs Sign
 		{
 			get
 			{
@@ -283,22 +283,22 @@ namespace MixLib.Type
 			return other != null && other.Index == Index && other.mMemory == mMemory && other.mRealWord == mRealWord;
 		}
 
-        public override int GetHashCode()
-        {
-            var hashcode = Index.GetHashCode();
+		public override int GetHashCode()
+		{
+			var hashcode = Index.GetHashCode();
 
-            if (mMemory != null)
-            {
-                hashcode ^= mMemory.GetHashCode();
-            }
+			if (mMemory != null)
+			{
+				hashcode ^= mMemory.GetHashCode();
+			}
 
-            if (mRealWord != null)
-            {
-                hashcode ^= mRealWord.GetHashCode();
-            }
+			if (mRealWord != null)
+			{
+				hashcode ^= mRealWord.GetHashCode();
+			}
 
-            return hashcode;
-        }
+			return hashcode;
+		}
 
 		public void IncreaseProfilingTickCount(int ticks)
 		{

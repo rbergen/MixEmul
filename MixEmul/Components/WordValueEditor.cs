@@ -1,21 +1,21 @@
-using System.Drawing;
-using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Utils;
 using MixLib.Type;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace MixGui.Components
 {
-    public class WordValueEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
+	public class WordValueEditor : UserControl, IWordEditor, INavigableControl, IEscapeConsumer
 	{
-        Label mEqualsLabel;
-        bool mIncludeSign;
-        readonly LongValueTextBox mLongValueTextBox;
-        bool mReadOnly;
-        int mTextBoxWidth;
-        readonly WordEditor mWordEditor;
+		Label mEqualsLabel;
+		bool mIncludeSign;
+		readonly LongValueTextBox mLongValueTextBox;
+		bool mReadOnly;
+		int mTextBoxWidth;
+		readonly WordEditor mWordEditor;
 
-        public event KeyEventHandler NavigationKeyDown;
+		public event KeyEventHandler NavigationKeyDown;
 
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
@@ -83,98 +83,98 @@ namespace MixGui.Components
 			SizeComponent();
 		}
 
-        public Control EditorControl => this;
+		public Control EditorControl => this;
 
-        public FieldTypes? FocusedField => mLongValueTextBox.Focused ? FieldTypes.Value : mWordEditor.FocusedField;
+		public FieldTypes? FocusedField => mLongValueTextBox.Focused ? FieldTypes.Value : mWordEditor.FocusedField;
 
-        public int? CaretIndex => 
-            FocusedField == FieldTypes.Value ? mLongValueTextBox.SelectionStart + mLongValueTextBox.SelectionLength : mWordEditor.CaretIndex;
+		public int? CaretIndex =>
+				FocusedField == FieldTypes.Value ? mLongValueTextBox.SelectionStart + mLongValueTextBox.SelectionLength : mWordEditor.CaretIndex;
 
-        public bool Focus(FieldTypes? field, int? index) => 
-            field == FieldTypes.Value ? mLongValueTextBox.FocusWithIndex(index) : mWordEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index) =>
+				field == FieldTypes.Value ? mLongValueTextBox.FocusWithIndex(index) : mWordEditor.Focus(field, index);
 
-        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        protected override void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
 		}
 
-        void This_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Modifiers != Keys.None) return;
+		void This_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Modifiers != Keys.None) return;
 
-            FieldTypes editorField = FieldTypes.Word;
-            int? index = null;
+			FieldTypes editorField = FieldTypes.Word;
+			int? index = null;
 
-            if (sender == mLongValueTextBox)
-            {
-                editorField = FieldTypes.Value;
-                index = mLongValueTextBox.SelectionLength + mLongValueTextBox.SelectionStart;
-            }
+			if (sender == mLongValueTextBox)
+			{
+				editorField = FieldTypes.Value;
+				index = mLongValueTextBox.SelectionLength + mLongValueTextBox.SelectionStart;
+			}
 
-            switch (e.KeyCode)
-            {
-                case Keys.Prior:
-                case Keys.Next:
-                case Keys.Up:
-                case Keys.Down:
-                    NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
-                    break;
+			switch (e.KeyCode)
+			{
+				case Keys.Prior:
+				case Keys.Next:
+				case Keys.Up:
+				case Keys.Down:
+					NavigationKeyDown?.Invoke(this, new FieldKeyEventArgs(e.KeyData, editorField, index));
+					break;
 
-                case Keys.Right:
-                    if (sender == mWordEditor)
-                    {
-                        mLongValueTextBox.Focus();
-                    }
-                    else if (sender == mLongValueTextBox && NavigationKeyDown != null)
-                    {
-                        NavigationKeyDown(this, e);
-                    }
+				case Keys.Right:
+					if (sender == mWordEditor)
+					{
+						mLongValueTextBox.Focus();
+					}
+					else if (sender == mLongValueTextBox && NavigationKeyDown != null)
+					{
+						NavigationKeyDown(this, e);
+					}
 
-                    break;
+					break;
 
-                case Keys.Left:
-                    if (sender == mLongValueTextBox)
-                    {
-                        mWordEditor.Focus(FieldTypes.LastByte, null);
-                    }
-                    else if (sender == mWordEditor && NavigationKeyDown != null)
-                    {
-                        NavigationKeyDown(this, e);
-                    }
+				case Keys.Left:
+					if (sender == mLongValueTextBox)
+					{
+						mWordEditor.Focus(FieldTypes.LastByte, null);
+					}
+					else if (sender == mWordEditor && NavigationKeyDown != null)
+					{
+						NavigationKeyDown(this, e);
+					}
 
-                    break;
-            }
-        }
+					break;
+			}
+		}
 
-        void SizeComponent()
-        {
-            SuspendLayout();
+		void SizeComponent()
+		{
+			SuspendLayout();
 
-            mEqualsLabel.Location = new Point(mWordEditor.Width, 2);
-            mLongValueTextBox.MinValue = IncludeSign ? -mWordEditor.WordValue.MaxMagnitude : 0L;
-            mLongValueTextBox.MaxValue = mWordEditor.WordValue.MaxMagnitude;
-            mLongValueTextBox.Location = new Point(mEqualsLabel.Left + mEqualsLabel.Width, 0);
-            mLongValueTextBox.Size = new Size(TextBoxWidth, 21);
-            mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
-            mLongValueTextBox.Sign = mWordEditor.WordValue.Sign;
-            Size = new Size(mLongValueTextBox.Left + TextBoxWidth, 21);
+			mEqualsLabel.Location = new Point(mWordEditor.Width, 2);
+			mLongValueTextBox.MinValue = IncludeSign ? -mWordEditor.WordValue.MaxMagnitude : 0L;
+			mLongValueTextBox.MaxValue = mWordEditor.WordValue.MaxMagnitude;
+			mLongValueTextBox.Location = new Point(mEqualsLabel.Left + mEqualsLabel.Width, 0);
+			mLongValueTextBox.Size = new Size(TextBoxWidth, 21);
+			mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
+			mLongValueTextBox.Sign = mWordEditor.WordValue.Sign;
+			Size = new Size(mLongValueTextBox.Left + TextBoxWidth, 21);
 
-            ResumeLayout(false);
-        }
+			ResumeLayout(false);
+		}
 
-        void TextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
-        {
-            IWord wordValue = mWordEditor.WordValue;
-            IWord oldValue = new Word(wordValue.Magnitude, wordValue.Sign);
-            wordValue.MagnitudeLongValue = mLongValueTextBox.Magnitude;
-            wordValue.Sign = mLongValueTextBox.Sign;
-            mWordEditor.Update();
+		void TextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+		{
+			IWord wordValue = mWordEditor.WordValue;
+			IWord oldValue = new Word(wordValue.Magnitude, wordValue.Sign);
+			wordValue.MagnitudeLongValue = mLongValueTextBox.Magnitude;
+			wordValue.Sign = mLongValueTextBox.Sign;
+			mWordEditor.Update();
 
-            OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new Word(wordValue.Magnitude, wordValue.Sign)));
-        }
+			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new Word(wordValue.Magnitude, wordValue.Sign)));
+		}
 
-        public new void Update()
+		public new void Update()
 		{
 			mWordEditor.Update();
 			mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
@@ -188,14 +188,14 @@ namespace MixGui.Components
 			mLongValueTextBox.UpdateLayout();
 		}
 
-        void WordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
-        {
-            mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
-            mLongValueTextBox.Sign = mWordEditor.WordValue.Sign;
-            OnValueChanged(args);
-        }
+		void WordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+		{
+			mLongValueTextBox.Magnitude = mWordEditor.WordValue.MagnitudeLongValue;
+			mLongValueTextBox.Sign = mWordEditor.WordValue.Sign;
+			OnValueChanged(args);
+		}
 
-        public int ByteCount
+		public int ByteCount
 		{
 			get
 			{

@@ -5,12 +5,12 @@ namespace MixLib.Misc
 	{
 		public const int Unspecified = int.MinValue;
 
-        public bool BoundsSpecified { get; private set; }
-        public string Message { get; private set; }
-        public int ValidLowerBound { get; private set; }
-        public int ValidUpperBound { get; private set; }
+		public bool BoundsSpecified { get; private set; }
+		public string Message { get; private set; }
+		public int ValidLowerBound { get; private set; }
+		public int ValidUpperBound { get; private set; }
 
-        public ValidationError(string message)
+		public ValidationError(string message)
 		{
 			Message = message;
 			ValidLowerBound = Unspecified;
@@ -34,7 +34,7 @@ namespace MixLib.Misc
 			BoundsSpecified = true;
 		}
 
-        public virtual string CompiledMessage
+		public virtual string CompiledMessage
 		{
 			get
 			{
@@ -57,5 +57,5 @@ namespace MixLib.Misc
 				return "";
 			}
 		}
-    }
+	}
 }

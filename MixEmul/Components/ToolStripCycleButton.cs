@@ -9,14 +9,14 @@ using System.Windows.Forms.Design;
 namespace MixGui.Components
 {
 	[ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip |
-									   ToolStripItemDesignerAvailability.ContextMenuStrip |
-									   ToolStripItemDesignerAvailability.StatusStrip)]
+										 ToolStripItemDesignerAvailability.ContextMenuStrip |
+										 ToolStripItemDesignerAvailability.StatusStrip)]
 	public partial class ToolStripCycleButton : ToolStripControlHost
 	{
-        Step mCurrentStep;
-        List<Step> mSteps;
+		Step mCurrentStep;
+		List<Step> mSteps;
 
-        public event EventHandler ValueChanged;
+		public event EventHandler ValueChanged;
 
 		public ToolStripCycleButton(IContainer container) : this()
 		{
@@ -28,27 +28,27 @@ namespace MixGui.Components
 		{
 			InitializeComponent();
 			mSteps = new List<Step>();
-            AutoSize = false;
-            Size = Control.Size;
+			AutoSize = false;
+			Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
 			Control.Click += Control_Click;
 			Control.Paint += ToolStripCycleButton_Paint;
 			Text = "";
 		}
 
-        protected void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
+		protected void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
 
-        void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
+		void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
 		{
 			if (string.IsNullOrEmpty(Text))
 			{
-                var stringFormat = new StringFormat
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
+				var stringFormat = new StringFormat
+				{
+					Alignment = StringAlignment.Center,
+					LineAlignment = StringAlignment.Center
+				};
 
-                e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
+				e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace MixGui.Components
 
 		void Control_SizeChanged(object sender, EventArgs e)
 		{
-            Size = Control.Size;
+			Size = Control.Size;
 		}
 
 		public Step AddStep(object value)
@@ -138,22 +138,22 @@ namespace MixGui.Components
 			}
 		}
 
-        void SetCurrentStep(Step step)
-        {
-            if (mCurrentStep == step) return;
-
-            mCurrentStep = step;
-            Invalidate();
-            OnValueChanged(new EventArgs());
-        }
-
-        public class Step
+		void SetCurrentStep(Step step)
 		{
-            public object Value { get; private set; }
-            public string Text { get; private set; }
-            public Step NextStep { get; set; }
+			if (mCurrentStep == step) return;
 
-            public Step(object value, string text) : this(value, text, null) { }
+			mCurrentStep = step;
+			Invalidate();
+			OnValueChanged(new EventArgs());
+		}
+
+		public class Step
+		{
+			public object Value { get; private set; }
+			public string Text { get; private set; }
+			public Step NextStep { get; set; }
+
+			public Step(object value, string text) : this(value, text, null) { }
 
 			public Step(object value) : this(value, value.ToString(), null) { }
 

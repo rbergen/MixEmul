@@ -5,12 +5,12 @@ namespace MixLib.Type
 {
 	public class MemoryFullWord : FullWord, IMemoryFullWord
 	{
-        public int Index { get; private set; }
-        public string SourceLine { get; set; }
-        public long ProfilingTickCount { get; private set; }
-        public long ProfilingExecutionCount { get; private set; }
+		public int Index { get; private set; }
+		public string SourceLine { get; set; }
+		public long ProfilingTickCount { get; private set; }
+		public long ProfilingExecutionCount { get; private set; }
 
-        public MemoryFullWord(int index)
+		public MemoryFullWord(int index)
 		{
 			Index = index;
 		}
@@ -22,11 +22,11 @@ namespace MixLib.Type
 
 		public override bool IsEmpty => base.IsEmpty && SourceLine == null;
 
-        public void IncreaseProfilingTickCount(int ticks) => ProfilingTickCount += ticks;
+		public void IncreaseProfilingTickCount(int ticks) => ProfilingTickCount += ticks;
 
-        public void IncreaseProfilingExecutionCount() => ProfilingExecutionCount++;
+		public void IncreaseProfilingExecutionCount() => ProfilingExecutionCount++;
 
-        public SearchResult FindMatch(SearchParameters options)
+		public SearchResult FindMatch(SearchParameters options)
 		{
 			int index;
 

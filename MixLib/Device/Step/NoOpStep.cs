@@ -2,16 +2,16 @@ namespace MixLib.Device.Step
 {
 	public class NoOpStep : TickingStep
 	{
-        readonly string mStatusDescription;
+		readonly string mStatusDescription;
 
-        public NoOpStep(int tickCount, string statusDescription) : base(tickCount)
+		public NoOpStep(int tickCount, string statusDescription) : base(tickCount)
 		{
 			mStatusDescription = statusDescription;
 		}
 
-        public override string StatusDescription => mStatusDescription;
+		public override string StatusDescription => mStatusDescription;
 
-        protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount);
+		protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount);
 
 		protected new class Instance : TickingStep.Instance
 		{

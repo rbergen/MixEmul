@@ -1,20 +1,20 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Settings;
 using MixLib.Type;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace MixGui.Components
 {
 	public class DeviceWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-        Label mWordIndexLabel;
-        FullWordEditor mFullWordEditor;
-        int mWordIndex;
-        IFullWord mDeviceWord;
+		Label mWordIndexLabel;
+		FullWordEditor mFullWordEditor;
+		int mWordIndex;
+		IFullWord mDeviceWord;
 
-        public event KeyEventHandler NavigationKeyDown;
+		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
 		public DeviceWordEditor()
@@ -35,63 +35,63 @@ namespace MixGui.Components
 			InitializeComponent();
 		}
 
-        public Control EditorControl => this;
+		public Control EditorControl => this;
 
-        public FieldTypes? FocusedField => mFullWordEditor.FocusedField;
+		public FieldTypes? FocusedField => mFullWordEditor.FocusedField;
 
-        public int? CaretIndex => mFullWordEditor.CaretIndex;
+		public int? CaretIndex => mFullWordEditor.CaretIndex;
 
-        public bool Focus(FieldTypes? field, int? index) => mFullWordEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index) => mFullWordEditor.Focus(field, index);
 
-        public void Select(int start, int length) => mFullWordEditor.Select(start, length);
+		public void Select(int start, int length) => mFullWordEditor.Select(start, length);
 
-        protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
+		void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
 
-        void InitializeComponent()
-        {
-            SuspendLayout();
+		void InitializeComponent()
+		{
+			SuspendLayout();
 
-            mWordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-            mWordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-            mWordIndexLabel.Location = new Point(0, 4);
-            mWordIndexLabel.Name = "mWordIndexLabel";
-            mWordIndexLabel.Size = new Size(30, 13);
-            mWordIndexLabel.TabIndex = 0;
-            mWordIndexLabel.Text = "00:";
+			mWordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			mWordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			mWordIndexLabel.Location = new Point(0, 4);
+			mWordIndexLabel.Name = "mWordIndexLabel";
+			mWordIndexLabel.Size = new Size(30, 13);
+			mWordIndexLabel.TabIndex = 0;
+			mWordIndexLabel.Text = "00:";
 
-            mFullWordEditor.Location = new Point(mWordIndexLabel.Right, 2);
-            mFullWordEditor.Name = "mFullWordEditor";
-            mFullWordEditor.TabIndex = 1;
-            mFullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
-            mFullWordEditor.NavigationKeyDown += This_KeyDown;
+			mFullWordEditor.Location = new Point(mWordIndexLabel.Right, 2);
+			mFullWordEditor.Name = "mFullWordEditor";
+			mFullWordEditor.TabIndex = 1;
+			mFullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
+			mFullWordEditor.NavigationKeyDown += This_KeyDown;
 
-            Controls.Add(mWordIndexLabel);
-            Controls.Add(mFullWordEditor);
-            Name = "DeviceWordEditor";
-            Size = new Size(mFullWordEditor.Right + 2, mFullWordEditor.Height + 3);
-            KeyDown += This_KeyDown;
-            ResumeLayout(false);
-        }
+			Controls.Add(mWordIndexLabel);
+			Controls.Add(mFullWordEditor);
+			Name = "DeviceWordEditor";
+			Size = new Size(mFullWordEditor.Right + 2, mFullWordEditor.Height + 3);
+			KeyDown += This_KeyDown;
+			ResumeLayout(false);
+		}
 
-        void This_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Prior:
-                case Keys.Next:
-                case Keys.Up:
-                case Keys.Down:
-                    NavigationKeyDown?.Invoke(this, e);
-                    break;
+		void This_KeyDown(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Prior:
+				case Keys.Next:
+				case Keys.Up:
+				case Keys.Down:
+					NavigationKeyDown?.Invoke(this, e);
+					break;
 
-                case Keys.Right:
-                    break;
-            }
-        }
+				case Keys.Right:
+					break;
+			}
+		}
 
-        public new void Update()
+		public new void Update()
 		{
 			mFullWordEditor.Update();
 			base.Update();
@@ -125,7 +125,7 @@ namespace MixGui.Components
 			}
 			set
 			{
-                mDeviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
+				mDeviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
 				mFullWordEditor.WordValue = mDeviceWord;
 			}
 		}

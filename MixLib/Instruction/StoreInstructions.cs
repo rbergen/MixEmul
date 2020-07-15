@@ -8,13 +8,13 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class StoreInstructions
 	{
-        const byte storeOpcodeBase = 24;
-        const byte storeJOpcode = 32;
+		const byte storeOpcodeBase = 24;
+		const byte storeJOpcode = 32;
 
-        /// <summary>
-        /// Method for performing STx instructions
-        /// </summary>
-        public static bool StoreRegister(ModuleBase module, MixInstruction.Instance instance)
+		/// <summary>
+		/// Method for performing STx instructions
+		/// </summary>
+		public static bool StoreRegister(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress != int.MinValue)

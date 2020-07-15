@@ -20,31 +20,43 @@
     <StartupObject>MixGui.MixForm</StartupObject>
     <Win32Resource>
     </Win32Resource>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
     <RootNamespace>MixGui</RootNamespace>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <PublishUrl>http://localhost/MixEmul/</PublishUrl>
+    <TargetFrameworkProfile />
+    <PublishUrl>C:\Users\rutge\source\repos\MixEmul\publish\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>276CF27507CF05CCC0A04C57251597FB62FF4CB9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>MixEmul_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -301,9 +313,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Documentation\Changes.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Documentation\Changes.txt" />
     <Content Include="DeviceEditorFormIcon.ico" />
     <Content Include="MixFormIcon.ico" />
     <Content Include="control.mixal">
@@ -312,30 +322,17 @@
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\99bottles.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\easter.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\echo.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\hello.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\loader.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\permutations.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample programs\primes.mixal">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Sample programs\99bottles.mixal" />
+    <None Include="Sample programs\easter.mixal" />
+    <None Include="Sample programs\echo.mixal" />
+    <None Include="Sample programs\hello.mixal" />
+    <None Include="Sample programs\loader.mixal" />
+    <None Include="Sample programs\permutations.mixal" />
+    <None Include="Sample programs\primes.mixal" />
     <None Include="ClassDiagram1.cd" />
     <None Include="Documentation\MixEmul Documentation 0.3.5.docx" />
     <None Include="Documentation\MixEmul Documentation 0.3.5.pdf" />
+    <None Include="MixEmul_TemporaryKey.pfx" />
     <None Include="Resources\Find_5650.png" />
     <None Include="Resources\Symbols_Up_16xLG - kopie.png" />
     <None Include="Resources\Symbols_Down_16xLG.png" />

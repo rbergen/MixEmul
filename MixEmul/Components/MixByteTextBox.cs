@@ -1,8 +1,8 @@
+using MixGui.Settings;
+using MixLib.Type;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using MixGui.Settings;
-using MixLib.Type;
 
 namespace MixGui.Components
 {
@@ -11,17 +11,17 @@ namespace MixGui.Components
 		public const int UseHeight = 21;
 		public const int UseWidth = 18;
 
-        byte mByteValue;
-        Color mEditingTextColor;
-        bool mEditMode;
-        int mLastCaretPos;
-        string mLastValidText;
-        Color mRenderedTextColor;
-        bool mUpdating;
+		byte mByteValue;
+		Color mEditingTextColor;
+		bool mEditMode;
+		int mLastCaretPos;
+		string mLastValidText;
+		Color mRenderedTextColor;
+		bool mUpdating;
 
-        public int Index { get; private set; }
+		public int Index { get; private set; }
 
-        public event ValueChangedEventHandler ValueChanged;
+		public event ValueChangedEventHandler ValueChanged;
 
 		public MixByteTextBox()
 			: this(0)
@@ -57,123 +57,123 @@ namespace MixGui.Components
 			TextChanged += This_TextChanged;
 		}
 
-        protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
 
-        void This_Enter(object sender, EventArgs e) => Select(0, TextLength);
+		void This_Enter(object sender, EventArgs e) => Select(0, TextLength);
 
-        void This_Leave(object sender, EventArgs e) => CheckAndUpdateValue(Text);
+		void This_Leave(object sender, EventArgs e) => CheckAndUpdateValue(Text);
 
-        void CheckAndUpdateValue(byte byteValue)
-        {
-            mEditMode = false;
+		void CheckAndUpdateValue(byte byteValue)
+		{
+			mEditMode = false;
 
-            if (byteValue > Byte.MaxValue)
-            {
-                byteValue = Byte.MaxValue;
-            }
+			if (byteValue > Byte.MaxValue)
+			{
+				byteValue = Byte.MaxValue;
+			}
 
-            byte oldByteValue = mByteValue;
-            mByteValue = byteValue;
+			byte oldByteValue = mByteValue;
+			mByteValue = byteValue;
 
-            mUpdating = true;
+			mUpdating = true;
 
-            ForeColor = mRenderedTextColor;
-            mLastValidText = mByteValue.ToString("D2");
-            base.Text = mLastValidText;
-            mLastCaretPos = SelectionStart + SelectionLength;
-            Select(0, TextLength);
+			ForeColor = mRenderedTextColor;
+			mLastValidText = mByteValue.ToString("D2");
+			base.Text = mLastValidText;
+			mLastCaretPos = SelectionStart + SelectionLength;
+			Select(0, TextLength);
 
-            mUpdating = false;
+			mUpdating = false;
 
-            if (oldByteValue != mByteValue) OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
-        }
+			if (oldByteValue != mByteValue) OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
+		}
 
-        void This_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.A)
-            {
-                SelectAll();
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
-        }
+		void This_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Control && e.KeyCode == Keys.A)
+			{
+				SelectAll();
+				e.Handled = true;
+				e.SuppressKeyPress = true;
+			}
+		}
 
-        void CheckAndUpdateValue(string newValue)
-        {
-            try
-            {
-                CheckAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
-            }
-            catch (FormatException)
-            {
-            }
-        }
+		void CheckAndUpdateValue(string newValue)
+		{
+			try
+			{
+				CheckAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
+			}
+			catch (FormatException)
+			{
+			}
+		}
 
-        void This_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            char keyChar = e.KeyChar;
+		void This_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			char keyChar = e.KeyChar;
 
-            switch ((Keys)keyChar)
-            {
-                case Keys.Enter:
-                    e.Handled = true;
-                    CheckAndUpdateValue(Text);
+			switch ((Keys)keyChar)
+			{
+				case Keys.Enter:
+					e.Handled = true;
+					CheckAndUpdateValue(Text);
 
-                    return;
+					return;
 
-                case Keys.Escape:
-                    e.Handled = true;
-                    CheckAndUpdateValue(mByteValue);
+				case Keys.Escape:
+					e.Handled = true;
+					CheckAndUpdateValue(mByteValue);
 
-                    return;
-            }
+					return;
+			}
 
-            e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
-        }
+			e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
+		}
 
-        void This_TextChanged(object sender, EventArgs e)
-        {
-            if (!mUpdating)
-            {
-                bool textIsValid = true;
+		void This_TextChanged(object sender, EventArgs e)
+		{
+			if (!mUpdating)
+			{
+				bool textIsValid = true;
 
-                try
-                {
-                    string text = Text;
+				try
+				{
+					string text = Text;
 
-                    if (text != "")
-                    {
-                        var byteValue = byte.Parse(text);
-                        textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;
-                    }
-                }
-                catch (FormatException)
-                {
-                    textIsValid = false;
-                }
+					if (text != "")
+					{
+						var byteValue = byte.Parse(text);
+						textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;
+					}
+				}
+				catch (FormatException)
+				{
+					textIsValid = false;
+				}
 
-                if (!textIsValid)
-                {
-                    mUpdating = true;
-                    base.Text = mLastValidText;
-                    Select(mLastCaretPos, 0);
-                    mUpdating = false;
-                }
-                else
-                {
-                    mLastValidText = base.Text;
-                    mLastCaretPos = SelectionStart + SelectionLength;
+				if (!textIsValid)
+				{
+					mUpdating = true;
+					base.Text = mLastValidText;
+					Select(mLastCaretPos, 0);
+					mUpdating = false;
+				}
+				else
+				{
+					mLastValidText = base.Text;
+					mLastCaretPos = SelectionStart + SelectionLength;
 
-                    if (!mEditMode)
-                    {
-                        ForeColor = mEditingTextColor;
-                        mEditMode = true;
-                    }
-                }
-            }
-        }
+					if (!mEditMode)
+					{
+						ForeColor = mEditingTextColor;
+						mEditMode = true;
+					}
+				}
+			}
+		}
 
-        public void UpdateLayout()
+		public void UpdateLayout()
 		{
 			SuspendLayout();
 

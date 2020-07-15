@@ -4,33 +4,33 @@ namespace MixLib.Instruction
 {
 	public class InstructionText
 	{
-        readonly MixInstruction.Instance mInstance;
+		readonly MixInstruction.Instance mInstance;
 
-        public InstructionText(MixInstruction.Instance instance)
+		public InstructionText(MixInstruction.Instance instance)
 		{
 			mInstance = instance;
 		}
 
-        public string Index => mInstance.Index != 0 ? "," + mInstance.Index : "";
+		public string Index => mInstance.Index != 0 ? "," + mInstance.Index : "";
 
-        public string InstanceText => Mnemonic + " " + Address + Index + Field;
+		public string InstanceText => Mnemonic + " " + Address + Index + Field;
 
-        public string Mnemonic => mInstance.MixInstruction.Mnemonic;
+		public string Mnemonic => mInstance.MixInstruction.Mnemonic;
 
-        string FieldText
-        {
-            get
-            {
-                FieldSpec fieldSpec = mInstance.FieldSpec;
-                if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
-                {
-                    return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
-                }
-                return fieldSpec.MixByteValue.ByteValue.ToString();
-            }
-        }
+		string FieldText
+		{
+			get
+			{
+				FieldSpec fieldSpec = mInstance.FieldSpec;
+				if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
+				{
+					return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
+				}
+				return fieldSpec.MixByteValue.ByteValue.ToString();
+			}
+		}
 
-        public string Address
+		public string Address
 		{
 			get
 			{

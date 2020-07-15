@@ -21,9 +21,9 @@ namespace MixLib.Type
 
 		int MinWordIndex { get; set; }
 
-        int MaxWordIndex { get; set; }
+		int MaxWordIndex { get; set; }
 
-        long MaxProfilingTickCount { get; }
+		long MaxProfilingTickCount { get; }
 
 		long MaxProfilingExecutionCount { get; }
 	}

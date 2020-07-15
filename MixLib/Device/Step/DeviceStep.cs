@@ -2,7 +2,7 @@ using MixLib.Events;
 
 namespace MixLib.Device.Step
 {
-    public abstract class DeviceStep
+	public abstract class DeviceStep
 	{
 		public DeviceStep NextStep { get; set; }
 
@@ -14,17 +14,17 @@ namespace MixLib.Device.Step
 
 		public abstract class Instance
 		{
-            object mPassthrough;
+			object mPassthrough;
 
-            public InOutputOperands Operands { get; set; }
+			public InOutputOperands Operands { get; set; }
 
-            public event ReportingEventHandler ReportingEvent;
+			public event ReportingEventHandler ReportingEvent;
 
-            public virtual object OutputForNextStep => mPassthrough;
+			public virtual object OutputForNextStep => mPassthrough;
 
-            protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+			protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
 
-            protected Instance() { }
+			protected Instance() { }
 
 			public abstract bool Tick();
 

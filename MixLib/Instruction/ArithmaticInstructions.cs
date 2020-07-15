@@ -8,12 +8,12 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class ArithmaticInstructions
 	{
-        const byte substractOpcode = 2;
+		const byte substractOpcode = 2;
 
-        /// <summary>
-        /// Method for performing ADD and SUB instructions
-        /// </summary>
-        public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
+		/// <summary>
+		/// Method for performing ADD and SUB instructions
+		/// </summary>
+		public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue) return false;
@@ -29,7 +29,7 @@ namespace MixLib.Instruction
 
 			long sumValue = rALongValue + memoryWordValue;
 
-            if (sumValue != 0L)
+			if (sumValue != 0L)
 			{
 				rA.Sign = sumValue.GetSign();
 				sumValue = sumValue.GetMagnitude();
@@ -71,8 +71,8 @@ namespace MixLib.Instruction
 			decimal divider = rAXValue / memoryWordValue;
 
 			rX.Sign = rA.Sign;
-		    rA.Sign = divider.GetSign();
-		    divider = divider.GetMagnitude();
+			rA.Sign = divider.GetSign();
+			divider = divider.GetMagnitude();
 
 			if (divider > rA.MaxMagnitude)
 			{

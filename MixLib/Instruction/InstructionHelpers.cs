@@ -2,17 +2,17 @@ using MixLib.Modules;
 
 namespace MixLib.Instruction
 {
-    public static class InstructionHelpers
+	public static class InstructionHelpers
 	{
 		public const int InvalidAddress = int.MinValue;
 
-		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex) => 
-            GetValidIndexedAddress(module, addressBase, registerIndex, true);
+		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex) =>
+						GetValidIndexedAddress(module, addressBase, registerIndex, true);
 
-        public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance) =>
-            instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
+		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance) =>
+				instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
 
-        public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
+		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
 		{
 			if (registerIndex < 0 || registerIndex > (int)Registers.Offset.rI6)
 			{
@@ -52,7 +52,7 @@ namespace MixLib.Instruction
 			if (index == 1) return new InstanceValidationError[] { errorArray[0] };
 			if (index == 2) return errorArray;
 
-            return null;
+			return null;
 		}
 	}
 }
