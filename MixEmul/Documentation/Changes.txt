@@ -14,6 +14,11 @@ x: Bugfix
 * Overall code cleanup
 * Slight changes in visual appearance
 
+0.3.6483.29917 (2017-10-01)
+* Large number of mainly cosmetic refactors
+x Minor bug fixes
+* Documentation updated
+
 0.3.5953.39333 (2016-04-19)
 * Refactored the code to use C# 6.0 features
 x "No instruction" text would not be shown when (shift-)tabbing out of the instruction editor
