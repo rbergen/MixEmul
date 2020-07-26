@@ -206,6 +206,7 @@ namespace MixGui.Components
 			mOverflowBox.Size = new Size(16, 21);
 			mOverflowBox.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mOverflowBox.Width, mrI6Editor.Top);
 			mOverflowBox.TabIndex = 19;
+			mOverflowBox.FlatStyle = FlatStyle.Flat;
 			mOverflowBox.CheckedChanged += MOverflowBox_CheckedChanged;
 
 			mCompareLabel.Name = "mCompareLabel";

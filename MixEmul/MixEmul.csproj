@@ -47,10 +47,10 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>276CF27507CF05CCC0A04C57251597FB62FF4CB9</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>56D8CA9FA393373C43CE6348BF765712A89A78AE</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>MixEmul_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>MixEmul_3_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -322,6 +322,7 @@
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="MixEmul_3_TemporaryKey.pfx" />
     <None Include="Sample programs\99bottles.mixal" />
     <None Include="Sample programs\easter.mixal" />
     <None Include="Sample programs\echo.mixal" />

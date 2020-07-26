@@ -392,6 +392,7 @@ namespace MixGui.Components
 			mColorSetButton.Size = new Size(40, 23);
 			mColorSetButton.TabIndex = 2;
 			mColorSetButton.Text = "&Set...";
+			mColorSetButton.FlatStyle = FlatStyle.Flat;
 			mColorSetButton.Click += MColorSetButton_Click;
 			// 
 			// mShowColorLabel
@@ -415,6 +416,7 @@ namespace MixGui.Components
 			mColorSelectionBox.Size = new Size(182, 21);
 			mColorSelectionBox.Sorted = true;
 			mColorSelectionBox.TabIndex = 0;
+			mColorSelectionBox.FlatStyle = FlatStyle.Flat;
 			mColorSelectionBox.SelectionChangeCommitted += MColorSelectionBox_SelectionChangeCommited;
 			// 
 			// mColorDefaultButton
@@ -425,6 +427,7 @@ namespace MixGui.Components
 			mColorDefaultButton.Size = new Size(56, 23);
 			mColorDefaultButton.TabIndex = 3;
 			mColorDefaultButton.Text = "Default";
+			mColorDefaultButton.FlatStyle = FlatStyle.Flat;
 			mColorDefaultButton.Click += MColorDefaultButton_Click;
 			// 
 			// mDeviceFilesGroup
@@ -455,6 +458,7 @@ namespace MixGui.Components
 			mDeviceDirectoryBox.ReadOnly = true;
 			mDeviceDirectoryBox.Size = new Size(146, 20);
 			mDeviceDirectoryBox.TabIndex = 1;
+			mDeviceDirectoryBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mDeviceDirectoryLabel
 			// 
@@ -473,6 +477,7 @@ namespace MixGui.Components
 			mDeviceDirectorySetButton.Size = new Size(40, 23);
 			mDeviceDirectorySetButton.TabIndex = 2;
 			mDeviceDirectorySetButton.Text = "S&et...";
+			mDeviceDirectorySetButton.FlatStyle = FlatStyle.Flat;
 			mDeviceDirectorySetButton.Click += MDeviceDirectorySetButton_Click;
 			// 
 			// mDeviceDirectoryDefaultButton
@@ -483,6 +488,7 @@ namespace MixGui.Components
 			mDeviceDirectoryDefaultButton.Size = new Size(56, 23);
 			mDeviceDirectoryDefaultButton.TabIndex = 3;
 			mDeviceDirectoryDefaultButton.Text = "Default";
+			mDeviceDirectoryDefaultButton.FlatStyle = FlatStyle.Flat;
 			mDeviceDirectoryDefaultButton.Click += MDeviceDirectoryDefaultButton_Click;
 			// 
 			// mDeviceFileSelectionBox
@@ -493,6 +499,7 @@ namespace MixGui.Components
 			mDeviceFileSelectionBox.Size = new Size(88, 21);
 			mDeviceFileSelectionBox.Sorted = true;
 			mDeviceFileSelectionBox.TabIndex = 4;
+			mDeviceFileSelectionBox.FlatStyle = FlatStyle.Flat;
 			mDeviceFileSelectionBox.SelectionChangeCommitted += MDeviceFileSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDeviceFileBox
@@ -503,6 +510,7 @@ namespace MixGui.Components
 			mDeviceFileBox.Name = "mDeviceFileBox";
 			mDeviceFileBox.ReadOnly = true;
 			mDeviceFileBox.Size = new Size(146, 20);
+			mDeviceFileBox.BorderStyle = BorderStyle.FixedSingle;
 			mDeviceFileBox.TabIndex = 5;
 			// 
 			// mDeviceFileSetButton
@@ -513,6 +521,7 @@ namespace MixGui.Components
 			mDeviceFileSetButton.Size = new Size(40, 23);
 			mDeviceFileSetButton.TabIndex = 6;
 			mDeviceFileSetButton.Text = "Se&t...";
+			mDeviceFileSetButton.FlatStyle = FlatStyle.Flat;
 			mDeviceFileSetButton.Click += MDeviceFileSetButton_Click;
 			// 
 			// mDeviceFileDefaultButton
@@ -523,6 +532,7 @@ namespace MixGui.Components
 			mDeviceFileDefaultButton.Size = new Size(56, 23);
 			mDeviceFileDefaultButton.TabIndex = 7;
 			mDeviceFileDefaultButton.Text = "Default";
+			mDeviceFileDefaultButton.FlatStyle = FlatStyle.Flat;
 			mDeviceFileDefaultButton.Click += MDeviceFileDefaultButton_Click;
 			// 
 			// mOkButton
@@ -534,6 +544,7 @@ namespace MixGui.Components
 			mOkButton.Size = new Size(75, 23);
 			mOkButton.TabIndex = 8;
 			mOkButton.Text = "&OK";
+			mOkButton.FlatStyle = FlatStyle.Flat;
 			mOkButton.Click += MOkButton_Click;
 			// 
 			// mCancelButton
@@ -544,6 +555,7 @@ namespace MixGui.Components
 			mCancelButton.Name = "mCancelButton";
 			mCancelButton.Size = new Size(75, 23);
 			mCancelButton.TabIndex = 9;
+			mCancelButton.FlatStyle = FlatStyle.Flat;
 			mCancelButton.Text = "&Cancel";
 			// 
 			// mDeviceTickCountsGroup
@@ -569,6 +581,7 @@ namespace MixGui.Components
 			mTickCountDefaultButton.Size = new Size(56, 23);
 			mTickCountDefaultButton.TabIndex = 3;
 			mTickCountDefaultButton.Text = "Default";
+			mTickCountDefaultButton.FlatStyle = FlatStyle.Flat;
 			mTickCountDefaultButton.Click += MTickCountDefaultButton_Click;
 			// 
 			// mTickCountSetButton
@@ -579,6 +592,7 @@ namespace MixGui.Components
 			mTickCountSetButton.Size = new Size(48, 23);
 			mTickCountSetButton.TabIndex = 2;
 			mTickCountSetButton.Text = "&Apply";
+			mTickCountSetButton.FlatStyle = FlatStyle.Flat;
 			mTickCountSetButton.Click += MTickCountSetButton_Click;
 			// 
 			// mTickCountSelectionBox
@@ -591,6 +605,7 @@ namespace MixGui.Components
 			mTickCountSelectionBox.Size = new Size(182, 21);
 			mTickCountSelectionBox.Sorted = true;
 			mTickCountSelectionBox.TabIndex = 0;
+			mTickCountSelectionBox.FlatStyle = FlatStyle.Flat;
 			mTickCountSelectionBox.SelectionChangeCommitted += MTickCountSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDefaultsButton
@@ -601,6 +616,7 @@ namespace MixGui.Components
 			mDefaultsButton.Size = new Size(75, 23);
 			mDefaultsButton.TabIndex = 7;
 			mDefaultsButton.Text = "&Defaults";
+			mDefaultsButton.FlatStyle = FlatStyle.Flat;
 			mDefaultsButton.Click += MDefaultsButton_Click;
 			// 
 			// mMiscGroupBox
@@ -625,6 +641,7 @@ namespace MixGui.Components
 			mDeviceReloadIntervalComboBox.Name = "mDeviceReloadIntervalComboBox";
 			mDeviceReloadIntervalComboBox.Size = new Size(73, 21);
 			mDeviceReloadIntervalComboBox.TabIndex = 5;
+			mDeviceReloadIntervalComboBox.FlatStyle = FlatStyle.Flat;
 			mDeviceReloadIntervalComboBox.SelectedIndexChanged += MDeviceReloadIntervalComboBox_SelectedIndexChanged;
 			// 
 			// mDeviceReloadIntervalLabel
@@ -644,6 +661,7 @@ namespace MixGui.Components
 			mDeviceReloadIntervalDefaultButton.Size = new Size(56, 23);
 			mDeviceReloadIntervalDefaultButton.TabIndex = 3;
 			mDeviceReloadIntervalDefaultButton.Text = "Default";
+			mDeviceReloadIntervalDefaultButton.FlatStyle = FlatStyle.Flat;
 			mDeviceReloadIntervalDefaultButton.Click += MDeviceReloadIntervalDefaultButton_Click;
 			// 
 			// mLoaderCardsGroupBox
@@ -667,6 +685,7 @@ namespace MixGui.Components
 			mLoaderCardsDefaultButton.Size = new Size(56, 23);
 			mLoaderCardsDefaultButton.TabIndex = 4;
 			mLoaderCardsDefaultButton.Text = "Default";
+			mLoaderCardsDefaultButton.FlatStyle = FlatStyle.Flat;
 			mLoaderCardsDefaultButton.Click += MLoaderCardsDefaultButton_Click;
 			// 
 			// mLoaderCardsPanel
@@ -713,6 +732,7 @@ namespace MixGui.Components
 			mFloatingPointMemoryWordCountDefaultButton.Size = new Size(56, 23);
 			mFloatingPointMemoryWordCountDefaultButton.TabIndex = 2;
 			mFloatingPointMemoryWordCountDefaultButton.Text = "Default";
+			mFloatingPointMemoryWordCountDefaultButton.FlatStyle = FlatStyle.Flat;
 			mFloatingPointMemoryWordCountDefaultButton.Click += MFloatingPointMemoryWordCountDefaultButton_Click;
 			// 
 			// mFloatingPointMemoryWordCountBox
@@ -848,6 +868,7 @@ namespace MixGui.Components
 			mColorProfilingCountsCheckBox.TabIndex = 4;
 			mColorProfilingCountsCheckBox.Text = "Color profiler counts";
 			mColorProfilingCountsCheckBox.UseVisualStyleBackColor = true;
+			mColorProfilingCountsCheckBox.FlatStyle = FlatStyle.Flat;
 			// 
 			// PreferencesForm
 			// 

@@ -49,9 +49,10 @@
 			// mFindLabel
 			// 
 			this.mFindLabel.AutoSize = true;
-			this.mFindLabel.Location = new System.Drawing.Point(9, 10);
+			this.mFindLabel.Location = new System.Drawing.Point(12, 12);
+			this.mFindLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.mFindLabel.Name = "mFindLabel";
-			this.mFindLabel.Size = new System.Drawing.Size(50, 13);
+			this.mFindLabel.Size = new System.Drawing.Size(65, 17);
 			this.mFindLabel.TabIndex = 0;
 			this.mFindLabel.Text = "Find &text:";
 			// 
@@ -60,9 +61,11 @@
 			this.mValueCheckBox.AutoSize = true;
 			this.mValueCheckBox.Checked = true;
 			this.mValueCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mValueCheckBox.Location = new System.Drawing.Point(6, 19);
+			this.mValueCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mValueCheckBox.Location = new System.Drawing.Point(8, 23);
+			this.mValueCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mValueCheckBox.Name = "mValueCheckBox";
-			this.mValueCheckBox.Size = new System.Drawing.Size(94, 17);
+			this.mValueCheckBox.Size = new System.Drawing.Size(116, 21);
 			this.mValueCheckBox.TabIndex = 0;
 			this.mValueCheckBox.Text = "&Numeric value";
 			this.mValueCheckBox.UseVisualStyleBackColor = true;
@@ -73,9 +76,11 @@
 			this.mCharsCheckBox.AutoSize = true;
 			this.mCharsCheckBox.Checked = true;
 			this.mCharsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mCharsCheckBox.Location = new System.Drawing.Point(6, 42);
+			this.mCharsCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mCharsCheckBox.Location = new System.Drawing.Point(8, 52);
+			this.mCharsCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mCharsCheckBox.Name = "mCharsCheckBox";
-			this.mCharsCheckBox.Size = new System.Drawing.Size(77, 17);
+			this.mCharsCheckBox.Size = new System.Drawing.Size(95, 21);
 			this.mCharsCheckBox.TabIndex = 1;
 			this.mCharsCheckBox.Text = "&Characters";
 			this.mCharsCheckBox.UseVisualStyleBackColor = true;
@@ -86,9 +91,11 @@
 			this.mInstructionCheckBox.AutoSize = true;
 			this.mInstructionCheckBox.Checked = true;
 			this.mInstructionCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mInstructionCheckBox.Location = new System.Drawing.Point(6, 65);
+			this.mInstructionCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mInstructionCheckBox.Location = new System.Drawing.Point(8, 80);
+			this.mInstructionCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mInstructionCheckBox.Name = "mInstructionCheckBox";
-			this.mInstructionCheckBox.Size = new System.Drawing.Size(75, 17);
+			this.mInstructionCheckBox.Size = new System.Drawing.Size(91, 21);
 			this.mInstructionCheckBox.TabIndex = 2;
 			this.mInstructionCheckBox.Text = "&Instruction";
 			this.mInstructionCheckBox.UseVisualStyleBackColor = true;
@@ -97,9 +104,11 @@
 			// mMatchWholeWordCheckBox
 			// 
 			this.mMatchWholeWordCheckBox.AutoSize = true;
-			this.mMatchWholeWordCheckBox.Location = new System.Drawing.Point(12, 148);
+			this.mMatchWholeWordCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mMatchWholeWordCheckBox.Location = new System.Drawing.Point(16, 182);
+			this.mMatchWholeWordCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mMatchWholeWordCheckBox.Name = "mMatchWholeWordCheckBox";
-			this.mMatchWholeWordCheckBox.Size = new System.Drawing.Size(113, 17);
+			this.mMatchWholeWordCheckBox.Size = new System.Drawing.Size(138, 21);
 			this.mMatchWholeWordCheckBox.TabIndex = 7;
 			this.mMatchWholeWordCheckBox.Text = "&Match whole word";
 			this.mMatchWholeWordCheckBox.UseVisualStyleBackColor = true;
@@ -109,9 +118,11 @@
 			this.mWrapSearchCheckBox.AutoSize = true;
 			this.mWrapSearchCheckBox.Checked = true;
 			this.mWrapSearchCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mWrapSearchCheckBox.Location = new System.Drawing.Point(12, 171);
+			this.mWrapSearchCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mWrapSearchCheckBox.Location = new System.Drawing.Point(16, 210);
+			this.mWrapSearchCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mWrapSearchCheckBox.Name = "mWrapSearchCheckBox";
-			this.mWrapSearchCheckBox.Size = new System.Drawing.Size(87, 17);
+			this.mWrapSearchCheckBox.Size = new System.Drawing.Size(107, 21);
 			this.mWrapSearchCheckBox.TabIndex = 8;
 			this.mWrapSearchCheckBox.Text = "&Wrap search";
 			this.mWrapSearchCheckBox.UseVisualStyleBackColor = true;
@@ -121,9 +132,11 @@
 			this.mFindButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.mFindButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.mFindButton.Enabled = false;
-			this.mFindButton.Location = new System.Drawing.Point(197, 24);
+			this.mFindButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mFindButton.Location = new System.Drawing.Point(263, 30);
+			this.mFindButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mFindButton.Name = "mFindButton";
-			this.mFindButton.Size = new System.Drawing.Size(75, 23);
+			this.mFindButton.Size = new System.Drawing.Size(100, 28);
 			this.mFindButton.TabIndex = 4;
 			this.mFindButton.Text = "&Find";
 			this.mFindButton.UseVisualStyleBackColor = true;
@@ -133,9 +146,11 @@
 			// 
 			this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.mCancelButton.Location = new System.Drawing.Point(197, 53);
+			this.mCancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.mCancelButton.Location = new System.Drawing.Point(263, 65);
+			this.mCancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mCancelButton.Name = "mCancelButton";
-			this.mCancelButton.Size = new System.Drawing.Size(75, 23);
+			this.mCancelButton.Size = new System.Drawing.Size(100, 28);
 			this.mCancelButton.TabIndex = 5;
 			this.mCancelButton.Text = "&Cancel";
 			this.mCancelButton.UseVisualStyleBackColor = true;
@@ -145,9 +160,11 @@
 			this.mInFieldsGroupBox.Controls.Add(this.mValueCheckBox);
 			this.mInFieldsGroupBox.Controls.Add(this.mCharsCheckBox);
 			this.mInFieldsGroupBox.Controls.Add(this.mInstructionCheckBox);
-			this.mInFieldsGroupBox.Location = new System.Drawing.Point(12, 52);
+			this.mInFieldsGroupBox.Location = new System.Drawing.Point(16, 64);
+			this.mInFieldsGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mInFieldsGroupBox.Name = "mInFieldsGroupBox";
-			this.mInFieldsGroupBox.Size = new System.Drawing.Size(170, 90);
+			this.mInFieldsGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.mInFieldsGroupBox.Size = new System.Drawing.Size(227, 111);
 			this.mInFieldsGroupBox.TabIndex = 6;
 			this.mInFieldsGroupBox.TabStop = false;
 			this.mInFieldsGroupBox.Text = "In";
@@ -156,18 +173,20 @@
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(118, 10);
+			this.label1.Location = new System.Drawing.Point(157, 12);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(54, 13);
+			this.label1.Size = new System.Drawing.Size(72, 17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Clipboard:";
 			// 
 			// mixCharClipboardButtonControl1
 			// 
 			this.mixCharClipboardButtonControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mixCharClipboardButtonControl1.Location = new System.Drawing.Point(121, 25);
+			this.mixCharClipboardButtonControl1.Location = new System.Drawing.Point(161, 31);
+			this.mixCharClipboardButtonControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.mixCharClipboardButtonControl1.Name = "mixCharClipboardButtonControl1";
-			this.mixCharClipboardButtonControl1.Size = new System.Drawing.Size(61, 21);
+			this.mixCharClipboardButtonControl1.Size = new System.Drawing.Size(81, 26);
 			this.mixCharClipboardButtonControl1.TabIndex = 3;
 			// 
 			// mSearchTextBox
@@ -179,7 +198,8 @@
 			this.mSearchTextBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
 			this.mSearchTextBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mSearchTextBox.ForeColor = System.Drawing.Color.Blue;
-			this.mSearchTextBox.Location = new System.Drawing.Point(12, 25);
+			this.mSearchTextBox.Location = new System.Drawing.Point(16, 31);
+			this.mSearchTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			fullWord1.LongValue = ((long)(0));
 			fullWord1.Magnitude = new MixLib.Type.MixByte[] {
         mixByte1,
@@ -191,7 +211,7 @@
 			fullWord1.Sign = MixLib.Type.Word.Signs.Positive;
 			this.mSearchTextBox.MixByteCollectionValue = fullWord1;
 			this.mSearchTextBox.Name = "mSearchTextBox";
-			this.mSearchTextBox.Size = new System.Drawing.Size(103, 21);
+			this.mSearchTextBox.Size = new System.Drawing.Size(137, 24);
 			this.mSearchTextBox.TabIndex = 1;
 			this.mSearchTextBox.UseEditMode = false;
 			this.mSearchTextBox.ValueChanged += new MixGui.Events.MixByteCollectionEditorValueChangedEventHandler(this.MSearchTextBox_ValueChanged);
@@ -199,10 +219,10 @@
 			// SearchDialog
 			// 
 			this.AcceptButton = this.mFindButton;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.mCancelButton;
-			this.ClientSize = new System.Drawing.Size(284, 199);
+			this.ClientSize = new System.Drawing.Size(379, 234);
 			this.Controls.Add(this.mixCharClipboardButtonControl1);
 			this.Controls.Add(this.mInFieldsGroupBox);
 			this.Controls.Add(this.mCancelButton);
@@ -212,8 +232,9 @@
 			this.Controls.Add(this.mSearchTextBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.mFindLabel);
-			this.MaximumSize = new System.Drawing.Size(800, 237);
-			this.MinimumSize = new System.Drawing.Size(300, 237);
+			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.MaximumSize = new System.Drawing.Size(1061, 281);
+			this.MinimumSize = new System.Drawing.Size(394, 281);
 			this.Name = "SearchDialog";
 			this.Text = "Search Parameters";
 			this.VisibleChanged += new System.EventHandler(this.SearchDialog_VisibleChanged);

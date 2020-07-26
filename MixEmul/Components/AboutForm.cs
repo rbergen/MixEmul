@@ -96,6 +96,7 @@ namespace MixGui.Components
 			mCloseButton.Name = "mCloseButton";
 			mCloseButton.Size = new System.Drawing.Size(74, 23);
 			mCloseButton.TabIndex = 3;
+			mCloseButton.FlatStyle = FlatStyle.Flat;
 			mCloseButton.Text = "&Close";
 			// 
 			// mFullVersionLabel

@@ -107,6 +107,7 @@ namespace MixGui.Components
 			mOutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			mOutputTextBox.Size = new Size(528, 264);
 			mOutputTextBox.TabIndex = 0;
+			mOutputTextBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mPromptLabel
 			// 
@@ -129,6 +130,7 @@ namespace MixGui.Components
 			mInputTextBox.Size = new Size(512, 20);
 			mInputTextBox.TabIndex = 3;
 			mInputTextBox.KeyPress += This_KeyPress;
+			mInputTextBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mStatusBar
 			// 
@@ -146,6 +148,7 @@ namespace MixGui.Components
 			mStatusBarPanel.Name = "mStatusBarPanel";
 			mStatusBarPanel.Text = "Idle";
 			mStatusBarPanel.Width = 600;
+			mStatusBarPanel.BorderStyle = StatusBarPanelBorderStyle.None;
 			// 
 			// mClearButton
 			// 
@@ -155,6 +158,7 @@ namespace MixGui.Components
 			mClearButton.Size = new Size(75, 23);
 			mClearButton.TabIndex = 1;
 			mClearButton.Text = "&Clear";
+			mClearButton.FlatStyle = FlatStyle.Flat;
 			mClearButton.Click += MClearButton_Click;
 			// 
 			// mSendButton
@@ -165,6 +169,7 @@ namespace MixGui.Components
 			mSendButton.Size = new Size(75, 23);
 			mSendButton.TabIndex = 4;
 			mSendButton.Text = "&Send";
+			mSendButton.FlatStyle = FlatStyle.Flat;
 			mSendButton.Click += MSendButton_Click;
 			// 
 			// mOnTopCheckBox
@@ -175,6 +180,7 @@ namespace MixGui.Components
 			mOnTopCheckBox.Size = new Size(72, 24);
 			mOnTopCheckBox.TabIndex = 6;
 			mOnTopCheckBox.Text = "&On top";
+			mOnTopCheckBox.FlatStyle = FlatStyle.Flat;
 			mOnTopCheckBox.CheckedChanged += MOnTopCheckBox_CheckedChanged;
 			// 
 			// mEchoInputCheckBox
@@ -185,6 +191,7 @@ namespace MixGui.Components
 			mEchoInputCheckBox.Size = new Size(88, 24);
 			mEchoInputCheckBox.TabIndex = 7;
 			mEchoInputCheckBox.Text = "&Echo input";
+			mEchoInputCheckBox.FlatStyle = FlatStyle.Flat;
 			// 
 			// TeletypeForm
 			// 

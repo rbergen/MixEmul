@@ -109,6 +109,7 @@ namespace MixGui.Components
 			this.mReadOnlyCheckBox.Size = new System.Drawing.Size(15, 14);
 			this.mReadOnlyCheckBox.TabIndex = 1;
 			this.mReadOnlyCheckBox.UseVisualStyleBackColor = true;
+			this.mReadOnlyCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mReadOnlyCheckBox.CheckedChanged += new System.EventHandler(this.MReadOnlyCheckBox_CheckedChanged);
 			// 
 			// mReadOnlyLabel
@@ -129,6 +130,7 @@ namespace MixGui.Components
 			this.mRevertButton.TabIndex = 10;
 			this.mRevertButton.Text = "&Revert";
 			this.mRevertButton.UseVisualStyleBackColor = true;
+			this.mRevertButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mRevertButton.Click += new System.EventHandler(this.MRevertButton_Click);
 			// 
 			// mSaveButton
@@ -140,6 +142,7 @@ namespace MixGui.Components
 			this.mSaveButton.TabIndex = 10;
 			this.mSaveButton.Text = "&Save";
 			this.mSaveButton.UseVisualStyleBackColor = true;
+			this.mSaveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mSaveButton.Click += new System.EventHandler(this.MSaveButton_Click);
 			// 
 			// mDeviceFileWatcher
@@ -157,7 +160,7 @@ namespace MixGui.Components
 			this.mWordEditorList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.mWordEditorList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.mWordEditorList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.mWordEditorList.CreateEditor = null;
 			this.mWordEditorList.FirstVisibleIndex = 0;
 			this.mWordEditorList.LoadEditor = null;
@@ -210,6 +213,7 @@ namespace MixGui.Components
 			this.mAppendButton.TabIndex = 11;
 			this.mAppendButton.Text = "A&ppend";
 			this.mAppendButton.UseVisualStyleBackColor = true;
+			this.mAppendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mAppendButton.Click += new System.EventHandler(this.MAppendButton_Click);
 			// 
 			// mTruncateButton
@@ -221,6 +225,7 @@ namespace MixGui.Components
 			this.mTruncateButton.TabIndex = 11;
 			this.mTruncateButton.Text = "&Truncate";
 			this.mTruncateButton.UseVisualStyleBackColor = true;
+			this.mTruncateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mTruncateButton.Click += new System.EventHandler(this.MTruncateButton_Click);
 			// 
 			// BinaryFileDeviceEditor

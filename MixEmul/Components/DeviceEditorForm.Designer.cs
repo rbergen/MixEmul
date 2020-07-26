@@ -103,6 +103,7 @@ namespace MixGui.Components
 			this.mCloseButton.TabIndex = 1;
 			this.mCloseButton.Text = "&Close";
 			this.mCloseButton.UseVisualStyleBackColor = true;
+			this.mCloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mCloseButton.Click += new System.EventHandler(this.MCloseButton_Click);
 			// 
 			// mDisksTab
@@ -130,6 +131,7 @@ namespace MixGui.Components
 			this.mDiskDeleteButton.TabIndex = 3;
 			this.mDiskDeleteButton.Text = "&Delete";
 			this.mDiskDeleteButton.UseVisualStyleBackColor = true;
+			this.mDiskDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mDiskDeleteButton.Click += new System.EventHandler(this.MDiskDeleteButton_Click);
 			// 
 			// mDiskPathBox
@@ -156,6 +158,7 @@ namespace MixGui.Components
 			// mDiskSelectorComboBox
 			// 
 			this.mDiskSelectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.mDiskSelectorComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mDiskSelectorComboBox.FormattingEnabled = true;
 			this.mDiskSelectorComboBox.Location = new System.Drawing.Point(72, 2);
 			this.mDiskSelectorComboBox.Name = "mDiskSelectorComboBox";
@@ -206,6 +209,7 @@ namespace MixGui.Components
 			this.mTapeDeleteButton.TabIndex = 3;
 			this.mTapeDeleteButton.Text = "&Delete";
 			this.mTapeDeleteButton.UseVisualStyleBackColor = true;
+			this.mTapeDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mTapeDeleteButton.Click += new System.EventHandler(this.MTapeDeleteButton_Click);
 			// 
 			// mTapePathBox
@@ -225,6 +229,7 @@ namespace MixGui.Components
 			// 
 			this.mTapeSelectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.mTapeSelectorComboBox.FormattingEnabled = true;
+			this.mTapeSelectorComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mTapeSelectorComboBox.Location = new System.Drawing.Point(72, 2);
 			this.mTapeSelectorComboBox.Name = "mTapeSelectorComboBox";
 			this.mTapeSelectorComboBox.Size = new System.Drawing.Size(67, 21);
@@ -264,6 +269,7 @@ namespace MixGui.Components
 			this.mCardReaderLoadButton.TabIndex = 2;
 			this.mCardReaderLoadButton.Text = "&Load...";
 			this.mCardReaderLoadButton.UseVisualStyleBackColor = true;
+			this.mCardReaderLoadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mCardReaderLoadButton.Click += new System.EventHandler(this.MCardReaderLoadButton_Click);
 			// 
 			// mCardReaderDeleteButton
@@ -275,6 +281,7 @@ namespace MixGui.Components
 			this.mCardReaderDeleteButton.TabIndex = 3;
 			this.mCardReaderDeleteButton.Text = "&Delete";
 			this.mCardReaderDeleteButton.UseVisualStyleBackColor = true;
+			this.mCardReaderDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mCardReaderDeleteButton.Click += new System.EventHandler(this.MCardReaderDeleteButton_Click);
 			// 
 			// mCardReaderPathBox
@@ -320,6 +327,7 @@ namespace MixGui.Components
 			this.mCardPunchDeleteButton.TabIndex = 2;
 			this.mCardPunchDeleteButton.Text = "&Delete";
 			this.mCardPunchDeleteButton.UseVisualStyleBackColor = true;
+			this.mCardPunchDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mCardPunchDeleteButton.Click += new System.EventHandler(this.MCardPunchDeleteButton_Click);
 			// 
 			// mCardWriterPathBox
@@ -365,6 +373,7 @@ namespace MixGui.Components
 			this.mPrinterDeleteButton.TabIndex = 3;
 			this.mPrinterDeleteButton.Text = "&Delete";
 			this.mPrinterDeleteButton.UseVisualStyleBackColor = true;
+			this.mPrinterDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mPrinterDeleteButton.Click += new System.EventHandler(this.MPrinterDeleteButton_Click);
 			// 
 			// mPrinterPathBox
@@ -410,6 +419,7 @@ namespace MixGui.Components
 			this.mPaperTapeDeleteButton.TabIndex = 2;
 			this.mPaperTapeDeleteButton.Text = "&Delete";
 			this.mPaperTapeDeleteButton.UseVisualStyleBackColor = true;
+			this.mPaperTapeDeleteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.mPaperTapeDeleteButton.Click += new System.EventHandler(this.MPaperTapeDeleteButton_Click);
 			// 
 			// mPaperTapePathBox

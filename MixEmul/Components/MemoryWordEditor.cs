@@ -123,6 +123,7 @@ namespace MixGui.Components
 			mBreakPointBox.Name = "mBreakPointBox";
 			mBreakPointBox.Size = new Size(16, 17);
 			mBreakPointBox.TabIndex = 0;
+			mBreakPointBox.FlatStyle = FlatStyle.Flat;
 			mBreakPointBox.CheckedChanged += MBreakPointBox_CheckedChanged;
 
 			mAddressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);

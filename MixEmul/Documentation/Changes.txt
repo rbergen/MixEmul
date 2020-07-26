@@ -9,6 +9,10 @@ x: Bugfix
 
 =========================================
 
+0.3.7512.22699
+* Applied flat-style visual appearance throughout MixEmul
+x Fixed regression in this change list
+
 0.3.7502.648 (2020-07-16)
 * Upgraded target version of .NET Framework to 4.7.2
 * Overall code cleanup
