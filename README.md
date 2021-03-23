@@ -11,7 +11,7 @@ Oh, I'd almost forget, it incorporates a MIXAL assembler too. This means that yo
 
 In a few words: MixEmul contains all the features that I think I need to be able to better absorb the contents of the TAOCP books.
 ## Can I get it?
-Well, obviously the answer is yes; you're looking at its sources as we speak. However, getting it to run doesn't even require you to build it yourself. The latest binary version I have seen working myself can be downloaded from [this location](http://rbergen.home.xs4all.nl/mixemul.html).
+Well, obviously the answer is yes; you're looking at its sources as we speak. However, getting it to run doesn't even require you to build it yourself. The latest binary version I have seen working myself can be downloaded from [the releases page](https://github.com/rbergen/MixEmul/releases).
 ## What's with all the security warnings?
 For incomprehensible reasons, MIX enthusiasts are not as common as you or I would like. This means that MixEmul is not downloaded as often as, for instance, Google Chrome. Furthermore, I loved writing MixEmul and I love maintaining it, but out of principle I refuse to cash out for things like code signing certificates. This means that on an average computer, your browser, your OS and probably your virus scanner will all object to downloading and running MixEmul.
 I'm afraid you'll just have to trust me when I say that MixEmul was not written to cause you or your computer any harm. Over the years, I have spent quite a few hours figuring out first how to improve MixEmul and then how to code those improvements; causing trouble is never an improvement in my book.
