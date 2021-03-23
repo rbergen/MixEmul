@@ -38,13 +38,25 @@ namespace MixLib.Device
 
 		public string StatusDescription => Busy ? CurrentStep.StatusDescription : idleDescription;
 
-		protected virtual DeviceStep.Instance GetCurrentStepInstance() => CurrentStep.CreateInstance();
+		protected virtual DeviceStep.Instance GetCurrentStepInstance()
+		{
+			return CurrentStep.CreateInstance();
+		}
 
-		public override string ToString() => ShortName + ": " + Id;
+		public override string ToString()
+		{
+			return ShortName + ": " + Id;
+		}
 
-		protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+		protected virtual void OnReportingEvent(ReportingEventArgs args)
+		{
+			ReportingEvent?.Invoke(this, args);
+		}
 
-		void StepInstance_Reporting(object sender, ReportingEventArgs args) => OnReportingEvent(args);
+		void StepInstance_Reporting(object sender, ReportingEventArgs args)
+		{
+			OnReportingEvent(args);
+		}
 
 		public virtual void Reset()
 		{
@@ -82,7 +94,10 @@ namespace MixLib.Device
 		public void Tick()
 		{
 			// If no I/O step is set, we're idle
-			if (CurrentStep == null) return;
+			if (CurrentStep == null)
+			{
+				return;
+			}
 
 			// At I/O start, the step instance is unset
 			if (mCurrentStepInstance == null)
@@ -93,7 +108,10 @@ namespace MixLib.Device
 			}
 
 			// Current step still busy? If so, we're done here
-			if (!mCurrentStepInstance.Tick()) return;
+			if (!mCurrentStepInstance.Tick())
+			{
+				return;
+			}
 
 			CurrentStep = CurrentStep.NextStep;
 
@@ -118,7 +136,7 @@ namespace MixLib.Device
 
 		protected class ReadFromMemoryStep : TickingStep
 		{
-			bool mIncludeSign;
+			readonly bool mIncludeSign;
 
 			public ReadFromMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
 			{
@@ -127,7 +145,10 @@ namespace MixLib.Device
 
 			public override string StatusDescription => readingDescription;
 
-			protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
+			protected override TickingStep.Instance CreateTickingInstance()
+			{
+				return new Instance(TickCount, mIncludeSign);
+			}
 
 			new class Instance : TickingStep.Instance
 			{
@@ -175,7 +196,7 @@ namespace MixLib.Device
 
 		protected class WriteToMemoryStep : TickingStep
 		{
-			bool mIncludeSign;
+			readonly bool mIncludeSign;
 
 			public WriteToMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
 			{
@@ -184,13 +205,16 @@ namespace MixLib.Device
 
 			public override string StatusDescription => writingDescription;
 
-			protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
+			protected override TickingStep.Instance CreateTickingInstance()
+			{
+				return new Instance(TickCount, mIncludeSign);
+			}
 
 			new class Instance : TickingStep.Instance
 			{
 				readonly MixByte[] mBytesForWriting;
-				bool mIncludeSign;
-				int mWordByteCount;
+				readonly bool mIncludeSign;
+				readonly int mWordByteCount;
 
 				public Instance(int tickCount, bool includeSign) : base(tickCount)
 				{
@@ -209,7 +233,10 @@ namespace MixLib.Device
 				{
 					int currentAddress = Operands.MValue + CurrentTick;
 
-					if (currentAddress >= Operands.Memory.MaxWordIndex) return;
+					if (currentAddress >= Operands.Memory.MaxWordIndex)
+					{
+						return;
+					}
 
 					int currentByte = mWordByteCount * CurrentTick;
 

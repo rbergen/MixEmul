@@ -4,7 +4,10 @@ namespace MixLib.Device.Step
 	{
 		protected StreamStep() { }
 
-		public override DeviceStep.Instance CreateInstance() => CreateStreamInstance(null);
+		public override DeviceStep.Instance CreateInstance()
+		{
+			return CreateStreamInstance(null);
+		}
 
 		public abstract Instance CreateStreamInstance(StreamStatus streamStatus);
 

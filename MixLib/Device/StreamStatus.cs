@@ -19,7 +19,10 @@ namespace MixLib.Device
 			Reset();
 		}
 
-		void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+		void OnReportingEvent(ReportingEventArgs args)
+		{
+			ReportingEvent?.Invoke(this, args);
+		}
 
 		public void CloseStream()
 		{
@@ -36,7 +39,10 @@ namespace MixLib.Device
 
 		public void UpdatePosition()
 		{
-			if (mStream == null) return;
+			if (mStream == null)
+			{
+				return;
+			}
 
 			try
 			{
@@ -51,10 +57,7 @@ namespace MixLib.Device
 
 		public string FileName
 		{
-			get
-			{
-				return mFileName;
-			}
+			get => mFileName;
 			set
 			{
 				if (mStream != null)
@@ -67,15 +70,15 @@ namespace MixLib.Device
 
 		public long Position
 		{
-			get
-			{
-				return mPosition;
-			}
+			get => mPosition;
 			set
 			{
 				mPosition = value;
 				PositionSet = true;
-				if (mStream == null) return;
+				if (mStream == null)
+				{
+					return;
+				}
 
 				try
 				{
@@ -90,10 +93,7 @@ namespace MixLib.Device
 
 		public System.IO.Stream Stream
 		{
-			get
-			{
-				return mStream;
-			}
+			get => mStream;
 			set
 			{
 				if (mStream != null)

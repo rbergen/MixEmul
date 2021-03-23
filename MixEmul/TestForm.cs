@@ -36,7 +36,7 @@ namespace MixGui
 			textBox1.Text = builder.ToString();
 		}
 
-		void clipboardButton_Click(object sender, EventArgs e)
+		void ClipboardButton_Click(object sender, EventArgs e)
 		{
 			Clipboard.SetDataObject(((Button)sender).Text);
 		}
@@ -56,10 +56,10 @@ namespace MixGui
 			// 
 			// textBox1
 			// 
-			textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			textBox1.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			| System.Windows.Forms.AnchorStyles.Right);
+			textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
 			textBox1.Location = new System.Drawing.Point(0, 0);
 			textBox1.Multiline = true;
 			textBox1.Name = "textBox1";
@@ -85,7 +85,7 @@ namespace MixGui
 			mDeltaButton.Size = new System.Drawing.Size(18, 21);
 			mDeltaButton.TabIndex = 2;
 			mDeltaButton.Text = "d";
-			mDeltaButton.Click += clipboardButton_Click;
+			mDeltaButton.Click += ClipboardButton_Click;
 			// 
 			// mSummaButton
 			// 
@@ -95,7 +95,7 @@ namespace MixGui
 			mSummaButton.Size = new System.Drawing.Size(18, 21);
 			mSummaButton.TabIndex = 3;
 			mSummaButton.Text = "s";
-			mSummaButton.Click += clipboardButton_Click;
+			mSummaButton.Click += ClipboardButton_Click;
 			// 
 			// mPiButton
 			// 
@@ -105,7 +105,7 @@ namespace MixGui
 			mPiButton.Size = new System.Drawing.Size(18, 21);
 			mPiButton.TabIndex = 4;
 			mPiButton.Text = "p";
-			mPiButton.Click += clipboardButton_Click;
+			mPiButton.Click += ClipboardButton_Click;
 			// 
 			// textBox2
 			// 
@@ -133,7 +133,7 @@ namespace MixGui
 			vScrollBar1.Name = "vScrollBar1";
 			vScrollBar1.Size = new System.Drawing.Size(16, 80);
 			vScrollBar1.TabIndex = 7;
-			vScrollBar1.Scroll += vScrollBar1_Scroll;
+			vScrollBar1.Scroll += ScrollBar1_Scroll;
 			// 
 			// checkBox1
 			// 
@@ -165,7 +165,7 @@ namespace MixGui
 
 		}
 
-		void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+		void ScrollBar1_Scroll(object sender, ScrollEventArgs e)
 		{
 
 		}

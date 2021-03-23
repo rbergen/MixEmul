@@ -8,14 +8,14 @@ namespace MixGui.Components
 {
 	public class DeviceStatusControl : UserControl
 	{
-		ContextMenu mContextMenu;
-		MenuItem mContextSeparator;
-		MixDevice mDevice;
-		Label mIndexLabel;
-		MenuItem mInputMenuItem;
-		MenuItem mOutputMenuItem;
-		MenuItem mResetMenuItem;
-		Label mStatusLabel;
+		private readonly ContextMenuStrip mContextMenuStrip;
+		private readonly ToolStripSeparator mContextSeparator;
+		private MixDevice mDevice;
+		private readonly Label mIndexLabel;
+		private readonly ToolStripMenuItem mInputMenuItem;
+		private readonly ToolStripMenuItem mOutputMenuItem;
+		private readonly ToolStripMenuItem mResetMenuItem;
+		private readonly Label mStatusLabel;
 
 		public ToolTip ToolTip { get; set; }
 
@@ -30,11 +30,11 @@ namespace MixGui.Components
 
 			mIndexLabel = new Label();
 			mStatusLabel = new Label();
-			mContextMenu = new ContextMenu();
-			mInputMenuItem = new MenuItem();
-			mOutputMenuItem = new MenuItem();
-			mContextSeparator = new MenuItem();
-			mResetMenuItem = new MenuItem();
+			mContextMenuStrip = new ContextMenuStrip();
+			mInputMenuItem = new ToolStripMenuItem();
+			mOutputMenuItem = new ToolStripMenuItem();
+			mContextSeparator = new ToolStripSeparator();
+			mResetMenuItem = new ToolStripMenuItem();
 
 			SuspendLayout();
 
@@ -55,22 +55,15 @@ namespace MixGui.Components
 			mStatusLabel.TextAlign = ContentAlignment.MiddleCenter;
 			mStatusLabel.DoubleClick += Control_DoubleClick;
 
-			mInputMenuItem.Index = 0;
 			mInputMenuItem.Text = "Input device";
 
-			mOutputMenuItem.Index = 1;
 			mOutputMenuItem.Text = "Output device";
 
-			mContextSeparator.Index = 2;
-			mContextSeparator.Text = "-";
-
-			mResetMenuItem.DefaultItem = true;
-			mResetMenuItem.Index = 3;
 			mResetMenuItem.Text = "Reset";
 			mResetMenuItem.Click += MResetMenuItem_Click;
 
-			mContextMenu.MenuItems.AddRange(new MenuItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
-			ContextMenu = mContextMenu;
+			mContextMenuStrip.Items.AddRange(new ToolStripItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
+			ContextMenuStrip = mContextMenuStrip;
 
 			Controls.Add(mIndexLabel);
 			Controls.Add(mStatusLabel);
@@ -81,7 +74,10 @@ namespace MixGui.Components
 			UpdateLayout();
 		}
 
-		void Control_DoubleClick(object sender, EventArgs e) => OnDoubleClick(e);
+		void Control_DoubleClick(object sender, EventArgs e)
+		{
+			OnDoubleClick(e);
+		}
 
 		void MResetMenuItem_Click(object sender, EventArgs e)
 		{
@@ -131,10 +127,7 @@ namespace MixGui.Components
 
 		public MixDevice Device
 		{
-			get
-			{
-				return mDevice;
-			}
+			get => mDevice;
 			set
 			{
 				if (mDevice == null)

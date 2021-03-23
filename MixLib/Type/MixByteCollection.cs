@@ -27,11 +27,20 @@ namespace MixLib.Type
 
 		public int MaxByteCount => mMaxByteCount;
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => mBytes.GetEnumerator();
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return mBytes.GetEnumerator();
+		}
 
-		public IEnumerator<MixByte> GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+		public IEnumerator<MixByte> GetEnumerator()
+		{
+			return ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+		}
 
-		public MixByte[] ToArray() => (MixByte[])mBytes.Clone();
+		public MixByte[] ToArray()
+		{
+			return (MixByte[])mBytes.Clone();
+		}
 
 		public void Load(string text)
 		{
@@ -54,7 +63,10 @@ namespace MixLib.Type
 			{
 				var builder = new StringBuilder();
 
-				foreach (MixByte mixByte in mBytes) builder.Append((char)mixByte);
+				foreach (MixByte mixByte in mBytes)
+				{
+					builder.Append((char)mixByte);
+				}
 
 				return builder.ToString().TrimEnd();
 			}
@@ -64,14 +76,8 @@ namespace MixLib.Type
 
 		public MixByte this[int index]
 		{
-			get
-			{
-				return mBytes[index];
-			}
-			set
-			{
-				mBytes[index] = value;
-			}
+			get => mBytes[index];
+			set => mBytes[index] = value;
 		}
 
 		#region ICloneable Members

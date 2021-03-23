@@ -5,8 +5,8 @@ namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-		long mLiteralMagnitude;
-		Word.Signs mLiteralSign;
+		readonly long mLiteralMagnitude;
+		readonly Word.Signs mLiteralSign;
 		long mMagnitude;
 		Word.Signs mSign;
 		bool mValueDefined;
@@ -28,23 +28,43 @@ namespace MixAssembler.Symbol
 
 		public override long MemoryWordValue => mLiteralSign.ApplyTo(mLiteralMagnitude);
 
-		public override long GetValue(int currentAddress) => mSign.ApplyTo(mMagnitude);
+		public override long GetValue(int currentAddress)
+		{
+			return mSign.ApplyTo(mMagnitude);
+		}
 
-		public override long GetMagnitude(int currentAddress) => mMagnitude;
+		public override long GetMagnitude(int currentAddress)
+		{
+			return mMagnitude;
+		}
 
-		public override Word.Signs GetSign(int currentAddress) => mSign;
+		public override Word.Signs GetSign(int currentAddress)
+		{
+			return mSign;
+		}
 
-		public override bool IsValueDefined(int currentAddress) => mValueDefined;
+		public override bool IsValueDefined(int currentAddress)
+		{
+			return mValueDefined;
+		}
 
-		static string GetName(Word.Signs literalSign, long literalMagnitude, int count) =>
-				string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
+		static string GetName(Word.Signs literalSign, long literalMagnitude, int count)
+		{
+			return string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
+		}
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=') return null;
+			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=')
+			{
+				return null;
+			}
 
 			var expressionValue = WValue.ParseValue(text.Substring(1, text.Length - 2), sectionCharIndex + 1, status);
-			if (expressionValue == null) return null;
+			if (expressionValue == null)
+			{
+				return null;
+			}
 
 			var literalMagnitude = expressionValue.GetMagnitude(status.LocationCounter);
 			var literalSign = expressionValue.GetSign(status.LocationCounter);

@@ -18,7 +18,7 @@ namespace MixGui.Components
 		long mLastRenderedMagnitude;
 		Word.Signs mLastRenderedSign;
 		bool mReadOnly;
-		Button mSignButton;
+		readonly Button mSignButton;
 		IWord mWord;
 
 		public event KeyEventHandler NavigationKeyDown;
@@ -75,10 +75,15 @@ namespace MixGui.Components
 
 		public Control EditorControl => this;
 
-		public bool Focus(FieldTypes? field, int? index) =>
-				ByteCount > 0 ? mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() : mSignButton.Focus();
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return ByteCount > 0 ? mByteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() : mSignButton.Focus();
+		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
 		void ByteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
 		{
@@ -96,14 +101,20 @@ namespace MixGui.Components
 		{
 			var box = (MixByteTextBox)sender;
 
-			if (box.SelectionLength == 0) box.Select(0, 2);
+			if (box.SelectionLength == 0)
+			{
+				box.Select(0, 2);
+			}
 		}
 
 		void Editor_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			char keyChar = e.KeyChar;
 
-			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative()))) NegateSign();
+			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && mWord.Sign.IsNegative())))
+			{
+				NegateSign();
+			}
 		}
 
 		void Editor_Leave(object sender, EventArgs e)
@@ -163,7 +174,10 @@ namespace MixGui.Components
 
 		void This_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Modifiers != Keys.None) return;
+			if (e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			MixByteTextBox box;
 
@@ -257,7 +271,10 @@ namespace MixGui.Components
 		{
 			Controls.Clear();
 
-			foreach (MixByteTextBox box in mByteTextBoxes) box.Dispose();
+			foreach (MixByteTextBox box in mByteTextBoxes)
+			{
+				box.Dispose();
+			}
 
 			InitializeComponent();
 		}
@@ -281,15 +298,15 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (MixByteTextBox box in mByteTextBoxes) box.UpdateLayout();
+			foreach (MixByteTextBox box in mByteTextBoxes)
+			{
+				box.UpdateLayout();
+			}
 		}
 
 		public int ByteCount
 		{
-			get
-			{
-				return mWord.ByteCount;
-			}
+			get => mWord.ByteCount;
 			set
 			{
 				if (ByteCount != value)
@@ -302,10 +319,7 @@ namespace MixGui.Components
 
 		public bool IncludeSign
 		{
-			get
-			{
-				return mIncludeSign;
-			}
+			get => mIncludeSign;
 			set
 			{
 				if (mIncludeSign != value)
@@ -318,10 +332,7 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mReadOnly;
-			}
+			get => mReadOnly;
 			set
 			{
 				if (ReadOnly != value)
@@ -339,10 +350,7 @@ namespace MixGui.Components
 
 		public IWord WordValue
 		{
-			get
-			{
-				return mWord;
-			}
+			get => mWord;
 			set
 			{
 				int byteCount = ByteCount;
@@ -363,11 +371,17 @@ namespace MixGui.Components
 		{
 			get
 			{
-				if (mSignButton.Focused) return FieldTypes.Word;
+				if (mSignButton.Focused)
+				{
+					return FieldTypes.Word;
+				}
 
 				foreach (MixByteTextBox byteBox in mByteTextBoxes)
 				{
-					if (byteBox.Focused) return FieldTypes.Word;
+					if (byteBox.Focused)
+					{
+						return FieldTypes.Word;
+					}
 				}
 
 				return null;

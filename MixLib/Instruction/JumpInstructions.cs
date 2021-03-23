@@ -53,7 +53,10 @@ namespace MixLib.Instruction
 		public static bool NonRegJump(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue) return false;
+			if (indexedAddress == int.MinValue)
+			{
+				return false;
+			}
 
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
 			{
@@ -86,19 +89,28 @@ namespace MixLib.Instruction
 					return false;
 
 				case jlField:
-					if (module.Registers.CompareIndicator != Registers.CompValues.Less) break;
+					if (module.Registers.CompareIndicator != Registers.CompValues.Less)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case jeField:
-					if (module.Registers.CompareIndicator != Registers.CompValues.Equal) break;
+					if (module.Registers.CompareIndicator != Registers.CompValues.Equal)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case jgField:
-					if (module.Registers.CompareIndicator != Registers.CompValues.Greater) break;
+					if (module.Registers.CompareIndicator != Registers.CompValues.Greater)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
@@ -113,7 +125,10 @@ namespace MixLib.Instruction
 					return false;
 
 				case jneField:
-					if (module.Registers.CompareIndicator == Registers.CompValues.Equal) break;
+					if (module.Registers.CompareIndicator == Registers.CompValues.Equal)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 
@@ -138,57 +153,84 @@ namespace MixLib.Instruction
 		public static bool RegJump(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue) return false;
+			if (indexedAddress == int.MinValue)
+			{
+				return false;
+			}
 
 			int registerIndex = instance.MixInstruction.Opcode - regJumpOpcodeBase;
 			long longValue = module.Registers[registerIndex].LongValue;
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
 			{
 				case regJumpNegField:
-					if (longValue >= 0L) break;
+					if (longValue >= 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpZeroField:
-					if (longValue != 0L) break;
+					if (longValue != 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpPosField:
-					if (longValue <= 0L) break;
+					if (longValue <= 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpNonNegField:
-					if (longValue < 0L) break;
+					if (longValue < 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpNonZeroField:
-					if (longValue == 0L) break;
+					if (longValue == 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 
 					return false;
 
 				case regJumpNonPosField:
-					if (longValue > 0L) break;
+					if (longValue > 0L)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpEvenField:
-					if (longValue % 2 != 0) break;
+					if (longValue % 2 != 0)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;
 
 				case regJumpOddField:
-					if (longValue % 2 == 0) break;
+					if (longValue % 2 == 0)
+					{
+						break;
+					}
 
 					Jump(module, indexedAddress);
 					return false;

@@ -32,38 +32,20 @@ namespace MixGui.Components
 
 		public int FromAddress
 		{
-			get
-			{
-				return (int)mFromAddressUpDown.Value;
-			}
-			set
-			{
-				mFromAddressUpDown.Value = value;
-			}
+			get => (int)mFromAddressUpDown.Value;
+			set => mFromAddressUpDown.Value = value;
 		}
 
 		public int ToAddress
 		{
-			get
-			{
-				return (int)mToAddressUpDown.Value;
-			}
-			set
-			{
-				mToAddressUpDown.Value = value;
-			}
+			get => (int)mToAddressUpDown.Value;
+			set => mToAddressUpDown.Value = value;
 		}
 
 		public int ProgramCounter
 		{
-			get
-			{
-				return (int)mProgramCounterUpDown.Value;
-			}
-			set
-			{
-				mProgramCounterUpDown.Value = value;
-			}
+			get => (int)mProgramCounterUpDown.Value;
+			set => mProgramCounterUpDown.Value = value;
 		}
 
 		void MFromAddressUpDown_ValueChanged(object sender, EventArgs e)

@@ -9,7 +9,10 @@ namespace MixLib.Device.Step
 			TickCount = tickCount;
 		}
 
-		public sealed override DeviceStep.Instance CreateInstance() => CreateTickingInstance();
+		public sealed override DeviceStep.Instance CreateInstance()
+		{
+			return CreateTickingInstance();
+		}
 
 		protected abstract Instance CreateTickingInstance();
 

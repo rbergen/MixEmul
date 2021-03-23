@@ -14,7 +14,7 @@ namespace MixGui.Components
 	public partial class ToolStripCycleButton : ToolStripControlHost
 	{
 		Step mCurrentStep;
-		List<Step> mSteps;
+		readonly List<Step> mSteps;
 
 		public event EventHandler ValueChanged;
 
@@ -36,25 +36,25 @@ namespace MixGui.Components
 			Text = "";
 		}
 
-		protected void OnValueChanged(EventArgs e) => ValueChanged?.Invoke(this, e);
+		protected void OnValueChanged(EventArgs e)
+		{
+			ValueChanged?.Invoke(this, e);
+		}
 
 		void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
 		{
 			if (string.IsNullOrEmpty(Text))
 			{
-				var stringFormat = new StringFormat
-				{
-					Alignment = StringAlignment.Center,
-					LineAlignment = StringAlignment.Center
-				};
-
 				e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
 			}
 		}
 
 		void Control_Click(object sender, EventArgs e)
 		{
-			if (mCurrentStep == null || mCurrentStep.NextStep == null) return;
+			if (mCurrentStep == null || mCurrentStep.NextStep == null)
+			{
+				return;
+			}
 
 			SetCurrentStep(mCurrentStep.NextStep);
 		}
@@ -107,27 +107,30 @@ namespace MixGui.Components
 				throw new ArgumentNullException(nameof(step), "step and its Value may not be null");
 			}
 
-			if (mSteps.Any(s => s.Value is IComparable ? ((IComparable)s.Value).CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
+			if (mSteps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
 			{
 				throw new ArgumentException(string.Format("another step with Value {0} already exists", step.Value));
 			}
 
 			mSteps.Add(step);
 
-			if (mCurrentStep == null) SetCurrentStep(step);
+			if (mCurrentStep == null)
+			{
+				SetCurrentStep(step);
+			}
 		}
 
 		public object Value
 		{
-			get
-			{
-				return mCurrentStep?.Value;
-			}
+			get => mCurrentStep?.Value;
 			set
 			{
-				if (value == null) return;
+				if (value == null)
+				{
+					return;
+				}
 
-				var step = mSteps.FirstOrDefault(s => s.Value is IComparable ? ((IComparable)s.Value).CompareTo(value) == 0 : s.Value.Equals(value));
+				var step = mSteps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
 
 				if (step == null)
 				{
@@ -140,7 +143,10 @@ namespace MixGui.Components
 
 		void SetCurrentStep(Step step)
 		{
-			if (mCurrentStep == step) return;
+			if (mCurrentStep == step)
+			{
+				return;
+			}
 
 			mCurrentStep = step;
 			Invalidate();

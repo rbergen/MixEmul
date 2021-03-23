@@ -24,7 +24,10 @@ namespace MixGui.Components
 			InitializeComponent();
 		}
 
-		protected void OnItemSelected(ItemSelectedEventArgs<T> e) => ItemSelected?.Invoke(this, e);
+		protected void OnItemSelected(ItemSelectedEventArgs<T> e)
+		{
+			ItemSelected?.Invoke(this, e);
+		}
 
 		void InitializeComponent()
 		{
@@ -73,7 +76,10 @@ namespace MixGui.Components
 
 		public void AddItem(T currentItem, T newItem)
 		{
-			if (currentItem.Equals(newItem)) return;
+			if (currentItem.Equals(newItem))
+			{
+				return;
+			}
 
 			AddItem(currentItem);
 			AddItem(newItem);
@@ -93,26 +99,12 @@ namespace MixGui.Components
 			}
 		}
 
-		void RemoveItem(LinkedItem<T> item)
-		{
-			if (item.Next != null)
-			{
-				item.Next.Previous = item.Previous;
-			}
-			if (item.Previous != null)
-			{
-				item.Previous.Next = item.Next;
-				item.Previous = null;
-			}
-
-			item.Next = null;
-
-			mItemCount--;
-		}
-
 		void AddItem(T item)
 		{
-			if (item == null) return;
+			if (item == null)
+			{
+				return;
+			}
 
 			if (mFirstItem == null)
 			{
@@ -122,7 +114,10 @@ namespace MixGui.Components
 			}
 			else
 			{
-				if (mCurrentItem.Item.Equals(item)) return;
+				if (mCurrentItem.Item.Equals(item))
+				{
+					return;
+				}
 
 				if (mCurrentItem.Next != null)
 				{
@@ -172,7 +167,10 @@ namespace MixGui.Components
 
 		LinkedItem<T> InsertItem(LinkedItem<T> insertBefore, T item)
 		{
-			if (insertBefore == null || item == null) return null;
+			if (insertBefore == null || item == null)
+			{
+				return null;
+			}
 
 			var insertee = new LinkedItem<T>(item)
 			{

@@ -4,7 +4,7 @@ namespace MixLib.Type
 {
 	public class WordField : Word
 	{
-		FieldSpec mFieldSpec;
+		readonly FieldSpec mFieldSpec;
 
 		WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount)
 		{

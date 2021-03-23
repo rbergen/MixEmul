@@ -11,9 +11,8 @@ namespace MixLib
 		const int addressByteIndex = 0;
 		const int flagsByteIndex = 2;
 		const int rJByteIndex = 3;
-
-		Register[] mRegisters = new Register[RegisterCount - 1];
-		Register mrJ;
+		readonly Register[] mRegisters = new Register[RegisterCount - 1];
+		readonly Register mrJ;
 
 		public CompValues CompareIndicator { get; set; }
 		public bool OverflowIndicator { get; set; }
@@ -57,7 +56,10 @@ namespace MixLib
 
 		public int GetIndexedAddress(int mValue, int index)
 		{
-			if (index == 0) return mValue;
+			if (index == 0)
+			{
+				return mValue;
+			}
 
 			if (index < (int)Offset.rI1 || index > (int)Offset.rI6)
 			{

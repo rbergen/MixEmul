@@ -33,11 +33,20 @@ namespace MixLib.Type
 
 		public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
 
-		public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
+		public MemoryFullWord GetRealWord(int index)
+		{
+			return SourceMemory.GetRealWord(index + mIndexOffset);
+		}
 
-		public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
+		public void ResetRealWord(int index)
+		{
+			SourceMemory.ResetRealWord(index + mIndexOffset);
+		}
 
-		public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
+		public void ClearRealWordSourceLine(int index)
+		{
+			SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
+		}
 
 		void ValidateParameters(int minIndex, int maxIndex, int offset)
 		{
@@ -54,17 +63,26 @@ namespace MixLib.Type
 
 		public void ClearSourceLines()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++) ClearRealWordSourceLine(index);
+			for (int index = mMinIndex; index <= mMaxIndex; index++)
+			{
+				ClearRealWordSourceLine(index);
+			}
 		}
 
 		public void Reset()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++) ResetRealWord(index);
+			for (int index = mMinIndex; index <= mMaxIndex; index++)
+			{
+				ResetRealWord(index);
+			}
 		}
 
 		public SearchResult FindMatch(SearchParameters options)
 		{
-			if (options.SearchFromWordIndex < mMinIndex || options.SearchFromWordIndex > mMaxIndex) return null;
+			if (options.SearchFromWordIndex < mMinIndex || options.SearchFromWordIndex > mMaxIndex)
+			{
+				return null;
+			}
 
 			var filteredOptions = new SearchParameters
 			{
@@ -80,13 +98,22 @@ namespace MixLib.Type
 
 			var result = SourceMemory.FindMatch(filteredOptions);
 
-			if (result == null) return null;
+			if (result == null)
+			{
+				return null;
+			}
 
 			result.WordIndex -= mIndexOffset;
 
-			if (result.WordIndex >= mMinIndex && result.WordIndex <= mMaxIndex) return result;
+			if (result.WordIndex >= mMinIndex && result.WordIndex <= mMaxIndex)
+			{
+				return result;
+			}
 
-			if (!options.WrapSearch || options.SearchFromWordIndex == mMinIndex) return null;
+			if (!options.WrapSearch || options.SearchFromWordIndex == mMinIndex)
+			{
+				return null;
+			}
 
 			filteredOptions.SearchFromWordIndex = mMinIndex + mIndexOffset;
 			filteredOptions.WrapSearch = false;
@@ -98,22 +125,13 @@ namespace MixLib.Type
 
 		public IMemoryFullWord this[int index]
 		{
-			get
-			{
-				return SourceMemory[index + mIndexOffset];
-			}
-			set
-			{
-				SourceMemory[index + mIndexOffset] = value;
-			}
+			get => SourceMemory[index + mIndexOffset];
+			set => SourceMemory[index + mIndexOffset] = value;
 		}
 
 		public int MinWordIndex
 		{
-			get
-			{
-				return mMinIndex;
-			}
+			get => mMinIndex;
 			set
 			{
 				ValidateParameters(value, mMaxIndex, mIndexOffset);
@@ -124,10 +142,7 @@ namespace MixLib.Type
 
 		public int MaxWordIndex
 		{
-			get
-			{
-				return mMaxIndex;
-			}
+			get => mMaxIndex;
 			set
 			{
 				ValidateParameters(mMinIndex, value, mIndexOffset);
@@ -138,10 +153,7 @@ namespace MixLib.Type
 
 		public int IndexOffset
 		{
-			get
-			{
-				return mIndexOffset;
-			}
+			get => mIndexOffset;
 			set
 			{
 				ValidateParameters(mMinIndex, mMaxIndex, value);

@@ -34,9 +34,15 @@ namespace MixLib.Device
 
 		public override bool SupportsOutput => true;
 
-		public static long CalculateBytePosition(long record) => record * bytesPerRecord;
+		public static long CalculateBytePosition(long record)
+		{
+			return record * bytesPerRecord;
+		}
 
-		public static long CalculateRecordCount(FileStream stream) => stream.Length / bytesPerRecord;
+		public static long CalculateRecordCount(FileStream stream)
+		{
+			return stream.Length / bytesPerRecord;
+		}
 
 		public sealed override void UpdateSettings()
 		{
@@ -80,7 +86,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => openingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -110,7 +119,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => windingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -126,14 +138,20 @@ namespace MixLib.Device
 				{
 					if (mTicksLeft == unset)
 					{
-						if (!StreamStatus.PositionSet) InitiateStreamPosition();
+						if (!StreamStatus.PositionSet)
+						{
+							InitiateStreamPosition();
+						}
 
 						mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
 					mTicksLeft -= 1L;
 
-					if (mTicksLeft > 0L) return false;
+					if (mTicksLeft > 0L)
+					{
+						return false;
+					}
 
 					if (Operands.MValue == 0)
 					{

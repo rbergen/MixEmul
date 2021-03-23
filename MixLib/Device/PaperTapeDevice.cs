@@ -64,7 +64,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => openingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -90,7 +93,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => rewindingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -110,7 +116,10 @@ namespace MixLib.Device
 					}
 
 					mTicksLeft -= 1L;
-					if (mTicksLeft > 0L) return false;
+					if (mTicksLeft > 0L)
+					{
+						return false;
+					}
 
 					StreamStatus.Position = 0L;
 

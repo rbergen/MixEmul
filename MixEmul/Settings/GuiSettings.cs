@@ -31,8 +31,8 @@ namespace MixGui.Settings
 		public const string TeletypeOutputText = "TeletypeOutputText";
 		public const string WarningText = "WarningText";
 
-		static Dictionary<string, Color> mDefaultColors;
-		static Dictionary<string, Font> mDefaultFonts;
+		static readonly Dictionary<string, Color> mDefaultColors;
+		static readonly Dictionary<string, Font> mDefaultFonts;
 
 		public static Dictionary<string, Color> Colors { private get; set; }
 		public static ProfilingInfoType ShowProfilingInfo { get; set; }
@@ -75,25 +75,37 @@ namespace MixGui.Settings
 			ColorProfilingCounts = true;
 		}
 
-		public static bool IsKnownColor(string name) => mDefaultColors.ContainsKey(name);
+		public static bool IsKnownColor(string name)
+		{
+			return mDefaultColors.ContainsKey(name);
+		}
 
 		public static Color GetColor(string name)
 		{
-			if (Colors.ContainsKey(name)) return Colors[name];
+			if (Colors.ContainsKey(name))
+			{
+				return Colors[name];
+			}
 
 			return GetDefaultColor(name);
 		}
 
 		public static Color GetDefaultColor(string name)
 		{
-			if (mDefaultColors.ContainsKey(name)) return mDefaultColors[name];
+			if (mDefaultColors.ContainsKey(name))
+			{
+				return mDefaultColors[name];
+			}
 
 			return SystemColors.WindowText;
 		}
 
 		public static Font GetFont(string name)
 		{
-			if (mDefaultFonts.ContainsKey(name)) return mDefaultFonts[name];
+			if (mDefaultFonts.ContainsKey(name))
+			{
+				return mDefaultFonts[name];
+			}
 
 			var enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
 			enumerator.MoveNext();

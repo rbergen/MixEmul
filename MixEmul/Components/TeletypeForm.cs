@@ -16,8 +16,8 @@ namespace MixGui.Components
 		TextBox mOutputTextBox;
 		Label mPromptLabel;
 		Button mSendButton;
-		StatusBar mStatusBar;
-		StatusBarPanel mStatusBarPanel;
+		StatusStrip mStatusStrip;
+		ToolStripStatusLabel mToolStripStatusLabel;
 		MixLib.Device.TeletypeDevice mTeletypeDevice;
 
 		public TeletypeForm(MixLib.Device.TeletypeDevice teleType)
@@ -29,9 +29,15 @@ namespace MixGui.Components
 			TeletypeDevice = teleType;
 		}
 
-		void MClearButton_Click(object sender, EventArgs e) => ClearOutput();
+		void MClearButton_Click(object sender, EventArgs e)
+		{
+			ClearOutput();
+		}
 
-		void MSendButton_Click(object sender, EventArgs e) => SendInput();
+		void MSendButton_Click(object sender, EventArgs e)
+		{
+			SendInput();
+		}
 
 		void This_Activated(object sender, EventArgs e)
 		{
@@ -65,7 +71,7 @@ namespace MixGui.Components
 
 			if (startIndex > 0)
 			{
-				mOutputTextBox.Text = mOutputTextBox.Text.Substring(startIndex) + textToAdd;
+				mOutputTextBox.Text = mOutputTextBox.Text[startIndex..] + textToAdd;
 			}
 			else
 			{
@@ -85,13 +91,12 @@ namespace MixGui.Components
 			mOutputTextBox = new TextBox();
 			mPromptLabel = new Label();
 			mInputTextBox = new TextBox();
-			mStatusBar = new StatusBar();
-			mStatusBarPanel = new StatusBarPanel();
+			mStatusStrip = new StatusStrip();
+			mToolStripStatusLabel = new ToolStripStatusLabel();
 			mClearButton = new Button();
 			mSendButton = new Button();
 			mOnTopCheckBox = new CheckBox();
 			mEchoInputCheckBox = new CheckBox();
-			((ISupportInitialize)(mStatusBarPanel)).BeginInit();
 			SuspendLayout();
 			// 
 			// mOutputTextBox
@@ -134,21 +139,20 @@ namespace MixGui.Components
 			// 
 			// mStatusBar
 			// 
-			mStatusBar.Location = new Point(0, 287);
-			mStatusBar.Name = "mStatusBar";
-			mStatusBar.Panels.AddRange(new StatusBarPanel[] {
-						mStatusBarPanel});
-			mStatusBar.ShowPanels = true;
-			mStatusBar.Size = new Size(616, 22);
-			mStatusBar.TabIndex = 5;
+			mStatusStrip.Location = new Point(0, 287);
+			mStatusStrip.Name = "mStatusBar";
+			mStatusStrip.Items.AddRange(new ToolStripItem[] {
+						mToolStripStatusLabel});
+			mStatusStrip.Size = new Size(616, 22);
+			mStatusStrip.TabIndex = 5;
 			// 
 			// mStatusBarPanel
 			// 
-			mStatusBarPanel.AutoSize = StatusBarPanelAutoSize.Spring;
-			mStatusBarPanel.Name = "mStatusBarPanel";
-			mStatusBarPanel.Text = "Idle";
-			mStatusBarPanel.Width = 600;
-			mStatusBarPanel.BorderStyle = StatusBarPanelBorderStyle.None;
+			mToolStripStatusLabel.AutoSize = true;
+			mToolStripStatusLabel.Name = "mStatusBarPanel";
+			mToolStripStatusLabel.Text = "Idle";
+			mToolStripStatusLabel.Width = 600;
+			mToolStripStatusLabel.BorderStyle = Border3DStyle.Flat;
 			// 
 			// mClearButton
 			// 
@@ -201,7 +205,7 @@ namespace MixGui.Components
 			Controls.Add(mOnTopCheckBox);
 			Controls.Add(mSendButton);
 			Controls.Add(mClearButton);
-			Controls.Add(mStatusBar);
+			Controls.Add(mStatusStrip);
 			Controls.Add(mPromptLabel);
 			Controls.Add(mInputTextBox);
 			Controls.Add(mOutputTextBox);
@@ -215,7 +219,6 @@ namespace MixGui.Components
 			Activated += This_Activated;
 			VisibleChanged += This_VisibleChanged;
 			FormClosing += This_FormClosing;
-			((ISupportInitialize)(mStatusBarPanel)).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 
@@ -266,13 +269,13 @@ namespace MixGui.Components
 				{
 					if (textToAdd.Length != 0)
 					{
-						textToAdd = textToAdd + Environment.NewLine;
+						textToAdd += Environment.NewLine;
 					}
-					textToAdd = textToAdd + outputLine;
+					textToAdd += outputLine;
 				}
 
 				AddOutputText(textToAdd);
-				mStatusBarPanel.Text = "Received output from Mix";
+				mToolStripStatusLabel.Text = "Received output from Mix";
 
 				if (Visible)
 				{
@@ -286,11 +289,14 @@ namespace MixGui.Components
 
 		void SendInput()
 		{
-			if (EchoInput) AddOutputText("> " + mInputTextBox.Text);
+			if (EchoInput)
+			{
+				AddOutputText("> " + mInputTextBox.Text);
+			}
 
 			mTeletypeDevice.AddInputLine(mInputTextBox.Text);
 			mInputTextBox.Text = "";
-			mStatusBarPanel.Text = "Sent input to Mix";
+			mToolStripStatusLabel.Text = "Sent input to Mix";
 		}
 
 		public void UpdateLayout()
@@ -314,36 +320,24 @@ namespace MixGui.Components
 		{
 			if (!Visible)
 			{
-				mStatusBarPanel.Text = "Idle";
+				mToolStripStatusLabel.Text = "Idle";
 			}
 		}
 
 		public bool EchoInput
 		{
-			get
-			{
-				return mEchoInputCheckBox.Checked;
-			}
-			set
-			{
-				mEchoInputCheckBox.Checked = value;
-			}
+			get => mEchoInputCheckBox.Checked;
+			set => mEchoInputCheckBox.Checked = value;
 		}
 
 		public string StatusText
 		{
-			set
-			{
-				mStatusBarPanel.Text = value;
-			}
+			set => mToolStripStatusLabel.Text = value;
 		}
 
 		public MixLib.Device.TeletypeDevice TeletypeDevice
 		{
-			get
-			{
-				return mTeletypeDevice;
-			}
+			get => mTeletypeDevice;
 			set
 			{
 				if (mTeletypeDevice == null)
@@ -360,10 +354,7 @@ namespace MixGui.Components
 
 		public new bool TopMost
 		{
-			get
-			{
-				return base.TopMost;
-			}
+			get => base.TopMost;
 			set
 			{
 				mOnTopCheckBox.Checked = value;

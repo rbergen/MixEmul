@@ -57,11 +57,20 @@ namespace MixGui.Components
 			TextChanged += This_TextChanged;
 		}
 
-		protected virtual void OnValueChanged(ValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(ValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		void This_Enter(object sender, EventArgs e) => Select(0, TextLength);
+		void This_Enter(object sender, EventArgs e)
+		{
+			Select(0, TextLength);
+		}
 
-		void This_Leave(object sender, EventArgs e) => CheckAndUpdateValue(Text);
+		void This_Leave(object sender, EventArgs e)
+		{
+			CheckAndUpdateValue(Text);
+		}
 
 		void CheckAndUpdateValue(byte byteValue)
 		{
@@ -85,7 +94,10 @@ namespace MixGui.Components
 
 			mUpdating = false;
 
-			if (oldByteValue != mByteValue) OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
+			if (oldByteValue != mByteValue)
+			{
+				OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
+			}
 		}
 
 		void This_KeyDown(object sender, KeyEventArgs e)
@@ -188,10 +200,7 @@ namespace MixGui.Components
 
 		public MixByte MixByteValue
 		{
-			get
-			{
-				return mByteValue;
-			}
+			get => mByteValue;
 			set
 			{
 				mByteValue = value;
@@ -201,14 +210,8 @@ namespace MixGui.Components
 
 		public sealed override string Text
 		{
-			get
-			{
-				return base.Text;
-			}
-			set
-			{
-				CheckAndUpdateValue(value);
-			}
+			get => base.Text;
+			set => CheckAndUpdateValue(value);
 		}
 
 		public class ValueChangedEventArgs : EventArgs

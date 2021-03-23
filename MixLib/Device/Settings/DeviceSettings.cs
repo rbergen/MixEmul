@@ -46,48 +46,37 @@ namespace MixLib.Device.Settings
 			mDeviceReloadInterval = UnsetDeviceReloadInterval;
 		}
 
-		public static bool IsKnownTickCount(string name) => mDefaultTickCounts.ContainsKey(name);
+		public static bool IsKnownTickCount(string name)
+		{
+			return mDefaultTickCounts.ContainsKey(name);
+		}
 
-		public static int GetDefaultTickCount(string name) =>
-				IsKnownTickCount(name) ? mDefaultTickCounts[name] : DefaultDefaultTickCount;
+		public static int GetDefaultTickCount(string name)
+		{
+			return IsKnownTickCount(name) ? mDefaultTickCounts[name] : DefaultDefaultTickCount;
+		}
 
-		public static int GetTickCount(string name) =>
-						TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
+		public static int GetTickCount(string name)
+		{
+			return TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
+		}
 
 		public static string DefaultDeviceFilesDirectory
 		{
-			get
-			{
-				return mDefaultDeviceFilesDirectory ?? "";
-			}
-			set
-			{
-				mDefaultDeviceFilesDirectory = value;
-			}
+			get => mDefaultDeviceFilesDirectory ?? "";
+			set => mDefaultDeviceFilesDirectory = value;
 		}
 
 		public static string DeviceFilesDirectory
 		{
-			get
-			{
-				return mDeviceFilesDirectory ?? DefaultDeviceFilesDirectory;
-			}
-			set
-			{
-				mDeviceFilesDirectory = value;
-			}
+			get => mDeviceFilesDirectory ?? DefaultDeviceFilesDirectory;
+			set => mDeviceFilesDirectory = value;
 		}
 
 		public static int DeviceReloadInterval
 		{
-			get
-			{
-				return mDeviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : mDeviceReloadInterval;
-			}
-			set
-			{
-				mDeviceReloadInterval = value;
-			}
+			get => mDeviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : mDeviceReloadInterval;
+			set => mDeviceReloadInterval = value;
 		}
 
 		public static string[] KnownTickCountNames

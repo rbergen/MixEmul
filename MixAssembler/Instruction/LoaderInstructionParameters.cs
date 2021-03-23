@@ -13,8 +13,8 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-		int mTextLength;
-		IValue mValue;
+		readonly int mTextLength;
+		readonly IValue mValue;
 
 		/// <summary>
 		/// Constructor for this class. 

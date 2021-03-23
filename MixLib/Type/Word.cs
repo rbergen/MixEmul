@@ -10,7 +10,7 @@ namespace MixLib.Type
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
-		ReaderWriterLock mAccessLock;
+		readonly ReaderWriterLock mAccessLock;
 		readonly MixByte[] mBytes;
 		Signs mSign;
 
@@ -63,17 +63,35 @@ namespace MixLib.Type
 
 		public long MaxMagnitude => (1 << BitCount) - 1;
 
-		public override string ToString() => ToString(false);
+		public override string ToString()
+		{
+			return ToString(false);
+		}
 
-		public IEnumerator GetEnumerator() => mBytes.GetEnumerator();
+		public IEnumerator GetEnumerator()
+		{
+			return mBytes.GetEnumerator();
+		}
 
-		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
+		{
+			return ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+		}
 
-		public MixByte[] ToArray() => Magnitude;
+		public MixByte[] ToArray()
+		{
+			return Magnitude;
+		}
 
-		public static long BytesToLong(params MixByte[] bytes) => BytesToLong(Signs.Positive, bytes);
+		public static long BytesToLong(params MixByte[] bytes)
+		{
+			return BytesToLong(Signs.Positive, bytes);
+		}
 
-		protected void OnWordValueChanged() => WordValueChanged?.Invoke(this);
+		protected void OnWordValueChanged()
+		{
+			WordValueChanged?.Invoke(this);
+		}
 
 		public static long BytesToLong(Signs sign, params MixByte[] bytes)
 		{
@@ -149,7 +167,10 @@ namespace MixLib.Type
 
 					mBytes[index] = value ?? new MixByte();
 
-					if (oldValue.ByteValue == mBytes[index].ByteValue) return;
+					if (oldValue.ByteValue == mBytes[index].ByteValue)
+					{
+						return;
+					}
 				}
 				finally
 				{
@@ -184,7 +205,10 @@ namespace MixLib.Type
 
 				try
 				{
-					if (value == LongValue) return;
+					if (value == LongValue)
+					{
+						return;
+					}
 
 					SetMagnitudeLongValue(value);
 					mSign = value.GetSign();
@@ -204,7 +228,10 @@ namespace MixLib.Type
 
 			magnitude = magnitude.GetMagnitude();
 
-			if (oldValue == magnitude) return magnitude;
+			if (oldValue == magnitude)
+			{
+				return magnitude;
+			}
 
 			for (int i = ByteCount - 1; i >= 0; i--)
 			{
@@ -266,7 +293,10 @@ namespace MixLib.Type
 						valueStartIndex++;
 					}
 
-					if (oldValue == MagnitudeLongValue) return;
+					if (oldValue == MagnitudeLongValue)
+					{
+						return;
+					}
 				}
 				finally
 				{
@@ -302,7 +332,10 @@ namespace MixLib.Type
 
 				try
 				{
-					if (SetMagnitudeLongValue(value) == value.GetMagnitude()) return;
+					if (SetMagnitudeLongValue(value) == value.GetMagnitude())
+					{
+						return;
+					}
 				}
 				finally
 				{
@@ -334,7 +367,10 @@ namespace MixLib.Type
 
 				try
 				{
-					if (value == mSign) return;
+					if (value == mSign)
+					{
+						return;
+					}
 
 					mSign = value;
 				}

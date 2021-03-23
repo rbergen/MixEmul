@@ -36,13 +36,25 @@ namespace MixLib.Device
 
 		public override bool SupportsOutput => true;
 
-		public void AddInputLine(string line) => mInputBuffer.Enqueue(line);
+		public void AddInputLine(string line)
+		{
+			mInputBuffer.Enqueue(line);
+		}
 
-		public string GetOutputLine() => mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
+		public string GetOutputLine()
+		{
+			return mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
+		}
 
-		void This_InputRequired(object sender, EventArgs e) => InputRequired?.Invoke(this, e);
+		void This_InputRequired(object sender, EventArgs e)
+		{
+			InputRequired?.Invoke(this, e);
+		}
 
-		void This_OutputAdded(object sender, EventArgs e) => OutputAdded?.Invoke(this, e);
+		void This_OutputAdded(object sender, EventArgs e)
+		{
+			OutputAdded?.Invoke(this, e);
+		}
 
 		protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
@@ -95,7 +107,7 @@ namespace MixLib.Device
 
 		class ReadLineStep : DeviceStep
 		{
-			Queue mInputBuffer;
+			readonly Queue mInputBuffer;
 
 			public ReadLineStep(Queue inputBuffer)
 			{
@@ -104,7 +116,10 @@ namespace MixLib.Device
 
 			public override string StatusDescription => readingDescription;
 
-			public override DeviceStep.Instance CreateInstance() => new Instance(mInputBuffer);
+			public override DeviceStep.Instance CreateInstance()
+			{
+				return new Instance(mInputBuffer);
+			}
 
 			public new class Instance : DeviceStep.Instance
 			{
@@ -153,7 +168,7 @@ namespace MixLib.Device
 
 		class WriteLineStep : DeviceStep
 		{
-			Queue mOutputBuffer;
+			readonly Queue mOutputBuffer;
 
 			public WriteLineStep(Queue outputBuffer)
 			{
@@ -162,11 +177,14 @@ namespace MixLib.Device
 
 			public override string StatusDescription => writingDescription;
 
-			public override DeviceStep.Instance CreateInstance() => new Instance(mOutputBuffer);
+			public override DeviceStep.Instance CreateInstance()
+			{
+				return new Instance(mOutputBuffer);
+			}
 
 			public new class Instance : DeviceStep.Instance
 			{
-				Queue mOutputBuffer;
+				readonly Queue mOutputBuffer;
 				MixByte[] mWriteBytes;
 
 				public event EventHandler OutputAdded;
@@ -178,7 +196,10 @@ namespace MixLib.Device
 
 				public override bool Tick()
 				{
-					if (mWriteBytes == null) return true;
+					if (mWriteBytes == null)
+					{
+						return true;
+					}
 
 					char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
 					var bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
@@ -205,10 +226,7 @@ namespace MixLib.Device
 
 				public override object InputFromPreviousStep
 				{
-					set
-					{
-						mWriteBytes = (MixByte[])value;
-					}
+					set => mWriteBytes = (MixByte[])value;
 				}
 			}
 		}

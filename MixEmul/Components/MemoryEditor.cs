@@ -14,14 +14,13 @@ namespace MixGui.Components
 {
 	public class MemoryEditor : UserControl, IBreakpointManager
 	{
-		VScrollBar mAddressScrollBar;
-		SortedList mBreakpoints;
+		readonly SortedList mBreakpoints;
 		Label mFirstAddressLabel;
 		Panel mFirstAddressPanel;
 		LongValueTextBox mFirstAddressTextBox;
 		int mMarkedAddress;
 		IMemory mMemory;
-		Label mNoMemoryLabel;
+		readonly Label mNoMemoryLabel;
 		bool mReadOnly;
 		Label mSetClipboardLabel;
 		ToolTip mToolTip;
@@ -36,7 +35,7 @@ namespace MixGui.Components
 		SaveFileDialog mSaveExportFileDialog;
 		int? mPrevDataIndex;
 		int? mNextDataIndex;
-		long[] mProfilingMaxCounts;
+		readonly long[] mProfilingMaxCounts;
 
 		public event AddressSelectedHandler AddressSelected;
 
@@ -69,31 +68,54 @@ namespace MixGui.Components
 
 		public ICollection Breakpoints => mBreakpoints.Values;
 
-		long GetMaxProfilingCount(GuiSettings.ProfilingInfoType infoType) => mProfilingMaxCounts[(int)infoType];
+		long GetMaxProfilingCount(GuiSettings.ProfilingInfoType infoType)
+		{
+			return mProfilingMaxCounts[(int)infoType];
+		}
 
-		public bool IsBreakpointSet(int address) => mBreakpoints.Contains(address);
+		public bool IsBreakpointSet(int address)
+		{
+			return mBreakpoints.Contains(address);
+		}
 
-		public void MakeAddressVisible(int address) => MakeAddressVisible(address, true);
+		public void MakeAddressVisible(int address)
+		{
+			MakeAddressVisible(address, true);
+		}
 
-		public bool IsAddressVisible(int address) => mWordEditorList.IsIndexVisible(address);
+		public bool IsAddressVisible(int address)
+		{
+			return mWordEditorList.IsIndexVisible(address);
+		}
 
-		public void ClearHistory() => mAddressHistorySelector.Clear();
+		public void ClearHistory()
+		{
+			mAddressHistorySelector.Clear();
+		}
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
+		{
+			AddressSelected?.Invoke(this, args);
+		}
 
-		void This_AddressSelected(object sender, AddressSelectedEventArgs args) => MakeAddressVisible(args.SelectedAddress);
+		void This_AddressSelected(object sender, AddressSelectedEventArgs args)
+		{
+			MakeAddressVisible(args.SelectedAddress);
+		}
 
-		void AddressDoubleClick(object sender, EventArgs e) =>
-				OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
+		void AddressDoubleClick(object sender, EventArgs e)
+		{
+			OnAddressSelected(new AddressSelectedEventArgs(((MemoryWordEditor)sender).MemoryWord.Index));
+		}
 
-		void MemoryEditor_SizeChanged(object sender, EventArgs e) => SetUpDownButtonStates(NavigationDirection.None);
+		void MemoryEditor_SizeChanged(object sender, EventArgs e)
+		{
+			SetUpDownButtonStates(NavigationDirection.None);
+		}
 
 		public ToolTip ToolTip
 		{
-			get
-			{
-				return mToolTip;
-			}
+			get => mToolTip;
 			set
 			{
 				mToolTip = value;
@@ -188,9 +210,8 @@ namespace MixGui.Components
 			{
 				mFirstAddressPanel = new Panel();
 				mFirstAddressLabel = new Label();
-				mFirstAddressTextBox = new LongValueTextBox(true, mMemory.MinWordIndex, mMemory.MaxWordIndex);
+				mFirstAddressTextBox = new LongValueTextBox(mMemory.MinWordIndex, mMemory.MaxWordIndex);
 				mSetClipboardLabel = new Label();
-				mAddressScrollBar = new VScrollBar();
 				mAddressHistorySelector = new LinkedItemsSelectorControl<EditorListViewInfo>();
 				mAddressHistorySelector.SetCurrentItemCallback(GetCurrentListViewInfo);
 				mMixCharButtons = new MixCharClipboardButtonControl();
@@ -201,14 +222,14 @@ namespace MixGui.Components
 				mFirstAddressPanel.SuspendLayout();
 				mFirstAddressLabel.Location = new Point(0, 0);
 				mFirstAddressLabel.Name = "mFirstAddressLabel";
-				mFirstAddressLabel.Size = new Size(110, 21);
+				mFirstAddressLabel.Size = new Size(120, 20);
 				mFirstAddressLabel.TabIndex = 0;
 				mFirstAddressLabel.Text = "First visible address:";
 				mFirstAddressLabel.TextAlign = ContentAlignment.MiddleLeft;
 
 				mFirstAddressTextBox.Location = new Point(mFirstAddressLabel.Width, 0);
 				mFirstAddressTextBox.Name = "mFirstAddressTextBox";
-				mFirstAddressTextBox.Size = new Size(32, 20);
+				mFirstAddressTextBox.Size = new Size(35, 20);
 				mFirstAddressTextBox.TabIndex = 1;
 				mFirstAddressTextBox.ClearZero = false;
 				mFirstAddressTextBox.ValueChanged += MFirstAddressTextBox_ValueChanged;
@@ -220,7 +241,7 @@ namespace MixGui.Components
 
 				mSetClipboardLabel.Location = new Point(mAddressHistorySelector.Right + 16, 0);
 				mSetClipboardLabel.Name = "mSetClipboardLabel";
-				mSetClipboardLabel.Size = new Size(88, mFirstAddressLabel.Height);
+				mSetClipboardLabel.Size = new Size(95, mFirstAddressLabel.Height);
 				mSetClipboardLabel.TabIndex = 3;
 				mSetClipboardLabel.Text = "Set clipboard to:";
 				mSetClipboardLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -358,9 +379,10 @@ namespace MixGui.Components
 
 		void SetUpDownButtonStates(NavigationDirection direction)
 		{
-			var memory = mMemory as Memory;
-
-			if (memory == null || mWordEditorList == null) return;
+			if (mMemory is not Memory memory || mWordEditorList == null)
+			{
+				return;
+			}
 
 			if (direction != NavigationDirection.Up || (mPrevDataIndex.HasValue && mPrevDataIndex.Value >= mWordEditorList.FirstVisibleIndex))
 			{
@@ -465,10 +487,7 @@ namespace MixGui.Components
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
-			get
-			{
-				return mIndexedAddressCalculatorCallback;
-			}
+			get => mIndexedAddressCalculatorCallback;
 			set
 			{
 				mIndexedAddressCalculatorCallback = value;
@@ -485,10 +504,7 @@ namespace MixGui.Components
 
 		public bool ResizeInProgress
 		{
-			get
-			{
-				return mWordEditorList != null && mWordEditorList.ResizeInProgress;
-			}
+			get => mWordEditorList != null && mWordEditorList.ResizeInProgress;
 
 			set
 			{
@@ -524,10 +540,7 @@ namespace MixGui.Components
 
 		public int FirstVisibleAddress
 		{
-			get
-			{
-				return mWordEditorList != null ? mWordEditorList.FirstVisibleIndex : 0;
-			}
+			get => mWordEditorList != null ? mWordEditorList.FirstVisibleIndex : 0;
 			set
 			{
 				if (mWordEditorList != null)
@@ -575,10 +588,7 @@ namespace MixGui.Components
 
 		public int MarkedAddress
 		{
-			get
-			{
-				return mMarkedAddress;
-			}
+			get => mMarkedAddress;
 			set
 			{
 				if (mMarkedAddress != value)
@@ -604,10 +614,7 @@ namespace MixGui.Components
 
 		public IMemory Memory
 		{
-			get
-			{
-				return mMemory;
-			}
+			get => mMemory;
 			set
 			{
 				if (mMemory == null && value != null)
@@ -622,10 +629,7 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mReadOnly;
-			}
+			get => mReadOnly;
 			set
 			{
 				if (mReadOnly != value)
@@ -641,10 +645,7 @@ namespace MixGui.Components
 
 		public SymbolCollection Symbols
 		{
-			get
-			{
-				return mSymbols;
-			}
+			get => mSymbols;
 			set
 			{
 				mSymbols = value;
@@ -686,7 +687,10 @@ namespace MixGui.Components
 				ProgramCounter = mMarkedAddress
 			};
 
-			if (exportDialog.ShowDialog(this) != DialogResult.OK) return;
+			if (exportDialog.ShowDialog(this) != DialogResult.OK)
+			{
+				return;
+			}
 
 			if (mSaveExportFileDialog == null)
 			{

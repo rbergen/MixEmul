@@ -24,23 +24,31 @@ namespace MixAssembler
 		const int addressFieldIndex = 2;
 		const int commentFieldIndex = 3;
 
-		static InstructionSet mInstructionSet = new InstructionSet();
-		static LoaderInstructions mLoaderInstructions = new LoaderInstructions();
+		static readonly InstructionSet mInstructionSet = new InstructionSet();
+		static readonly LoaderInstructions mLoaderInstructions = new LoaderInstructions();
 
-		static bool IsCommentLine(string sourceLine) => sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
+		static bool IsCommentLine(string sourceLine)
+		{
+			return sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
+		}
 
 		/// <summary>
 		/// This method parses an "in-memory" instruction. That is: an instruction without a location field. 
 		/// </summary>
-		public static ParsedSourceLine ParseInstructionLine(string instructionLine, ParsingStatus status) =>
-				// add an empty location field, then parse as usual.
-				ParseLine(" " + instructionLine, status);
+		public static ParsedSourceLine ParseInstructionLine(string instructionLine, ParsingStatus status)
+		{
+			// add an empty location field, then parse as usual.
+			return ParseLine(" " + instructionLine, status);
+		}
 
 		static int FindFirstNonWhiteSpace(string sourceLine, int searchBeyondIndex)
 		{
 			for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
 			{
-				if (!char.IsWhiteSpace(sourceLine, i)) return i;
+				if (!char.IsWhiteSpace(sourceLine, i))
+				{
+					return i;
+				}
 			}
 
 			return -1;
@@ -50,7 +58,10 @@ namespace MixAssembler
 		{
 			for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
 			{
-				if (char.IsWhiteSpace(sourceLine, i)) return i;
+				if (char.IsWhiteSpace(sourceLine, i))
+				{
+					return i;
+				}
 			}
 
 			return -1;
@@ -134,7 +145,10 @@ namespace MixAssembler
 		static ParsedSourceLine ParseLine(string sourceLine, ParsingStatus status)
 		{
 
-			if (IsCommentLine(sourceLine)) return new ParsedSourceLine(status.LineNumber, sourceLine);
+			if (IsCommentLine(sourceLine))
+			{
+				return new ParsedSourceLine(status.LineNumber, sourceLine);
+			}
 
 			var lineFields = SplitLine(sourceLine);
 			lineFields[locFieldIndex] = lineFields[locFieldIndex].ToUpper();
@@ -168,7 +182,10 @@ namespace MixAssembler
 
 		static SymbolBase ParseLocField(string locField, ParsingStatus status)
 		{
-			if (locField == "") return null;
+			if (locField == "")
+			{
+				return null;
+			}
 
 			status.LineSection = LineSection.LocationField;
 
@@ -252,10 +269,16 @@ namespace MixAssembler
 		{
 			int addressFieldEnd;
 			var searchBeyondIndex = FindFirstWhiteSpace(sourceLine, -1);
-			if (searchBeyondIndex == -1) return new string[] { sourceLine, "", "", "" };
+			if (searchBeyondIndex == -1)
+			{
+				return new string[] { sourceLine, "", "", "" };
+			}
 
 			var opFieldStart = FindFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
-			if (opFieldStart == -1) return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
+			if (opFieldStart == -1)
+			{
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
+			}
 
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
 			if (opFieldEnd == -1)

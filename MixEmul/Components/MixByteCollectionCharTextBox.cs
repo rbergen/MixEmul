@@ -10,8 +10,6 @@ namespace MixGui.Components
 {
 	public class MixByteCollectionCharTextBox : TextBox, IMixByteCollectionEditor, IEscapeConsumer, INavigableControl
 	{
-		const long unrendered = long.MinValue;
-
 		Color mEditingTextColor;
 		bool mEditMode;
 		int mLastCaretPos;
@@ -63,15 +61,24 @@ namespace MixGui.Components
 
 		public Control EditorControl => this;
 
-		public bool Focus(FieldTypes? field, int? index) => this.FocusWithIndex(index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return this.FocusWithIndex(index);
+		}
 
 		public FieldTypes? FocusedField => FieldTypes.Chars;
 
 		public int? CaretIndex => SelectionStart + SelectionLength;
 
-		protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		void This_Leave(object sender, EventArgs e) => UpdateValue();
+		void This_Leave(object sender, EventArgs e)
+		{
+			UpdateValue();
+		}
 
 		void This_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -83,7 +90,10 @@ namespace MixGui.Components
 				return;
 			}
 
-			if (e.Modifiers != Keys.None) return;
+			if (e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			switch (e.KeyCode)
 			{
@@ -148,7 +158,7 @@ namespace MixGui.Components
 
 				for (int i = 0; i < TextLength; i++)
 				{
-					if (MixByte.MixChars.IndexOf(Text[i]) >= 0)
+					if (MixByte.MixChars.Contains(Text[i]))
 					{
 						validText += Text[i];
 					}
@@ -185,15 +195,29 @@ namespace MixGui.Components
 			}
 		}
 
-		bool ArraysEqual(MixByte[] one, MixByte[] two)
+		static bool ArraysEqual(MixByte[] one, MixByte[] two)
 		{
-			if ((one == null && two != null) || (one != null && two == null)) return false;
-			if (one == null && two == null) return true;
-			if (one.Length != two.Length) return false;
+			if ((one == null && two != null) || (one != null && two == null))
+			{
+				return false;
+			}
+
+			if (one == null && two == null)
+			{
+				return true;
+			}
+
+			if (one.Length != two.Length)
+			{
+				return false;
+			}
 
 			for (int i = 0; i < one.Length; i++)
 			{
-				if (one[i] != two[i]) return false;
+				if (one[i] != two[i])
+				{
+					return false;
+				}
 			}
 
 			return true;
@@ -251,7 +275,7 @@ namespace MixGui.Components
 				{
 					valueDiffers = true;
 
-					if (Text[currentCharIndex] != MixByte.MixChars[MixByte.MixChars.Length - 1])
+					if (Text[currentCharIndex] != MixByte.MixChars[^1])
 					{
 						mByteCollection[currentCharIndex] = Text[currentCharIndex];
 					}
@@ -281,10 +305,7 @@ namespace MixGui.Components
 
 		public IMixByteCollection MixByteCollectionValue
 		{
-			get
-			{
-				return mByteCollection;
-			}
+			get => mByteCollection;
 			set
 			{
 				if (value != null)

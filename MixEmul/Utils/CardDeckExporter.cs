@@ -19,20 +19,20 @@ namespace MixGui.Utils
 
 		const int maxWordsPerCard = 7;
 
-		static string GetTransLine(int programCounter) => "TRANS0" + GetAddressText(programCounter);
+		static string GetTransLine(int programCounter)
+		{
+			return "TRANS0" + GetAddressText(programCounter);
+		}
 
-		static char GetNegativeDigit(char digit) => MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
+		static char GetNegativeDigit(char digit)
+		{
+			return MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
+		}
 
 		public static string[] LoaderCards
 		{
-			get
-			{
-				return mLoaderCards ?? DefaultLoaderCards;
-			}
-			set
-			{
-				mLoaderCards = value;
-			}
+			get => mLoaderCards ?? DefaultLoaderCards;
+			set => mLoaderCards = value;
 		}
 
 		static StreamWriter PrepareWriter(string filePath)
@@ -41,7 +41,10 @@ namespace MixGui.Utils
 
 			foreach (string loaderCard in LoaderCards)
 			{
-				if (loaderCard != null && loaderCard.TrimEnd() != string.Empty) writer.WriteLine(loaderCard);
+				if (loaderCard != null && loaderCard.TrimEnd() != string.Empty)
+				{
+					writer.WriteLine(loaderCard);
+				}
 			}
 
 			return writer;
@@ -66,7 +69,10 @@ namespace MixGui.Utils
 				}
 			}
 
-			if (words.Count > 0) writer.WriteLine(GetInformationLine(firstWordLocation, words));
+			if (words.Count > 0)
+			{
+				writer.WriteLine(GetInformationLine(firstWordLocation, words));
+			}
 
 			writer.WriteLine(GetTransLine(programCounter));
 			writer.Close();
@@ -77,17 +83,13 @@ namespace MixGui.Utils
 			var words = new List<IFullWord>();
 			int firstWordLocation = 0;
 			int locationCounter = 0;
-			LoaderInstruction.Instance loaderInstance;
-			MixInstruction.Instance mixInstance;
 
 			var writer = PrepareWriter(filePath);
 
 			foreach (InstructionInstanceBase instance in instances)
 			{
-				if (instance is LoaderInstruction.Instance)
+				if (instance is LoaderInstruction.Instance loaderInstance)
 				{
-					loaderInstance = (LoaderInstruction.Instance)instance;
-
 					switch (((LoaderInstruction)instance.Instruction).Operation)
 					{
 						case LoaderInstruction.Operations.SetLocationCounter:
@@ -118,10 +120,8 @@ namespace MixGui.Utils
 							return;
 					}
 				}
-				else if (instance is MixInstruction.Instance)
+				else if (instance is MixInstruction.Instance mixInstance)
 				{
-					mixInstance = (MixInstruction.Instance)instance;
-
 					words.Add(mixInstance.InstructionWord);
 					locationCounter++;
 				}
@@ -151,7 +151,7 @@ namespace MixGui.Utils
 		{
 			var lineBuilder = new StringBuilder("INFO ");
 
-			lineBuilder.Append(words.Count.ToString());
+			lineBuilder.Append(words.Count);
 			lineBuilder.Append(GetAddressText(firstWordLocation));
 
 			string numberText;

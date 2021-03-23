@@ -25,8 +25,8 @@ namespace MixGui.Components
 		ComboBox mColorSelectionBox;
 		Button mColorSetButton;
 		GroupBox mColorsGroup;
-		Configuration mConfiguration;
-		string mDefaultDirectory;
+		readonly Configuration mConfiguration;
+		readonly string mDefaultDirectory;
 		Button mDefaultsButton;
 		TextBox mDeviceDirectoryBox;
 		Button mDeviceDirectoryDefaultButton;
@@ -39,7 +39,7 @@ namespace MixGui.Components
 		Button mDeviceFileSetButton;
 		FolderBrowserDialog mDeviceFilesFolderBrowserDialog;
 		GroupBox mDeviceFilesGroup;
-		Devices mDevices;
+		readonly Devices mDevices;
 		GroupBox mDeviceTickCountsGroup;
 		Button mOkButton;
 		SaveFileDialog mSelectDeviceFileDialog;
@@ -83,22 +83,40 @@ namespace MixGui.Components
 
 		}
 
-		string GetCurrentDeviceFilesDirectory() => mDeviceFilesDirectory ?? DeviceSettings.DefaultDeviceFilesDirectory;
+		string GetCurrentDeviceFilesDirectory()
+		{
+			return mDeviceFilesDirectory ?? DeviceSettings.DefaultDeviceFilesDirectory;
+		}
 
-		public void UpdateLayout() => mTickCountBox.UpdateLayout();
+		public void UpdateLayout()
+		{
+			mTickCountBox.UpdateLayout();
+		}
 
-		void MColorSelectionBox_SelectionChangeCommited(object sender, EventArgs e) =>
-				UpdateColorControls((ColorComboBoxItem)mColorSelectionBox.SelectedItem);
+		void ColorSelectionBox_SelectionChangeCommited(object sender, EventArgs e)
+		{
+			UpdateColorControls((ColorComboBoxItem)mColorSelectionBox.SelectedItem);
+		}
 
-		void MDeviceFileSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) =>
-				UpdateDeviceFileControls((DeviceFileComboBoxItem)mDeviceFileSelectionBox.SelectedItem);
+		void DeviceFileSelectionBox_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			UpdateDeviceFileControls((DeviceFileComboBoxItem)mDeviceFileSelectionBox.SelectedItem);
+		}
 
-		void MTickCountSelectionBox_SelectionChangeCommitted(object sender, EventArgs e) =>
-				UpdateTickCountControls((TickCountComboBoxItem)mTickCountSelectionBox.SelectedItem);
+		void TickCountSelectionBox_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			UpdateTickCountControls((TickCountComboBoxItem)mTickCountSelectionBox.SelectedItem);
+		}
 
-		void MTickCountSetButton_Click(object sender, EventArgs e) => SetTickCountValue();
+		void TickCountSetButton_Click(object sender, EventArgs e)
+		{
+			SetTickCountValue();
+		}
 
-		void MLoaderCardsDefaultButton_Click(object sender, EventArgs e) => LoadDefaultLoaderCards();
+		void LoaderCardsDefaultButton_Click(object sender, EventArgs e)
+		{
+			LoadDefaultLoaderCards();
+		}
 
 		void InitializeLoaderCardTextBoxes()
 		{
@@ -108,7 +126,7 @@ namespace MixGui.Components
 			{
 				MixByteCollectionCharTextBox loaderCardTextBox = mLoaderCardTextBoxes[index];
 				loaderCardTextBox.MixByteCollectionValue = new MixByteCollection(CardReaderDevice.BytesPerRecord);
-				loaderCardTextBox.NavigationKeyDown += This_KeyDown;
+				loaderCardTextBox.NavigationKeyDown += KeyDownHandler;
 				loaderCardTextBox.ValueChanged += LoaderCardTextBox_ValueChanged;
 			}
 		}
@@ -118,15 +136,18 @@ namespace MixGui.Components
 			mLoaderCardsDefaultButton.Enabled = true;
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		void KeyDownHandler(object sender, KeyEventArgs e)
 		{
-			if (!(sender is MixByteCollectionCharTextBox) || e.Modifiers != Keys.None) return;
+			if (!(sender is MixByteCollectionCharTextBox) || e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			var senderTextBox = (MixByteCollectionCharTextBox)sender;
 			MixByteCollectionCharTextBox targetTextBox;
 			int index;
 
-			int? caretPos = (e is IndexKeyEventArgs) ? ((IndexKeyEventArgs)e).Index : null;
+			int? caretPos = e is IndexKeyEventArgs args ? args.Index : null;
 
 			switch (e.KeyCode)
 			{
@@ -136,7 +157,10 @@ namespace MixGui.Components
 					{
 						targetTextBox = mLoaderCardTextBoxes[index - 1];
 						targetTextBox.Focus();
-						if (caretPos.HasValue) targetTextBox.Select(caretPos.Value, 0);
+						if (caretPos.HasValue)
+						{
+							targetTextBox.Select(caretPos.Value, 0);
+						}
 					}
 
 					break;
@@ -147,7 +171,10 @@ namespace MixGui.Components
 					{
 						targetTextBox = mLoaderCardTextBoxes[index + 1];
 						targetTextBox.Focus();
-						if (caretPos.HasValue) targetTextBox.Select(caretPos.Value, 0);
+						if (caretPos.HasValue)
+						{
+							targetTextBox.Select(caretPos.Value, 0);
+						}
 					}
 
 					break;
@@ -195,7 +222,10 @@ namespace MixGui.Components
 			var list = new List<DeviceFileComboBoxItem>();
 			foreach (MixDevice device in mDevices)
 			{
-				if (!(device is FileBasedDevice)) continue;
+				if (!(device is FileBasedDevice))
+				{
+					continue;
+				}
 
 				var item = new DeviceFileComboBoxItem((FileBasedDevice)device);
 
@@ -267,7 +297,7 @@ namespace MixGui.Components
 			{
 				if (name.EndsWith("Text", StringComparison.Ordinal))
 				{
-					matchingColorName = name.Substring(0, name.Length - 4);
+					matchingColorName = name[..^4];
 				}
 				else
 				{
@@ -276,12 +306,12 @@ namespace MixGui.Components
 
 				if (!GuiSettings.IsKnownColor(matchingColorName))
 				{
-					matchingColorName = matchingColorName + "Background";
+					matchingColorName += "Background";
 				}
 			}
 			else if (name.EndsWith("Background", StringComparison.Ordinal))
 			{
-				matchingColorName = name.Substring(0, name.Length - 10) + "Text";
+				matchingColorName = name[..^10] + "Text";
 			}
 			else
 			{
@@ -295,7 +325,10 @@ namespace MixGui.Components
 
 			foreach (ColorComboBoxItem item in mColorSelectionBox.Items)
 			{
-				if (item.Name == matchingColorName) return item.Color;
+				if (item.Name == matchingColorName)
+				{
+					return item.Color;
+				}
 			}
 
 			return GuiSettings.GetDefaultColor(name);
@@ -393,7 +426,7 @@ namespace MixGui.Components
 			mColorSetButton.TabIndex = 2;
 			mColorSetButton.Text = "&Set...";
 			mColorSetButton.FlatStyle = FlatStyle.Flat;
-			mColorSetButton.Click += MColorSetButton_Click;
+			mColorSetButton.Click += ColorSetButton_Click;
 			// 
 			// mShowColorLabel
 			// 
@@ -417,7 +450,7 @@ namespace MixGui.Components
 			mColorSelectionBox.Sorted = true;
 			mColorSelectionBox.TabIndex = 0;
 			mColorSelectionBox.FlatStyle = FlatStyle.Flat;
-			mColorSelectionBox.SelectionChangeCommitted += MColorSelectionBox_SelectionChangeCommited;
+			mColorSelectionBox.SelectionChangeCommitted += ColorSelectionBox_SelectionChangeCommited;
 			// 
 			// mColorDefaultButton
 			// 
@@ -428,7 +461,7 @@ namespace MixGui.Components
 			mColorDefaultButton.TabIndex = 3;
 			mColorDefaultButton.Text = "Default";
 			mColorDefaultButton.FlatStyle = FlatStyle.Flat;
-			mColorDefaultButton.Click += MColorDefaultButton_Click;
+			mColorDefaultButton.Click += ColorDefaultButton_Click;
 			// 
 			// mDeviceFilesGroup
 			// 
@@ -453,10 +486,10 @@ namespace MixGui.Components
 			// 
 			mDeviceDirectoryBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mDeviceDirectoryBox.Location = new Point(100, 16);
+			mDeviceDirectoryBox.Location = new Point(104, 16);
 			mDeviceDirectoryBox.Name = "mDeviceDirectoryBox";
 			mDeviceDirectoryBox.ReadOnly = true;
-			mDeviceDirectoryBox.Size = new Size(146, 20);
+			mDeviceDirectoryBox.Size = new Size(142, 20);
 			mDeviceDirectoryBox.TabIndex = 1;
 			mDeviceDirectoryBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
@@ -464,7 +497,7 @@ namespace MixGui.Components
 			// 
 			mDeviceDirectoryLabel.Location = new Point(6, 16);
 			mDeviceDirectoryLabel.Name = "mDeviceDirectoryLabel";
-			mDeviceDirectoryLabel.Size = new Size(96, 21);
+			mDeviceDirectoryLabel.Size = new Size(100, 21);
 			mDeviceDirectoryLabel.TabIndex = 0;
 			mDeviceDirectoryLabel.Text = "Default directory:";
 			mDeviceDirectoryLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -478,7 +511,7 @@ namespace MixGui.Components
 			mDeviceDirectorySetButton.TabIndex = 2;
 			mDeviceDirectorySetButton.Text = "S&et...";
 			mDeviceDirectorySetButton.FlatStyle = FlatStyle.Flat;
-			mDeviceDirectorySetButton.Click += MDeviceDirectorySetButton_Click;
+			mDeviceDirectorySetButton.Click += DeviceDirectorySetButton_Click;
 			// 
 			// mDeviceDirectoryDefaultButton
 			// 
@@ -489,27 +522,27 @@ namespace MixGui.Components
 			mDeviceDirectoryDefaultButton.TabIndex = 3;
 			mDeviceDirectoryDefaultButton.Text = "Default";
 			mDeviceDirectoryDefaultButton.FlatStyle = FlatStyle.Flat;
-			mDeviceDirectoryDefaultButton.Click += MDeviceDirectoryDefaultButton_Click;
+			mDeviceDirectoryDefaultButton.Click += DeviceDirectoryDefaultButton_Click;
 			// 
 			// mDeviceFileSelectionBox
 			// 
 			mDeviceFileSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			mDeviceFileSelectionBox.Location = new Point(6, 48);
 			mDeviceFileSelectionBox.Name = "mDeviceFileSelectionBox";
-			mDeviceFileSelectionBox.Size = new Size(88, 21);
+			mDeviceFileSelectionBox.Size = new Size(92, 21);
 			mDeviceFileSelectionBox.Sorted = true;
 			mDeviceFileSelectionBox.TabIndex = 4;
 			mDeviceFileSelectionBox.FlatStyle = FlatStyle.Flat;
-			mDeviceFileSelectionBox.SelectionChangeCommitted += MDeviceFileSelectionBox_SelectionChangeCommitted;
+			mDeviceFileSelectionBox.SelectionChangeCommitted += DeviceFileSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDeviceFileBox
 			// 
 			mDeviceFileBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mDeviceFileBox.Location = new Point(100, 48);
+			mDeviceFileBox.Location = new Point(104, 48);
 			mDeviceFileBox.Name = "mDeviceFileBox";
 			mDeviceFileBox.ReadOnly = true;
-			mDeviceFileBox.Size = new Size(146, 20);
+			mDeviceFileBox.Size = new Size(142, 20);
 			mDeviceFileBox.BorderStyle = BorderStyle.FixedSingle;
 			mDeviceFileBox.TabIndex = 5;
 			// 
@@ -522,7 +555,7 @@ namespace MixGui.Components
 			mDeviceFileSetButton.TabIndex = 6;
 			mDeviceFileSetButton.Text = "Se&t...";
 			mDeviceFileSetButton.FlatStyle = FlatStyle.Flat;
-			mDeviceFileSetButton.Click += MDeviceFileSetButton_Click;
+			mDeviceFileSetButton.Click += DeviceFileSetButton_Click;
 			// 
 			// mDeviceFileDefaultButton
 			// 
@@ -533,7 +566,7 @@ namespace MixGui.Components
 			mDeviceFileDefaultButton.TabIndex = 7;
 			mDeviceFileDefaultButton.Text = "Default";
 			mDeviceFileDefaultButton.FlatStyle = FlatStyle.Flat;
-			mDeviceFileDefaultButton.Click += MDeviceFileDefaultButton_Click;
+			mDeviceFileDefaultButton.Click += DeviceFileDefaultButton_Click;
 			// 
 			// mOkButton
 			// 
@@ -545,7 +578,7 @@ namespace MixGui.Components
 			mOkButton.TabIndex = 8;
 			mOkButton.Text = "&OK";
 			mOkButton.FlatStyle = FlatStyle.Flat;
-			mOkButton.Click += MOkButton_Click;
+			mOkButton.Click += OkButton_Click;
 			// 
 			// mCancelButton
 			// 
@@ -582,7 +615,7 @@ namespace MixGui.Components
 			mTickCountDefaultButton.TabIndex = 3;
 			mTickCountDefaultButton.Text = "Default";
 			mTickCountDefaultButton.FlatStyle = FlatStyle.Flat;
-			mTickCountDefaultButton.Click += MTickCountDefaultButton_Click;
+			mTickCountDefaultButton.Click += TickCountDefaultButton_Click;
 			// 
 			// mTickCountSetButton
 			// 
@@ -593,7 +626,7 @@ namespace MixGui.Components
 			mTickCountSetButton.TabIndex = 2;
 			mTickCountSetButton.Text = "&Apply";
 			mTickCountSetButton.FlatStyle = FlatStyle.Flat;
-			mTickCountSetButton.Click += MTickCountSetButton_Click;
+			mTickCountSetButton.Click += TickCountSetButton_Click;
 			// 
 			// mTickCountSelectionBox
 			// 
@@ -606,7 +639,7 @@ namespace MixGui.Components
 			mTickCountSelectionBox.Sorted = true;
 			mTickCountSelectionBox.TabIndex = 0;
 			mTickCountSelectionBox.FlatStyle = FlatStyle.Flat;
-			mTickCountSelectionBox.SelectionChangeCommitted += MTickCountSelectionBox_SelectionChangeCommitted;
+			mTickCountSelectionBox.SelectionChangeCommitted += TickCountSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDefaultsButton
 			// 
@@ -617,7 +650,7 @@ namespace MixGui.Components
 			mDefaultsButton.TabIndex = 7;
 			mDefaultsButton.Text = "&Defaults";
 			mDefaultsButton.FlatStyle = FlatStyle.Flat;
-			mDefaultsButton.Click += MDefaultsButton_Click;
+			mDefaultsButton.Click += DefaultsButton_Click;
 			// 
 			// mMiscGroupBox
 			// 
@@ -642,7 +675,7 @@ namespace MixGui.Components
 			mDeviceReloadIntervalComboBox.Size = new Size(73, 21);
 			mDeviceReloadIntervalComboBox.TabIndex = 5;
 			mDeviceReloadIntervalComboBox.FlatStyle = FlatStyle.Flat;
-			mDeviceReloadIntervalComboBox.SelectedIndexChanged += MDeviceReloadIntervalComboBox_SelectedIndexChanged;
+			mDeviceReloadIntervalComboBox.SelectedIndexChanged += DeviceReloadIntervalComboBox_SelectedIndexChanged;
 			// 
 			// mDeviceReloadIntervalLabel
 			// 
@@ -662,7 +695,7 @@ namespace MixGui.Components
 			mDeviceReloadIntervalDefaultButton.TabIndex = 3;
 			mDeviceReloadIntervalDefaultButton.Text = "Default";
 			mDeviceReloadIntervalDefaultButton.FlatStyle = FlatStyle.Flat;
-			mDeviceReloadIntervalDefaultButton.Click += MDeviceReloadIntervalDefaultButton_Click;
+			mDeviceReloadIntervalDefaultButton.Click += DeviceReloadIntervalDefaultButton_Click;
 			// 
 			// mLoaderCardsGroupBox
 			// 
@@ -686,7 +719,7 @@ namespace MixGui.Components
 			mLoaderCardsDefaultButton.TabIndex = 4;
 			mLoaderCardsDefaultButton.Text = "Default";
 			mLoaderCardsDefaultButton.FlatStyle = FlatStyle.Flat;
-			mLoaderCardsDefaultButton.Click += MLoaderCardsDefaultButton_Click;
+			mLoaderCardsDefaultButton.Click += LoaderCardsDefaultButton_Click;
 			// 
 			// mLoaderCardsPanel
 			// 
@@ -733,7 +766,7 @@ namespace MixGui.Components
 			mFloatingPointMemoryWordCountDefaultButton.TabIndex = 2;
 			mFloatingPointMemoryWordCountDefaultButton.Text = "Default";
 			mFloatingPointMemoryWordCountDefaultButton.FlatStyle = FlatStyle.Flat;
-			mFloatingPointMemoryWordCountDefaultButton.Click += MFloatingPointMemoryWordCountDefaultButton_Click;
+			mFloatingPointMemoryWordCountDefaultButton.Click += FloatingPointMemoryWordCountDefaultButton_Click;
 			// 
 			// mFloatingPointMemoryWordCountBox
 			// 
@@ -753,7 +786,7 @@ namespace MixGui.Components
 			mFloatingPointMemoryWordCountBox.SupportNegativeZero = false;
 			mFloatingPointMemoryWordCountBox.TabIndex = 1;
 			mFloatingPointMemoryWordCountBox.Text = "200";
-			mFloatingPointMemoryWordCountBox.ValueChanged += MFloatingPointMemoryWordCountBox_ValueChanged;
+			mFloatingPointMemoryWordCountBox.ValueChanged += FloatingPointMemoryWordCountBox_ValueChanged;
 			// 
 			// mLoaderCard3TextBox
 			// 
@@ -855,7 +888,7 @@ namespace MixGui.Components
 			mTickCountBox.SupportNegativeZero = false;
 			mTickCountBox.TabIndex = 1;
 			mTickCountBox.Text = "1";
-			mTickCountBox.ValueChanged += MTickCountBox_ValueChanged;
+			mTickCountBox.ValueChanged += TickCountBox_ValueChanged;
 			// 
 			// mColorProfilingCountsCheckBox
 			// 
@@ -893,8 +926,8 @@ namespace MixGui.Components
 			SizeGripStyle = SizeGripStyle.Hide;
 			StartPosition = FormStartPosition.CenterParent;
 			Text = "Preferences";
-			VisibleChanged += This_VisibleChanged;
-			KeyPress += This_KeyPress;
+			VisibleChanged += VisibleChangedHandler;
+			KeyPress += KeyPressHandler;
 			mColorsGroup.ResumeLayout(false);
 			mColorsGroup.PerformLayout();
 			mDeviceFilesGroup.ResumeLayout(false);
@@ -912,7 +945,7 @@ namespace MixGui.Components
 
 		}
 
-		void MColorDefaultButton_Click(object sender, EventArgs e)
+		void ColorDefaultButton_Click(object sender, EventArgs e)
 		{
 			var selectedItem = (ColorComboBoxItem)mColorSelectionBox.SelectedItem;
 
@@ -921,7 +954,7 @@ namespace MixGui.Components
 			mColorSelectionBox.Focus();
 		}
 
-		void MColorSetButton_Click(object sender, EventArgs e)
+		void ColorSetButton_Click(object sender, EventArgs e)
 		{
 			if (mColorDialog == null)
 			{
@@ -944,15 +977,24 @@ namespace MixGui.Components
 			}
 		}
 
-		void MDefaultsButton_Click(object sender, EventArgs e)
+		void DefaultsButton_Click(object sender, EventArgs e)
 		{
-			foreach (ColorComboBoxItem colorItem in mColorSelectionBox.Items) colorItem.ResetDefault();
+			foreach (ColorComboBoxItem colorItem in mColorSelectionBox.Items)
+			{
+				colorItem.ResetDefault();
+			}
 
 			mColorProfilingCountsCheckBox.Checked = true;
 
-			foreach (DeviceFileComboBoxItem deviceFileItem in mDeviceFileSelectionBox.Items) deviceFileItem.ResetDefault();
+			foreach (DeviceFileComboBoxItem deviceFileItem in mDeviceFileSelectionBox.Items)
+			{
+				deviceFileItem.ResetDefault();
+			}
 
-			foreach (TickCountComboBoxItem tickCountItem in mTickCountSelectionBox.Items) tickCountItem.ResetDefault();
+			foreach (TickCountComboBoxItem tickCountItem in mTickCountSelectionBox.Items)
+			{
+				tickCountItem.ResetDefault();
+			}
 
 			mDeviceFilesDirectory = null;
 			mDeviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
@@ -974,7 +1016,7 @@ namespace MixGui.Components
 			mFloatingPointMemoryWordCountDefaultButton.Enabled = mFloatingPointMemoryWordCount != null;
 		}
 
-		void MDeviceDirectoryDefaultButton_Click(object sender, EventArgs e)
+		void DeviceDirectoryDefaultButton_Click(object sender, EventArgs e)
 		{
 			mDeviceFilesDirectory = null;
 			UpdateDeviceDirectoryControls();
@@ -982,7 +1024,7 @@ namespace MixGui.Components
 			mDeviceDirectoryBox.Focus();
 		}
 
-		void MDeviceDirectorySetButton_Click(object sender, EventArgs e)
+		void DeviceDirectorySetButton_Click(object sender, EventArgs e)
 		{
 			if (mDeviceFilesFolderBrowserDialog == null)
 			{
@@ -1002,7 +1044,7 @@ namespace MixGui.Components
 			}
 		}
 
-		void MDeviceFileDefaultButton_Click(object sender, EventArgs e)
+		void DeviceFileDefaultButton_Click(object sender, EventArgs e)
 		{
 			var selectedItem = (DeviceFileComboBoxItem)mDeviceFileSelectionBox.SelectedItem;
 			selectedItem.ResetDefault();
@@ -1010,7 +1052,7 @@ namespace MixGui.Components
 			mDeviceFileSelectionBox.Focus();
 		}
 
-		void MDeviceFileSetButton_Click(object sender, EventArgs e)
+		void DeviceFileSetButton_Click(object sender, EventArgs e)
 		{
 			if (mSelectDeviceFileDialog == null)
 			{
@@ -1033,12 +1075,15 @@ namespace MixGui.Components
 			}
 		}
 
-		void MOkButton_Click(object sender, EventArgs e)
+		void OkButton_Click(object sender, EventArgs e)
 		{
 			mConfiguration.Colors.Clear();
 			foreach (ColorComboBoxItem colorItem in mColorSelectionBox.Items)
 			{
-				if (!colorItem.IsDefault) mConfiguration.Colors.Add(colorItem.Name, colorItem.Color);
+				if (!colorItem.IsDefault)
+				{
+					mConfiguration.Colors.Add(colorItem.Name, colorItem.Color);
+				}
 			}
 
 			mConfiguration.ColorProfilingCounts = mColorProfilingCountsCheckBox.Checked;
@@ -1075,14 +1120,17 @@ namespace MixGui.Components
 			catch (Exception exception)
 			{
 				MessageBox.Show(this, "Unable to save preferences: " + exception.Message, "Error saving preferences", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-				DialogResult = DialogResult.None;
 			}
 
+			DialogResult = DialogResult.OK;
 		}
 
-		void MTickCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args) => SetTickCountValue();
+		void TickCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+		{
+			SetTickCountValue();
+		}
 
-		void MTickCountDefaultButton_Click(object sender, EventArgs e)
+		void TickCountDefaultButton_Click(object sender, EventArgs e)
 		{
 			var selectedItem = (TickCountComboBoxItem)mTickCountSelectionBox.SelectedItem;
 			selectedItem.ResetDefault();
@@ -1097,7 +1145,7 @@ namespace MixGui.Components
 			UpdateTickCountControls(selectedItem);
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		void KeyPressHandler(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Escape && !(GetFocusedControl() is IEscapeConsumer))
 			{
@@ -1106,7 +1154,7 @@ namespace MixGui.Components
 			}
 		}
 
-		void This_VisibleChanged(object sender, EventArgs e)
+		void VisibleChangedHandler(object sender, EventArgs e)
 		{
 			if (Visible)
 			{
@@ -1239,13 +1287,13 @@ namespace MixGui.Components
 			}
 		}
 
-		void MDeviceReloadIntervalDefaultButton_Click(object sender, EventArgs e)
+		void DeviceReloadIntervalDefaultButton_Click(object sender, EventArgs e)
 		{
 			mDeviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 			UpdateDeviceReloadIntervalControls();
 		}
 
-		void MDeviceReloadIntervalComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		void DeviceReloadIntervalComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mDeviceReloadInterval = ((DeviceReloadIntervalComboBoxItem)mDeviceReloadIntervalComboBox.SelectedItem).MilliSeconds;
 			mDeviceReloadIntervalDefaultButton.Enabled = true;
@@ -1264,13 +1312,13 @@ namespace MixGui.Components
 			mLoaderCardsDefaultButton.Enabled = false;
 		}
 
-		void MFloatingPointMemoryWordCountDefaultButton_Click(object sender, EventArgs e)
+		void FloatingPointMemoryWordCountDefaultButton_Click(object sender, EventArgs e)
 		{
 			mFloatingPointMemoryWordCount = null;
 			UpdateFloatingPointControls();
 		}
 
-		void MFloatingPointMemoryWordCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+		void FloatingPointMemoryWordCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
 			mFloatingPointMemoryWordCount = (int)mFloatingPointMemoryWordCountBox.LongValue;
 			UpdateFloatingPointControls();
@@ -1281,7 +1329,7 @@ namespace MixGui.Components
 		/// </summary>
 		class ColorComboBoxItem
 		{
-			string mDisplayName;
+			readonly string mDisplayName;
 			public bool IsDefault { get; private set; }
 			public string Name { get; private set; }
 			Color mSetColor;
@@ -1295,7 +1343,10 @@ namespace MixGui.Components
 
 			public bool IsBackground => !Name.EndsWith("Text", StringComparison.Ordinal);
 
-			public override string ToString() => mDisplayName;
+			public override string ToString()
+			{
+				return mDisplayName;
+			}
 
 			static string GetDisplayName(string name)
 			{
@@ -1324,10 +1375,7 @@ namespace MixGui.Components
 
 			public Color Color
 			{
-				get
-				{
-					return !IsDefault ? mSetColor : GuiSettings.GetDefaultColor(Name);
-				}
+				get => !IsDefault ? mSetColor : GuiSettings.GetDefaultColor(Name);
 				set
 				{
 					mSetColor = value;
@@ -1353,7 +1401,10 @@ namespace MixGui.Components
 
 			public bool IsDefault => mFilePath == null;
 
-			public override string ToString() => mDevice.Id.ToString("D2") + ": " + mDevice.ShortName;
+			public override string ToString()
+			{
+				return mDevice.Id.ToString("D2") + ": " + mDevice.ShortName;
+			}
 
 			public void ResetDefault()
 			{
@@ -1362,14 +1413,8 @@ namespace MixGui.Components
 
 			public string FilePath
 			{
-				get
-				{
-					return mFilePath ?? mDevice.DefaultFileName;
-				}
-				set
-				{
-					mFilePath = value;
-				}
+				get => mFilePath ?? mDevice.DefaultFileName;
+				set => mFilePath = value;
 			}
 		}
 
@@ -1378,7 +1423,7 @@ namespace MixGui.Components
 		/// </summary>
 		class TickCountComboBoxItem
 		{
-			string mDisplayName;
+			readonly string mDisplayName;
 			bool mIsDefault;
 			readonly string mName;
 			int mSetTickCount;
@@ -1394,7 +1439,10 @@ namespace MixGui.Components
 
 			public string Name => mName;
 
-			public override string ToString() => mDisplayName;
+			public override string ToString()
+			{
+				return mDisplayName;
+			}
 
 			static string GetDisplayName(string name)
 			{
@@ -1423,10 +1471,7 @@ namespace MixGui.Components
 
 			public int TickCount
 			{
-				get
-				{
-					return !mIsDefault ? mSetTickCount : DeviceSettings.GetDefaultTickCount(mName);
-				}
+				get => !mIsDefault ? mSetTickCount : DeviceSettings.GetDefaultTickCount(mName);
 				set
 				{
 					mSetTickCount = value;
@@ -1446,7 +1491,10 @@ namespace MixGui.Components
 
 			public override string ToString()
 			{
-				if (MilliSeconds < 1000) return MilliSeconds.ToString("##0 ms");
+				if (MilliSeconds < 1000)
+				{
+					return MilliSeconds.ToString("##0 ms");
+				}
 
 				float seconds = MilliSeconds / 1000f;
 				return seconds.ToString("0.## s");

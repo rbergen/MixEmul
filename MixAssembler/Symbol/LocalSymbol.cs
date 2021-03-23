@@ -10,11 +10,14 @@ namespace MixAssembler.Symbol
 	/// </summary>
 	public class LocalSymbol : SymbolBase
 	{
-		List<long> mAddresses;
+		readonly List<long> mAddresses;
 
 		public LocalSymbol(int index) : base(index.ToString())
 		{
-			if (index < 0 || index > 9) throw new ArgumentException("index must be between 0 and 9");
+			if (index < 0 || index > 9)
+			{
+				throw new ArgumentException("index must be between 0 and 9");
+			}
 
 			mAddresses = new List<long>();
 		}
@@ -23,21 +26,45 @@ namespace MixAssembler.Symbol
 
 		public override bool IsSymbolDefined => true;
 
-		public override void SetValue(long value) => mAddresses.Add(value);
+		public override void SetValue(long value)
+		{
+			mAddresses.Add(value);
+		}
 
-		static bool IsBackwardReferenceChar(char c) => c == 'B';
+		static bool IsBackwardReferenceChar(char c)
+		{
+			return c == 'B';
+		}
 
-		static bool IsDefinitionChar(char c) => c == 'H';
+		static bool IsDefinitionChar(char c)
+		{
+			return c == 'H';
+		}
 
-		static bool IsForwardReferenceChar(char c) => c == 'F';
+		static bool IsForwardReferenceChar(char c)
+		{
+			return c == 'F';
+		}
 
-		static bool IsLocalSymbol(string text) => (text.Length == 2 && char.IsNumber(text[0])) && IsLocalSymbolChar(text[1]);
+		static bool IsLocalSymbol(string text)
+		{
+			return (text.Length == 2 && char.IsNumber(text[0])) && IsLocalSymbolChar(text[1]);
+		}
 
-		static bool IsLocalSymbolChar(char c) => "BHF".IndexOf(c) >= 0;
+		static bool IsLocalSymbolChar(char c)
+		{
+			return "BHF".IndexOf(c) >= 0;
+		}
 
-		public override bool IsValueDefined(int currentAddress) => false;
+		public override bool IsValueDefined(int currentAddress)
+		{
+			return false;
+		}
 
-		public override void SetValue(Word.Signs sign, long magnitude) => mAddresses.Add(magnitude);
+		public override void SetValue(Word.Signs sign, long magnitude)
+		{
+			mAddresses.Add(magnitude);
+		}
 
 		public override long GetValue(int currentAddress)
 		{
@@ -46,7 +73,10 @@ namespace MixAssembler.Symbol
 
 		public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			if (!IsLocalSymbol(text)) return null;
+			if (!IsLocalSymbol(text))
+			{
+				return null;
+			}
 
 			if (!IsDefinitionChar(text[1]))
 			{
@@ -55,7 +85,10 @@ namespace MixAssembler.Symbol
 
 			char localSymbolChar = text[0];
 			SymbolBase symbol = status.Symbols[localSymbolChar.ToString()];
-			if (symbol == null) return new LocalSymbol(localSymbolChar - '0');
+			if (symbol == null)
+			{
+				return new LocalSymbol(localSymbolChar - '0');
+			}
 
 			if (!(symbol is LocalSymbol))
 			{
@@ -67,7 +100,10 @@ namespace MixAssembler.Symbol
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			if (!IsLocalSymbol(text)) return null;
+			if (!IsLocalSymbol(text))
+			{
+				return null;
+			}
 
 			char localSymbolChar = text[0];
 			SymbolBase symbol = status.Symbols[new string(localSymbolChar, 1)];
@@ -114,8 +150,8 @@ namespace MixAssembler.Symbol
 
 		class Reference : IValue
 		{
-			Directions mDirection;
-			LocalSymbol mReferee;
+			readonly Directions mDirection;
+			readonly LocalSymbol mReferee;
 
 			public Reference(LocalSymbol referee, Directions direction)
 			{
@@ -123,11 +159,20 @@ namespace MixAssembler.Symbol
 				mDirection = direction;
 			}
 
-			public long GetMagnitude(int currentAddress) => GetValue(currentAddress);
+			public long GetMagnitude(int currentAddress)
+			{
+				return GetValue(currentAddress);
+			}
 
-			public Word.Signs GetSign(int currentAddress) => Word.Signs.Positive;
+			public Word.Signs GetSign(int currentAddress)
+			{
+				return Word.Signs.Positive;
+			}
 
-			public bool IsValueDefined(int currentAddress) => GetValue(currentAddress) != -1L;
+			public bool IsValueDefined(int currentAddress)
+			{
+				return GetValue(currentAddress) != -1L;
+			}
 
 			/// <summary>
 			/// Try to locate the symbol (i.e. address) that this reference refers to. 
@@ -154,7 +199,10 @@ namespace MixAssembler.Symbol
 					}
 				}
 
-				if (mDirection == Directions.Backwards) return followingAddress;
+				if (mDirection == Directions.Backwards)
+				{
+					return followingAddress;
+				}
 
 				return -1L;
 			}

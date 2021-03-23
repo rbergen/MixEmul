@@ -33,7 +33,10 @@ namespace MixLib.Device
 
 		public override bool SupportsOutput => true;
 
-		public static long CalculateBytePosition(long sector) => sector * WordsPerSector * (FullWord.ByteCount + 1);
+		public static long CalculateBytePosition(long sector)
+		{
+			return sector * WordsPerSector * (FullWord.ByteCount + 1);
+		}
 
 		public sealed override void UpdateSettings()
 		{
@@ -97,7 +100,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => openingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -130,7 +136,10 @@ namespace MixLib.Device
 		{
 			public override string StatusDescription => seekingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			new class Instance : StreamStep.Instance
 			{
@@ -145,7 +154,10 @@ namespace MixLib.Device
 				public override bool Tick()
 				{
 					var desiredPosition = CalculateBytePosition(Operands.Sector);
-					if (desiredPosition == StreamStatus.Position) return true;
+					if (desiredPosition == StreamStatus.Position)
+					{
+						return true;
+					}
 
 					if (mTicksLeft == unset)
 					{
@@ -154,7 +166,10 @@ namespace MixLib.Device
 
 					mTicksLeft -= 1L;
 
-					if (mTicksLeft > 0L) return false;
+					if (mTicksLeft > 0L)
+					{
+						return false;
+					}
 
 					if (desiredPosition < 0L)
 					{

@@ -16,7 +16,10 @@ namespace MixLib.Instruction
 		public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue) return false;
+			if (indexedAddress == int.MinValue)
+			{
+				return false;
+			}
 
 			Register rA = module.Registers.RA;
 			long rALongValue = rA.LongValue;
@@ -52,7 +55,10 @@ namespace MixLib.Instruction
 		public static bool Divide(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue) return false;
+			if (indexedAddress == int.MinValue)
+			{
+				return false;
+			}
 
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 			if (memoryWordValue == 0L)
@@ -93,7 +99,10 @@ namespace MixLib.Instruction
 		public static bool Multiply(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue) return false;
+			if (indexedAddress == int.MinValue)
+			{
+				return false;
+			}
 
 			Register rA = module.Registers.RA;
 			Register rX = module.Registers.RX;

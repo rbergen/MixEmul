@@ -8,7 +8,7 @@ namespace MixGui.Components
 {
 	public class FullWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		Label mEqualsLabel;
+		readonly Label mEqualsLabel;
 		IFullWord mFullWord;
 		bool mReadOnly;
 		readonly MixByteCollectionCharTextBox mWordCharTextBox;
@@ -43,10 +43,15 @@ namespace MixGui.Components
 
 		public int? CaretIndex => FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index) =>
-				field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
+		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
 		void InitializeComponent()
 		{
@@ -82,15 +87,18 @@ namespace MixGui.Components
 
 		void This_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Modifiers != Keys.None) return;
+			if (e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			FieldTypes editorField = FieldTypes.Chars;
 			int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;
 
-			if (e is FieldKeyEventArgs)
+			if (e is FieldKeyEventArgs args)
 			{
-				editorField = ((FieldKeyEventArgs)e).Field;
-				index = ((FieldKeyEventArgs)e).Index;
+				editorField = args.Field;
+				index = args.Index;
 			}
 
 			switch (e.KeyCode)
@@ -155,10 +163,7 @@ namespace MixGui.Components
 
 		public IFullWord FullWord
 		{
-			get
-			{
-				return mFullWord;
-			}
+			get => mFullWord;
 			set
 			{
 				mFullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
@@ -169,10 +174,7 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mReadOnly;
-			}
+			get => mReadOnly;
 			set
 			{
 				if (mReadOnly != value)
@@ -186,10 +188,7 @@ namespace MixGui.Components
 
 		public IWord WordValue
 		{
-			get
-			{
-				return FullWord;
-			}
+			get => FullWord;
 			set
 			{
 				if (!(value is IFullWord))

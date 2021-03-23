@@ -20,7 +20,10 @@ namespace MixLib.Device.Step
 
 		public override string StatusDescription => statusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+		{
+			return new Instance(streamStatus, mRecordWordCount);
+		}
 
 		public static void WriteBytes(Stream stream, int bytesPerRecord, List<IMixByteCollection> bytes)
 		{
@@ -61,7 +64,10 @@ namespace MixLib.Device.Step
 
 			public override bool Tick()
 			{
-				if (StreamStatus.Stream == null || mWriteBytes == null) return true;
+				if (StreamStatus.Stream == null || mWriteBytes == null)
+				{
+					return true;
+				}
 
 				try
 				{
@@ -80,10 +86,7 @@ namespace MixLib.Device.Step
 
 			public override object InputFromPreviousStep
 			{
-				set
-				{
-					mWriteBytes = (MixByte[])value;
-				}
+				set => mWriteBytes = (MixByte[])value;
 			}
 		}
 	}

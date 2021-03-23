@@ -13,7 +13,7 @@ namespace MixGui.Components
 		MixLib.Devices mDevices;
 		int mLastSectionSize;
 		int mMaxSequenceSize;
-		Label mNoDevicesLabel;
+		readonly Label mNoDevicesLabel;
 		int mSectionSize;
 		int mSequenceSize;
 		LayoutStructure mStructure;
@@ -134,36 +134,51 @@ namespace MixGui.Components
 			}
 			else
 			{
-				for (int i = 0; i < mDeviceControls.Length; i++) AddDeviceControl(i);
+				for (int i = 0; i < mDeviceControls.Length; i++)
+				{
+					AddDeviceControl(i);
+				}
 			}
 
 			ResumeLayout(false);
 		}
 
-		int GetHorizontalSpacing() => mStructure == null ? 0 : mStructure.HorizontalSpacing;
+		int GetHorizontalSpacing()
+		{
+			return mStructure == null ? 0 : mStructure.HorizontalSpacing;
+		}
 
-		Orientations GetOrientation() => mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
+		Orientations GetOrientation()
+		{
+			return mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
+		}
 
-		int GetVerticalSpacing() => mStructure == null ? 0 : mStructure.VerticalSpacing;
+		int GetVerticalSpacing()
+		{
+			return mStructure == null ? 0 : mStructure.VerticalSpacing;
+		}
 
 		public new void Update()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls) control.Update();
+			foreach (DeviceStatusControl control in mDeviceControls)
+			{
+				control.Update();
+			}
 
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls) control.UpdateLayout();
+			foreach (DeviceStatusControl control in mDeviceControls)
+			{
+				control.UpdateLayout();
+			}
 		}
 
 		public MixLib.Devices Devices
 		{
-			get
-			{
-				return mDevices;
-			}
+			get => mDevices;
 			set
 			{
 				if (mDevices == null)
@@ -190,14 +205,14 @@ namespace MixGui.Components
 			}
 		}
 
-		void DevicesControl_DoubleClick(object sender, EventArgs e) => DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
+		void DevicesControl_DoubleClick(object sender, EventArgs e)
+		{
+			DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
+		}
 
 		public LayoutStructure Structure
 		{
-			get
-			{
-				return mStructure;
-			}
+			get => mStructure;
 			set
 			{
 				if (value != null)
@@ -217,10 +232,7 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			get
-			{
-				return mToolTip;
-			}
+			get => mToolTip;
 			set
 			{
 				mToolTip = value;
@@ -258,14 +270,18 @@ namespace MixGui.Components
 
 			public DevicesControl.Breaks this[int location]
 			{
-				get
-				{
-					return !mLayoutList.ContainsKey(location) ? DevicesControl.Breaks.None : mLayoutList[location];
-				}
+				get => !mLayoutList.ContainsKey(location) ? DevicesControl.Breaks.None : mLayoutList[location];
 				set
 				{
-					if (mLayoutList.ContainsKey(location)) mLayoutList.Remove(location);
-					if (value != DevicesControl.Breaks.None) mLayoutList.Add(location, value);
+					if (mLayoutList.ContainsKey(location))
+					{
+						mLayoutList.Remove(location);
+					}
+
+					if (value != DevicesControl.Breaks.None)
+					{
+						mLayoutList.Add(location, value);
+					}
 				}
 			}
 		}

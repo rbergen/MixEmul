@@ -24,19 +24,37 @@ namespace MixAssembler.Symbol
 
 		public long Value => Sign.ApplyTo(Magnitude);
 
-		public static SymbolBase ParseDefinition(string text) => !IsValueSymbolName(text) ? null : new ValueSymbol(text);
+		public static SymbolBase ParseDefinition(string text)
+		{
+			return !IsValueSymbolName(text) ? null : new ValueSymbol(text);
+		}
 
-		public override long GetValue(int currentAddress) => Value;
+		public override long GetValue(int currentAddress)
+		{
+			return Value;
+		}
 
-		public override long GetMagnitude(int currentAddress) => Magnitude;
+		public override long GetMagnitude(int currentAddress)
+		{
+			return Magnitude;
+		}
 
-		public override Word.Signs GetSign(int currentAddress) => Sign;
+		public override Word.Signs GetSign(int currentAddress)
+		{
+			return Sign;
+		}
 
-		public override bool IsValueDefined(int currentAddress) => mIsDefined;
+		public override bool IsValueDefined(int currentAddress)
+		{
+			return mIsDefined;
+		}
 
 		public static bool IsValueSymbolName(string text)
 		{
-			if (text.Length == 0 || text.Length > MaxNameLength) return false;
+			if (text.Length == 0 || text.Length > MaxNameLength)
+			{
+				return false;
+			}
 
 			bool letterFound = false;
 
@@ -46,7 +64,10 @@ namespace MixAssembler.Symbol
 				{
 					letterFound = true;
 				}
-				else if (!char.IsNumber(text[i])) return false;
+				else if (!char.IsNumber(text[i]))
+				{
+					return false;
+				}
 			}
 
 			return letterFound;
@@ -56,7 +77,10 @@ namespace MixAssembler.Symbol
 		{
 			var symbol = LocalSymbol.ParseDefinition(text, sectionCharIndex, status);
 
-			if (symbol != null) return symbol;
+			if (symbol != null)
+			{
+				return symbol;
+			}
 
 			return ParseDefinition(text);
 		}
@@ -65,9 +89,15 @@ namespace MixAssembler.Symbol
 		{
 			var symbolValue = LocalSymbol.ParseValue(text, sectionCharIndex, status);
 
-			if (symbolValue != null) return symbolValue;
+			if (symbolValue != null)
+			{
+				return symbolValue;
+			}
 
-			if (!IsValueSymbolName(text)) return null;
+			if (!IsValueSymbolName(text))
+			{
+				return null;
+			}
 
 			SymbolBase symbol = status.Symbols[text];
 			if (symbol == null)

@@ -31,12 +31,13 @@ namespace MixGui.Utils
 
 		public static bool ControlHasFocus(this ContainerControl container, Control control)
 		{
-			Control activeControl = null;
-
 			while (container != null)
 			{
-				activeControl = container.ActiveControl;
-				if (activeControl == control) return true;
+				Control activeControl = container.ActiveControl;
+				if (activeControl == control)
+				{
+					return true;
+				}
 
 				container = activeControl as ContainerControl;
 			}

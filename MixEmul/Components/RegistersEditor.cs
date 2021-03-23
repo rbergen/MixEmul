@@ -8,31 +8,31 @@ namespace MixGui.Components
 {
 	public class RegistersEditor : UserControl
 	{
-		Button mCompareButton;
-		Label mCompareLabel;
-		List<WordValueEditor> mEditors;
-		CheckBox mOverflowBox;
-		Label mOverflowLabel;
+		readonly Button mCompareButton;
+		readonly Label mCompareLabel;
+		readonly List<WordValueEditor> mEditors;
+		readonly CheckBox mOverflowBox;
+		readonly Label mOverflowLabel;
 		readonly WordValueEditor mrI1Editor;
-		Label mrI1Label;
+		readonly Label mrI1Label;
 		readonly WordValueEditor mrI2Editor;
-		Label mrI2Label;
+		readonly Label mrI2Label;
 		readonly WordValueEditor mrI3Editor;
-		Label mrI3Label;
+		readonly Label mrI3Label;
 		readonly WordValueEditor mrI4Editor;
-		Label mrI4Label;
+		readonly Label mrI4Label;
 		readonly WordValueEditor mr5Editor;
-		Label mrI5Label;
+		readonly Label mrI5Label;
 		readonly WordValueEditor mrI6Editor;
-		Label mrI6Label;
+		readonly Label mrI6Label;
 		readonly WordValueEditor mrAEditor;
-		Label mrALabel;
+		readonly Label mrALabel;
 		bool mReadOnly;
 		MixLib.Registers mRegisters;
 		readonly WordValueEditor mrJEditor;
-		Label mrJLabel;
+		readonly Label mrJLabel;
 		readonly WordValueEditor mrXEditor;
-		Label mrXLabel;
+		readonly Label mrXLabel;
 
 		public RegistersEditor()
 	: this(null)
@@ -145,59 +145,59 @@ namespace MixGui.Components
 			mrAEditor.Name = "mrAEditor";
 			mrAEditor.TabIndex = 1;
 			mrAEditor.TextBoxWidth = 80;
-			mrAEditor.NavigationKeyDown += This_KeyDown;
+			mrAEditor.NavigationKeyDown += KeyDownHandler;
 
 			mrXEditor.Location = new Point(24, 24);
 			mrXEditor.Name = "mrXEditor";
 			mrXEditor.TabIndex = 3;
 			mrXEditor.TextBoxWidth = 80;
-			mrXEditor.NavigationKeyDown += This_KeyDown;
+			mrXEditor.NavigationKeyDown += KeyDownHandler;
 
 			mrI1Editor.Location = new Point(24, 48);
 			mrI1Editor.Name = "mr1Editor";
 			mrI1Editor.TabIndex = 5;
 			mrI1Editor.TextBoxWidth = 40;
-			mrI1Editor.NavigationKeyDown += This_KeyDown;
+			mrI1Editor.NavigationKeyDown += KeyDownHandler;
 
 			mrI2Editor.Location = new Point(24, 72);
 			mrI2Editor.Name = "mr2Editor";
 			mrI2Editor.TabIndex = 7;
 			mrI2Editor.TextBoxWidth = 40;
-			mrI2Editor.NavigationKeyDown += This_KeyDown;
+			mrI2Editor.NavigationKeyDown += KeyDownHandler;
 
 			mrI3Editor.Location = new Point(24, 96);
 			mrI3Editor.Name = "mr3Editor";
 			mrI3Editor.TabIndex = 9;
 			mrI3Editor.TextBoxWidth = 40;
-			mrI3Editor.NavigationKeyDown += This_KeyDown;
+			mrI3Editor.NavigationKeyDown += KeyDownHandler;
 
 			mrI4Editor.Location = new Point(24, 120);
 			mrI4Editor.Name = "mr4Editor";
 			mrI4Editor.TabIndex = 11;
 			mrI4Editor.TextBoxWidth = 40;
-			mrI4Editor.NavigationKeyDown += This_KeyDown;
+			mrI4Editor.NavigationKeyDown += KeyDownHandler;
 
 			mr5Editor.Location = new Point(24, 144);
 			mr5Editor.Name = "mr5Editor";
 			mr5Editor.TabIndex = 13;
 			mr5Editor.TextBoxWidth = 40;
-			mr5Editor.NavigationKeyDown += This_KeyDown;
+			mr5Editor.NavigationKeyDown += KeyDownHandler;
 
 			mrI6Editor.Location = new Point(24, 168);
 			mrI6Editor.Name = "mr6Editor";
 			mrI6Editor.TabIndex = 15;
 			mrI6Editor.TextBoxWidth = 40;
-			mrI6Editor.NavigationKeyDown += This_KeyDown;
+			mrI6Editor.NavigationKeyDown += KeyDownHandler;
 
 			mrJEditor.Location = new Point(41, 192);
 			mrJEditor.Name = "mrJEditor";
 			mrJEditor.ReadOnly = false;
 			mrJEditor.TabIndex = 17;
 			mrJEditor.TextBoxWidth = 40;
-			mrJEditor.NavigationKeyDown += This_KeyDown;
+			mrJEditor.NavigationKeyDown += KeyDownHandler;
 
 			mOverflowLabel.Name = "mOverflowLabel";
-			mOverflowLabel.Size = new Size(56, 21);
+			mOverflowLabel.Size = new Size(58, 21);
 			mOverflowLabel.TabIndex = 18;
 			mOverflowLabel.Text = "Overflow:";
 			mOverflowLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -207,10 +207,10 @@ namespace MixGui.Components
 			mOverflowBox.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mOverflowBox.Width, mrI6Editor.Top);
 			mOverflowBox.TabIndex = 19;
 			mOverflowBox.FlatStyle = FlatStyle.Flat;
-			mOverflowBox.CheckedChanged += MOverflowBox_CheckedChanged;
+			mOverflowBox.CheckedChanged += OverflowBox_CheckedChanged;
 
 			mCompareLabel.Name = "mCompareLabel";
-			mCompareLabel.Size = new Size(56, 21);
+			mCompareLabel.Size = new Size(58, 21);
 			mCompareLabel.TabIndex = 20;
 			mCompareLabel.Text = "Compare:";
 			mCompareLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -221,7 +221,7 @@ namespace MixGui.Components
 			mCompareButton.Location = new Point((mrAEditor.Left + mrAEditor.Width) - mCompareButton.Width, mrJEditor.Top);
 			mCompareButton.TabIndex = 21;
 			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
-			mCompareButton.Click += MCompareButton_Click;
+			mCompareButton.Click += CompareButton_Click;
 
 			mOverflowLabel.Location = new Point(Math.Min(mCompareButton.Left, mOverflowBox.Left) - Math.Max(mCompareLabel.Width, mOverflowLabel.Width), mOverflowBox.Top);
 
@@ -255,20 +255,20 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		void MOverflowBox_CheckedChanged(object sender, EventArgs e)
+		void OverflowBox_CheckedChanged(object sender, EventArgs e)
 		{
 			mRegisters.OverflowIndicator = mOverflowBox.Checked;
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		void KeyDownHandler(object sender, KeyEventArgs e)
 		{
 			FieldTypes? editorField = null;
 			int? index = null;
 
-			if (e is FieldKeyEventArgs)
+			if (e is FieldKeyEventArgs args)
 			{
-				editorField = ((FieldKeyEventArgs)e).Field;
-				index = ((FieldKeyEventArgs)e).Index;
+				editorField = args.Field;
+				index = args.Index;
 			}
 
 			var editorIndex = mEditors.IndexOf((WordValueEditor)sender);
@@ -283,7 +283,7 @@ namespace MixGui.Components
 			}
 		}
 
-		void MCompareButton_Click(object sender, EventArgs e)
+		void CompareButton_Click(object sender, EventArgs e)
 		{
 			var compValue = mRegisters.CompareIndicator.Next();
 			mRegisters.CompareIndicator = compValue;
@@ -292,7 +292,10 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			foreach (WordValueEditor editor in mEditors) editor.Update();
+			foreach (WordValueEditor editor in mEditors)
+			{
+				editor.Update();
+			}
 
 			mCompareButton.Text = "" + mRegisters.CompareIndicator.ToChar();
 			mOverflowBox.Checked = mRegisters.OverflowIndicator;
@@ -302,15 +305,15 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (WordValueEditor editor in mEditors) editor.UpdateLayout();
+			foreach (WordValueEditor editor in mEditors)
+			{
+				editor.UpdateLayout();
+			}
 		}
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mReadOnly;
-			}
+			get => mReadOnly;
 			set
 			{
 				if (mReadOnly != value)
@@ -330,10 +333,7 @@ namespace MixGui.Components
 
 		public MixLib.Registers Registers
 		{
-			get
-			{
-				return mRegisters;
-			}
+			get => mRegisters;
 			set
 			{
 				if (value != null && mRegisters != value)

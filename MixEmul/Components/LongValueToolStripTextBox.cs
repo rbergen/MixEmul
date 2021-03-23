@@ -6,29 +6,24 @@ namespace MixGui.Components
 {
 	public partial class LongValueToolStripTextBox : ToolStripControlHost
 	{
-		public LongValueToolStripTextBox()
-			: this(true, long.MinValue, long.MaxValue, 0L)
-		{
-		}
-
 		public LongValueToolStripTextBox(IContainer container)
 			: this()
 		{
 			container.Add(this);
 		}
 
-		public LongValueToolStripTextBox(bool supportsSign)
-			: this(supportsSign, long.MinValue, long.MaxValue, 0L)
+		public LongValueToolStripTextBox()
+			: this(long.MinValue, long.MaxValue, 0L)
 		{
 		}
 
-		public LongValueToolStripTextBox(bool supportsSign, long minValue, long maxValue)
-			: this(supportsSign, minValue, maxValue, 0L)
+		public LongValueToolStripTextBox(long minValue, long maxValue)
+			: this(minValue, maxValue, 0L)
 		{
 		}
 
-		public LongValueToolStripTextBox(bool supportsSign, long minValue, long maxValue, long value)
-			: base(new LongValueTextBox(supportsSign, minValue, maxValue, value))
+		public LongValueToolStripTextBox(long minValue, long maxValue, long value)
+			: base(new LongValueTextBox(minValue, maxValue, value))
 		{
 			InitializeComponent();
 			AutoSize = false;
@@ -55,62 +50,32 @@ namespace MixGui.Components
 
 		public long LongValue
 		{
-			get
-			{
-				return ((LongValueTextBox)Control).LongValue;
-			}
-			set
-			{
-				((LongValueTextBox)Control).LongValue = value;
-			}
+			get => ((LongValueTextBox)Control).LongValue;
+			set => ((LongValueTextBox)Control).LongValue = value;
 		}
 
 		public long MaxValue
 		{
-			get
-			{
-				return ((LongValueTextBox)Control).MaxValue;
-			}
-			set
-			{
-				((LongValueTextBox)Control).MaxValue = value;
-			}
+			get => ((LongValueTextBox)Control).MaxValue;
+			set => ((LongValueTextBox)Control).MaxValue = value;
 		}
 
 		public long MinValue
 		{
-			get
-			{
-				return ((LongValueTextBox)Control).MinValue;
-			}
-			set
-			{
-				((LongValueTextBox)Control).MinValue = value;
-			}
+			get => ((LongValueTextBox)Control).MinValue;
+			set => ((LongValueTextBox)Control).MinValue = value;
 		}
 
 		public bool ClearZero
 		{
-			get
-			{
-				return ((LongValueTextBox)Control).ClearZero;
-			}
-			set
-			{
-				((LongValueTextBox)Control).ClearZero = value;
-			}
+			get => ((LongValueTextBox)Control).ClearZero;
+			set => ((LongValueTextBox)Control).ClearZero = value;
 		}
 
 		public override string Text
 		{
-			get
-			{
-				return ((LongValueTextBox)Control).Text;
-			}
-			set
-			{
-				((LongValueTextBox)Control).Text = value;
-			}
+			get => ((LongValueTextBox)Control).Text;
+			set => ((LongValueTextBox)Control).Text = value;
 		}
 
 	}

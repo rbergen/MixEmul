@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace MixGui.Settings
@@ -108,34 +108,24 @@ namespace MixGui.Settings
 
 				if (File.Exists(path))
 				{
-					var serializationStream = new FileStream(path, FileMode.Open);
-					var formatter = new BinaryFormatter();
-					var configuration = (Configuration)formatter.Deserialize(serializationStream);
-					serializationStream.Close();
-
-					return configuration;
+					return JsonSerializer.Deserialize<Configuration>(File.ReadAllBytes(path));
 				}
 			}
-			catch (Exception)
-			{
-			}
+			catch (Exception) {}
 
 			return new Configuration();
 		}
 
 		public void Save(string directory)
 		{
-			var serializationStream = new FileStream(Path.Combine(directory, fileName), FileMode.Create);
-			new BinaryFormatter().Serialize(serializationStream, this);
+			using var serializationStream = new FileStream(Path.Combine(directory, fileName), FileMode.Create);
+			JsonSerializer.Serialize(new Utf8JsonWriter(serializationStream), this);
 			serializationStream.Close();
 		}
 
 		public string DeviceFilesDirectory
 		{
-			get
-			{
-				return mDeviceFilesDirectory;
-			}
+			get => mDeviceFilesDirectory;
 			set
 			{
 				if (value == null || Directory.Exists(value))

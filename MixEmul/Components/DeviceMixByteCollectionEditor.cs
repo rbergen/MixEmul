@@ -10,8 +10,8 @@ namespace MixGui.Components
 
 	public class DeviceMixByteCollectionEditor : UserControl, IMixByteCollectionEditor, INavigableControl
 	{
-		Label mMixByteCollectionIndexLabel;
-		MixByteCollectionCharTextBox mCharTextBox;
+		readonly Label mMixByteCollectionIndexLabel;
+		readonly MixByteCollectionCharTextBox mCharTextBox;
 		int mMixByteCollectionIndex;
 		IMixByteCollection mDeviceMixByteCollection;
 		int mIndexCharCount = 2;
@@ -39,18 +39,29 @@ namespace MixGui.Components
 
 		public Control EditorControl => this;
 
-		public FieldTypes? FocusedField => mCharTextBox.Focused ? FieldTypes.Chars : (FieldTypes?)null;
+		public FieldTypes? FocusedField => mCharTextBox.Focused ? FieldTypes.Chars : null;
 
-		public int? CaretIndex => mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : (int?)null;
+		public int? CaretIndex => mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : null;
 
-		public void Select(int start, int length) => mCharTextBox.Select(start, length);
+		public void Select(int start, int length)
+		{
+			mCharTextBox.Select(start, length);
+		}
 
-		public bool Focus(FieldTypes? field, int? index) => mCharTextBox.FocusWithIndex(index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return mCharTextBox.FocusWithIndex(index);
+		}
 
-		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		void MMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) =>
-				OnValueChanged(args);
+		void MMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
+		{
+			OnValueChanged(args);
+		}
 
 		void InitializeComponent()
 		{
@@ -84,7 +95,10 @@ namespace MixGui.Components
 
 		void This_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Modifiers != Keys.None) return;
+			if (e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			switch (e.KeyCode)
 			{
@@ -112,10 +126,7 @@ namespace MixGui.Components
 
 		public int MixByteCollectionIndex
 		{
-			get
-			{
-				return mMixByteCollectionIndex;
-			}
+			get => mMixByteCollectionIndex;
 			set
 			{
 				if (value < 0)
@@ -135,13 +146,13 @@ namespace MixGui.Components
 
 		public int IndexCharCount
 		{
-			get
-			{
-				return mIndexCharCount;
-			}
+			get => mIndexCharCount;
 			set
 			{
-				if (mIndexCharCount == value) return;
+				if (mIndexCharCount == value)
+				{
+					return;
+				}
 
 				mIndexCharCount = value;
 				SetIndexLabelText();
@@ -154,10 +165,7 @@ namespace MixGui.Components
 
 		public IMixByteCollection DeviceMixByteCollection
 		{
-			get
-			{
-				return mDeviceMixByteCollection;
-			}
+			get => mDeviceMixByteCollection;
 			set
 			{
 				mDeviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
@@ -168,26 +176,14 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mCharTextBox.ReadOnly;
-			}
-			set
-			{
-				mCharTextBox.ReadOnly = value;
-			}
+			get => mCharTextBox.ReadOnly;
+			set => mCharTextBox.ReadOnly = value;
 		}
 
 		public IMixByteCollection MixByteCollectionValue
 		{
-			get
-			{
-				return DeviceMixByteCollection;
-			}
-			set
-			{
-				DeviceMixByteCollection = value;
-			}
+			get => DeviceMixByteCollection;
+			set => DeviceMixByteCollection = value;
 		}
 	}
 }

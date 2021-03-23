@@ -13,10 +13,10 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class MixInstructionParameters : IInstructionParameters
 	{
-		IValue mAddress;
-		IValue mField;
+		readonly IValue mAddress;
+		readonly IValue mField;
 		readonly int mFieldPartCharIndex;
-		IValue mIndex;
+		readonly IValue mIndex;
 		readonly int mIndexPartCharIndex;
 		readonly int mTextLength;
 
@@ -68,7 +68,10 @@ namespace MixAssembler.Instruction
 
 			var mixInstruction = (MixInstruction)instruction;
 
-			if (!AreValuesDefined(status)) return null;
+			if (!AreValuesDefined(status))
+			{
+				return null;
+			}
 
 			var addressMagnitude = mAddress.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
@@ -80,7 +83,10 @@ namespace MixAssembler.Instruction
 
 			word.MagnitudeLongValue = addressMagnitude;
 			var fieldSpecValue = GetFieldSpecValue(status, mixInstruction);
-			if (fieldSpecValue == null) return null;
+			if (fieldSpecValue == null)
+			{
+				return null;
+			}
 
 			var instructionWord = new FullWord
 			{
@@ -108,7 +114,10 @@ namespace MixAssembler.Instruction
 			switch (mixInstruction.MetaFieldSpec.Presence)
 			{
 				case MetaFieldSpec.Presences.Forbidden:
-					if (fieldValue == long.MinValue) return mixInstruction.FieldSpec.MixByteValue;
+					if (fieldValue == long.MinValue)
+					{
+						return mixInstruction.FieldSpec.MixByteValue;
+					}
 
 					status.ReportParsingError(LineSection.AddressField, mFieldPartCharIndex, mTextLength - mFieldPartCharIndex, "fieldspec forbidden for this instruction");
 					return null;
@@ -122,7 +131,10 @@ namespace MixAssembler.Instruction
 					return (int)fieldValue;
 
 				case MetaFieldSpec.Presences.Mandatory:
-					if (fieldValue != long.MinValue) return (int)fieldValue;
+					if (fieldValue != long.MinValue)
+					{
+						return (int)fieldValue;
+					}
 
 					status.ReportParsingError(LineSection.AddressField, mFieldPartCharIndex, mTextLength - mFieldPartCharIndex, "fieldspec mandatory for this instruction");
 					return null;

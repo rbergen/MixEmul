@@ -9,8 +9,8 @@ namespace MixGui.Components
 {
 	public class DeviceWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		Label mWordIndexLabel;
-		FullWordEditor mFullWordEditor;
+		readonly Label mWordIndexLabel;
+		readonly FullWordEditor mFullWordEditor;
 		int mWordIndex;
 		IFullWord mDeviceWord;
 
@@ -41,13 +41,25 @@ namespace MixGui.Components
 
 		public int? CaretIndex => mFullWordEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index) => mFullWordEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return mFullWordEditor.Focus(field, index);
+		}
 
-		public void Select(int start, int length) => mFullWordEditor.Select(start, length);
+		public void Select(int start, int length)
+		{
+			mFullWordEditor.Select(start, length);
+		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
+		void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+		{
+			OnValueChanged(args);
+		}
 
 		void InitializeComponent()
 		{
@@ -106,10 +118,7 @@ namespace MixGui.Components
 
 		public int WordIndex
 		{
-			get
-			{
-				return mWordIndex;
-			}
+			get => mWordIndex;
 			set
 			{
 				mWordIndex = value;
@@ -119,10 +128,7 @@ namespace MixGui.Components
 
 		public IFullWord DeviceWord
 		{
-			get
-			{
-				return mDeviceWord;
-			}
+			get => mDeviceWord;
 			set
 			{
 				mDeviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
@@ -132,22 +138,13 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mFullWordEditor.ReadOnly;
-			}
-			set
-			{
-				mFullWordEditor.ReadOnly = value;
-			}
+			get => mFullWordEditor.ReadOnly;
+			set => mFullWordEditor.ReadOnly = value;
 		}
 
 		public IWord WordValue
 		{
-			get
-			{
-				return DeviceWord;
-			}
+			get => DeviceWord;
 			set
 			{
 				if (!(value is IFullWord))

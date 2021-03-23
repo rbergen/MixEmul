@@ -11,7 +11,10 @@ namespace MixLib.Device.Step
 
 		public override string StatusDescription => mStatusDescription;
 
-		protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount);
+		protected override TickingStep.Instance CreateTickingInstance()
+		{
+			return new Instance(TickCount);
+		}
 
 		protected new class Instance : TickingStep.Instance
 		{

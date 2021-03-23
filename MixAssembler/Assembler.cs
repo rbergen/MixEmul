@@ -21,7 +21,10 @@ namespace MixAssembler
 			symbols = null;
 
 			// if errors were found during parsing, abort assembly
-			if (status.Findings.ContainsErrors) return null;
+			if (status.Findings.ContainsErrors)
+			{
+				return null;
+			}
 
 			status.LocationCounter = 0;
 			status.LineNumber = 0;
@@ -70,12 +73,18 @@ namespace MixAssembler
 			}
 
 			// if errors were found during assembly, don't return the instruction instances: they would be useless anyway
-			if (status.Findings.ContainsErrors) return null;
+			if (status.Findings.ContainsErrors)
+			{
+				return null;
+			}
 
 			symbols = new SymbolCollection();
 			foreach (SymbolBase symbol in status.Symbols)
 			{
-				if (symbol is ValueSymbol) symbols.Add(symbol);
+				if (symbol is ValueSymbol)
+				{
+					symbols.Add(symbol);
+				}
 			}
 
 			status.Findings.Add(new AssemblyInfo("assembly completed successfully", int.MinValue, LineSection.EntireLine, 0, 0));
@@ -94,7 +103,10 @@ namespace MixAssembler
 			findings = status.Findings;
 
 			// if errors were found while parsing, abort assembly
-			if (status.Findings.ContainsErrors) return null;
+			if (status.Findings.ContainsErrors)
+			{
+				return null;
+			}
 
 			if (!parsedLine.IsDefined)
 			{
@@ -107,7 +119,10 @@ namespace MixAssembler
 			var instructionInstance = parsedLine.CreateInstance(status);
 
 			// if errors were found while assembling, don't return the instruction instance: it would be useless anyway
-			if (status.Findings.ContainsErrors) return null;
+			if (status.Findings.ContainsErrors)
+			{
+				return null;
+			}
 
 			return instructionInstance;
 		}

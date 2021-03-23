@@ -11,15 +11,13 @@ namespace MixGui.Components
 		const int moduleFieldIndex = 1;
 		const int addressFieldIndex = 2;
 		const int noAddress = -1;
-
-		ColumnHeader mSeverityColumn = new ColumnHeader();
-		ColumnHeader mModuleColumn = new ColumnHeader();
-		ColumnHeader mAddressColumn = new ColumnHeader();
-		ColumnHeader mTitleColumn = new ColumnHeader();
-		ColumnHeader mMessageColumn = new ColumnHeader();
-
-		Button mClearButton = new Button();
-		readonly ListView mListView = new ListView();
+		readonly ColumnHeader mSeverityColumn = new();
+		readonly ColumnHeader mModuleColumn = new();
+		readonly ColumnHeader mAddressColumn = new();
+		readonly ColumnHeader mTitleColumn = new();
+		readonly ColumnHeader mMessageColumn = new();
+		readonly Button mClearButton = new();
+		readonly ListView mListView = new();
 
 		public event AddressSelectedHandler AddressSelected;
 
@@ -72,14 +70,25 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		public void AddLogLine(LogLine line) =>
-				mListView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
+		public void AddLogLine(LogLine line)
+		{
+			mListView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
+		}
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
+		{
+			AddressSelected?.Invoke(this, args);
+		}
 
-		void This_DoubleClick(object sender, EventArgs args) => HandleAddressSelected();
+		void This_DoubleClick(object sender, EventArgs args)
+		{
+			HandleAddressSelected();
+		}
 
-		void MClearButton_Click(object sender, EventArgs e) => mListView.Items.Clear();
+		void MClearButton_Click(object sender, EventArgs e)
+		{
+			mListView.Items.Clear();
+		}
 
 		void MListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
@@ -93,7 +102,10 @@ namespace MixGui.Components
 		void HandleAddressSelected()
 		{
 			int selectedAddress = SelectedAddress;
-			if (selectedAddress != noAddress) OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
+			if (selectedAddress != noAddress)
+			{
+				OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
+			}
 		}
 
 		public string SelectedModule
@@ -102,7 +114,10 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0) return null;
+				if (selectedItems.Count == 0)
+				{
+					return null;
+				}
 
 				string module = selectedItems[0].SubItems[moduleFieldIndex].Text;
 
@@ -116,7 +131,10 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0 || selectedItems[0].SubItems[addressFieldIndex].Text == "") return noAddress;
+				if (selectedItems.Count == 0 || selectedItems[0].SubItems[addressFieldIndex].Text == "")
+				{
+					return noAddress;
+				}
 
 				int address = noAddress;
 				try
@@ -133,14 +151,8 @@ namespace MixGui.Components
 
 		public ImageList SeverityImageList
 		{
-			get
-			{
-				return mListView.SmallImageList;
-			}
-			set
-			{
-				mListView.SmallImageList = value;
-			}
+			get => mListView.SmallImageList;
+			set => mListView.SmallImageList = value;
 		}
 	}
 }

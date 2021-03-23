@@ -12,7 +12,10 @@ namespace MixLib.Type
 
 		public int ByteCountWithPadding => mPaddingByteCount + ByteCount;
 
-		public MixByte GetByteWithPadding(int index) => index < mPaddingByteCount ? (MixByte)0 : base[index - mPaddingByteCount];
+		public MixByte GetByteWithPadding(int index)
+		{
+			return index < mPaddingByteCount ? 0 : base[index - mPaddingByteCount];
+		}
 
 		public FullWord FullWordValue
 		{

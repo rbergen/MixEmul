@@ -18,10 +18,15 @@ namespace MixLib.Modules
 
 		public virtual Devices Devices => null;
 
-		protected bool IsBreakpointSet(int address) => BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
+		protected bool IsBreakpointSet(int address)
+		{
+			return BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
+		}
 
-		void ReportLoadError(int locationCounter, string message) =>
-				AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
+		void ReportLoadError(int locationCounter, string message)
+		{
+			AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
+		}
 
 		public abstract void ResetProfilingCounts();
 
@@ -35,13 +40,13 @@ namespace MixLib.Modules
 
 		public int ProgramCounter
 		{
-			get
-			{
-				return mProgramCounter;
-			}
+			get => mProgramCounter;
 			set
 			{
-				if (mProgramCounter == value) return;
+				if (mProgramCounter == value)
+				{
+					return;
+				}
 
 				if (value < Memory.MinWordIndex)
 				{
@@ -64,7 +69,10 @@ namespace MixLib.Modules
 			{
 				case LoaderInstruction.Operations.SetLocationCounter:
 					var desiredLC = (int)instance.Value.LongValue;
-					if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex) return desiredLC;
+					if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex)
+					{
+						return desiredLC;
+					}
 
 					ReportLoadError(locationCounter, string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
 
@@ -101,7 +109,10 @@ namespace MixLib.Modules
 		int LoadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
 		{
 			var validationErrors = instance.Validate();
-			if (validationErrors != null) ReportLoadInstanceErrors(locationCounter, validationErrors);
+			if (validationErrors != null)
+			{
+				ReportLoadInstanceErrors(locationCounter, validationErrors);
+			}
 
 			FullMemory[locationCounter].MagnitudeLongValue = instance.InstructionWord.MagnitudeLongValue;
 			FullMemory[locationCounter].Sign = instance.InstructionWord.Sign;
@@ -145,7 +156,10 @@ namespace MixLib.Modules
 
 		protected void ReportInvalidInstruction(InstanceValidationError[] errors)
 		{
-			foreach (InstanceValidationError error in errors) ReportInvalidInstruction(error.CompiledMessage);
+			foreach (InstanceValidationError error in errors)
+			{
+				ReportInvalidInstruction(error.CompiledMessage);
+			}
 		}
 
 		protected void ReportInvalidInstruction(string message)

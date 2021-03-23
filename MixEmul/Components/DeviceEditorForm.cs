@@ -41,25 +41,47 @@ namespace MixGui.Components
 			mLastSelectedDeviceTab = 0;
 		}
 
-		void MCloseButton_Click(object sender, EventArgs e) => Hide();
+		void MCloseButton_Click(object sender, EventArgs e)
+		{
+			Hide();
+		}
 
-		void MTapeDeleteButton_Click(object sender, EventArgs e) =>
-				DeleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
+		void MTapeDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteBinaryDeviceFile(mTapeSelectorComboBox.SelectedItem.ToString(), mTapeEditor);
+		}
 
-		void MDiskDeleteButton_Click(object sender, EventArgs e) =>
-				DeleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
+		void MDiskDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteBinaryDeviceFile(mDiskSelectorComboBox.SelectedItem.ToString(), mDiskEditor);
+		}
 
-		void MCardReaderDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("card reader", mCardReaderEditor);
+		void MCardReaderDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteTextDeviceFile("card reader", mCardReaderEditor);
+		}
 
-		void MCardPunchDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("card punch", mCardWriterEditor);
+		void MCardPunchDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteTextDeviceFile("card punch", mCardWriterEditor);
+		}
 
-		void MPrinterDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("printer", mPrinterEditor);
+		void MPrinterDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteTextDeviceFile("printer", mPrinterEditor);
+		}
 
-		void MPaperTapeDeleteButton_Click(object sender, EventArgs e) => DeleteTextDeviceFile("paper tape", mPaperTapeEditor);
+		void MPaperTapeDeleteButton_Click(object sender, EventArgs e)
+		{
+			DeleteTextDeviceFile("paper tape", mPaperTapeEditor);
+		}
 
 		void MDiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex) return;
+			if (mLastSelectedDisk == mDiskSelectorComboBox.SelectedIndex)
+			{
+				return;
+			}
 
 			if (UpdateDiskControls())
 			{
@@ -73,7 +95,10 @@ namespace MixGui.Components
 
 		void MTapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex) return;
+			if (mLastSelectedTape == mTapeSelectorComboBox.SelectedIndex)
+			{
+				return;
+			}
 
 			if (UpdateTapeControls())
 			{
@@ -88,7 +113,10 @@ namespace MixGui.Components
 
 		public new void Hide()
 		{
-			if (SaveCurrentTabRecord()) base.Hide();
+			if (SaveCurrentTabRecord())
+			{
+				base.Hide();
+			}
 		}
 
 		public void ShowDevice(MixDevice device)
@@ -123,13 +151,13 @@ namespace MixGui.Components
 
 		public Devices Devices
 		{
-			get
-			{
-				return mDevices;
-			}
+			get => mDevices;
 			set
 			{
-				if (value == null) return;
+				if (value == null)
+				{
+					return;
+				}
 
 				if (mDevices != null)
 				{
@@ -296,7 +324,10 @@ namespace MixGui.Components
 
 		void MDeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab) return;
+			if (mDeviceTypeTabs.SelectedIndex == mLastSelectedDeviceTab)
+			{
+				return;
+			}
 
 			if (SaveCurrentTabRecord())
 			{

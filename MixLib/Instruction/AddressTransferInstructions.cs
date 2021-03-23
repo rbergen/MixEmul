@@ -13,8 +13,10 @@ namespace MixLib.Instruction
 		/// <summary>
 		/// Method for performing DECx instructions
 		/// </summary>
-		public static bool Decrease(ModuleBase module, MixInstruction.Instance instance) =>
-				DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+		public static bool Decrease(ModuleBase module, MixInstruction.Instance instance)
+		{
+			return DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+		}
 
 		static bool DoEnter(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
 		{
@@ -75,19 +77,25 @@ namespace MixLib.Instruction
 		/// <summary>
 		/// Method for performing ENTx instructions
 		/// </summary>
-		public static bool Enter(ModuleBase module, MixInstruction.Instance instance) =>
-				DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+		public static bool Enter(ModuleBase module, MixInstruction.Instance instance)
+		{
+			return DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+		}
 
 		/// <summary>
 		/// Method for performing ENNx instructions
 		/// </summary>
-		public static bool EnterNegative(ModuleBase module, MixInstruction.Instance instance) =>
-						DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+		public static bool EnterNegative(ModuleBase module, MixInstruction.Instance instance)
+		{
+			return DoEnter(module, instance, instance.MixInstruction.Opcode - opcodeBase, true);
+		}
 
 		/// <summary>
 		/// Method for performing INCx instructions
 		/// </summary>
-		public static bool Increase(ModuleBase module, MixInstruction.Instance instance) =>
-						DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+		public static bool Increase(ModuleBase module, MixInstruction.Instance instance)
+		{
+			return DoIncrease(module, instance, instance.MixInstruction.Opcode - opcodeBase, false);
+		}
 	}
 }

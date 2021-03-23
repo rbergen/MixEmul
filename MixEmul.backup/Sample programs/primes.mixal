@@ -1,0 +1,53 @@
+* Example program ... Tables of Primes
+*
+l	equ	500		The number of primes to find
+printer	equ	18		Unit number of the line printer
+prime	equ	499		Memory area for table of primes
+buf0	equ	2000		Memory area for BUFFER[0]
+buf1	equ	buf0+25		Memory area for BUFFER[1]
+	orig	3000
+start	ioc	0(printer)
+	ld1	=1-l=
+	ld2	=3=
+2h	inc1	1
+	st2	prime+l,1
+	j1z	2f
+4h	inc2	2
+	ent3	2
+6h	enta	0
+	entx	0,2
+	div	prime,3
+	jxz	4b
+	cmpa	prime,3
+	inc3	1
+	jg	6b
+	jmp	2b
+2h	out	title(printer)
+	ent4	buf1+20
+	ent5	-25
+2h	inc5	l+1
+4h	lda	prime,5
+	char
+	stx	0,4(1:4)
+	dec4	1
+	dec5	25
+	j5p	4b
+	out	0,4(printer)
+	ld4	24,4
+	j5n	2b
+	hlt
+* Initial contents of tables and buffers
+	orig	prime+1
+	con	2
+	orig	buf0-5
+title	alf	FIRST
+	alf	" FIVE"
+	alf	" HUND"
+	alf	"RED P"
+	alf	RIMES
+	orig	buf0+24
+	con	buf1+20
+	orig	buf1+24
+	con	buf0+20
+	end	start
+* End of program

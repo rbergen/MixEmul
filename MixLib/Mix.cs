@@ -20,25 +20,23 @@ namespace MixLib
 		const int memoryMinIndex = -3999;
 		const int memoryMaxIndex = 3999;
 		const int timerMemoryAddress = -10;
-
-		Devices mDevices = new Devices();
-		Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);
-		Registers mRegisters = new Registers();
-		MemoryView mMemory;
-		Queue<Interrupt> mInterruptQueue = new Queue<Interrupt>();
+		readonly Devices mDevices = new Devices();
+		readonly Memory mFullMemory = new Memory(memoryMinIndex, memoryMaxIndex);
+		readonly Registers mRegisters = new Registers();
+		readonly MemoryView mMemory;
+		readonly Queue<Interrupt> mInterruptQueue = new Queue<Interrupt>();
 
 		int mCurrentInstructionAddress;
 		int mCurrentInstructionTicksLeft;
 		string mCurrentInstructionMnemonic;
-
-		Queue mLog;
+		readonly Queue mLog;
 		bool mRunDetached;
 		TimeSpan mRunSpan;
-		AutoResetEvent mStartStep;
+		readonly AutoResetEvent mStartStep;
 		RunStatus mStatus;
 		RunMode mMode;
 		bool mInterruptExecuted;
-		object mSyncRoot = new object();
+		readonly object mSyncRoot = new object();
 
 		public FloatingPointModule FloatingPointModule { get; private set; }
 		public long TickCounter { get; private set; }
@@ -94,16 +92,30 @@ namespace MixLib
 
 		public override string ModuleName => moduleName;
 
-		public void QueueInterrupt(Interrupt interrupt) => mInterruptQueue.Enqueue(interrupt);
+		public void QueueInterrupt(Interrupt interrupt)
+		{
+			mInterruptQueue.Enqueue(interrupt);
+		}
 
-		public void ContinueRun() => ContinueRun(new TimeSpan(0L));
+		public void ContinueRun()
+		{
+			ContinueRun(new TimeSpan(0L));
+		}
 
-		public LogLine GetLogLine() => mLog.Count <= 0 ? null : (LogLine)mLog.Dequeue();
+		public LogLine GetLogLine()
+		{
+			return mLog.Count <= 0 ? null : (LogLine)mLog.Dequeue();
+		}
 
-		public void RequestStop() => RequestStop(true);
+		public void RequestStop()
+		{
+			RequestStop(true);
+		}
 
-		void DeviceReporting(object sender, DeviceReportingEventArgs args) =>
-				AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
+		void DeviceReporting(object sender, DeviceReportingEventArgs args)
+		{
+			AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
+		}
 
 		void SetMemoryBounds()
 		{
@@ -222,7 +234,10 @@ namespace MixLib
 
 				suspendRun = !IsRunning || (DateTime.Now - stepStartTime > mRunSpan && !RunDetached);
 
-				if (suspendRun) StepPerformed?.Invoke(this, new EventArgs());
+				if (suspendRun)
+				{
+					StepPerformed?.Invoke(this, new EventArgs());
+				}
 			}
 		}
 
@@ -255,11 +270,17 @@ namespace MixLib
 			var instance = instruction.CreateInstance(instructionWord);
 
 			int ticksLeft = instruction.TickCount;
-			while (ticksLeft-- > 0) IncreaseTickCounter();
+			while (ticksLeft-- > 0)
+			{
+				IncreaseTickCounter();
+			}
 
 			instance.Execute(this);
 
-			while (mDevices[Devices.CardReaderUnitCode].Busy) IncreaseTickCounter();
+			while (mDevices[Devices.CardReaderUnitCode].Busy)
+			{
+				IncreaseTickCounter();
+			}
 
 			ProgramCounter = 0;
 
@@ -278,7 +299,10 @@ namespace MixLib
 		public override void ResetProfilingCounts()
 		{
 			mFullMemory.ResetProfilingCounts();
-			if (FloatingPointModule != null) FloatingPointModule.ResetProfilingCounts();
+			if (FloatingPointModule != null)
+			{
+				FloatingPointModule.ResetProfilingCounts();
+			}
 		}
 
 		public void Tick()
@@ -315,7 +339,10 @@ namespace MixLib
 			if (instruction == null)
 			{
 				ReportInvalidInstruction("Opcode (and field) do not encode an instruction");
-				if (Mode == RunMode.Module) ResetMode();
+				if (Mode == RunMode.Module)
+				{
+					ResetMode();
+				}
 
 				return;
 			}
@@ -325,7 +352,10 @@ namespace MixLib
 			if (errors != null)
 			{
 				ReportInvalidInstruction(errors);
-				if (Mode == RunMode.Module) ResetMode();
+				if (Mode == RunMode.Module)
+				{
+					ResetMode();
+				}
 
 				return;
 			}
@@ -335,14 +365,20 @@ namespace MixLib
 				mCurrentInstructionAddress = ProgramCounter;
 				mCurrentInstructionTicksLeft = instruction.TickCount;
 				mCurrentInstructionMnemonic = instruction.Mnemonic;
-				if (Mode == RunMode.Module) ResetMode();
+				if (Mode == RunMode.Module)
+				{
+					ResetMode();
+				}
 			}
 
 			if (Mode != RunMode.Module && mCurrentInstructionTicksLeft > 0)
 			{
 				mCurrentInstructionTicksLeft--;
 
-				if (ExecutionSettings.ProfilingEnabled) instructionWord.IncreaseProfilingTickCount(1);
+				if (ExecutionSettings.ProfilingEnabled)
+				{
+					instructionWord.IncreaseProfilingTickCount(1);
+				}
 			}
 
 			int programCounter;
@@ -376,11 +412,17 @@ namespace MixLib
 			else
 			{
 				ProgramCounter = programCounter;
-				if (Status == RunStatus.Running && IsBreakpointSet(programCounter)) ReportBreakpointReached();
+				if (Status == RunStatus.Running && IsBreakpointSet(programCounter))
+				{
+					ReportBreakpointReached();
+				}
 			}
 		}
 
-		void ResetMode() => Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
+		void ResetMode()
+		{
+			Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
+		}
 
 		public bool RunDetached
 		{
@@ -402,10 +444,7 @@ namespace MixLib
 
 		public override RunMode Mode
 		{
-			get
-			{
-				return mMode;
-			}
+			get => mMode;
 			set
 			{
 				if (mMode != value)
@@ -454,7 +493,10 @@ namespace MixLib
 		{
 			if (!disposedValue)
 			{
-				if (disposing) mStartStep?.Dispose();
+				if (disposing)
+				{
+					mStartStep?.Dispose();
+				}
 
 				disposedValue = true;
 			}

@@ -10,13 +10,16 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class MiscInstructions
 	{
-		static SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
+		static readonly SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
 		const byte zeroCharValue = 30;
 
 		/// <summary>
 		/// Method for performing the NOP instruction
 		/// </summary>
-		public static bool Noop(ModuleBase module, MixInstruction.Instance instance) => true;
+		public static bool Noop(ModuleBase module, MixInstruction.Instance instance)
+		{
+			return true;
+		}
 
 		/// <summary>
 		/// Method for performing the CHAR instruction
@@ -116,10 +119,16 @@ namespace MixLib.Instruction
 			if (status == null)
 			{
 				var fromAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-				if (fromAddress == int.MinValue) return false;
+				if (fromAddress == int.MinValue)
+				{
+					return false;
+				}
 
 				var toAddress = InstructionHelpers.GetValidIndexedAddress(module, 0, 1);
-				if (toAddress == int.MinValue) return false;
+				if (toAddress == int.MinValue)
+				{
+					return false;
+				}
 
 				status = new moveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
 				mMoveStatuses[module.ModuleName] = status;
@@ -196,7 +205,10 @@ namespace MixLib.Instruction
 				CurrentWordState = WordStates.BeforeMove;
 			}
 
-			public void NextWord() => CurrentWord++;
+			public void NextWord()
+			{
+				CurrentWord++;
+			}
 
 			public enum WordStates
 			{

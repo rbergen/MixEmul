@@ -8,10 +8,10 @@ namespace MixGui.Components
 {
 	public class AssemblyFindingListView : UserControl
 	{
-		ListView mFindingsListView = new ListView();
-		ColumnHeader mLineNumberColumn = new ColumnHeader();
-		ColumnHeader mMessageColumn = new ColumnHeader();
-		ColumnHeader mSeverityColumn = new ColumnHeader();
+		readonly ListView mFindingsListView = new();
+		readonly ColumnHeader mLineNumberColumn = new();
+		readonly ColumnHeader mMessageColumn = new();
+		readonly ColumnHeader mSeverityColumn = new();
 
 		public event SelectionChangedHandler SelectionChanged;
 
@@ -45,9 +45,15 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		protected void OnSelectionChanged(SelectionChangedEventArgs args) => SelectionChanged?.Invoke(this, args);
+		protected void OnSelectionChanged(SelectionChangedEventArgs args)
+		{
+			SelectionChanged?.Invoke(this, args);
+		}
 
-		void SelectedIndexChanged(object sender, EventArgs e) => OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
+		void SelectedIndexChanged(object sender, EventArgs e)
+		{
+			OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
+		}
 
 		void AddFinding(AssemblyFinding finding)
 		{
@@ -87,7 +93,10 @@ namespace MixGui.Components
 			get
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mFindingsListView.SelectedItems;
-				if (selectedItems.Count == 0) return null;
+				if (selectedItems.Count == 0)
+				{
+					return null;
+				}
 
 				return (AssemblyFinding)selectedItems[0].Tag;
 			}
@@ -95,14 +104,8 @@ namespace MixGui.Components
 
 		public ImageList SeverityImageList
 		{
-			get
-			{
-				return mFindingsListView.SmallImageList;
-			}
-			set
-			{
-				mFindingsListView.SmallImageList = value;
-			}
+			get => mFindingsListView.SmallImageList;
+			set => mFindingsListView.SmallImageList = value;
 		}
 
 		class FindingComparer : IComparer<AssemblyFinding>
@@ -110,13 +113,22 @@ namespace MixGui.Components
 			public int Compare(AssemblyFinding x, AssemblyFinding y)
 			{
 				int comparison = y.Severity - x.Severity;
-				if (comparison != 0) return comparison;
+				if (comparison != 0)
+				{
+					return comparison;
+				}
 
 				comparison = x.LineNumber - y.LineNumber;
-				if (comparison != 0) return comparison;
+				if (comparison != 0)
+				{
+					return comparison;
+				}
 
 				comparison = x.LineSection - y.LineSection;
-				if (comparison != 0) return comparison;
+				if (comparison != 0)
+				{
+					return comparison;
+				}
 
 				return string.Compare(x.Message, y.Message, StringComparison.Ordinal);
 			}

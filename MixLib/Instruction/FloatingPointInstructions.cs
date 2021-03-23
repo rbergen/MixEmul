@@ -15,7 +15,7 @@ namespace MixLib.Instruction
 		public const string FcmpMnemonic = "FCMP";
 
 		static ExecutionStatus mExecutionStatus;
-		static int[] mPrenormOpcodes = { faddOpcode, fsubOpcode, fmulOpcode, fdivOpcode };
+		static readonly int[] mPrenormOpcodes = { faddOpcode, fsubOpcode, fmulOpcode, fdivOpcode };
 
 		public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
 		{

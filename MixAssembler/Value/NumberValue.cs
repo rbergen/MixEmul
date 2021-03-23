@@ -33,13 +33,25 @@ namespace MixAssembler.Value
 			Magnitude = magnitude;
 		}
 
-		public virtual long GetValue(int currentAddress) => Sign.ApplyTo(Magnitude);
+		public virtual long GetValue(int currentAddress)
+		{
+			return Sign.ApplyTo(Magnitude);
+		}
 
-		public virtual bool IsValueDefined(int currentAddress) => true;
+		public virtual bool IsValueDefined(int currentAddress)
+		{
+			return true;
+		}
 
-		public long GetMagnitude(int currentAddress) => Magnitude;
+		public long GetMagnitude(int currentAddress)
+		{
+			return Magnitude;
+		}
 
-		public Word.Signs GetSign(int currentAddress) => Sign;
+		public Word.Signs GetSign(int currentAddress)
+		{
+			return Sign;
+		}
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
@@ -48,7 +60,10 @@ namespace MixAssembler.Value
 				// all characters must be numeric for this to be a literal numeric value
 				for (int i = 0; i < text.Length; i++)
 				{
-					if (!char.IsNumber(text[i])) return null;
+					if (!char.IsNumber(text[i]))
+					{
+						return null;
+					}
 				}
 
 				// it seems to be numeric, so we just parse it

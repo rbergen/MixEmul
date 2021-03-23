@@ -17,7 +17,10 @@ namespace MixLib.Type
 			Sign = sign;
 		}
 
-		public static implicit operator FullWord(long value) => new FullWord(value);
+		public static implicit operator FullWord(long value)
+		{
+			return new FullWord(value);
+		}
 
 		public override object Clone()
 		{

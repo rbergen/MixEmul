@@ -8,7 +8,7 @@ namespace MixLib.Device.Step
 {
 	public class BinaryWriteStep : StreamStep
 	{
-		int mRecordWordCount;
+		readonly int mRecordWordCount;
 		const string statusDescription = "Writing binary data";
 
 		public BinaryWriteStep(int recordWordCount)
@@ -18,8 +18,10 @@ namespace MixLib.Device.Step
 
 		public override string StatusDescription => statusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) =>
-				new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+		{
+			return new Instance(streamStatus, mRecordWordCount);
+		}
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)
 		{
@@ -55,7 +57,7 @@ namespace MixLib.Device.Step
 
 		new class Instance : StreamStep.Instance
 		{
-			int mRecordWordCount;
+			readonly int mRecordWordCount;
 			MixByte[] mWriteBytes;
 
 			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
@@ -65,7 +67,10 @@ namespace MixLib.Device.Step
 
 			public override bool Tick()
 			{
-				if (StreamStatus.Stream == null || mWriteBytes == null) return true;
+				if (StreamStatus.Stream == null || mWriteBytes == null)
+				{
+					return true;
+				}
 
 				try
 				{
@@ -82,10 +87,7 @@ namespace MixLib.Device.Step
 
 			public override object InputFromPreviousStep
 			{
-				set
-				{
-					mWriteBytes = (MixByte[])value;
-				}
+				set => mWriteBytes = (MixByte[])value;
 			}
 		}
 	}

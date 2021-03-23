@@ -20,7 +20,10 @@ namespace MixLib.Device.Step
 
 		public override string StatusDescription => statusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+		{
+			return new Instance(streamStatus, mRecordWordCount);
+		}
 
 		public static List<IMixByteCollection> ReadBytes(Stream stream, int bytesPerRecord)
 		{
@@ -70,7 +73,10 @@ namespace MixLib.Device.Step
 
 			public override bool Tick()
 			{
-				if (StreamStatus.Stream == null) return true;
+				if (StreamStatus.Stream == null)
+				{
+					return true;
+				}
 
 				string readText = null;
 				try

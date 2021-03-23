@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectGuid>{8947C313-9E7E-4558-A9C1-DCB59F4C32E2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <StartupObject>
+    </StartupObject>
+    <RootNamespace>MixAssembler</RootNamespace>
+    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assembler.cs" />
+    <Compile Include="AssemblingStatus.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="LineSection.cs" />
+    <Compile Include="Instruction\IInstructionParameters.cs" />
+    <Compile Include="Instruction\LoaderInstructionParameters.cs" />
+    <Compile Include="Instruction\MixInstructionParameters.cs" />
+    <Compile Include="Instruction\ParsedSourceLine.cs" />
+    <Compile Include="Instruction\PreInstruction.cs" />
+    <Compile Include="Finding\AssemblyError.cs" />
+    <Compile Include="Finding\AssemblyFinding.cs" />
+    <Compile Include="Finding\AssemblyFindingCollection.cs" />
+    <Compile Include="Finding\AssemblyInfo.cs" />
+    <Compile Include="Finding\AssemblyWarning.cs" />
+    <Compile Include="Finding\ParsingError.cs" />
+    <Compile Include="Finding\ValidationFinding.cs" />
+    <Compile Include="Symbol\LiteralConstantSymbol.cs" />
+    <Compile Include="Symbol\LocalSymbol.cs" />
+    <Compile Include="Symbol\ValueSymbol.cs" />
+    <Compile Include="Value\APartValue.cs" />
+    <Compile Include="Value\AtomicExpressionValue.cs" />
+    <Compile Include="Value\CharacterConstantValue.cs" />
+    <Compile Include="Value\ExpressionValue.cs" />
+    <Compile Include="Value\FPartValue.cs" />
+    <Compile Include="Value\IPartValue.cs" />
+    <Compile Include="Value\LocationCounterValue.cs" />
+    <Compile Include="Value\NumberValue.cs" />
+    <Compile Include="Value\WValue.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="ParsingStatus.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MixLib\MixLib.csproj">
+      <Project>{5865F55B-9F09-47FC-8DB6-84AF7B5990EE}</Project>
+      <Name>MixLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MixFormIcon.ico" />
+  </ItemGroup>
+  <Import Condition="" Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

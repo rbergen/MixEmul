@@ -11,19 +11,19 @@ namespace MixGui.Components
 {
 	public class MemoryWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		Label mAddressLabel;
-		Panel mAddressPanel;
-		Panel mInstructionPanel;
-		CheckBox mBreakPointBox;
-		Label mColonLabel;
-		Label mColonLabel2;
+		readonly Label mAddressLabel;
+		readonly Panel mAddressPanel;
+		readonly Panel mInstructionPanel;
+		readonly CheckBox mBreakPointBox;
+		readonly Label mColonLabel;
+		readonly Label mColonLabel2;
 		readonly InstructionInstanceTextBox mInstructionTextBox;
 		readonly FullWordEditor mFullWordEditor;
 		bool mMarked;
 		IMemoryFullWord mMemoryWord;
 		bool mReadOnly;
-		Label mEqualsLabel;
-		Label mProfileLabel;
+		readonly Label mEqualsLabel;
+		readonly Label mProfileLabel;
 		GetMaxProfilingCountCallback mGetMaxProfilingCount;
 
 		public event EventHandler AddressDoubleClick;
@@ -72,38 +72,69 @@ namespace MixGui.Components
 
 		public int? CaretIndex => FocusedField == FieldTypes.Instruction ? mInstructionTextBox.CaretIndex : mFullWordEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index) =>
-				field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
+		}
 
-		Color GetBlendedColor(double fraction) =>
-				fraction < .5 ? Interpolate(Color.Green, Color.Yellow, fraction * 2) : Interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
+		static Color GetBlendedColor(double fraction)
+		{
+			return fraction < .5 ? Interpolate(Color.Green, Color.Yellow, fraction * 2) : Interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
+		}
 
-		int RoundForArgb(double d) => d < 0 ? 0 : (d > 255 ? 255 : (int)d);
+		private static int RoundForArgb(double d)
+		{
+			return d < 0 ? 0 : (d > 255 ? 255 : (int)d);
+		}
 
-		double Interpolate(double d1, double d2, double fraction) => d1 * (1 - fraction) + d2 * fraction;
+		static double Interpolate(double d1, double d2, double fraction)
+		{
+			return d1 * (1 - fraction) + d2 * fraction;
+		}
 
-		void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+		void OnAddressSelected(AddressSelectedEventArgs args)
+		{
+			AddressSelected?.Invoke(this, args);
+		}
 
-		protected virtual void OnAddressDoubleClick(EventArgs e) => AddressDoubleClick?.Invoke(this, e);
+		protected virtual void OnAddressDoubleClick(EventArgs e)
+		{
+			AddressDoubleClick?.Invoke(this, e);
+		}
 
-		protected virtual void OnBreakpointCheckedChanged(EventArgs e) => BreakpointCheckedChanged?.Invoke(this, e);
+		protected virtual void OnBreakpointCheckedChanged(EventArgs e)
+		{
+			BreakpointCheckedChanged?.Invoke(this, e);
+		}
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		void MInstructionTextBox_MouseWheel(object sender, MouseEventArgs e) => OnMouseWheel(e);
+		void MInstructionTextBox_MouseWheel(object sender, MouseEventArgs e)
+		{
+			OnMouseWheel(e);
+		}
 
-		void MInstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args) => OnAddressSelected(args);
+		void MInstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args)
+		{
+			OnAddressSelected(args);
+		}
 
-		void MAddressLabel_DoubleClick(object sender, EventArgs e) => OnAddressDoubleClick(e);
+		void MAddressLabel_DoubleClick(object sender, EventArgs e)
+		{
+			OnAddressDoubleClick(e);
+		}
 
-		void MBreakPointBox_CheckedChanged(object sender, EventArgs e) => OnBreakpointCheckedChanged(e);
+		void MBreakPointBox_CheckedChanged(object sender, EventArgs e)
+		{
+			OnBreakpointCheckedChanged(e);
+		}
 
 		public GetMaxProfilingCountCallback GetMaxProfilingCount
 		{
-			get
-			{
-				return mGetMaxProfilingCount;
-			}
+			get => mGetMaxProfilingCount;
 			set
 			{
 				if (mGetMaxProfilingCount != value)
@@ -212,7 +243,7 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		Color Interpolate(Color color1, Color color2, double fraction)
+		static Color Interpolate(Color color1, Color color2, double fraction)
 		{
 			var r = RoundForArgb(Interpolate(color1.R, color2.R, fraction));
 			var g = RoundForArgb(Interpolate(color1.G, color2.G, fraction));
@@ -240,9 +271,15 @@ namespace MixGui.Components
 
 		void UpdateProfilingLayout()
 		{
-			if (ExecutionSettings.ProfilingEnabled) UpdateProfilingCount();
+			if (ExecutionSettings.ProfilingEnabled)
+			{
+				UpdateProfilingCount();
+			}
 
-			if (mProfileLabel.Enabled == ExecutionSettings.ProfilingEnabled) return;
+			if (mProfileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
+			{
+				return;
+			}
 
 			if (!ExecutionSettings.ProfilingEnabled)
 			{
@@ -262,39 +299,30 @@ namespace MixGui.Components
 
 		public int MemoryMinIndex
 		{
-			get
-			{
-				return mInstructionTextBox.MemoryMinIndex;
-			}
-			set
-			{
-				mInstructionTextBox.MemoryMinIndex = value;
-			}
+			get => mInstructionTextBox.MemoryMinIndex;
+			set => mInstructionTextBox.MemoryMinIndex = value;
 		}
 
 		public int MemoryMaxIndex
 		{
-			get
-			{
-				return mInstructionTextBox.MemoryMaxIndex;
-			}
-			set
-			{
-				mInstructionTextBox.MemoryMaxIndex = value;
-			}
+			get => mInstructionTextBox.MemoryMaxIndex;
+			set => mInstructionTextBox.MemoryMaxIndex = value;
 		}
 
 		void This_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Modifiers != Keys.None) return;
+			if (e.Modifiers != Keys.None)
+			{
+				return;
+			}
 
 			FieldTypes editorField = FieldTypes.Instruction;
 			int? index = mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength;
 
-			if (e is FieldKeyEventArgs)
+			if (e is FieldKeyEventArgs args)
 			{
-				editorField = ((FieldKeyEventArgs)e).Field;
-				index = ((FieldKeyEventArgs)e).Index;
+				editorField = args.Field;
+				index = args.Index;
 			}
 
 			switch (e.KeyCode)
@@ -352,7 +380,10 @@ namespace MixGui.Components
 		{
 			mFullWordEditor.Update();
 			mInstructionTextBox.Update();
-			if (mProfileLabel.Enabled) UpdateProfilingCount();
+			if (mProfileLabel.Enabled)
+			{
+				UpdateProfilingCount();
+			}
 
 			base.Update();
 		}
@@ -361,10 +392,7 @@ namespace MixGui.Components
 		{
 			mAddressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			mAddressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			if (mMarked)
-			{
-				mAddressPanel.BackColor = GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground);
-			}
+			mAddressPanel.BackColor = mMarked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 
 			mFullWordEditor.UpdateLayout();
 			mInstructionTextBox.UpdateLayout();
@@ -374,50 +402,32 @@ namespace MixGui.Components
 
 		public bool BreakPointChecked
 		{
-			get
-			{
-				return mBreakPointBox.Checked;
-			}
-			set
-			{
-				mBreakPointBox.Checked = value;
-			}
+			get => mBreakPointBox.Checked;
+			set => mBreakPointBox.Checked = value;
 		}
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
-			get
-			{
-				return mInstructionTextBox.IndexedAddressCalculatorCallback;
-			}
-			set
-			{
-				mInstructionTextBox.IndexedAddressCalculatorCallback = value;
-			}
+			get => mInstructionTextBox.IndexedAddressCalculatorCallback;
+			set => mInstructionTextBox.IndexedAddressCalculatorCallback = value;
 		}
 
 		public bool Marked
 		{
-			get
-			{
-				return mMarked;
-			}
+			get => mMarked;
 			set
 			{
 				if (mMarked != value)
 				{
 					mMarked = value;
-					mAddressPanel.BackColor = mMarked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : SystemColors.Control;
+					mAddressPanel.BackColor = mMarked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 				}
 			}
 		}
 
 		public IMemoryFullWord MemoryWord
 		{
-			get
-			{
-				return mMemoryWord;
-			}
+			get => mMemoryWord;
 			set
 			{
 				mMemoryWord = value ?? throw new ArgumentNullException(nameof(value), "MemoryWord may not be set to null");
@@ -434,16 +444,16 @@ namespace MixGui.Components
 				mInstructionTextBox.MemoryAddress = mMemoryWord.Index;
 				mFullWordEditor.WordValue = mMemoryWord;
 				mInstructionTextBox.InstructionWord = mMemoryWord;
-				if (mProfileLabel.Enabled) UpdateProfilingCount();
+				if (mProfileLabel.Enabled)
+				{
+					UpdateProfilingCount();
+				}
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get
-			{
-				return mReadOnly;
-			}
+			get => mReadOnly;
 			set
 			{
 				if (mReadOnly != value)
@@ -457,30 +467,18 @@ namespace MixGui.Components
 
 		public SymbolCollection Symbols
 		{
-			get
-			{
-				return mInstructionTextBox.Symbols;
-			}
-			set
-			{
-				mInstructionTextBox.Symbols = value;
-			}
+			get => mInstructionTextBox.Symbols;
+			set => mInstructionTextBox.Symbols = value;
 		}
 
 		public ToolTip ToolTip
 		{
-			set
-			{
-				mInstructionTextBox.ToolTip = value;
-			}
+			set => mInstructionTextBox.ToolTip = value;
 		}
 
 		public IWord WordValue
 		{
-			get
-			{
-				return MemoryWord;
-			}
+			get => MemoryWord;
 			set
 			{
 				if (!(value is IMemoryFullWord))

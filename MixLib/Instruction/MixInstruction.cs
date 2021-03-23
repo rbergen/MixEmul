@@ -24,9 +24,8 @@ namespace MixLib.Instruction
 		public const int IndexByte = AddressByteCount;
 		public const int FieldSpecByte = IndexByte + 1;
 		public const int OpcodeByte = FieldSpecByte + 1;
-
-		Executor mExecutor;
-		Validator mValidator;
+		readonly Executor mExecutor;
+		readonly Validator mValidator;
 
 		public FieldSpec FieldSpec { get; private set; }
 		public MetaFieldSpec MetaFieldSpec { get; private set; }
@@ -64,7 +63,10 @@ namespace MixLib.Instruction
 			mValidator = validator;
 		}
 
-		public Instance CreateInstance(IFullWord instructionWord) => new Instance(this, instructionWord);
+		public Instance CreateInstance(IFullWord instructionWord)
+		{
+			return new Instance(this, instructionWord);
+		}
 
 		public class Instance : InstructionInstanceBase
 		{
@@ -103,17 +105,32 @@ namespace MixLib.Instruction
 
 			public Word.Signs Sign => InstructionWord.Sign;
 
-			public InstanceValidationError[] Validate() => MixInstruction.mValidator == null ? null : MixInstruction.mValidator(this);
+			public InstanceValidationError[] Validate()
+			{
+				return MixInstruction.mValidator == null ? null : MixInstruction.mValidator(this);
+			}
 
-			public override string ToString() => new InstructionText(this).InstanceText;
+			public override string ToString()
+			{
+				return new InstructionText(this).InstanceText;
+			}
 
-			int AddressMagnitudeFromWord(IWord word) => (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+			int AddressMagnitudeFromWord(IWord word)
+			{
+				return (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+			}
 
-			int AddressValueFromWord(IWord word) => (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
+			int AddressValueFromWord(IWord word)
+			{
+				return (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
+			}
 
 			public bool Execute(ModuleBase module)
 			{
-				if (Validate() != null) throw new ArgumentException("instance not valid for instruction");
+				if (Validate() != null)
+				{
+					throw new ArgumentException("instance not valid for instruction");
+				}
 
 				return MixInstruction.mExecutor(module, this);
 			}

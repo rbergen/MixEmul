@@ -54,7 +54,10 @@ namespace MixLib.Device
 
 		class OpenStreamStep : StreamStep
 		{
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			{
+				return new Instance(streamStatus);
+			}
 
 			public override string StatusDescription => openingDescription;
 

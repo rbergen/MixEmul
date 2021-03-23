@@ -16,10 +16,14 @@ namespace MixAssembler
 			Symbols = symbols ?? new SymbolCollection();
 		}
 
-		public void ReportParsingError(int causeStartIndex, int causeLength, string message) =>
-				ReportParsingError(LineSection, causeStartIndex, causeLength, message);
+		public void ReportParsingError(int causeStartIndex, int causeLength, string message)
+		{
+			ReportParsingError(LineSection, causeStartIndex, causeLength, message);
+		}
 
-		public void ReportParsingWarning(int causeStartIndex, int causeLength, string message) =>
-						ReportParsingWarning(LineSection, causeStartIndex, causeLength, message);
+		public void ReportParsingWarning(int causeStartIndex, int causeLength, string message)
+		{
+			ReportParsingWarning(LineSection, causeStartIndex, causeLength, message);
+		}
 	}
 }

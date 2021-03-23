@@ -37,9 +37,9 @@ namespace MixGui.Components
 		string mLastRenderedSourceLine;
 		string mCaption;
 
-		MenuItem mShowAddressMenuItem;
-		MenuItem mShowIndexedAddressMenuItem;
-		ContextMenu mContextMenu;
+		readonly ToolStripMenuItem mShowAddressMenuItem;
+		readonly ToolStripMenuItem mShowIndexedAddressMenuItem;
+		readonly ContextMenuStrip mContextMenu;
 
 		public int MemoryMinIndex { get; set; }
 		public int MemoryMaxIndex { get; set; }
@@ -74,15 +74,15 @@ namespace MixGui.Components
 			Enter += This_Enter;
 			ReadOnlyChanged += This_ReadOnlyChanged;
 
-			mShowAddressMenuItem = new MenuItem("Show address", ShowAddressMenuItem_Click);
+			mShowAddressMenuItem = new ToolStripMenuItem("Show address", null, ShowAddressMenuItem_Click);
 
-			mShowIndexedAddressMenuItem = new MenuItem("Show indexed address", ShowIndexedAddressMenuItem_Click);
+			mShowIndexedAddressMenuItem = new ToolStripMenuItem("Show indexed address", null, ShowIndexedAddressMenuItem_Click);
 
-			mContextMenu = new ContextMenu();
-			mContextMenu.MenuItems.Add(mShowAddressMenuItem);
-			mContextMenu.MenuItems.Add(mShowIndexedAddressMenuItem);
+			mContextMenu = new ContextMenuStrip();
+			mContextMenu.Items.Add(mShowAddressMenuItem);
+			mContextMenu.Items.Add(mShowIndexedAddressMenuItem);
 
-			ContextMenu = mContextMenu;
+			ContextMenuStrip = mContextMenu;
 
 			mUpdating = false;
 			mEditMode = false;
@@ -101,18 +101,35 @@ namespace MixGui.Components
 
 		public int? CaretIndex => SelectionStart + SelectionLength;
 
-		public bool Focus(FieldTypes? field, int? index) => this.FocusWithIndex(index);
+		public bool Focus(FieldTypes? field, int? index)
+		{
+			return this.FocusWithIndex(index);
+		}
 
-		protected void OnValueChanged(WordEditorValueChangedEventArgs args) => ValueChanged?.Invoke(this, args);
+		protected void OnValueChanged(WordEditorValueChangedEventArgs args)
+		{
+			ValueChanged?.Invoke(this, args);
+		}
 
-		protected void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+		protected void OnAddressSelected(AddressSelectedEventArgs args)
+		{
+			AddressSelected?.Invoke(this, args);
+		}
 
-		void This_Enter(object sender, EventArgs e) => CheckContentsEditable();
+		void This_Enter(object sender, EventArgs e)
+		{
+			CheckContentsEditable();
+		}
 
-		void ShowIndexedAddressMenuItem_Click(object sender, EventArgs e) =>
-				OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), mInstructionWord[MixInstruction.IndexByte])));
+		void ShowIndexedAddressMenuItem_Click(object sender, EventArgs e)
+		{
+			OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), mInstructionWord[MixInstruction.IndexByte])));
+		}
 
-		void ShowAddressMenuItem_Click(object sender, EventArgs e) => OnAddressSelected(new AddressSelectedEventArgs(GetAddress()));
+		void ShowAddressMenuItem_Click(object sender, EventArgs e)
+		{
+			OnAddressSelected(new AddressSelectedEventArgs(GetAddress()));
+		}
 
 		void AddTextElement(string element, bool markAsError)
 		{
@@ -221,7 +238,10 @@ namespace MixGui.Components
 				mUpdating = false;
 			}
 
-			if (instance == null) return false;
+			if (instance == null)
+			{
+				return false;
+			}
 
 			var oldValue = new FullWord(mInstructionWord.LongValue);
 			mInstructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
@@ -246,13 +266,16 @@ namespace MixGui.Components
 			return true;
 		}
 
-		bool ItemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item)
+		static bool ItemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item)
 		{
 			if (errors != null)
 			{
 				foreach (InstanceValidationError error in errors)
 				{
-					if (error.Source == item) return true;
+					if (error.Source == item)
+					{
+						return true;
+					}
 				}
 			}
 
@@ -293,7 +316,7 @@ namespace MixGui.Components
 			mCaption = null;
 			mToolTip?.SetToolTip(this, null);
 
-			ContextMenu = null;
+			ContextMenuStrip = null;
 
 			mLastRenderedMagnitude = unrendered;
 			mLastRenderedSign = Word.Signs.Positive;
@@ -323,7 +346,10 @@ namespace MixGui.Components
 		{
 			if (e.KeyCode == Keys.Enter)
 			{
-				if (mEditMode) AssembleInstruction(true);
+				if (mEditMode)
+				{
+					AssembleInstruction(true);
+				}
 
 				e.Handled = true;
 			}
@@ -350,24 +376,30 @@ namespace MixGui.Components
 
 		void This_ReadOnlyChanged(object sender, EventArgs e)
 		{
-			if (Focused) CheckContentsEditable();
+			if (Focused)
+			{
+				CheckContentsEditable();
+			}
 		}
 
 		void This_TextChanged(object sender, EventArgs e)
 		{
-			if (!mUpdating && !mEditMode) SetEditMode();
+			if (!mUpdating && !mEditMode)
+			{
+				SetEditMode();
+			}
 		}
 
 		public new string Text
 		{
-			get
-			{
-				return base.Text;
-			}
+			get => base.Text;
 			set
 			{
 				base.Text = value;
-				if (Focused) CheckContentsEditable();
+				if (Focused)
+				{
+					CheckContentsEditable();
+				}
 			}
 		}
 
@@ -390,16 +422,6 @@ namespace MixGui.Components
 			return address;
 		}
 
-		void HandleNoInstructionSet()
-		{
-			ShowNonInstruction("No instructionset loaded");
-
-			ContextMenu = null;
-			mUpdating = false;
-			mLastRenderedMagnitude = unrendered;
-			mLastRenderedSign = Word.Signs.Positive;
-		}
-
 		void HandleNoInstruction(string caption)
 		{
 			ShowNonInstruction("No instruction");
@@ -407,7 +429,7 @@ namespace MixGui.Components
 			mCaption = caption;
 			mToolTip?.SetToolTip(this, caption);
 
-			ContextMenu = null;
+			ContextMenuStrip = null;
 			mUpdating = false;
 		}
 
@@ -457,7 +479,10 @@ namespace MixGui.Components
 			AddTextElement(text.Index, ItemInErrors(errors, InstanceValidationError.Sources.Index));
 			AddTextElement(text.Field, ItemInErrors(errors, InstanceValidationError.Sources.FieldSpec));
 
-			if (TextLength > 0) Select(TextLength, 0);
+			if (TextLength > 0)
+			{
+				Select(TextLength, 0);
+			}
 
 			var caption = GetAddressErrorsCaption(errors);
 
@@ -472,7 +497,7 @@ namespace MixGui.Components
 			var address = GetAddress();
 			mShowAddressMenuItem.Enabled = address >= MemoryMinIndex && address <= MemoryMaxIndex;
 			mShowIndexedAddressMenuItem.Enabled = IndexedAddressCalculatorCallback?.Invoke(address, mInstructionWord[MixInstruction.IndexByte]) != int.MinValue;
-			ContextMenu = mContextMenu;
+			ContextMenuStrip = mContextMenu;
 
 			base.Update();
 			ResumeLayout();
@@ -481,17 +506,28 @@ namespace MixGui.Components
 			mUpdating = false;
 		}
 
-		string GetAddressErrorsCaption(InstanceValidationError[] errors)
+		static string GetAddressErrorsCaption(InstanceValidationError[] errors)
 		{
-			if (errors == null) return null;
+			if (errors == null)
+			{
+				return null;
+			}
 
 			var captionBuilder = new StringBuilder();
 			int errorNumber = 1;
 
 			foreach (InstanceValidationError error in errors)
 			{
-				if (errorNumber != 1) captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
-				if (errorNumber == 2) captionBuilder.Insert(0, "1. ");
+				if (errorNumber != 1)
+				{
+					captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
+				}
+
+				if (errorNumber == 2)
+				{
+					captionBuilder.Insert(0, "1. ");
+				}
+
 				captionBuilder.AppendFormat("address: {0}", error.CompiledMessage);
 				errorNumber++;
 			}
@@ -530,10 +566,7 @@ namespace MixGui.Components
 
 		public IFullWord InstructionWord
 		{
-			get
-			{
-				return mInstructionWord;
-			}
+			get => mInstructionWord;
 			set
 			{
 				if (value != null)
@@ -543,17 +576,17 @@ namespace MixGui.Components
 
 					Update();
 
-					if (Focused) CheckContentsEditable();
+					if (Focused)
+					{
+						CheckContentsEditable();
+					}
 				}
 			}
 		}
 
 		public ToolTip ToolTip
 		{
-			get
-			{
-				return mToolTip;
-			}
+			get => mToolTip;
 			set
 			{
 				mToolTip = value;
@@ -563,13 +596,13 @@ namespace MixGui.Components
 
 		public IWord WordValue
 		{
-			get
-			{
-				return mInstructionWord;
-			}
+			get => mInstructionWord;
 			set
 			{
-				if (!(value is IFullWord)) throw new ArgumentException("value must be an IFullWord");
+				if (!(value is IFullWord))
+				{
+					throw new ArgumentException("value must be an IFullWord");
+				}
 
 				InstructionWord = (IFullWord)value;
 			}

@@ -29,7 +29,10 @@ namespace MixLib
 		{
 			lock (mSyncRoot)
 			{
-				foreach (MemoryFullWord word in mWords.Values) word.ResetProfilingCounts();
+				foreach (MemoryFullWord word in mWords.Values)
+				{
+					word.ResetProfilingCounts();
+				}
 			}
 		}
 
@@ -215,25 +218,31 @@ namespace MixLib
 
 		public int? LastAddressWithContentsBefore(int index)
 		{
-			if (index <= MinWordIndex) return null;
+			if (index <= MinWordIndex)
+			{
+				return null;
+			}
 
 			var collection = mWords.TakeWhile(kvp => kvp.Key < index).Reverse().SkipWhile(kvp => kvp.Value.IsEmpty);
 
 			lock (mSyncRoot)
 			{
-				return collection.Any() ? collection.First().Key : (int?)null;
+				return collection.Any() ? collection.First().Key : null;
 			}
 		}
 
 		public int? FirstAddressWithContentsAfter(int index)
 		{
-			if (index >= MaxWordIndex) return null;
+			if (index >= MaxWordIndex)
+			{
+				return null;
+			}
 
 			var collection = mWords.SkipWhile(kvp => kvp.Key <= index || kvp.Value.IsEmpty);
 
 			lock (mSyncRoot)
 			{
-				return collection.Any() ? collection.First().Key : (int?)null;
+				return collection.Any() ? collection.First().Key : null;
 			}
 		}
 

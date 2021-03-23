@@ -15,22 +15,13 @@ namespace MixLib.Modules.Settings
 
 		public static bool FloatingPointEnabled
 		{
-			get
-			{
-				return mFloatingPointEnabled ?? FloatingPointEnabledDefault;
-			}
-			set
-			{
-				mFloatingPointEnabled = value;
-			}
+			get => mFloatingPointEnabled ?? FloatingPointEnabledDefault;
+			set => mFloatingPointEnabled = value;
 		}
 
 		public static bool FloatingPointEnabledDefined
 		{
-			get
-			{
-				return mFloatingPointEnabled != null;
-			}
+			get => mFloatingPointEnabled != null;
 			set
 			{
 				if (!value)
@@ -46,46 +37,25 @@ namespace MixLib.Modules.Settings
 
 		public static string FloatingPointProgramFile
 		{
-			get
-			{
-				return mFloatingPointProgramFile ?? FloatingPointProgramFileDefault;
-			}
-			set
-			{
-				mFloatingPointProgramFile = value;
-			}
+			get => mFloatingPointProgramFile ?? FloatingPointProgramFileDefault;
+			set => mFloatingPointProgramFile = value;
 		}
 
 		public static string ControlProgramFile
 		{
-			get
-			{
-				return mControlProgramFile ?? ControlProgramFileDefault;
-			}
-			set
-			{
-				mControlProgramFile = value;
-			}
+			get => mControlProgramFile ?? ControlProgramFileDefault;
+			set => mControlProgramFile = value;
 		}
 
 		public static int FloatingPointMemoryWordCount
 		{
-			get
-			{
-				return mFloatingPointMemoryWordCount ?? FloatingPointMemoryWordCountDefault;
-			}
-			set
-			{
-				mFloatingPointMemoryWordCount = value;
-			}
+			get => mFloatingPointMemoryWordCount ?? FloatingPointMemoryWordCountDefault;
+			set => mFloatingPointMemoryWordCount = value;
 		}
 
 		public static bool FloatingPointMemoryWordCountDefined
 		{
-			get
-			{
-				return mFloatingPointMemoryWordCount != null;
-			}
+			get => mFloatingPointMemoryWordCount != null;
 			set
 			{
 				if (!value)

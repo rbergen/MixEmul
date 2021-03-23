@@ -13,7 +13,7 @@ namespace MixAssembler.Value
 		const long fullWordModulusMask = 1L << fullWordBitCount;
 
 		// Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-		static SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new OperationComparator());
+		static readonly SortedList<string, operationDelegate> mBinaryOperations = new SortedList<string, operationDelegate>(new OperationComparator());
 
 		static ExpressionValue()
 		{
@@ -25,20 +25,30 @@ namespace MixAssembler.Value
 			mBinaryOperations[":"] = DoCalculateField;
 		}
 
-		static IValue DoAdd(IValue left, IValue right, int currentAddress) =>
-				new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoAdd(IValue left, IValue right, int currentAddress)
+		{
+			return new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		}
 
-		static IValue DoCalculateField(IValue left, IValue right, int currentAddress) =>
-				new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoCalculateField(IValue left, IValue right, int currentAddress)
+		{
+			return new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		}
 
-		static IValue DoDivide(IValue left, IValue right, int currentAddress) =>
-				new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoDivide(IValue left, IValue right, int currentAddress)
+		{
+			return new NumberValue((left.GetValue(currentAddress) / right.GetValue(currentAddress)) % fullWordModulusMask);
+		}
 
-		static IValue DoMultiply(IValue left, IValue right, int currentAddress) =>
-				new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoMultiply(IValue left, IValue right, int currentAddress)
+		{
+			return new NumberValue((left.GetValue(currentAddress) * right.GetValue(currentAddress)) % fullWordModulusMask);
+		}
 
-		static IValue DoSubstract(IValue left, IValue right, int currentAddress) =>
-				new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
+		static IValue DoSubstract(IValue left, IValue right, int currentAddress)
+		{
+			return new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
+		}
 
 		static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
 		{
@@ -54,10 +64,16 @@ namespace MixAssembler.Value
 			{
 				// check if this expression is an atomic expression
 				var value = AtomicExpressionValue.ParseValue(text, sectionCharIndex, status);
-				if (value != null) return value;
+				if (value != null)
+				{
+					return value;
+				}
 
 				// if the expression is not an atomic one, it must be longer than 1 character
-				if (text.Length == 1) return null;
+				if (text.Length == 1)
+				{
+					return null;
+				}
 
 				// check if this expression is an atomic expression preceded by a numeric sign
 				if (text[0] == '+' || text[0] == '-')
@@ -91,7 +107,10 @@ namespace MixAssembler.Value
 						}
 					}
 
-					if (operatorPosition == -1) return null;
+					if (operatorPosition == -1)
+					{
+						return null;
+					}
 
 					int rightTermStartIndex = operatorPosition + operatorText.Length;
 					// the left term can itself be an expression, so parse it as one (recursively)
@@ -116,7 +135,10 @@ namespace MixAssembler.Value
 			{
 				var lengthComparison = left.Length.CompareTo(right.Length);
 
-				if (lengthComparison == 0) return string.Compare(left, right, StringComparison.Ordinal);
+				if (lengthComparison == 0)
+				{
+					return string.Compare(left, right, StringComparison.Ordinal);
+				}
 
 				return -lengthComparison;
 			}

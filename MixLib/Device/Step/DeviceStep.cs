@@ -22,7 +22,10 @@ namespace MixLib.Device.Step
 
 			public virtual object OutputForNextStep => mPassthrough;
 
-			protected virtual void OnReportingEvent(ReportingEventArgs args) => ReportingEvent?.Invoke(this, args);
+			protected virtual void OnReportingEvent(ReportingEventArgs args)
+			{
+				ReportingEvent?.Invoke(this, args);
+			}
 
 			protected Instance() { }
 
@@ -30,10 +33,7 @@ namespace MixLib.Device.Step
 
 			public virtual object InputFromPreviousStep
 			{
-				set
-				{
-					mPassthrough = value;
-				}
+				set => mPassthrough = value;
 			}
 		}
 	}

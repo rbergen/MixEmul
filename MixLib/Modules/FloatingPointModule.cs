@@ -18,11 +18,10 @@ namespace MixLib.Modules
 		const string exponentOverflowSymbol = "EXPOV";
 		const string fixOverflowSymbol = "FIXOV";
 		const string divisionByZeroSymbol = "DIVZRO";
-
-		Mix mMix;
-		Memory mFullMemory;
+		readonly Mix mMix;
+		readonly Memory mFullMemory;
 		readonly IMemory mMemory;
-		Registers mRegisters;
+		readonly Registers mRegisters;
 		RunStatus mStatus;
 		int? mAccAddress;
 		int? mPrenormAddress;
@@ -53,20 +52,20 @@ namespace MixLib.Modules
 
 		public override Registers Registers => mMix.Registers;
 
-		public override void AddLogLine(LogLine line) => mMix.AddLogLine(line);
+		public override void AddLogLine(LogLine line)
+		{
+			mMix.AddLogLine(line);
+		}
 
-		public override void ResetProfilingCounts() => mFullMemory.ResetProfilingCounts();
+		public override void ResetProfilingCounts()
+		{
+			mFullMemory.ResetProfilingCounts();
+		}
 
 		public override RunStatus Status
 		{
-			get
-			{
-				return mStatus;
-			}
-			protected set
-			{
-				mStatus = value;
-			}
+			get => mStatus;
+			protected set => mStatus = value;
 		}
 
 		public override void Halt(int code)
@@ -87,7 +86,10 @@ namespace MixLib.Modules
 
 		int? GetSymbolAddress(string name)
 		{
-			if (Symbols == null) return null;
+			if (Symbols == null)
+			{
+				return null;
+			}
 
 			var symbol = Symbols[name] as IValueSymbol;
 			return symbol == null ? null : (int?)symbol.Value;
@@ -106,7 +108,10 @@ namespace MixLib.Modules
 			mFixOverflowAddress = null;
 			mDivisionByZeroAddress = null;
 
-			if (!base.LoadInstructionInstances(instances, symbols)) return false;
+			if (!base.LoadInstructionInstances(instances, symbols))
+			{
+				return false;
+			}
 
 			Symbols = symbols;
 			mAccAddress = GetSymbolAddress(accSymbol);
@@ -147,7 +152,10 @@ namespace MixLib.Modules
 
 		public bool ValidateCall(string mnemonic)
 		{
-			if (!ValidateAddresses(Severity.Error)) return false;
+			if (!ValidateAddresses(Severity.Error))
+			{
+				return false;
+			}
 
 			long? instructionValue = GetSymbolAddress(mnemonic);
 			if (instructionValue == null)
@@ -204,10 +212,7 @@ namespace MixLib.Modules
 
 		public override RunMode Mode
 		{
-			get
-			{
-				return RunMode.Normal;
-			}
+			get => RunMode.Normal;
 			set
 			{
 				if (value != RunMode.Normal)
@@ -283,7 +288,10 @@ namespace MixLib.Modules
 
 			int programCounter = ProgramCounter;
 
-			if (increasePC) programCounter++;
+			if (increasePC)
+			{
+				programCounter++;
+			}
 
 			if (programCounter > mMemory.MaxWordIndex)
 			{
@@ -293,7 +301,10 @@ namespace MixLib.Modules
 			else
 			{
 				ProgramCounter = programCounter;
-				if (Status == RunStatus.Running && IsBreakpointSet(programCounter)) ReportBreakpointReached();
+				if (Status == RunStatus.Running && IsBreakpointSet(programCounter))
+				{
+					ReportBreakpointReached();
+				}
 			}
 
 			return overflowDetected;

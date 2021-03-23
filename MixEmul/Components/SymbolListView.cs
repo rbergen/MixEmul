@@ -33,15 +33,30 @@ namespace MixGui.Components
 			mListView.SelectedIndexChanged += MListView_SelectedIndexChanged;
 		}
 
-		void MSymbolValueTextBox_TextChanged(object sender, EventArgs e) => SetEnabledStates();
+		void MSymbolValueTextBox_TextChanged(object sender, EventArgs e)
+		{
+			SetEnabledStates();
+		}
 
-		void MSymbolNameTextBox_TextChanged(object sender, EventArgs e) => SetEnabledStates();
+		void MSymbolNameTextBox_TextChanged(object sender, EventArgs e)
+		{
+			SetEnabledStates();
+		}
 
-		void SetEnabledStates() => SetEnabledStates(true);
+		void SetEnabledStates()
+		{
+			SetEnabledStates(true);
+		}
 
-		void MListView_DoubleClick(object sender, EventArgs e) => ValueSelected();
+		void MListView_DoubleClick(object sender, EventArgs e)
+		{
+			ValueSelected();
+		}
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) => AddressSelected?.Invoke(this, args);
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
+		{
+			AddressSelected?.Invoke(this, args);
+		}
 
 		void SetEnabledStates(bool updateSelectedItem)
 		{
@@ -69,14 +84,14 @@ namespace MixGui.Components
 
 		public SymbolCollection Symbols
 		{
-			get
-			{
-				return mSymbols;
-			}
+			get => mSymbols;
 
 			set
 			{
-				if (mSymbols == value) return;
+				if (mSymbols == value)
+				{
+					return;
+				}
 
 				mSymbols = value;
 
@@ -148,7 +163,10 @@ namespace MixGui.Components
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-				if (selectedItems.Count == 0) return long.MinValue;
+				if (selectedItems.Count == 0)
+				{
+					return long.MinValue;
+				}
 
 				long value = long.MinValue;
 				try
@@ -192,12 +210,13 @@ namespace MixGui.Components
 			long symbolMagnitude = mSymbolValueTextBox.Magnitude;
 			Word.Signs symbolSign = mSymbolValueTextBox.Sign;
 			SymbolBase symbol = mSymbols[symbolName];
-			ValueSymbol valueSymbol = null;
 
 			if (symbol != null)
 			{
-				valueSymbol = symbol as ValueSymbol;
-				if (valueSymbol == null) return;
+				if (symbol is not ValueSymbol valueSymbol)
+				{
+					return;
+				}
 
 				valueSymbol.SetValue(symbolSign, symbolMagnitude);
 				var valueText = symbolMagnitude.ToString();
@@ -210,9 +229,10 @@ namespace MixGui.Components
 			}
 			else
 			{
-				valueSymbol = ValueSymbol.ParseDefinition(symbolName) as ValueSymbol;
-
-				if (valueSymbol == null) return;
+				if (ValueSymbol.ParseDefinition(symbolName) is not ValueSymbol valueSymbol)
+				{
+					return;
+				}
 
 				valueSymbol.SetValue(symbolSign, symbolMagnitude);
 
@@ -225,7 +245,10 @@ namespace MixGui.Components
 
 		void MUnsetButton_Click(object sender, EventArgs e)
 		{
-			if (mSymbols == null) return;
+			if (mSymbols == null)
+			{
+				return;
+			}
 
 			string symbolName = mSymbolNameTextBox.Text;
 			mSymbols.Remove(symbolName);
@@ -238,7 +261,10 @@ namespace MixGui.Components
 		{
 			ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
 
-			if (selectedItems.Count == 0) return;
+			if (selectedItems.Count == 0)
+			{
+				return;
+			}
 
 			ListViewItem selectedItem = selectedItems[0];
 			mSymbolNameTextBox.Text = selectedItem.SubItems[nameFieldIndex].Text;
@@ -250,7 +276,7 @@ namespace MixGui.Components
 				if (valueText[0] == '-')
 				{
 					sign = Word.Signs.Negative;
-					valueText = valueText.Substring(1);
+					valueText = valueText[1..];
 				}
 				magnitude = long.Parse(valueText);
 			}

@@ -12,7 +12,7 @@ namespace MixGui.Components
 		Label mFullVersionLabel;
 		PictureBox mLogoBox;
 		Label mProductAndVersionLabel;
-		string mVersionString;
+		readonly string mVersionString;
 
 		public AboutForm()
 		{
@@ -26,16 +26,19 @@ namespace MixGui.Components
 
 			foreach (object attribute in customAttributes)
 			{
-				if (copyright == null && attribute is AssemblyCopyrightAttribute)
+				if (copyright == null && attribute is AssemblyCopyrightAttribute copyrightAttribute)
 				{
-					copyright = ((AssemblyCopyrightAttribute)attribute).Copyright;
+					copyright = copyrightAttribute.Copyright;
 				}
-				else if (product == null && attribute is AssemblyProductAttribute)
+				else if (product == null && attribute is AssemblyProductAttribute productAttribute)
 				{
-					product = ((AssemblyProductAttribute)attribute).Product;
+					product = productAttribute.Product;
 				}
 
-				if (copyright != null && product != null) break;
+				if (copyright != null && product != null)
+				{
+					break;
+				}
 			}
 
 			Version version = executingAssembly.GetName().Version;
@@ -43,13 +46,19 @@ namespace MixGui.Components
 
 			mProductAndVersionLabel.Text = product;
 			mVersionString = version.ToString();
-			mFullVersionLabel.Text = mFullVersionLabel.Text + mVersionString;
+			mFullVersionLabel.Text += mVersionString;
 			mCopyrightLabel.Text = copyright;
 		}
 
-		void MFullVersionLabel_Click(object sender, EventArgs e) => Clipboard.SetText(mVersionString);
+		void MFullVersionLabel_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(mVersionString);
+		}
 
-		void MFullVersionLabel_DoubleClick(object sender, EventArgs e) => Clipboard.SetText(mVersionString.Replace('.', '_'));
+		void MFullVersionLabel_DoubleClick(object sender, EventArgs e)
+		{
+			Clipboard.SetText(mVersionString.Replace('.', '_'));
+		}
 
 		void InitializeComponent()
 		{

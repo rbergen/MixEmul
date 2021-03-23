@@ -31,42 +31,99 @@ namespace MixLib.Type
 
 		public char CharValue => ByteValue >= MixChars.Length ? MixChars[MixChars.Length - 1] : MixChars[ByteValue];
 
-		public static int operator +(MixByte mixbyte, byte delta) => mixbyte.ByteValue + delta;
+		public static int operator +(MixByte mixbyte, byte delta)
+		{
+			return mixbyte.ByteValue + delta;
+		}
 
-		public static int operator /(MixByte mixbyte, byte divisor) => mixbyte.ByteValue / divisor;
+		public static int operator /(MixByte mixbyte, byte divisor)
+		{
+			return mixbyte.ByteValue / divisor;
+		}
 
-		public static bool operator ==(MixByte mixbyte, byte value) => mixbyte != null && mixbyte.ByteValue == value;
+		public static bool operator ==(MixByte mixbyte, byte value)
+		{
+			return mixbyte != null && mixbyte.ByteValue == value;
+		}
 
-		public static bool operator >(MixByte mixbyte, byte value) => mixbyte.ByteValue > value;
+		public static bool operator >(MixByte mixbyte, byte value)
+		{
+			return mixbyte.ByteValue > value;
+		}
 
-		public static bool operator >=(MixByte mixbyte, byte value) => mixbyte.ByteValue >= value;
+		public static bool operator >=(MixByte mixbyte, byte value)
+		{
+			return mixbyte.ByteValue >= value;
+		}
 
-		public static implicit operator byte(MixByte mixbyte) => mixbyte.ByteValue;
+		public static implicit operator byte(MixByte mixbyte)
+		{
+			return mixbyte.ByteValue;
+		}
 
-		public static implicit operator char(MixByte mixbyte) => mixbyte.CharValue;
+		public static implicit operator char(MixByte mixbyte)
+		{
+			return mixbyte.CharValue;
+		}
 
-		public static implicit operator int(MixByte mixbyte) => mixbyte.ByteValue;
+		public static implicit operator int(MixByte mixbyte)
+		{
+			return mixbyte.ByteValue;
+		}
 
-		public static implicit operator MixByte(byte value) => new MixByte(value);
+		public static implicit operator MixByte(byte value)
+		{
+			return new MixByte(value);
+		}
 
-		public static implicit operator MixByte(char value) => new MixByte(value);
+		public static implicit operator MixByte(char value)
+		{
+			return new MixByte(value);
+		}
 
-		public static implicit operator MixByte(int value) => new MixByte((byte)value);
+		public static implicit operator MixByte(int value)
+		{
+			return new MixByte((byte)value);
+		}
 
-		public static bool operator !=(MixByte mixbyte, byte value) => mixbyte != null && mixbyte.ByteValue != value;
+		public static bool operator !=(MixByte mixbyte, byte value)
+		{
+			return mixbyte != null && mixbyte.ByteValue != value;
+		}
 
-		public static bool operator <(MixByte mixbyte, byte value) => mixbyte.ByteValue < value;
+		public static bool operator <(MixByte mixbyte, byte value)
+		{
+			return mixbyte.ByteValue < value;
+		}
 
-		public static bool operator <=(MixByte mixbyte, byte value) => mixbyte.ByteValue <= value;
+		public static bool operator <=(MixByte mixbyte, byte value)
+		{
+			return mixbyte.ByteValue <= value;
+		}
 
-		public static int operator %(MixByte mixbyte, byte divisor) => mixbyte.ByteValue % divisor;
+		public static int operator %(MixByte mixbyte, byte divisor)
+		{
+			return mixbyte.ByteValue % divisor;
+		}
 
-		public static int operator -(MixByte mixbyte, byte delta) => mixbyte.ByteValue - delta;
+		public static int operator -(MixByte mixbyte, byte delta)
+		{
+			return mixbyte.ByteValue - delta;
+		}
 
-		public override string ToString() => ByteValue.ToString("D2");
+		public override string ToString()
+		{
+			return ByteValue.ToString("D2");
+		}
 
-		public override bool Equals(object obj) => obj is MixByte && ByteValue == ((MixByte)obj).ByteValue;
+		public override bool Equals(object obj)
+		{
+			return obj is MixByte && ByteValue == ((MixByte)obj).ByteValue;
+		}
 
-		public override int GetHashCode() => ByteValue.GetHashCode();
+		public override int GetHashCode()
+		{
+			return ByteValue.GetHashCode();
+		}
 	}
 }

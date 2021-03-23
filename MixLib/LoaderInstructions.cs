@@ -17,7 +17,9 @@ namespace MixLib
 
 		public LoaderInstruction this[string mnemonic] => mInstructions.ContainsKey(mnemonic) ? mInstructions[mnemonic] : null;
 
-		void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) =>
-				mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
+		void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric)
+		{
+			mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
+		}
 	}
 }

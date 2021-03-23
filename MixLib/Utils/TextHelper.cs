@@ -6,7 +6,10 @@ namespace MixLib.Utils
 	{
 		public static int FindMatch(this string text, SearchParameters options, int startIndex)
 		{
-			if (text == null || startIndex >= text.Length) return -1;
+			if (text == null || startIndex >= text.Length)
+			{
+				return -1;
+			}
 
 			if (startIndex < 0)
 			{
@@ -18,7 +21,10 @@ namespace MixLib.Utils
 			while (index >= 0)
 			{
 				// if we're not doing a full word search or the search text is the full text, we have a match
-				if (!options.MatchWholeWord || options.SearchText.Length == text.Length) return index;
+				if (!options.MatchWholeWord || options.SearchText.Length == text.Length)
+				{
+					return index;
+				}
 
 				// ...otherwise check if the character before and after the search text (insofar present) are not alphanumeric
 				if ((index == 0 || !char.IsLetterOrDigit(text, index - 1))

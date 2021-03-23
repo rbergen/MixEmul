@@ -6,17 +6,24 @@ namespace MixLib.Instruction
 	{
 		public const int InvalidAddress = int.MinValue;
 
-		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex) =>
-						GetValidIndexedAddress(module, addressBase, registerIndex, true);
+		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex)
+		{
+			return GetValidIndexedAddress(module, addressBase, registerIndex, true);
+		}
 
-		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance) =>
-				instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
+		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance)
+		{
+			return instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
+		}
 
 		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
 		{
 			if (registerIndex < 0 || registerIndex > (int)Registers.Offset.rI6)
 			{
-				if (reportErrors) module.ReportRuntimeError("Register index invalid: " + registerIndex);
+				if (reportErrors)
+				{
+					module.ReportRuntimeError("Register index invalid: " + registerIndex);
+				}
 
 				return int.MinValue;
 			}
@@ -27,7 +34,10 @@ namespace MixLib.Instruction
 				return indexedAddress;
 			}
 
-			if (reportErrors) module.ReportRuntimeError("Indexed memory address invalid: " + indexedAddress);
+			if (reportErrors)
+			{
+				module.ReportRuntimeError("Indexed memory address invalid: " + indexedAddress);
+			}
 
 			return int.MinValue;
 		}
@@ -49,8 +59,15 @@ namespace MixLib.Instruction
 				index++;
 			}
 
-			if (index == 1) return new InstanceValidationError[] { errorArray[0] };
-			if (index == 2) return errorArray;
+			if (index == 1)
+			{
+				return new InstanceValidationError[] { errorArray[0] };
+			}
+
+			if (index == 2)
+			{
+				return errorArray;
+			}
 
 			return null;
 		}

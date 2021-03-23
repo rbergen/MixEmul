@@ -23,6 +23,9 @@ namespace MixAssembler.Instruction
 		/// </summary>
 		public bool IsDefined => Instruction != null && Parameters != null;
 
-		public InstructionInstanceBase CreateInstance(AssemblingStatus status) => Parameters.CreateInstance(Instruction, status);
+		public InstructionInstanceBase CreateInstance(AssemblingStatus status)
+		{
+			return Parameters.CreateInstance(Instruction, status);
+		}
 	}
 }
