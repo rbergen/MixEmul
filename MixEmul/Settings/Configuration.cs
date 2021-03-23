@@ -111,7 +111,7 @@ namespace MixGui.Settings
 					return JsonSerializer.Deserialize<Configuration>(File.ReadAllBytes(path));
 				}
 			}
-			catch (Exception) {}
+			catch (Exception) { }
 
 			return new Configuration();
 		}

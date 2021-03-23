@@ -51,10 +51,8 @@ namespace MixAssembler
 
 					list.Add(instructionInstance);
 
-					if (instructionInstance != null && instructionInstance.Instruction is LoaderInstruction)
+					if (instructionInstance != null && instructionInstance.Instruction is LoaderInstruction loaderInstruction)
 					{
-						var loaderInstruction = (LoaderInstruction)instructionInstance.Instruction;
-
 						if (loaderInstruction.Operation == LoaderInstruction.Operations.SetLocationCounter)
 						{
 							status.LocationCounter = (int)((LoaderInstruction.Instance)instructionInstance).Value.LongValue;

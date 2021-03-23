@@ -171,14 +171,14 @@ namespace MixAssembler.Instruction
 				return null;
 			}
 
-			var index = IPartValue.ParseValue(addressField.Substring(indexCharIndex, sectionCharIndex - indexCharIndex), indexCharIndex, status);
+			var index = IPartValue.ParseValue(addressField[indexCharIndex..sectionCharIndex], indexCharIndex, status);
 			if (index == null)
 			{
 				status.ReportParsingError(indexCharIndex, sectionCharIndex - indexCharIndex, "unable to parse index");
 				return null;
 			}
 
-			var field = FPartValue.ParseValue(addressField.Substring(sectionCharIndex), sectionCharIndex, status);
+			var field = FPartValue.ParseValue(addressField[sectionCharIndex..], sectionCharIndex, status);
 			if (field == null)
 			{
 				status.ReportParsingError(sectionCharIndex, addressField.Length - sectionCharIndex, "unable to parse field");

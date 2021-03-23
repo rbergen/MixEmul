@@ -3,148 +3,37 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>MixGui.MixForm</StartupObject>
-    <Win32Resource>
-    </Win32Resource>
     <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
     <RootNamespace>MixGui</RootNamespace>
-    <PublishUrl>C:\Users\rutge\source\repos\MixEmul\publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Background</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>6</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Deterministic>false</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>56D8CA9FA393373C43CE6348BF765712A89A78AE</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>MixEmul_3_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Update="Components\AssemblyFindingListView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\BinaryFileDeviceEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\ToolStripCycleButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\DeviceWordEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\TextFileDeviceEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\MixByteCollectionEditorList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\LinkedItemsSelectorControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\WordEditorList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\DeviceMixByteCollectionEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\DevicesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\DeviceStatusControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\FullWordEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\InstructionInstanceTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\LogListView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\LongValueTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\LongValueToolStripTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\MemoryEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\MemoryWordEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\MixByteTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\MixCharClipboardButtonControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\RegistersEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\SourceCodeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\SymbolListView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\MixByteCollectionCharTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Components\WordEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\EditorList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Components\WordValueEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <None Remove="Documentation\Changes.txt" />
+    <None Remove="Documentation\MixEmul Documentation 0.3.5.pdf" />
+    <None Remove="Sample programs\99bottles.mixal" />
+    <None Remove="Sample programs\easter.mixal" />
+    <None Remove="Sample programs\echo.mixal" />
+    <None Remove="Sample programs\hello.mixal" />
+    <None Remove="Sample programs\loader.mixal" />
+    <None Remove="Sample programs\permutations.mixal" />
+    <None Remove="Sample programs\primes.mixal" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MixAssembler\MixAssembler.csproj" />
     <ProjectReference Include="..\MixLib\MixLib.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="DeviceEditorFormIcon.ico" />
+    <Content Include="Documentation\Changes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Documentation\MixEmul Documentation 0.3.5.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MixFormIcon.ico" />
     <Content Include="control.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -152,9 +41,27 @@
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Components\INavigableWordEditor.cs" />
+    <Content Include="Sample programs\99bottles.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\easter.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\echo.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\hello.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\loader.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\permutations.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sample programs\primes.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.212405">

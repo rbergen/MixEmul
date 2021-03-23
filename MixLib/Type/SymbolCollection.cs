@@ -6,7 +6,7 @@ namespace MixLib.Type
 {
 	public sealed class SymbolCollection : IEnumerable<SymbolBase>, IEnumerable
 	{
-		readonly SortedList<string, SymbolBase> mList = new SortedList<string, SymbolBase>();
+		readonly SortedList<string, SymbolBase> mList = new();
 
 		public int Count => mList.Count;
 

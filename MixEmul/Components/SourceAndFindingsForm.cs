@@ -4,7 +4,6 @@ using MixGui.Utils;
 using MixLib.Instruction;
 using MixLib.Misc;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace MixGui.Components
@@ -54,7 +53,7 @@ namespace MixGui.Components
 			// mStatusStrip
 			// 
 			this.mStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mToolStripStatusLabel});
+						this.mToolStripStatusLabel});
 			this.mStatusStrip.Location = new System.Drawing.Point(0, 383);
 			this.mStatusStrip.Name = "mStatusStrip";
 			this.mStatusStrip.Size = new System.Drawing.Size(568, 22);
@@ -111,9 +110,9 @@ namespace MixGui.Components
 			// 
 			// mFindingListView
 			// 
-			this.mFindingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.mFindingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.mFindingListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.mFindingListView.Location = new System.Drawing.Point(0, 0);
 			this.mFindingListView.Name = "mFindingListView";

@@ -55,12 +55,12 @@ namespace MixAssembler.Symbol
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			if (text.Length < 2 || text[0] != '=' || text[text.Length - 1] != '=')
+			if (text.Length < 2 || text[0] != '=' || text[^1] != '=')
 			{
 				return null;
 			}
 
-			var expressionValue = WValue.ParseValue(text.Substring(1, text.Length - 2), sectionCharIndex + 1, status);
+			var expressionValue = WValue.ParseValue(text[1..^1], sectionCharIndex + 1, status);
 			if (expressionValue == null)
 			{
 				return null;

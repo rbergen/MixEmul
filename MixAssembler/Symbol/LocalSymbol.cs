@@ -31,11 +31,6 @@ namespace MixAssembler.Symbol
 			mAddresses.Add(value);
 		}
 
-		static bool IsBackwardReferenceChar(char c)
-		{
-			return c == 'B';
-		}
-
 		static bool IsDefinitionChar(char c)
 		{
 			return c == 'H';
@@ -53,7 +48,7 @@ namespace MixAssembler.Symbol
 
 		static bool IsLocalSymbolChar(char c)
 		{
-			return "BHF".IndexOf(c) >= 0;
+			return "BHF".Contains(c);
 		}
 
 		public override bool IsValueDefined(int currentAddress)
@@ -181,11 +176,10 @@ namespace MixAssembler.Symbol
 			/// <returns></returns>
 			public long GetValue(int currentAddress)
 			{
-				long previousAddress = -1L;
 				long followingAddress = -1L;
 				foreach (long refereeAddress in mReferee.Addresses)
 				{
-					previousAddress = followingAddress;
+					long previousAddress = followingAddress;
 					followingAddress = refereeAddress;
 
 					if (mDirection == Directions.Backwards && followingAddress >= currentAddress)

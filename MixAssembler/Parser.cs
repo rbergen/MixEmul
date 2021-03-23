@@ -24,8 +24,8 @@ namespace MixAssembler
 		const int addressFieldIndex = 2;
 		const int commentFieldIndex = 3;
 
-		static readonly InstructionSet mInstructionSet = new InstructionSet();
-		static readonly LoaderInstructions mLoaderInstructions = new LoaderInstructions();
+		static readonly InstructionSet mInstructionSet = new();
+		static readonly LoaderInstructions mLoaderInstructions = new();
 
 		static bool IsCommentLine(string sourceLine)
 		{
@@ -283,7 +283,7 @@ namespace MixAssembler
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
 			if (opFieldEnd == -1)
 			{
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart), "", "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine[opFieldStart..], "", "" };
 			}
 
 			int opFieldLength = opFieldEnd - opFieldStart;
@@ -312,7 +312,7 @@ namespace MixAssembler
 
 			if (addressFieldEnd == -1)
 			{
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart), "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], "" };
 			}
 
 			int addressFieldLength = addressFieldEnd - addressFieldStart;
@@ -322,7 +322,7 @@ namespace MixAssembler
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };
 			}
 
-			return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine.Substring(commentFieldStart) };
+			return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
 		}
 	}
 }
