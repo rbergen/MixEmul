@@ -74,11 +74,6 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Install dependencies
-      run: |
-        dotnet add package Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers --version 0.2.212405
-        dotnet add package Microsoft.Windows.Compatibility --version 5.0.2
-
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
