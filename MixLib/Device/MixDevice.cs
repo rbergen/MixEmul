@@ -1,19 +1,19 @@
+﻿using System;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Interrupts;
 using MixLib.Type;
-using System;
 
 namespace MixLib.Device
 {
 	public abstract class MixDevice
 	{
-		const string idleDescription = "Idle";
-		const string readingDescription = "Reading from memory";
-		const string writingDescription = "Writing to memory";
+		private const string IdleDescription = "Idle";
+		private const string ReadingDescription = "Reading from memory";
+		private const string WritingDescription = "Writing to memory";
 
-		InOutputOperands mCurrentOperands;
-		DeviceStep.Instance mCurrentStepInstance;
+		private InOutputOperands _currentOperands;
+		private DeviceStep.Instance _currentStepInstance;
 
 		protected DeviceStep CurrentStep { get; private set; }
 		protected DeviceStep FirstInputDeviceStep { get; set; }
@@ -34,59 +34,53 @@ namespace MixLib.Device
 			CurrentStep = null;
 		}
 
-		public bool Busy => CurrentStep != null;
+		public bool Busy 
+			=> CurrentStep != null;
 
-		public string StatusDescription => Busy ? CurrentStep.StatusDescription : idleDescription;
+		public string StatusDescription 
+			=> Busy ? CurrentStep.StatusDescription : IdleDescription;
 
-		protected virtual DeviceStep.Instance GetCurrentStepInstance()
-		{
-			return CurrentStep.CreateInstance();
-		}
+		protected virtual DeviceStep.Instance GetCurrentStepInstance() 
+			=> CurrentStep.CreateInstance();
 
-		public override string ToString()
-		{
-			return ShortName + ": " + Id;
-		}
+		public override string ToString() 
+			=> ShortName + ": " + Id;
 
-		protected virtual void OnReportingEvent(ReportingEventArgs args)
-		{
-			ReportingEvent?.Invoke(this, args);
-		}
+		protected virtual void OnReportingEvent(ReportingEventArgs args) 
+			=> ReportingEvent?.Invoke(this, args);
 
-		void StepInstance_Reporting(object sender, ReportingEventArgs args)
-		{
-			OnReportingEvent(args);
-		}
+		private void StepInstance_Reporting(object sender, ReportingEventArgs args) 
+			=> OnReportingEvent(args);
 
 		public virtual void Reset()
 		{
 			CurrentStep = null;
-			mCurrentStepInstance = null;
+			_currentStepInstance = null;
 		}
 
-		public virtual void StartInput(IMemory memory, int mValue, int sector, InterruptQueueCallback callback)
+		public virtual void StartInput(IMemory memory, int value, int sector, InterruptQueueCallback callback)
 		{
 			if (!Busy && SupportsInput)
 			{
-				mCurrentOperands = new InOutputOperands(memory, mValue, sector, callback);
+				_currentOperands = new InOutputOperands(memory, value, sector, callback);
 				CurrentStep = FirstInputDeviceStep;
 			}
 		}
 
-		public virtual void StartIoc(int mValue, int sector, InterruptQueueCallback callback)
+		public virtual void StartIoc(int value, int sector, InterruptQueueCallback callback)
 		{
 			if (!Busy)
 			{
-				mCurrentOperands = new InOutputOperands(null, mValue, sector, callback);
+				_currentOperands = new InOutputOperands(null, value, sector, callback);
 				CurrentStep = FirstIocDeviceStep;
 			}
 		}
 
-		public virtual void StartOutput(IMemory memory, int mValue, int sector, InterruptQueueCallback callback)
+		public virtual void StartOutput(IMemory memory, int value, int sector, InterruptQueueCallback callback)
 		{
 			if (!Busy && SupportsOutput)
 			{
-				mCurrentOperands = new InOutputOperands(memory, mValue, sector, callback);
+				_currentOperands = new InOutputOperands(memory, value, sector, callback);
 				CurrentStep = FirstOutputDeviceStep;
 			}
 		}
@@ -95,66 +89,59 @@ namespace MixLib.Device
 		{
 			// If no I/O step is set, we're idle
 			if (CurrentStep == null)
-			{
 				return;
-			}
 
 			// At I/O start, the step instance is unset
-			if (mCurrentStepInstance == null)
+			if (_currentStepInstance == null)
 			{
-				mCurrentStepInstance = GetCurrentStepInstance();
-				mCurrentStepInstance.Operands = mCurrentOperands;
-				mCurrentStepInstance.ReportingEvent += StepInstance_Reporting;
+				_currentStepInstance = GetCurrentStepInstance();
+				_currentStepInstance.Operands = _currentOperands;
+				_currentStepInstance.ReportingEvent += StepInstance_Reporting;
 			}
 
 			// Current step still busy? If so, we're done here
-			if (!mCurrentStepInstance.Tick())
-			{
+			if (!_currentStepInstance.Tick())
 				return;
-			}
 
 			CurrentStep = CurrentStep.NextStep;
 
 			// Have we reached the end of the I/O step chain? If so, trigger interrupt and quit
 			if (CurrentStep == null)
 			{
-				mCurrentStepInstance = null;
-				mCurrentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
+				_currentStepInstance = null;
+				_currentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
 
 				return;
 			}
 
 			// Move on to next I/O step
 			var currentStepInstance = GetCurrentStepInstance();
-			currentStepInstance.Operands = mCurrentOperands;
+			currentStepInstance.Operands = _currentOperands;
 			currentStepInstance.ReportingEvent += StepInstance_Reporting;
-			currentStepInstance.InputFromPreviousStep = mCurrentStepInstance.OutputForNextStep;
-			mCurrentStepInstance = currentStepInstance;
+			currentStepInstance.InputFromPreviousStep = _currentStepInstance.OutputForNextStep;
+			_currentStepInstance = currentStepInstance;
 		}
 
 		public abstract void UpdateSettings();
 
 		protected class ReadFromMemoryStep : TickingStep
 		{
-			readonly bool mIncludeSign;
+			private readonly bool mIncludeSign;
 
-			public ReadFromMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
+			public ReadFromMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount) 
+				=> mIncludeSign = includeSign;
+
+			public override string StatusDescription 
+				=> ReadingDescription;
+
+			protected override TickingStep.Instance CreateTickingInstance() 
+				=> new Instance(TickCount, mIncludeSign);
+
+			private new class Instance : TickingStep.Instance
 			{
-				mIncludeSign = includeSign;
-			}
-
-			public override string StatusDescription => readingDescription;
-
-			protected override TickingStep.Instance CreateTickingInstance()
-			{
-				return new Instance(TickCount, mIncludeSign);
-			}
-
-			new class Instance : TickingStep.Instance
-			{
-				readonly MixByte[] mBytesForReading;
-				readonly bool mIncludeSign;
-				readonly int mWordByteCount;
+				private readonly MixByte[] mBytesForReading;
+				private readonly bool mIncludeSign;
+				private readonly int mWordByteCount;
 
 				public Instance(int tickCount, bool includeSign) : base(tickCount)
 				{
@@ -162,9 +149,7 @@ namespace MixLib.Device
 					mWordByteCount = FullWord.ByteCount;
 
 					if (includeSign)
-					{
 						mWordByteCount++;
-					}
 
 					mBytesForReading = new MixByte[TickCount * mWordByteCount];
 				}
@@ -186,9 +171,7 @@ namespace MixLib.Device
 						}
 
 						for (int index = 0; index < FullWord.ByteCount; index++)
-						{
 							mBytesForReading[currentByte + index] = Operands.Memory[currentAddress][index];
-						}
 					}
 				}
 			}
@@ -196,25 +179,19 @@ namespace MixLib.Device
 
 		protected class WriteToMemoryStep : TickingStep
 		{
-			readonly bool mIncludeSign;
+			private readonly bool mIncludeSign;
 
-			public WriteToMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount)
+			public WriteToMemoryStep(bool includeSign, int recordWordCount) : base(recordWordCount) => mIncludeSign = includeSign;
+
+			public override string StatusDescription => WritingDescription;
+
+			protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, mIncludeSign);
+
+			private new class Instance : TickingStep.Instance
 			{
-				mIncludeSign = includeSign;
-			}
-
-			public override string StatusDescription => writingDescription;
-
-			protected override TickingStep.Instance CreateTickingInstance()
-			{
-				return new Instance(TickCount, mIncludeSign);
-			}
-
-			new class Instance : TickingStep.Instance
-			{
-				readonly MixByte[] mBytesForWriting;
-				readonly bool mIncludeSign;
-				readonly int mWordByteCount;
+				private readonly MixByte[] mBytesForWriting;
+				private readonly bool mIncludeSign;
+				private readonly int mWordByteCount;
 
 				public Instance(int tickCount, bool includeSign) : base(tickCount)
 				{
@@ -222,9 +199,7 @@ namespace MixLib.Device
 					mWordByteCount = FullWord.ByteCount;
 
 					if (includeSign)
-					{
 						mWordByteCount++;
-					}
 
 					mBytesForWriting = new MixByte[TickCount * mWordByteCount];
 				}
@@ -234,9 +209,7 @@ namespace MixLib.Device
 					int currentAddress = Operands.MValue + CurrentTick;
 
 					if (currentAddress >= Operands.Memory.MaxWordIndex)
-					{
 						return;
-					}
 
 					int currentByte = mWordByteCount * CurrentTick;
 
@@ -246,14 +219,10 @@ namespace MixLib.Device
 						currentByte++;
 					}
 					else
-					{
 						Operands.Memory[currentAddress].Sign = Word.Signs.Positive;
-					}
 
 					for (int index = 0; index < FullWord.ByteCount; index++)
-					{
 						Operands.Memory[currentAddress][index] = mBytesForWriting[currentByte + index];
-					}
 				}
 
 				public override object InputFromPreviousStep

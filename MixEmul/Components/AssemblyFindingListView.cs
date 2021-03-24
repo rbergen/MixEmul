@@ -1,8 +1,8 @@
-using MixAssembler.Finding;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using MixAssembler.Finding;
 
 namespace MixGui.Components
 {
@@ -45,13 +45,13 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		protected void OnSelectionChanged(SelectionChangedEventArgs args) 
+		protected void OnSelectionChanged(SelectionChangedEventArgs args)
 			=> SelectionChanged?.Invoke(this, args);
 
-		private void SelectedIndexChanged(object sender, EventArgs e) 
+		private void SelectedIndexChanged(object sender, EventArgs e)
 			=> OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
 
-		void AddFinding(AssemblyFinding finding)
+		private void AddFinding(AssemblyFinding finding)
 		{
 			var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : (finding.LineNumber + 1).ToString(), finding.Message }, (int)finding.Severity)
 			{
@@ -86,7 +86,7 @@ namespace MixGui.Components
 			get
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mFindingsListView.SelectedItems;
-				
+
 				return selectedItems.Count == 0 ? null : (AssemblyFinding)selectedItems[0].Tag;
 			}
 		}
@@ -119,9 +119,9 @@ namespace MixGui.Components
 
 		public class SelectionChangedEventArgs : EventArgs
 		{
-			readonly AssemblyFinding mSelectedFinding;
+			private readonly AssemblyFinding mSelectedFinding;
 
-			public SelectionChangedEventArgs(AssemblyFinding finding) 
+			public SelectionChangedEventArgs(AssemblyFinding finding)
 				=> mSelectedFinding = finding;
 
 			public AssemblyFinding SelectedFinding => mSelectedFinding;

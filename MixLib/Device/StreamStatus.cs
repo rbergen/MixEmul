@@ -1,52 +1,46 @@
+﻿using System;
 using MixLib.Events;
 using MixLib.Misc;
-using System;
 
 namespace MixLib.Device
 {
 	public class StreamStatus
 	{
-		string mFileName;
-		long mPosition;
-		System.IO.Stream mStream;
+		private string _fileName;
+		private long _position;
+		private System.IO.Stream _stream;
 
 		public bool PositionSet { get; private set; }
 
 		public event ReportingEventHandler ReportingEvent;
 
-		public StreamStatus()
-		{
-			Reset();
-		}
+		public StreamStatus() 
+			=> Reset();
 
-		void OnReportingEvent(ReportingEventArgs args)
-		{
-			ReportingEvent?.Invoke(this, args);
-		}
+		private void OnReportingEvent(ReportingEventArgs args) 
+			=> ReportingEvent?.Invoke(this, args);
 
 		public void CloseStream()
 		{
-			mStream?.Close();
-			mStream = null;
+			_stream?.Close();
+			_stream = null;
 		}
 
 		public void Reset()
 		{
 			CloseStream();
-			mPosition = 0L;
+			_position = 0L;
 			PositionSet = false;
 		}
 
 		public void UpdatePosition()
 		{
-			if (mStream == null)
-			{
+			if (_stream == null)
 				return;
-			}
 
 			try
 			{
-				Position = mStream.Position;
+				Position = _stream.Position;
 				PositionSet = true;
 			}
 			catch (Exception exception)
@@ -57,32 +51,30 @@ namespace MixLib.Device
 
 		public string FileName
 		{
-			get => mFileName;
+			get => _fileName;
 			set
 			{
-				if (mStream != null)
-				{
+				if (_stream != null)
 					throw new InvalidOperationException("can't change filename on open stream. Open stream must first be closed.");
-				}
-				mFileName = value;
+
+				_fileName = value;
 			}
 		}
 
 		public long Position
 		{
-			get => mPosition;
+			get => _position;
 			set
 			{
-				mPosition = value;
+				_position = value;
 				PositionSet = true;
-				if (mStream == null)
-				{
+
+				if (_stream == null)
 					return;
-				}
 
 				try
 				{
-					mStream.Position = mPosition;
+					_stream.Position = _position;
 				}
 				catch (Exception exception)
 				{
@@ -93,20 +85,16 @@ namespace MixLib.Device
 
 		public System.IO.Stream Stream
 		{
-			get => mStream;
+			get => _stream;
 			set
 			{
-				if (mStream != null)
-				{
+				if (_stream != null)
 					throw new InvalidOperationException("can't replace open stream. Open stream must first be closed.");
-				}
 
-				mStream = value ?? throw new ArgumentNullException(nameof(value), "stream may not be set to null");
+				_stream = value ?? throw new ArgumentNullException(nameof(value), "stream may not be set to null");
 
 				if (PositionSet)
-				{
-					mStream.Position = Position;
-				}
+					_stream.Position = Position;
 
 				UpdatePosition();
 			}

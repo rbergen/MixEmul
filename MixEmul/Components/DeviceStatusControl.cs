@@ -1,84 +1,84 @@
-using MixGui.Settings;
-using MixLib.Device;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Settings;
+using MixLib.Device;
 
 namespace MixGui.Components
 {
 	public class DeviceStatusControl : UserControl
 	{
-		private readonly ContextMenuStrip mContextMenuStrip;
-		private readonly ToolStripSeparator mContextSeparator;
-		private MixDevice mDevice;
-		private readonly Label mIndexLabel;
-		private readonly ToolStripMenuItem mInputMenuItem;
-		private readonly ToolStripMenuItem mOutputMenuItem;
-		private readonly ToolStripMenuItem mResetMenuItem;
-		private readonly Label mStatusLabel;
+		private readonly ContextMenuStrip _contextMenuStrip;
+		private readonly ToolStripSeparator _contextSeparator;
+		private MixDevice _device;
+		private readonly Label _indexLabel;
+		private readonly ToolStripMenuItem _inputMenuItem;
+		private readonly ToolStripMenuItem _outputMenuItem;
+		private readonly ToolStripMenuItem _resetMenuItem;
+		private readonly Label _statusLabel;
 
 		public ToolTip ToolTip { get; set; }
 
-		public DeviceStatusControl() : this(null) {}
+		public DeviceStatusControl() : this(null) { }
 
 		public DeviceStatusControl(MixDevice device)
 		{
-			mDevice = device;
+			_device = device;
 
-			mIndexLabel = new Label();
-			mStatusLabel = new Label();
-			mContextMenuStrip = new ContextMenuStrip();
-			mInputMenuItem = new ToolStripMenuItem();
-			mOutputMenuItem = new ToolStripMenuItem();
-			mContextSeparator = new ToolStripSeparator();
-			mResetMenuItem = new ToolStripMenuItem();
+			_indexLabel = new Label();
+			_statusLabel = new Label();
+			_contextMenuStrip = new ContextMenuStrip();
+			_inputMenuItem = new ToolStripMenuItem();
+			_outputMenuItem = new ToolStripMenuItem();
+			_contextSeparator = new ToolStripSeparator();
+			_resetMenuItem = new ToolStripMenuItem();
 
 			SuspendLayout();
 
-			mIndexLabel.Location = new Point(0, 0);
-			mIndexLabel.Name = "mIndexLabel";
-			mIndexLabel.Size = new Size(20, 16);
-			mIndexLabel.TabIndex = 0;
-			mIndexLabel.Text = "00:";
-			mIndexLabel.TextAlign = ContentAlignment.MiddleRight;
-			mIndexLabel.DoubleClick += Control_DoubleClick;
+			_indexLabel.Location = new Point(0, 0);
+			_indexLabel.Name = "mIndexLabel";
+			_indexLabel.Size = new Size(20, 16);
+			_indexLabel.TabIndex = 0;
+			_indexLabel.Text = "00:";
+			_indexLabel.TextAlign = ContentAlignment.MiddleRight;
+			_indexLabel.DoubleClick += Control_DoubleClick;
 
-			mStatusLabel.BorderStyle = BorderStyle.FixedSingle;
-			mStatusLabel.Location = new Point(20, 0);
-			mStatusLabel.Name = "mStatusLabel";
-			mStatusLabel.Size = new Size(32, 16);
-			mStatusLabel.TabIndex = 1;
-			mStatusLabel.Text = "";
-			mStatusLabel.TextAlign = ContentAlignment.MiddleCenter;
-			mStatusLabel.DoubleClick += Control_DoubleClick;
+			_statusLabel.BorderStyle = BorderStyle.FixedSingle;
+			_statusLabel.Location = new Point(20, 0);
+			_statusLabel.Name = "mStatusLabel";
+			_statusLabel.Size = new Size(32, 16);
+			_statusLabel.TabIndex = 1;
+			_statusLabel.Text = "";
+			_statusLabel.TextAlign = ContentAlignment.MiddleCenter;
+			_statusLabel.DoubleClick += Control_DoubleClick;
 
-			mInputMenuItem.Text = "Input device";
+			_inputMenuItem.Text = "Input device";
 
-			mOutputMenuItem.Text = "Output device";
+			_outputMenuItem.Text = "Output device";
 
-			mResetMenuItem.Text = "Reset";
-			mResetMenuItem.Click += ResetMenuItem_Click;
+			_resetMenuItem.Text = "Reset";
+			_resetMenuItem.Click += ResetMenuItem_Click;
 
-			mContextMenuStrip.Items.AddRange(new ToolStripItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
-			ContextMenuStrip = mContextMenuStrip;
+			_contextMenuStrip.Items.AddRange(new ToolStripItem[] { _inputMenuItem, _outputMenuItem, _contextSeparator, _resetMenuItem });
+			ContextMenuStrip = _contextMenuStrip;
 
-			Controls.Add(mIndexLabel);
-			Controls.Add(mStatusLabel);
+			Controls.Add(_indexLabel);
+			Controls.Add(_statusLabel);
 			Name = "DeviceStatusControl";
-			Size = new Size(mIndexLabel.Width + mStatusLabel.Width, 16);
+			Size = new Size(_indexLabel.Width + _statusLabel.Width, 16);
 			ResumeLayout(false);
 
 			UpdateLayout();
 		}
 
-		private void Control_DoubleClick(object sender, EventArgs e) 
+		private void Control_DoubleClick(object sender, EventArgs e)
 			=> OnDoubleClick(e);
 
 		private void ResetMenuItem_Click(object sender, EventArgs e)
 		{
-			if (mDevice != null)
+			if (_device != null)
 			{
-				mDevice.Reset();
+				_device.Reset();
 				Update();
 			}
 		}
@@ -89,13 +89,13 @@ namespace MixGui.Components
 			{
 				SuspendLayout();
 
-				mIndexLabel.Text = "";
-				mStatusLabel.BackColor = Color.Gray;
-				mStatusLabel.Text = "";
-				ToolTip?.SetToolTip(mStatusLabel, "No device connected");
+				_indexLabel.Text = "";
+				_statusLabel.BackColor = Color.Gray;
+				_statusLabel.Text = "";
+				ToolTip?.SetToolTip(_statusLabel, "No device connected");
 
-				mInputMenuItem.Checked = false;
-				mOutputMenuItem.Checked = false;
+				_inputMenuItem.Checked = false;
+				_outputMenuItem.Checked = false;
 
 				ResumeLayout();
 			}
@@ -103,12 +103,12 @@ namespace MixGui.Components
 			{
 				SuspendLayout();
 
-				mIndexLabel.Text = Device.Id + ":";
-				mStatusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
-				mStatusLabel.Text = Device.ShortName;
-				ToolTip?.SetToolTip(mStatusLabel, Device.StatusDescription);
-				mInputMenuItem.Checked = Device.SupportsInput;
-				mOutputMenuItem.Checked = Device.SupportsOutput;
+				_indexLabel.Text = Device.Id + ":";
+				_statusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
+				_statusLabel.Text = Device.ShortName;
+				ToolTip?.SetToolTip(_statusLabel, Device.StatusDescription);
+				_inputMenuItem.Checked = Device.SupportsInput;
+				_outputMenuItem.Checked = Device.SupportsOutput;
 
 				ResumeLayout();
 			}
@@ -116,18 +116,18 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			mStatusLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_statusLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			Update();
 		}
 
 		public MixDevice Device
 		{
-			get => mDevice;
+			get => _device;
 			set
 			{
-				if (mDevice == null)
+				if (_device == null)
 				{
-					mDevice = value;
+					_device = value;
 					Update();
 				}
 			}

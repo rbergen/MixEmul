@@ -1,4 +1,11 @@
-﻿using MixAssembler;
+﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using MixAssembler;
 using MixAssembler.Finding;
 using MixAssembler.Instruction;
 using MixGui.Components;
@@ -13,316 +20,280 @@ using MixLib.Modules;
 using MixLib.Modules.Settings;
 using MixLib.Settings;
 using MixLib.Type;
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
 
 namespace MixGui
 {
 	public partial class MixForm : Form
 	{
-		private const int mainMemoryEditorIndex = 0;
-		private const int floatingPointMemoryEditorIndex = 1;
+		private const int MainMemoryEditorIndex = 0;
+		private const int FloatingPointMemoryEditorIndex = 1;
 
-		private IContainer components;
-		private AboutForm mAboutForm;
-		private readonly Configuration mConfiguration;
-		private readonly string mDefaultDirectory = Environment.CurrentDirectory;
-		private readonly Mix mMix;
-		private OpenFileDialog mOpenProgramFileDialog;
-		private PreferencesForm mPreferencesForm;
-		private bool mReadOnly;
-		private bool mRunning;
-		private bool mUpdating;
-		private ImageList mSeverityImageList;
-		private SourceAndFindingsForm mSourceAndFindingsForm;
-		private SteppingState mSteppingState;
-		private readonly TeletypeForm mTeletype;
-		private MenuStrip mMainMenuStrip;
-		private ToolStripMenuItem mFileToolStripMenuItem;
-		private ToolStripMenuItem mOpenProgramToolStripMenuItem;
-		private ToolStripMenuItem mExitToolStripMenuItem;
-		private ToolStripMenuItem mToolsToolStripMenuItem;
-		private ToolStripMenuItem mPreferencesToolStripMenuItem;
-		private ToolStripMenuItem mHelpToolStripMenuItem;
-		private ToolStripMenuItem mAboutToolStripMenuItem;
-		private ToolStripMenuItem mActionsToolStripMenuItem;
-		private ToolStripMenuItem mTickToolStripMenuItem;
-		private ToolStripMenuItem mStepToolStripMenuItem;
-		private ToolStripMenuItem mRunToolStripMenuItem;
-		private ToolStripMenuItem mGoToolStripMenuItem;
-		private ToolStripMenuItem mDetachToolStripMenuItem;
-		private ToolStripMenuItem mResetToolStripMenuItem;
-		private ToolStripMenuItem mViewToolStripMenuItem;
-		private ToolStripMenuItem mTeletypeToolStripMenuItem;
-		private ToolStripContainer mToolStripContainer;
-		private StatusStrip mStatusStrip;
-		private ToolStripStatusLabel mToolStripStatusLabel;
-		private readonly LongValueTextBox mPCBox;
-		private ToolStrip mControlToolStrip;
-		private ToolStripLabel mPCToolStripLabel;
-		private ToolStripButton mShowPCToolStripButton;
-		private ToolStripLabel mTicksToolStripLabel;
-		private ToolStripTextBox mTicksToolStripTextBox;
-		private ToolStripButton mResetTicksToolStripButton;
-		private ToolStripButton mTickToolStripButton;
-		private ToolStripButton mStepToolStripButton;
-		private ToolStripButton mRunToolStripButton;
-		private ToolStripButton mGoToolStripButton;
-		private ToolStripButton mDetachToolStripButton;
-		private ToolStripButton mResetToolStripButton;
-		private ToolStripButton mTeletypeToolStripButton;
-		private SplitContainer mSplitContainer;
-		private GroupBox mMemoryGroup;
-		private MemoryEditor mMainMemoryEditor;
-		private MemoryEditor mFloatingPointMemoryEditor;
-		readonly MemoryEditor[] mMemoryEditors;
-		private GroupBox mRegistersGroup;
-		private RegistersEditor mRegistersEditor;
-		private GroupBox mDevicesGroup;
-		private DevicesControl mDevicesControl;
-		private GroupBox mSymbolGroup;
-		private SymbolListView mSymbolListView;
-		private GroupBox mLogListGroup;
-		private LogListView mLogListView;
-		private ToolStripButton mClearBreakpointsToolStripButton;
-		private ToolStripMenuItem mClearBreakpointsToolStripMenuItem;
-		private Button mDeviceEditorButton;
-		private ToolStripMenuItem mDeviceEditorToolStripMenuItem;
-		private ToolStripCycleButton mModeCycleButton;
-		private TabControl mMemoryTabControl;
-		private TabPage mMainMemoryTab;
-		private TabPage mFloatingPointMemoryTab;
-		private ToolStripStatusLabel mModeToolStripStatusLabel;
-		private ToolStripStatusLabel mStatusToolStripStatusLabel;
-		private ToolTip mToolTip;
-		private ToolStripSeparator toolStripSeparator8;
-		private ToolStripMenuItem mFindMenuItem;
-		private ToolStripMenuItem mFindNextMenuItem;
-		private readonly DeviceEditorForm mDeviceEditor;
-		private SearchDialog mSearchDialog;
-		private ToolStripSeparator toolStripSeparator9;
-		private ToolStripMenuItem mProfilingEnabledMenuItem;
-		private ToolStripMenuItem mProfilingShowTickCountsMenuItem;
-		private ToolStripMenuItem mProfilingResetCountsMenuItem;
-		private SearchParameters mSearchOptions;
+		private IContainer _components;
+		private AboutForm _aboutForm;
+		private readonly Configuration _configuration;
+		private readonly string _defaultDirectory = Environment.CurrentDirectory;
+		private readonly Mix _mix;
+		private OpenFileDialog _openProgramFileDialog;
+		private PreferencesForm _preferencesForm;
+		private bool _readOnly;
+		private bool _running;
+		private bool _updating;
+		private ImageList _severityImageList;
+		private SourceAndFindingsForm _sourceAndFindingsForm;
+		private SteppingState _steppingState;
+		private readonly TeletypeForm _teletype;
+		private MenuStrip _mainMenuStrip;
+		private ToolStripMenuItem _fileToolStripMenuItem;
+		private ToolStripMenuItem _openProgramToolStripMenuItem;
+		private ToolStripMenuItem _exitToolStripMenuItem;
+		private ToolStripMenuItem toolsToolStripMenuItem;
+		private ToolStripMenuItem _preferencesToolStripMenuItem;
+		private ToolStripMenuItem _helpToolStripMenuItem;
+		private ToolStripMenuItem _aboutToolStripMenuItem;
+		private ToolStripMenuItem _actionsToolStripMenuItem;
+		private ToolStripMenuItem _tickToolStripMenuItem;
+		private ToolStripMenuItem _stepToolStripMenuItem;
+		private ToolStripMenuItem _runToolStripMenuItem;
+		private ToolStripMenuItem _goToolStripMenuItem;
+		private ToolStripMenuItem _detachToolStripMenuItem;
+		private ToolStripMenuItem _resetToolStripMenuItem;
+		private ToolStripMenuItem _viewToolStripMenuItem;
+		private ToolStripMenuItem _teletypeToolStripMenuItem;
+		private ToolStripContainer _toolStripContainer;
+		private StatusStrip _statusStrip;
+		private ToolStripStatusLabel _toolStripStatusLabel;
+		private readonly LongValueTextBox _pcBox;
+		private ToolStrip _controlToolStrip;
+		private ToolStripLabel _pcToolStripLabel;
+		private ToolStripButton _showPCToolStripButton;
+		private ToolStripLabel _ticksToolStripLabel;
+		private ToolStripTextBox _ticksToolStripTextBox;
+		private ToolStripButton _resetTicksToolStripButton;
+		private ToolStripButton _tickToolStripButton;
+		private ToolStripButton _stepToolStripButton;
+		private ToolStripButton _runToolStripButton;
+		private ToolStripButton _goToolStripButton;
+		private ToolStripButton _detachToolStripButton;
+		private ToolStripButton _resetToolStripButton;
+		private ToolStripButton _teletypeToolStripButton;
+		private SplitContainer _splitContainer;
+		private GroupBox _memoryGroup;
+		private MemoryEditor _mainMemoryEditor;
+		private MemoryEditor _floatingPointMemoryEditor;
+		private readonly MemoryEditor[] _memoryEditors;
+		private GroupBox _registersGroup;
+		private RegistersEditor _registersEditor;
+		private GroupBox _devicesGroup;
+		private DevicesControl _devicesControl;
+		private GroupBox _symbolGroup;
+		private SymbolListView _symbolListView;
+		private GroupBox _logListGroup;
+		private LogListView _logListView;
+		private ToolStripButton _clearBreakpointsToolStripButton;
+		private ToolStripMenuItem _clearBreakpointsToolStripMenuItem;
+		private Button _deviceEditorButton;
+		private ToolStripMenuItem _deviceEditorToolStripMenuItem;
+		private ToolStripCycleButton _modeCycleButton;
+		private TabControl _memoryTabControl;
+		private TabPage _mainMemoryTab;
+		private TabPage _floatingPointMemoryTab;
+		private ToolStripStatusLabel _modeToolStripStatusLabel;
+		private ToolStripStatusLabel _statusToolStripStatusLabel;
+		private ToolTip _toolTip;
+		private ToolStripSeparator _toolStripSeparator8;
+		private ToolStripMenuItem _findMenuItem;
+		private ToolStripMenuItem _findNextMenuItem;
+		private readonly DeviceEditorForm _deviceEditor;
+		private SearchDialog _searchDialog;
+		private ToolStripSeparator _toolStripSeparator9;
+		private ToolStripMenuItem _profilingEnabledMenuItem;
+		private ToolStripMenuItem _profilingShowTickCountsMenuItem;
+		private ToolStripMenuItem _profilingResetCountsMenuItem;
+		private SearchParameters _searchOptions;
 
 		public MixForm()
 		{
-			mConfiguration = Configuration.Load(mDefaultDirectory);
-			ExecutionSettings.ProfilingEnabled = mConfiguration.ProfilingEnabled;
-			GuiSettings.Colors = mConfiguration.Colors;
-			GuiSettings.ShowProfilingInfo = mConfiguration.ShowProfilingInfo;
-			GuiSettings.ColorProfilingCounts = mConfiguration.ColorProfilingCounts;
-			DeviceSettings.DefaultDeviceFilesDirectory = mDefaultDirectory;
-			if (mConfiguration.FloatingPointMemoryWordCount != null)
-			{
-				ModuleSettings.FloatingPointMemoryWordCount = mConfiguration.FloatingPointMemoryWordCount.Value;
-			}
+			_configuration = Configuration.Load(_defaultDirectory);
+			ExecutionSettings.ProfilingEnabled = _configuration.ProfilingEnabled;
+			GuiSettings.Colors = _configuration.Colors;
+			GuiSettings.ShowProfilingInfo = _configuration.ShowProfilingInfo;
+			GuiSettings.ColorProfilingCounts = _configuration.ColorProfilingCounts;
+			DeviceSettings.DefaultDeviceFilesDirectory = _defaultDirectory;
+
+			if (_configuration.FloatingPointMemoryWordCount != null)
+				ModuleSettings.FloatingPointMemoryWordCount = _configuration.FloatingPointMemoryWordCount.Value;
 
 			InitializeComponent();
 
-			mMemoryEditors = new MemoryEditor[2];
-			mMemoryEditors[0] = mMainMemoryEditor;
-			mMemoryEditors[1] = null;
+			_memoryEditors = new MemoryEditor[2];
+			_memoryEditors[0] = _mainMemoryEditor;
+			_memoryEditors[1] = null;
 
-			mMix = new Mix();
-			mMix.StepPerformed += Mix_StepPerformed;
-			mMix.LogLineAdded += Mix_LogLineAdded;
+			_mix = new Mix();
+			_mix.StepPerformed += Mix_StepPerformed;
+			_mix.LogLineAdded += Mix_LogLineAdded;
 
-			mPCBox = new LongValueTextBox
+			_pcBox = new LongValueTextBox
 			{
 				BackColor = Color.White,
 				BorderStyle = BorderStyle.FixedSingle,
 				ForeColor = Color.Black,
-				LongValue = mMix.ProgramCounter,
+				LongValue = _mix.ProgramCounter,
 				ClearZero = false
 			};
+
 			SetPCBoxBounds();
-			mPCBox.Name = "mPCBox";
-			mPCBox.Size = new Size(40, 25);
-			mPCBox.TabIndex = 1;
-			mPCBox.Text = "0";
-			mPCBox.ValueChanged += PcChanged;
-			mControlToolStrip.Items.Insert(1, new LongValueToolStripTextBox(mPCBox));
+			_pcBox.Name = "mPCBox";
+			_pcBox.Size = new Size(40, 25);
+			_pcBox.TabIndex = 1;
+			_pcBox.Text = "0";
+			_pcBox.ValueChanged += PcChanged;
+			_controlToolStrip.Items.Insert(1, new LongValueToolStripTextBox(_pcBox));
 
-			mRegistersEditor.Registers = mMix.Registers;
+			_registersEditor.Registers = _mix.Registers;
 
-			mMainMemoryEditor.ToolTip = mToolTip;
-			mMainMemoryEditor.Memory = mMix.FullMemory;
-			mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
-			mMainMemoryEditor.IndexedAddressCalculatorCallback = CalculateIndexedAddress;
+			_mainMemoryEditor.ToolTip = _toolTip;
+			_mainMemoryEditor.Memory = _mix.FullMemory;
+			_mainMemoryEditor.MarkedAddress = _mix.ProgramCounter;
+			_mainMemoryEditor.IndexedAddressCalculatorCallback = CalculateIndexedAddress;
 
-			mProfilingEnabledMenuItem.Checked = ExecutionSettings.ProfilingEnabled;
-			mProfilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
-			mProfilingShowTickCountsMenuItem.Checked = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick;
-			mProfilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
+			_profilingEnabledMenuItem.Checked = ExecutionSettings.ProfilingEnabled;
+			_profilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
+			_profilingShowTickCountsMenuItem.Checked = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick;
+			_profilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
 
-			mSymbolListView.MemoryMinIndex = mMix.FullMemory.MinWordIndex;
-			mSymbolListView.MemoryMaxIndex = mMix.FullMemory.MaxWordIndex;
+			_symbolListView.MemoryMinIndex = _mix.FullMemory.MinWordIndex;
+			_symbolListView.MemoryMaxIndex = _mix.FullMemory.MaxWordIndex;
 
 			var layoutStructure = new DevicesControl.LayoutStructure(DevicesControl.Orientations.Horizontal, 8, 4);
 			layoutStructure[8] = DevicesControl.Breaks.Sequence;
 			layoutStructure[16] = DevicesControl.Breaks.Section;
 			layoutStructure[18] = DevicesControl.Breaks.Sequence;
 
-			mDevicesControl.ToolTip = mToolTip;
-			mDevicesControl.Structure = layoutStructure;
-			mDevicesControl.Devices = mMix.Devices;
-			mDevicesControl.DeviceDoubleClick += DevicesControl_DeviceDoubleClick;
+			_devicesControl.ToolTip = _toolTip;
+			_devicesControl.Structure = layoutStructure;
+			_devicesControl.Devices = _mix.Devices;
+			_devicesControl.DeviceDoubleClick += DevicesControl_DeviceDoubleClick;
 
-			mTeletype = new TeletypeForm(mMix.Devices.Teletype);
-			mTeletype.VisibleChanged += Teletype_VisibleChanged;
+			_teletype = new TeletypeForm(_mix.Devices.Teletype);
+			_teletype.VisibleChanged += Teletype_VisibleChanged;
 
-			if (mConfiguration.TeletypeWindowLocation != Point.Empty)
-			{
-				mTeletype.Location = mConfiguration.TeletypeWindowLocation;
-			}
+			if (_configuration.TeletypeWindowLocation != Point.Empty)
+				_teletype.Location = _configuration.TeletypeWindowLocation;
 
-			if (mConfiguration.TeletypeWindowSize != Size.Empty)
-			{
-				mTeletype.Size = mConfiguration.TeletypeWindowSize;
-			}
+			if (_configuration.TeletypeWindowSize != Size.Empty)
+				_teletype.Size = _configuration.TeletypeWindowSize;
 
-			mTeletype.TopMost = mConfiguration.TeletypeOnTop;
-			mTeletype.EchoInput = mConfiguration.TeletypeEchoInput;
+			_teletype.TopMost = _configuration.TeletypeOnTop;
+			_teletype.EchoInput = _configuration.TeletypeEchoInput;
 
-			mTeletype.AddOutputText("*** MIX TELETYPE INITIALIZED ***");
+			_teletype.AddOutputText("*** MIX TELETYPE INITIALIZED ***");
 
-			if (mConfiguration.TeletypeVisible)
-			{
-				mTeletype.Show();
-			}
+			if (_configuration.TeletypeVisible)
+				_teletype.Show();
 
-			CardDeckExporter.LoaderCards = mConfiguration.LoaderCards;
+			CardDeckExporter.LoaderCards = _configuration.LoaderCards;
 			UpdateDeviceConfig();
 
-			mDeviceEditor = new DeviceEditorForm(mMix.Devices);
-			mDeviceEditor.VisibleChanged += DeviceEditor_VisibleChanged;
+			_deviceEditor = new DeviceEditorForm(_mix.Devices);
+			_deviceEditor.VisibleChanged += DeviceEditor_VisibleChanged;
 
-			if (mConfiguration.DeviceEditorWindowLocation != Point.Empty)
-			{
-				mDeviceEditor.Location = mConfiguration.DeviceEditorWindowLocation;
-			}
+			if (_configuration.DeviceEditorWindowLocation != Point.Empty)
+				_deviceEditor.Location = _configuration.DeviceEditorWindowLocation;
 
-			if (mConfiguration.DeviceEditorWindowSize != Size.Empty)
-			{
-				mDeviceEditor.Size = mConfiguration.DeviceEditorWindowSize;
-			}
+			if (_configuration.DeviceEditorWindowSize != Size.Empty)
+				_deviceEditor.Size = _configuration.DeviceEditorWindowSize;
 
-			if (mConfiguration.DeviceEditorVisible)
-			{
-				mDeviceEditor.Show();
-			}
+			if (_configuration.DeviceEditorVisible)
+				_deviceEditor.Show();
 
-			mMix.Devices.Teletype.InputRequired += Mix_InputRequired;
-			mMix.BreakpointManager = mMainMemoryEditor;
+			_mix.Devices.Teletype.InputRequired += Mix_InputRequired;
+			_mix.BreakpointManager = _mainMemoryEditor;
 
 			LoadControlProgram();
 			ApplyFloatingPointSettings();
 
-			mOpenProgramFileDialog = null;
-			mSourceAndFindingsForm = null;
-			mReadOnly = false;
-			mRunning = false;
-			mSteppingState = SteppingState.Idle;
+			_openProgramFileDialog = null;
+			_sourceAndFindingsForm = null;
+			_readOnly = false;
+			_running = false;
+			_steppingState = SteppingState.Idle;
 
 			var symbols = new SymbolCollection();
-			mSymbolListView.Symbols = symbols;
-			mMainMemoryEditor.Symbols = symbols;
+			_symbolListView.Symbols = symbols;
+			_mainMemoryEditor.Symbols = symbols;
 
-			var controlStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Control);
-			var normalStep = mModeCycleButton.AddStep(ModuleBase.RunMode.Normal, controlStep);
-			mModeCycleButton.AddStep(ModuleBase.RunMode.Module, normalStep);
+			var controlStep = _modeCycleButton.AddStep(ModuleBase.RunMode.Control);
+			var normalStep = _modeCycleButton.AddStep(ModuleBase.RunMode.Normal, controlStep);
+			_modeCycleButton.AddStep(ModuleBase.RunMode.Module, normalStep);
 			controlStep.NextStep = normalStep;
 
-			mModeCycleButton.Value = mMix.Mode;
-			mModeCycleButton.ValueChanged += ModeCycleButton_ValueChanged;
+			_modeCycleButton.Value = _mix.Mode;
+			_modeCycleButton.ValueChanged += ModeCycleButton_ValueChanged;
 
 			Update();
 
-			if (mConfiguration.MainWindowLocation != Point.Empty)
-			{
-				Location = mConfiguration.MainWindowLocation;
-			}
+			if (_configuration.MainWindowLocation != Point.Empty)
+				Location = _configuration.MainWindowLocation;
 
-			if (mConfiguration.MainWindowSize != Size.Empty)
-			{
-				Size = mConfiguration.MainWindowSize;
-			}
+			if (_configuration.MainWindowSize != Size.Empty)
+				Size = _configuration.MainWindowSize;
 
-			WindowState = mConfiguration.MainWindowState;
-			SizeChanged += SizeChangedHandler;
-			LocationChanged += LocationChangedHandler;
+			WindowState = _configuration.MainWindowState;
+			SizeChanged += This_SizeChanged;
+			LocationChanged += This_LocationChanged;
 		}
 
-		MemoryEditor ActiveMemoryEditor => mMemoryEditors[mMemoryTabControl.SelectedIndex];
+		private MemoryEditor ActiveMemoryEditor => _memoryEditors[_memoryTabControl.SelectedIndex];
 
-		void FindNext()
+		private void FindNext() => ActiveMemoryEditor.FindMatch(_searchOptions);
+
+		private int CalculateIndexedAddress(int address, int index) => InstructionHelpers.GetValidIndexedAddress(_mix, address, index, false);
+
+		private void SetPCBoxBounds()
 		{
-			ActiveMemoryEditor.FindMatch(mSearchOptions);
+			_pcBox.MinValue = _mix.Memory.MinWordIndex;
+			_pcBox.MaxValue = _mix.Memory.MaxWordIndex;
 		}
 
-		int CalculateIndexedAddress(int address, int index)
+		private void ApplyFloatingPointSettings()
 		{
-			return InstructionHelpers.GetValidIndexedAddress(mMix, address, index, false);
-		}
+			_mix.SetFloatingPointModuleEnabled(ModuleSettings.FloatingPointEnabled);
 
-		void SetPCBoxBounds()
-		{
-			mPCBox.MinValue = mMix.Memory.MinWordIndex;
-			mPCBox.MaxValue = mMix.Memory.MaxWordIndex;
-		}
-
-		void ApplyFloatingPointSettings()
-		{
-			mMix.SetFloatingPointModuleEnabled(ModuleSettings.FloatingPointEnabled);
 			if (ModuleSettings.FloatingPointEnabled)
-			{
-				LoadModuleProgram(mMix.FloatingPointModule, ModuleSettings.FloatingPointProgramFile, "floating point");
-			}
+				LoadModuleProgram(_mix.FloatingPointModule, ModuleSettings.FloatingPointProgramFile, "floating point");
 		}
 
-		void LoadControlProgram()
+		private void LoadControlProgram()
 		{
 			string controlProgramFileName = ModuleSettings.ControlProgramFile;
 
 			if (string.IsNullOrEmpty(controlProgramFileName) || !File.Exists(controlProgramFileName))
-			{
 				return;
-			}
 
-			LoadModuleProgram(mMix, controlProgramFileName, "control");
-			mMix.FullMemory.ClearSourceLines();
+			LoadModuleProgram(_mix, controlProgramFileName, "control");
+			_mix.FullMemory.ClearSourceLines();
 		}
 
-		SymbolCollection LoadModuleProgram(ModuleBase module, string fileName, string programName)
+		private SymbolCollection LoadModuleProgram(ModuleBase module, string fileName, string programName)
 		{
 			try
 			{
-
 				var instances = Assembler.Assemble(File.ReadAllLines(fileName), out PreInstruction[] instructions, out SymbolCollection symbols, out AssemblyFindingCollection findings);
 				if (instances != null)
 				{
 					if (!module.LoadInstructionInstances(instances, symbols))
-					{
-						mLogListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to load {0} program", programName)));
-					}
+						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to load {0} program", programName)));
 				}
 				else
 				{
 					if (findings != null)
 					{
-						mLogListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Parse failed", string.Format("Error(s) occured while assembling {0} program", programName)));
+						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Parse failed", string.Format("Error(s) occured while assembling {0} program", programName)));
 						foreach (AssemblyFinding finding in findings)
-						{
-							mLogListView.AddLogLine(new LogLine("Assembler", finding.Severity, "Parse error", finding.LineNumber == int.MinValue ? finding.Message : string.Format("Line {0}: {1}", finding.LineNumber, finding.Message)));
-						}
+							_logListView.AddLogLine(new LogLine("Assembler", finding.Severity, "Parse error", finding.LineNumber == int.MinValue ? finding.Message : string.Format("Line {0}: {1}", finding.LineNumber, finding.Message)));
 					}
-					mLogListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to assemble {0} program", programName)));
+					_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to assemble {0} program", programName)));
 
 					return symbols;
 
@@ -330,17 +301,17 @@ namespace MixGui
 			}
 			catch (Exception ex)
 			{
-				mLogListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to read {0} program: {1}", programName, ex.Message)));
+				_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to read {0} program: {1}", programName, ex.Message)));
 			}
 
 			return null;
 		}
 
-		bool DisableTeletypeOnTop()
+		private bool DisableTeletypeOnTop()
 		{
-			if (mTeletype != null && mTeletype.Visible && mTeletype.TopMost)
+			if (_teletype != null && _teletype.Visible && _teletype.TopMost)
 			{
-				mTeletype.TopMost = false;
+				_teletype.TopMost = false;
 				return true;
 			}
 
@@ -351,14 +322,14 @@ namespace MixGui
 		{
 			if (disposing)
 			{
-				components?.Dispose();
-				mMix?.Dispose();
+				_components?.Dispose();
+				_mix?.Dispose();
 			}
 
 			base.Dispose(disposing);
 		}
 
-		static void HandleException(Exception exception)
+		private static void HandleException(Exception exception)
 		{
 			Exception handlingException = null;
 			var path = Path.Combine(Environment.CurrentDirectory, "exception.log");
@@ -370,18 +341,14 @@ namespace MixGui
 				writer.WriteLine("  Stack trace: " + exception.StackTrace);
 
 				if (exception.InnerException != null)
-				{
 					writer.WriteLine("  Inner exception: " + exception.InnerException);
-				}
 
 				if (exception.Data.Count > 0)
 				{
 					writer.WriteLine("  Exception data:");
 
 					foreach (DictionaryEntry entry in exception.Data)
-					{
 						writer.WriteLine(string.Concat(new object[] { "  * ", entry.Key, " = ", entry.Value }));
-					}
 				}
 
 				writer.WriteLine();
@@ -395,9 +362,8 @@ namespace MixGui
 			var text = string.Concat(new object[] { "I'm sorry, MixEmul seems to have encountered a fatal problem.\nAn unhandled error of type ", exception.GetType().Name, " occured, with message: ", exception.Message, '\n' });
 
 			if (handlingException == null)
-			{
 				text = text + "A detailed error log has been written to the following location: " + path + ".\nPlease attach this file when reporting the error.";
-			}
+
 			else
 			{
 				string str3 = text;
@@ -408,21 +374,19 @@ namespace MixGui
 			Application.Exit();
 		}
 
-		void ImplementPCChange(int address)
+		private void ImplementPCChange(int address)
 		{
-			if (mMainMemoryEditor.IsAddressVisible(mMix.ProgramCounter))
-			{
-				mMainMemoryEditor.MakeAddressVisible(address, mMix.Status == ModuleBase.RunStatus.Idle);
-			}
+			if (_mainMemoryEditor.IsAddressVisible(_mix.ProgramCounter))
+				_mainMemoryEditor.MakeAddressVisible(address, _mix.Status == ModuleBase.RunStatus.Idle);
 
-			mMix.ProgramCounter = address;
-			mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
-			mPCBox.LongValue = mMix.ProgramCounter;
+			_mix.ProgramCounter = address;
+			_mainMemoryEditor.MarkedAddress = _mix.ProgramCounter;
+			_pcBox.LongValue = _mix.ProgramCounter;
 		}
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
-			components = new Container();
+			_components = new Container();
 			ToolStripSeparator fileMenuToolStripSeparator;
 			ToolStripSeparator toolStripSeparator1;
 			ToolStripSeparator toolStripSeparator2;
@@ -433,69 +397,69 @@ namespace MixGui
 			ToolStripSeparator toolStripSeparator7;
 			var resources = new ComponentResourceManager(typeof(MixForm));
 			var registers1 = new Registers();
-			mSeverityImageList = new ImageList(components);
-			mMainMenuStrip = new MenuStrip();
-			mFileToolStripMenuItem = new ToolStripMenuItem();
-			mOpenProgramToolStripMenuItem = new ToolStripMenuItem();
-			mExitToolStripMenuItem = new ToolStripMenuItem();
-			mViewToolStripMenuItem = new ToolStripMenuItem();
-			mTeletypeToolStripMenuItem = new ToolStripMenuItem();
-			mDeviceEditorToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator8 = new ToolStripSeparator();
-			mFindMenuItem = new ToolStripMenuItem();
-			mFindNextMenuItem = new ToolStripMenuItem();
-			mActionsToolStripMenuItem = new ToolStripMenuItem();
-			mTickToolStripMenuItem = new ToolStripMenuItem();
-			mStepToolStripMenuItem = new ToolStripMenuItem();
-			mRunToolStripMenuItem = new ToolStripMenuItem();
-			mGoToolStripMenuItem = new ToolStripMenuItem();
-			mDetachToolStripMenuItem = new ToolStripMenuItem();
-			mClearBreakpointsToolStripMenuItem = new ToolStripMenuItem();
-			mResetToolStripMenuItem = new ToolStripMenuItem();
-			mToolsToolStripMenuItem = new ToolStripMenuItem();
-			mPreferencesToolStripMenuItem = new ToolStripMenuItem();
-			toolStripSeparator9 = new ToolStripSeparator();
-			mProfilingEnabledMenuItem = new ToolStripMenuItem();
-			mProfilingShowTickCountsMenuItem = new ToolStripMenuItem();
-			mHelpToolStripMenuItem = new ToolStripMenuItem();
-			mAboutToolStripMenuItem = new ToolStripMenuItem();
-			mToolStripContainer = new ToolStripContainer();
-			mStatusStrip = new StatusStrip();
-			mModeToolStripStatusLabel = new ToolStripStatusLabel();
-			mModeCycleButton = new ToolStripCycleButton(components);
-			mStatusToolStripStatusLabel = new ToolStripStatusLabel();
-			mToolStripStatusLabel = new ToolStripStatusLabel();
-			mSplitContainer = new SplitContainer();
-			mMemoryGroup = new GroupBox();
-			mMemoryTabControl = new TabControl();
-			mMainMemoryTab = new TabPage();
-			mMainMemoryEditor = new MemoryEditor();
-			mFloatingPointMemoryTab = new TabPage();
-			mRegistersGroup = new GroupBox();
-			mRegistersEditor = new RegistersEditor();
-			mDevicesGroup = new GroupBox();
-			mDeviceEditorButton = new Button();
-			mDevicesControl = new DevicesControl();
-			mSymbolGroup = new GroupBox();
-			mSymbolListView = new SymbolListView();
-			mLogListGroup = new GroupBox();
-			mLogListView = new LogListView();
-			mControlToolStrip = new ToolStrip();
-			mPCToolStripLabel = new ToolStripLabel();
-			mShowPCToolStripButton = new ToolStripButton();
-			mTicksToolStripLabel = new ToolStripLabel();
-			mTicksToolStripTextBox = new ToolStripTextBox();
-			mResetTicksToolStripButton = new ToolStripButton();
-			mTickToolStripButton = new ToolStripButton();
-			mStepToolStripButton = new ToolStripButton();
-			mRunToolStripButton = new ToolStripButton();
-			mGoToolStripButton = new ToolStripButton();
-			mDetachToolStripButton = new ToolStripButton();
-			mClearBreakpointsToolStripButton = new ToolStripButton();
-			mResetToolStripButton = new ToolStripButton();
-			mTeletypeToolStripButton = new ToolStripButton();
-			mToolTip = new ToolTip(components);
-			mProfilingResetCountsMenuItem = new ToolStripMenuItem();
+			_severityImageList = new ImageList(_components);
+			_mainMenuStrip = new MenuStrip();
+			_fileToolStripMenuItem = new ToolStripMenuItem();
+			_openProgramToolStripMenuItem = new ToolStripMenuItem();
+			_exitToolStripMenuItem = new ToolStripMenuItem();
+			_viewToolStripMenuItem = new ToolStripMenuItem();
+			_teletypeToolStripMenuItem = new ToolStripMenuItem();
+			_deviceEditorToolStripMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator8 = new ToolStripSeparator();
+			_findMenuItem = new ToolStripMenuItem();
+			_findNextMenuItem = new ToolStripMenuItem();
+			_actionsToolStripMenuItem = new ToolStripMenuItem();
+			_tickToolStripMenuItem = new ToolStripMenuItem();
+			_stepToolStripMenuItem = new ToolStripMenuItem();
+			_runToolStripMenuItem = new ToolStripMenuItem();
+			_goToolStripMenuItem = new ToolStripMenuItem();
+			_detachToolStripMenuItem = new ToolStripMenuItem();
+			_clearBreakpointsToolStripMenuItem = new ToolStripMenuItem();
+			_resetToolStripMenuItem = new ToolStripMenuItem();
+			toolsToolStripMenuItem = new ToolStripMenuItem();
+			_preferencesToolStripMenuItem = new ToolStripMenuItem();
+			_toolStripSeparator9 = new ToolStripSeparator();
+			_profilingEnabledMenuItem = new ToolStripMenuItem();
+			_profilingShowTickCountsMenuItem = new ToolStripMenuItem();
+			_helpToolStripMenuItem = new ToolStripMenuItem();
+			_aboutToolStripMenuItem = new ToolStripMenuItem();
+			_toolStripContainer = new ToolStripContainer();
+			_statusStrip = new StatusStrip();
+			_modeToolStripStatusLabel = new ToolStripStatusLabel();
+			_modeCycleButton = new ToolStripCycleButton(_components);
+			_statusToolStripStatusLabel = new ToolStripStatusLabel();
+			_toolStripStatusLabel = new ToolStripStatusLabel();
+			_splitContainer = new SplitContainer();
+			_memoryGroup = new GroupBox();
+			_memoryTabControl = new TabControl();
+			_mainMemoryTab = new TabPage();
+			_mainMemoryEditor = new MemoryEditor();
+			_floatingPointMemoryTab = new TabPage();
+			_registersGroup = new GroupBox();
+			_registersEditor = new RegistersEditor();
+			_devicesGroup = new GroupBox();
+			_deviceEditorButton = new Button();
+			_devicesControl = new DevicesControl();
+			_symbolGroup = new GroupBox();
+			_symbolListView = new SymbolListView();
+			_logListGroup = new GroupBox();
+			_logListView = new LogListView();
+			_controlToolStrip = new ToolStrip();
+			_pcToolStripLabel = new ToolStripLabel();
+			_showPCToolStripButton = new ToolStripButton();
+			_ticksToolStripLabel = new ToolStripLabel();
+			_ticksToolStripTextBox = new ToolStripTextBox();
+			_resetTicksToolStripButton = new ToolStripButton();
+			_tickToolStripButton = new ToolStripButton();
+			_stepToolStripButton = new ToolStripButton();
+			_runToolStripButton = new ToolStripButton();
+			_goToolStripButton = new ToolStripButton();
+			_detachToolStripButton = new ToolStripButton();
+			_clearBreakpointsToolStripButton = new ToolStripButton();
+			_resetToolStripButton = new ToolStripButton();
+			_teletypeToolStripButton = new ToolStripButton();
+			_toolTip = new ToolTip(_components);
+			_profilingResetCountsMenuItem = new ToolStripMenuItem();
 			fileMenuToolStripSeparator = new ToolStripSeparator();
 			toolStripSeparator1 = new ToolStripSeparator();
 			toolStripSeparator2 = new ToolStripSeparator();
@@ -504,23 +468,23 @@ namespace MixGui
 			toolStripSeparator5 = new ToolStripSeparator();
 			toolStripSeparator6 = new ToolStripSeparator();
 			toolStripSeparator7 = new ToolStripSeparator();
-			mMainMenuStrip.SuspendLayout();
-			mToolStripContainer.BottomToolStripPanel.SuspendLayout();
-			mToolStripContainer.ContentPanel.SuspendLayout();
-			mToolStripContainer.TopToolStripPanel.SuspendLayout();
-			mToolStripContainer.SuspendLayout();
-			mStatusStrip.SuspendLayout();
-			mSplitContainer.Panel1.SuspendLayout();
-			mSplitContainer.Panel2.SuspendLayout();
-			mSplitContainer.SuspendLayout();
-			mMemoryGroup.SuspendLayout();
-			mMemoryTabControl.SuspendLayout();
-			mMainMemoryTab.SuspendLayout();
-			mRegistersGroup.SuspendLayout();
-			mDevicesGroup.SuspendLayout();
-			mSymbolGroup.SuspendLayout();
-			mLogListGroup.SuspendLayout();
-			mControlToolStrip.SuspendLayout();
+			_mainMenuStrip.SuspendLayout();
+			_toolStripContainer.BottomToolStripPanel.SuspendLayout();
+			_toolStripContainer.ContentPanel.SuspendLayout();
+			_toolStripContainer.TopToolStripPanel.SuspendLayout();
+			_toolStripContainer.SuspendLayout();
+			_statusStrip.SuspendLayout();
+			_splitContainer.Panel1.SuspendLayout();
+			_splitContainer.Panel2.SuspendLayout();
+			_splitContainer.SuspendLayout();
+			_memoryGroup.SuspendLayout();
+			_memoryTabControl.SuspendLayout();
+			_mainMemoryTab.SuspendLayout();
+			_registersGroup.SuspendLayout();
+			_devicesGroup.SuspendLayout();
+			_symbolGroup.SuspendLayout();
+			_logListGroup.SuspendLayout();
+			_controlToolStrip.SuspendLayout();
 			SuspendLayout();
 			// 
 			// fileMenuToolStripSeparator
@@ -565,751 +529,750 @@ namespace MixGui
 			// 
 			// mSeverityImageList
 			// 
-			mSeverityImageList.ImageStream = ((ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
-			mSeverityImageList.TransparentColor = Color.Transparent;
-			mSeverityImageList.Images.SetKeyName(0, "");
-			mSeverityImageList.Images.SetKeyName(1, "");
-			mSeverityImageList.Images.SetKeyName(2, "");
-			mSeverityImageList.Images.SetKeyName(3, "");
+			_severityImageList.ImageStream = ((ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
+			_severityImageList.TransparentColor = Color.Transparent;
+			_severityImageList.Images.SetKeyName(0, "");
+			_severityImageList.Images.SetKeyName(1, "");
+			_severityImageList.Images.SetKeyName(2, "");
+			_severityImageList.Images.SetKeyName(3, "");
 			// 
 			// mMainMenuStrip
 			// 
-			mMainMenuStrip.Dock = DockStyle.None;
-			mMainMenuStrip.Items.AddRange(new ToolStripItem[] {
-						mFileToolStripMenuItem,
-						mViewToolStripMenuItem,
-						mActionsToolStripMenuItem,
-						mToolsToolStripMenuItem,
-						mHelpToolStripMenuItem});
-			mMainMenuStrip.Location = new Point(0, 0);
-			mMainMenuStrip.Name = "mMainMenuStrip";
-			mMainMenuStrip.Size = new Size(804, 24);
-			mMainMenuStrip.TabIndex = 0;
-			mMainMenuStrip.Text = "Main Menu";
+			_mainMenuStrip.Dock = DockStyle.None;
+			_mainMenuStrip.Items.AddRange(new ToolStripItem[] {
+						_fileToolStripMenuItem,
+						_viewToolStripMenuItem,
+						_actionsToolStripMenuItem,
+						toolsToolStripMenuItem,
+						_helpToolStripMenuItem});
+			_mainMenuStrip.Location = new Point(0, 0);
+			_mainMenuStrip.Name = "mMainMenuStrip";
+			_mainMenuStrip.Size = new Size(804, 24);
+			_mainMenuStrip.TabIndex = 0;
+			_mainMenuStrip.Text = "Main Menu";
 			// 
 			// mFileToolStripMenuItem
 			// 
-			mFileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						mOpenProgramToolStripMenuItem,
+			_fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+						_openProgramToolStripMenuItem,
 						fileMenuToolStripSeparator,
-						mExitToolStripMenuItem});
-			mFileToolStripMenuItem.Name = "mFileToolStripMenuItem";
-			mFileToolStripMenuItem.Size = new Size(37, 20);
-			mFileToolStripMenuItem.Text = "&File";
+						_exitToolStripMenuItem});
+			_fileToolStripMenuItem.Name = "mFileToolStripMenuItem";
+			_fileToolStripMenuItem.Size = new Size(37, 20);
+			_fileToolStripMenuItem.Text = "&File";
 			// 
 			// mOpenProgramToolStripMenuItem
 			// 
-			mOpenProgramToolStripMenuItem.Image = ((Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
-			mOpenProgramToolStripMenuItem.Name = "mOpenProgramToolStripMenuItem";
-			mOpenProgramToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.O);
-			mOpenProgramToolStripMenuItem.Size = new Size(204, 22);
-			mOpenProgramToolStripMenuItem.Text = "&Open program...";
-			mOpenProgramToolStripMenuItem.Click += OpenProgramMenuItem_Click;
+			_openProgramToolStripMenuItem.Image = ((Image)(resources.GetObject("mOpenProgramToolStripMenuItem.Image")));
+			_openProgramToolStripMenuItem.Name = "mOpenProgramToolStripMenuItem";
+			_openProgramToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.O);
+			_openProgramToolStripMenuItem.Size = new Size(204, 22);
+			_openProgramToolStripMenuItem.Text = "&Open program...";
+			_openProgramToolStripMenuItem.Click += OpenProgramMenuItem_Click;
 			// 
 			// mExitToolStripMenuItem
 			// 
-			mExitToolStripMenuItem.Name = "mExitToolStripMenuItem";
-			mExitToolStripMenuItem.Size = new Size(204, 22);
-			mExitToolStripMenuItem.Text = "E&xit";
-			mExitToolStripMenuItem.Click += ExitMenuItem_Click;
+			_exitToolStripMenuItem.Name = "mExitToolStripMenuItem";
+			_exitToolStripMenuItem.Size = new Size(204, 22);
+			_exitToolStripMenuItem.Text = "E&xit";
+			_exitToolStripMenuItem.Click += ExitMenuItem_Click;
 			// 
 			// mViewToolStripMenuItem
 			// 
-			mViewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						mTeletypeToolStripMenuItem,
-						mDeviceEditorToolStripMenuItem,
-						toolStripSeparator8,
-						mFindMenuItem,
-						mFindNextMenuItem});
-			mViewToolStripMenuItem.Name = "mViewToolStripMenuItem";
-			mViewToolStripMenuItem.Size = new Size(44, 20);
-			mViewToolStripMenuItem.Text = "&View";
+			_viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+						_teletypeToolStripMenuItem,
+						_deviceEditorToolStripMenuItem,
+						_toolStripSeparator8,
+						_findMenuItem,
+						_findNextMenuItem});
+			_viewToolStripMenuItem.Name = "mViewToolStripMenuItem";
+			_viewToolStripMenuItem.Size = new Size(44, 20);
+			_viewToolStripMenuItem.Text = "&View";
 			// 
 			// mTeletypeToolStripMenuItem
 			// 
-			mTeletypeToolStripMenuItem.Image = ((Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
-			mTeletypeToolStripMenuItem.Name = "mTeletypeToolStripMenuItem";
-			mTeletypeToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.T);
-			mTeletypeToolStripMenuItem.Size = new Size(215, 22);
-			mTeletypeToolStripMenuItem.Text = "&Show Teletype";
-			mTeletypeToolStripMenuItem.Click += TeletypeItem_Click;
+			_teletypeToolStripMenuItem.Image = ((Image)(resources.GetObject("mTeletypeToolStripMenuItem.Image")));
+			_teletypeToolStripMenuItem.Name = "mTeletypeToolStripMenuItem";
+			_teletypeToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.T);
+			_teletypeToolStripMenuItem.Size = new Size(215, 22);
+			_teletypeToolStripMenuItem.Text = "&Show Teletype";
+			_teletypeToolStripMenuItem.Click += TeletypeItem_Click;
 			// 
 			// mDeviceEditorToolStripMenuItem
 			// 
-			mDeviceEditorToolStripMenuItem.Image = ((Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
-			mDeviceEditorToolStripMenuItem.Name = "mDeviceEditorToolStripMenuItem";
-			mDeviceEditorToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.E);
-			mDeviceEditorToolStripMenuItem.Size = new Size(215, 22);
-			mDeviceEditorToolStripMenuItem.Text = "Show &Device Editor";
-			mDeviceEditorToolStripMenuItem.Click += DeviceEditorItem_Click;
+			_deviceEditorToolStripMenuItem.Image = ((Image)(resources.GetObject("mDeviceEditorToolStripMenuItem.Image")));
+			_deviceEditorToolStripMenuItem.Name = "mDeviceEditorToolStripMenuItem";
+			_deviceEditorToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.E);
+			_deviceEditorToolStripMenuItem.Size = new Size(215, 22);
+			_deviceEditorToolStripMenuItem.Text = "Show &Device Editor";
+			_deviceEditorToolStripMenuItem.Click += DeviceEditorItem_Click;
 			// 
 			// toolStripSeparator8
 			// 
-			toolStripSeparator8.Name = "toolStripSeparator8";
-			toolStripSeparator8.Size = new Size(212, 6);
+			_toolStripSeparator8.Name = "toolStripSeparator8";
+			_toolStripSeparator8.Size = new Size(212, 6);
 			// 
 			// mFindMenuItem
 			// 
-			mFindMenuItem.Image = Properties.Resources.Find_5650;
-			mFindMenuItem.Name = "mFindMenuItem";
-			mFindMenuItem.ShortcutKeys = (Keys.Control | Keys.F);
-			mFindMenuItem.Size = new Size(215, 22);
-			mFindMenuItem.Text = "Find in memory...";
-			mFindMenuItem.Click += FindMenuItem_Click;
+			_findMenuItem.Image = Properties.Resources.Find_5650;
+			_findMenuItem.Name = "mFindMenuItem";
+			_findMenuItem.ShortcutKeys = (Keys.Control | Keys.F);
+			_findMenuItem.Size = new Size(215, 22);
+			_findMenuItem.Text = "Find in memory...";
+			_findMenuItem.Click += FindMenuItem_Click;
 			// 
 			// mFindNextMenuItem
 			// 
-			mFindNextMenuItem.Name = "mFindNextMenuItem";
-			mFindNextMenuItem.ShortcutKeys = Keys.F3;
-			mFindNextMenuItem.Size = new Size(215, 22);
-			mFindNextMenuItem.Text = "Find next";
-			mFindNextMenuItem.Click += FindNextMenuItem_Click;
+			_findNextMenuItem.Name = "mFindNextMenuItem";
+			_findNextMenuItem.ShortcutKeys = Keys.F3;
+			_findNextMenuItem.Size = new Size(215, 22);
+			_findNextMenuItem.Text = "Find next";
+			_findNextMenuItem.Click += FindNextMenuItem_Click;
 			// 
 			// mActionsToolStripMenuItem
 			// 
-			mActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						mTickToolStripMenuItem,
-						mStepToolStripMenuItem,
-						mRunToolStripMenuItem,
-						mGoToolStripMenuItem,
+			_actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+						_tickToolStripMenuItem,
+						_stepToolStripMenuItem,
+						_runToolStripMenuItem,
+						_goToolStripMenuItem,
 						toolStripSeparator1,
-						mDetachToolStripMenuItem,
+						_detachToolStripMenuItem,
 						toolStripSeparator2,
-						mClearBreakpointsToolStripMenuItem,
-						mResetToolStripMenuItem});
-			mActionsToolStripMenuItem.Name = "mActionsToolStripMenuItem";
-			mActionsToolStripMenuItem.Size = new Size(59, 20);
-			mActionsToolStripMenuItem.Text = "&Actions";
+						_clearBreakpointsToolStripMenuItem,
+						_resetToolStripMenuItem});
+			_actionsToolStripMenuItem.Name = "mActionsToolStripMenuItem";
+			_actionsToolStripMenuItem.Size = new Size(59, 20);
+			_actionsToolStripMenuItem.Text = "&Actions";
 			// 
 			// mTickToolStripMenuItem
 			// 
-			mTickToolStripMenuItem.Image = ((Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
-			mTickToolStripMenuItem.Name = "mTickToolStripMenuItem";
-			mTickToolStripMenuItem.ShortcutKeys = Keys.F11;
-			mTickToolStripMenuItem.Size = new Size(207, 22);
-			mTickToolStripMenuItem.Text = "T&ick";
-			mTickToolStripMenuItem.Click += TickItem_Click;
+			_tickToolStripMenuItem.Image = ((Image)(resources.GetObject("mTickToolStripMenuItem.Image")));
+			_tickToolStripMenuItem.Name = "mTickToolStripMenuItem";
+			_tickToolStripMenuItem.ShortcutKeys = Keys.F11;
+			_tickToolStripMenuItem.Size = new Size(207, 22);
+			_tickToolStripMenuItem.Text = "T&ick";
+			_tickToolStripMenuItem.Click += TickItem_Click;
 			// 
 			// mStepToolStripMenuItem
 			// 
-			mStepToolStripMenuItem.Image = ((Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
-			mStepToolStripMenuItem.Name = "mStepToolStripMenuItem";
-			mStepToolStripMenuItem.ShortcutKeys = Keys.F10;
-			mStepToolStripMenuItem.Size = new Size(207, 22);
-			mStepToolStripMenuItem.Text = "&Step";
-			mStepToolStripMenuItem.Click += StepItem_Click;
+			_stepToolStripMenuItem.Image = ((Image)(resources.GetObject("mStepToolStripMenuItem.Image")));
+			_stepToolStripMenuItem.Name = "mStepToolStripMenuItem";
+			_stepToolStripMenuItem.ShortcutKeys = Keys.F10;
+			_stepToolStripMenuItem.Size = new Size(207, 22);
+			_stepToolStripMenuItem.Text = "&Step";
+			_stepToolStripMenuItem.Click += StepItem_Click;
 			// 
 			// mRunToolStripMenuItem
 			// 
-			mRunToolStripMenuItem.Image = ((Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
-			mRunToolStripMenuItem.Name = "mRunToolStripMenuItem";
-			mRunToolStripMenuItem.ShortcutKeys = Keys.F5;
-			mRunToolStripMenuItem.Size = new Size(207, 22);
-			mRunToolStripMenuItem.Text = "R&un";
-			mRunToolStripMenuItem.Click += RunItem_Click;
+			_runToolStripMenuItem.Image = ((Image)(resources.GetObject("mRunToolStripMenuItem.Image")));
+			_runToolStripMenuItem.Name = "mRunToolStripMenuItem";
+			_runToolStripMenuItem.ShortcutKeys = Keys.F5;
+			_runToolStripMenuItem.Size = new Size(207, 22);
+			_runToolStripMenuItem.Text = "R&un";
+			_runToolStripMenuItem.Click += RunItem_Click;
 			// 
 			// mGoToolStripMenuItem
 			// 
-			mGoToolStripMenuItem.Image = ((Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
-			mGoToolStripMenuItem.Name = "mGoToolStripMenuItem";
-			mGoToolStripMenuItem.ShortcutKeys = (Keys.Shift | Keys.F5);
-			mGoToolStripMenuItem.Size = new Size(207, 22);
-			mGoToolStripMenuItem.Text = "&Go";
-			mGoToolStripMenuItem.Click += GoItem_Click;
+			_goToolStripMenuItem.Image = ((Image)(resources.GetObject("mGoToolStripMenuItem.Image")));
+			_goToolStripMenuItem.Name = "mGoToolStripMenuItem";
+			_goToolStripMenuItem.ShortcutKeys = (Keys.Shift | Keys.F5);
+			_goToolStripMenuItem.Size = new Size(207, 22);
+			_goToolStripMenuItem.Text = "&Go";
+			_goToolStripMenuItem.Click += GoItem_Click;
 			// 
 			// mDetachToolStripMenuItem
 			// 
-			mDetachToolStripMenuItem.Name = "mDetachToolStripMenuItem";
-			mDetachToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.D);
-			mDetachToolStripMenuItem.Size = new Size(207, 22);
-			mDetachToolStripMenuItem.Text = "&Detach";
-			mDetachToolStripMenuItem.Click += DetachItem_Click;
+			_detachToolStripMenuItem.Name = "mDetachToolStripMenuItem";
+			_detachToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.D);
+			_detachToolStripMenuItem.Size = new Size(207, 22);
+			_detachToolStripMenuItem.Text = "&Detach";
+			_detachToolStripMenuItem.Click += DetachItem_Click;
 			// 
 			// mClearBreakpointsToolStripMenuItem
 			// 
-			mClearBreakpointsToolStripMenuItem.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
-			mClearBreakpointsToolStripMenuItem.Name = "mClearBreakpointsToolStripMenuItem";
-			mClearBreakpointsToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.B);
-			mClearBreakpointsToolStripMenuItem.Size = new Size(207, 22);
-			mClearBreakpointsToolStripMenuItem.Text = "Clear &Breakpoints";
-			mClearBreakpointsToolStripMenuItem.Click += ClearBreakpointsItem_Click;
+			_clearBreakpointsToolStripMenuItem.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripMenuItem.Image")));
+			_clearBreakpointsToolStripMenuItem.Name = "mClearBreakpointsToolStripMenuItem";
+			_clearBreakpointsToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.B);
+			_clearBreakpointsToolStripMenuItem.Size = new Size(207, 22);
+			_clearBreakpointsToolStripMenuItem.Text = "Clear &Breakpoints";
+			_clearBreakpointsToolStripMenuItem.Click += ClearBreakpointsItem_Click;
 			// 
 			// mResetToolStripMenuItem
 			// 
-			mResetToolStripMenuItem.Image = ((Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
-			mResetToolStripMenuItem.Name = "mResetToolStripMenuItem";
-			mResetToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.R);
-			mResetToolStripMenuItem.Size = new Size(207, 22);
-			mResetToolStripMenuItem.Text = "&Reset";
-			mResetToolStripMenuItem.Click += ResetItem_Click;
+			_resetToolStripMenuItem.Image = ((Image)(resources.GetObject("mResetToolStripMenuItem.Image")));
+			_resetToolStripMenuItem.Name = "mResetToolStripMenuItem";
+			_resetToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.R);
+			_resetToolStripMenuItem.Size = new Size(207, 22);
+			_resetToolStripMenuItem.Text = "&Reset";
+			_resetToolStripMenuItem.Click += ResetItem_Click;
 			// 
 			// mToolsToolStripMenuItem
 			// 
-			mToolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						mPreferencesToolStripMenuItem,
-						toolStripSeparator9,
-						mProfilingEnabledMenuItem,
-						mProfilingShowTickCountsMenuItem,
-						mProfilingResetCountsMenuItem});
-			mToolsToolStripMenuItem.Name = "mToolsToolStripMenuItem";
-			mToolsToolStripMenuItem.Size = new Size(48, 20);
-			mToolsToolStripMenuItem.Text = "&Tools";
+			toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+						_preferencesToolStripMenuItem,
+						_toolStripSeparator9,
+						_profilingEnabledMenuItem,
+						_profilingShowTickCountsMenuItem,
+						_profilingResetCountsMenuItem});
+			toolsToolStripMenuItem.Name = "mToolsToolStripMenuItem";
+			toolsToolStripMenuItem.Size = new Size(48, 20);
+			toolsToolStripMenuItem.Text = "&Tools";
 			// 
 			// mPreferencesToolStripMenuItem
 			// 
-			mPreferencesToolStripMenuItem.Image = ((Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
-			mPreferencesToolStripMenuItem.Name = "mPreferencesToolStripMenuItem";
-			mPreferencesToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.P);
-			mPreferencesToolStripMenuItem.Size = new Size(185, 22);
-			mPreferencesToolStripMenuItem.Text = "&Preferences...";
-			mPreferencesToolStripMenuItem.Click += PreferencesMenuItem_Click;
+			_preferencesToolStripMenuItem.Image = ((Image)(resources.GetObject("mPreferencesToolStripMenuItem.Image")));
+			_preferencesToolStripMenuItem.Name = "mPreferencesToolStripMenuItem";
+			_preferencesToolStripMenuItem.ShortcutKeys = (Keys.Control | Keys.P);
+			_preferencesToolStripMenuItem.Size = new Size(185, 22);
+			_preferencesToolStripMenuItem.Text = "&Preferences...";
+			_preferencesToolStripMenuItem.Click += PreferencesMenuItem_Click;
 			// 
 			// toolStripSeparator9
 			// 
-			toolStripSeparator9.Name = "toolStripSeparator9";
-			toolStripSeparator9.Size = new Size(182, 6);
+			_toolStripSeparator9.Name = "toolStripSeparator9";
+			_toolStripSeparator9.Size = new Size(182, 6);
 			// 
 			// mProfilingEnabledMenuItem
 			// 
-			mProfilingEnabledMenuItem.CheckOnClick = true;
-			mProfilingEnabledMenuItem.Name = "mProfilingEnabledMenuItem";
-			mProfilingEnabledMenuItem.Size = new Size(185, 22);
-			mProfilingEnabledMenuItem.Text = "&Enable profiling";
-			mProfilingEnabledMenuItem.CheckedChanged += ProfilingEnabledMenuItem_CheckedChanged;
+			_profilingEnabledMenuItem.CheckOnClick = true;
+			_profilingEnabledMenuItem.Name = "mProfilingEnabledMenuItem";
+			_profilingEnabledMenuItem.Size = new Size(185, 22);
+			_profilingEnabledMenuItem.Text = "&Enable profiling";
+			_profilingEnabledMenuItem.CheckedChanged += ProfilingEnabledMenuItem_CheckedChanged;
 			// 
 			// mProfilingShowTickCountsMenuItem
 			// 
-			mProfilingShowTickCountsMenuItem.CheckOnClick = true;
-			mProfilingShowTickCountsMenuItem.Name = "mProfilingShowTickCountsMenuItem";
-			mProfilingShowTickCountsMenuItem.Size = new Size(185, 22);
-			mProfilingShowTickCountsMenuItem.Text = "&Show tick counts";
-			mProfilingShowTickCountsMenuItem.CheckedChanged += ProfilingShowTickCountsMenuItem_CheckedChanged;
+			_profilingShowTickCountsMenuItem.CheckOnClick = true;
+			_profilingShowTickCountsMenuItem.Name = "mProfilingShowTickCountsMenuItem";
+			_profilingShowTickCountsMenuItem.Size = new Size(185, 22);
+			_profilingShowTickCountsMenuItem.Text = "&Show tick counts";
+			_profilingShowTickCountsMenuItem.CheckedChanged += ProfilingShowTickCountsMenuItem_CheckedChanged;
 			// 
 			// mHelpToolStripMenuItem
 			// 
-			mHelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						mAboutToolStripMenuItem});
-			mHelpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
-			mHelpToolStripMenuItem.Size = new Size(44, 20);
-			mHelpToolStripMenuItem.Text = "&Help";
+			_helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+						_aboutToolStripMenuItem});
+			_helpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
+			_helpToolStripMenuItem.Size = new Size(44, 20);
+			_helpToolStripMenuItem.Text = "&Help";
 			// 
 			// mAboutToolStripMenuItem
 			// 
-			mAboutToolStripMenuItem.Image = ((Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
-			mAboutToolStripMenuItem.Name = "mAboutToolStripMenuItem";
-			mAboutToolStripMenuItem.Size = new Size(116, 22);
-			mAboutToolStripMenuItem.Text = "&About...";
-			mAboutToolStripMenuItem.Click += AboutMenuItem_Click;
+			_aboutToolStripMenuItem.Image = ((Image)(resources.GetObject("mAboutToolStripMenuItem.Image")));
+			_aboutToolStripMenuItem.Name = "mAboutToolStripMenuItem";
+			_aboutToolStripMenuItem.Size = new Size(116, 22);
+			_aboutToolStripMenuItem.Text = "&About...";
+			_aboutToolStripMenuItem.Click += AboutMenuItem_Click;
 			// 
 			// mToolStripContainer
 			// 
 			// 
 			// mToolStripContainer.BottomToolStripPanel
 			// 
-			mToolStripContainer.BottomToolStripPanel.Controls.Add(mStatusStrip);
+			_toolStripContainer.BottomToolStripPanel.Controls.Add(_statusStrip);
 			// 
 			// mToolStripContainer.ContentPanel
 			// 
-			mToolStripContainer.ContentPanel.Controls.Add(mSplitContainer);
-			mToolStripContainer.ContentPanel.Size = new Size(804, 491);
-			mToolStripContainer.Dock = DockStyle.Fill;
-			mToolStripContainer.LeftToolStripPanelVisible = false;
-			mToolStripContainer.Location = new Point(0, 0);
-			mToolStripContainer.Name = "mToolStripContainer";
-			mToolStripContainer.RightToolStripPanelVisible = false;
-			mToolStripContainer.Size = new Size(804, 562);
-			mToolStripContainer.TabIndex = 0;
-			mToolStripContainer.Text = "ToolStripContainer";
+			_toolStripContainer.ContentPanel.Controls.Add(_splitContainer);
+			_toolStripContainer.ContentPanel.Size = new Size(804, 491);
+			_toolStripContainer.Dock = DockStyle.Fill;
+			_toolStripContainer.LeftToolStripPanelVisible = false;
+			_toolStripContainer.Location = new Point(0, 0);
+			_toolStripContainer.Name = "mToolStripContainer";
+			_toolStripContainer.RightToolStripPanelVisible = false;
+			_toolStripContainer.Size = new Size(804, 562);
+			_toolStripContainer.TabIndex = 0;
+			_toolStripContainer.Text = "ToolStripContainer";
 			// 
 			// mToolStripContainer.TopToolStripPanel
 			// 
-			mToolStripContainer.TopToolStripPanel.Controls.Add(mMainMenuStrip);
-			mToolStripContainer.TopToolStripPanel.Controls.Add(mControlToolStrip);
+			_toolStripContainer.TopToolStripPanel.Controls.Add(_mainMenuStrip);
+			_toolStripContainer.TopToolStripPanel.Controls.Add(_controlToolStrip);
 			// 
 			// mStatusStrip
 			// 
-			mStatusStrip.Dock = DockStyle.None;
-			mStatusStrip.Items.AddRange(new ToolStripItem[] {
-						mModeToolStripStatusLabel,
-						mModeCycleButton,
-						mStatusToolStripStatusLabel,
-						mToolStripStatusLabel});
-			mStatusStrip.Location = new Point(0, 0);
-			mStatusStrip.Name = "mStatusStrip";
-			mStatusStrip.Size = new Size(804, 22);
-			mStatusStrip.TabIndex = 8;
+			_statusStrip.Dock = DockStyle.None;
+			_statusStrip.Items.AddRange(new ToolStripItem[] {
+						_modeToolStripStatusLabel,
+						_modeCycleButton,
+						_statusToolStripStatusLabel,
+						_toolStripStatusLabel});
+			_statusStrip.Location = new Point(0, 0);
+			_statusStrip.Name = "mStatusStrip";
+			_statusStrip.Size = new Size(804, 22);
+			_statusStrip.TabIndex = 8;
 			// 
 			// mModeToolStripStatusLabel
 			// 
-			mModeToolStripStatusLabel.Name = "mModeToolStripStatusLabel";
-			mModeToolStripStatusLabel.Size = new Size(41, 17);
-			mModeToolStripStatusLabel.Text = "Mode:";
+			_modeToolStripStatusLabel.Name = "mModeToolStripStatusLabel";
+			_modeToolStripStatusLabel.Size = new Size(41, 17);
+			_modeToolStripStatusLabel.Text = "Mode:";
 			// 
 			// mModeCycleButton
 			// 
-			mModeCycleButton.AutoSize = false;
-			mModeCycleButton.Name = "mModeCycleButton";
-			mModeCycleButton.Size = new Size(60, 20);
-			mModeCycleButton.Value = null;
+			_modeCycleButton.AutoSize = false;
+			_modeCycleButton.Name = "mModeCycleButton";
+			_modeCycleButton.Size = new Size(60, 20);
+			_modeCycleButton.Value = null;
 			// 
 			// mStatusToolStripStatusLabel
 			// 
-			mStatusToolStripStatusLabel.Name = "mStatusToolStripStatusLabel";
-			mStatusToolStripStatusLabel.Size = new Size(48, 17);
-			mStatusToolStripStatusLabel.Text = "| Status:";
+			_statusToolStripStatusLabel.Name = "mStatusToolStripStatusLabel";
+			_statusToolStripStatusLabel.Size = new Size(48, 17);
+			_statusToolStripStatusLabel.Text = "| Status:";
 			// 
 			// mToolStripStatusLabel
 			// 
-			mToolStripStatusLabel.Name = "mToolStripStatusLabel";
-			mToolStripStatusLabel.Size = new Size(10, 17);
-			mToolStripStatusLabel.Text = " ";
+			_toolStripStatusLabel.Name = "mToolStripStatusLabel";
+			_toolStripStatusLabel.Size = new Size(10, 17);
+			_toolStripStatusLabel.Text = " ";
 			// 
 			// mSplitContainer
 			// 
-			mSplitContainer.BackColor = SystemColors.Control;
-			mSplitContainer.Dock = DockStyle.Fill;
-			mSplitContainer.FixedPanel = FixedPanel.Panel2;
-			mSplitContainer.Location = new Point(0, 0);
-			mSplitContainer.Name = "mSplitContainer";
-			mSplitContainer.Orientation = Orientation.Horizontal;
+			_splitContainer.BackColor = SystemColors.Control;
+			_splitContainer.Dock = DockStyle.Fill;
+			_splitContainer.FixedPanel = FixedPanel.Panel2;
+			_splitContainer.Location = new Point(0, 0);
+			_splitContainer.Name = "mSplitContainer";
+			_splitContainer.Orientation = Orientation.Horizontal;
 			// 
 			// mSplitContainer.Panel1
 			// 
-			mSplitContainer.Panel1.Controls.Add(mMemoryGroup);
-			mSplitContainer.Panel1.Controls.Add(mRegistersGroup);
-			mSplitContainer.Panel1.Controls.Add(mDevicesGroup);
-			mSplitContainer.Panel1.Controls.Add(mSymbolGroup);
-			mSplitContainer.Panel1MinSize = 380;
+			_splitContainer.Panel1.Controls.Add(_memoryGroup);
+			_splitContainer.Panel1.Controls.Add(_registersGroup);
+			_splitContainer.Panel1.Controls.Add(_devicesGroup);
+			_splitContainer.Panel1.Controls.Add(_symbolGroup);
+			_splitContainer.Panel1MinSize = 380;
 			// 
 			// mSplitContainer.Panel2
 			// 
-			mSplitContainer.Panel2.Controls.Add(mLogListGroup);
-			mSplitContainer.Panel2MinSize = 96;
-			mSplitContainer.Size = new Size(804, 491);
-			mSplitContainer.SplitterDistance = 385;
-			mSplitContainer.TabIndex = 6;
+			_splitContainer.Panel2.Controls.Add(_logListGroup);
+			_splitContainer.Panel2MinSize = 96;
+			_splitContainer.Size = new Size(804, 491);
+			_splitContainer.SplitterDistance = 385;
+			_splitContainer.TabIndex = 6;
 			// 
 			// mMemoryGroup
 			// 
-			mMemoryGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_memoryGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mMemoryGroup.Controls.Add(mMemoryTabControl);
-			mMemoryGroup.Location = new Point(236, -2);
-			mMemoryGroup.Name = "mMemoryGroup";
-			mMemoryGroup.Size = new Size(568, 328);
-			mMemoryGroup.TabIndex = 4;
-			mMemoryGroup.TabStop = false;
-			mMemoryGroup.Text = "Memory";
+			_memoryGroup.Controls.Add(_memoryTabControl);
+			_memoryGroup.Location = new Point(236, -2);
+			_memoryGroup.Name = "mMemoryGroup";
+			_memoryGroup.Size = new Size(568, 328);
+			_memoryGroup.TabIndex = 4;
+			_memoryGroup.TabStop = false;
+			_memoryGroup.Text = "Memory";
 			// 
 			// mMemoryTabControl
 			// 
-			mMemoryTabControl.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_memoryTabControl.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mMemoryTabControl.Controls.Add(mMainMemoryTab);
-			mMemoryTabControl.Controls.Add(mFloatingPointMemoryTab);
-			mMemoryTabControl.Location = new Point(4, 16);
-			mMemoryTabControl.Name = "mMemoryTabControl";
-			mMemoryTabControl.SelectedIndex = 0;
-			mMemoryTabControl.Size = new Size(560, 309);
-			mMemoryTabControl.TabIndex = 0;
-			mMemoryTabControl.SelectedIndexChanged += MemoryTabControl_SelectedIndexChanged;
-			mMemoryTabControl.Selecting += MemoryTabControl_Selecting;
+			_memoryTabControl.Controls.Add(_mainMemoryTab);
+			_memoryTabControl.Controls.Add(_floatingPointMemoryTab);
+			_memoryTabControl.Location = new Point(4, 16);
+			_memoryTabControl.Name = "mMemoryTabControl";
+			_memoryTabControl.SelectedIndex = 0;
+			_memoryTabControl.Size = new Size(560, 309);
+			_memoryTabControl.TabIndex = 0;
+			_memoryTabControl.SelectedIndexChanged += MemoryTabControl_SelectedIndexChanged;
+			_memoryTabControl.Selecting += MemoryTabControl_Selecting;
 			// 
 			// mMainMemoryTab
 			// 
-			mMainMemoryTab.Controls.Add(mMainMemoryEditor);
-			mMainMemoryTab.Location = new Point(4, 22);
-			mMainMemoryTab.Name = "mMainMemoryTab";
-			mMainMemoryTab.Padding = new Padding(3);
-			mMainMemoryTab.Size = new Size(552, 283);
-			mMainMemoryTab.TabIndex = 0;
-			mMainMemoryTab.Text = "Main";
-			mMainMemoryTab.UseVisualStyleBackColor = true;
+			_mainMemoryTab.Controls.Add(_mainMemoryEditor);
+			_mainMemoryTab.Location = new Point(4, 22);
+			_mainMemoryTab.Name = "mMainMemoryTab";
+			_mainMemoryTab.Padding = new Padding(3);
+			_mainMemoryTab.Size = new Size(552, 283);
+			_mainMemoryTab.TabIndex = 0;
+			_mainMemoryTab.Text = "Main";
+			_mainMemoryTab.UseVisualStyleBackColor = true;
 			// 
 			// mMainMemoryEditor
 			// 
-			mMainMemoryEditor.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_mainMemoryEditor.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mMainMemoryEditor.FirstVisibleAddress = 0;
-			mMainMemoryEditor.IndexedAddressCalculatorCallback = null;
-			mMainMemoryEditor.Location = new Point(0, 0);
-			mMainMemoryEditor.MarkedAddress = -1;
-			mMainMemoryEditor.Memory = null;
-			mMainMemoryEditor.Name = "mMainMemoryEditor";
-			mMainMemoryEditor.ReadOnly = false;
-			mMainMemoryEditor.ResizeInProgress = false;
-			mMainMemoryEditor.Size = new Size(552, 283);
-			mMainMemoryEditor.Symbols = null;
-			mMainMemoryEditor.TabIndex = 0;
-			mMainMemoryEditor.ToolTip = null;
-			mMainMemoryEditor.AddressSelected += MemoryEditor_addressSelected;
+			_mainMemoryEditor.FirstVisibleAddress = 0;
+			_mainMemoryEditor.IndexedAddressCalculatorCallback = null;
+			_mainMemoryEditor.Location = new Point(0, 0);
+			_mainMemoryEditor.MarkedAddress = -1;
+			_mainMemoryEditor.Memory = null;
+			_mainMemoryEditor.Name = "mMainMemoryEditor";
+			_mainMemoryEditor.ReadOnly = false;
+			_mainMemoryEditor.ResizeInProgress = false;
+			_mainMemoryEditor.Size = new Size(552, 283);
+			_mainMemoryEditor.Symbols = null;
+			_mainMemoryEditor.TabIndex = 0;
+			_mainMemoryEditor.ToolTip = null;
+			_mainMemoryEditor.AddressSelected += MemoryEditor_addressSelected;
 			// 
 			// mFloatingPointMemoryTab
 			// 
-			mFloatingPointMemoryTab.Location = new Point(4, 22);
-			mFloatingPointMemoryTab.Name = "mFloatingPointMemoryTab";
-			mFloatingPointMemoryTab.Padding = new Padding(3);
-			mFloatingPointMemoryTab.Size = new Size(552, 283);
-			mFloatingPointMemoryTab.TabIndex = 1;
-			mFloatingPointMemoryTab.Text = "Floating Point";
-			mFloatingPointMemoryTab.UseVisualStyleBackColor = true;
+			_floatingPointMemoryTab.Location = new Point(4, 22);
+			_floatingPointMemoryTab.Name = "mFloatingPointMemoryTab";
+			_floatingPointMemoryTab.Padding = new Padding(3);
+			_floatingPointMemoryTab.Size = new Size(552, 283);
+			_floatingPointMemoryTab.TabIndex = 1;
+			_floatingPointMemoryTab.Text = "Floating Point";
+			_floatingPointMemoryTab.UseVisualStyleBackColor = true;
 			// 
 			// mRegistersGroup
 			// 
-			mRegistersGroup.Controls.Add(mRegistersEditor);
-			mRegistersGroup.Location = new Point(0, -2);
-			mRegistersGroup.Name = "mRegistersGroup";
-			mRegistersGroup.Size = new Size(232, 236);
-			mRegistersGroup.TabIndex = 2;
-			mRegistersGroup.TabStop = false;
-			mRegistersGroup.Text = "Registers";
+			_registersGroup.Controls.Add(_registersEditor);
+			_registersGroup.Location = new Point(0, -2);
+			_registersGroup.Name = "mRegistersGroup";
+			_registersGroup.Size = new Size(232, 236);
+			_registersGroup.TabIndex = 2;
+			_registersGroup.TabStop = false;
+			_registersGroup.Text = "Registers";
 			// 
 			// mRegistersEditor
 			// 
-			mRegistersEditor.Location = new Point(8, 16);
-			mRegistersEditor.Name = "mRegistersEditor";
-			mRegistersEditor.ReadOnly = false;
+			_registersEditor.Location = new Point(8, 16);
+			_registersEditor.Name = "mRegistersEditor";
+			_registersEditor.ReadOnly = false;
 			registers1.CompareIndicator = MixLib.Registers.CompValues.Equal;
 			registers1.OverflowIndicator = false;
-			mRegistersEditor.Registers = registers1;
-			mRegistersEditor.Size = new Size(218, 214);
-			mRegistersEditor.TabIndex = 0;
+			_registersEditor.Registers = registers1;
+			_registersEditor.Size = new Size(218, 214);
+			_registersEditor.TabIndex = 0;
 			// 
 			// mDevicesGroup
 			// 
-			mDevicesGroup.Anchor = ((AnchorStyles.Bottom | AnchorStyles.Left)
+			_devicesGroup.Anchor = ((AnchorStyles.Bottom | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mDevicesGroup.Controls.Add(mDeviceEditorButton);
-			mDevicesGroup.Controls.Add(mDevicesControl);
-			mDevicesGroup.Location = new Point(0, 326);
-			mDevicesGroup.Name = "mDevicesGroup";
-			mDevicesGroup.Size = new Size(804, 56);
-			mDevicesGroup.TabIndex = 5;
-			mDevicesGroup.TabStop = false;
-			mDevicesGroup.Text = "Devices";
+			_devicesGroup.Controls.Add(_deviceEditorButton);
+			_devicesGroup.Controls.Add(_devicesControl);
+			_devicesGroup.Location = new Point(0, 326);
+			_devicesGroup.Name = "mDevicesGroup";
+			_devicesGroup.Size = new Size(804, 56);
+			_devicesGroup.TabIndex = 5;
+			_devicesGroup.TabStop = false;
+			_devicesGroup.Text = "Devices";
 			// 
 			// mDeviceEditorButton
 			// 
-			mDeviceEditorButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			mDeviceEditorButton.Location = new Point(716, 16);
-			mDeviceEditorButton.Margin = new Padding(0);
-			mDeviceEditorButton.Name = "mDeviceEditorButton";
-			mDeviceEditorButton.Size = new Size(80, 23);
-			mDeviceEditorButton.TabIndex = 1;
-			mDeviceEditorButton.Text = "Show E&ditor";
-			mDeviceEditorButton.UseVisualStyleBackColor = true;
-			mDeviceEditorButton.FlatStyle = FlatStyle.Flat;
-			mDeviceEditorButton.Click += DeviceEditorItem_Click;
+			_deviceEditorButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			_deviceEditorButton.Location = new Point(716, 16);
+			_deviceEditorButton.Margin = new Padding(0);
+			_deviceEditorButton.Name = "mDeviceEditorButton";
+			_deviceEditorButton.Size = new Size(80, 23);
+			_deviceEditorButton.TabIndex = 1;
+			_deviceEditorButton.Text = "Show E&ditor";
+			_deviceEditorButton.UseVisualStyleBackColor = true;
+			_deviceEditorButton.FlatStyle = FlatStyle.Flat;
+			_deviceEditorButton.Click += DeviceEditorItem_Click;
 			// 
 			// mDevicesControl
 			// 
-			mDevicesControl.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			_devicesControl.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mDevicesControl.Devices = null;
-			mDevicesControl.Location = new Point(4, 16);
-			mDevicesControl.Name = "mDevicesControl";
-			mDevicesControl.Size = new Size(706, 36);
-			mDevicesControl.Structure = null;
-			mDevicesControl.TabIndex = 0;
-			mDevicesControl.ToolTip = null;
+			_devicesControl.Devices = null;
+			_devicesControl.Location = new Point(4, 16);
+			_devicesControl.Name = "mDevicesControl";
+			_devicesControl.Size = new Size(706, 36);
+			_devicesControl.Structure = null;
+			_devicesControl.TabIndex = 0;
+			_devicesControl.ToolTip = null;
 			// 
 			// mSymbolGroup
 			// 
-			mSymbolGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom)
+			_symbolGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left);
-			mSymbolGroup.Controls.Add(mSymbolListView);
-			mSymbolGroup.Location = new Point(0, 234);
-			mSymbolGroup.Name = "mSymbolGroup";
-			mSymbolGroup.Size = new Size(232, 92);
-			mSymbolGroup.TabIndex = 3;
-			mSymbolGroup.TabStop = false;
-			mSymbolGroup.Text = "Symbols";
+			_symbolGroup.Controls.Add(_symbolListView);
+			_symbolGroup.Location = new Point(0, 234);
+			_symbolGroup.Name = "mSymbolGroup";
+			_symbolGroup.Size = new Size(232, 92);
+			_symbolGroup.TabIndex = 3;
+			_symbolGroup.TabStop = false;
+			_symbolGroup.Text = "Symbols";
 			// 
 			// mSymbolListView
 			// 
-			mSymbolListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_symbolListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mSymbolListView.Location = new Point(8, 16);
-			mSymbolListView.MemoryMaxIndex = 0;
-			mSymbolListView.MemoryMinIndex = 0;
-			mSymbolListView.Name = "mSymbolListView";
-			mSymbolListView.Size = new Size(218, 70);
-			mSymbolListView.Symbols = null;
-			mSymbolListView.TabIndex = 0;
-			mSymbolListView.AddressSelected += ListViews_addressSelected;
+			_symbolListView.Location = new Point(8, 16);
+			_symbolListView.MemoryMaxIndex = 0;
+			_symbolListView.MemoryMinIndex = 0;
+			_symbolListView.Name = "mSymbolListView";
+			_symbolListView.Size = new Size(218, 70);
+			_symbolListView.Symbols = null;
+			_symbolListView.TabIndex = 0;
+			_symbolListView.AddressSelected += ListViews_addressSelected;
 			// 
 			// mLogListGroup
 			// 
-			mLogListGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_logListGroup.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mLogListGroup.Controls.Add(mLogListView);
-			mLogListGroup.Location = new Point(0, 3);
-			mLogListGroup.Name = "mLogListGroup";
-			mLogListGroup.Size = new Size(804, 95);
-			mLogListGroup.TabIndex = 7;
-			mLogListGroup.TabStop = false;
-			mLogListGroup.Text = "Messages";
+			_logListGroup.Controls.Add(_logListView);
+			_logListGroup.Location = new Point(0, 3);
+			_logListGroup.Name = "mLogListGroup";
+			_logListGroup.Size = new Size(804, 95);
+			_logListGroup.TabIndex = 7;
+			_logListGroup.TabStop = false;
+			_logListGroup.Text = "Messages";
 			// 
 			// mLogListView
 			// 
-			mLogListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			_logListView.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 									| AnchorStyles.Left)
 									| AnchorStyles.Right);
-			mLogListView.Location = new Point(8, 16);
-			mLogListView.Name = "mLogListView";
-			mLogListView.SeverityImageList = mSeverityImageList;
-			mLogListView.Size = new Size(788, 73);
-			mLogListView.TabIndex = 0;
-			mLogListView.AddressSelected += ListViews_addressSelected;
+			_logListView.Location = new Point(8, 16);
+			_logListView.Name = "mLogListView";
+			_logListView.SeverityImageList = _severityImageList;
+			_logListView.Size = new Size(788, 73);
+			_logListView.TabIndex = 0;
+			_logListView.AddressSelected += ListViews_addressSelected;
 			// 
 			// mControlToolStrip
 			// 
-			mControlToolStrip.Dock = DockStyle.None;
-			mControlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			mControlToolStrip.Items.AddRange(new ToolStripItem[] {
-						mPCToolStripLabel,
-						mShowPCToolStripButton,
-						toolStripSeparator3,
-						mTicksToolStripLabel,
-						mTicksToolStripTextBox,
-						mResetTicksToolStripButton,
-						toolStripSeparator4,
-						mTickToolStripButton,
-						mStepToolStripButton,
-						mRunToolStripButton,
-						mGoToolStripButton,
-						toolStripSeparator5,
-						mDetachToolStripButton,
-						toolStripSeparator6,
-						mClearBreakpointsToolStripButton,
-						mResetToolStripButton,
-						toolStripSeparator7,
-						mTeletypeToolStripButton});
-			mControlToolStrip.Location = new Point(3, 24);
-			mControlToolStrip.Name = "mControlToolStrip";
-			mControlToolStrip.Size = new Size(761, 25);
-			mControlToolStrip.TabIndex = 1;
+			_controlToolStrip.Dock = DockStyle.None;
+			_controlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			_controlToolStrip.Items.AddRange(new ToolStripItem[] 
+			{
+				_pcToolStripLabel,
+				_showPCToolStripButton,
+				toolStripSeparator3,
+				_ticksToolStripLabel,
+				_ticksToolStripTextBox,
+				_resetTicksToolStripButton,
+				toolStripSeparator4,
+				_tickToolStripButton,
+				_stepToolStripButton,
+				_runToolStripButton,
+				_goToolStripButton,
+				toolStripSeparator5,
+				_detachToolStripButton,
+				toolStripSeparator6,
+				_clearBreakpointsToolStripButton,
+				_resetToolStripButton,
+				toolStripSeparator7,
+				_teletypeToolStripButton
+			});
+
+			_controlToolStrip.Location = new Point(3, 24);
+			_controlToolStrip.Name = "mControlToolStrip";
+			_controlToolStrip.Size = new Size(761, 25);
+			_controlToolStrip.TabIndex = 1;
 			// 
 			// mPCToolStripLabel
 			// 
-			mPCToolStripLabel.Name = "mPCToolStripLabel";
-			mPCToolStripLabel.Size = new Size(28, 22);
-			mPCToolStripLabel.Text = "PC: ";
+			_pcToolStripLabel.Name = "mPCToolStripLabel";
+			_pcToolStripLabel.Size = new Size(28, 22);
+			_pcToolStripLabel.Text = "PC: ";
 			// 
 			// mShowPCToolStripButton
 			// 
-			mShowPCToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			mShowPCToolStripButton.Image = ((Image)(resources.GetObject("mShowPCToolStripButton.Image")));
-			mShowPCToolStripButton.ImageTransparentColor = Color.Magenta;
-			mShowPCToolStripButton.Name = "mShowPCToolStripButton";
-			mShowPCToolStripButton.Size = new Size(40, 22);
-			mShowPCToolStripButton.Text = "Sh&ow";
-			mShowPCToolStripButton.ToolTipText = "Show the program counter";
-			mShowPCToolStripButton.Click += ShowPCButton_Click;
+			_showPCToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			_showPCToolStripButton.Image = ((Image)(resources.GetObject("mShowPCToolStripButton.Image")));
+			_showPCToolStripButton.ImageTransparentColor = Color.Magenta;
+			_showPCToolStripButton.Name = "mShowPCToolStripButton";
+			_showPCToolStripButton.Size = new Size(40, 22);
+			_showPCToolStripButton.Text = "Sh&ow";
+			_showPCToolStripButton.ToolTipText = "Show the program counter";
+			_showPCToolStripButton.Click += ShowPCButton_Click;
 			// 
 			// mTicksToolStripLabel
 			// 
-			mTicksToolStripLabel.Name = "mTicksToolStripLabel";
-			mTicksToolStripLabel.Size = new Size(40, 22);
-			mTicksToolStripLabel.Text = "Ticks: ";
+			_ticksToolStripLabel.Name = "mTicksToolStripLabel";
+			_ticksToolStripLabel.Size = new Size(40, 22);
+			_ticksToolStripLabel.Text = "Ticks: ";
 			// 
 			// mTicksToolStripTextBox
 			// 
-			mTicksToolStripTextBox.BorderStyle = BorderStyle.FixedSingle;
-			mTicksToolStripTextBox.Name = "mTicksToolStripTextBox";
-			mTicksToolStripTextBox.ReadOnly = true;
-			mTicksToolStripTextBox.Size = new Size(64, 25);
-			mTicksToolStripTextBox.Text = "0";
+			_ticksToolStripTextBox.BorderStyle = BorderStyle.FixedSingle;
+			_ticksToolStripTextBox.Name = "mTicksToolStripTextBox";
+			_ticksToolStripTextBox.ReadOnly = true;
+			_ticksToolStripTextBox.Size = new Size(64, 25);
+			_ticksToolStripTextBox.Text = "0";
 			// 
 			// mResetTicksToolStripButton
 			// 
-			mResetTicksToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			mResetTicksToolStripButton.Image = ((Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
-			mResetTicksToolStripButton.ImageTransparentColor = Color.Magenta;
-			mResetTicksToolStripButton.Name = "mResetTicksToolStripButton";
-			mResetTicksToolStripButton.Size = new Size(39, 22);
-			mResetTicksToolStripButton.Text = "&Reset";
-			mResetTicksToolStripButton.ToolTipText = "Reset the tick counter";
-			mResetTicksToolStripButton.Click += ResetTicksButton_Click;
+			_resetTicksToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			_resetTicksToolStripButton.Image = ((Image)(resources.GetObject("mResetTicksToolStripButton.Image")));
+			_resetTicksToolStripButton.ImageTransparentColor = Color.Magenta;
+			_resetTicksToolStripButton.Name = "mResetTicksToolStripButton";
+			_resetTicksToolStripButton.Size = new Size(39, 22);
+			_resetTicksToolStripButton.Text = "&Reset";
+			_resetTicksToolStripButton.ToolTipText = "Reset the tick counter";
+			_resetTicksToolStripButton.Click += ResetTicksButton_Click;
 			// 
 			// mTickToolStripButton
 			// 
-			mTickToolStripButton.Image = ((Image)(resources.GetObject("mTickToolStripButton.Image")));
-			mTickToolStripButton.ImageTransparentColor = Color.Magenta;
-			mTickToolStripButton.Name = "mTickToolStripButton";
-			mTickToolStripButton.Size = new Size(49, 22);
-			mTickToolStripButton.Text = "T&ick";
-			mTickToolStripButton.ToolTipText = "Execute one tick";
-			mTickToolStripButton.Click += TickItem_Click;
+			_tickToolStripButton.Image = ((Image)(resources.GetObject("mTickToolStripButton.Image")));
+			_tickToolStripButton.ImageTransparentColor = Color.Magenta;
+			_tickToolStripButton.Name = "mTickToolStripButton";
+			_tickToolStripButton.Size = new Size(49, 22);
+			_tickToolStripButton.Text = "T&ick";
+			_tickToolStripButton.ToolTipText = "Execute one tick";
+			_tickToolStripButton.Click += TickItem_Click;
 			// 
 			// mStepToolStripButton
 			// 
-			mStepToolStripButton.Image = ((Image)(resources.GetObject("mStepToolStripButton.Image")));
-			mStepToolStripButton.ImageTransparentColor = Color.Magenta;
-			mStepToolStripButton.Name = "mStepToolStripButton";
-			mStepToolStripButton.Size = new Size(50, 22);
-			mStepToolStripButton.Text = "Ste&p";
-			mStepToolStripButton.ToolTipText = "Execute one step";
-			mStepToolStripButton.Click += StepItem_Click;
+			_stepToolStripButton.Image = ((Image)(resources.GetObject("mStepToolStripButton.Image")));
+			_stepToolStripButton.ImageTransparentColor = Color.Magenta;
+			_stepToolStripButton.Name = "mStepToolStripButton";
+			_stepToolStripButton.Size = new Size(50, 22);
+			_stepToolStripButton.Text = "Ste&p";
+			_stepToolStripButton.ToolTipText = "Execute one step";
+			_stepToolStripButton.Click += StepItem_Click;
 			// 
 			// mRunToolStripButton
 			// 
-			mRunToolStripButton.Image = ((Image)(resources.GetObject("mRunToolStripButton.Image")));
-			mRunToolStripButton.ImageTransparentColor = Color.Magenta;
-			mRunToolStripButton.Name = "mRunToolStripButton";
-			mRunToolStripButton.Size = new Size(48, 22);
-			mRunToolStripButton.Text = "R&un";
-			mRunToolStripButton.ToolTipText = "Start or stop a full run";
-			mRunToolStripButton.Click += RunItem_Click;
+			_runToolStripButton.Image = ((Image)(resources.GetObject("mRunToolStripButton.Image")));
+			_runToolStripButton.ImageTransparentColor = Color.Magenta;
+			_runToolStripButton.Name = "mRunToolStripButton";
+			_runToolStripButton.Size = new Size(48, 22);
+			_runToolStripButton.Text = "R&un";
+			_runToolStripButton.ToolTipText = "Start or stop a full run";
+			_runToolStripButton.Click += RunItem_Click;
 			// 
 			// mGoToolStripButton
 			// 
-			mGoToolStripButton.Image = ((Image)(resources.GetObject("mGoToolStripButton.Image")));
-			mGoToolStripButton.ImageTransparentColor = Color.Magenta;
-			mGoToolStripButton.Name = "mGoToolStripButton";
-			mGoToolStripButton.Size = new Size(42, 22);
-			mGoToolStripButton.Text = "&Go";
-			mGoToolStripButton.ToolTipText = "Start the MIX loader";
-			mGoToolStripButton.Click += GoItem_Click;
+			_goToolStripButton.Image = ((Image)(resources.GetObject("mGoToolStripButton.Image")));
+			_goToolStripButton.ImageTransparentColor = Color.Magenta;
+			_goToolStripButton.Name = "mGoToolStripButton";
+			_goToolStripButton.Size = new Size(42, 22);
+			_goToolStripButton.Text = "&Go";
+			_goToolStripButton.ToolTipText = "Start the MIX loader";
+			_goToolStripButton.Click += GoItem_Click;
 			// 
 			// mDetachToolStripButton
 			// 
-			mDetachToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			mDetachToolStripButton.Image = ((Image)(resources.GetObject("mDetachToolStripButton.Image")));
-			mDetachToolStripButton.ImageTransparentColor = Color.Magenta;
-			mDetachToolStripButton.Name = "mDetachToolStripButton";
-			mDetachToolStripButton.Size = new Size(48, 22);
-			mDetachToolStripButton.Text = "Detac&h";
-			mDetachToolStripButton.ToolTipText = "Switch between running MIX in the foreground or background";
-			mDetachToolStripButton.Click += DetachItem_Click;
+			_detachToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			_detachToolStripButton.Image = ((Image)(resources.GetObject("mDetachToolStripButton.Image")));
+			_detachToolStripButton.ImageTransparentColor = Color.Magenta;
+			_detachToolStripButton.Name = "mDetachToolStripButton";
+			_detachToolStripButton.Size = new Size(48, 22);
+			_detachToolStripButton.Text = "Detac&h";
+			_detachToolStripButton.ToolTipText = "Switch between running MIX in the foreground or background";
+			_detachToolStripButton.Click += DetachItem_Click;
 			// 
 			// mClearBreakpointsToolStripButton
 			// 
-			mClearBreakpointsToolStripButton.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
-			mClearBreakpointsToolStripButton.ImageTransparentColor = Color.Magenta;
-			mClearBreakpointsToolStripButton.Name = "mClearBreakpointsToolStripButton";
-			mClearBreakpointsToolStripButton.Size = new Size(119, 22);
-			mClearBreakpointsToolStripButton.Text = "Clear &Breakpoints";
-			mClearBreakpointsToolStripButton.ToolTipText = "Remove all set breakpoints";
-			mClearBreakpointsToolStripButton.Click += ClearBreakpointsItem_Click;
+			_clearBreakpointsToolStripButton.Image = ((Image)(resources.GetObject("mClearBreakpointsToolStripButton.Image")));
+			_clearBreakpointsToolStripButton.ImageTransparentColor = Color.Magenta;
+			_clearBreakpointsToolStripButton.Name = "mClearBreakpointsToolStripButton";
+			_clearBreakpointsToolStripButton.Size = new Size(119, 22);
+			_clearBreakpointsToolStripButton.Text = "Clear &Breakpoints";
+			_clearBreakpointsToolStripButton.ToolTipText = "Remove all set breakpoints";
+			_clearBreakpointsToolStripButton.Click += ClearBreakpointsItem_Click;
 			// 
 			// mResetToolStripButton
 			// 
-			mResetToolStripButton.Image = ((Image)(resources.GetObject("mResetToolStripButton.Image")));
-			mResetToolStripButton.ImageTransparentColor = Color.Magenta;
-			mResetToolStripButton.Name = "mResetToolStripButton";
-			mResetToolStripButton.Size = new Size(55, 22);
-			mResetToolStripButton.Text = "R&eset";
-			mResetToolStripButton.ToolTipText = "Reset MIX to initial state";
-			mResetToolStripButton.Click += ResetItem_Click;
+			_resetToolStripButton.Image = ((Image)(resources.GetObject("mResetToolStripButton.Image")));
+			_resetToolStripButton.ImageTransparentColor = Color.Magenta;
+			_resetToolStripButton.Name = "mResetToolStripButton";
+			_resetToolStripButton.Size = new Size(55, 22);
+			_resetToolStripButton.Text = "R&eset";
+			_resetToolStripButton.ToolTipText = "Reset MIX to initial state";
+			_resetToolStripButton.Click += ResetItem_Click;
 			// 
 			// mTeletypeToolStripButton
 			// 
-			mTeletypeToolStripButton.Image = ((Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
-			mTeletypeToolStripButton.ImageTransparentColor = Color.Magenta;
-			mTeletypeToolStripButton.Name = "mTeletypeToolStripButton";
-			mTeletypeToolStripButton.Size = new Size(104, 22);
-			mTeletypeToolStripButton.Text = "Show &Teletype";
-			mTeletypeToolStripButton.ToolTipText = "Show or hide the teletype";
-			mTeletypeToolStripButton.Click += TeletypeItem_Click;
+			_teletypeToolStripButton.Image = ((Image)(resources.GetObject("mTeletypeToolStripButton.Image")));
+			_teletypeToolStripButton.ImageTransparentColor = Color.Magenta;
+			_teletypeToolStripButton.Name = "mTeletypeToolStripButton";
+			_teletypeToolStripButton.Size = new Size(104, 22);
+			_teletypeToolStripButton.Text = "Show &Teletype";
+			_teletypeToolStripButton.ToolTipText = "Show or hide the teletype";
+			_teletypeToolStripButton.Click += TeletypeItem_Click;
 			// 
 			// mToolTip
 			// 
-			mToolTip.AutoPopDelay = 10000;
-			mToolTip.InitialDelay = 100;
-			mToolTip.ReshowDelay = 100;
-			mToolTip.ShowAlways = true;
+			_toolTip.AutoPopDelay = 10000;
+			_toolTip.InitialDelay = 100;
+			_toolTip.ReshowDelay = 100;
+			_toolTip.ShowAlways = true;
 			// 
 			// mProfilingResetCountsMenuItem
 			// 
-			mProfilingResetCountsMenuItem.Name = "mProfilingResetCountsMenuItem";
-			mProfilingResetCountsMenuItem.Size = new Size(185, 22);
-			mProfilingResetCountsMenuItem.Text = "&Reset counts";
-			mProfilingResetCountsMenuItem.Click += ProfilingResetCountsMenuItem_Click;
+			_profilingResetCountsMenuItem.Name = "mProfilingResetCountsMenuItem";
+			_profilingResetCountsMenuItem.Size = new Size(185, 22);
+			_profilingResetCountsMenuItem.Text = "&Reset counts";
+			_profilingResetCountsMenuItem.Click += ProfilingResetCountsMenuItem_Click;
 			// 
 			// MixForm
 			// 
 			ClientSize = new Size(804, 562);
-			Controls.Add(mToolStripContainer);
+			Controls.Add(_toolStripContainer);
 			Icon = ((Icon)(resources.GetObject("$this.Icon")));
 			KeyPreview = true;
-			MainMenuStrip = mMainMenuStrip;
+			MainMenuStrip = _mainMenuStrip;
 			MinimumSize = new Size(820, 600);
 			Name = "MixForm";
 			StartPosition = FormStartPosition.Manual;
 			Text = "MixEmul";
-			FormClosing += FormClosingHandler;
-			ResizeBegin += ResizeBeginHandler;
-			ResizeEnd += ResizeEndHandler;
-			mMainMenuStrip.ResumeLayout(false);
-			mMainMenuStrip.PerformLayout();
-			mToolStripContainer.BottomToolStripPanel.ResumeLayout(false);
-			mToolStripContainer.BottomToolStripPanel.PerformLayout();
-			mToolStripContainer.ContentPanel.ResumeLayout(false);
-			mToolStripContainer.TopToolStripPanel.ResumeLayout(false);
-			mToolStripContainer.TopToolStripPanel.PerformLayout();
-			mToolStripContainer.ResumeLayout(false);
-			mToolStripContainer.PerformLayout();
-			mStatusStrip.ResumeLayout(false);
-			mStatusStrip.PerformLayout();
-			mSplitContainer.Panel1.ResumeLayout(false);
-			mSplitContainer.Panel2.ResumeLayout(false);
-			mSplitContainer.ResumeLayout(false);
-			mMemoryGroup.ResumeLayout(false);
-			mMemoryTabControl.ResumeLayout(false);
-			mMainMemoryTab.ResumeLayout(false);
-			mRegistersGroup.ResumeLayout(false);
-			mDevicesGroup.ResumeLayout(false);
-			mSymbolGroup.ResumeLayout(false);
-			mLogListGroup.ResumeLayout(false);
-			mControlToolStrip.ResumeLayout(false);
-			mControlToolStrip.PerformLayout();
+			FormClosing += This_FormClosing;
+			ResizeBegin += This_ResizeBegin;
+			ResizeEnd += This_ResizeEnd;
+			_mainMenuStrip.ResumeLayout(false);
+			_mainMenuStrip.PerformLayout();
+			_toolStripContainer.BottomToolStripPanel.ResumeLayout(false);
+			_toolStripContainer.BottomToolStripPanel.PerformLayout();
+			_toolStripContainer.ContentPanel.ResumeLayout(false);
+			_toolStripContainer.TopToolStripPanel.ResumeLayout(false);
+			_toolStripContainer.TopToolStripPanel.PerformLayout();
+			_toolStripContainer.ResumeLayout(false);
+			_toolStripContainer.PerformLayout();
+			_statusStrip.ResumeLayout(false);
+			_statusStrip.PerformLayout();
+			_splitContainer.Panel1.ResumeLayout(false);
+			_splitContainer.Panel2.ResumeLayout(false);
+			_splitContainer.ResumeLayout(false);
+			_memoryGroup.ResumeLayout(false);
+			_memoryTabControl.ResumeLayout(false);
+			_mainMemoryTab.ResumeLayout(false);
+			_registersGroup.ResumeLayout(false);
+			_devicesGroup.ResumeLayout(false);
+			_symbolGroup.ResumeLayout(false);
+			_logListGroup.ResumeLayout(false);
+			_controlToolStrip.ResumeLayout(false);
+			_controlToolStrip.PerformLayout();
 			ResumeLayout(false);
 
 		}
 
-		void LoadProgram(string filePath)
+		private void LoadProgram(string filePath)
 		{
 			if (filePath == null)
-			{
 				return;
-			}
 
 			var instances = Assembler.Assemble(File.ReadAllLines(filePath), out PreInstruction[] instructions, out SymbolCollection symbols, out AssemblyFindingCollection findings);
 			if (instructions != null && findings != null)
 			{
-				if (mSourceAndFindingsForm == null)
+				if (_sourceAndFindingsForm == null)
 				{
-					mSourceAndFindingsForm = new SourceAndFindingsForm
+					_sourceAndFindingsForm = new SourceAndFindingsForm
 					{
-						SeverityImageList = mSeverityImageList
+						SeverityImageList = _severityImageList
 					};
 				}
 
-				mSourceAndFindingsForm.SetInstructionsAndFindings(instructions, instances, findings);
+				_sourceAndFindingsForm.SetInstructionsAndFindings(instructions, instances, findings);
 
-				if (mSourceAndFindingsForm.ShowDialog(this) != DialogResult.OK)
-				{
+				if (_sourceAndFindingsForm.ShowDialog(this) != DialogResult.OK)
 					return;
-				}
 			}
 
 			if (instances != null)
 			{
-				mSymbolListView.Symbols = symbols;
-				mMainMemoryEditor.Symbols = symbols;
-				mMix.LoadInstructionInstances(instances, symbols);
+				_symbolListView.Symbols = symbols;
+				_mainMemoryEditor.Symbols = symbols;
+				_mix.LoadInstructionInstances(instances, symbols);
 				Update();
 			}
 		}
 
 		[STAThread]
-		static void Main()
+		private static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.ThreadException += MixForm.Application_ThreadException;
@@ -1318,214 +1281,188 @@ namespace MixGui
 			Application.Run(mixForm);
 		}
 
-
-		void SwitchRunningState()
+		private void SwitchRunningState()
 		{
-			if (mSteppingState == SteppingState.Idle)
+			if (_steppingState == SteppingState.Idle)
 			{
 				SetSteppingState(SteppingState.Stepping);
-				mRunning = true;
-				mMix.StartRun();
+				_running = true;
+				_mix.StartRun();
 			}
 			else
 			{
-				mRunning = false;
-				mMix.RequestStop();
+				_running = false;
+				_mix.RequestStop();
 			}
 		}
 
-		void PcChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+		private void PcChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
-			if (!mUpdating)
-			{
+			if (!_updating)
 				ImplementPCChange((int)args.NewValue);
-			}
 		}
 
-		void SetSteppingState(SteppingState state)
+		private void SetSteppingState(SteppingState state)
 		{
-			if (mSteppingState != state)
+			if (_steppingState != state)
 			{
-				mSteppingState = state;
+				_steppingState = state;
 
-				if (mSteppingState == SteppingState.Idle)
+				if (_steppingState == SteppingState.Idle)
 				{
 					ReadOnly = false;
-					mRunToolStripButton.Text = "R&un";
-					mRunToolStripMenuItem.Text = "R&un";
+					_runToolStripButton.Text = "R&un";
+					_runToolStripMenuItem.Text = "R&un";
 				}
 				else
 				{
 					ReadOnly = true;
-					mRunToolStripButton.Text = "St&op";
-					mRunToolStripMenuItem.Text = "St&op";
+					_runToolStripButton.Text = "St&op";
+					_runToolStripMenuItem.Text = "St&op";
 				}
 			}
 		}
 
-		void SwitchTeletypeVisibility()
+		private void SwitchTeletypeVisibility()
 		{
-			if (mTeletype.Visible)
-			{
-				mTeletype.Hide();
-			}
+			if (_teletype.Visible)
+				_teletype.Hide();
+
 			else
-			{
-				mTeletype.Show();
-			}
+				_teletype.Show();
 		}
 
 		public new void Update()
 		{
-			mUpdating = true;
-			var pcVisible = mMainMemoryEditor.IsAddressVisible((int)mPCBox.LongValue);
+			_updating = true;
+			var pcVisible = _mainMemoryEditor.IsAddressVisible((int)_pcBox.LongValue);
 			SetPCBoxBounds();
-			mPCBox.LongValue = mMix.ProgramCounter;
-			mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
-			if (mFloatingPointMemoryEditor != null)
-			{
-				var floatPcVisible = mFloatingPointMemoryEditor.IsAddressVisible(mFloatingPointMemoryEditor.MarkedAddress);
-				mFloatingPointMemoryEditor.MarkedAddress = mMix.FloatingPointModule.ProgramCounter;
-				if (floatPcVisible)
-				{
-					mFloatingPointMemoryEditor.MakeAddressVisible(mFloatingPointMemoryEditor.MarkedAddress);
-				}
-			}
-			mTicksToolStripTextBox.Text = mMix.TickCounter.ToString();
+			_pcBox.LongValue = _mix.ProgramCounter;
+			_mainMemoryEditor.MarkedAddress = _mix.ProgramCounter;
 
-			switch (mMix.Status)
+			if (_floatingPointMemoryEditor != null)
+			{
+				var floatPcVisible = _floatingPointMemoryEditor.IsAddressVisible(_floatingPointMemoryEditor.MarkedAddress);
+				_floatingPointMemoryEditor.MarkedAddress = _mix.FloatingPointModule.ProgramCounter;
+
+				if (floatPcVisible)
+					_floatingPointMemoryEditor.MakeAddressVisible(_floatingPointMemoryEditor.MarkedAddress);
+			}
+
+			_ticksToolStripTextBox.Text = _mix.TickCounter.ToString();
+
+			switch (_mix.Status)
 			{
 				case ModuleBase.RunStatus.InvalidInstruction:
-					mToolStripStatusLabel.Text = "Encountered invalid instruction";
+					_toolStripStatusLabel.Text = "Encountered invalid instruction";
 					pcVisible = true;
 					break;
 
 				case ModuleBase.RunStatus.RuntimeError:
-					mToolStripStatusLabel.Text = "Runtime error occured";
+					_toolStripStatusLabel.Text = "Runtime error occured";
 					pcVisible = true;
 					break;
 
 				case ModuleBase.RunStatus.BreakpointReached:
-					mToolStripStatusLabel.Text = "Breakpoint reached";
+					_toolStripStatusLabel.Text = "Breakpoint reached";
 					break;
 
 				default:
-					mToolStripStatusLabel.Text = mMix.Status.ToString();
+					_toolStripStatusLabel.Text = _mix.Status.ToString();
 					break;
 			}
 
 			if (pcVisible)
-			{
-				mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == ModuleBase.RunStatus.Idle);
-			}
+				_mainMemoryEditor.MakeAddressVisible(_mix.ProgramCounter, _mix.Status == ModuleBase.RunStatus.Idle);
 
-			mMix.NeutralizeStatus();
+			_mix.NeutralizeStatus();
 
-			mModeCycleButton.Value = mMix.Mode;
+			_modeCycleButton.Value = _mix.Mode;
 
-			mRegistersEditor.Update();
-			mMainMemoryEditor.Update();
-			mFloatingPointMemoryEditor?.Update();
-			mDevicesControl.Update();
+			_registersEditor.Update();
+			_mainMemoryEditor.Update();
+			_floatingPointMemoryEditor?.Update();
+			_devicesControl.Update();
 			base.Update();
-			mUpdating = false;
+			_updating = false;
 		}
 
-		void UpdateDeviceConfig()
+		private void UpdateDeviceConfig()
 		{
-			DeviceSettings.DeviceFilesDirectory = mConfiguration.DeviceFilesDirectory;
-			DeviceSettings.TickCounts = mConfiguration.TickCounts;
-			DeviceSettings.DeviceReloadInterval = mConfiguration.DeviceReloadInterval;
-			mMix.Devices.UpdateSettings();
+			DeviceSettings.DeviceFilesDirectory = _configuration.DeviceFilesDirectory;
+			DeviceSettings.TickCounts = _configuration.TickCounts;
+			DeviceSettings.DeviceReloadInterval = _configuration.DeviceReloadInterval;
+			_mix.Devices.UpdateSettings();
 
-			foreach (MixDevice device in mMix.Devices)
+			foreach (var device in _mix.Devices.OfType<FileBasedDevice>())
 			{
-				if (!(device is FileBasedDevice))
-				{
-					continue;
-				}
-
-				var fileBasedDevice = (FileBasedDevice)device;
-
-				if (mConfiguration.DeviceFilePaths.ContainsKey(device.Id))
-				{
-					fileBasedDevice.FilePath = mConfiguration.DeviceFilePaths[device.Id];
-					continue;
-				}
-
-				fileBasedDevice.FilePath = null;
+				device.FilePath = _configuration.DeviceFilePaths.ContainsKey(device.Id)
+					? _configuration.DeviceFilePaths[device.Id]
+					: null;
 			}
 		}
 
 		public void UpdateLayout()
 		{
-			GuiSettings.Colors = mConfiguration.Colors;
-			mPCBox.UpdateLayout();
-			mTeletype.UpdateLayout();
-			mRegistersEditor.UpdateLayout();
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
-				editor?.UpdateLayout();
-			}
+			GuiSettings.Colors = _configuration.Colors;
+			_pcBox.UpdateLayout();
+			_teletype.UpdateLayout();
+			_registersEditor.UpdateLayout();
 
-			mDevicesControl.UpdateLayout();
-			mSourceAndFindingsForm?.UpdateLayout();
-			mPreferencesForm?.UpdateLayout();
-			mDeviceEditor.UpdateLayout();
+			foreach (MemoryEditor editor in _memoryEditors)
+				editor?.UpdateLayout();
+
+			_devicesControl.UpdateLayout();
+			_sourceAndFindingsForm?.UpdateLayout();
+			_preferencesForm?.UpdateLayout();
+			_deviceEditor.UpdateLayout();
 		}
 
 		public bool ReadOnly
 		{
-			get => mReadOnly;
+			get => _readOnly;
 			set
 			{
-				if (mReadOnly != value)
-				{
-					mReadOnly = value;
-					mPCBox.ReadOnly = mReadOnly;
-					mResetTicksToolStripButton.Enabled = !mReadOnly;
-					mStepToolStripButton.Enabled = !mReadOnly;
-					mStepToolStripMenuItem.Enabled = !ReadOnly;
-					mTickToolStripButton.Enabled = !mReadOnly;
-					mTickToolStripMenuItem.Enabled = !mReadOnly;
-					mGoToolStripButton.Enabled = !mReadOnly;
-					mGoToolStripMenuItem.Enabled = !mReadOnly;
-					mResetToolStripButton.Enabled = !mReadOnly;
-					mResetToolStripMenuItem.Enabled = !mReadOnly;
-					mRegistersEditor.ReadOnly = mReadOnly;
-					foreach (MemoryEditor editor in mMemoryEditors)
-					{
-						if (editor != null)
-						{
-							editor.ReadOnly = mReadOnly;
-						}
-					}
-					mMainMemoryEditor.ReadOnly = mReadOnly;
-					mOpenProgramToolStripMenuItem.Enabled = !mReadOnly;
-					mPreferencesToolStripMenuItem.Enabled = !mReadOnly;
-				}
+				if (_readOnly == value)
+					return;
+
+				_readOnly = value;
+				_pcBox.ReadOnly = _readOnly;
+				_resetTicksToolStripButton.Enabled = !_readOnly;
+				_stepToolStripButton.Enabled = !_readOnly;
+				_stepToolStripMenuItem.Enabled = !ReadOnly;
+				_tickToolStripButton.Enabled = !_readOnly;
+				_tickToolStripMenuItem.Enabled = !_readOnly;
+				_goToolStripButton.Enabled = !_readOnly;
+				_goToolStripMenuItem.Enabled = !_readOnly;
+				_resetToolStripButton.Enabled = !_readOnly;
+				_resetToolStripMenuItem.Enabled = !_readOnly;
+				_registersEditor.ReadOnly = _readOnly;
+
+				foreach (MemoryEditor editor in _memoryEditors.Where(editor => editor != null))
+					editor.ReadOnly = _readOnly;
+
+				_mainMemoryEditor.ReadOnly = _readOnly;
+				_openProgramToolStripMenuItem.Enabled = !_readOnly;
+				_preferencesToolStripMenuItem.Enabled = !_readOnly;
 			}
 		}
 
-		enum SteppingState
+		private enum SteppingState
 		{
 			Idle,
 			Stepping
 		}
 
-		void ImplementFloatingPointPCChange(int address)
+		private void ImplementFloatingPointPCChange(int address)
 		{
-			if (mFloatingPointMemoryEditor != null && mFloatingPointMemoryEditor.IsAddressVisible(mMix.FloatingPointModule.ProgramCounter))
-			{
-				mFloatingPointMemoryEditor.MakeAddressVisible(address, mMix.Status == ModuleBase.RunStatus.Idle);
-			}
+			if (_floatingPointMemoryEditor != null && _floatingPointMemoryEditor.IsAddressVisible(_mix.FloatingPointModule.ProgramCounter))
+				_floatingPointMemoryEditor.MakeAddressVisible(address, _mix.Status == ModuleBase.RunStatus.Idle);
 
-			mMix.FloatingPointModule.ProgramCounter = address;
+			_mix.FloatingPointModule.ProgramCounter = address;
 
-			if (mFloatingPointMemoryEditor != null)
-			{
-				mFloatingPointMemoryEditor.MarkedAddress = mMix.FloatingPointModule.ProgramCounter;
-			}
+			if (_floatingPointMemoryEditor != null)
+				_floatingPointMemoryEditor.MarkedAddress = _mix.FloatingPointModule.ProgramCounter;
 		}
 
 	}

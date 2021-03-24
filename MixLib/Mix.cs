@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
 using MixLib.Events;
 using MixLib.Instruction;
 using MixLib.Interrupts;
@@ -6,11 +10,6 @@ using MixLib.Modules;
 using MixLib.Modules.Settings;
 using MixLib.Settings;
 using MixLib.Type;
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace MixLib
 {
@@ -76,46 +75,46 @@ namespace MixLib
 			thread.Start();
 		}
 
-		public override Devices Devices 
+		public override Devices Devices
 			=> mDevices;
 
-		public bool IsError 
+		public bool IsError
 			=> Status == RunStatus.InvalidInstruction || Status == RunStatus.RuntimeError;
 
-		public bool IsExecuting 
+		public bool IsExecuting
 			=> IsRunning || Status == RunStatus.Stepping;
 
-		public bool IsRunning 
+		public bool IsRunning
 			=> Status == RunStatus.Running || Status == RunStatus.Halted;
 
-		public override IMemory FullMemory 
+		public override IMemory FullMemory
 			=> mFullMemory;
 
-		public override IMemory Memory 
+		public override IMemory Memory
 			=> mMemory;
 
 		public override Registers Registers
 			=> mRegisters;
 
-		public override string ModuleName 
+		public override string ModuleName
 			=> moduleName;
 
-		public void QueueInterrupt(Interrupt interrupt) 
+		public void QueueInterrupt(Interrupt interrupt)
 			=> mInterruptQueue.Enqueue(interrupt);
 
-		public void ContinueRun() 
+		public void ContinueRun()
 			=> ContinueRun(new TimeSpan(0L));
 
-		public LogLine GetLogLine() 
+		public LogLine GetLogLine()
 			=> mLog.TryDequeue(out LogLine line) ? line : null;
 
-		public void RequestStop() 
+		public void RequestStop()
 			=> RequestStop(true);
 
-		void DeviceReporting(object sender, DeviceReportingEventArgs args) 
+		private void DeviceReporting(object sender, DeviceReportingEventArgs args)
 			=> AddLogLine(new LogLine(ModuleName, args.Severity, "Device message", string.Concat(new object[] { "Device ", args.ReportingDevice.Id, ": ", args.Message })));
 
-		void SetMemoryBounds()
+		private void SetMemoryBounds()
 		{
 			mMemory.IndexOffset = 0;
 			mMemory.MinWordIndex = Mode == RunMode.Control ? mFullMemory.MinWordIndex : 0;
@@ -182,7 +181,7 @@ namespace MixLib
 			Status = RunStatus.Idle;
 		}
 
-		public void ResetTickCounter() 
+		public void ResetTickCounter()
 			=> TickCounter = 0L;
 
 		public void StartRun()
@@ -198,7 +197,7 @@ namespace MixLib
 			mStartStep.Set();
 		}
 
-		void StepRunEntryPoint()
+		private void StepRunEntryPoint()
 		{
 			var stepStartTime = new DateTime();
 			bool suspendRun = true;
@@ -223,7 +222,7 @@ namespace MixLib
 			}
 		}
 
-		void IncreaseTickCounter()
+		private void IncreaseTickCounter()
 		{
 			TickCounter++;
 			if (TickCounter % 1000 == 0)
@@ -269,7 +268,7 @@ namespace MixLib
 			IncreaseTickCounter();
 		}
 
-		public void SignalInterruptExecuted() 
+		public void SignalInterruptExecuted()
 			=> mInterruptExecuted = true;
 
 		public override void ResetProfilingCounts()
@@ -376,7 +375,7 @@ namespace MixLib
 			}
 		}
 
-		void ResetMode() 
+		private void ResetMode()
 			=> Mode = ProgramCounter < 0 ? RunMode.Control : RunMode.Normal;
 
 		public bool RunDetached
@@ -442,7 +441,7 @@ namespace MixLib
 		}
 
 		#region IDisposable Support
-		bool disposedValue;
+		private bool disposedValue;
 
 		protected virtual void Dispose(bool disposing)
 		{

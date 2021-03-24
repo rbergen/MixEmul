@@ -1,6 +1,6 @@
+using System;
 using MixLib.Modules;
 using MixLib.Type;
-using System;
 
 namespace MixLib.Instruction
 {
@@ -61,7 +61,7 @@ namespace MixLib.Instruction
 			mValidator = validator;
 		}
 
-		public Instance CreateInstance(IFullWord instructionWord) 
+		public Instance CreateInstance(IFullWord instructionWord)
 			=> new(this, instructionWord);
 
 		public class Instance : InstructionInstanceBase
@@ -83,37 +83,37 @@ namespace MixLib.Instruction
 				InstructionWord = instructionWord;
 			}
 
-			public int AddressValue 
+			public int AddressValue
 				=> AddressValueFromWord(InstructionWord);
 
-			public int AddressMagnitude 
+			public int AddressMagnitude
 				=> AddressMagnitudeFromWord(InstructionWord);
 
-			public Word.Signs AddressSign 
+			public Word.Signs AddressSign
 				=> InstructionWord.Sign;
 
-			public FieldSpec FieldSpec 
+			public FieldSpec FieldSpec
 				=> new(InstructionWord[FieldSpecByte]);
 
-			public byte Index 
+			public byte Index
 				=> InstructionWord[IndexByte];
 
-			public override InstructionBase Instruction 
+			public override InstructionBase Instruction
 				=> MixInstruction;
 
-			public Word.Signs Sign 
+			public Word.Signs Sign
 				=> InstructionWord.Sign;
 
-			public InstanceValidationError[] Validate() 
+			public InstanceValidationError[] Validate()
 				=> MixInstruction.mValidator == null ? null : MixInstruction.mValidator(this);
 
-			public override string ToString() 
+			public override string ToString()
 				=> new InstructionText(this).InstanceText;
 
-			private static int AddressMagnitudeFromWord(IWord word) 
+			private static int AddressMagnitudeFromWord(IWord word)
 				=> (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
 
-			private static int AddressValueFromWord(IWord word) 
+			private static int AddressValueFromWord(IWord word)
 				=> (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
 
 			public bool Execute(ModuleBase module)

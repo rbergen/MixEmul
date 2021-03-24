@@ -1,11 +1,18 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixEmul", "MixEmul\MixEmul.csproj", "{3CE2CBD5-6C29-437B-844B-A32C1029128A}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixEmul", "MixEmul\MixEmul.csproj", "{3CE2CBD5-6C29-437B-844B-A32C1029128A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixAssembler", "MixAssembler\MixAssembler.csproj", "{8947C313-9E7E-4558-A9C1-DCB59F4C32E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixAssembler", "MixAssembler\MixAssembler.csproj", "{8947C313-9E7E-4558-A9C1-DCB59F4C32E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixLib", "MixLib\MixLib.csproj", "{5865F55B-9F09-47FC-8DB6-84AF7B5990EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MixLib", "MixLib\MixLib.csproj", "{5865F55B-9F09-47FC-8DB6-84AF7B5990EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B6633F6-31F5-4E78-9358-6D73D8144FB4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B4C5CE4-B012-43B1-B37A-034B5866A9AE}
 	EndGlobalSection
 EndGlobal

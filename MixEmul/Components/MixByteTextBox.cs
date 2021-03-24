@@ -1,8 +1,8 @@
-using MixGui.Settings;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Settings;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
@@ -11,30 +11,25 @@ namespace MixGui.Components
 		public const int UseHeight = 21;
 		public const int UseWidth = 18;
 
-		byte mByteValue;
-		Color mEditingTextColor;
-		bool mEditMode;
-		int mLastCaretPos;
-		string mLastValidText;
-		Color mRenderedTextColor;
-		bool mUpdating;
+		private byte _byteValue;
+		private Color _editingTextColor;
+		private bool _editMode;
+		private int _lastCaretPos;
+		private string _lastValidText;
+		private Color _renderedTextColor;
+		private bool _updating;
 
 		public int Index { get; private set; }
 
 		public event ValueChangedEventHandler ValueChanged;
 
-		public MixByteTextBox()
-			: this(0)
-		{
-		}
-
-		public MixByteTextBox(int index)
+		public MixByteTextBox(int index = 0)
 		{
 			Index = index;
-			mByteValue = 0;
+			_byteValue = 0;
 
-			mLastValidText = mByteValue.ToString("D2");
-			mLastCaretPos = SelectionStart + SelectionLength;
+			_lastValidText = _byteValue.ToString("D2");
+			_lastCaretPos = SelectionStart + SelectionLength;
 
 			SuspendLayout();
 
@@ -44,7 +39,7 @@ namespace MixGui.Components
 			Name = "mByteBox";
 			Size = new Size(UseWidth, UseHeight);
 			TabIndex = 0;
-			Text = mByteValue.ToString("D2");
+			Text = _byteValue.ToString("D2");
 
 			ResumeLayout(false);
 
@@ -58,49 +53,39 @@ namespace MixGui.Components
 		}
 
 		protected virtual void OnValueChanged(ValueChangedEventArgs args)
+			=> ValueChanged?.Invoke(this, args);
+
+		private void This_Enter(object sender, EventArgs e)
+			=> Select(0, TextLength);
+
+		private void This_Leave(object sender, EventArgs e)
+			=> CheckAndUpdateValue(Text);
+
+		private void CheckAndUpdateValue(byte byteValue)
 		{
-			ValueChanged?.Invoke(this, args);
-		}
+			_editMode = false;
 
-		void This_Enter(object sender, EventArgs e)
-		{
-			Select(0, TextLength);
-		}
+			if (byteValue > byte.MaxValue)
+				byteValue = byte.MaxValue;
 
-		void This_Leave(object sender, EventArgs e)
-		{
-			CheckAndUpdateValue(Text);
-		}
+			byte oldByteValue = _byteValue;
+			_byteValue = byteValue;
 
-		void CheckAndUpdateValue(byte byteValue)
-		{
-			mEditMode = false;
+			_updating = true;
 
-			if (byteValue > Byte.MaxValue)
-			{
-				byteValue = Byte.MaxValue;
-			}
-
-			byte oldByteValue = mByteValue;
-			mByteValue = byteValue;
-
-			mUpdating = true;
-
-			ForeColor = mRenderedTextColor;
-			mLastValidText = mByteValue.ToString("D2");
-			base.Text = mLastValidText;
-			mLastCaretPos = SelectionStart + SelectionLength;
+			ForeColor = _renderedTextColor;
+			_lastValidText = _byteValue.ToString("D2");
+			base.Text = _lastValidText;
+			_lastCaretPos = SelectionStart + SelectionLength;
 			Select(0, TextLength);
 
-			mUpdating = false;
+			_updating = false;
 
-			if (oldByteValue != mByteValue)
-			{
-				OnValueChanged(new ValueChangedEventArgs(mByteValue, mByteValue));
-			}
+			if (oldByteValue != _byteValue)
+				OnValueChanged(new ValueChangedEventArgs(_byteValue, _byteValue));
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -110,18 +95,16 @@ namespace MixGui.Components
 			}
 		}
 
-		void CheckAndUpdateValue(string newValue)
+		private void CheckAndUpdateValue(string newValue)
 		{
 			try
 			{
 				CheckAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
 			}
-			catch (FormatException)
-			{
-			}
+			catch (FormatException) { }
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			char keyChar = e.KeyChar;
 
@@ -135,7 +118,7 @@ namespace MixGui.Components
 
 				case Keys.Escape:
 					e.Handled = true;
-					CheckAndUpdateValue(mByteValue);
+					CheckAndUpdateValue(_byteValue);
 
 					return;
 			}
@@ -143,44 +126,44 @@ namespace MixGui.Components
 			e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
 		}
 
-		void This_TextChanged(object sender, EventArgs e)
+		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (!mUpdating)
+			if (_updating)
+				return;
+
+			bool textIsValid = true;
+
+			try
 			{
-				bool textIsValid = true;
+				string text = Text;
 
-				try
+				if (text != "")
 				{
-					string text = Text;
-
-					if (text != "")
-					{
-						var byteValue = byte.Parse(text);
-						textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;
-					}
+					var byteValue = byte.Parse(text);
+					textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;
 				}
-				catch (FormatException)
-				{
-					textIsValid = false;
-				}
+			}
+			catch (FormatException)
+			{
+				textIsValid = false;
+			}
 
-				if (!textIsValid)
-				{
-					mUpdating = true;
-					base.Text = mLastValidText;
-					Select(mLastCaretPos, 0);
-					mUpdating = false;
-				}
-				else
-				{
-					mLastValidText = base.Text;
-					mLastCaretPos = SelectionStart + SelectionLength;
+			if (!textIsValid)
+			{
+				_updating = true;
+				base.Text = _lastValidText;
+				Select(_lastCaretPos, 0);
+				_updating = false;
+			}
+			else
+			{
+				_lastValidText = base.Text;
+				_lastCaretPos = SelectionStart + SelectionLength;
 
-					if (!mEditMode)
-					{
-						ForeColor = mEditingTextColor;
-						mEditMode = true;
-					}
+				if (!_editMode)
+				{
+					ForeColor = _editingTextColor;
+					_editMode = true;
 				}
 			}
 		}
@@ -191,20 +174,20 @@ namespace MixGui.Components
 
 			Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			mRenderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			mEditingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			ForeColor = mRenderedTextColor;
+			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			ForeColor = _renderedTextColor;
 
 			ResumeLayout();
 		}
 
 		public MixByte MixByteValue
 		{
-			get => mByteValue;
+			get => _byteValue;
 			set
 			{
-				mByteValue = value;
-				CheckAndUpdateValue(mByteValue);
+				_byteValue = value;
+				CheckAndUpdateValue(_byteValue);
 			}
 		}
 

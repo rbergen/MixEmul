@@ -1,9 +1,9 @@
+﻿using System.IO;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Interrupts;
 using MixLib.Type;
-using System.IO;
 
 namespace MixLib.Device
 {
@@ -11,32 +11,32 @@ namespace MixLib.Device
 	{
 		public const string FileNameExtension = "mixdev";
 
-		private readonly string mFileNamePrefix;
-		private string mFilePath;
+		private readonly string _fileNamePrefix;
+		private string _filePath;
 
 		protected StreamStatus StreamStatus { get; set; }
 
 		protected FileBasedDevice(int id, string fileNamePrefix) : base(id)
 		{
-			mFileNamePrefix = fileNamePrefix;
-			mFilePath = null;
+			_fileNamePrefix = fileNamePrefix;
+			_filePath = null;
 			StreamStatus = new StreamStatus();
 			StreamStatus.ReportingEvent += StreamStatus_Reporting;
 		}
 
-		public string DefaultFileName 
-			=> mFileNamePrefix + Id + "." + FileNameExtension;
+		public string DefaultFileName
+			=> _fileNamePrefix + Id + "." + FileNameExtension;
 
-		public static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare) 
+		public static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 			=> new(fileName, fileMode, fileAccess, fileShare);
 
-		public void CloseStream() 
+		public void CloseStream()
 			=> StreamStatus.CloseStream();
 
-		void StreamStatus_Reporting(object sender, ReportingEventArgs args) 
+		private void StreamStatus_Reporting(object sender, ReportingEventArgs args)
 			=> OnReportingEvent(args);
 
-		protected override DeviceStep.Instance GetCurrentStepInstance() 
+		protected override DeviceStep.Instance GetCurrentStepInstance()
 			=> CurrentStep is StreamStep step ? step.CreateStreamInstance(StreamStatus) : base.GetCurrentStepInstance();
 
 		public override void Reset()
@@ -67,10 +67,10 @@ namespace MixLib.Device
 		{
 			get
 			{
-				string str = mFilePath ?? DefaultFileName;
+				string str = _filePath ?? DefaultFileName;
 				return Path.Combine(DeviceSettings.DeviceFilesDirectory, str);
 			}
-			set => mFilePath = value;
+			set => _filePath = value;
 		}
 	}
 }

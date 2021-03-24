@@ -1,4 +1,4 @@
-namespace MixGui.Events
+﻿namespace MixGui.Events
 {
 	using System;
 
@@ -6,9 +6,7 @@ namespace MixGui.Events
 	{
 		public int SelectedAddress { get; private set; }
 
-		public AddressSelectedEventArgs(int selectedAddress)
-		{
-			SelectedAddress = selectedAddress;
-		}
+		public AddressSelectedEventArgs(int selectedAddress) 
+			=> SelectedAddress = selectedAddress;
 	}
 }

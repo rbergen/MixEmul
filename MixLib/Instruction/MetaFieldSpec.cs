@@ -44,7 +44,7 @@ namespace MixLib.Instruction
 		{
 		}
 
-		MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
+		private MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
 		{
 			Presence = presence;
 			FieldIsRange = fieldIsRange;

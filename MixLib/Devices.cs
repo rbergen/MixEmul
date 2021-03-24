@@ -1,6 +1,6 @@
+using System.Collections;
 using MixLib.Device;
 using MixLib.Events;
-using System.Collections;
 
 namespace MixLib
 {
@@ -8,7 +8,7 @@ namespace MixLib
 	{
 		public const int DeviceCount = 21;
 		public const byte CardReaderUnitCode = 16;
-		readonly MixDevice[] mDevices = new MixDevice[DeviceCount];
+		private readonly MixDevice[] mDevices = new MixDevice[DeviceCount];
 
 		public TeletypeDevice Teletype { get; private set; }
 
@@ -47,20 +47,11 @@ namespace MixLib
 
 		public MixDevice this[int index] => mDevices[index];
 
-		public IEnumerator GetEnumerator()
-		{
-			return mDevices.GetEnumerator();
-		}
+		public IEnumerator GetEnumerator() => mDevices.GetEnumerator();
 
-		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args)
-		{
-			DeviceReportingEvent?.Invoke(this, args);
-		}
+		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) => DeviceReportingEvent?.Invoke(this, args);
 
-		void Device_Reporting(object sender, ReportingEventArgs args)
-		{
-			OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
-		}
+		private void Device_Reporting(object sender, ReportingEventArgs args) => OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
 
 		public void Reset()
 		{

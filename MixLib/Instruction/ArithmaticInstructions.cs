@@ -1,4 +1,4 @@
-using MixLib.Modules;
+﻿using MixLib.Modules;
 using MixLib.Type;
 
 namespace MixLib.Instruction
@@ -8,7 +8,7 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class ArithmaticInstructions
 	{
-		const byte substractOpcode = 2;
+		private const byte SubstractOpcode = 2;
 
 		/// <summary>
 		/// Method for performing ADD and SUB instructions
@@ -16,19 +16,16 @@ namespace MixLib.Instruction
 		public static bool AddSubstract(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+
 			if (indexedAddress == int.MinValue)
-			{
 				return false;
-			}
 
 			Register rA = module.Registers.RA;
 			long rALongValue = rA.LongValue;
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 
-			if (instance.MixInstruction.Opcode == substractOpcode)
-			{
+			if (instance.MixInstruction.Opcode == SubstractOpcode)
 				memoryWordValue = -memoryWordValue;
-			}
 
 			long sumValue = rALongValue + memoryWordValue;
 
@@ -55,10 +52,9 @@ namespace MixLib.Instruction
 		public static bool Divide(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+
 			if (indexedAddress == int.MinValue)
-			{
 				return false;
-			}
 
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 			if (memoryWordValue == 0L)
@@ -99,10 +95,9 @@ namespace MixLib.Instruction
 		public static bool Multiply(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
+
 			if (indexedAddress == int.MinValue)
-			{
 				return false;
-			}
 
 			Register rA = module.Registers.RA;
 			Register rX = module.Registers.RX;

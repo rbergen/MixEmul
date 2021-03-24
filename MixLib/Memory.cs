@@ -1,8 +1,8 @@
-using MixLib.Type;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using MixLib.Type;
 
 namespace MixLib
 {

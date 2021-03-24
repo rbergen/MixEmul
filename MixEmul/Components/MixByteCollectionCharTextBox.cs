@@ -1,45 +1,37 @@
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Settings;
 using MixGui.Utils;
 using MixLib.Type;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace MixGui.Components
 {
 	public class MixByteCollectionCharTextBox : TextBox, IMixByteCollectionEditor, IEscapeConsumer, INavigableControl
 	{
-		Color mEditingTextColor;
-		bool mEditMode;
-		int mLastCaretPos;
-		MixByte[] mLastRenderedBytes;
-		string mLastValidText;
-		Color mRenderedTextColor;
-		bool mUpdating;
-		IMixByteCollection mByteCollection;
+		private Color _editingTextColor;
+		private bool _editMode;
+		private int _lastCaretPos;
+		private MixByte[] _lastRenderedBytes;
+		private string _lastValidText;
+		private Color _renderedTextColor;
+		private bool _updating;
+		private IMixByteCollection _byteCollection;
 
 		public bool UseEditMode { get; set; }
 
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 		public event KeyEventHandler NavigationKeyDown;
 
-		public MixByteCollectionCharTextBox()
-			: this(null)
+		public MixByteCollectionCharTextBox(IMixByteCollection byteCollection = null)
 		{
-		}
-
-		public MixByteCollectionCharTextBox(IMixByteCollection byteCollection)
-		{
-			mByteCollection = byteCollection;
+			_byteCollection = byteCollection ?? new FullWord();
 			UseEditMode = true;
 
-			if (mByteCollection == null)
-			{
-				mByteCollection = new FullWord();
-			}
-
 			SuspendLayout();
+
 			CharacterCasing = CharacterCasing.Upper;
 			Location = new Point(40, 16);
 			Size = new Size(48, 21);
@@ -48,39 +40,36 @@ namespace MixGui.Components
 			KeyPress += This_KeyPress;
 			Leave += This_Leave;
 			TextChanged += This_TextChanged;
-			//      base.MaxLength = mByteCollection.MaxByteCount;
+
 			ResumeLayout(false);
 
 			UpdateLayout();
 
-			mUpdating = false;
-			mEditMode = false;
-			mLastRenderedBytes = null;
+			_updating = false;
+			_editMode = false;
+			_lastRenderedBytes = null;
 			Update();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl
+			=> this;
 
 		public bool Focus(FieldTypes? field, int? index)
-		{
-			return this.FocusWithIndex(index);
-		}
+			=> this.FocusWithIndex(index);
 
-		public FieldTypes? FocusedField => FieldTypes.Chars;
+		public FieldTypes? FocusedField
+			=> FieldTypes.Chars;
 
-		public int? CaretIndex => SelectionStart + SelectionLength;
+		public int? CaretIndex
+			=> SelectionStart + SelectionLength;
 
 		protected void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+			=> ValueChanged?.Invoke(this, args);
 
-		void This_Leave(object sender, EventArgs e)
-		{
-			UpdateValue();
-		}
+		private void This_Leave(object sender, EventArgs e)
+			=> UpdateValue();
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -91,9 +80,7 @@ namespace MixGui.Components
 			}
 
 			if (e.Modifiers != Keys.None)
-			{
 				return;
-			}
 
 			switch (e.KeyCode)
 			{
@@ -106,16 +93,14 @@ namespace MixGui.Components
 
 				case Keys.Right:
 					if (SelectionStart + SelectionLength == TextLength && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
+
 					break;
 
 				case Keys.Left:
 					if (SelectionStart + SelectionLength == 0 && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
+
 					break;
 
 				case Keys.Enter:
@@ -124,10 +109,10 @@ namespace MixGui.Components
 			}
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			char keyChar = e.KeyChar;
-			if (mEditMode)
+			if (_editMode)
 			{
 				switch ((Keys)keyChar)
 				{
@@ -150,74 +135,58 @@ namespace MixGui.Components
 			e.Handled = (index < 0 || index == MixByte.MixChars.Length - 2) && !char.IsControl(keyChar);
 		}
 
-		void This_TextChanged(object sender, EventArgs e)
+		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (!mUpdating)
+			if (_updating)
+				return;
+
+			string validText = "";
+
+			foreach (var c in Text.Where(c => MixByte.MixChars.Contains(c)))
+				validText += c;
+
+			if (validText.Length > _byteCollection.MaxByteCount)
+				validText = validText.Substring(0, _byteCollection.MaxByteCount);
+
+			if (validText.Length > 0 || TextLength == 0)
 			{
-				string validText = "";
+				_lastValidText = validText;
+				_lastCaretPos = SelectionStart + SelectionLength;
 
-				for (int i = 0; i < TextLength; i++)
+				if (!UseEditMode)
 				{
-					if (MixByte.MixChars.Contains(Text[i]))
-					{
-						validText += Text[i];
-					}
+					UpdateValue();
 				}
-
-				if (validText.Length > mByteCollection.MaxByteCount)
+				else if (!_editMode)
 				{
-					validText = validText.Substring(0, mByteCollection.MaxByteCount);
+					ForeColor = _editingTextColor;
+					_editMode = true;
 				}
-
-				if (validText.Length > 0 || TextLength == 0)
-				{
-					mLastValidText = validText;
-					mLastCaretPos = SelectionStart + SelectionLength;
-
-					if (!UseEditMode)
-					{
-						UpdateValue();
-					}
-					else if (!mEditMode)
-					{
-						ForeColor = mEditingTextColor;
-						mEditMode = true;
-					}
-				}
-
-				mUpdating = true;
-
-				base.Text = mLastValidText;
-				Select(mLastCaretPos, 0);
-
-				mUpdating = false;
-
 			}
+
+			_updating = true;
+
+			base.Text = _lastValidText;
+			Select(_lastCaretPos, 0);
+
+			_updating = false;
 		}
 
-		static bool ArraysEqual(MixByte[] one, MixByte[] two)
+		private static bool ArraysEqual(MixByte[] one, MixByte[] two)
 		{
 			if ((one == null && two != null) || (one != null && two == null))
-			{
 				return false;
-			}
 
 			if (one == null && two == null)
-			{
 				return true;
-			}
 
 			if (one.Length != two.Length)
-			{
 				return false;
-			}
 
 			for (int i = 0; i < one.Length; i++)
 			{
 				if (one[i] != two[i])
-				{
 					return false;
-				}
 			}
 
 			return true;
@@ -225,28 +194,28 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			var byteCollectionBytes = mByteCollection.ToArray();
+			var byteCollectionBytes = _byteCollection.ToArray();
 
-			if (mEditMode || mLastRenderedBytes == null || !ArraysEqual(mLastRenderedBytes, byteCollectionBytes))
-			{
-				mEditMode = false;
-				mLastRenderedBytes = byteCollectionBytes;
+			if (!_editMode && _lastRenderedBytes != null && ArraysEqual(_lastRenderedBytes, byteCollectionBytes))
+				return;
 
-				var textValue = mByteCollection.ToString(true).TrimEnd();
+			_editMode = false;
+			_lastRenderedBytes = byteCollectionBytes;
 
-				mUpdating = true;
-				SuspendLayout();
+			var textValue = _byteCollection.ToString(true).TrimEnd();
 
-				ForeColor = mRenderedTextColor;
-				mLastValidText = textValue;
-				mLastCaretPos = SelectionStart + SelectionLength;
-				Text = mLastValidText;
-				Select(mLastCaretPos, 0);
+			_updating = true;
+			SuspendLayout();
 
-				ResumeLayout();
-				mUpdating = false;
-				base.Update();
-			}
+			ForeColor = _renderedTextColor;
+			_lastValidText = textValue;
+			_lastCaretPos = SelectionStart + SelectionLength;
+			Text = _lastValidText;
+			Select(_lastCaretPos, 0);
+
+			ResumeLayout();
+			_updating = false;
+			base.Update();
 		}
 
 		public void UpdateLayout()
@@ -255,48 +224,47 @@ namespace MixGui.Components
 
 			Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			mRenderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			mEditingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			ForeColor = mRenderedTextColor;
+			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			ForeColor = _renderedTextColor;
 
 			ResumeLayout();
 		}
 
-		void UpdateValue()
+		private void UpdateValue()
 		{
 			int currentCharIndex = 0;
-			var oldValue = (IMixByteCollection)mByteCollection.Clone();
+			var oldValue = (IMixByteCollection)_byteCollection.Clone();
 
 			bool valueDiffers = false;
 
-			while (currentCharIndex < Math.Min(TextLength, mByteCollection.MaxByteCount))
+			while (currentCharIndex < Math.Min(TextLength, _byteCollection.MaxByteCount))
 			{
-				if (mByteCollection[currentCharIndex].CharValue != Text[currentCharIndex])
+				if (_byteCollection[currentCharIndex].CharValue != Text[currentCharIndex])
 				{
 					valueDiffers = true;
 
 					if (Text[currentCharIndex] != MixByte.MixChars[^1])
-					{
-						mByteCollection[currentCharIndex] = Text[currentCharIndex];
-					}
+						_byteCollection[currentCharIndex] = Text[currentCharIndex];
 				}
 
 				currentCharIndex++;
 			}
 
-			while (currentCharIndex < mByteCollection.MaxByteCount)
+			while (currentCharIndex < _byteCollection.MaxByteCount)
 			{
-				if (mByteCollection[currentCharIndex].CharValue != ' ')
+				if (_byteCollection[currentCharIndex].CharValue != ' ')
 				{
 					valueDiffers = true;
-					mByteCollection[currentCharIndex] = ' ';
+					_byteCollection[currentCharIndex] = ' ';
 				}
+
 				currentCharIndex++;
 			}
 
 			if (valueDiffers)
 			{
-				var newValue = (IMixByteCollection)mByteCollection.Clone();
+				var newValue = (IMixByteCollection)_byteCollection.Clone();
 				OnValueChanged(new MixByteCollectionEditorValueChangedEventArgs(oldValue, newValue));
 			}
 
@@ -305,17 +273,15 @@ namespace MixGui.Components
 
 		public IMixByteCollection MixByteCollectionValue
 		{
-			get => mByteCollection;
+			get => _byteCollection;
 			set
 			{
 				if (value != null)
 				{
-					mByteCollection = value;
+					_byteCollection = value;
 
-					if (TextLength > mByteCollection.MaxByteCount)
-					{
-						Text = Text.Substring(0, mByteCollection.MaxByteCount);
-					}
+					if (TextLength > _byteCollection.MaxByteCount)
+						Text = Text.Substring(0, _byteCollection.MaxByteCount);
 
 					Select(TextLength, 0);
 

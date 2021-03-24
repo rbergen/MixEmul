@@ -1,54 +1,50 @@
+﻿using System;
+using System.IO;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.IO;
 
 namespace MixLib.Device
 {
 	public class TapeDevice : FileBasedDevice
 	{
-		const string shortName = "TAP";
-		const string fileNamePrefix = "tape";
-
-		const string initializationDescription = "Initializing tape device";
-		const string openingDescription = "Starting data transfer with tape";
-		const string windingDescription = "Winding tape";
+		private const string MyShortName = "TAP";
+		private const string FileNamePrefix = "tape";
+		private const string InitializationDescription = "Initializing tape device";
+		private const string OpeningDescription = "Starting data transfer with tape";
+		private const string WindingDescription = "Winding tape";
 
 		public const int WordsPerRecord = 100;
+		private const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
 
-		const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
+		public TapeDevice(int id) : base(id, FileNamePrefix) 
+			=> UpdateSettings();
 
-		public TapeDevice(int id) : base(id, fileNamePrefix)
-		{
-			UpdateSettings();
-		}
+		public override int RecordWordCount 
+			=> WordsPerRecord;
 
-		public override int RecordWordCount => WordsPerRecord;
+		public override string ShortName 
+			=> MyShortName;
 
-		public override string ShortName => shortName;
+		public override bool SupportsInput 
+			=> true;
 
-		public override bool SupportsInput => true;
+		public override bool SupportsOutput 
+			=> true;
 
-		public override bool SupportsOutput => true;
+		public static long CalculateBytePosition(long record) 
+			=> record * bytesPerRecord;
 
-		public static long CalculateBytePosition(long record)
-		{
-			return record * bytesPerRecord;
-		}
-
-		public static long CalculateRecordCount(FileStream stream)
-		{
-			return stream.Length / bytesPerRecord;
-		}
+		public static long CalculateRecordCount(FileStream stream) 
+			=> stream.Length / bytesPerRecord;
 
 		public sealed override void UpdateSettings()
 		{
 			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.TapeInitialization);
 
-			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
+			DeviceStep nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
@@ -61,7 +57,7 @@ namespace MixLib.Device
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerRecord);
 			nextStep = nextStep.NextStep;
@@ -74,7 +70,7 @@ namespace MixLib.Device
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new SeekStep
 			{
@@ -82,16 +78,15 @@ namespace MixLib.Device
 			};
 		}
 
-		class OpenStreamStep : StreamStep
+		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription => openingDescription;
+			public override string StatusDescription 
+				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+				=> new Instance(streamStatus);
 
-			new class Instance : StreamStep.Instance
+			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
@@ -100,10 +95,10 @@ namespace MixLib.Device
 					try
 					{
 						var stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+
 						if (!StreamStatus.PositionSet)
-						{
 							stream.Position = stream.Length;
-						}
+
 						StreamStatus.Stream = stream;
 					}
 					catch (Exception exception)
@@ -115,43 +110,38 @@ namespace MixLib.Device
 			}
 		}
 
-		class SeekStep : StreamStep
+		private class SeekStep : StreamStep
 		{
-			public override string StatusDescription => windingDescription;
+			public override string StatusDescription 
+				=> WindingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+				=> new Instance(streamStatus);
+
+			private new class Instance : StreamStep.Instance
 			{
-				return new Instance(streamStatus);
-			}
+				private long mTicksLeft;
+				private const long unset = long.MinValue;
 
-			new class Instance : StreamStep.Instance
-			{
-				long mTicksLeft;
-				const long unset = long.MinValue;
-
-				public Instance(StreamStatus streamStatus) : base(streamStatus)
-				{
-					mTicksLeft = unset;
-				}
+				public Instance(StreamStatus streamStatus) : base(streamStatus) 
+					=> mTicksLeft = unset;
 
 				public override bool Tick()
 				{
 					if (mTicksLeft == unset)
 					{
 						if (!StreamStatus.PositionSet)
-						{
 							InitiateStreamPosition();
-						}
 
-						mTicksLeft = (Operands.MValue == 0 ? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) : Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
+						mTicksLeft = (Operands.MValue == 0 
+							? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) 
+							: Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
 					mTicksLeft -= 1L;
 
 					if (mTicksLeft > 0L)
-					{
 						return false;
-					}
 
 					if (Operands.MValue == 0)
 					{
@@ -160,10 +150,9 @@ namespace MixLib.Device
 					}
 
 					long currentPosition = StreamStatus.Position + Operands.MValue * WordsPerRecord * (FullWord.ByteCount + 1);
+
 					if (currentPosition < 0L)
-					{
 						currentPosition = 0L;
-					}
 
 					StreamStatus.Position = currentPosition;
 

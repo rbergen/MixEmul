@@ -1,20 +1,20 @@
+﻿using System;
+using System.Collections;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Type;
-using System;
-using System.Collections;
 
 namespace MixLib.Device
 {
 	public class TeletypeDevice : MixDevice
 	{
-		private const string shortName = "TTY";
+		private const string MyShortName = "TTY";
 
-		private const string initializationDescription = "Initializing teletype";
-		private const string readingDescription = "Reading line from teletype";
-		private const string writingDescription = "Writing line to teletype";
+		private const string InitializationDescription = "Initializing teletype";
+		private const string ReadingDescription = "Reading line from teletype";
+		private const string WritingDescription = "Writing line to teletype";
 
-		private const int recordWordCount = 14;
+		private const int MyRecordWordCount = 14;
 
 		private Queue mInputBuffer;
 		private Queue mOutputBuffer;
@@ -23,31 +23,31 @@ namespace MixLib.Device
 
 		public event EventHandler OutputAdded;
 
-		public TeletypeDevice(int id) : base(id) 
+		public TeletypeDevice(int id) : base(id)
 			=> UpdateSettings();
 
-		public override int RecordWordCount 
-			=> recordWordCount;
+		public override int RecordWordCount
+			=> MyRecordWordCount;
 
-		public override string ShortName 
-			=> shortName;
+		public override string ShortName
+			=> MyShortName;
 
-		public override bool SupportsInput 
+		public override bool SupportsInput
 			=> true;
 
-		public override bool SupportsOutput 
+		public override bool SupportsOutput
 			=> true;
 
-		public void AddInputLine(string line) 
+		public void AddInputLine(string line)
 			=> mInputBuffer.Enqueue(line);
 
-		public string GetOutputLine() 
+		public string GetOutputLine()
 			=> mOutputBuffer.Count > 0 ? (string)mOutputBuffer.Dequeue() : null;
 
-		void This_InputRequired(object sender, EventArgs e) 
+		private void This_InputRequired(object sender, EventArgs e)
 			=> InputRequired?.Invoke(this, e);
 
-		void This_OutputAdded(object sender, EventArgs e) 
+		private void This_OutputAdded(object sender, EventArgs e)
 			=> OutputAdded?.Invoke(this, e);
 
 		protected override DeviceStep.Instance GetCurrentStepInstance()
@@ -78,18 +78,18 @@ namespace MixLib.Device
 			mInputBuffer = Queue.Synchronized(new Queue());
 			mOutputBuffer = Queue.Synchronized(new Queue());
 
-			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
+			DeviceStep nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadLineStep(mInputBuffer);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+			nextStep.NextStep = new WriteToMemoryStep(false, MyRecordWordCount)
 			{
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
+			nextStep.NextStep = new ReadFromMemoryStep(false, MyRecordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new WriteLineStep(mOutputBuffer)
 			{
@@ -99,59 +99,53 @@ namespace MixLib.Device
 			FirstIocDeviceStep = null;
 		}
 
-		class ReadLineStep : DeviceStep
+		private class ReadLineStep : DeviceStep
 		{
-			readonly Queue mInputBuffer;
+			private readonly Queue _inputBuffer;
 
-			public ReadLineStep(Queue inputBuffer)
-			{
-				mInputBuffer = inputBuffer;
-			}
+			public ReadLineStep(Queue inputBuffer) 
+				=> _inputBuffer = inputBuffer;
 
-			public override string StatusDescription => readingDescription;
+			public override string StatusDescription 
+				=> ReadingDescription;
 
-			public override DeviceStep.Instance CreateInstance()
-			{
-				return new Instance(mInputBuffer);
-			}
+			public override DeviceStep.Instance CreateInstance() 
+				=> new Instance(_inputBuffer);
 
 			public new class Instance : DeviceStep.Instance
 			{
-				readonly Queue mInputBuffer;
-				MixByte[] mReadBytes;
+				private readonly Queue _inputBuffer;
+				private MixByte[] _readBytes;
 
 				public event EventHandler InputRequired;
 
-				public Instance(Queue inputBuffer)
-				{
-					mInputBuffer = inputBuffer;
-				}
+				public Instance(Queue inputBuffer) => _inputBuffer = inputBuffer;
 
-				public override object OutputForNextStep => mReadBytes;
+				public override object OutputForNextStep => _readBytes;
 
 				public override bool Tick()
 				{
-					if (mInputBuffer.Count == 0)
+					if (_inputBuffer.Count == 0)
 					{
 						InputRequired(this, new EventArgs());
 						return false;
 					}
 
-					string stringToRead = (mInputBuffer.Count == 0) ? "" : ((string)mInputBuffer.Dequeue());
-					mReadBytes = new MixByte[FullWord.ByteCount * recordWordCount];
+					string stringToRead = (_inputBuffer.Count == 0) ? "" : ((string)_inputBuffer.Dequeue());
+					_readBytes = new MixByte[FullWord.ByteCount * MyRecordWordCount];
 
-					var bytesToReadCount = Math.Min(stringToRead.Length, mReadBytes.Length);
+					var bytesToReadCount = Math.Min(stringToRead.Length, _readBytes.Length);
 					int index = 0;
 
 					while (index < bytesToReadCount)
 					{
-						mReadBytes[index] = stringToRead[index];
+						_readBytes[index] = stringToRead[index];
 						index++;
 					}
 
-					while (index < mReadBytes.Length)
+					while (index < _readBytes.Length)
 					{
-						mReadBytes[index] = 0;
+						_readBytes[index] = 0;
 						index++;
 					}
 
@@ -160,48 +154,41 @@ namespace MixLib.Device
 			}
 		}
 
-		class WriteLineStep : DeviceStep
+		private class WriteLineStep : DeviceStep
 		{
-			readonly Queue mOutputBuffer;
+			private readonly Queue _outputBuffer;
 
-			public WriteLineStep(Queue outputBuffer)
-			{
-				mOutputBuffer = outputBuffer;
-			}
+			public WriteLineStep(Queue outputBuffer) 
+				=> _outputBuffer = outputBuffer;
 
-			public override string StatusDescription => writingDescription;
+			public override string StatusDescription 
+				=> WritingDescription;
 
-			public override DeviceStep.Instance CreateInstance()
-			{
-				return new Instance(mOutputBuffer);
-			}
+			public override DeviceStep.Instance CreateInstance() 
+				=> new Instance(_outputBuffer);
 
 			public new class Instance : DeviceStep.Instance
 			{
-				readonly Queue mOutputBuffer;
-				MixByte[] mWriteBytes;
+				private readonly Queue _outputBuffer;
+				private MixByte[] _writeBytes;
 
 				public event EventHandler OutputAdded;
 
-				public Instance(Queue outputBuffer)
-				{
-					mOutputBuffer = outputBuffer;
-				}
+				public Instance(Queue outputBuffer) 
+					=> _outputBuffer = outputBuffer;
 
 				public override bool Tick()
 				{
-					if (mWriteBytes == null)
-					{
+					if (_writeBytes == null)
 						return true;
-					}
 
-					char[] charsToWrite = new char[recordWordCount * FullWord.ByteCount];
-					var bytesToWriteCount = Math.Min(charsToWrite.Length, mWriteBytes.Length);
+					char[] charsToWrite = new char[MyRecordWordCount * FullWord.ByteCount];
+					var bytesToWriteCount = Math.Min(charsToWrite.Length, _writeBytes.Length);
 					int index = 0;
 
 					while (index < bytesToWriteCount)
 					{
-						charsToWrite[index] = mWriteBytes[index];
+						charsToWrite[index] = _writeBytes[index];
 						index++;
 					}
 
@@ -211,7 +198,7 @@ namespace MixLib.Device
 						index++;
 					}
 
-					mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(Array.Empty<char>()));
+					_outputBuffer.Enqueue(new string(charsToWrite).TrimEnd(Array.Empty<char>()));
 
 					OutputAdded(this, new EventArgs());
 
@@ -220,7 +207,7 @@ namespace MixLib.Device
 
 				public override object InputFromPreviousStep
 				{
-					set => mWriteBytes = (MixByte[])value;
+					set => _writeBytes = (MixByte[])value;
 				}
 			}
 		}

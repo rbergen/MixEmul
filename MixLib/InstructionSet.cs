@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using MixLib.Instruction;
 using MixLib.Type;
 using MixLib.Utils;
-using System.Collections.Generic;
 
 namespace MixLib
 {
@@ -250,17 +250,11 @@ namespace MixLib
 			AddInstruction("INT", 5, new FieldSpec(9), 2, executor, null);
 		}
 
-		void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
-		{
-			AddInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
-		}
+		private void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) => AddInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
 
-		void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
-		{
-			AddInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
-		}
+		private void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) => AddInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
 
-		void AddInstruction(string mnemonic, MixInstruction instruction)
+		private void AddInstruction(string mnemonic, MixInstruction instruction)
 		{
 			mMnemonicInstructionMap.Add(mnemonic, instruction);
 			var list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);

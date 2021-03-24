@@ -41,7 +41,7 @@ namespace MixAssembler.Instruction
 			Comment = comment;
 		}
 
-		public bool IsCommentLine 
+		public bool IsCommentLine
 			=> LocationField == null;
 	}
 }

@@ -6,17 +6,15 @@ namespace MixGui.Components
 	public partial class MemoryExportDialog : Form
 	{
 		public MemoryExportDialog()
-		{
-			InitializeComponent();
-		}
+			=> InitializeComponent();
 
 		public int MinMemoryIndex
 		{
 			set
 			{
-				mFromAddressUpDown.Minimum = value;
-				mToAddressUpDown.Minimum = value;
-				mProgramCounterUpDown.Minimum = value;
+				_fromAddressUpDown.Minimum = value;
+				_toAddressUpDown.Minimum = value;
+				_programCounterUpDown.Minimum = value;
 			}
 		}
 
@@ -24,44 +22,40 @@ namespace MixGui.Components
 		{
 			set
 			{
-				mFromAddressUpDown.Maximum = value;
-				mToAddressUpDown.Maximum = value;
-				mProgramCounterUpDown.Maximum = value;
+				_fromAddressUpDown.Maximum = value;
+				_toAddressUpDown.Maximum = value;
+				_programCounterUpDown.Maximum = value;
 			}
 		}
 
 		public int FromAddress
 		{
-			get => (int)mFromAddressUpDown.Value;
-			set => mFromAddressUpDown.Value = value;
+			get => (int)_fromAddressUpDown.Value;
+			set => _fromAddressUpDown.Value = value;
 		}
 
 		public int ToAddress
 		{
-			get => (int)mToAddressUpDown.Value;
-			set => mToAddressUpDown.Value = value;
+			get => (int)_toAddressUpDown.Value;
+			set => _toAddressUpDown.Value = value;
 		}
 
 		public int ProgramCounter
 		{
-			get => (int)mProgramCounterUpDown.Value;
-			set => mProgramCounterUpDown.Value = value;
+			get => (int)_programCounterUpDown.Value;
+			set => _programCounterUpDown.Value = value;
 		}
 
-		void MFromAddressUpDown_ValueChanged(object sender, EventArgs e)
+		private void FromAddressUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			if (mToAddressUpDown.Value < mFromAddressUpDown.Value)
-			{
-				mToAddressUpDown.Value = mFromAddressUpDown.Value;
-			}
+			if (_toAddressUpDown.Value < _fromAddressUpDown.Value)
+				_toAddressUpDown.Value = _fromAddressUpDown.Value;
 		}
 
-		void MToAddressUpDown_ValueChanged(object sender, EventArgs e)
+		private void ToAddressUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			if (mFromAddressUpDown.Value > mToAddressUpDown.Value)
-			{
-				mFromAddressUpDown.Value = mToAddressUpDown.Value;
-			}
+			if (_fromAddressUpDown.Value > _toAddressUpDown.Value)
+				_fromAddressUpDown.Value = _toAddressUpDown.Value;
 		}
 	}
 }

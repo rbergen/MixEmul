@@ -1,4 +1,4 @@
-using MixLib.Type;
+﻿using MixLib.Type;
 
 namespace MixAssembler.Value
 {

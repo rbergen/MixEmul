@@ -2,7 +2,7 @@ using System.Windows.Forms;
 
 namespace MixGui.Components
 {
-	interface INavigableControl
+	internal interface INavigableControl
 	{
 		event KeyEventHandler NavigationKeyDown;
 	}

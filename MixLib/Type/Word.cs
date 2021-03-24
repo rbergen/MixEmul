@@ -1,8 +1,8 @@
-using MixLib.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using MixLib.Events;
 
 namespace MixLib.Type
 {
@@ -28,7 +28,7 @@ namespace MixLib.Type
 				mBytes[i] = bytes[i];
 		}
 
-		Word(int byteCount, Signs sign)
+		private Word(int byteCount, Signs sign)
 		{
 			ByteCount = byteCount;
 			mSign = sign;
@@ -48,34 +48,34 @@ namespace MixLib.Type
 				mBytes[index++] = 0;
 		}
 
-		public virtual bool IsEmpty 
+		public virtual bool IsEmpty
 			=> MagnitudeLongValue == 0 && Sign.IsPositive();
 
-		public int MaxByteCount 
+		public int MaxByteCount
 			=> ByteCount;
 
-		public int BitCount 
+		public int BitCount
 			=> ByteCount * MixByte.BitCount;
 
-		public long MaxMagnitude 
+		public long MaxMagnitude
 			=> (1 << BitCount) - 1;
 
-		public override string ToString() 
+		public override string ToString()
 			=> ToString(false);
 
-		public IEnumerator GetEnumerator() 
+		public IEnumerator GetEnumerator()
 			=> mBytes.GetEnumerator();
 
-		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() 
+		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
 			=> ((IEnumerable<MixByte>)mBytes).GetEnumerator();
 
-		public MixByte[] ToArray() 
+		public MixByte[] ToArray()
 			=> Magnitude;
 
-		public static long BytesToLong(params MixByte[] bytes) 
+		public static long BytesToLong(params MixByte[] bytes)
 			=> BytesToLong(Signs.Positive, bytes);
 
-		protected void OnWordValueChanged() 
+		protected void OnWordValueChanged()
 			=> WordValueChanged?.Invoke(this);
 
 		public static long BytesToLong(Signs sign, params MixByte[] bytes)
@@ -90,7 +90,7 @@ namespace MixLib.Type
 			return longValue;
 		}
 
-		public void InvertSign() 
+		public void InvertSign()
 			=> Sign = Sign.Invert();
 
 		public string ToString(bool asChars)
@@ -195,7 +195,7 @@ namespace MixLib.Type
 			}
 		}
 
-		long SetMagnitudeLongValue(long magnitude)
+		private long SetMagnitudeLongValue(long magnitude)
 		{
 			long oldValue = MagnitudeLongValue;
 

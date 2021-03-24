@@ -1,50 +1,50 @@
-using MixAssembler.Value;
+﻿using MixAssembler.Value;
 using MixLib.Type;
 
 namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-		private readonly long mLiteralMagnitude;
-		private readonly Word.Signs mLiteralSign;
-		private long mMagnitude;
-		private Word.Signs mSign;
-		private bool mValueDefined;
+		private readonly long _literalMagnitude;
+		private readonly Word.Signs _literalSign;
+		private long _magnitude;
+		private Word.Signs _sign;
+		private bool _valueDefined;
 
 		private LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
 		{
-			mLiteralSign = literalSign;
-			mLiteralMagnitude = literalMagnitude;
-			mMagnitude = -1L;
-			mSign = Word.Signs.Positive;
-			mValueDefined = false;
+			_literalSign = literalSign;
+			_literalMagnitude = literalMagnitude;
+			_magnitude = -1L;
+			_sign = Word.Signs.Positive;
+			_valueDefined = false;
 		}
 
-		public override bool IsSymbolDefined 
-			=> mValueDefined;
+		public override bool IsSymbolDefined
+			=> _valueDefined;
 
-		public override long MemoryWordMagnitude 
-			=> mLiteralMagnitude;
+		public override long MemoryWordMagnitude
+			=> _literalMagnitude;
 
-		public override Word.Signs MemoryWordSign 
-			=> mLiteralSign;
+		public override Word.Signs MemoryWordSign
+			=> _literalSign;
 
-		public override long MemoryWordValue 
-			=> mLiteralSign.ApplyTo(mLiteralMagnitude);
+		public override long MemoryWordValue
+			=> _literalSign.ApplyTo(_literalMagnitude);
 
-		public override long GetValue(int currentAddress) 
-			=> mSign.ApplyTo(mMagnitude);
+		public override long GetValue(int currentAddress)
+			=> _sign.ApplyTo(_magnitude);
 
-		public override long GetMagnitude(int currentAddress) 
-			=> mMagnitude;
+		public override long GetMagnitude(int currentAddress)
+			=> _magnitude;
 
-		public override Word.Signs GetSign(int currentAddress) 
-			=> mSign;
+		public override Word.Signs GetSign(int currentAddress)
+			=> _sign;
 
-		public override bool IsValueDefined(int currentAddress) 
-			=> mValueDefined;
+		public override bool IsValueDefined(int currentAddress)
+			=> _valueDefined;
 
-		private static string GetName(Word.Signs literalSign, long literalMagnitude, int count) 
+		private static string GetName(Word.Signs literalSign, long literalMagnitude, int count)
 			=> string.Concat("=", literalSign.IsNegative() ? "-" : "", literalMagnitude, '=', count);
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
@@ -76,16 +76,16 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-			mSign = value.GetSign();
-			mMagnitude = value.GetMagnitude();
-			mValueDefined = true;
+			_sign = value.GetSign();
+			_magnitude = value.GetMagnitude();
+			_valueDefined = true;
 		}
 
 		public override void SetValue(Word.Signs sign, long magnitude)
 		{
-			mSign = sign;
-			mMagnitude = magnitude;
-			mValueDefined = true;
+			_sign = sign;
+			_magnitude = magnitude;
+			_valueDefined = true;
 		}
 	}
 }

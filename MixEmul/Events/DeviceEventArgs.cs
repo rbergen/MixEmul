@@ -1,5 +1,5 @@
-﻿using MixLib.Device;
-using System;
+﻿using System;
+using MixLib.Device;
 
 namespace MixGui.Events
 {
@@ -7,9 +7,7 @@ namespace MixGui.Events
 	{
 		public MixDevice Device { get; private set; }
 
-		public DeviceEventArgs(MixDevice device)
-		{
-			Device = device;
-		}
+		public DeviceEventArgs(MixDevice device) 
+			=> Device = device;
 	}
 }

@@ -8,14 +8,14 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class ShiftInstructions
 	{
-		const byte slaField = 0;
-		const byte sraField = 1;
-		const byte slaxField = 2;
-		const byte sraxField = 3;
-		const byte slcField = 4;
-		const byte srcField = 5;
-		const byte slbField = 6;
-		const byte srbField = 7;
+		private const byte slaField = 0;
+		private const byte sraField = 1;
+		private const byte slaxField = 2;
+		private const byte sraxField = 3;
+		private const byte slcField = 4;
+		private const byte srcField = 5;
+		private const byte slbField = 6;
+		private const byte srbField = 7;
 
 		/// <summary>
 		/// Method for performing SLA and SRA instructions
@@ -286,7 +286,7 @@ namespace MixLib.Instruction
 			return true;
 		}
 
-		static void ShiftRegistersLeft(FullWordRegister left, FullWordRegister right, int shiftCount)
+		private static void ShiftRegistersLeft(FullWordRegister left, FullWordRegister right, int shiftCount)
 		{
 			ShiftWordLeft(left, shiftCount);
 
@@ -298,7 +298,7 @@ namespace MixLib.Instruction
 			ShiftWordLeft(right, shiftCount);
 		}
 
-		static void ShiftRegistersRight(FullWordRegister left, FullWordRegister right, int shiftCount)
+		private static void ShiftRegistersRight(FullWordRegister left, FullWordRegister right, int shiftCount)
 		{
 			ShiftWordRight(right, shiftCount);
 
@@ -310,7 +310,7 @@ namespace MixLib.Instruction
 			ShiftWordRight(left, shiftCount);
 		}
 
-		static void ShiftWordLeft(Word word, int shiftCount)
+		private static void ShiftWordLeft(Word word, int shiftCount)
 		{
 			for (int i = shiftCount; i < word.ByteCount; i++)
 			{
@@ -318,7 +318,7 @@ namespace MixLib.Instruction
 			}
 		}
 
-		static void ShiftWordRight(Word word, int shiftCount)
+		private static void ShiftWordRight(Word word, int shiftCount)
 		{
 			for (int i = (word.ByteCount - shiftCount) - 1; i >= 0; i--)
 			{

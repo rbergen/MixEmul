@@ -1,4 +1,4 @@
-namespace MixGui.Components
+﻿namespace MixGui.Components
 {
   partial class TextFileDeviceEditor
   {
@@ -26,200 +26,200 @@ namespace MixGui.Components
     private void InitializeComponent()
     {
 			this.components = new System.ComponentModel.Container();
-			this.mFirstRecordLabel = new System.Windows.Forms.Label();
-			this.mSetClipboardLabel = new System.Windows.Forms.Label();
-			this.mReadOnlyCheckBox = new System.Windows.Forms.CheckBox();
-			this.mReadOnlyLabel = new System.Windows.Forms.Label();
-			this.mRevertButton = new System.Windows.Forms.Button();
-			this.mSaveButton = new System.Windows.Forms.Button();
-			this.mDeviceFileWatcher = new System.IO.FileSystemWatcher();
-			this.mMixByteCollectionEditorList = new MixGui.Components.MixByteCollectionEditorList();
-			this.mMixCharButtons = new MixGui.Components.MixCharClipboardButtonControl();
-			this.mFirstRecordTextBox = new MixGui.Components.LongValueTextBox();
-			this.mIODelayTimer = new System.Timers.Timer();
-			this.mAppendButton = new System.Windows.Forms.Button();
-			this.mTruncateButton = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.mDeviceFileWatcher)).BeginInit();
+			this._firstRecordLabel = new System.Windows.Forms.Label();
+			this._setClipboardLabel = new System.Windows.Forms.Label();
+			this._readOnlyCheckBox = new System.Windows.Forms.CheckBox();
+			this._readOnlyLabel = new System.Windows.Forms.Label();
+			this._revertButton = new System.Windows.Forms.Button();
+			this._saveButton = new System.Windows.Forms.Button();
+			this._deviceFileWatcher = new System.IO.FileSystemWatcher();
+			this._mixByteCollectionEditorList = new MixGui.Components.MixByteCollectionEditorList();
+			this._mixCharButtons = new MixGui.Components.MixCharClipboardButtonControl();
+			this._firstRecordTextBox = new MixGui.Components.LongValueTextBox();
+			this._ioDelayTimer = new System.Timers.Timer();
+			this._appendButton = new System.Windows.Forms.Button();
+			this._truncateButton = new System.Windows.Forms.Button();
+			((System.ComponentModel.ISupportInitialize)(this._deviceFileWatcher)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// mFirstRecordLabel
 			// 
-			this.mFirstRecordLabel.AutoSize = true;
-			this.mFirstRecordLabel.Location = new System.Drawing.Point(0, 27);
-			this.mFirstRecordLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mFirstRecordLabel.Name = "mFirstRecordLabel";
-			this.mFirstRecordLabel.Size = new System.Drawing.Size(49, 15);
-			this.mFirstRecordLabel.TabIndex = 5;
-			this.mFirstRecordLabel.Text = "First {0}:";
+			this._firstRecordLabel.AutoSize = true;
+			this._firstRecordLabel.Location = new System.Drawing.Point(0, 27);
+			this._firstRecordLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._firstRecordLabel.Name = "mFirstRecordLabel";
+			this._firstRecordLabel.Size = new System.Drawing.Size(49, 15);
+			this._firstRecordLabel.TabIndex = 5;
+			this._firstRecordLabel.Text = "First {0}:";
 			// 
 			// mSetClipboardLabel
 			// 
-			this.mSetClipboardLabel.AutoSize = true;
-			this.mSetClipboardLabel.Location = new System.Drawing.Point(149, 27);
-			this.mSetClipboardLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mSetClipboardLabel.Name = "mSetClipboardLabel";
-			this.mSetClipboardLabel.Size = new System.Drawing.Size(96, 15);
-			this.mSetClipboardLabel.TabIndex = 7;
-			this.mSetClipboardLabel.Text = "Set clipboard to: ";
+			this._setClipboardLabel.AutoSize = true;
+			this._setClipboardLabel.Location = new System.Drawing.Point(149, 27);
+			this._setClipboardLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._setClipboardLabel.Name = "mSetClipboardLabel";
+			this._setClipboardLabel.Size = new System.Drawing.Size(96, 15);
+			this._setClipboardLabel.TabIndex = 7;
+			this._setClipboardLabel.Text = "Set clipboard to: ";
 			// 
 			// mReadOnlyCheckBox
 			// 
-			this.mReadOnlyCheckBox.AutoSize = true;
-			this.mReadOnlyCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mReadOnlyCheckBox.Location = new System.Drawing.Point(84, 1);
-			this.mReadOnlyCheckBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mReadOnlyCheckBox.Name = "mReadOnlyCheckBox";
-			this.mReadOnlyCheckBox.Size = new System.Drawing.Size(12, 11);
-			this.mReadOnlyCheckBox.TabIndex = 1;
-			this.mReadOnlyCheckBox.UseVisualStyleBackColor = true;
-			this.mReadOnlyCheckBox.CheckedChanged += new System.EventHandler(this.MReadOnlyCheckBox_CheckedChanged);
+			this._readOnlyCheckBox.AutoSize = true;
+			this._readOnlyCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._readOnlyCheckBox.Location = new System.Drawing.Point(84, 1);
+			this._readOnlyCheckBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._readOnlyCheckBox.Name = "mReadOnlyCheckBox";
+			this._readOnlyCheckBox.Size = new System.Drawing.Size(12, 11);
+			this._readOnlyCheckBox.TabIndex = 1;
+			this._readOnlyCheckBox.UseVisualStyleBackColor = true;
+			this._readOnlyCheckBox.CheckedChanged += new System.EventHandler(this.ReadOnlyCheckBox_CheckedChanged);
 			// 
 			// mReadOnlyLabel
 			// 
-			this.mReadOnlyLabel.AutoSize = true;
-			this.mReadOnlyLabel.Location = new System.Drawing.Point(0, 0);
-			this.mReadOnlyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mReadOnlyLabel.Name = "mReadOnlyLabel";
-			this.mReadOnlyLabel.Size = new System.Drawing.Size(67, 15);
-			this.mReadOnlyLabel.TabIndex = 0;
-			this.mReadOnlyLabel.Text = "Read-only: ";
+			this._readOnlyLabel.AutoSize = true;
+			this._readOnlyLabel.Location = new System.Drawing.Point(0, 0);
+			this._readOnlyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._readOnlyLabel.Name = "mReadOnlyLabel";
+			this._readOnlyLabel.Size = new System.Drawing.Size(67, 15);
+			this._readOnlyLabel.TabIndex = 0;
+			this._readOnlyLabel.Text = "Read-only: ";
 			// 
 			// mRevertButton
 			// 
-			this.mRevertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mRevertButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mRevertButton.Location = new System.Drawing.Point(260, 170);
-			this.mRevertButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mRevertButton.Name = "mRevertButton";
-			this.mRevertButton.Size = new System.Drawing.Size(64, 27);
-			this.mRevertButton.TabIndex = 10;
-			this.mRevertButton.Text = "&Revert";
-			this.mRevertButton.UseVisualStyleBackColor = true;
-			this.mRevertButton.Click += new System.EventHandler(this.MRevertButton_Click);
+			this._revertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._revertButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._revertButton.Location = new System.Drawing.Point(260, 170);
+			this._revertButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._revertButton.Name = "mRevertButton";
+			this._revertButton.Size = new System.Drawing.Size(64, 27);
+			this._revertButton.TabIndex = 10;
+			this._revertButton.Text = "&Revert";
+			this._revertButton.UseVisualStyleBackColor = true;
+			this._revertButton.Click += new System.EventHandler(this.RevertButton_Click);
 			// 
 			// mSaveButton
 			// 
-			this.mSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mSaveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mSaveButton.Location = new System.Drawing.Point(189, 170);
-			this.mSaveButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mSaveButton.Name = "mSaveButton";
-			this.mSaveButton.Size = new System.Drawing.Size(64, 27);
-			this.mSaveButton.TabIndex = 10;
-			this.mSaveButton.Text = "&Save";
-			this.mSaveButton.UseVisualStyleBackColor = true;
-			this.mSaveButton.Click += new System.EventHandler(this.MSaveButton_Click);
+			this._saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._saveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._saveButton.Location = new System.Drawing.Point(189, 170);
+			this._saveButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._saveButton.Name = "mSaveButton";
+			this._saveButton.Size = new System.Drawing.Size(64, 27);
+			this._saveButton.TabIndex = 10;
+			this._saveButton.Text = "&Save";
+			this._saveButton.UseVisualStyleBackColor = true;
+			this._saveButton.Click += new System.EventHandler(this.SaveButton_Click);
 			// 
 			// mDeviceFileWatcher
 			// 
-			this.mDeviceFileWatcher.EnableRaisingEvents = true;
-			this.mDeviceFileWatcher.NotifyFilter = ((System.IO.NotifyFilters)((System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.LastWrite)));
-			this.mDeviceFileWatcher.SynchronizingObject = this;
-			this.mDeviceFileWatcher.Changed += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Created += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Deleted += new System.IO.FileSystemEventHandler(this.MDeviceFileWatcher_Event);
-			this.mDeviceFileWatcher.Renamed += new System.IO.RenamedEventHandler(this.MDeviceFileWatcher_Renamed);
+			this._deviceFileWatcher.EnableRaisingEvents = true;
+			this._deviceFileWatcher.NotifyFilter = ((System.IO.NotifyFilters)((System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.LastWrite)));
+			this._deviceFileWatcher.SynchronizingObject = this;
+			this._deviceFileWatcher.Changed += new System.IO.FileSystemEventHandler(this.DeviceFileWatcher_Event);
+			this._deviceFileWatcher.Created += new System.IO.FileSystemEventHandler(this.DeviceFileWatcher_Event);
+			this._deviceFileWatcher.Deleted += new System.IO.FileSystemEventHandler(this.DeviceFileWatcher_Event);
+			this._deviceFileWatcher.Renamed += new System.IO.RenamedEventHandler(this.DeviceFileWatcher_Renamed);
 			// 
 			// mMixByteCollectionEditorList
 			// 
-			this.mMixByteCollectionEditorList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._mixByteCollectionEditorList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.mMixByteCollectionEditorList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mMixByteCollectionEditorList.CreateEditor = null;
-			this.mMixByteCollectionEditorList.FirstVisibleIndex = 0;
-			this.mMixByteCollectionEditorList.LoadEditor = null;
-			this.mMixByteCollectionEditorList.Location = new System.Drawing.Point(0, 50);
-			this.mMixByteCollectionEditorList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mMixByteCollectionEditorList.MaxIndex = 0;
-			this.mMixByteCollectionEditorList.MinIndex = 0;
-			this.mMixByteCollectionEditorList.Name = "mMixByteCollectionEditorList";
-			this.mMixByteCollectionEditorList.ReadOnly = false;
-			this.mMixByteCollectionEditorList.ResizeInProgress = false;
-			this.mMixByteCollectionEditorList.Size = new System.Drawing.Size(324, 115);
-			this.mMixByteCollectionEditorList.TabIndex = 9;
-			this.mMixByteCollectionEditorList.FirstVisibleIndexChanged += new MixGui.Components.EditorList<MixGui.Components.IMixByteCollectionEditor>.FirstVisibleIndexChangedHandler(this.MMixByteCollectionEditorList_FirstVisibleIndexChanged);
+			this._mixByteCollectionEditorList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._mixByteCollectionEditorList.CreateEditor = null;
+			this._mixByteCollectionEditorList.FirstVisibleIndex = 0;
+			this._mixByteCollectionEditorList.LoadEditor = null;
+			this._mixByteCollectionEditorList.Location = new System.Drawing.Point(0, 50);
+			this._mixByteCollectionEditorList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._mixByteCollectionEditorList.MaxIndex = 0;
+			this._mixByteCollectionEditorList.MinIndex = 0;
+			this._mixByteCollectionEditorList.Name = "mMixByteCollectionEditorList";
+			this._mixByteCollectionEditorList.ReadOnly = false;
+			this._mixByteCollectionEditorList.ResizeInProgress = false;
+			this._mixByteCollectionEditorList.Size = new System.Drawing.Size(324, 115);
+			this._mixByteCollectionEditorList.TabIndex = 9;
+			this._mixByteCollectionEditorList.FirstVisibleIndexChanged += new MixGui.Components.EditorList<MixGui.Components.IMixByteCollectionEditor>.FirstVisibleIndexChangedHandler(this.MixByteCollectionEditorList_FirstVisibleIndexChanged);
 			// 
 			// mMixCharButtons
 			// 
-			this.mMixCharButtons.Location = new System.Drawing.Point(251, 23);
-			this.mMixCharButtons.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mMixCharButtons.Name = "mMixCharButtons";
-			this.mMixCharButtons.Size = new System.Drawing.Size(74, 27);
-			this.mMixCharButtons.TabIndex = 8;
+			this._mixCharButtons.Location = new System.Drawing.Point(251, 23);
+			this._mixCharButtons.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._mixCharButtons.Name = "mMixCharButtons";
+			this._mixCharButtons.Size = new System.Drawing.Size(74, 27);
+			this._mixCharButtons.TabIndex = 8;
 			// 
 			// mFirstRecordTextBox
 			// 
-			this.mFirstRecordTextBox.BackColor = System.Drawing.Color.White;
-			this.mFirstRecordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mFirstRecordTextBox.ClearZero = true;
-			this.mFirstRecordTextBox.ForeColor = System.Drawing.Color.Black;
-			this.mFirstRecordTextBox.Location = new System.Drawing.Point(83, 24);
-			this.mFirstRecordTextBox.LongValue = ((long)(0));
-			this.mFirstRecordTextBox.Magnitude = ((long)(0));
-			this.mFirstRecordTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mFirstRecordTextBox.MaxLength = 2;
-			this.mFirstRecordTextBox.MaxValue = ((long)(99));
-			this.mFirstRecordTextBox.MinValue = ((long)(0));
-			this.mFirstRecordTextBox.Name = "mFirstRecordTextBox";
-			this.mFirstRecordTextBox.Sign = MixLib.Type.Word.Signs.Positive;
-			this.mFirstRecordTextBox.Size = new System.Drawing.Size(40, 23);
-			this.mFirstRecordTextBox.SupportNegativeZero = false;
-			this.mFirstRecordTextBox.TabIndex = 6;
-			this.mFirstRecordTextBox.Text = "0";
-			this.mFirstRecordTextBox.ValueChanged += new MixGui.Components.LongValueTextBox.ValueChangedEventHandler(this.MFirstRecordTextBox_ValueChanged);
+			this._firstRecordTextBox.BackColor = System.Drawing.Color.White;
+			this._firstRecordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._firstRecordTextBox.ClearZero = true;
+			this._firstRecordTextBox.ForeColor = System.Drawing.Color.Black;
+			this._firstRecordTextBox.Location = new System.Drawing.Point(83, 24);
+			this._firstRecordTextBox.LongValue = ((long)(0));
+			this._firstRecordTextBox.Magnitude = ((long)(0));
+			this._firstRecordTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._firstRecordTextBox.MaxLength = 2;
+			this._firstRecordTextBox.MaxValue = ((long)(99));
+			this._firstRecordTextBox.MinValue = ((long)(0));
+			this._firstRecordTextBox.Name = "mFirstRecordTextBox";
+			this._firstRecordTextBox.Sign = MixLib.Type.Word.Signs.Positive;
+			this._firstRecordTextBox.Size = new System.Drawing.Size(40, 23);
+			this._firstRecordTextBox.SupportNegativeZero = false;
+			this._firstRecordTextBox.TabIndex = 6;
+			this._firstRecordTextBox.Text = "0";
+			this._firstRecordTextBox.ValueChanged += new MixGui.Components.LongValueTextBox.ValueChangedEventHandler(this.FirstRecordTextBox_ValueChanged);
 			// 
 			// mIODelayTimer
 			// 
-			this.mIODelayTimer.Interval = 500;
-			this.mIODelayTimer.Elapsed += this.MIODelayTimer_Tick;
+			this._ioDelayTimer.Interval = 500;
+			this._ioDelayTimer.Elapsed += this.IODelayTimer_Tick;
 			// 
 			// mAppendButton
 			// 
-			this.mAppendButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mAppendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mAppendButton.Location = new System.Drawing.Point(0, 170);
-			this.mAppendButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mAppendButton.Name = "mAppendButton";
-			this.mAppendButton.Size = new System.Drawing.Size(71, 27);
-			this.mAppendButton.TabIndex = 11;
-			this.mAppendButton.Text = "A&ppend";
-			this.mAppendButton.UseVisualStyleBackColor = true;
-			this.mAppendButton.Click += new System.EventHandler(this.MAppendButton_Click);
+			this._appendButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._appendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._appendButton.Location = new System.Drawing.Point(0, 170);
+			this._appendButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._appendButton.Name = "mAppendButton";
+			this._appendButton.Size = new System.Drawing.Size(71, 27);
+			this._appendButton.TabIndex = 11;
+			this._appendButton.Text = "A&ppend";
+			this._appendButton.UseVisualStyleBackColor = true;
+			this._appendButton.Click += new System.EventHandler(this.AppendButton_Click);
 			// 
 			// mTruncateButton
 			// 
-			this.mTruncateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mTruncateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mTruncateButton.Location = new System.Drawing.Point(78, 170);
-			this.mTruncateButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.mTruncateButton.Name = "mTruncateButton";
-			this.mTruncateButton.Size = new System.Drawing.Size(71, 27);
-			this.mTruncateButton.TabIndex = 11;
-			this.mTruncateButton.Text = "&Truncate";
-			this.mTruncateButton.UseVisualStyleBackColor = true;
-			this.mTruncateButton.Click += new System.EventHandler(this.MTruncateButton_Click);
+			this._truncateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this._truncateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._truncateButton.Location = new System.Drawing.Point(78, 170);
+			this._truncateButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this._truncateButton.Name = "mTruncateButton";
+			this._truncateButton.Size = new System.Drawing.Size(71, 27);
+			this._truncateButton.TabIndex = 11;
+			this._truncateButton.Text = "&Truncate";
+			this._truncateButton.UseVisualStyleBackColor = true;
+			this._truncateButton.Click += new System.EventHandler(this.TruncateButton_Click);
 			// 
 			// TextFileDeviceEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.mTruncateButton);
-			this.Controls.Add(this.mAppendButton);
-			this.Controls.Add(this.mSaveButton);
-			this.Controls.Add(this.mRevertButton);
-			this.Controls.Add(this.mReadOnlyLabel);
-			this.Controls.Add(this.mReadOnlyCheckBox);
-			this.Controls.Add(this.mMixByteCollectionEditorList);
-			this.Controls.Add(this.mMixCharButtons);
-			this.Controls.Add(this.mSetClipboardLabel);
-			this.Controls.Add(this.mFirstRecordTextBox);
-			this.Controls.Add(this.mFirstRecordLabel);
+			this.Controls.Add(this._truncateButton);
+			this.Controls.Add(this._appendButton);
+			this.Controls.Add(this._saveButton);
+			this.Controls.Add(this._revertButton);
+			this.Controls.Add(this._readOnlyLabel);
+			this.Controls.Add(this._readOnlyCheckBox);
+			this.Controls.Add(this._mixByteCollectionEditorList);
+			this.Controls.Add(this._mixCharButtons);
+			this.Controls.Add(this._setClipboardLabel);
+			this.Controls.Add(this._firstRecordTextBox);
+			this.Controls.Add(this._firstRecordLabel);
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "TextFileDeviceEditor";
 			this.Size = new System.Drawing.Size(324, 197);
 			this.VisibleChanged += new System.EventHandler(this.DeviceEditor_VisibleChanged);
-			((System.ComponentModel.ISupportInitialize)(this.mDeviceFileWatcher)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this._deviceFileWatcher)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -227,18 +227,18 @@ namespace MixGui.Components
 
     #endregion
 
-    private System.Windows.Forms.Label mFirstRecordLabel;
-    private global::MixGui.Components.LongValueTextBox mFirstRecordTextBox;
-    private MixCharClipboardButtonControl mMixCharButtons;
-    private System.Windows.Forms.Label mSetClipboardLabel;
-    private MixByteCollectionEditorList mMixByteCollectionEditorList;
-    private System.Windows.Forms.CheckBox mReadOnlyCheckBox;
-    private System.Windows.Forms.Label mReadOnlyLabel;
-    private System.Windows.Forms.Button mRevertButton;
-    private System.Windows.Forms.Button mSaveButton;
-    private System.IO.FileSystemWatcher mDeviceFileWatcher;
-    private System.Timers.Timer mIODelayTimer;
-    private System.Windows.Forms.Button mTruncateButton;
-    private System.Windows.Forms.Button mAppendButton;
+    private System.Windows.Forms.Label _firstRecordLabel;
+    private global::MixGui.Components.LongValueTextBox _firstRecordTextBox;
+    private MixCharClipboardButtonControl _mixCharButtons;
+    private System.Windows.Forms.Label _setClipboardLabel;
+    private MixByteCollectionEditorList _mixByteCollectionEditorList;
+    private System.Windows.Forms.CheckBox _readOnlyCheckBox;
+    private System.Windows.Forms.Label _readOnlyLabel;
+    private System.Windows.Forms.Button _revertButton;
+    private System.Windows.Forms.Button _saveButton;
+    private System.IO.FileSystemWatcher _deviceFileWatcher;
+    private System.Timers.Timer _ioDelayTimer;
+    private System.Windows.Forms.Button _truncateButton;
+    private System.Windows.Forms.Button _appendButton;
   }
 }

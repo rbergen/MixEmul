@@ -1,4 +1,4 @@
-using MixLib.Modules;
+﻿using MixLib.Modules;
 using MixLib.Type;
 
 namespace MixLib.Instruction
@@ -8,7 +8,7 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class ComparisonInstructions
 	{
-		const int opcodeBase = 56;
+		private const int OpcodeBase = 56;
 
 		/// <summary>
 		/// Method for performing CMPx instructions
@@ -16,12 +16,11 @@ namespace MixLib.Instruction
 		public static bool Compare(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue)
-			{
-				return false;
-			}
 
-			int registerIndex = instance.MixInstruction.Opcode - opcodeBase;
+			if (indexedAddress == int.MinValue)
+				return false;
+
+			int registerIndex = instance.MixInstruction.Opcode - OpcodeBase;
 			Register register = module.Registers[registerIndex];
 
 			module.Registers.CompareIndicator = WordField.LoadFromFullWord(instance.FieldSpec, register.FullWordValue).CompareTo(module.Memory[indexedAddress]).ToCompValue();

@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using MixLib.Interrupts;
 using MixLib.Modules;
 using MixLib.Type;
-using System.Collections.Generic;
 
 namespace MixLib.Instruction
 {
@@ -16,7 +16,7 @@ namespace MixLib.Instruction
 		/// <summary>
 		/// Method for performing the NOP instruction
 		/// </summary>
-		public static bool Noop(ModuleBase module, MixInstruction.Instance instance) 
+		public static bool Noop(ModuleBase module, MixInstruction.Instance instance)
 			=> true;
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace MixLib.Instruction
 		/// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
 		/// several ticks, the exact number of ticks depending on the number of words moved.
 		/// </summary>
-		class MoveStatus
+		private class MoveStatus
 		{
 			public int CurrentWord { get; private set; }
 			public WordStates CurrentWordState { get; set; }
@@ -197,10 +197,7 @@ namespace MixLib.Instruction
 				CurrentWordState = WordStates.BeforeMove;
 			}
 
-			public void NextWord()
-			{
-				CurrentWord++;
-			}
+			public void NextWord() => CurrentWord++;
 
 			public enum WordStates
 			{

@@ -9,9 +9,6 @@ namespace MixLib.Instruction
 	{
 		public string Mnemonic { get; private set; }
 
-		protected InstructionBase(string mnemonic)
-		{
-			Mnemonic = mnemonic;
-		}
+		protected InstructionBase(string mnemonic) => Mnemonic = mnemonic;
 	}
 }

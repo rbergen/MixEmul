@@ -1,4 +1,4 @@
-using MixLib.Events;
+﻿using MixLib.Events;
 
 namespace MixLib.Device.Step
 {
@@ -14,18 +14,17 @@ namespace MixLib.Device.Step
 
 		public abstract class Instance
 		{
-			object mPassthrough;
+			private object _passthrough;
 
 			public InOutputOperands Operands { get; set; }
 
 			public event ReportingEventHandler ReportingEvent;
 
-			public virtual object OutputForNextStep => mPassthrough;
+			public virtual object OutputForNextStep 
+				=> _passthrough;
 
-			protected virtual void OnReportingEvent(ReportingEventArgs args)
-			{
-				ReportingEvent?.Invoke(this, args);
-			}
+			protected virtual void OnReportingEvent(ReportingEventArgs args) 
+				=> ReportingEvent?.Invoke(this, args);
 
 			protected Instance() { }
 
@@ -33,7 +32,7 @@ namespace MixLib.Device.Step
 
 			public virtual object InputFromPreviousStep
 			{
-				set => mPassthrough = value;
+				set => _passthrough = value;
 			}
 		}
 	}

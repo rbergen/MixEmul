@@ -1,102 +1,90 @@
-﻿using MixGui.Events;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using MixGui.Events;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
 	public partial class SearchDialog : Form
 	{
-		SearchParameters mSearchParameters;
+		private SearchParameters _searchParameters;
 
 		public SearchDialog()
 		{
 			InitializeComponent();
-			mSearchTextBox.MixByteCollectionValue = new MixByteCollection(80);
+			_searchTextBox.MixByteCollectionValue = new MixByteCollection(80);
 		}
 
-		void FieldCheckedChanged(object sender, EventArgs e)
-		{
-			SetFindButtonEnabledState();
-		}
+		private void FieldCheckedChanged(object sender, EventArgs e)
+			=> SetFindButtonEnabledState();
 
-		void MSearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			SetFindButtonEnabledState();
-		}
+		private void SearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) 
+			=> SetFindButtonEnabledState();
 
 		public SearchParameters SearchParameters
 		{
-			get => mSearchParameters;
+			get => _searchParameters;
 
 			set
 			{
 				if (value != null)
 				{
-					mSearchParameters = value;
+					_searchParameters = value;
 
 					FillControls();
 				}
 			}
 		}
 
-		void SetFindButtonEnabledState()
+		private void SetFindButtonEnabledState() 
+			=> _findButton.Enabled = _searchTextBox.MixByteCollectionValue.ToString(true).Trim() != string.Empty && (_valueCheckBox.Checked || _charsCheckBox.Checked || _instructionCheckBox.Checked);
+
+		private void FindButton_Click(object sender, EventArgs e)
 		{
-			mFindButton.Enabled = mSearchTextBox.MixByteCollectionValue.ToString(true).Trim() != string.Empty && (mValueCheckBox.Checked || mCharsCheckBox.Checked || mInstructionCheckBox.Checked);
+			if (_searchParameters == null)
+				_searchParameters = new SearchParameters();
+
+			_searchParameters.SearchText = _searchTextBox.MixByteCollectionValue.ToString(true).Trim();
+			_searchParameters.SearchFields = FieldTypes.None;
+
+			if (_valueCheckBox.Checked)
+				_searchParameters.SearchFields |= FieldTypes.Value;
+
+			if (_charsCheckBox.Checked)
+				_searchParameters.SearchFields |= FieldTypes.Chars;
+
+			if (_instructionCheckBox.Checked)
+				_searchParameters.SearchFields |= FieldTypes.Instruction;
+
+			_searchParameters.MatchWholeWord = _matchWholeWordCheckBox.Checked;
+			_searchParameters.WrapSearch = _wrapSearchCheckBox.Checked;
 		}
 
-		void MFindButton_Click(object sender, EventArgs e)
-		{
-			if (mSearchParameters == null)
-			{
-				mSearchParameters = new SearchParameters();
-			}
-
-			mSearchParameters.SearchText = mSearchTextBox.MixByteCollectionValue.ToString(true).Trim();
-			mSearchParameters.SearchFields = FieldTypes.None;
-			if (mValueCheckBox.Checked)
-			{
-				mSearchParameters.SearchFields |= FieldTypes.Value;
-			}
-			if (mCharsCheckBox.Checked)
-			{
-				mSearchParameters.SearchFields |= FieldTypes.Chars;
-			}
-			if (mInstructionCheckBox.Checked)
-			{
-				mSearchParameters.SearchFields |= FieldTypes.Instruction;
-			}
-			mSearchParameters.MatchWholeWord = mMatchWholeWordCheckBox.Checked;
-			mSearchParameters.WrapSearch = mWrapSearchCheckBox.Checked;
-		}
-
-		void SearchDialog_VisibleChanged(object sender, EventArgs e)
+		private void SearchDialog_VisibleChanged(object sender, EventArgs e)
 		{
 			if (Visible)
-			{
 				FillControls();
-			}
 		}
 
-		void FillControls()
+		private void FillControls()
 		{
-			if (mSearchParameters != null)
+			if (_searchParameters != null)
 			{
-				mSearchTextBox.MixByteCollectionValue.Load(mSearchParameters.SearchText);
-				mValueCheckBox.Checked = (mSearchParameters.SearchFields & FieldTypes.Value) == FieldTypes.Value;
-				mCharsCheckBox.Checked = (mSearchParameters.SearchFields & FieldTypes.Chars) == FieldTypes.Chars;
-				mInstructionCheckBox.Checked = (mSearchParameters.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction;
-				mMatchWholeWordCheckBox.Checked = mSearchParameters.MatchWholeWord;
-				mWrapSearchCheckBox.Checked = mSearchParameters.WrapSearch;
+				_searchTextBox.MixByteCollectionValue.Load(_searchParameters.SearchText);
+				_valueCheckBox.Checked = (_searchParameters.SearchFields & FieldTypes.Value) == FieldTypes.Value;
+				_charsCheckBox.Checked = (_searchParameters.SearchFields & FieldTypes.Chars) == FieldTypes.Chars;
+				_instructionCheckBox.Checked = (_searchParameters.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction;
+				_matchWholeWordCheckBox.Checked = _searchParameters.MatchWholeWord;
+				_wrapSearchCheckBox.Checked = _searchParameters.WrapSearch;
 			}
 			else
 			{
-				mSearchTextBox.Text = "";
-				mValueCheckBox.Checked = true;
-				mCharsCheckBox.Checked = true;
-				mInstructionCheckBox.Checked = true;
-				mMatchWholeWordCheckBox.Checked = false;
-				mWrapSearchCheckBox.Checked = true;
+				_searchTextBox.Text = "";
+				_valueCheckBox.Checked = true;
+				_charsCheckBox.Checked = true;
+				_instructionCheckBox.Checked = true;
+				_matchWholeWordCheckBox.Checked = false;
+				_wrapSearchCheckBox.Checked = true;
 			}
 		}
 	}

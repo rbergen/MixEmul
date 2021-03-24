@@ -1,5 +1,5 @@
-using MixLib.Type;
 using System;
+using MixLib.Type;
 
 namespace MixGui.Events
 {

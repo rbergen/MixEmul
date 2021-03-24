@@ -1,30 +1,30 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Settings;
 using MixGui.Utils;
 using MixLib.Settings;
 using MixLib.Type;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace MixGui.Components
 {
 	public class MemoryWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		readonly Label mAddressLabel;
-		readonly Panel mAddressPanel;
-		readonly Panel mInstructionPanel;
-		readonly CheckBox mBreakPointBox;
-		readonly Label mColonLabel;
-		readonly Label mColonLabel2;
-		readonly InstructionInstanceTextBox mInstructionTextBox;
-		readonly FullWordEditor mFullWordEditor;
-		bool mMarked;
-		IMemoryFullWord mMemoryWord;
-		bool mReadOnly;
-		readonly Label mEqualsLabel;
-		readonly Label mProfileLabel;
-		GetMaxProfilingCountCallback mGetMaxProfilingCount;
+		private readonly Label _addressLabel;
+		private readonly Panel _addressPanel;
+		private readonly Panel _instructionPanel;
+		private readonly CheckBox _breakPointBox;
+		private readonly Label _colonLabel;
+		private readonly Label _colonLabel2;
+		private readonly InstructionInstanceTextBox _instructionTextBox;
+		private readonly FullWordEditor _fullWordEditor;
+		private bool _marked;
+		private IMemoryFullWord _memoryWord;
+		private bool _readOnly;
+		private readonly Label _equalsLabel;
+		private readonly Label _profileLabel;
+		private GetMaxProfilingCountCallback _getMaxProfilingCount;
 
 		public event EventHandler AddressDoubleClick;
 		public event EventHandler BreakpointCheckedChanged;
@@ -34,31 +34,25 @@ namespace MixGui.Components
 
 		public delegate long GetMaxProfilingCountCallback(GuiSettings.ProfilingInfoType infoType);
 
-		public MemoryWordEditor()
-			: this(null)
+		public MemoryWordEditor(IMemoryFullWord memoryWord = null)
 		{
-		}
+			_readOnly = false;
+			_marked = false;
 
-		public MemoryWordEditor(IMemoryFullWord memoryWord)
-		{
-			mReadOnly = false;
-			mMarked = false;
 			if (memoryWord == null)
-			{
 				memoryWord = new MemoryFullWord(int.MinValue);
-			}
 
-			mInstructionTextBox = new InstructionInstanceTextBox(mMemoryWord);
-			mFullWordEditor = new FullWordEditor(mMemoryWord);
-			mAddressPanel = new Panel();
-			mInstructionPanel = new Panel();
-			mBreakPointBox = new CheckBox();
-			mAddressLabel = new Label();
-			mColonLabel = new Label();
-			mEqualsLabel = new Label();
-			mColonLabel = new Label();
-			mColonLabel2 = new Label();
-			mProfileLabel = new Label();
+			_instructionTextBox = new InstructionInstanceTextBox(memoryWord);
+			_fullWordEditor = new FullWordEditor(memoryWord);
+			_addressPanel = new Panel();
+			_instructionPanel = new Panel();
+			_breakPointBox = new CheckBox();
+			_addressLabel = new Label();
+			_colonLabel = new Label();
+			_equalsLabel = new Label();
+			_colonLabel = new Label();
+			_colonLabel2 = new Label();
+			_profileLabel = new Label();
 			InitializeComponent();
 
 			MemoryWord = memoryWord;
@@ -66,184 +60,165 @@ namespace MixGui.Components
 			UpdateProfilingLayout();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl
+			=> this;
 
-		public FieldTypes? FocusedField => mInstructionTextBox.Focused ? FieldTypes.Instruction : mFullWordEditor.FocusedField;
+		public FieldTypes? FocusedField
+			=> _instructionTextBox.Focused ? FieldTypes.Instruction : _fullWordEditor.FocusedField;
 
-		public int? CaretIndex => FocusedField == FieldTypes.Instruction ? mInstructionTextBox.CaretIndex : mFullWordEditor.CaretIndex;
+		public int? CaretIndex
+			=> FocusedField == FieldTypes.Instruction ? _instructionTextBox.CaretIndex : _fullWordEditor.CaretIndex;
 
 		public bool Focus(FieldTypes? field, int? index)
-		{
-			return field == FieldTypes.Instruction ? mInstructionTextBox.FocusWithIndex(index) : mFullWordEditor.Focus(field, index);
-		}
+			=> field == FieldTypes.Instruction ? _instructionTextBox.FocusWithIndex(index) : _fullWordEditor.Focus(field, index);
 
-		static Color GetBlendedColor(double fraction)
-		{
-			return fraction < .5 ? Interpolate(Color.Green, Color.Yellow, fraction * 2) : Interpolate(Color.Yellow, Color.Red, fraction * 2 - 1);
-		}
+		private static Color GetBlendedColor(double fraction)
+			=> fraction < .5
+			? Interpolate(Color.Green, Color.Yellow, fraction * 2)
+			: Interpolate(Color.Yellow, Color.Red, (fraction * 2) - 1);
 
 		private static int RoundForArgb(double d)
-		{
-			return d < 0 ? 0 : (d > 255 ? 255 : (int)d);
-		}
+			=> d < 0 ? 0 : (d > 255 ? 255 : (int)d);
 
-		static double Interpolate(double d1, double d2, double fraction)
-		{
-			return d1 * (1 - fraction) + d2 * fraction;
-		}
+		private static double Interpolate(double d1, double d2, double fraction)
+			=> (d1 * (1 - fraction)) + (d2 * fraction);
 
-		void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			AddressSelected?.Invoke(this, args);
-		}
+		private void OnAddressSelected(AddressSelectedEventArgs args)
+			=> AddressSelected?.Invoke(this, args);
 
 		protected virtual void OnAddressDoubleClick(EventArgs e)
-		{
-			AddressDoubleClick?.Invoke(this, e);
-		}
+			=> AddressDoubleClick?.Invoke(this, e);
 
 		protected virtual void OnBreakpointCheckedChanged(EventArgs e)
-		{
-			BreakpointCheckedChanged?.Invoke(this, e);
-		}
+			=> BreakpointCheckedChanged?.Invoke(this, e);
 
 		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+			=> ValueChanged?.Invoke(this, args);
 
-		void MInstructionTextBox_MouseWheel(object sender, MouseEventArgs e)
-		{
-			OnMouseWheel(e);
-		}
+		private void InstructionTextBox_MouseWheel(object sender, MouseEventArgs e)
+			=> OnMouseWheel(e);
 
-		void MInstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args)
-		{
-			OnAddressSelected(args);
-		}
+		private void InstructionTextBox_AddressSelected(object sender, AddressSelectedEventArgs args)
+			=> OnAddressSelected(args);
 
-		void MAddressLabel_DoubleClick(object sender, EventArgs e)
-		{
-			OnAddressDoubleClick(e);
-		}
+		private void AddressLabel_DoubleClick(object sender, EventArgs e)
+			=> OnAddressDoubleClick(e);
 
-		void MBreakPointBox_CheckedChanged(object sender, EventArgs e)
-		{
-			OnBreakpointCheckedChanged(e);
-		}
+		private void BreakPointBox_CheckedChanged(object sender, EventArgs e)
+			=> OnBreakpointCheckedChanged(e);
 
 		public GetMaxProfilingCountCallback GetMaxProfilingCount
 		{
-			get => mGetMaxProfilingCount;
+			get => _getMaxProfilingCount;
 			set
 			{
-				if (mGetMaxProfilingCount != value)
+				if (_getMaxProfilingCount != value)
 				{
-					mGetMaxProfilingCount = value;
+					_getMaxProfilingCount = value;
 					UpdateProfilingCount();
 				}
 			}
 		}
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
-			mAddressPanel.SuspendLayout();
+			_addressPanel.SuspendLayout();
 			SuspendLayout();
 
-			mBreakPointBox.Location = new Point(2, 2);
-			mBreakPointBox.Name = "mBreakPointBox";
-			mBreakPointBox.Size = new Size(16, 17);
-			mBreakPointBox.TabIndex = 0;
-			mBreakPointBox.FlatStyle = FlatStyle.Flat;
-			mBreakPointBox.CheckedChanged += MBreakPointBox_CheckedChanged;
+			_breakPointBox.Location = new Point(2, 2);
+			_breakPointBox.Name = "mBreakPointBox";
+			_breakPointBox.Size = new Size(16, 17);
+			_breakPointBox.TabIndex = 0;
+			_breakPointBox.FlatStyle = FlatStyle.Flat;
+			_breakPointBox.CheckedChanged += BreakPointBox_CheckedChanged;
 
-			mAddressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mAddressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mAddressLabel.Location = new Point(mBreakPointBox.Right, mBreakPointBox.Top - 1);
-			mAddressLabel.Name = "mAddressLabel";
-			mAddressLabel.Size = new Size(45, mBreakPointBox.Height);
-			mAddressLabel.TabIndex = 1;
-			mAddressLabel.Text = "0000";
-			mAddressLabel.TextAlign = ContentAlignment.MiddleCenter;
-			mAddressLabel.DoubleClick += MAddressLabel_DoubleClick;
+			_addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			_addressLabel.Location = new Point(_breakPointBox.Right, _breakPointBox.Top - 1);
+			_addressLabel.Name = "mAddressLabel";
+			_addressLabel.Size = new Size(45, _breakPointBox.Height);
+			_addressLabel.TabIndex = 1;
+			_addressLabel.Text = "0000";
+			_addressLabel.TextAlign = ContentAlignment.MiddleCenter;
+			_addressLabel.DoubleClick += AddressLabel_DoubleClick;
 
-			mAddressPanel.Controls.Add(mBreakPointBox);
-			mAddressPanel.Controls.Add(mAddressLabel);
-			mAddressPanel.Size = new Size(mAddressLabel.Right, 21);
-			mAddressPanel.Location = new Point(0, 1);
-			mAddressLabel.TabIndex = 0;
+			_addressPanel.Controls.Add(_breakPointBox);
+			_addressPanel.Controls.Add(_addressLabel);
+			_addressPanel.Size = new Size(_addressLabel.Right, 21);
+			_addressPanel.Location = new Point(0, 1);
+			_addressLabel.TabIndex = 0;
 
-			mColonLabel.Location = new Point(mAddressPanel.Right, mAddressPanel.Top + 3);
-			mColonLabel.Name = "mFirstEqualsLabel";
-			mColonLabel.Size = new Size(10, mAddressLabel.Height - 3);
-			mColonLabel.TabIndex = 1;
-			mColonLabel.Text = ":";
+			_colonLabel.Location = new Point(_addressPanel.Right, _addressPanel.Top + 3);
+			_colonLabel.Name = "mFirstEqualsLabel";
+			_colonLabel.Size = new Size(10, _addressLabel.Height - 3);
+			_colonLabel.TabIndex = 1;
+			_colonLabel.Text = ":";
 
-			mFullWordEditor.Location = new Point(mColonLabel.Right, mAddressPanel.Top);
-			mFullWordEditor.Name = "mFullWordEditor";
-			mFullWordEditor.TabIndex = 2;
-			mFullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
-			mFullWordEditor.NavigationKeyDown += This_KeyDown;
+			_fullWordEditor.Location = new Point(_colonLabel.Right, _addressPanel.Top);
+			_fullWordEditor.Name = "mFullWordEditor";
+			_fullWordEditor.TabIndex = 2;
+			_fullWordEditor.ValueChanged += FullWordEditor_ValueChanged;
+			_fullWordEditor.NavigationKeyDown += This_KeyDown;
 
-			mEqualsLabel.Location = new Point(mFullWordEditor.Right, mFullWordEditor.Top + 2);
-			mEqualsLabel.Name = "mEqualsLabel";
-			mEqualsLabel.Size = new Size(10, 19);
-			mEqualsLabel.TabIndex = 3;
-			mEqualsLabel.Text = "=";
+			_equalsLabel.Location = new Point(_fullWordEditor.Right, _fullWordEditor.Top + 2);
+			_equalsLabel.Name = "mEqualsLabel";
+			_equalsLabel.Size = new Size(10, 19);
+			_equalsLabel.TabIndex = 3;
+			_equalsLabel.Text = "=";
 
-			mInstructionTextBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-			mInstructionTextBox.Dock = DockStyle.Fill;
-			mInstructionTextBox.BorderStyle = BorderStyle.None;
-			mInstructionTextBox.Location = new Point(0, 0);
-			mInstructionTextBox.Multiline = false;
-			mInstructionTextBox.Name = "mInstructionTextBox";
-			mInstructionTextBox.Size = new Size(128, 21);
-			mInstructionTextBox.TabIndex = 0;
-			mInstructionTextBox.KeyDown += This_KeyDown;
-			mInstructionTextBox.ValueChanged += MInstructionTextBox_ValueChanged;
-			mInstructionTextBox.AddressSelected += MInstructionTextBox_AddressSelected;
-			mInstructionTextBox.MouseWheel += MInstructionTextBox_MouseWheel;
+			_instructionTextBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
+			_instructionTextBox.Dock = DockStyle.Fill;
+			_instructionTextBox.BorderStyle = BorderStyle.None;
+			_instructionTextBox.Location = new Point(0, 0);
+			_instructionTextBox.Multiline = false;
+			_instructionTextBox.Name = "mInstructionTextBox";
+			_instructionTextBox.Size = new Size(128, 21);
+			_instructionTextBox.TabIndex = 0;
+			_instructionTextBox.KeyDown += This_KeyDown;
+			_instructionTextBox.ValueChanged += InstructionTextBox_ValueChanged;
+			_instructionTextBox.AddressSelected += InstructionTextBox_AddressSelected;
+			_instructionTextBox.MouseWheel += InstructionTextBox_MouseWheel;
 
-			mInstructionPanel.Controls.Add(mInstructionTextBox);
-			mInstructionPanel.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
-			mInstructionPanel.Location = new Point(mEqualsLabel.Right, mFullWordEditor.Top);
-			mInstructionPanel.Size = new Size(mInstructionTextBox.Width, 21);
-			mInstructionPanel.TabIndex = 4;
-			mInstructionPanel.BorderStyle = BorderStyle.FixedSingle;
+			_instructionPanel.Controls.Add(_instructionTextBox);
+			_instructionPanel.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
+			_instructionPanel.Location = new Point(_equalsLabel.Right, _fullWordEditor.Top);
+			_instructionPanel.Size = new Size(_instructionTextBox.Width, 21);
+			_instructionPanel.TabIndex = 4;
+			_instructionPanel.BorderStyle = BorderStyle.FixedSingle;
 
-			mColonLabel2.Location = new Point(mInstructionPanel.Right, mAddressPanel.Top + 3);
-			mColonLabel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			mColonLabel2.Name = "mColonLabel2";
-			mColonLabel2.Size = new Size(10, mAddressLabel.Height - 3);
-			mColonLabel2.TabIndex = 5;
-			mColonLabel2.Text = "x";
-			mColonLabel2.TextAlign = ContentAlignment.MiddleCenter;
+			_colonLabel2.Location = new Point(_instructionPanel.Right, _addressPanel.Top + 3);
+			_colonLabel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			_colonLabel2.Name = "mColonLabel2";
+			_colonLabel2.Size = new Size(10, _addressLabel.Height - 3);
+			_colonLabel2.TabIndex = 5;
+			_colonLabel2.Text = "x";
+			_colonLabel2.TextAlign = ContentAlignment.MiddleCenter;
 
-			mProfileLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-			mProfileLabel.Location = new Point(mColonLabel2.Right, mInstructionPanel.Top);
-			mProfileLabel.Size = new Size(64, mInstructionPanel.Height);
-			mProfileLabel.Name = "mProfileLabel";
-			mProfileLabel.TabIndex = 6;
-			mProfileLabel.Text = "0";
-			mProfileLabel.TextAlign = ContentAlignment.MiddleRight;
-			mProfileLabel.BorderStyle = BorderStyle.FixedSingle;
+			_profileLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+			_profileLabel.Location = new Point(_colonLabel2.Right, _instructionPanel.Top);
+			_profileLabel.Size = new Size(64, _instructionPanel.Height);
+			_profileLabel.Name = "mProfileLabel";
+			_profileLabel.TabIndex = 6;
+			_profileLabel.Text = "0";
+			_profileLabel.TextAlign = ContentAlignment.MiddleRight;
+			_profileLabel.BorderStyle = BorderStyle.FixedSingle;
 
-			Controls.Add(mAddressPanel);
-			Controls.Add(mColonLabel);
-			Controls.Add(mFullWordEditor);
-			Controls.Add(mEqualsLabel);
-			Controls.Add(mInstructionPanel);
-			Controls.Add(mColonLabel2);
-			Controls.Add(mProfileLabel);
+			Controls.Add(_addressPanel);
+			Controls.Add(_colonLabel);
+			Controls.Add(_fullWordEditor);
+			Controls.Add(_equalsLabel);
+			Controls.Add(_instructionPanel);
+			Controls.Add(_colonLabel2);
+			Controls.Add(_profileLabel);
 			Name = "MemoryWordEditor";
-			Size = new Size(mProfileLabel.Right + 2, mInstructionPanel.Height + 3);
+			Size = new Size(_profileLabel.Right + 2, _instructionPanel.Height + 3);
 			KeyDown += This_KeyDown;
 
-			mAddressPanel.ResumeLayout(false);
+			_addressPanel.ResumeLayout(false);
 			ResumeLayout(false);
 		}
 
-		static Color Interpolate(Color color1, Color color2, double fraction)
+		private static Color Interpolate(Color color1, Color color2, double fraction)
 		{
 			var r = RoundForArgb(Interpolate(color1.R, color2.R, fraction));
 			var g = RoundForArgb(Interpolate(color1.G, color2.G, fraction));
@@ -251,73 +226,68 @@ namespace MixGui.Components
 			return Color.FromArgb(r, g, b);
 		}
 
-		void UpdateProfilingCount()
+		private void UpdateProfilingCount()
 		{
-			long count = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick ? mMemoryWord.ProfilingTickCount : mMemoryWord.ProfilingExecutionCount;
+			long count = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick ? _memoryWord.ProfilingTickCount : _memoryWord.ProfilingExecutionCount;
 			long max;
-			mProfileLabel.Text = count.ToString();
+			_profileLabel.Text = count.ToString();
+
 			if (count == 0 || !GuiSettings.ColorProfilingCounts || GetMaxProfilingCount == null || (max = GetMaxProfilingCount(GuiSettings.ShowProfilingInfo)) == 0)
 			{
-				mProfileLabel.BackColor = mColonLabel2.BackColor;
-				mProfileLabel.ForeColor = mColonLabel2.ForeColor;
+				_profileLabel.BackColor = _colonLabel2.BackColor;
+				_profileLabel.ForeColor = _colonLabel2.ForeColor;
 			}
 			else
 			{
 				var backColor = GetBlendedColor((double)count / max);
-				mProfileLabel.BackColor = backColor;
-				mProfileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
+				_profileLabel.BackColor = backColor;
+				_profileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
 			}
 		}
 
-		void UpdateProfilingLayout()
+		private void UpdateProfilingLayout()
 		{
 			if (ExecutionSettings.ProfilingEnabled)
-			{
 				UpdateProfilingCount();
-			}
 
-			if (mProfileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
-			{
+			if (_profileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
 				return;
-			}
 
 			if (!ExecutionSettings.ProfilingEnabled)
 			{
-				mInstructionPanel.Width += mColonLabel2.Width + mProfileLabel.Width;
-				mColonLabel2.Visible = false;
-				mProfileLabel.Visible = false;
-				mProfileLabel.Enabled = false;
+				_instructionPanel.Width += _colonLabel2.Width + _profileLabel.Width;
+				_colonLabel2.Visible = false;
+				_profileLabel.Visible = false;
+				_profileLabel.Enabled = false;
 			}
 			else
 			{
-				mColonLabel2.Visible = true;
-				mProfileLabel.Visible = true;
-				mProfileLabel.Enabled = true;
-				mInstructionPanel.Width -= mColonLabel2.Width + mProfileLabel.Width;
+				_colonLabel2.Visible = true;
+				_profileLabel.Visible = true;
+				_profileLabel.Enabled = true;
+				_instructionPanel.Width -= _colonLabel2.Width + _profileLabel.Width;
 			}
 		}
 
 		public int MemoryMinIndex
 		{
-			get => mInstructionTextBox.MemoryMinIndex;
-			set => mInstructionTextBox.MemoryMinIndex = value;
+			get => _instructionTextBox.MemoryMinIndex;
+			set => _instructionTextBox.MemoryMinIndex = value;
 		}
 
 		public int MemoryMaxIndex
 		{
-			get => mInstructionTextBox.MemoryMaxIndex;
-			set => mInstructionTextBox.MemoryMaxIndex = value;
+			get => _instructionTextBox.MemoryMaxIndex;
+			set => _instructionTextBox.MemoryMaxIndex = value;
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Modifiers != Keys.None)
-			{
 				return;
-			}
 
 			FieldTypes editorField = FieldTypes.Instruction;
-			int? index = mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength;
+			int? index = _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength;
 
 			if (e is FieldKeyEventArgs args)
 			{
@@ -337,11 +307,11 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Right:
-					if (sender == mFullWordEditor)
+					if (sender == _fullWordEditor)
 					{
-						mInstructionTextBox.Focus();
+						_instructionTextBox.Focus();
 					}
-					else if (sender == mInstructionTextBox && mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength == mInstructionTextBox.TextLength && NavigationKeyDown != null)
+					else if (sender == _instructionTextBox && _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength == _instructionTextBox.TextLength && NavigationKeyDown != null)
 					{
 						NavigationKeyDown(this, e);
 						e.Handled = true;
@@ -350,13 +320,13 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Left:
-					if (sender == mFullWordEditor)
+					if (sender == _fullWordEditor)
 					{
 						NavigationKeyDown?.Invoke(this, e);
 					}
-					else if (sender == mInstructionTextBox && mInstructionTextBox.SelectionStart + mInstructionTextBox.SelectionLength == 0)
+					else if (sender == _instructionTextBox && _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength == 0)
 					{
-						mFullWordEditor.Focus(FieldTypes.Chars, null);
+						_fullWordEditor.Focus(FieldTypes.Chars, null);
 						e.Handled = true;
 					}
 
@@ -364,116 +334,113 @@ namespace MixGui.Components
 			}
 		}
 
-		void MInstructionTextBox_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+		private void InstructionTextBox_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			mFullWordEditor.Update();
+			_fullWordEditor.Update();
 			OnValueChanged(args);
 		}
 
-		void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+		private void FullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			mInstructionTextBox.Update();
+			_instructionTextBox.Update();
 			OnValueChanged(args);
 		}
 
 		public new void Update()
 		{
-			mFullWordEditor.Update();
-			mInstructionTextBox.Update();
-			if (mProfileLabel.Enabled)
-			{
+			_fullWordEditor.Update();
+			_instructionTextBox.Update();
+
+			if (_profileLabel.Enabled)
 				UpdateProfilingCount();
-			}
 
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			mAddressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mAddressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mAddressPanel.BackColor = mMarked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
+			_addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			_addressPanel.BackColor = _marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 
-			mFullWordEditor.UpdateLayout();
-			mInstructionTextBox.UpdateLayout();
+			_fullWordEditor.UpdateLayout();
+			_instructionTextBox.UpdateLayout();
 
 			UpdateProfilingLayout();
 		}
 
 		public bool BreakPointChecked
 		{
-			get => mBreakPointBox.Checked;
-			set => mBreakPointBox.Checked = value;
+			get => _breakPointBox.Checked;
+			set => _breakPointBox.Checked = value;
 		}
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
-			get => mInstructionTextBox.IndexedAddressCalculatorCallback;
-			set => mInstructionTextBox.IndexedAddressCalculatorCallback = value;
+			get => _instructionTextBox.IndexedAddressCalculatorCallback;
+			set => _instructionTextBox.IndexedAddressCalculatorCallback = value;
 		}
 
 		public bool Marked
 		{
-			get => mMarked;
+			get => _marked;
 			set
 			{
-				if (mMarked != value)
+				if (_marked != value)
 				{
-					mMarked = value;
-					mAddressPanel.BackColor = mMarked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
+					_marked = value;
+					_addressPanel.BackColor = _marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 				}
 			}
 		}
 
 		public IMemoryFullWord MemoryWord
 		{
-			get => mMemoryWord;
+			get => _memoryWord;
 			set
 			{
-				mMemoryWord = value ?? throw new ArgumentNullException(nameof(value), "MemoryWord may not be set to null");
-				var text = mMemoryWord.Index.ToString("D4");
-				if (mMemoryWord.Index == 0)
-				{
+				_memoryWord = value ?? throw new ArgumentNullException(nameof(value), "MemoryWord may not be set to null");
+				var text = _memoryWord.Index.ToString("D4");
+
+				if (_memoryWord.Index == 0)
 					text = " " + text;
-				}
-				else if (mMemoryWord.Index > 0)
-				{
+
+				else if (_memoryWord.Index > 0)
 					text = "+" + text;
-				}
-				mAddressLabel.Text = text;
-				mInstructionTextBox.MemoryAddress = mMemoryWord.Index;
-				mFullWordEditor.WordValue = mMemoryWord;
-				mInstructionTextBox.InstructionWord = mMemoryWord;
-				if (mProfileLabel.Enabled)
-				{
+
+				_addressLabel.Text = text;
+				_instructionTextBox.MemoryAddress = _memoryWord.Index;
+				_fullWordEditor.WordValue = _memoryWord;
+				_instructionTextBox.InstructionWord = _memoryWord;
+
+				if (_profileLabel.Enabled)
 					UpdateProfilingCount();
-				}
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => mReadOnly;
+			get => _readOnly;
 			set
 			{
-				if (mReadOnly != value)
-				{
-					mReadOnly = value;
-					mFullWordEditor.ReadOnly = mReadOnly;
-					mInstructionTextBox.ReadOnly = mReadOnly;
-				}
+				if (_readOnly == value)
+					return;
+
+				_readOnly = value;
+				_fullWordEditor.ReadOnly = _readOnly;
+				_instructionTextBox.ReadOnly = _readOnly;
 			}
 		}
 
 		public SymbolCollection Symbols
 		{
-			get => mInstructionTextBox.Symbols;
-			set => mInstructionTextBox.Symbols = value;
+			get => _instructionTextBox.Symbols;
+			set => _instructionTextBox.Symbols = value;
 		}
 
 		public ToolTip ToolTip
 		{
-			set => mInstructionTextBox.ToolTip = value;
+			set => _instructionTextBox.ToolTip = value;
 		}
 
 		public IWord WordValue
@@ -481,10 +448,8 @@ namespace MixGui.Components
 			get => MemoryWord;
 			set
 			{
-				if (!(value is IMemoryFullWord))
-				{
+				if (value is not IMemoryFullWord)
 					throw new ArgumentException("Value must be an IMemoryFullWord");
-				}
 
 				MemoryWord = (IMemoryFullWord)value;
 			}
@@ -493,13 +458,10 @@ namespace MixGui.Components
 		public void Select(int start, int length)
 		{
 			if (FocusedField == FieldTypes.Instruction)
-			{
-				mInstructionTextBox.Select(start, length);
-			}
+				_instructionTextBox.Select(start, length);
+
 			else
-			{
-				mFullWordEditor.Select(start, length);
-			}
+				_fullWordEditor.Select(start, length);
 		}
 	}
 }

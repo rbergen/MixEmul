@@ -1,6 +1,5 @@
-using MixLib.Type;
-using System;
 using System.Linq;
+using MixLib.Type;
 
 namespace MixAssembler.Value
 {
@@ -32,19 +31,19 @@ namespace MixAssembler.Value
 			Magnitude = magnitude;
 		}
 
-		public virtual long GetValue(int currentAddress) 
+		public virtual long GetValue(int currentAddress)
 			=> Sign.ApplyTo(Magnitude);
 
-		public virtual bool IsValueDefined(int currentAddress) 
+		public virtual bool IsValueDefined(int currentAddress)
 			=> true;
 
-		public long GetMagnitude(int currentAddress) 
+		public long GetMagnitude(int currentAddress)
 			=> Magnitude;
 
-		public Word.Signs GetSign(int currentAddress) 
+		public Word.Signs GetSign(int currentAddress)
 			=> Sign;
 
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status) 
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 			=> text.Length != 0 && text.Length <= 10 && text.All(c => char.IsNumber(c)) && long.TryParse(text, out long longValue)
 			? new NumberValue(longValue)
 			: null;

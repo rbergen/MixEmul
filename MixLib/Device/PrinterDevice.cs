@@ -1,40 +1,40 @@
+﻿using System;
+using System.IO;
+using System.Text;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.IO;
-using System.Text;
 
 namespace MixLib.Device
 {
 	public class PrinterDevice : FileBasedDevice
 	{
-		const string shortName = "PRN";
-		const string fileNamePrefix = "prn";
-
-		const string initializationDescription = "Initializing printer";
-		const string openingDescription = "Starting write to printer";
-		const string nextPageDescription = "Skipping to next page";
-
-		const int recordWordCount = 24;
-		public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
+		private const string MyShortName = "PRN";
+		private const string FileNamePrefix = "prn";
+		private const string InitializationDescription = "Initializing printer";
+		private const string OpeningDescription = "Starting write to printer";
+		private const string NextPageDescription = "Skipping to next page";
+		private const int MyRecordWordCount = 24;
+		public const int BytesPerRecord = MyRecordWordCount * FullWord.ByteCount;
 
 
 		public PrinterDevice(int id)
-			: base(id, fileNamePrefix)
-		{
-			UpdateSettings();
-		}
+			: base(id, FileNamePrefix) 
+			=> UpdateSettings();
 
-		public override int RecordWordCount => recordWordCount;
+		public override int RecordWordCount 
+			=> MyRecordWordCount;
 
-		public override string ShortName => shortName;
+		public override string ShortName 
+			=> MyShortName;
 
-		public override bool SupportsInput => false;
+		public override bool SupportsInput 
+			=> false;
 
-		public override bool SupportsOutput => true;
+		public override bool SupportsOutput 
+			=> true;
 
 		public sealed override void UpdateSettings()
 		{
@@ -42,20 +42,20 @@ namespace MixLib.Device
 
 			FirstInputDeviceStep = null;
 
-			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
+			DeviceStep nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstOutputDeviceStep = nextStep;
-			nextStep.NextStep = new ReadFromMemoryStep(false, recordWordCount);
+			nextStep.NextStep = new ReadFromMemoryStep(false, MyRecordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new TextWriteStep(recordWordCount);
+			nextStep.NextStep = new TextWriteStep(MyRecordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep
 			{
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
@@ -67,16 +67,15 @@ namespace MixLib.Device
 			};
 		}
 
-		class OpenStreamStep : StreamStep
+		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription => openingDescription;
+			public override string StatusDescription 
+				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+				=> new Instance(streamStatus);
 
-			new class Instance : StreamStep.Instance
+			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
@@ -87,9 +86,7 @@ namespace MixLib.Device
 						var stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 
 						if (!StreamStatus.PositionSet)
-						{
 							stream.Position = stream.Length;
-						}
 
 						StreamStatus.Stream = stream;
 					}
@@ -103,25 +100,20 @@ namespace MixLib.Device
 			}
 		}
 
-		class PageForwardStep : StreamStep
+		private class PageForwardStep : StreamStep
 		{
-			public override string StatusDescription => nextPageDescription;
+			public override string StatusDescription => NextPageDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			new class Instance : StreamStep.Instance
+			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
 				public override bool Tick()
 				{
 					if (StreamStatus.Stream == null)
-					{
 						return true;
-					}
 
 					try
 					{

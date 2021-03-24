@@ -1,6 +1,6 @@
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MixLib.Type;
 
 namespace MixAssembler.Value
 {
@@ -9,43 +9,43 @@ namespace MixAssembler.Value
 	/// </summary>
 	public static class ExpressionValue
 	{
-		private const int fullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
-		private const long fullWordModulusMask = 1L << fullWordBitCount;
+		private const int FullWordBitCount = FullWord.ByteCount * MixByte.BitCount;
+		private const long FullWordModulusMask = 1L << FullWordBitCount;
 
 		// Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-		private static readonly SortedList<string, operationDelegate> mBinaryOperations = new(new OperationComparator());
+		private static readonly SortedList<string, operationDelegate> _binaryOperations = new(new OperationComparator());
 
 		static ExpressionValue()
 		{
-			mBinaryOperations["+"] = DoAdd;
-			mBinaryOperations["-"] = DoSubstract;
-			mBinaryOperations["*"] = DoMultiply;
-			mBinaryOperations["/"] = DoDivide;
-			mBinaryOperations["//"] = DoFractionDivide;
-			mBinaryOperations[":"] = DoCalculateField;
+			_binaryOperations["+"] = DoAdd;
+			_binaryOperations["-"] = DoSubstract;
+			_binaryOperations["*"] = DoMultiply;
+			_binaryOperations["/"] = DoDivide;
+			_binaryOperations["//"] = DoFractionDivide;
+			_binaryOperations[":"] = DoCalculateField;
 		}
 
-		private static IValue DoAdd(IValue left, IValue right, int currentAddress) 
-			=> new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		private static IValue DoAdd(IValue left, IValue right, int currentAddress)
+			=> new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % FullWordModulusMask);
 
-		private static IValue DoCalculateField(IValue left, IValue right, int currentAddress) 
-			=> new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % fullWordModulusMask);
+		private static IValue DoCalculateField(IValue left, IValue right, int currentAddress)
+			=> new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % FullWordModulusMask);
 
-		private static IValue DoDivide(IValue left, IValue right, int currentAddress) 
-			=> new NumberValue(left.GetValue(currentAddress) / right.GetValue(currentAddress) % fullWordModulusMask);
+		private static IValue DoDivide(IValue left, IValue right, int currentAddress)
+			=> new NumberValue(left.GetValue(currentAddress) / right.GetValue(currentAddress) % FullWordModulusMask);
 
-		private static IValue DoMultiply(IValue left, IValue right, int currentAddress) 
-			=> new NumberValue(left.GetValue(currentAddress) * right.GetValue(currentAddress) % fullWordModulusMask);
+		private static IValue DoMultiply(IValue left, IValue right, int currentAddress)
+			=> new NumberValue(left.GetValue(currentAddress) * right.GetValue(currentAddress) % FullWordModulusMask);
 
-		private static IValue DoSubstract(IValue left, IValue right, int currentAddress) 
-			=> new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % fullWordModulusMask);
+		private static IValue DoSubstract(IValue left, IValue right, int currentAddress)
+			=> new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % FullWordModulusMask);
 
 		private static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
 		{
 			var divider = new decimal(left.GetValue(currentAddress));
-			divider *= fullWordModulusMask;
+			divider *= FullWordModulusMask;
 			divider /= right.GetValue(currentAddress);
-			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(fullWordBitCount, 64)));
+			return new NumberValue((long)decimal.Remainder(decimal.Truncate(divider), 1 << Math.Min(FullWordBitCount, 64)));
 		}
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
@@ -81,7 +81,7 @@ namespace MixAssembler.Value
 			operationDelegate operatorDelegate = null;
 
 			// find the last operator included the expression, if any
-			foreach (KeyValuePair<string, operationDelegate> pair in mBinaryOperations)
+			foreach (KeyValuePair<string, operationDelegate> pair in _binaryOperations)
 			{
 				string currentOperator = pair.Key;
 

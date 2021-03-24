@@ -1,31 +1,31 @@
-using MixGui.Events;
-using MixLib.Device;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Events;
+using MixLib.Device;
 
 namespace MixGui.Components
 {
 	public class DevicesControl : UserControl
 	{
-		private DeviceStatusControl[] mDeviceControls;
-		private MixLib.Devices mDevices;
-		private int mLastSectionSize;
-		private int mMaxSequenceSize;
-		private readonly Label mNoDevicesLabel;
-		private int mSectionSize;
-		private int mSequenceSize;
-		private LayoutStructure mStructure;
-		private ToolTip mToolTip;
+		private DeviceStatusControl[] _deviceControls;
+		private MixLib.Devices _devices;
+		private int _lastSectionSize;
+		private int _maxSequenceSize;
+		private readonly Label _noDevicesLabel;
+		private int _sectionSize;
+		private int _sequenceSize;
+		private LayoutStructure _structure;
+		private ToolTip _toolTip;
 
 		public event EventHandler<DeviceEventArgs> DeviceDoubleClick;
 
 		public DevicesControl(MixLib.Devices devices = null, LayoutStructure layout = null)
 		{
-			mStructure = layout;
+			_structure = layout;
 
-			mNoDevicesLabel = new Label
+			_noDevicesLabel = new Label
 			{
 				Location = new Point(0, 0),
 				Name = "mNoDevicesLabel",
@@ -42,76 +42,87 @@ namespace MixGui.Components
 		private void AddDeviceControl(int index)
 		{
 			var orientation = GetOrientation();
-			Breaks breaks = mStructure != null && index > 0 ? mStructure[index] : Breaks.None;
+
+			Breaks breaks = index == 0
+				? Breaks.Sequence
+				: _structure != null
+					? _structure[index]
+					: Breaks.None;
 
 			var horizontalSpacing = GetHorizontalSpacing();
 			var verticalSpacing = GetVerticalSpacing();
 
 			if (index == 0)
 			{
-				mSequenceSize = 0;
-				mSectionSize = 0;
-				mLastSectionSize = 0;
-				mMaxSequenceSize = 0;
+				_sequenceSize = 0;
+				_sectionSize = 0;
+				_lastSectionSize = 0;
+				_maxSequenceSize = 0;
 			}
 
 			var controlLocation = new Point();
-			DeviceStatusControl control = mDeviceControls[index];
+			DeviceStatusControl control = _deviceControls[index];
 
-			if (index == 0 || breaks == Breaks.Sequence)
+			switch (breaks)
 			{
-				if (orientation == Orientations.Horizontal)
-				{
-					controlLocation.X = mLastSectionSize;
-					controlLocation.Y = mSequenceSize;
-					mSequenceSize += control.Height + verticalSpacing;
-					mSectionSize = Math.Max(mSectionSize, (mLastSectionSize + control.Width) + horizontalSpacing);
-				}
-				else
-				{
-					controlLocation.X = mSequenceSize;
-					controlLocation.Y = mLastSectionSize;
-					mSequenceSize += control.Width + horizontalSpacing;
-					mSectionSize = Math.Max(mSectionSize, (mLastSectionSize + control.Height) + verticalSpacing);
-				}
-			}
-			else if (breaks == Breaks.Section)
-			{
-				if (orientation == Orientations.Horizontal)
-				{
-					mLastSectionSize = mSectionSize;
-					controlLocation.X = mLastSectionSize;
-					controlLocation.Y = 0;
-					mSequenceSize = control.Height + verticalSpacing;
-					mSectionSize = (mLastSectionSize + control.Width) + horizontalSpacing;
-				}
-				else
-				{
-					mLastSectionSize = mSectionSize;
-					controlLocation.X = 0;
-					controlLocation.Y = mLastSectionSize;
-					mSequenceSize = control.Width + horizontalSpacing;
-					mSectionSize = (mLastSectionSize + control.Height) + verticalSpacing;
-				}
-			}
-			else if (orientation == Orientations.Horizontal)
-			{
-				DeviceStatusControl previousControl = mDeviceControls[index - 1];
-				controlLocation.X = (previousControl.Left + previousControl.Width) + horizontalSpacing;
-				controlLocation.Y = previousControl.Top;
-				mSequenceSize = Math.Max(mSequenceSize, (controlLocation.Y + control.Height) + verticalSpacing);
-				mSectionSize = Math.Max(mSectionSize, (controlLocation.X + control.Width) + horizontalSpacing);
-			}
-			else
-			{
-				DeviceStatusControl previousControl = mDeviceControls[index - 1];
-				controlLocation.X = previousControl.Left;
-				controlLocation.Y = (previousControl.Top + previousControl.Height) + horizontalSpacing;
-				mSequenceSize = Math.Max(mSequenceSize, (controlLocation.X + control.Width) + horizontalSpacing);
-				mSectionSize = Math.Max(mSectionSize, (controlLocation.Y + control.Height) + verticalSpacing);
+				case Breaks.Sequence:
+					if (orientation == Orientations.Horizontal)
+					{
+						controlLocation.X = _lastSectionSize;
+						controlLocation.Y = _sequenceSize;
+						_sequenceSize += control.Height + verticalSpacing;
+						_sectionSize = Math.Max(_sectionSize, _lastSectionSize + control.Width + horizontalSpacing);
+					}
+					else
+					{
+						controlLocation.X = _sequenceSize;
+						controlLocation.Y = _lastSectionSize;
+						_sequenceSize += control.Width + horizontalSpacing;
+						_sectionSize = Math.Max(_sectionSize, _lastSectionSize + control.Height + verticalSpacing);
+					}
+					break;
+
+				case Breaks.Section:
+					if (orientation == Orientations.Horizontal)
+					{
+						_lastSectionSize = _sectionSize;
+						controlLocation.X = _lastSectionSize;
+						controlLocation.Y = 0;
+						_sequenceSize = control.Height + verticalSpacing;
+						_sectionSize = _lastSectionSize + control.Width + horizontalSpacing;
+					}
+					else
+					{
+						_lastSectionSize = _sectionSize;
+						controlLocation.X = 0;
+						controlLocation.Y = _lastSectionSize;
+						_sequenceSize = control.Width + horizontalSpacing;
+						_sectionSize = _lastSectionSize + control.Height + verticalSpacing;
+					}
+					break;
+
+				default:
+					if (orientation == Orientations.Horizontal)
+					{
+						DeviceStatusControl previousControl = _deviceControls[index - 1];
+						controlLocation.X = previousControl.Left + previousControl.Width + horizontalSpacing;
+						controlLocation.Y = previousControl.Top;
+						_sequenceSize = Math.Max(_sequenceSize, controlLocation.Y + control.Height + verticalSpacing);
+						_sectionSize = Math.Max(_sectionSize, controlLocation.X + control.Width + horizontalSpacing);
+					}
+					else
+					{
+						DeviceStatusControl previousControl = _deviceControls[index - 1];
+						controlLocation.X = previousControl.Left;
+						controlLocation.Y = previousControl.Top + previousControl.Height + horizontalSpacing;
+						_sequenceSize = Math.Max(_sequenceSize, controlLocation.X + control.Width + horizontalSpacing);
+						_sectionSize = Math.Max(_sectionSize, controlLocation.Y + control.Height + verticalSpacing);
+					}
+
+					break;
 			}
 
-			mMaxSequenceSize = Math.Max(mMaxSequenceSize, mSequenceSize);
+			_maxSequenceSize = Math.Max(_maxSequenceSize, _sequenceSize);
 
 			control.Location = controlLocation;
 			Controls.Add(control);
@@ -123,29 +134,30 @@ namespace MixGui.Components
 			Controls.Clear();
 
 			if (Devices == null)
-				Controls.Add(mNoDevicesLabel);
-
+			{
+				Controls.Add(_noDevicesLabel);
+			}
 			else
 			{
-				for (int i = 0; i < mDeviceControls.Length; i++)
+				for (int i = 0; i < _deviceControls.Length; i++)
 					AddDeviceControl(i);
 			}
 
 			ResumeLayout(false);
 		}
 
-		private int GetHorizontalSpacing() 
-			=> mStructure == null ? 0 : mStructure.HorizontalSpacing;
+		private int GetHorizontalSpacing()
+			=> _structure == null ? 0 : _structure.HorizontalSpacing;
 
-		private Orientations GetOrientation() 
-			=> mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
+		private Orientations GetOrientation()
+			=> _structure == null ? Orientations.Horizontal : _structure.Orientation;
 
-		private int GetVerticalSpacing() 
-			=> mStructure == null ? 0 : mStructure.VerticalSpacing;
+		private int GetVerticalSpacing()
+			=> _structure == null ? 0 : _structure.VerticalSpacing;
 
 		public new void Update()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls)
+			foreach (DeviceStatusControl control in _deviceControls)
 				control.Update();
 
 			base.Update();
@@ -153,55 +165,51 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (DeviceStatusControl control in mDeviceControls)
-			{
+			foreach (DeviceStatusControl control in _deviceControls)
 				control.UpdateLayout();
-			}
 		}
 
 		public MixLib.Devices Devices
 		{
-			get => mDevices;
+			get => _devices;
 			set
 			{
-				if (mDevices == null)
+				if (_devices != null)
+					return;
+
+				_devices = value;
+				if (_devices != null)
 				{
-					mDevices = value;
-					if (mDevices != null)
+					_deviceControls = new DeviceStatusControl[_devices.Count];
+					DeviceStatusControl control;
+					foreach (MixDevice device in _devices)
 					{
-						mDeviceControls = new DeviceStatusControl[mDevices.Count];
-						DeviceStatusControl control;
-						foreach (MixDevice device in mDevices)
+						control = new DeviceStatusControl(device)
 						{
-							control = new DeviceStatusControl(device)
-							{
-								ToolTip = mToolTip
-							};
+							ToolTip = _toolTip
+						};
 
-							control.DoubleClick += DevicesControl_DoubleClick;
+						control.DoubleClick += DevicesControl_DoubleClick;
 
-							mDeviceControls[device.Id] = control;
-						}
+						_deviceControls[device.Id] = control;
 					}
-
-					AddDeviceControls();
 				}
+
+				AddDeviceControls();
 			}
 		}
 
 		private void DevicesControl_DoubleClick(object sender, EventArgs e)
-		{
-			DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
-		}
+			=> DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
 
 		public LayoutStructure Structure
 		{
-			get => mStructure;
+			get => _structure;
 			set
 			{
 				if (value != null)
 				{
-					mStructure = value;
+					_structure = value;
 					AddDeviceControls();
 				}
 			}
@@ -216,14 +224,14 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			get => mToolTip;
+			get => _toolTip;
 			set
 			{
-				mToolTip = value;
+				_toolTip = value;
 
-				if (mDeviceControls != null)
+				if (_deviceControls != null)
 				{
-					foreach (DeviceStatusControl control in mDeviceControls)
+					foreach (DeviceStatusControl control in _deviceControls)
 						control.ToolTip = value;
 				}
 			}
@@ -231,31 +239,31 @@ namespace MixGui.Components
 
 		public class LayoutStructure
 		{
-			private readonly SortedList<int, DevicesControl.Breaks> mLayoutList;
+			private readonly SortedList<int, Breaks> mLayoutList;
 
-			public DevicesControl.Orientations Orientation { get; set; }
+			public Orientations Orientation { get; set; }
 			public int HorizontalSpacing { get; set; }
 			public int VerticalSpacing { get; set; }
 
-			public LayoutStructure(DevicesControl.Orientations orientation) : this(orientation, 0, 0) {}
+			public LayoutStructure(Orientations orientation) : this(orientation, 0, 0) { }
 
-			public LayoutStructure(DevicesControl.Orientations orientation, int horizontalSpacing, int verticalSpacing)
+			public LayoutStructure(Orientations orientation, int horizontalSpacing, int verticalSpacing)
 			{
-				mLayoutList = new SortedList<int, DevicesControl.Breaks>();
+				mLayoutList = new SortedList<int, Breaks>();
 				Orientation = orientation;
 				HorizontalSpacing = horizontalSpacing;
 				VerticalSpacing = verticalSpacing;
 			}
 
-			public DevicesControl.Breaks this[int location]
+			public Breaks this[int location]
 			{
-				get => !mLayoutList.ContainsKey(location) ? DevicesControl.Breaks.None : mLayoutList[location];
+				get => !mLayoutList.ContainsKey(location) ? Breaks.None : mLayoutList[location];
 				set
 				{
 					if (mLayoutList.ContainsKey(location))
 						mLayoutList.Remove(location);
 
-					if (value != DevicesControl.Breaks.None)
+					if (value != Breaks.None)
 						mLayoutList.Add(location, value);
 				}
 			}

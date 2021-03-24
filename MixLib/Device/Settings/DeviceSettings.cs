@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace MixLib.Device.Settings
 {
@@ -18,73 +18,67 @@ namespace MixLib.Device.Settings
 		public const int UnsetDeviceReloadInterval = int.MinValue;
 		public const int DefaultDefaultTickCount = 50;
 
-		static string mDefaultDeviceFilesDirectory;
-		static string mDeviceFilesDirectory;
-		static int mDeviceReloadInterval;
-		static readonly Dictionary<string, int> mDefaultTickCounts;
+		private static string _defaultDeviceFilesDirectory;
+		private static string _deviceFilesDirectory;
+		private static int _deviceReloadInterval;
+		private static readonly Dictionary<string, int> _defaultTickCounts;
 
 		public static Dictionary<string, int> TickCounts { private get; set; }
 
 		static DeviceSettings()
 		{
-			mDefaultTickCounts = new Dictionary<string, int>
-						{
-								{ CardReaderInitialization, 100 },
-								{ CardWriterInitialization, 100 },
-								{ DiskInitialization, 50 },
-								{ DiskSectorSeek, 20 },
-								{ PaperTapeInitialization, 100 },
-								{ PaperTapeRecordWind, 5 },
-								{ PrinterInitialization, 50 },
-								{ TapeInitialization, 100 },
-								{ TapeRecordWind, 10 },
-								{ TeletypeInitialization, 25 }
-						};
+			_defaultTickCounts = new Dictionary<string, int>
+			{
+				{ CardReaderInitialization, 100 },
+				{ CardWriterInitialization, 100 },
+				{ DiskInitialization, 50 },
+				{ DiskSectorSeek, 20 },
+				{ PaperTapeInitialization, 100 },
+				{ PaperTapeRecordWind, 5 },
+				{ PrinterInitialization, 50 },
+				{ TapeInitialization, 100 },
+				{ TapeRecordWind, 10 },
+				{ TeletypeInitialization, 25 }
+			};
 
 			TickCounts = new Dictionary<string, int>();
 
-			mDeviceReloadInterval = UnsetDeviceReloadInterval;
+			_deviceReloadInterval = UnsetDeviceReloadInterval;
 		}
 
-		public static bool IsKnownTickCount(string name)
-		{
-			return mDefaultTickCounts.ContainsKey(name);
-		}
+		public static bool IsKnownTickCount(string name) 
+			=> _defaultTickCounts.ContainsKey(name);
 
-		public static int GetDefaultTickCount(string name)
-		{
-			return IsKnownTickCount(name) ? mDefaultTickCounts[name] : DefaultDefaultTickCount;
-		}
+		public static int GetDefaultTickCount(string name) 
+			=> IsKnownTickCount(name) ? _defaultTickCounts[name] : DefaultDefaultTickCount;
 
-		public static int GetTickCount(string name)
-		{
-			return TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
-		}
+		public static int GetTickCount(string name) 
+			=> TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
 
 		public static string DefaultDeviceFilesDirectory
 		{
-			get => mDefaultDeviceFilesDirectory ?? "";
-			set => mDefaultDeviceFilesDirectory = value;
+			get => _defaultDeviceFilesDirectory ?? "";
+			set => _defaultDeviceFilesDirectory = value;
 		}
 
 		public static string DeviceFilesDirectory
 		{
-			get => mDeviceFilesDirectory ?? DefaultDeviceFilesDirectory;
-			set => mDeviceFilesDirectory = value;
+			get => _deviceFilesDirectory ?? DefaultDeviceFilesDirectory;
+			set => _deviceFilesDirectory = value;
 		}
 
 		public static int DeviceReloadInterval
 		{
-			get => mDeviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : mDeviceReloadInterval;
-			set => mDeviceReloadInterval = value;
+			get => _deviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : _deviceReloadInterval;
+			set => _deviceReloadInterval = value;
 		}
 
 		public static string[] KnownTickCountNames
 		{
 			get
 			{
-				string[] array = new string[mDefaultTickCounts.Count];
-				mDefaultTickCounts.Keys.CopyTo(array, 0);
+				string[] array = new string[_defaultTickCounts.Count];
+				_defaultTickCounts.Keys.CopyTo(array, 0);
 				return array;
 			}
 		}

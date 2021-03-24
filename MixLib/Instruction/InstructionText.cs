@@ -4,12 +4,9 @@ namespace MixLib.Instruction
 {
 	public class InstructionText
 	{
-		readonly MixInstruction.Instance mInstance;
+		private readonly MixInstruction.Instance mInstance;
 
-		public InstructionText(MixInstruction.Instance instance)
-		{
-			mInstance = instance;
-		}
+		public InstructionText(MixInstruction.Instance instance) => mInstance = instance;
 
 		public string Index => mInstance.Index != 0 ? "," + mInstance.Index : "";
 
@@ -17,7 +14,7 @@ namespace MixLib.Instruction
 
 		public string Mnemonic => mInstance.MixInstruction.Mnemonic;
 
-		string FieldText
+		private string FieldText
 		{
 			get
 			{

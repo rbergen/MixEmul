@@ -1,24 +1,24 @@
-using MixGui.Settings;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Settings;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
 	public class LongValueTextBox : TextBox, IEscapeConsumer, INavigableControl
 	{
-		Color mEditingTextColor;
-		bool mEditMode;
-		int mLastCaretPos;
-		string mLastValidText;
-		long mMagnitude;
-		Word.Signs mSign;
-		long mMaxValue;
-		long mMinValue;
-		Color mRenderedTextColor;
-		bool mSupportNegativeZero;
-		bool mUpdating;
+		private Color _editingTextColor;
+		private bool _editMode;
+		private int _lastCaretPos;
+		private string _lastValidText;
+		private long _magnitude;
+		private Word.Signs _sign;
+		private long _maxValue;
+		private long _minValue;
+		private Color _renderedTextColor;
+		private bool _supportNegativeZero;
+		private bool _updating;
 
 		public bool SupportSign { get; private set; }
 		public bool ClearZero { get; set; }
@@ -26,20 +26,12 @@ namespace MixGui.Components
 		public event ValueChangedEventHandler ValueChanged;
 		public event KeyEventHandler NavigationKeyDown;
 
-		public LongValueTextBox()
-			: this(long.MinValue, long.MaxValue, 0L)
-		{
-		}
+		public LongValueTextBox() : this(long.MinValue, long.MaxValue, 0L) { }
 
-		public LongValueTextBox(long minValue, long maxValue)
-			: this(minValue, maxValue, 0L)
-		{
-		}
+		public LongValueTextBox(long minValue, long maxValue) : this(minValue, maxValue, 0L) { }
 
 		public LongValueTextBox(long minValue, long maxValue, long value)
-			: this(minValue, maxValue, value.GetSign(), value.GetMagnitude())
-		{
-		}
+			: this(minValue, maxValue, value.GetSign(), value.GetMagnitude()) { }
 
 		public LongValueTextBox(long minValue, long maxValue, Word.Signs sign, long magnitude)
 		{
@@ -60,39 +52,31 @@ namespace MixGui.Components
 			CheckAndUpdateValue(sign, magnitude);
 			CheckAndUpdateMaxLength();
 
-			mUpdating = false;
-			mEditMode = false;
+			_updating = false;
+			_editMode = false;
 
 			ClearZero = true;
 
-			mLastCaretPos = SelectionStart + SelectionLength;
-			mLastValidText = mMagnitude.ToString();
+			_lastCaretPos = SelectionStart + SelectionLength;
+			_lastValidText = _magnitude.ToString();
 		}
 
-		void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude)
-		{
-			CheckAndUpdateValue(newSign, newMagnitude, false);
-		}
+		private void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude)
+			=> CheckAndUpdateValue(newSign, newMagnitude, false);
 
 		protected virtual void OnValueChanged(ValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+			=> ValueChanged?.Invoke(this, args);
 
-		void This_Leave(object sender, EventArgs e)
-		{
-			CheckAndUpdateValue(Text);
-		}
+		private void This_Leave(object sender, EventArgs e)
+			=> CheckAndUpdateValue(Text);
 
-		void LongValueTextBox_Enter(object sender, EventArgs e)
+		private void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
-			if (ClearZero && mMagnitude == 0 && mSign.IsPositive())
-			{
+			if (ClearZero && _magnitude == 0 && _sign.IsPositive())
 				base.Text = "";
-			}
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -103,9 +87,7 @@ namespace MixGui.Components
 			}
 
 			if (e.Modifiers != Keys.None)
-			{
 				return;
-			}
 
 			switch (e.KeyCode)
 			{
@@ -118,26 +100,22 @@ namespace MixGui.Components
 
 				case Keys.Right:
 					if (SelectionStart + SelectionLength == TextLength && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
+
 					break;
 
 				case Keys.Left:
 					if (SelectionStart + SelectionLength == 0 && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
+
 					break;
 			}
 		}
 
-		void CheckAndUpdateMaxLength()
-		{
-			MaxLength = Math.Max(mMinValue.ToString().Length, mMaxValue.ToString().Length);
-		}
+		private void CheckAndUpdateMaxLength()
+			=> MaxLength = Math.Max(_minValue.ToString().Length, _maxValue.ToString().Length);
 
-		void CheckAndUpdateValue(string newValue)
+		private void CheckAndUpdateValue(string newValue)
 		{
 			try
 			{
@@ -147,9 +125,7 @@ namespace MixGui.Components
 				if (newValue == "" || newValue == "-")
 				{
 					if (MinValue > 0)
-					{
 						magnitude = MinValue;
-					}
 				}
 				else
 				{
@@ -168,13 +144,13 @@ namespace MixGui.Components
 			}
 			catch (FormatException)
 			{
-				CheckAndUpdateValue(mLastValidText);
+				CheckAndUpdateValue(_lastValidText);
 			}
 		}
 
-		void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
+		private void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
 		{
-			mEditMode = false;
+			_editMode = false;
 			var newValue = newSign.ApplyTo(newMagnitude);
 
 			if (newValue < MinValue)
@@ -204,64 +180,56 @@ namespace MixGui.Components
 				}
 			}
 
-			mUpdating = true;
+			_updating = true;
 			SuspendLayout();
 
-			ForeColor = mRenderedTextColor;
-			mLastValidText = newMagnitude.ToString();
-			if (newSign == Word.Signs.Negative && (mSupportNegativeZero || newMagnitude != 0))
-			{
-				mLastValidText = '-' + mLastValidText;
-			}
+			ForeColor = _renderedTextColor;
+			_lastValidText = newMagnitude.ToString();
 
-			base.Text = mLastValidText;
-			mLastCaretPos = SelectionStart + SelectionLength;
+			if (newSign == Word.Signs.Negative && (_supportNegativeZero || newMagnitude != 0))
+				_lastValidText = '-' + _lastValidText;
+
+			base.Text = _lastValidText;
+			_lastCaretPos = SelectionStart + SelectionLength;
 			Select(TextLength, 0);
 
 			ResumeLayout();
-			mUpdating = false;
+			_updating = false;
 
-			if (newMagnitude != mMagnitude || newSign != mSign)
+			if (newMagnitude != _magnitude || newSign != _sign)
 			{
-				long magnitude = mMagnitude;
-				mMagnitude = newMagnitude;
-				Word.Signs sign = mSign;
-				mSign = newSign;
+				long magnitude = _magnitude;
+				_magnitude = newMagnitude;
+				Word.Signs sign = _sign;
+				_sign = newSign;
 
 				if (!suppressEvent)
-				{
 					OnValueChanged(new ValueChangedEventArgs(sign, magnitude, newSign, newMagnitude));
-				}
 			}
 		}
 
-		void SetMaxValue(long value)
+		private void SetMaxValue(long value)
 		{
-			mMaxValue = value;
+			_maxValue = value;
 
-			if (!SupportSign && (mMaxValue < 0L))
-			{
-				mMaxValue = -mMaxValue;
-			}
+			if (!SupportSign && (_maxValue < 0L))
+				_maxValue = -_maxValue;
 
-			if (mMinValue > mMaxValue)
-			{
-				mMinValue = mMaxValue;
-			}
+			if (_minValue > _maxValue)
+				_minValue = _maxValue;
 		}
 
-		void SetMinValue(long value)
+		private void SetMinValue(long value)
 		{
-			mMinValue = value;
-			if (mMinValue > mMaxValue)
-			{
-				mMaxValue = mMinValue;
-			}
+			_minValue = value;
 
-			SupportSign = mMinValue < 0L;
+			if (_minValue > _maxValue)
+				_maxValue = _minValue;
+
+			SupportSign = _minValue < 0L;
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			char keyChar = e.KeyChar;
 
@@ -275,28 +243,24 @@ namespace MixGui.Components
 
 				case Keys.Escape:
 					e.Handled = true;
-					CheckAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateValue(_sign, _magnitude);
 
 					return;
 			}
 
 			if (keyChar == '-' || (keyChar == '+' && Text.Length > 0 && Text[0] == '-'))
-			{
 				ChangeSign();
-			}
 
 			e.Handled = !char.IsNumber(keyChar) && !char.IsControl(keyChar);
 		}
 
-		void ChangeSign()
+		private void ChangeSign()
 		{
 			int selectionStart = SelectionStart;
 			int selectionLength = SelectionLength;
 
 			if (!SupportSign)
-			{
 				return;
-			}
 
 			if (TextLength == 0)
 			{
@@ -317,14 +281,10 @@ namespace MixGui.Components
 				base.Text = Text[1..];
 
 				if (selectionStart > 0)
-				{
 					selectionStart--;
-				}
 
 				if (selectionLength > TextLength)
-				{
 					selectionLength--;
-				}
 
 				SelectionLength = selectionLength;
 				SelectionStart = selectionStart;
@@ -333,22 +293,18 @@ namespace MixGui.Components
 
 		public Word.Signs Sign
 		{
-			get => mSign;
+			get => _sign;
 			set
 			{
-				if (mSign != value)
-				{
-					CheckAndUpdateValue(value, mMagnitude, true);
-				}
+				if (_sign != value)
+					CheckAndUpdateValue(value, _magnitude, true);
 			}
 		}
 
-		void This_TextChanged(object sender, EventArgs e)
+		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (mUpdating)
-			{
+			if (_updating)
 				return;
-			}
 
 			bool textIsValid = true;
 
@@ -368,23 +324,23 @@ namespace MixGui.Components
 
 			if (!textIsValid)
 			{
-				mUpdating = true;
+				_updating = true;
 
-				base.Text = mLastValidText;
-				Select(mLastCaretPos, 0);
+				base.Text = _lastValidText;
+				Select(_lastCaretPos, 0);
 
-				mUpdating = false;
+				_updating = false;
 
 				return;
 			}
 
-			mLastValidText = base.Text;
-			mLastCaretPos = SelectionStart + SelectionLength;
+			_lastValidText = base.Text;
+			_lastCaretPos = SelectionStart + SelectionLength;
 
-			if (!mEditMode)
+			if (!_editMode)
 			{
-				ForeColor = mEditingTextColor;
-				mEditMode = true;
+				ForeColor = _editingTextColor;
+				_editMode = true;
 			}
 		}
 
@@ -393,16 +349,16 @@ namespace MixGui.Components
 			SuspendLayout();
 
 			BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			mRenderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			mEditingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			ForeColor = mRenderedTextColor;
+			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			ForeColor = _renderedTextColor;
 
 			ResumeLayout();
 		}
 
 		public long LongValue
 		{
-			get => mSign.ApplyTo(mMagnitude);
+			get => _sign.ApplyTo(_magnitude);
 			set
 			{
 				Word.Signs sign = Word.Signs.Positive;
@@ -413,36 +369,32 @@ namespace MixGui.Components
 					value = -value;
 				}
 
-				if (sign != mSign || value != mMagnitude)
-				{
+				if (sign != _sign || value != _magnitude)
 					CheckAndUpdateValue(sign, value, true);
-				}
 			}
 		}
 
 		public long Magnitude
 		{
-			get => mMagnitude;
+			get => _magnitude;
 			set
 			{
 				value = value.GetMagnitude();
 
-				if (mMagnitude != value)
-				{
-					CheckAndUpdateValue(mSign, value, true);
-				}
+				if (_magnitude != value)
+					CheckAndUpdateValue(_sign, value, true);
 			}
 		}
 
 		public long MaxValue
 		{
-			get => mMaxValue;
+			get => _maxValue;
 			set
 			{
-				if (mMaxValue != value)
+				if (_maxValue != value)
 				{
 					SetMaxValue(value);
-					CheckAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateValue(_sign, _magnitude);
 					CheckAndUpdateMaxLength();
 				}
 			}
@@ -450,13 +402,13 @@ namespace MixGui.Components
 
 		public long MinValue
 		{
-			get => mMinValue;
+			get => _minValue;
 			set
 			{
-				if (mMinValue != value)
+				if (_minValue != value)
 				{
 					SetMinValue(value);
-					CheckAndUpdateValue(mSign, mMagnitude);
+					CheckAndUpdateValue(_sign, _magnitude);
 					CheckAndUpdateMaxLength();
 				}
 			}
@@ -464,13 +416,13 @@ namespace MixGui.Components
 
 		public bool SupportNegativeZero
 		{
-			get => mSupportNegativeZero;
+			get => _supportNegativeZero;
 			set
 			{
-				if (mSupportNegativeZero != value)
+				if (_supportNegativeZero != value)
 				{
-					mSupportNegativeZero = value;
-					CheckAndUpdateValue(mSign, mMagnitude);
+					_supportNegativeZero = value;
+					CheckAndUpdateValue(_sign, _magnitude);
 				}
 			}
 		}
@@ -496,9 +448,11 @@ namespace MixGui.Components
 				NewSign = newSign;
 			}
 
-			public long NewValue => NewSign.ApplyTo(NewMagnitude);
+			public long NewValue
+				=> NewSign.ApplyTo(NewMagnitude);
 
-			public long OldValue => OldSign.ApplyTo(OldMagnitude);
+			public long OldValue
+				=> OldSign.ApplyTo(OldMagnitude);
 		}
 
 		public delegate void ValueChangedEventHandler(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs e);
