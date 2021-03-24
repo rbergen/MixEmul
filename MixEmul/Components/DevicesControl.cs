@@ -9,24 +9,19 @@ namespace MixGui.Components
 {
 	public class DevicesControl : UserControl
 	{
-		DeviceStatusControl[] mDeviceControls;
-		MixLib.Devices mDevices;
-		int mLastSectionSize;
-		int mMaxSequenceSize;
-		readonly Label mNoDevicesLabel;
-		int mSectionSize;
-		int mSequenceSize;
-		LayoutStructure mStructure;
-		ToolTip mToolTip;
+		private DeviceStatusControl[] mDeviceControls;
+		private MixLib.Devices mDevices;
+		private int mLastSectionSize;
+		private int mMaxSequenceSize;
+		private readonly Label mNoDevicesLabel;
+		private int mSectionSize;
+		private int mSequenceSize;
+		private LayoutStructure mStructure;
+		private ToolTip mToolTip;
 
 		public event EventHandler<DeviceEventArgs> DeviceDoubleClick;
 
-		public DevicesControl()
-			: this(null, null)
-		{
-		}
-
-		public DevicesControl(MixLib.Devices devices, LayoutStructure layout)
+		public DevicesControl(MixLib.Devices devices = null, LayoutStructure layout = null)
 		{
 			mStructure = layout;
 
@@ -41,11 +36,10 @@ namespace MixGui.Components
 			};
 
 			Name = "DevicesControl";
-
 			Devices = devices;
 		}
 
-		void AddDeviceControl(int index)
+		private void AddDeviceControl(int index)
 		{
 			var orientation = GetOrientation();
 			Breaks breaks = mStructure != null && index > 0 ? mStructure[index] : Breaks.None;
@@ -123,47 +117,36 @@ namespace MixGui.Components
 			Controls.Add(control);
 		}
 
-		void AddDeviceControls()
+		private void AddDeviceControls()
 		{
 			SuspendLayout();
 			Controls.Clear();
 
 			if (Devices == null)
-			{
 				Controls.Add(mNoDevicesLabel);
-			}
+
 			else
 			{
 				for (int i = 0; i < mDeviceControls.Length; i++)
-				{
 					AddDeviceControl(i);
-				}
 			}
 
 			ResumeLayout(false);
 		}
 
-		int GetHorizontalSpacing()
-		{
-			return mStructure == null ? 0 : mStructure.HorizontalSpacing;
-		}
+		private int GetHorizontalSpacing() 
+			=> mStructure == null ? 0 : mStructure.HorizontalSpacing;
 
-		Orientations GetOrientation()
-		{
-			return mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
-		}
+		private Orientations GetOrientation() 
+			=> mStructure == null ? Orientations.Horizontal : mStructure.Orientation;
 
-		int GetVerticalSpacing()
-		{
-			return mStructure == null ? 0 : mStructure.VerticalSpacing;
-		}
+		private int GetVerticalSpacing() 
+			=> mStructure == null ? 0 : mStructure.VerticalSpacing;
 
 		public new void Update()
 		{
 			foreach (DeviceStatusControl control in mDeviceControls)
-			{
 				control.Update();
-			}
 
 			base.Update();
 		}
@@ -194,6 +177,7 @@ namespace MixGui.Components
 							{
 								ToolTip = mToolTip
 							};
+
 							control.DoubleClick += DevicesControl_DoubleClick;
 
 							mDeviceControls[device.Id] = control;
@@ -205,7 +189,7 @@ namespace MixGui.Components
 			}
 		}
 
-		void DevicesControl_DoubleClick(object sender, EventArgs e)
+		private void DevicesControl_DoubleClick(object sender, EventArgs e)
 		{
 			DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
 		}
@@ -240,25 +224,20 @@ namespace MixGui.Components
 				if (mDeviceControls != null)
 				{
 					foreach (DeviceStatusControl control in mDeviceControls)
-					{
 						control.ToolTip = value;
-					}
 				}
 			}
 		}
 
 		public class LayoutStructure
 		{
-			readonly SortedList<int, DevicesControl.Breaks> mLayoutList;
+			private readonly SortedList<int, DevicesControl.Breaks> mLayoutList;
 
 			public DevicesControl.Orientations Orientation { get; set; }
 			public int HorizontalSpacing { get; set; }
 			public int VerticalSpacing { get; set; }
 
-			public LayoutStructure(DevicesControl.Orientations orientation)
-				: this(orientation, 0, 0)
-			{
-			}
+			public LayoutStructure(DevicesControl.Orientations orientation) : this(orientation, 0, 0) {}
 
 			public LayoutStructure(DevicesControl.Orientations orientation, int horizontalSpacing, int verticalSpacing)
 			{
@@ -274,14 +253,10 @@ namespace MixGui.Components
 				set
 				{
 					if (mLayoutList.ContainsKey(location))
-					{
 						mLayoutList.Remove(location);
-					}
 
 					if (value != DevicesControl.Breaks.None)
-					{
 						mLayoutList.Add(location, value);
-					}
 				}
 			}
 		}

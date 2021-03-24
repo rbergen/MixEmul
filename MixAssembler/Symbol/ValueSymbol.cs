@@ -9,7 +9,7 @@ namespace MixAssembler.Symbol
 		public const long MinValue = -MaxValue;
 		public const int MaxNameLength = 10;
 
-		bool mIsDefined;
+		private bool mIsDefined;
 
 		public long Magnitude { get; private set; }
 		public Word.Signs Sign { get; private set; }
@@ -20,54 +20,41 @@ namespace MixAssembler.Symbol
 			Sign = Word.Signs.Positive;
 		}
 
-		public override bool IsSymbolDefined => mIsDefined;
+		public override bool IsSymbolDefined 
+			=> mIsDefined;
 
-		public long Value => Sign.ApplyTo(Magnitude);
+		public long Value 
+			=> Sign.ApplyTo(Magnitude);
 
-		public static SymbolBase ParseDefinition(string text)
-		{
-			return !IsValueSymbolName(text) ? null : new ValueSymbol(text);
-		}
+		public static SymbolBase ParseDefinition(string text) 
+			=> !IsValueSymbolName(text) ? null : new ValueSymbol(text);
 
-		public override long GetValue(int currentAddress)
-		{
-			return Value;
-		}
+		public override long GetValue(int currentAddress) 
+			=> Value;
 
-		public override long GetMagnitude(int currentAddress)
-		{
-			return Magnitude;
-		}
+		public override long GetMagnitude(int currentAddress) 
+			=> Magnitude;
 
-		public override Word.Signs GetSign(int currentAddress)
-		{
-			return Sign;
-		}
+		public override Word.Signs GetSign(int currentAddress) 
+			=> Sign;
 
-		public override bool IsValueDefined(int currentAddress)
-		{
-			return mIsDefined;
-		}
+		public override bool IsValueDefined(int currentAddress) 
+			=> mIsDefined;
 
 		public static bool IsValueSymbolName(string text)
 		{
 			if (text.Length == 0 || text.Length > MaxNameLength)
-			{
 				return false;
-			}
 
 			bool letterFound = false;
 
 			for (int i = 0; i < text.Length; i++)
 			{
 				if (char.IsLetter(text[i]))
-				{
 					letterFound = true;
-				}
+
 				else if (!char.IsNumber(text[i]))
-				{
 					return false;
-				}
 			}
 
 			return letterFound;
@@ -78,9 +65,7 @@ namespace MixAssembler.Symbol
 			var symbol = LocalSymbol.ParseDefinition(text, sectionCharIndex, status);
 
 			if (symbol != null)
-			{
 				return symbol;
-			}
 
 			return ParseDefinition(text);
 		}
@@ -90,14 +75,10 @@ namespace MixAssembler.Symbol
 			var symbolValue = LocalSymbol.ParseValue(text, sectionCharIndex, status);
 
 			if (symbolValue != null)
-			{
 				return symbolValue;
-			}
 
 			if (!IsValueSymbolName(text))
-			{
 				return null;
-			}
 
 			SymbolBase symbol = status.Symbols[text];
 			if (symbol == null)

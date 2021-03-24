@@ -5,13 +5,13 @@ namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-		readonly long mLiteralMagnitude;
-		readonly Word.Signs mLiteralSign;
-		long mMagnitude;
-		Word.Signs mSign;
-		bool mValueDefined;
+		private readonly long mLiteralMagnitude;
+		private readonly Word.Signs mLiteralSign;
+		private long mMagnitude;
+		private Word.Signs mSign;
+		private bool mValueDefined;
 
-		LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
+		private LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
 		{
 			mLiteralSign = literalSign;
 			mLiteralMagnitude = literalMagnitude;
@@ -20,51 +20,42 @@ namespace MixAssembler.Symbol
 			mValueDefined = false;
 		}
 
-		public override bool IsSymbolDefined => mValueDefined;
+		public override bool IsSymbolDefined 
+			=> mValueDefined;
 
-		public override long MemoryWordMagnitude => mLiteralMagnitude;
+		public override long MemoryWordMagnitude 
+			=> mLiteralMagnitude;
 
-		public override Word.Signs MemoryWordSign => mLiteralSign;
+		public override Word.Signs MemoryWordSign 
+			=> mLiteralSign;
 
-		public override long MemoryWordValue => mLiteralSign.ApplyTo(mLiteralMagnitude);
+		public override long MemoryWordValue 
+			=> mLiteralSign.ApplyTo(mLiteralMagnitude);
 
-		public override long GetValue(int currentAddress)
-		{
-			return mSign.ApplyTo(mMagnitude);
-		}
+		public override long GetValue(int currentAddress) 
+			=> mSign.ApplyTo(mMagnitude);
 
-		public override long GetMagnitude(int currentAddress)
-		{
-			return mMagnitude;
-		}
+		public override long GetMagnitude(int currentAddress) 
+			=> mMagnitude;
 
-		public override Word.Signs GetSign(int currentAddress)
-		{
-			return mSign;
-		}
+		public override Word.Signs GetSign(int currentAddress) 
+			=> mSign;
 
-		public override bool IsValueDefined(int currentAddress)
-		{
-			return mValueDefined;
-		}
+		public override bool IsValueDefined(int currentAddress) 
+			=> mValueDefined;
 
-		static string GetName(Word.Signs literalSign, long literalMagnitude, int count)
-		{
-			return string.Concat("=", (literalSign.IsNegative() ? "-" : ""), literalMagnitude, '=', count);
-		}
+		private static string GetName(Word.Signs literalSign, long literalMagnitude, int count) 
+			=> string.Concat("=", literalSign.IsNegative() ? "-" : "", literalMagnitude, '=', count);
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (text.Length < 2 || text[0] != '=' || text[^1] != '=')
-			{
 				return null;
-			}
 
 			var expressionValue = WValue.ParseValue(text[1..^1], sectionCharIndex + 1, status);
+
 			if (expressionValue == null)
-			{
 				return null;
-			}
 
 			var literalMagnitude = expressionValue.GetMagnitude(status.LocationCounter);
 			var literalSign = expressionValue.GetSign(status.LocationCounter);

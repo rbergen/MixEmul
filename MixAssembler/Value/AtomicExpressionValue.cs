@@ -10,24 +10,20 @@ namespace MixAssembler.Value
 	{
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
-			IValue value = null;
+			IValue value = NumberValue.ParseValue(text, sectionCharIndex, status);
 
-			value = NumberValue.ParseValue(text, sectionCharIndex, status);
+			if (value != null)
+				return value;
 
-			if (value == null)
-			{
-				value = LocationCounterValue.ParseValue(text, sectionCharIndex, status);
-				if (value != null)
-				{
-					return value;
-				}
+			value = LocationCounterValue.ParseValue(text, sectionCharIndex, status);
 
-				value = ValueSymbol.ParseValue(text, sectionCharIndex, status);
-				if (value != null && !value.IsValueDefined(status.LocationCounter))
-				{
-					status.ReportParsingError(sectionCharIndex, text.Length, "symbol " + text + " not defined");
-				}
-			}
+			if (value != null)
+				return value;
+
+			value = ValueSymbol.ParseValue(text, sectionCharIndex, status);
+
+			if (value != null && !value.IsValueDefined(status.LocationCounter))
+				status.ReportParsingError(sectionCharIndex, text.Length, "symbol " + text + " not defined");
 
 			return value;
 		}

@@ -10,60 +10,48 @@ namespace MixGui.Components
 
 	public class DeviceMixByteCollectionEditor : UserControl, IMixByteCollectionEditor, INavigableControl
 	{
-		readonly Label mMixByteCollectionIndexLabel;
-		readonly MixByteCollectionCharTextBox mCharTextBox;
-		int mMixByteCollectionIndex;
-		IMixByteCollection mDeviceMixByteCollection;
-		int mIndexCharCount = 2;
+		private readonly Label mMixByteCollectionIndexLabel;
+		private readonly MixByteCollectionCharTextBox mCharTextBox;
+		private int mMixByteCollectionIndex;
+		private IMixByteCollection mDeviceMixByteCollection;
+		private int mIndexCharCount = 2;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 
-		public DeviceMixByteCollectionEditor()
-			: this(null)
-		{
-		}
-
-		public DeviceMixByteCollectionEditor(IMixByteCollection mixByteCollection)
+		public DeviceMixByteCollectionEditor(IMixByteCollection mixByteCollection = null)
 		{
 			mDeviceMixByteCollection = mixByteCollection;
 			if (mDeviceMixByteCollection == null)
-			{
 				mDeviceMixByteCollection = new MixByteCollection(FullWord.ByteCount);
-			}
 
 			mCharTextBox = new MixByteCollectionCharTextBox(mDeviceMixByteCollection);
 			mMixByteCollectionIndexLabel = new Label();
 			InitializeComponent();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl 
+			=> this;
 
-		public FieldTypes? FocusedField => mCharTextBox.Focused ? FieldTypes.Chars : null;
+		public FieldTypes? FocusedField 
+			=> mCharTextBox.Focused ? FieldTypes.Chars : null;
 
-		public int? CaretIndex => mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : null;
+		public int? CaretIndex 
+			=> mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : null;
 
-		public void Select(int start, int length)
-		{
-			mCharTextBox.Select(start, length);
-		}
+		public void Select(int start, int length) 
+			=> mCharTextBox.Select(start, length);
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return mCharTextBox.FocusWithIndex(index);
-		}
+		public bool Focus(FieldTypes? field, int? index) 
+			=> mCharTextBox.FocusWithIndex(index);
 
-		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) 
+			=> ValueChanged?.Invoke(this, args);
 
-		void MMixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-		{
-			OnValueChanged(args);
-		}
+		private void MixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) 
+			=> OnValueChanged(args);
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
 			SuspendLayout();
 
@@ -79,7 +67,7 @@ namespace MixGui.Components
 			mCharTextBox.Location = new Point(mMixByteCollectionIndexLabel.Right, 0);
 			mCharTextBox.Name = "mCharTextBox";
 			mCharTextBox.TabIndex = 1;
-			mCharTextBox.ValueChanged += MMixByteCollectionEditor_ValueChanged;
+			mCharTextBox.ValueChanged += MixByteCollectionEditor_ValueChanged;
 			mCharTextBox.NavigationKeyDown += This_KeyDown;
 			mCharTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			mCharTextBox.BorderStyle = BorderStyle.None;
@@ -93,12 +81,10 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Modifiers != Keys.None)
-			{
 				return;
-			}
 
 			switch (e.KeyCode)
 			{
@@ -130,19 +116,15 @@ namespace MixGui.Components
 			set
 			{
 				if (value < 0)
-				{
 					value = 0;
-				}
 
 				mMixByteCollectionIndex = value;
 				SetIndexLabelText();
 			}
 		}
 
-		void SetIndexLabelText()
-		{
-			mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
-		}
+		private void SetIndexLabelText() 
+			=> mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
 
 		public int IndexCharCount
 		{
@@ -150,9 +132,7 @@ namespace MixGui.Components
 			set
 			{
 				if (mIndexCharCount == value)
-				{
 					return;
-				}
 
 				mIndexCharCount = value;
 				SetIndexLabelText();

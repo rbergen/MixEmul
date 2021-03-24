@@ -107,7 +107,7 @@ namespace MixGui.Components
 			this.mCloseButton.TabIndex = 1;
 			this.mCloseButton.Text = "&Close";
 			this.mCloseButton.UseVisualStyleBackColor = true;
-			this.mCloseButton.Click += new System.EventHandler(this.MCloseButton_Click);
+			this.mCloseButton.Click += new System.EventHandler(this.CloseButton_Click);
 			// 
 			// mDisksTab
 			// 
@@ -137,7 +137,7 @@ namespace MixGui.Components
 			this.mDiskDeleteButton.TabIndex = 3;
 			this.mDiskDeleteButton.Text = "&Delete";
 			this.mDiskDeleteButton.UseVisualStyleBackColor = true;
-			this.mDiskDeleteButton.Click += new System.EventHandler(this.MDiskDeleteButton_Click);
+			this.mDiskDeleteButton.Click += new System.EventHandler(this.DiskDeleteButton_Click);
 			// 
 			// mDiskPathBox
 			// 
@@ -172,7 +172,7 @@ namespace MixGui.Components
 			this.mDiskSelectorComboBox.Name = "mDiskSelectorComboBox";
 			this.mDiskSelectorComboBox.Size = new System.Drawing.Size(78, 23);
 			this.mDiskSelectorComboBox.TabIndex = 1;
-			this.mDiskSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.MDiskSelectorComboBox_SelectedIndexChanged);
+			this.mDiskSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.DiskSelectorComboBox_SelectedIndexChanged);
 			// 
 			// mDiskEditor
 			// 
@@ -207,7 +207,7 @@ namespace MixGui.Components
 			this.mDeviceTypeTabs.SelectedIndex = 0;
 			this.mDeviceTypeTabs.Size = new System.Drawing.Size(512, 396);
 			this.mDeviceTypeTabs.TabIndex = 0;
-			this.mDeviceTypeTabs.SelectedIndexChanged += new System.EventHandler(this.MDeviceTypeTabs_SelectedIndexChanged);
+			this.mDeviceTypeTabs.SelectedIndexChanged += new System.EventHandler(this.DeviceTypeTabs_SelectedIndexChanged);
 			// 
 			// mTapesTab
 			// 
@@ -237,7 +237,7 @@ namespace MixGui.Components
 			this.mTapeDeleteButton.TabIndex = 3;
 			this.mTapeDeleteButton.Text = "&Delete";
 			this.mTapeDeleteButton.UseVisualStyleBackColor = true;
-			this.mTapeDeleteButton.Click += new System.EventHandler(this.MTapeDeleteButton_Click);
+			this.mTapeDeleteButton.Click += new System.EventHandler(this.TapeDeleteButton_Click);
 			// 
 			// mTapePathBox
 			// 
@@ -279,7 +279,7 @@ namespace MixGui.Components
 			this.mTapeSelectorComboBox.Name = "mTapeSelectorComboBox";
 			this.mTapeSelectorComboBox.Size = new System.Drawing.Size(78, 23);
 			this.mTapeSelectorComboBox.TabIndex = 1;
-			this.mTapeSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.MTapeSelectorComboBox_SelectedIndexChanged);
+			this.mTapeSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.TapeSelectorComboBox_SelectedIndexChanged);
 			// 
 			// mTapeSelectorLabel
 			// 
@@ -318,7 +318,7 @@ namespace MixGui.Components
 			this.mCardReaderLoadButton.TabIndex = 2;
 			this.mCardReaderLoadButton.Text = "&Load...";
 			this.mCardReaderLoadButton.UseVisualStyleBackColor = true;
-			this.mCardReaderLoadButton.Click += new System.EventHandler(this.MCardReaderLoadButton_Click);
+			this.mCardReaderLoadButton.Click += new System.EventHandler(this.CardReaderLoadButton_Click);
 			// 
 			// mCardReaderDeleteButton
 			// 
@@ -331,7 +331,7 @@ namespace MixGui.Components
 			this.mCardReaderDeleteButton.TabIndex = 3;
 			this.mCardReaderDeleteButton.Text = "&Delete";
 			this.mCardReaderDeleteButton.UseVisualStyleBackColor = true;
-			this.mCardReaderDeleteButton.Click += new System.EventHandler(this.MCardReaderDeleteButton_Click);
+			this.mCardReaderDeleteButton.Click += new System.EventHandler(this.CardReaderDeleteButton_Click);
 			// 
 			// mCardReaderPathBox
 			// 
@@ -397,7 +397,7 @@ namespace MixGui.Components
 			this.mCardPunchDeleteButton.TabIndex = 2;
 			this.mCardPunchDeleteButton.Text = "&Delete";
 			this.mCardPunchDeleteButton.UseVisualStyleBackColor = true;
-			this.mCardPunchDeleteButton.Click += new System.EventHandler(this.MCardPunchDeleteButton_Click);
+			this.mCardPunchDeleteButton.Click += new System.EventHandler(this.CardPunchDeleteButton_Click);
 			// 
 			// mCardWriterPathBox
 			// 
@@ -463,7 +463,7 @@ namespace MixGui.Components
 			this.mPrinterDeleteButton.TabIndex = 3;
 			this.mPrinterDeleteButton.Text = "&Delete";
 			this.mPrinterDeleteButton.UseVisualStyleBackColor = true;
-			this.mPrinterDeleteButton.Click += new System.EventHandler(this.MPrinterDeleteButton_Click);
+			this.mPrinterDeleteButton.Click += new System.EventHandler(this.PrinterDeleteButton_Click);
 			// 
 			// mPrinterPathBox
 			// 
@@ -529,7 +529,7 @@ namespace MixGui.Components
 			this.mPaperTapeDeleteButton.TabIndex = 2;
 			this.mPaperTapeDeleteButton.Text = "&Delete";
 			this.mPaperTapeDeleteButton.UseVisualStyleBackColor = true;
-			this.mPaperTapeDeleteButton.Click += new System.EventHandler(this.MPaperTapeDeleteButton_Click);
+			this.mPaperTapeDeleteButton.Click += new System.EventHandler(this.PaperTapeDeleteButton_Click);
 			// 
 			// mPaperTapePathBox
 			// 

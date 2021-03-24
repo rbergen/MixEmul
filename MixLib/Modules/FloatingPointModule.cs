@@ -84,16 +84,8 @@ namespace MixLib.Modules
 			Status = RunStatus.Idle;
 		}
 
-		int? GetSymbolAddress(string name)
-		{
-			if (Symbols == null)
-			{
-				return null;
-			}
-
-			var symbol = Symbols[name] as IValueSymbol;
-			return symbol == null ? null : (int?)symbol.Value;
-		}
+		int? GetSymbolAddress(string name) 
+			=> Symbols[name] is not IValueSymbol symbol ? null : (int?)symbol.Value;
 
 		public override bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
 		{
@@ -109,9 +101,7 @@ namespace MixLib.Modules
 			mDivisionByZeroAddress = null;
 
 			if (!base.LoadInstructionInstances(instances, symbols))
-			{
 				return false;
-			}
 
 			Symbols = symbols;
 			mAccAddress = GetSymbolAddress(accSymbol);

@@ -7,12 +7,12 @@ namespace MixGui.Components
 {
 	public class AboutForm : Form
 	{
-		Button mCloseButton;
-		Label mCopyrightLabel;
-		Label mFullVersionLabel;
-		PictureBox mLogoBox;
-		Label mProductAndVersionLabel;
-		readonly string mVersionString;
+		private Button mCloseButton;
+		private Label mCopyrightLabel;
+		private Label mFullVersionLabel;
+		private PictureBox mLogoBox;
+		private Label mProductAndVersionLabel;
+		private readonly string mVersionString;
 
 		public AboutForm()
 		{
@@ -27,22 +27,17 @@ namespace MixGui.Components
 			foreach (object attribute in customAttributes)
 			{
 				if (copyright == null && attribute is AssemblyCopyrightAttribute copyrightAttribute)
-				{
 					copyright = copyrightAttribute.Copyright;
-				}
+
 				else if (product == null && attribute is AssemblyProductAttribute productAttribute)
-				{
 					product = productAttribute.Product;
-				}
 
 				if (copyright != null && product != null)
-				{
 					break;
-				}
 			}
 
 			Version version = executingAssembly.GetName().Version;
-			product = product + " " + version.ToString(2);
+			product += " " + version.ToString(2);
 
 			mProductAndVersionLabel.Text = product;
 			mVersionString = version.ToString();
@@ -50,17 +45,13 @@ namespace MixGui.Components
 			mCopyrightLabel.Text = copyright;
 		}
 
-		void MFullVersionLabel_Click(object sender, EventArgs e)
-		{
-			Clipboard.SetText(mVersionString);
-		}
+		private void FullVersionLabel_Click(object sender, EventArgs e) 
+			=> Clipboard.SetText(mVersionString);
 
-		void MFullVersionLabel_DoubleClick(object sender, EventArgs e)
-		{
-			Clipboard.SetText(mVersionString.Replace('.', '_'));
-		}
+		private void FullVersionLabel_DoubleClick(object sender, EventArgs e) 
+			=> Clipboard.SetText(mVersionString.Replace('.', '_'));
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
 			var resources = new ComponentResourceManager(typeof(AboutForm));
 			mLogoBox = new PictureBox();
@@ -116,8 +107,8 @@ namespace MixGui.Components
 			mFullVersionLabel.TabIndex = 1;
 			mFullVersionLabel.Text = "Full version number: ";
 			mFullVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			mFullVersionLabel.Click += MFullVersionLabel_Click;
-			mFullVersionLabel.DoubleClick += MFullVersionLabel_DoubleClick;
+			mFullVersionLabel.Click += FullVersionLabel_Click;
+			mFullVersionLabel.DoubleClick += FullVersionLabel_DoubleClick;
 			// 
 			// AboutForm
 			// 

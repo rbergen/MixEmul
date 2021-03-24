@@ -10,6 +10,7 @@ using MixLib.Misc;
 using MixLib.Type;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -17,29 +18,29 @@ namespace MixGui.Components
 {
 	public class InstructionInstanceTextBox : RichTextBox, IWordEditor, IEscapeConsumer
 	{
-		const long unrendered = long.MinValue;
+		private const long unrendered = long.MinValue;
 
-		Color mEditingTextColor;
-		Color mErrorTextColor;
-		Color mImmutableTextColor;
-		Color mRenderedTextColor;
-		Color mEditorBackgroundColor;
-		Color mLoadedInstructionTextColor;
-		Color mLoadedInstructionBackgroundColor;
+		private Color mEditingTextColor;
+		private Color mErrorTextColor;
+		private Color mImmutableTextColor;
+		private Color mRenderedTextColor;
+		private Color mEditorBackgroundColor;
+		private Color mLoadedInstructionTextColor;
+		private Color mLoadedInstructionBackgroundColor;
 
-		bool mEditMode;
-		IFullWord mInstructionWord;
-		long mLastRenderedMagnitude;
-		Word.Signs mLastRenderedSign;
-		ToolTip mToolTip;
-		bool mNoInstructionRendered;
-		bool mUpdating;
-		string mLastRenderedSourceLine;
-		string mCaption;
+		private bool mEditMode;
+		private IFullWord mInstructionWord;
+		private long mLastRenderedMagnitude;
+		private Word.Signs mLastRenderedSign;
+		private ToolTip mToolTip;
+		private bool mNoInstructionRendered;
+		private bool mUpdating;
+		private string mLastRenderedSourceLine;
+		private string mCaption;
 
-		readonly ToolStripMenuItem mShowAddressMenuItem;
-		readonly ToolStripMenuItem mShowIndexedAddressMenuItem;
-		readonly ContextMenuStrip mContextMenu;
+		private readonly ToolStripMenuItem mShowAddressMenuItem;
+		private readonly ToolStripMenuItem mShowIndexedAddressMenuItem;
+		private readonly ContextMenuStrip mContextMenu;
 
 		public int MemoryMinIndex { get; set; }
 		public int MemoryMaxIndex { get; set; }
@@ -50,19 +51,11 @@ namespace MixGui.Components
 		public event WordEditorValueChangedEventHandler ValueChanged;
 		public event AddressSelectedHandler AddressSelected;
 
-		public InstructionInstanceTextBox()
-			: this(null)
-		{
-		}
+		public InstructionInstanceTextBox() : this(null) {}
 
 		public InstructionInstanceTextBox(IFullWord instructionWord)
 		{
-			if (instructionWord == null)
-			{
-				instructionWord = new FullWord();
-			}
-
-			mInstructionWord = instructionWord;
+			mInstructionWord = instructionWord ?? new FullWord();
 
 			UpdateLayout();
 
@@ -95,43 +88,34 @@ namespace MixGui.Components
 			Update();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl 
+			=> this;
 
-		public FieldTypes? FocusedField => FieldTypes.Instruction;
+		public FieldTypes? FocusedField 
+			=> FieldTypes.Instruction;
 
-		public int? CaretIndex => SelectionStart + SelectionLength;
+		public int? CaretIndex 
+			=> SelectionStart + SelectionLength;
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return this.FocusWithIndex(index);
-		}
+		public bool Focus(FieldTypes? field, int? index) 
+			=> this.FocusWithIndex(index);
 
-		protected void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+		protected void OnValueChanged(WordEditorValueChangedEventArgs args) 
+			=> ValueChanged?.Invoke(this, args);
 
-		protected void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			AddressSelected?.Invoke(this, args);
-		}
+		protected void OnAddressSelected(AddressSelectedEventArgs args) 
+			=> AddressSelected?.Invoke(this, args);
 
-		void This_Enter(object sender, EventArgs e)
-		{
-			CheckContentsEditable();
-		}
+		private void This_Enter(object sender, EventArgs e) 
+			=> CheckContentsEditable();
 
-		void ShowIndexedAddressMenuItem_Click(object sender, EventArgs e)
-		{
-			OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), mInstructionWord[MixInstruction.IndexByte])));
-		}
+		private void ShowIndexedAddressMenuItem_Click(object sender, EventArgs e) 
+			=> OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), mInstructionWord[MixInstruction.IndexByte])));
 
-		void ShowAddressMenuItem_Click(object sender, EventArgs e)
-		{
-			OnAddressSelected(new AddressSelectedEventArgs(GetAddress()));
-		}
+		private void ShowAddressMenuItem_Click(object sender, EventArgs e) 
+			=> OnAddressSelected(new AddressSelectedEventArgs(GetAddress()));
 
-		void AddTextElement(string element, bool markAsError)
+		private void AddTextElement(string element, bool markAsError)
 		{
 			if (element != "")
 			{
@@ -142,7 +126,7 @@ namespace MixGui.Components
 			}
 		}
 
-		string GetAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
+		private string GetAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
 		{
 			string caption = "";
 			int findingNumber = 1;
@@ -163,13 +147,11 @@ namespace MixGui.Components
 
 						case LineSection.AddressField:
 							if (finding.Length != 0)
-							{
 								MarkAssemblyError((line.OpField.Length + finding.StartCharIndex) + 1, finding.Length);
-							}
+
 							else
-							{
 								MarkAssemblyError(line.OpField.Length + 1, line.AddressField.Length);
-							}
+
 							fieldLabel = "address";
 
 							break;
@@ -187,14 +169,10 @@ namespace MixGui.Components
 				}
 
 				if (findingNumber != 1)
-				{
 					caption = string.Concat(caption, Environment.NewLine, findingNumber, ". ");
-				}
 
 				if (findingNumber == 2)
-				{
 					caption = "1. " + caption;
-				}
 
 				caption = caption + fieldLabel + ": " + finding.Message;
 
@@ -206,7 +184,7 @@ namespace MixGui.Components
 					: string.Concat("Instruction errors:", Environment.NewLine, caption);
 		}
 
-		bool AssembleInstruction(bool markErrors)
+		private bool AssembleInstruction(bool markErrors)
 		{
 			mEditMode = false;
 
@@ -239,9 +217,7 @@ namespace MixGui.Components
 			}
 
 			if (instance == null)
-			{
 				return false;
-			}
 
 			var oldValue = new FullWord(mInstructionWord.LongValue);
 			mInstructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
@@ -253,49 +229,34 @@ namespace MixGui.Components
 			return true;
 		}
 
-		bool CheckContentsEditable()
+		private bool CheckContentsEditable()
 		{
-			if (!ReadOnly && (mNoInstructionRendered || mInstructionWord.IsEmpty))
-			{
-				base.Text = "";
-				SetEditMode();
+			if (ReadOnly || !mNoInstructionRendered && !mInstructionWord.IsEmpty)
+				return true;
 
-				return false;
-			}
-
-			return true;
-		}
-
-		static bool ItemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item)
-		{
-			if (errors != null)
-			{
-				foreach (InstanceValidationError error in errors)
-				{
-					if (error.Source == item)
-					{
-						return true;
-					}
-				}
-			}
+			base.Text = "";
+			SetEditMode();
 
 			return false;
 		}
 
-		void MarkAssemblyError(int startCharIndex, int length)
+		static bool ItemInErrors(InstanceValidationError[] errors, InstanceValidationError.Sources item) 
+			=> errors?.Any(error => error.Source == item) ?? false;
+
+		private void MarkAssemblyError(int startCharIndex, int length)
 		{
 			int selectionStart = SelectionStart;
 			int selectionLength = SelectionLength;
 
-			if (length != 0)
-			{
-				Select(startCharIndex, length);
-				SelectionColor = mErrorTextColor;
-				Select(selectionStart, selectionLength);
-			}
+			if (length == 0)
+				return;
+
+			Select(startCharIndex, length);
+			SelectionColor = mErrorTextColor;
+			Select(selectionStart, selectionLength);
 		}
 
-		void SetEditMode()
+		private void SetEditMode()
 		{
 			SuspendLayout();
 
@@ -323,71 +284,65 @@ namespace MixGui.Components
 			mEditMode = true;
 		}
 
-		void ShowNonInstruction(string text)
+		private void ShowNonInstruction(string text)
 		{
 			mNoInstructionRendered = true;
 
-			if (!Focused || CheckContentsEditable())
-			{
-				SuspendLayout();
-				base.Text = text;
-				Select(0, TextLength);
-				SelectionFont = new Font(Font.Name, Font.Size, FontStyle.Italic, Font.Unit, Font.GdiCharSet);
+			if (Focused && !CheckContentsEditable())
+				return;
 
-				ForeColor = mImmutableTextColor;
-				SelectionLength = 0;
+			SuspendLayout();
+			base.Text = text;
+			Select(0, TextLength);
+			SelectionFont = new Font(Font.Name, Font.Size, FontStyle.Italic, Font.Unit, Font.GdiCharSet);
 
-				Select(0, 0);
-				ResumeLayout();
-			}
+			ForeColor = mImmutableTextColor;
+			SelectionLength = 0;
+
+			Select(0, 0);
+			ResumeLayout();
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				if (mEditMode)
-				{
-					AssembleInstruction(true);
-				}
+			if (e.KeyCode != Keys.Enter)
+				return;
 
-				e.Handled = true;
-			}
+			if (mEditMode)
+				AssembleInstruction(true);
+
+			e.Handled = true;
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == (char)Keys.Escape)
-			{
-				e.Handled = true;
-				mEditMode = false;
-				Update();
-			}
+			if (e.KeyChar != (char)Keys.Escape)
+				return;
+
+			e.Handled = true;
+			mEditMode = false;
+			Update();
 		}
 
-		void This_LostFocus(object sender, EventArgs e)
+		private void This_LostFocus(object sender, EventArgs e)
 		{
-			if (!mEditMode || !AssembleInstruction(false))
-			{
-				mEditMode = false;
-				Update();
-			}
+			if (mEditMode && AssembleInstruction(false))
+				return;
+
+			mEditMode = false;
+			Update();
 		}
 
-		void This_ReadOnlyChanged(object sender, EventArgs e)
+		private void This_ReadOnlyChanged(object sender, EventArgs e)
 		{
 			if (Focused)
-			{
 				CheckContentsEditable();
-			}
 		}
 
-		void This_TextChanged(object sender, EventArgs e)
+		private void This_TextChanged(object sender, EventArgs e)
 		{
 			if (!mUpdating && !mEditMode)
-			{
 				SetEditMode();
-			}
 		}
 
 		public new string Text
@@ -397,32 +352,26 @@ namespace MixGui.Components
 			{
 				base.Text = value;
 				if (Focused)
-				{
 					CheckContentsEditable();
-				}
 			}
 		}
 
-		int GetAddress()
+		private int GetAddress()
 		{
 			MixByte[] addressBytes = new MixByte[MixInstruction.AddressByteCount];
 
 			for (int i = 0; i < MixInstruction.AddressByteCount; i++)
-			{
 				addressBytes[i] = mInstructionWord[i];
-			}
 
 			var address = (int)Word.BytesToLong(addressBytes);
 
 			if (mInstructionWord.Sign.IsNegative())
-			{
 				address = -address;
-			}
 
 			return address;
 		}
 
-		void HandleNoInstruction(string caption)
+		private void HandleNoInstruction(string caption)
 		{
 			ShowNonInstruction("No instruction");
 
@@ -480,16 +429,12 @@ namespace MixGui.Components
 			AddTextElement(text.Field, ItemInErrors(errors, InstanceValidationError.Sources.FieldSpec));
 
 			if (TextLength > 0)
-			{
 				Select(TextLength, 0);
-			}
 
 			var caption = GetAddressErrorsCaption(errors);
 
 			if (sourceCaption != null)
-			{
 				caption = caption == null ? sourceCaption : string.Concat(sourceCaption, Environment.NewLine, caption);
-			}
 
 			mCaption = caption;
 			mToolTip?.SetToolTip(this, caption);
@@ -506,12 +451,10 @@ namespace MixGui.Components
 			mUpdating = false;
 		}
 
-		static string GetAddressErrorsCaption(InstanceValidationError[] errors)
+		private static string GetAddressErrorsCaption(InstanceValidationError[] errors)
 		{
 			if (errors == null)
-			{
 				return null;
-			}
 
 			var captionBuilder = new StringBuilder();
 			int errorNumber = 1;
@@ -519,27 +462,20 @@ namespace MixGui.Components
 			foreach (InstanceValidationError error in errors)
 			{
 				if (errorNumber != 1)
-				{
 					captionBuilder.AppendFormat("{0}{1}. ", Environment.NewLine, errorNumber);
-				}
 
 				if (errorNumber == 2)
-				{
 					captionBuilder.Insert(0, "1. ");
-				}
 
 				captionBuilder.AppendFormat("address: {0}", error.CompiledMessage);
 				errorNumber++;
 			}
 
 			if (errorNumber == 2)
-			{
 				captionBuilder.Insert(0, "Instruction error: ");
-			}
+
 			else
-			{
 				captionBuilder.Insert(0, String.Format("Instruction errors:{0}", Environment.NewLine));
-			}
 
 			return captionBuilder.ToString();
 		}

@@ -9,9 +9,7 @@ namespace MixGui.Components
 
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field) : this(keyData, field, null) { }
 
-		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : base(keyData, index)
-		{
-			Field = field;
-		}
+		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : base(keyData, index) 
+			=> Field = field;
 	}
 }

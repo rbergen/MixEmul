@@ -10,16 +10,14 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class MiscInstructions
 	{
-		static readonly SortedDictionary<string, moveStatus> mMoveStatuses = new SortedDictionary<string, moveStatus>();
-		const byte zeroCharValue = 30;
+		private static readonly SortedDictionary<string, MoveStatus> mMoveStatuses = new();
+		private const byte zeroCharValue = 30;
 
 		/// <summary>
 		/// Method for performing the NOP instruction
 		/// </summary>
-		public static bool Noop(ModuleBase module, MixInstruction.Instance instance)
-		{
-			return true;
-		}
+		public static bool Noop(ModuleBase module, MixInstruction.Instance instance) 
+			=> true;
 
 		/// <summary>
 		/// Method for performing the CHAR instruction
@@ -70,7 +68,7 @@ namespace MixLib.Instruction
 			if (num > rA.MaxMagnitude)
 			{
 				module.ReportOverflow();
-				num = num % rA.MaxMagnitude;
+				num %= rA.MaxMagnitude;
 			}
 
 			rA.MagnitudeLongValue = (long)num;
@@ -107,7 +105,7 @@ namespace MixLib.Instruction
 		public static bool Move(ModuleBase module, MixInstruction.Instance instance)
 		{
 
-			mMoveStatuses.TryGetValue(module.ModuleName, out moveStatus status);
+			mMoveStatuses.TryGetValue(module.ModuleName, out MoveStatus status);
 
 			// if we have a move status, check if it applies to this instruction
 			if (status != null && status.ProgramCounter != module.ProgramCounter)
@@ -120,17 +118,13 @@ namespace MixLib.Instruction
 			{
 				var fromAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 				if (fromAddress == int.MinValue)
-				{
 					return false;
-				}
 
 				var toAddress = InstructionHelpers.GetValidIndexedAddress(module, 0, 1);
 				if (toAddress == int.MinValue)
-				{
 					return false;
-				}
 
-				status = new moveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
+				status = new MoveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
 				mMoveStatuses[module.ModuleName] = status;
 
 				return false;
@@ -140,8 +134,8 @@ namespace MixLib.Instruction
 			switch (status.CurrentWordState)
 			{
 				// ... during one of those, the actual move is performed...
-				case moveStatus.WordStates.BeforeMove:
-				case moveStatus.WordStates.RegisterIncreased:
+				case MoveStatus.WordStates.BeforeMove:
+				case MoveStatus.WordStates.RegisterIncreased:
 					IMemory memory = module.Memory;
 					int currentFromAddress = status.FromAddress + status.CurrentWord;
 					int currentToAddress = status.ToAddress + status.CurrentWord;
@@ -149,31 +143,29 @@ namespace MixLib.Instruction
 					if (currentFromAddress > memory.MaxWordIndex || currentToAddress > memory.MaxWordIndex)
 					{
 						module.ReportRuntimeError("Source or target address overflow");
-						status = null;
 						mMoveStatuses.Remove(module.ModuleName);
 
 						return false;
 					}
 
 					memory[currentToAddress] = memory[currentFromAddress];
-					status.CurrentWordState = moveStatus.WordStates.Moved;
+					status.CurrentWordState = MoveStatus.WordStates.Moved;
 
 					break;
 
 				// ... during the other, the value of rI1 is increased
-				case moveStatus.WordStates.Moved:
+				case MoveStatus.WordStates.Moved:
 					Register rI1 = module.Registers.RI1;
 					rI1.LongValue++;
 					status.NextWord();
 
 					if (status.CurrentWord >= status.WordCount)
 					{
-						status = null;
 						mMoveStatuses.Remove(module.ModuleName);
 						return true;
 					}
 
-					status.CurrentWordState = moveStatus.WordStates.RegisterIncreased;
+					status.CurrentWordState = MoveStatus.WordStates.RegisterIncreased;
 
 					break;
 			}
@@ -186,7 +178,7 @@ namespace MixLib.Instruction
 		/// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
 		/// several ticks, the exact number of ticks depending on the number of words moved.
 		/// </summary>
-		class moveStatus
+		class MoveStatus
 		{
 			public int CurrentWord { get; private set; }
 			public WordStates CurrentWordState { get; set; }
@@ -195,7 +187,7 @@ namespace MixLib.Instruction
 			public int ToAddress { get; private set; }
 			public byte WordCount { get; private set; }
 
-			public moveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
+			public MoveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
 			{
 				ProgramCounter = programCounter;
 				FromAddress = fromAddress;

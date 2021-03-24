@@ -8,52 +8,43 @@ namespace MixGui.Components
 {
 	public class FullWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		readonly Label mEqualsLabel;
-		IFullWord mFullWord;
-		bool mReadOnly;
-		readonly MixByteCollectionCharTextBox mWordCharTextBox;
-		readonly WordValueEditor mWordValueEditor;
+		private readonly Label mEqualsLabel;
+		private IFullWord mFullWord;
+		private bool mReadOnly;
+		private readonly MixByteCollectionCharTextBox mWordCharTextBox;
+		private readonly WordValueEditor mWordValueEditor;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
-		public FullWordEditor()
-			: this(null)
-		{
-		}
+		public FullWordEditor() : this(null) {}
 
 		public FullWordEditor(IFullWord fullWord)
 		{
-			mFullWord = fullWord;
+			mFullWord = fullWord ?? new FullWord();
 			mReadOnly = false;
-			if (mFullWord == null)
-			{
-				mFullWord = new FullWord();
-			}
-
 			mWordValueEditor = new WordValueEditor(mFullWord);
 			mWordCharTextBox = new MixByteCollectionCharTextBox(mFullWord);
 			mEqualsLabel = new Label();
 			InitializeComponent();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl 
+			=> this;
 
-		public FieldTypes? FocusedField => mWordCharTextBox.Focused ? FieldTypes.Chars : mWordValueEditor.FocusedField;
+		public FieldTypes? FocusedField 
+			=> mWordCharTextBox.Focused ? FieldTypes.Chars : mWordValueEditor.FocusedField;
 
-		public int? CaretIndex => FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
+		public int? CaretIndex 
+			=> FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
-		}
+		public bool Focus(FieldTypes? field, int? index) 
+			=> field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
+			=> ValueChanged?.Invoke(this, args);
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
 			SuspendLayout();
 
@@ -85,12 +76,10 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Modifiers != Keys.None)
-			{
 				return;
-			}
 
 			FieldTypes editorField = FieldTypes.Chars;
 			int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;
@@ -112,25 +101,19 @@ namespace MixGui.Components
 
 				case Keys.Right:
 					if (sender == mWordValueEditor)
-					{
 						mWordCharTextBox.Focus();
-					}
+
 					else if (sender == mWordCharTextBox && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
 
 					break;
 
 				case Keys.Left:
 					if (sender == mWordCharTextBox)
-					{
 						mWordValueEditor.Focus(FieldTypes.Value, null);
-					}
+
 					else if (sender == mWordValueEditor && NavigationKeyDown != null)
-					{
 						NavigationKeyDown(this, e);
-					}
 
 					break;
 			}
@@ -191,10 +174,8 @@ namespace MixGui.Components
 			get => FullWord;
 			set
 			{
-				if (!(value is IFullWord))
-				{
+				if (value is not IFullWord)
 					throw new ArgumentException("Value must be an IFullWord");
-				}
 
 				FullWord = (IFullWord)value;
 			}
@@ -203,13 +184,10 @@ namespace MixGui.Components
 		public void Select(int start, int length)
 		{
 			if (FocusedField == FieldTypes.Chars)
-			{
 				mWordCharTextBox.Select(start, length);
-			}
+
 			else
-			{
 				mWordValueEditor.Select(start, length);
-			}
 		}
 	}
 }

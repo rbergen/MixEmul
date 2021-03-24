@@ -19,10 +19,7 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip { get; set; }
 
-		public DeviceStatusControl()
-			: this(null)
-		{
-		}
+		public DeviceStatusControl() : this(null) {}
 
 		public DeviceStatusControl(MixDevice device)
 		{
@@ -60,7 +57,7 @@ namespace MixGui.Components
 			mOutputMenuItem.Text = "Output device";
 
 			mResetMenuItem.Text = "Reset";
-			mResetMenuItem.Click += MResetMenuItem_Click;
+			mResetMenuItem.Click += ResetMenuItem_Click;
 
 			mContextMenuStrip.Items.AddRange(new ToolStripItem[] { mInputMenuItem, mOutputMenuItem, mContextSeparator, mResetMenuItem });
 			ContextMenuStrip = mContextMenuStrip;
@@ -74,12 +71,10 @@ namespace MixGui.Components
 			UpdateLayout();
 		}
 
-		void Control_DoubleClick(object sender, EventArgs e)
-		{
-			OnDoubleClick(e);
-		}
+		private void Control_DoubleClick(object sender, EventArgs e) 
+			=> OnDoubleClick(e);
 
-		void MResetMenuItem_Click(object sender, EventArgs e)
+		private void ResetMenuItem_Click(object sender, EventArgs e)
 		{
 			if (mDevice != null)
 			{

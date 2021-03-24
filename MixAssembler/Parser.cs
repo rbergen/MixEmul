@@ -6,6 +6,7 @@ using MixLib;
 using MixLib.Instruction;
 using MixLib.Type;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MixAssembler
 {
@@ -19,49 +20,41 @@ namespace MixAssembler
 		public const int MinLocLength = 10;
 		public const int MinOpLength = 4;
 
-		const int locFieldIndex = 0;
-		const int opFieldIndex = 1;
-		const int addressFieldIndex = 2;
-		const int commentFieldIndex = 3;
+		private const int locFieldIndex = 0;
+		private const int opFieldIndex = 1;
+		private const int addressFieldIndex = 2;
+		private const int commentFieldIndex = 3;
 
-		static readonly InstructionSet mInstructionSet = new();
-		static readonly LoaderInstructions mLoaderInstructions = new();
+		private static readonly InstructionSet mInstructionSet = new();
+		private static readonly LoaderInstructions mLoaderInstructions = new();
 
-		static bool IsCommentLine(string sourceLine)
-		{
-			return sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
-		}
+		private static bool IsCommentLine(string sourceLine) 
+			=> sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
 
 		/// <summary>
 		/// This method parses an "in-memory" instruction. That is: an instruction without a location field. 
 		/// </summary>
 		public static ParsedSourceLine ParseInstructionLine(string instructionLine, ParsingStatus status)
-		{
 			// add an empty location field, then parse as usual.
-			return ParseLine(" " + instructionLine, status);
-		}
+			=> ParseLine(" " + instructionLine, status);
 
-		static int FindFirstNonWhiteSpace(string sourceLine, int searchBeyondIndex)
+		private static int FindFirstNonWhiteSpace(string sourceLine, int searchBeyondIndex)
 		{
 			for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
 			{
 				if (!char.IsWhiteSpace(sourceLine, i))
-				{
 					return i;
-				}
 			}
 
 			return -1;
 		}
 
-		static int FindFirstWhiteSpace(string sourceLine, int searchBeyondIndex)
+		private static int FindFirstWhiteSpace(string sourceLine, int searchBeyondIndex)
 		{
 			for (int i = searchBeyondIndex + 1; i < sourceLine.Length; i++)
 			{
 				if (char.IsWhiteSpace(sourceLine, i))
-				{
 					return i;
-				}
 			}
 
 			return -1;
@@ -70,26 +63,26 @@ namespace MixAssembler
 		/// <summary>
 		/// This method is used to handle instructions targeted at the assembler itself. 
 		/// </summary>
-		static bool HandleAssemblyInstruction(string opField, string addressField, SymbolBase symbol, ParsingStatus status)
+		private static bool HandleAssemblyInstruction(string opField, string addressField, SymbolBase symbol, ParsingStatus status)
 		{
 			IValue expression;
 			status.LineSection = LineSection.AddressField;
 			switch (opField)
 			{
 				case "EQU":
+					if (symbol == null)
+						return true;
+
 					// set value of the instruction symbol (first field) to the value of the expression that is in the address field
-					if (symbol != null)
+					expression = WValue.ParseValue(addressField, 0, status);
+
+					if (!expression.IsValueDefined(status.LocationCounter))
 					{
-						expression = WValue.ParseValue(addressField, 0, status);
-
-						if (!expression.IsValueDefined(status.LocationCounter))
-						{
-							status.ReportParsingError(0, addressField.Length, "expression value is undefined");
-							return true;
-						}
-
-						symbol.SetValue(expression.GetSign(status.LocationCounter), expression.GetMagnitude(status.LocationCounter));
+						status.ReportParsingError(0, addressField.Length, "expression value is undefined");
+						return true;
 					}
+
+					symbol.SetValue(expression.GetSign(status.LocationCounter), expression.GetMagnitude(status.LocationCounter));
 
 					return true;
 
@@ -119,7 +112,7 @@ namespace MixAssembler
 			return false;
 		}
 
-		static void GetMixOrLoaderInstructionAndParameters(string opField, string addressField, ParsingStatus status, out InstructionBase instruction, out IInstructionParameters instructionParameters)
+		private static void GetMixOrLoaderInstructionAndParameters(string opField, string addressField, ParsingStatus status, out InstructionBase instruction, out IInstructionParameters instructionParameters)
 		{
 			status.LineSection = LineSection.AddressField;
 			instructionParameters = null;
@@ -129,26 +122,23 @@ namespace MixAssembler
 			if (instruction != null)
 			{
 				instructionParameters = LoaderInstructionParameters.ParseAddressField(instruction, addressField, status);
+				return;
 			}
-			else
-			{
-				instruction = mInstructionSet[opField];
 
-				if (instruction != null)
-				{
-					instructionParameters = MixInstructionParameters.ParseAddressField(instruction, addressField, status);
-					status.LocationCounter++;
-				}
+			instruction = mInstructionSet[opField];
+
+			if (instruction != null)
+			{
+				instructionParameters = MixInstructionParameters.ParseAddressField(instruction, addressField, status);
+				status.LocationCounter++;
 			}
 		}
 
-		static ParsedSourceLine ParseLine(string sourceLine, ParsingStatus status)
+		private static ParsedSourceLine ParseLine(string sourceLine, ParsingStatus status)
 		{
 
 			if (IsCommentLine(sourceLine))
-			{
 				return new ParsedSourceLine(status.LineNumber, sourceLine);
-			}
 
 			var lineFields = SplitLine(sourceLine);
 			lineFields[locFieldIndex] = lineFields[locFieldIndex].ToUpper();
@@ -173,19 +163,15 @@ namespace MixAssembler
 
 			// if the line isn't a comment or a MIX or loader instruction, it must be an assembler instruction. If not, we don't know the mnemonic
 			if (instruction == null && !assemblyInstructionHandled)
-			{
 				status.ReportParsingError(LineSection.OpField, 0, lineFields[opFieldIndex].Length, "operation mnemonic unknown");
-			}
 
 			return new ParsedSourceLine(status.LineNumber, lineFields[locFieldIndex], lineFields[opFieldIndex], lineFields[addressFieldIndex], lineFields[commentFieldIndex], instruction, instructionParameters);
 		}
 
-		static SymbolBase ParseLocField(string locField, ParsingStatus status)
+		private static SymbolBase ParseLocField(string locField, ParsingStatus status)
 		{
 			if (locField == "")
-			{
 				return null;
-			}
 
 			status.LineSection = LineSection.LocationField;
 
@@ -196,21 +182,19 @@ namespace MixAssembler
 				return null;
 			}
 
-			if (status.Symbols.Contains(symbol))
+			if (!status.Symbols.Contains(symbol))
 			{
-				symbol = status.Symbols[symbol.Name];
-
-				if (symbol.IsSymbolDefined && !symbol.IsMultiValuedSymbol)
-				{
-					status.ReportParsingError(0, locField.Length, "symbol already defined");
-					return null;
-				}
-
+				status.Symbols.Add(symbol);
 				return symbol;
 			}
 
-			status.Symbols.Add(symbol);
-			return symbol;
+			symbol = status.Symbols[symbol.Name];
+
+			if (!symbol.IsSymbolDefined || symbol.IsMultiValuedSymbol)
+				return symbol;
+
+			status.ReportParsingError(0, locField.Length, "symbol already defined");
+			return null;
 		}
 
 		public static PreInstruction[] ParseSource(string[] sourceLines, ParsingStatus status)
@@ -233,94 +217,76 @@ namespace MixAssembler
 					var parsedLine = ParseLine(sourceLines[lineNumber], status);
 					preInstructions.Add(parsedLine);
 					if (parsedLine.OpField == "END")
-					{
 						endLineNumber = preInstructions.Count - 1;
-					}
 				}
 			}
 
 			if (endLineNumber == -1)
 			{
 				status.Findings.Add(new AssemblyError(int.MinValue, LineSection.CommentField, 0, 0, new ParsingError("END operation is mandatory but not included")));
+				return preInstructions.ToArray();
 			}
-			else
+
+			// all symbols that are not yet defined at the end of the parsing process are treated as if "<symbolname> CON *" instructions were included just before the END instruction
+			foreach (SymbolBase symbol in status.Symbols.Where(symbol => !symbol.IsSymbolDefined))
 			{
-				// all symbols that are not yet defined at the end of the parsing process are treated as if "<symbolname> CON *" instructions were included just before the END instruction
-				foreach (SymbolBase symbol in status.Symbols)
-				{
-					if (!symbol.IsSymbolDefined)
-					{
-						symbol.SetValue(status.LocationCounter);
+				symbol.SetValue(status.LocationCounter);
 
-						var parameters = new LoaderInstructionParameters(new NumberValue(symbol.MemoryWordSign, symbol.MemoryWordMagnitude), 0);
-						var instruction = new PreInstruction(mLoaderInstructions["CON"], parameters);
+				var parameters = new LoaderInstructionParameters(new NumberValue(symbol.MemoryWordSign, symbol.MemoryWordMagnitude), 0);
+				var instruction = new PreInstruction(mLoaderInstructions["CON"], parameters);
 
-						preInstructions.Insert(endLineNumber, instruction);
-						status.LocationCounter++;
-						endLineNumber++;
-					}
-				}
+				preInstructions.Insert(endLineNumber, instruction);
+				status.LocationCounter++;
+				endLineNumber++;
 			}
 
 			return preInstructions.ToArray();
 		}
 
-		static string[] SplitLine(string sourceLine)
+		private static string[] SplitLine(string sourceLine)
 		{
 			int addressFieldEnd;
 			var searchBeyondIndex = FindFirstWhiteSpace(sourceLine, -1);
+
 			if (searchBeyondIndex == -1)
-			{
 				return new string[] { sourceLine, "", "", "" };
-			}
 
 			var opFieldStart = FindFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
+			
 			if (opFieldStart == -1)
-			{
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
-			}
 
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
+
 			if (opFieldEnd == -1)
-			{
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine[opFieldStart..], "", "" };
-			}
 
 			int opFieldLength = opFieldEnd - opFieldStart;
 			var addressFieldStart = FindFirstNonWhiteSpace(sourceLine, opFieldEnd);
+
 			if (addressFieldStart == -1)
-			{
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), "", "" };
-			}
 
 			if (sourceLine[addressFieldStart] == '"')
 			{
 				addressFieldEnd = sourceLine.LastIndexOf('"');
 				if (addressFieldEnd == addressFieldStart || addressFieldEnd == sourceLine.Length - 1 || !char.IsWhiteSpace(sourceLine, addressFieldEnd + 1))
-				{
 					addressFieldEnd = -1;
-				}
+
 				else
-				{
 					addressFieldEnd++;
-				}
 			}
 			else
-			{
 				addressFieldEnd = FindFirstWhiteSpace(sourceLine, addressFieldStart);
-			}
 
 			if (addressFieldEnd == -1)
-			{
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], "" };
-			}
 
 			int addressFieldLength = addressFieldEnd - addressFieldStart;
 			var commentFieldStart = FindFirstNonWhiteSpace(sourceLine, addressFieldEnd);
+			
 			if (commentFieldStart == -1)
-			{
 				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };
-			}
 
 			return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
 		}

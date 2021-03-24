@@ -8,10 +8,10 @@ namespace MixGui.Components
 {
 	public class AssemblyFindingListView : UserControl
 	{
-		readonly ListView mFindingsListView = new();
-		readonly ColumnHeader mLineNumberColumn = new();
-		readonly ColumnHeader mMessageColumn = new();
-		readonly ColumnHeader mSeverityColumn = new();
+		private readonly ListView mFindingsListView = new();
+		private readonly ColumnHeader mLineNumberColumn = new();
+		private readonly ColumnHeader mMessageColumn = new();
+		private readonly ColumnHeader mSeverityColumn = new();
 
 		public event SelectionChangedHandler SelectionChanged;
 
@@ -45,22 +45,19 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		protected void OnSelectionChanged(SelectionChangedEventArgs args)
-		{
-			SelectionChanged?.Invoke(this, args);
-		}
+		protected void OnSelectionChanged(SelectionChangedEventArgs args) 
+			=> SelectionChanged?.Invoke(this, args);
 
-		void SelectedIndexChanged(object sender, EventArgs e)
-		{
-			OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
-		}
+		private void SelectedIndexChanged(object sender, EventArgs e) 
+			=> OnSelectionChanged(new SelectionChangedEventArgs(SelectedFinding));
 
 		void AddFinding(AssemblyFinding finding)
 		{
-			var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : ((finding.LineNumber + 1)).ToString(), finding.Message }, (int)finding.Severity)
+			var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? "" : (finding.LineNumber + 1).ToString(), finding.Message }, (int)finding.Severity)
 			{
 				Tag = finding
 			};
+
 			mFindingsListView.Items.Add(item);
 		}
 
@@ -70,21 +67,17 @@ namespace MixGui.Components
 			{
 				mFindingsListView.Items.Clear();
 
-				if (value != null)
-				{
-					var list = new List<AssemblyFinding>(value);
-					list.Sort(new FindingComparer());
+				if (value == null)
+					return;
 
-					foreach (AssemblyFinding finding in list)
-					{
-						AddFinding(finding);
-					}
+				var list = new List<AssemblyFinding>(value);
+				list.Sort(new FindingComparer());
 
-					if (mFindingsListView.Items.Count > 0)
-					{
-						mFindingsListView.Items[0].Selected = true;
-					}
-				}
+				foreach (AssemblyFinding finding in list)
+					AddFinding(finding);
+
+				if (mFindingsListView.Items.Count > 0)
+					mFindingsListView.Items[0].Selected = true;
 			}
 		}
 
@@ -93,12 +86,8 @@ namespace MixGui.Components
 			get
 			{
 				ListView.SelectedListViewItemCollection selectedItems = mFindingsListView.SelectedItems;
-				if (selectedItems.Count == 0)
-				{
-					return null;
-				}
-
-				return (AssemblyFinding)selectedItems[0].Tag;
+				
+				return selectedItems.Count == 0 ? null : (AssemblyFinding)selectedItems[0].Tag;
 			}
 		}
 
@@ -108,29 +97,23 @@ namespace MixGui.Components
 			set => mFindingsListView.SmallImageList = value;
 		}
 
-		class FindingComparer : IComparer<AssemblyFinding>
+		private class FindingComparer : IComparer<AssemblyFinding>
 		{
 			public int Compare(AssemblyFinding x, AssemblyFinding y)
 			{
 				int comparison = y.Severity - x.Severity;
+
 				if (comparison != 0)
-				{
 					return comparison;
-				}
 
 				comparison = x.LineNumber - y.LineNumber;
+
 				if (comparison != 0)
-				{
 					return comparison;
-				}
 
 				comparison = x.LineSection - y.LineSection;
-				if (comparison != 0)
-				{
-					return comparison;
-				}
 
-				return string.Compare(x.Message, y.Message, StringComparison.Ordinal);
+				return comparison != 0 ? comparison : string.Compare(x.Message, y.Message, StringComparison.Ordinal);
 			}
 		}
 
@@ -138,10 +121,8 @@ namespace MixGui.Components
 		{
 			readonly AssemblyFinding mSelectedFinding;
 
-			public SelectionChangedEventArgs(AssemblyFinding finding)
-			{
-				mSelectedFinding = finding;
-			}
+			public SelectionChangedEventArgs(AssemblyFinding finding) 
+				=> mSelectedFinding = finding;
 
 			public AssemblyFinding SelectedFinding => mSelectedFinding;
 		}

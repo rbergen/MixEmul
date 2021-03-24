@@ -9,59 +9,45 @@ namespace MixGui.Components
 {
 	public class DeviceWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		readonly Label mWordIndexLabel;
-		readonly FullWordEditor mFullWordEditor;
-		int mWordIndex;
-		IFullWord mDeviceWord;
+		private readonly Label mWordIndexLabel;
+		private readonly FullWordEditor mFullWordEditor;
+		private int mWordIndex;
+		private IFullWord mDeviceWord;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
-		public DeviceWordEditor()
-			: this(null)
-		{
-		}
+		public DeviceWordEditor() : this(null) {}
 
 		public DeviceWordEditor(IFullWord deviceWord)
 		{
-			mDeviceWord = deviceWord;
-			if (mDeviceWord == null)
-			{
-				mDeviceWord = new FullWord();
-			}
-
+			mDeviceWord = deviceWord ?? new FullWord();
 			mFullWordEditor = new FullWordEditor(mDeviceWord);
 			mWordIndexLabel = new Label();
 			InitializeComponent();
 		}
 
-		public Control EditorControl => this;
+		public Control EditorControl 
+			=> this;
 
-		public FieldTypes? FocusedField => mFullWordEditor.FocusedField;
+		public FieldTypes? FocusedField 
+			=> mFullWordEditor.FocusedField;
 
-		public int? CaretIndex => mFullWordEditor.CaretIndex;
+		public int? CaretIndex 
+			=> mFullWordEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index)
-		{
-			return mFullWordEditor.Focus(field, index);
-		}
+		public bool Focus(FieldTypes? field, int? index) 
+			=> mFullWordEditor.Focus(field, index);
 
-		public void Select(int start, int length)
-		{
-			mFullWordEditor.Select(start, length);
-		}
+		public void Select(int start, int length) 
+			=> mFullWordEditor.Select(start, length);
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
-		{
-			ValueChanged?.Invoke(this, args);
-		}
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
+			=> ValueChanged?.Invoke(this, args);
 
-		void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
-		{
-			OnValueChanged(args);
-		}
+		private void MFullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args) => OnValueChanged(args);
 
-		void InitializeComponent()
+		private void InitializeComponent()
 		{
 			SuspendLayout();
 
@@ -87,7 +73,7 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		void This_KeyDown(object sender, KeyEventArgs e)
+		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
@@ -147,10 +133,8 @@ namespace MixGui.Components
 			get => DeviceWord;
 			set
 			{
-				if (!(value is IFullWord))
-				{
+				if (value is not IFullWord)
 					throw new ArgumentException("Value must be an IFullWord");
-				}
 
 				DeviceWord = (IFullWord)value;
 			}

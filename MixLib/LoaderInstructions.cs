@@ -5,7 +5,7 @@ namespace MixLib
 {
 	public class LoaderInstructions
 	{
-		readonly SortedDictionary<string, LoaderInstruction> mInstructions = new SortedDictionary<string, LoaderInstruction>();
+		readonly SortedDictionary<string, LoaderInstruction> mInstructions = new();
 
 		public LoaderInstructions()
 		{

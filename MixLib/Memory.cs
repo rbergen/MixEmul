@@ -8,9 +8,9 @@ namespace MixLib
 {
 	public class Memory : IMemory, IEnumerable
 	{
-		public static readonly FieldSpec DefaultFieldSpec = new FieldSpec(0, 5);
-		readonly SortedDictionary<int, MemoryFullWord> mWords;
-		readonly object mSyncRoot;
+		public static readonly FieldSpec DefaultFieldSpec = new(0, 5);
+		private readonly SortedDictionary<int, MemoryFullWord> mWords;
+		private readonly object mSyncRoot;
 
 		public int MinWordIndex { get; set; }
 		public int MaxWordIndex { get; set; }

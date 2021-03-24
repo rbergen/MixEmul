@@ -43,7 +43,7 @@ namespace MixLib.Instruction
 			}
 
 			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.RX);
-			device.StartInput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
+			device.StartInput(module.Memory, mValue, (int)field.LongValue, module is Mix mix && mix.Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(mix.QueueInterrupt) : null);
 
 			return true;
 		}
@@ -99,7 +99,7 @@ namespace MixLib.Instruction
 			}
 
 			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.RX);
-			device.StartIoc(indexedAddress, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
+			device.StartIoc(indexedAddress, (int)field.LongValue, module is Mix mix && mix.Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(mix.QueueInterrupt) : null);
 
 			return true;
 		}
@@ -192,7 +192,7 @@ namespace MixLib.Instruction
 			}
 
 			var field = WordField.LoadFromRegister(new FieldSpec(4, 5), module.Registers.RX);
-			device.StartOutput(module.Memory, mValue, (int)field.LongValue, module is Mix && ((Mix)module).Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(((Mix)module).QueueInterrupt) : null);
+			device.StartOutput(module.Memory, mValue, (int)field.LongValue, module is Mix mix && mix.Mode == ModuleBase.RunMode.Control ? new InterruptQueueCallback(mix.QueueInterrupt) : null);
 
 			return true;
 		}

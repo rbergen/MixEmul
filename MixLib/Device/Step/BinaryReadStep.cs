@@ -8,8 +8,8 @@ namespace MixLib.Device.Step
 {
 	public class BinaryReadStep : StreamStep
 	{
-		readonly int mRecordWordCount;
-		const string statusDescription = "Reading binary data";
+		private readonly int mRecordWordCount;
+		private const string statusDescription = "Reading binary data";
 
 		public BinaryReadStep(int recordWordCount)
 		{
@@ -25,13 +25,11 @@ namespace MixLib.Device.Step
 
 		public static MixByte[] ReadBytes(Stream stream, int wordCount)
 		{
-			byte[] buffer = new byte[wordCount * (FullWord.ByteCount + 1)];
-
-			int readByteCount = 0;
-
-			readByteCount = stream.Read(buffer, 0, buffer.Length);
-
-			MixByte[] readBytes = new MixByte[buffer.Length];
+			var buffer = new byte[wordCount * (FullWord.ByteCount + 1)];
+			
+			int readByteCount = stream.Read(buffer, 0, buffer.Length);
+			var readBytes = new MixByte[buffer.Length];
+			
 			for (int index = 0; index < readByteCount; index++)
 			{
 				readBytes[index] = buffer[index];
@@ -98,7 +96,7 @@ namespace MixLib.Device.Step
 				catch (Exception exception)
 				{
 					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-					mReadBytes = new MixByte[0];
+					mReadBytes = Array.Empty<MixByte>();
 				}
 
 				return true;

@@ -8,67 +8,61 @@ namespace MixLib.Device
 {
 	public class TeletypeDevice : MixDevice
 	{
-		const string shortName = "TTY";
+		private const string shortName = "TTY";
 
-		const string initializationDescription = "Initializing teletype";
-		const string readingDescription = "Reading line from teletype";
-		const string writingDescription = "Writing line to teletype";
+		private const string initializationDescription = "Initializing teletype";
+		private const string readingDescription = "Reading line from teletype";
+		private const string writingDescription = "Writing line to teletype";
 
-		const int recordWordCount = 14;
+		private const int recordWordCount = 14;
 
-		Queue mInputBuffer;
-		Queue mOutputBuffer;
+		private Queue mInputBuffer;
+		private Queue mOutputBuffer;
 
 		public event EventHandler InputRequired;
 
 		public event EventHandler OutputAdded;
 
-		public TeletypeDevice(int id) : base(id)
-		{
-			UpdateSettings();
-		}
+		public TeletypeDevice(int id) : base(id) 
+			=> UpdateSettings();
 
-		public override int RecordWordCount => recordWordCount;
+		public override int RecordWordCount 
+			=> recordWordCount;
 
-		public override string ShortName => shortName;
+		public override string ShortName 
+			=> shortName;
 
-		public override bool SupportsInput => true;
+		public override bool SupportsInput 
+			=> true;
 
-		public override bool SupportsOutput => true;
+		public override bool SupportsOutput 
+			=> true;
 
-		public void AddInputLine(string line)
-		{
-			mInputBuffer.Enqueue(line);
-		}
+		public void AddInputLine(string line) 
+			=> mInputBuffer.Enqueue(line);
 
-		public string GetOutputLine()
-		{
-			return mOutputBuffer.Count <= 0 ? null : (string)mOutputBuffer.Dequeue();
-		}
+		public string GetOutputLine() 
+			=> mOutputBuffer.Count > 0 ? (string)mOutputBuffer.Dequeue() : null;
 
-		void This_InputRequired(object sender, EventArgs e)
-		{
-			InputRequired?.Invoke(this, e);
-		}
+		void This_InputRequired(object sender, EventArgs e) 
+			=> InputRequired?.Invoke(this, e);
 
-		void This_OutputAdded(object sender, EventArgs e)
-		{
-			OutputAdded?.Invoke(this, e);
-		}
+		void This_OutputAdded(object sender, EventArgs e) 
+			=> OutputAdded?.Invoke(this, e);
 
 		protected override DeviceStep.Instance GetCurrentStepInstance()
 		{
-			if (CurrentStep is ReadLineStep)
+			if (CurrentStep is ReadLineStep readLineStep)
 			{
-				var instance = (ReadLineStep.Instance)((ReadLineStep)CurrentStep).CreateInstance();
+				var instance = (ReadLineStep.Instance)readLineStep.CreateInstance();
 				instance.InputRequired += This_InputRequired;
 
 				return instance;
 			}
 
-			if (CurrentStep is WriteLineStep)
+			if (CurrentStep is WriteLineStep writeLineStep)
 			{
-				var instance = (WriteLineStep.Instance)((WriteLineStep)CurrentStep).CreateInstance();
+				var instance = (WriteLineStep.Instance)writeLineStep.CreateInstance();
 				instance.OutputAdded += This_OutputAdded;
 
 				return instance;
@@ -217,7 +211,7 @@ namespace MixLib.Device
 						index++;
 					}
 
-					mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(new char[0]));
+					mOutputBuffer.Enqueue(new string(charsToWrite).TrimEnd(Array.Empty<char>()));
 
 					OutputAdded(this, new EventArgs());
 

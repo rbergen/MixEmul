@@ -13,8 +13,8 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-		readonly int mTextLength;
-		readonly IValue mValue;
+		private readonly int mTextLength;
+		private readonly IValue mValue;
 
 		/// <summary>
 		/// Constructor for this class. 
@@ -36,9 +36,7 @@ namespace MixAssembler.Instruction
 		public InstructionInstanceBase CreateInstance(InstructionBase instruction, AssemblingStatus status)
 		{
 			if (!(instruction is LoaderInstruction))
-			{
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
-			}
 
 			var loaderInstruction = (LoaderInstruction)instruction;
 			if (!mValue.IsValueDefined(status.LocationCounter))
@@ -60,12 +58,11 @@ namespace MixAssembler.Instruction
 		public static IInstructionParameters ParseAddressField(InstructionBase instruction, string addressField, ParsingStatus status)
 		{
 			if (!(instruction is LoaderInstruction))
-			{
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
-			}
 
 			var loaderInstruction = (LoaderInstruction)instruction;
 			IValue address = loaderInstruction.Alphanumeric ? CharacterConstantValue.ParseValue(addressField, 0, status) : WValue.ParseValue(addressField, 0, status);
+			
 			if (address == null)
 			{
 				status.ReportParsingError(0, addressField.Length, "unable to parse value");

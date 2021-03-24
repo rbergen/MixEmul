@@ -6,7 +6,7 @@ namespace MixLib.Modules
 {
 	public abstract class ModuleBase
 	{
-		int mProgramCounter;
+		private int mProgramCounter;
 
 		public IBreakpointManager BreakpointManager { protected get; set; }
 		public abstract string ModuleName { get; }
@@ -18,15 +18,11 @@ namespace MixLib.Modules
 
 		public virtual Devices Devices => null;
 
-		protected bool IsBreakpointSet(int address)
-		{
-			return BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
-		}
+		protected bool IsBreakpointSet(int address) 
+			=> BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
 
-		void ReportLoadError(int locationCounter, string message)
-		{
-			AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
-		}
+		void ReportLoadError(int locationCounter, string message) 
+			=> AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
 
 		public abstract void ResetProfilingCounts();
 
@@ -70,9 +66,7 @@ namespace MixLib.Modules
 				case LoaderInstruction.Operations.SetLocationCounter:
 					var desiredLC = (int)instance.Value.LongValue;
 					if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex)
-					{
 						return desiredLC;
-					}
 
 					ReportLoadError(locationCounter, string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
 
@@ -110,9 +104,7 @@ namespace MixLib.Modules
 		{
 			var validationErrors = instance.Validate();
 			if (validationErrors != null)
-			{
 				ReportLoadInstanceErrors(locationCounter, validationErrors);
-			}
 
 			FullMemory[locationCounter].MagnitudeLongValue = instance.InstructionWord.MagnitudeLongValue;
 			FullMemory[locationCounter].Sign = instance.InstructionWord.Sign;
@@ -130,14 +122,11 @@ namespace MixLib.Modules
 
 			foreach (InstructionInstanceBase instance in instances)
 			{
-				if (instance is MixInstruction.Instance)
-				{
-					locationCounter = LoadInstructionInstance((MixInstruction.Instance)instance, locationCounter);
-				}
-				else if (instance is LoaderInstruction.Instance)
-				{
-					locationCounter = LoadInstructionInstance((LoaderInstruction.Instance)instance, locationCounter);
-				}
+				if (instance is MixInstruction.Instance mixInstance)
+					locationCounter = LoadInstructionInstance(mixInstance, locationCounter);
+
+				else if (instance is LoaderInstruction.Instance loaderInstance)
+					locationCounter = LoadInstructionInstance(loaderInstance, locationCounter);
 
 				if (locationCounter > FullMemory.MaxWordIndex)
 				{
@@ -157,9 +146,7 @@ namespace MixLib.Modules
 		protected void ReportInvalidInstruction(InstanceValidationError[] errors)
 		{
 			foreach (InstanceValidationError error in errors)
-			{
 				ReportInvalidInstruction(error.CompiledMessage);
-			}
 		}
 
 		protected void ReportInvalidInstruction(string message)
@@ -171,9 +158,7 @@ namespace MixLib.Modules
 		void ReportLoadInstanceErrors(int counter, InstanceValidationError[] errors)
 		{
 			foreach (InstanceValidationError error in errors)
-			{
 				AddLogLine(new LogLine(ModuleName, Severity.Warning, counter, "Loaded invalid instruction", error.CompiledMessage));
-			}
 		}
 
 		public void ReportOverflow()

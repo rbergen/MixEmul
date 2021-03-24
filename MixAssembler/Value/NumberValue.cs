@@ -1,5 +1,6 @@
 using MixLib.Type;
 using System;
+using System.Linq;
 
 namespace MixAssembler.Value
 {
@@ -19,9 +20,7 @@ namespace MixAssembler.Value
 				value = -value;
 			}
 			else
-			{
 				Sign = Word.Signs.Positive;
-			}
 
 			Magnitude = value;
 
@@ -33,50 +32,21 @@ namespace MixAssembler.Value
 			Magnitude = magnitude;
 		}
 
-		public virtual long GetValue(int currentAddress)
-		{
-			return Sign.ApplyTo(Magnitude);
-		}
+		public virtual long GetValue(int currentAddress) 
+			=> Sign.ApplyTo(Magnitude);
 
-		public virtual bool IsValueDefined(int currentAddress)
-		{
-			return true;
-		}
+		public virtual bool IsValueDefined(int currentAddress) 
+			=> true;
 
-		public long GetMagnitude(int currentAddress)
-		{
-			return Magnitude;
-		}
+		public long GetMagnitude(int currentAddress) 
+			=> Magnitude;
 
-		public Word.Signs GetSign(int currentAddress)
-		{
-			return Sign;
-		}
+		public Word.Signs GetSign(int currentAddress) 
+			=> Sign;
 
-		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
-		{
-			if (text.Length != 0 && text.Length <= 10)
-			{
-				// all characters must be numeric for this to be a literal numeric value
-				for (int i = 0; i < text.Length; i++)
-				{
-					if (!char.IsNumber(text[i]))
-					{
-						return null;
-					}
-				}
-
-				// it seems to be numeric, so we just parse it
-				try
-				{
-					return new NumberValue(long.Parse(text));
-				}
-				catch (FormatException)
-				{
-				}
-			}
-
-			return null;
-		}
+		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status) 
+			=> text.Length != 0 && text.Length <= 10 && text.All(c => char.IsNumber(c)) && long.TryParse(text, out long longValue)
+			? new NumberValue(longValue)
+			: null;
 	}
 }

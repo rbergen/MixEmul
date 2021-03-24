@@ -23,9 +23,7 @@ namespace MixAssembler.Value
 				var braceIndex = part.IndexOf('(');
 				var address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part.Substring(0, braceIndex), sectionCharIndex + currentIndex, status);
 				if (address == null)
-				{
 					return null;
-				}
 
 				// ... and check if it is valid
 				var addressSign = address.GetSign(status.LocationCounter);
@@ -44,21 +42,19 @@ namespace MixAssembler.Value
 				if (braceIndex >= 0)
 				{
 					// ... parse its value...
-					var field = FPartValue.ParseValue(part.Substring(braceIndex), (sectionCharIndex + currentIndex) + braceIndex, status);
+					var field = FPartValue.ParseValue(part[braceIndex..], (sectionCharIndex + currentIndex) + braceIndex, status);
+					
 					if (field == null)
-					{
 						return null;
-					}
 
 					// ... and check if it is valid
 					if (field.GetValue(status.LocationCounter) != FPartValue.Default)
-					{
 						fieldValue = (int)field.GetValue(status.LocationCounter);
-					}
 				}
 
 				// use the fieldspec value to create and check an actual fieldspec
 				var fieldSpec = new FieldSpec(fieldValue);
+				
 				if (!fieldSpec.IsValid)
 				{
 					status.ReportParsingError((sectionCharIndex + currentIndex) + braceIndex, part.Length - braceIndex, "field must be a fieldspec");

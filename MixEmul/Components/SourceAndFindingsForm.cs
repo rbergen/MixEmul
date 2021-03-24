@@ -35,7 +35,7 @@ namespace MixGui.Components
 
 		void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceAndFindingsForm));
+			System.ComponentModel.ComponentResourceManager resources = new(typeof(SourceAndFindingsForm));
 			this.mStatusStrip = new System.Windows.Forms.StatusStrip();
 			this.mToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.mListPanel = new System.Windows.Forms.Panel();

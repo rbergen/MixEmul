@@ -7,9 +7,9 @@ namespace MixLib
 {
 	public class InstructionSet
 	{
-		readonly SortedDictionary<string, MixInstruction> mMnemonicInstructionMap = new SortedDictionary<string, MixInstruction>();
-		readonly SortedDictionary<byte, List<MixInstruction>> mOpcodeInstructionMap = new SortedDictionary<byte, List<MixInstruction>>();
-		static InstructionSet mInstance;
+		private readonly SortedDictionary<string, MixInstruction> mMnemonicInstructionMap = new();
+		private readonly SortedDictionary<byte, List<MixInstruction>> mOpcodeInstructionMap = new();
+		private static InstructionSet mInstance;
 
 		public InstructionSet()
 		{

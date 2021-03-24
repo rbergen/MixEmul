@@ -13,32 +13,25 @@ namespace MixAssembler.Value
 		{
 			// an empty index is equal to 0
 			if (text.Length == 0)
-			{
 				return new NumberValue(0L);
-			}
 
 			// it can only be an index if it starts with a comma
-			if (text[0] == TagCharacter)
-			{
-				// the actual fieldspec can be any expression...
-				var expression = ExpressionValue.ParseValue(text.Substring(1), sectionCharIndex + 1, status);
+			if (text[0] != TagCharacter)
+				return null;
 
-				if (expression == null)
-				{
-					return null;
-				}
+			// the actual fieldspec can be any expression...
+			var expression = ExpressionValue.ParseValue(text[1..], sectionCharIndex + 1, status);
 
-				var value = expression.GetValue(status.LocationCounter);
+			if (expression == null)
+				return null;
 
-				// ... as long as it is within the range of valid MIX byte values
-				if (value >= MixByte.MinValue && value <= MixByte.MaxValue)
-				{
-					return expression;
-				}
+			var value = expression.GetValue(status.LocationCounter);
 
-				status.ReportParsingError(sectionCharIndex, text.Length, "index value invalid");
-			}
+			// ... as long as it is within the range of valid MIX byte values
+			if (value >= MixByte.MinValue && value <= MixByte.MaxValue)
+				return expression;
 
+			status.ReportParsingError(sectionCharIndex, text.Length, "index value invalid");
 			return null;
 		}
 	}

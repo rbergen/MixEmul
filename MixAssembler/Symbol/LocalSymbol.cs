@@ -10,85 +10,61 @@ namespace MixAssembler.Symbol
 	/// </summary>
 	public class LocalSymbol : SymbolBase
 	{
-		readonly List<long> mAddresses;
+		private readonly List<long> mAddresses;
 
 		public LocalSymbol(int index) : base(index.ToString())
 		{
 			if (index < 0 || index > 9)
-			{
 				throw new ArgumentException("index must be between 0 and 9");
-			}
 
 			mAddresses = new List<long>();
 		}
 
-		public override bool IsMultiValuedSymbol => true;
+		public override bool IsMultiValuedSymbol 
+			=> true;
 
-		public override bool IsSymbolDefined => true;
+		public override bool IsSymbolDefined 
+			=> true;
 
-		public override void SetValue(long value)
-		{
-			mAddresses.Add(value);
-		}
+		public override void SetValue(long value) 
+			=> mAddresses.Add(value);
 
-		static bool IsDefinitionChar(char c)
-		{
-			return c == 'H';
-		}
+		private static bool IsDefinitionChar(char c) 
+			=> c == 'H';
 
-		static bool IsForwardReferenceChar(char c)
-		{
-			return c == 'F';
-		}
+		private static bool IsForwardReferenceChar(char c) 
+			=> c == 'F';
 
-		static bool IsLocalSymbol(string text)
-		{
-			return (text.Length == 2 && char.IsNumber(text[0])) && IsLocalSymbolChar(text[1]);
-		}
+		static bool IsLocalSymbol(string text) 
+			=> text.Length == 2 && char.IsNumber(text[0]) && IsLocalSymbolChar(text[1]);
 
-		static bool IsLocalSymbolChar(char c)
-		{
-			return "BHF".Contains(c);
-		}
+		static bool IsLocalSymbolChar(char c) => "BHF".Contains(c);
 
-		public override bool IsValueDefined(int currentAddress)
-		{
-			return false;
-		}
+		public override bool IsValueDefined(int currentAddress) 
+			=> false;
 
-		public override void SetValue(Word.Signs sign, long magnitude)
-		{
-			mAddresses.Add(magnitude);
-		}
+		public override void SetValue(Word.Signs sign, long magnitude) 
+			=> mAddresses.Add(magnitude);
 
-		public override long GetValue(int currentAddress)
-		{
-			throw new NotImplementedException();
-		}
+		public override long GetValue(int currentAddress) 
+			=> throw new NotImplementedException();
 
 		public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (!IsLocalSymbol(text))
-			{
 				return null;
-			}
 
 			if (!IsDefinitionChar(text[1]))
-			{
 				status.ReportParsingError(sectionCharIndex + 1, 1, "local symbol reference found where definition was expected");
-			}
 
 			char localSymbolChar = text[0];
 			SymbolBase symbol = status.Symbols[localSymbolChar.ToString()];
-			if (symbol == null)
-			{
-				return new LocalSymbol(localSymbolChar - '0');
-			}
 
-			if (!(symbol is LocalSymbol))
-			{
+			if (symbol == null)
+				return new LocalSymbol(localSymbolChar - '0');
+
+			if (symbol is not LocalSymbol)
 				status.ReportParsingError(sectionCharIndex, 1, "non-local symbol named " + localSymbolChar + " already defined");
-			}
 
 			return symbol;
 		}
@@ -96,9 +72,7 @@ namespace MixAssembler.Symbol
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			if (!IsLocalSymbol(text))
-			{
 				return null;
-			}
 
 			char localSymbolChar = text[0];
 			SymbolBase symbol = status.Symbols[new string(localSymbolChar, 1)];
@@ -133,20 +107,16 @@ namespace MixAssembler.Symbol
 			}
 		}
 
-		public override long GetMagnitude(int currentAddress)
-		{
-			throw new NotImplementedException();
-		}
+		public override long GetMagnitude(int currentAddress) 
+			=> throw new NotImplementedException();
 
-		public override Word.Signs GetSign(int currentAddress)
-		{
-			throw new NotImplementedException();
-		}
+		public override Word.Signs GetSign(int currentAddress) 
+			=> throw new NotImplementedException();
 
-		class Reference : IValue
+		private class Reference : IValue
 		{
-			readonly Directions mDirection;
-			readonly LocalSymbol mReferee;
+			private readonly Directions mDirection;
+			private readonly LocalSymbol mReferee;
 
 			public Reference(LocalSymbol referee, Directions direction)
 			{
@@ -154,20 +124,14 @@ namespace MixAssembler.Symbol
 				mDirection = direction;
 			}
 
-			public long GetMagnitude(int currentAddress)
-			{
-				return GetValue(currentAddress);
-			}
+			public long GetMagnitude(int currentAddress) 
+				=> GetValue(currentAddress);
 
-			public Word.Signs GetSign(int currentAddress)
-			{
-				return Word.Signs.Positive;
-			}
+			public Word.Signs GetSign(int currentAddress) 
+				=> Word.Signs.Positive;
 
-			public bool IsValueDefined(int currentAddress)
-			{
-				return GetValue(currentAddress) != -1L;
-			}
+			public bool IsValueDefined(int currentAddress) 
+				=> GetValue(currentAddress) != -1L;
 
 			/// <summary>
 			/// Try to locate the symbol (i.e. address) that this reference refers to. 
@@ -183,20 +147,14 @@ namespace MixAssembler.Symbol
 					followingAddress = refereeAddress;
 
 					if (mDirection == Directions.Backwards && followingAddress >= currentAddress)
-					{
 						return previousAddress;
-					}
 
 					if (mDirection == Directions.Forwards && previousAddress <= currentAddress && followingAddress > currentAddress)
-					{
 						return followingAddress;
-					}
 				}
 
 				if (mDirection == Directions.Backwards)
-				{
 					return followingAddress;
-				}
 
 				return -1L;
 			}

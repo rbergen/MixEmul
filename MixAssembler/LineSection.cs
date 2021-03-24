@@ -1,6 +1,5 @@
 namespace MixAssembler
 {
-
 	public enum LineSection
 	{
 		LocationField,
