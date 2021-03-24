@@ -4,14 +4,14 @@ namespace MixLib.Type
 {
 	public class MemoryView : IMemory
 	{
-		private int mMinIndex;
-		private int mMaxIndex;
-		private int mIndexOffset;
+		private int _minIndex;
+		private int _maxIndex;
+		private int _indexOffset;
 
 		public IMemory SourceMemory { get; private set; }
 
 		public MemoryView(IMemory sourceMemory)
-	: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, 0) { }
+			: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, 0) { }
 
 		public MemoryView(IMemory sourceMemory, int indexOffset)
 			: this(sourceMemory, sourceMemory.MinWordIndex, sourceMemory.MaxWordIndex, indexOffset) { }
@@ -22,58 +22,54 @@ namespace MixLib.Type
 
 			ValidateParameters(minIndex, maxIndex, indexOffset);
 
-			mMinIndex = minIndex;
-			mMaxIndex = maxIndex;
-			mIndexOffset = indexOffset;
+			_minIndex = minIndex;
+			_maxIndex = maxIndex;
+			_indexOffset = indexOffset;
 		}
 
-		public int WordCount => mMaxIndex - mMinIndex + 1;
+		public int WordCount 
+			=> _maxIndex - _minIndex + 1;
 
-		public long MaxProfilingTickCount => SourceMemory.MaxProfilingTickCount;
+		public long MaxProfilingTickCount 
+			=> SourceMemory.MaxProfilingTickCount;
 
-		public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
+		public long MaxProfilingExecutionCount 
+			=> SourceMemory.MaxProfilingExecutionCount;
 
-		public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
+		public MemoryFullWord GetRealWord(int index) 
+			=> SourceMemory.GetRealWord(index + _indexOffset);
 
-		public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
+		public void ResetRealWord(int index) 
+			=> SourceMemory.ResetRealWord(index + _indexOffset);
 
-		public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
+		public void ClearRealWordSourceLine(int index) 
+			=> SourceMemory.ClearRealWordSourceLine(index + _indexOffset);
 
 		private void ValidateParameters(int minIndex, int maxIndex, int offset)
 		{
 			if (minIndex + offset < SourceMemory.MinWordIndex)
-			{
 				throw new IndexOutOfRangeException("MinWordIndex + IndexOffset must be greater than or equal to the MinWordIndex of SourceMemory");
-			}
 
 			if (maxIndex + offset > SourceMemory.MaxWordIndex)
-			{
 				throw new IndexOutOfRangeException("MaxWordIndex + IndexOffset must be less than or equal to the MaxWordIndex of SourceMemory");
-			}
 		}
 
 		public void ClearSourceLines()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++)
-			{
+			for (int index = _minIndex; index <= _maxIndex; index++)
 				ClearRealWordSourceLine(index);
-			}
 		}
 
 		public void Reset()
 		{
-			for (int index = mMinIndex; index <= mMaxIndex; index++)
-			{
+			for (int index = _minIndex; index <= _maxIndex; index++)
 				ResetRealWord(index);
-			}
 		}
 
 		public SearchResult FindMatch(SearchParameters options)
 		{
-			if (options.SearchFromWordIndex < mMinIndex || options.SearchFromWordIndex > mMaxIndex)
-			{
+			if (options.SearchFromWordIndex < _minIndex || options.SearchFromWordIndex > _maxIndex)
 				return null;
-			}
 
 			var filteredOptions = new SearchParameters
 			{
@@ -82,7 +78,7 @@ namespace MixLib.Type
 				MatchWholeWord = options.MatchWholeWord,
 				WrapSearch = options.WrapSearch,
 				IncludeOriginalSource = options.IncludeOriginalSource,
-				SearchFromWordIndex = options.SearchFromWordIndex + mIndexOffset,
+				SearchFromWordIndex = options.SearchFromWordIndex + _indexOffset,
 				SearchFromField = options.SearchFromField,
 				SearchFromFieldIndex = options.SearchFromFieldIndex
 			};
@@ -90,66 +86,60 @@ namespace MixLib.Type
 			var result = SourceMemory.FindMatch(filteredOptions);
 
 			if (result == null)
-			{
 				return null;
-			}
 
-			result.WordIndex -= mIndexOffset;
+			result.WordIndex -= _indexOffset;
 
-			if (result.WordIndex >= mMinIndex && result.WordIndex <= mMaxIndex)
-			{
+			if (result.WordIndex >= _minIndex && result.WordIndex <= _maxIndex)
 				return result;
-			}
 
-			if (!options.WrapSearch || options.SearchFromWordIndex == mMinIndex)
-			{
+			if (!options.WrapSearch || options.SearchFromWordIndex == _minIndex)
 				return null;
-			}
 
-			filteredOptions.SearchFromWordIndex = mMinIndex + mIndexOffset;
+			filteredOptions.SearchFromWordIndex = _minIndex + _indexOffset;
 			filteredOptions.WrapSearch = false;
 
 			result = SourceMemory.FindMatch(filteredOptions);
 
-			return result != null && (result.WordIndex -= mIndexOffset) < options.SearchFromWordIndex ? result : null;
+			return result != null && (result.WordIndex -= _indexOffset) < options.SearchFromWordIndex ? result : null;
 		}
 
 		public IMemoryFullWord this[int index]
 		{
-			get => SourceMemory[index + mIndexOffset];
-			set => SourceMemory[index + mIndexOffset] = value;
+			get => SourceMemory[index + _indexOffset];
+			set => SourceMemory[index + _indexOffset] = value;
 		}
 
 		public int MinWordIndex
 		{
-			get => mMinIndex;
+			get => _minIndex;
 			set
 			{
-				ValidateParameters(value, mMaxIndex, mIndexOffset);
+				ValidateParameters(value, _maxIndex, _indexOffset);
 
-				mMinIndex = value;
+				_minIndex = value;
 			}
 		}
 
 		public int MaxWordIndex
 		{
-			get => mMaxIndex;
+			get => _maxIndex;
 			set
 			{
-				ValidateParameters(mMinIndex, value, mIndexOffset);
+				ValidateParameters(_minIndex, value, _indexOffset);
 
-				mMaxIndex = value;
+				_maxIndex = value;
 			}
 		}
 
 		public int IndexOffset
 		{
-			get => mIndexOffset;
+			get => _indexOffset;
 			set
 			{
-				ValidateParameters(mMinIndex, mMaxIndex, value);
+				ValidateParameters(_minIndex, _maxIndex, value);
 
-				mIndexOffset = value;
+				_indexOffset = value;
 			}
 		}
 	}

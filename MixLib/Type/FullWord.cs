@@ -1,4 +1,4 @@
-namespace MixLib.Type
+﻿namespace MixLib.Type
 {
 	public class FullWord : Word, IFullWord
 	{
@@ -6,7 +6,8 @@ namespace MixLib.Type
 
 		public FullWord() : base(ByteCount) { }
 
-		public FullWord(long value) : this() => LongValue = value;
+		public FullWord(long value) : this() 
+			=> LongValue = value;
 
 		public FullWord(Word.Signs sign, long magnitude) : this()
 		{
@@ -14,7 +15,8 @@ namespace MixLib.Type
 			Sign = sign;
 		}
 
-		public static implicit operator FullWord(long value) => new FullWord(value);
+		public static implicit operator FullWord(long value) 
+			=> new(value);
 
 		public override object Clone()
 		{

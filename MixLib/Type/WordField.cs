@@ -1,42 +1,37 @@
-using System;
+﻿using System;
 
 namespace MixLib.Type
 {
 	public class WordField : Word
 	{
-		private readonly FieldSpec mFieldSpec;
+		private readonly FieldSpec _fieldSpec;
 
-		private WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount) => mFieldSpec = fieldSpec;
+		private WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount) 
+			=> _fieldSpec = fieldSpec;
 
 		public void ApplyToFullWord(IFullWord word)
 		{
-			int byteCount = mFieldSpec.ByteCount;
-			int lowBoundByteIndex = mFieldSpec.LowBoundByteIndex;
+			int byteCount = _fieldSpec.ByteCount;
+			int lowBoundByteIndex = _fieldSpec.LowBoundByteIndex;
 
 			for (int i = 0; i < byteCount; i++)
-			{
 				word[lowBoundByteIndex + i] = base[i];
-			}
 
-			if (mFieldSpec.IncludesSign)
-			{
+			if (_fieldSpec.IncludesSign)
 				word.Sign = Sign;
-			}
 		}
 
 		public void ApplyToRegister(Register register)
 		{
-			int fieldSpecByteCount = mFieldSpec.ByteCount;
+			int fieldSpecByteCount = _fieldSpec.ByteCount;
+
 			if (fieldSpecByteCount > register.ByteCountWithPadding)
-			{
 				throw new ArgumentOutOfRangeException(nameof(register), register, "bytecount too large for this register");
-			}
 
 			int paddingByteCount = register.ByteCount - fieldSpecByteCount;
+
 			for (int i = 0; i < paddingByteCount; i++)
-			{
 				register[i] = 0;
-			}
 
 			var fromWordByteCount = Math.Max(0, -paddingByteCount);
 			fieldSpecByteCount--;
@@ -52,7 +47,7 @@ namespace MixLib.Type
 
 		public int CompareTo(IFullWord toCompare)
 		{
-			var field = LoadFromFullWord(mFieldSpec, toCompare);
+			var field = LoadFromFullWord(_fieldSpec, toCompare);
 
 			long wordValue = LongValue;
 			long fieldValue = field.LongValue;
@@ -68,14 +63,10 @@ namespace MixLib.Type
 			int lowBoundByteIndex = fieldSpec.LowBoundByteIndex;
 
 			for (int i = 0; i < fieldSpecByteCount; i++)
-			{
 				field[i] = word[lowBoundByteIndex + i];
-			}
 
 			if (fieldSpec.IncludesSign)
-			{
 				field.Sign = word.Sign;
-			}
 
 			return field;
 		}
@@ -83,10 +74,9 @@ namespace MixLib.Type
 		public static WordField LoadFromRegister(FieldSpec fieldSpec, Register register)
 		{
 			int fieldSpecByteCount = fieldSpec.ByteCount;
+
 			if (fieldSpecByteCount > register.ByteCountWithPadding)
-			{
 				throw new ArgumentOutOfRangeException(nameof(fieldSpec), fieldSpec, "bytecount too large for this register");
-			}
 
 			var field = new WordField(fieldSpec, fieldSpecByteCount);
 			int fromRegisterStartIndex = register.ByteCountWithPadding - fieldSpecByteCount;
@@ -99,9 +89,7 @@ namespace MixLib.Type
 			}
 
 			if (fieldSpec.IncludesSign)
-			{
 				field.Sign = register.Sign;
-			}
 
 			return field;
 		}

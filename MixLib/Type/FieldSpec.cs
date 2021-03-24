@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace MixLib.Type
 {
@@ -6,14 +6,13 @@ namespace MixLib.Type
 	{
 		public MixByte MixByteValue { get; private set; }
 
-		public FieldSpec(MixByte value) => MixByteValue = value;
+		public FieldSpec(MixByte value) 
+			=> MixByteValue = value;
 
 		public FieldSpec(int lowBound, int highBound)
 		{
 			if (!IsValidFieldSpec(lowBound, highBound))
-			{
 				throw new ArgumentException("low and/or high bounds are invalid");
-			}
 
 			MixByteValue = (8 * lowBound) + highBound;
 		}

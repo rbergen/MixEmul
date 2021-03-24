@@ -24,11 +24,11 @@ namespace MixGui.Components
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
-		public WordEditor() : this(FullWord.ByteCount) {}
+		public WordEditor() : this(FullWord.ByteCount) { }
 
-		public WordEditor(IWord word) : this(word, true) {}
+		public WordEditor(IWord word) : this(word, true) { }
 
-		public WordEditor(int byteCount) : this(byteCount, true) {}
+		public WordEditor(int byteCount) : this(byteCount, true) { }
 
 		public WordEditor(IWord word, bool includeSign) : this(word.ByteCount, includeSign) 
 			=> WordValue = word;

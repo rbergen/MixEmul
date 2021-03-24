@@ -10,9 +10,7 @@ namespace MixLib.Interrupts
 		public Interrupt(Types type)
 		{
 			if (type == Types.Device)
-			{
 				throw new ArgumentException("Interrupt of type Device must be constructed with device ID");
-			}
 
 			Type = type;
 			DeviceID = -1;

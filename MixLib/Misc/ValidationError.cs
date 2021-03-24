@@ -1,4 +1,4 @@
-namespace MixLib.Misc
+﻿namespace MixLib.Misc
 {
 
 	public class ValidationError
@@ -41,20 +41,16 @@ namespace MixLib.Misc
 				if (Message != null)
 				{
 					if (BoundsSpecified)
-					{
-						return string.Concat(Message, " (must be between ", ValidLowerBound, " and ", ValidUpperBound, ")");
-					}
+						return $"{Message} (must be between {ValidLowerBound} and {ValidUpperBound})";
 
 					return Message;
 				}
 
 
 				if (BoundsSpecified)
-				{
-					return string.Concat("value must be between ", ValidLowerBound, " and ", ValidUpperBound);
-				}
+					return $"value must be between {ValidLowerBound} and {ValidUpperBound}";
 
-				return "";
+				return string.Empty;
 			}
 		}
 	}

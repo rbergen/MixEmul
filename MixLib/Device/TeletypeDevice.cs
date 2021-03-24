@@ -16,11 +16,10 @@ namespace MixLib.Device
 
 		private const int MyRecordWordCount = 14;
 
-		private Queue mInputBuffer;
-		private Queue mOutputBuffer;
+		private Queue _inputBuffer;
+		private Queue _outputBuffer;
 
 		public event EventHandler InputRequired;
-
 		public event EventHandler OutputAdded;
 
 		public TeletypeDevice(int id) : base(id)
@@ -39,10 +38,10 @@ namespace MixLib.Device
 			=> true;
 
 		public void AddInputLine(string line)
-			=> mInputBuffer.Enqueue(line);
+			=> _inputBuffer.Enqueue(line);
 
 		public string GetOutputLine()
-			=> mOutputBuffer.Count > 0 ? (string)mOutputBuffer.Dequeue() : null;
+			=> _outputBuffer.Count > 0 ? (string)_outputBuffer.Dequeue() : null;
 
 		private void This_InputRequired(object sender, EventArgs e)
 			=> InputRequired?.Invoke(this, e);
@@ -75,12 +74,12 @@ namespace MixLib.Device
 		{
 			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.TeletypeInitialization);
 
-			mInputBuffer = Queue.Synchronized(new Queue());
-			mOutputBuffer = Queue.Synchronized(new Queue());
+			_inputBuffer = Queue.Synchronized(new Queue());
+			_outputBuffer = Queue.Synchronized(new Queue());
 
 			DeviceStep nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstInputDeviceStep = nextStep;
-			nextStep.NextStep = new ReadLineStep(mInputBuffer);
+			nextStep.NextStep = new ReadLineStep(_inputBuffer);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new WriteToMemoryStep(false, MyRecordWordCount)
 			{
@@ -91,7 +90,7 @@ namespace MixLib.Device
 			FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(false, MyRecordWordCount);
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteLineStep(mOutputBuffer)
+			nextStep.NextStep = new WriteLineStep(_outputBuffer)
 			{
 				NextStep = null
 			};

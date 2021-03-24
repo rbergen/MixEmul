@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using MixLib.Type;
 
 namespace MixAssembler.Value
@@ -43,6 +43,8 @@ namespace MixAssembler.Value
 		public Word.Signs GetSign(int currentAddress)
 			=> Sign;
 
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Delegate interface")]
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 			=> text.Length != 0 && text.Length <= 10 && text.All(c => char.IsNumber(c)) && long.TryParse(text, out long longValue)
 			? new NumberValue(longValue)

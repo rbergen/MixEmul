@@ -1,4 +1,4 @@
-using MixLib.Modules;
+﻿using MixLib.Modules;
 
 namespace MixLib.Instruction
 {
@@ -7,32 +7,30 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class JumpInstructions
 	{
-		private const byte jmpField = 0;
-		private const byte jsjField = 1;
-		private const byte jovField = 2;
-		private const byte jnovField = 3;
-		private const byte jlField = 4;
-		private const byte jeField = 5;
-		private const byte jgField = 6;
-		private const byte jgeField = 7;
-		private const byte jneField = 8;
-		private const byte jleField = 9;
-		private const byte regJumpOpcodeBase = 40;
-		private const byte regJumpNegField = 0;
-		private const byte regJumpZeroField = 1;
-		private const byte regJumpPosField = 2;
-		private const byte regJumpNonNegField = 3;
-		private const byte regJumpNonZeroField = 4;
-		private const byte regJumpNonPosField = 5;
-		private const byte regJumpEvenField = 6;
-		private const byte regJumpOddField = 7;
+		private const byte JmpField = 0;
+		private const byte JsjField = 1;
+		private const byte JovField = 2;
+		private const byte JnovField = 3;
+		private const byte JlField = 4;
+		private const byte JeField = 5;
+		private const byte JgField = 6;
+		private const byte JgeField = 7;
+		private const byte JneField = 8;
+		private const byte JleField = 9;
+		private const byte RegJumpOpcodeBase = 40;
+		private const byte RegJumpNegField = 0;
+		private const byte RegJumpZeroField = 1;
+		private const byte RegJumpPosField = 2;
+		private const byte RegJumpNonNegField = 3;
+		private const byte RegJumpNonZeroField = 4;
+		private const byte RegJumpNonPosField = 5;
+		private const byte RegJumpEvenField = 6;
+		private const byte RegJumpOddField = 7;
 
 		private static void DoJump(ModuleBase module, int indexedAddress, bool saveJ)
 		{
 			if (!saveJ)
-			{
 				module.Registers.RJ.LongValue = module.ProgramCounter + 1;
-			}
 
 			module.ProgramCounter = indexedAddress;
 		}
@@ -40,7 +38,8 @@ namespace MixLib.Instruction
 		/// <summary>
 		/// Public jump method for use by other classes
 		/// </summary>
-		public static void Jump(ModuleBase module, int indexedAddress) => DoJump(module, indexedAddress, false);
+		public static void Jump(ModuleBase module, int indexedAddress) 
+			=> DoJump(module, indexedAddress, false);
 
 		/// <summary>
 		/// Method for performing JMP, JSJ, JOV, JNOV, JL, JE, JG, JGE, JNE and JLE instructions
@@ -49,21 +48,19 @@ namespace MixLib.Instruction
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue)
-			{
 				return false;
-			}
 
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
 			{
-				case jmpField:
+				case JmpField:
 					Jump(module, indexedAddress);
 					return false;
 
-				case jsjField:
+				case JsjField:
 					DoJump(module, indexedAddress, true);
 					return false;
 
-				case jovField:
+				case JovField:
 					if (!module.Registers.OverflowIndicator)
 					{
 						module.Registers.OverflowIndicator = false;
@@ -73,7 +70,7 @@ namespace MixLib.Instruction
 					Jump(module, indexedAddress);
 					return false;
 
-				case jnovField:
+				case JnovField:
 					if (module.Registers.OverflowIndicator)
 					{
 						module.Registers.OverflowIndicator = false;
@@ -83,57 +80,45 @@ namespace MixLib.Instruction
 					Jump(module, indexedAddress);
 					return false;
 
-				case jlField:
+				case JlField:
 					if (module.Registers.CompareIndicator != Registers.CompValues.Less)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case jeField:
+				case JeField:
 					if (module.Registers.CompareIndicator != Registers.CompValues.Equal)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case jgField:
+				case JgField:
 					if (module.Registers.CompareIndicator != Registers.CompValues.Greater)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case jgeField:
+				case JgeField:
 					if (module.Registers.CompareIndicator != Registers.CompValues.Greater && module.Registers.CompareIndicator != Registers.CompValues.Equal)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case jneField:
+				case JneField:
 					if (module.Registers.CompareIndicator == Registers.CompValues.Equal)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 
 					return false;
 
-				case jleField:
+				case JleField:
 					if (module.Registers.CompareIndicator != Registers.CompValues.Less && module.Registers.CompareIndicator != Registers.CompValues.Equal)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
@@ -148,84 +133,67 @@ namespace MixLib.Instruction
 		public static bool RegJump(ModuleBase module, MixInstruction.Instance instance)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
-			if (indexedAddress == int.MinValue)
-			{
-				return false;
-			}
 
-			int registerIndex = instance.MixInstruction.Opcode - regJumpOpcodeBase;
+			if (indexedAddress == int.MinValue)
+				return false;
+
+			int registerIndex = instance.MixInstruction.Opcode - RegJumpOpcodeBase;
 			long longValue = module.Registers[registerIndex].LongValue;
 			switch (instance.MixInstruction.FieldSpec.MixByteValue.ByteValue)
 			{
-				case regJumpNegField:
+				case RegJumpNegField:
 					if (longValue >= 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpZeroField:
+				case RegJumpZeroField:
 					if (longValue != 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpPosField:
+				case RegJumpPosField:
 					if (longValue <= 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpNonNegField:
+				case RegJumpNonNegField:
 					if (longValue < 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpNonZeroField:
+				case RegJumpNonZeroField:
 					if (longValue == 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 
 					return false;
 
-				case regJumpNonPosField:
+				case RegJumpNonPosField:
 					if (longValue > 0L)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpEvenField:
+				case RegJumpEvenField:
 					if (longValue % 2 != 0)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;
 
-				case regJumpOddField:
+				case RegJumpOddField:
 					if (longValue % 2 == 0)
-					{
 						break;
-					}
 
 					Jump(module, indexedAddress);
 					return false;

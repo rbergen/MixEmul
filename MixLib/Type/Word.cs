@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,30 +10,30 @@ namespace MixLib.Type
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
-		private readonly ReaderWriterLock mAccessLock;
-		private readonly MixByte[] mBytes;
-		private Signs mSign;
+		private readonly ReaderWriterLock _accessLock;
+		private readonly MixByte[] _bytes;
+		private Signs _sign;
 
 		public int ByteCount { get; private set; }
 
 		public Word(int byteCount) : this(byteCount, Signs.Positive)
 		{
 			for (int i = 0; i < byteCount; i++)
-				mBytes[i] = new MixByte(0);
+				_bytes[i] = new MixByte(0);
 		}
 
 		public Word(MixByte[] bytes, Signs sign) : this(bytes.Length, sign)
 		{
 			for (int i = 0; i < ByteCount; i++)
-				mBytes[i] = bytes[i];
+				_bytes[i] = bytes[i];
 		}
 
 		private Word(int byteCount, Signs sign)
 		{
 			ByteCount = byteCount;
-			mSign = sign;
-			mBytes = new MixByte[byteCount];
-			mAccessLock = new ReaderWriterLock();
+			_sign = sign;
+			_bytes = new MixByte[byteCount];
+			_accessLock = new ReaderWriterLock();
 		}
 
 		public void Load(string text)
@@ -42,10 +42,10 @@ namespace MixLib.Type
 			int index = 0;
 
 			for (; index < count; index++)
-				mBytes[index] = text[index];
+				_bytes[index] = text[index];
 
 			while (index < ByteCount)
-				mBytes[index++] = 0;
+				_bytes[index++] = 0;
 		}
 
 		public virtual bool IsEmpty
@@ -64,10 +64,10 @@ namespace MixLib.Type
 			=> ToString(false);
 
 		public IEnumerator GetEnumerator()
-			=> mBytes.GetEnumerator();
+			=> _bytes.GetEnumerator();
 
 		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
-			=> ((IEnumerable<MixByte>)mBytes).GetEnumerator();
+			=> ((IEnumerable<MixByte>)_bytes).GetEnumerator();
 
 		public MixByte[] ToArray()
 			=> Magnitude;
@@ -101,14 +101,14 @@ namespace MixLib.Type
 			{
 				stringValue = string.Empty;
 
-				foreach (MixByte mixByte in mBytes)
+				foreach (MixByte mixByte in _bytes)
 					stringValue += (char)mixByte;
 			}
 			else
 			{
 				stringValue = "" + Sign.ToChar();
 
-				foreach (MixByte mixByte in mBytes)
+				foreach (MixByte mixByte in _bytes)
 					stringValue += ' ' + mixByte;
 			}
 
@@ -121,35 +121,35 @@ namespace MixLib.Type
 			{
 				MixByte selectedByte;
 
-				mAccessLock.AcquireReaderLock(Timeout.Infinite);
+				_accessLock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					selectedByte = mBytes[index];
+					selectedByte = _bytes[index];
 				}
 				finally
 				{
-					mAccessLock.ReleaseReaderLock();
+					_accessLock.ReleaseReaderLock();
 				}
 
 				return selectedByte;
 			}
 			set
 			{
-				mAccessLock.AcquireWriterLock(Timeout.Infinite);
+				_accessLock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
-					MixByte oldValue = mBytes[index];
+					MixByte oldValue = _bytes[index];
 
-					mBytes[index] = value ?? new MixByte();
+					_bytes[index] = value ?? new MixByte();
 
-					if (oldValue.ByteValue == mBytes[index].ByteValue)
+					if (oldValue.ByteValue == _bytes[index].ByteValue)
 						return;
 				}
 				finally
 				{
-					mAccessLock.ReleaseWriterLock();
+					_accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -161,22 +161,22 @@ namespace MixLib.Type
 			get
 			{
 				long longValue;
-				mAccessLock.AcquireReaderLock(Timeout.Infinite);
+				_accessLock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					longValue = BytesToLong(Sign, mBytes);
+					longValue = BytesToLong(Sign, _bytes);
 				}
 				finally
 				{
-					mAccessLock.ReleaseReaderLock();
+					_accessLock.ReleaseReaderLock();
 				}
 
 				return longValue;
 			}
 			set
 			{
-				mAccessLock.AcquireWriterLock(Timeout.Infinite);
+				_accessLock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
@@ -184,11 +184,11 @@ namespace MixLib.Type
 						return;
 
 					SetMagnitudeLongValue(value);
-					mSign = value.GetSign();
+					_sign = value.GetSign();
 				}
 				finally
 				{
-					mAccessLock.ReleaseWriterLock();
+					_accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -206,7 +206,7 @@ namespace MixLib.Type
 
 			for (int i = ByteCount - 1; i >= 0; i--)
 			{
-				mBytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
+				_bytes[i] = new MixByte((byte)(magnitude & MixByte.MaxValue));
 				magnitude >>= MixByte.BitCount;
 			}
 
@@ -219,22 +219,22 @@ namespace MixLib.Type
 			{
 				MixByte[] bytes;
 
-				mAccessLock.AcquireReaderLock(Timeout.Infinite);
+				_accessLock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					bytes = (MixByte[])mBytes.Clone();
+					bytes = (MixByte[])_bytes.Clone();
 				}
 				finally
 				{
-					mAccessLock.ReleaseReaderLock();
+					_accessLock.ReleaseReaderLock();
 				}
 
 				return bytes;
 			}
 			set
 			{
-				mAccessLock.AcquireWriterLock(Timeout.Infinite);
+				_accessLock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
@@ -248,14 +248,14 @@ namespace MixLib.Type
 						thisStartIndex = ByteCount - value.Length;
 
 						for (int i = 0; i < thisStartIndex; i++)
-							mBytes[i] = new MixByte(0);
+							_bytes[i] = new MixByte(0);
 					}
 					else if (value.Length > ByteCount)
 						valueStartIndex = value.Length - ByteCount;
 
 					while (thisStartIndex < ByteCount)
 					{
-						mBytes[thisStartIndex] = value[valueStartIndex];
+						_bytes[thisStartIndex] = value[valueStartIndex];
 						thisStartIndex++;
 						valueStartIndex++;
 					}
@@ -265,7 +265,7 @@ namespace MixLib.Type
 				}
 				finally
 				{
-					mAccessLock.ReleaseWriterLock();
+					_accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -278,22 +278,22 @@ namespace MixLib.Type
 			{
 				long longValue;
 
-				mAccessLock.AcquireReaderLock(Timeout.Infinite);
+				_accessLock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					longValue = BytesToLong(mBytes);
+					longValue = BytesToLong(_bytes);
 				}
 				finally
 				{
-					mAccessLock.ReleaseReaderLock();
+					_accessLock.ReleaseReaderLock();
 				}
 
 				return longValue;
 			}
 			set
 			{
-				mAccessLock.AcquireWriterLock(Timeout.Infinite);
+				_accessLock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
@@ -302,7 +302,7 @@ namespace MixLib.Type
 				}
 				finally
 				{
-					mAccessLock.ReleaseWriterLock();
+					_accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -313,31 +313,31 @@ namespace MixLib.Type
 		{
 			get
 			{
-				mAccessLock.AcquireReaderLock(Timeout.Infinite);
+				_accessLock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					return mSign;
+					return _sign;
 				}
 				finally
 				{
-					mAccessLock.ReleaseReaderLock();
+					_accessLock.ReleaseReaderLock();
 				}
 			}
 			set
 			{
-				mAccessLock.AcquireWriterLock(Timeout.Infinite);
+				_accessLock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
-					if (value == mSign)
+					if (value == _sign)
 						return;
 
-					mSign = value;
+					_sign = value;
 				}
 				finally
 				{
-					mAccessLock.ReleaseWriterLock();
+					_accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -364,9 +364,9 @@ namespace MixLib.Type
 				throw new ArgumentException("Target Word must have same bytecount as this Word", nameof(target));
 
 			for (int i = 0; i < ByteCount; i++)
-				target.mBytes[i] = mBytes[i].ByteValue;
+				target._bytes[i] = _bytes[i].ByteValue;
 
-			target.mSign = mSign;
+			target._sign = _sign;
 		}
 	}
 }

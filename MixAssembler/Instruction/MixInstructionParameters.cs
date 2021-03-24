@@ -61,10 +61,8 @@ namespace MixAssembler.Instruction
 		/// <returns></returns>
 		public InstructionInstanceBase CreateInstance(InstructionBase instruction, AssemblingStatus status)
 		{
-			if (instruction is not MixInstruction)
+			if (instruction is not MixInstruction mixInstruction)
 				throw new ArgumentException("instruction must be a MixInstruction", nameof(instruction));
-
-			var mixInstruction = (MixInstruction)instruction;
 
 			if (!AreValuesDefined(status))
 				return null;

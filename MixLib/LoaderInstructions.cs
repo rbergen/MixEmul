@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MixLib.Instruction;
 
 namespace MixLib
 {
 	public class LoaderInstructions
 	{
-		private readonly SortedDictionary<string, LoaderInstruction> mInstructions = new();
+		private readonly SortedDictionary<string, LoaderInstruction> _instructions = new();
 
 		public LoaderInstructions()
 		{
@@ -15,8 +15,10 @@ namespace MixLib
 			AddInstruction("END", LoaderInstruction.Operations.SetProgramCounter, false);
 		}
 
-		public LoaderInstruction this[string mnemonic] => mInstructions.ContainsKey(mnemonic) ? mInstructions[mnemonic] : null;
+		public LoaderInstruction this[string mnemonic] 
+			=> _instructions.ContainsKey(mnemonic) ? _instructions[mnemonic] : null;
 
-		private void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) => mInstructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
+		private void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) 
+			=> _instructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
 	}
 }

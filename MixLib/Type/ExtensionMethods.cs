@@ -60,14 +60,10 @@
 		public static Registers.CompValues ToCompValue(this int comparisonValue)
 		{
 			if (comparisonValue < 0)
-			{
 				return Registers.CompValues.Less;
-			}
 
 			if (comparisonValue > 0)
-			{
 				return Registers.CompValues.Greater;
-			}
 
 			return Registers.CompValues.Equal;
 		}

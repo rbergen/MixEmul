@@ -1,4 +1,4 @@
-using MixLib.Modules;
+﻿using MixLib.Modules;
 using MixLib.Type;
 
 namespace MixLib.Instruction
@@ -8,8 +8,8 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class StoreInstructions
 	{
-		private const byte storeOpcodeBase = 24;
-		private const byte storeJOpcode = 32;
+		private const byte StoreOpcodeBase = 24;
+		private const byte StoreJOpcode = 32;
 
 		/// <summary>
 		/// Method for performing STx instructions
@@ -21,14 +21,11 @@ namespace MixLib.Instruction
 			{
 				Register sourceRegister;
 
-				if (instance.MixInstruction.Opcode == storeJOpcode)
-				{
+				if (instance.MixInstruction.Opcode == StoreJOpcode)
 					sourceRegister = module.Registers.RJ;
-				}
+
 				else
-				{
-					sourceRegister = module.Registers[instance.MixInstruction.Opcode - storeOpcodeBase];
-				}
+					sourceRegister = module.Registers[instance.MixInstruction.Opcode - StoreOpcodeBase];
 
 				WordField.LoadFromRegister(instance.FieldSpec, sourceRegister).ApplyToFullWord(module.Memory[indexedAddress]);
 			}

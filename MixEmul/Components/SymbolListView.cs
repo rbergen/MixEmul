@@ -152,7 +152,7 @@ namespace MixGui.Components
 				{
 					value = long.Parse(selectedItems[0].SubItems[ValueFieldIndex].Text);
 				}
-				catch (FormatException) {}
+				catch (FormatException) { }
 
 				return value;
 			}
@@ -246,7 +246,7 @@ namespace MixGui.Components
 
 				magnitude = long.Parse(valueText);
 			}
-			catch (FormatException) {}
+			catch (FormatException) { }
 
 			_symbolValueTextBox.Magnitude = magnitude;
 			_symbolValueTextBox.Sign = sign;

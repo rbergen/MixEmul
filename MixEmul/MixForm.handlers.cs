@@ -277,7 +277,7 @@ namespace MixGui
 			{
 				_configuration.Save(_defaultDirectory);
 			}
-			catch (Exception) {}
+			catch (Exception) { }
 		}
 
 		private void This_LocationChanged(object sender, EventArgs e)

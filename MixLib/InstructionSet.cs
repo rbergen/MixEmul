@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MixLib.Instruction;
 using MixLib.Type;
 using MixLib.Utils;
@@ -7,9 +8,9 @@ namespace MixLib
 {
 	public class InstructionSet
 	{
-		private readonly SortedDictionary<string, MixInstruction> mMnemonicInstructionMap = new();
-		private readonly SortedDictionary<byte, List<MixInstruction>> mOpcodeInstructionMap = new();
-		private static InstructionSet mInstance;
+		private readonly SortedDictionary<string, MixInstruction> _mnemonicInstructionMap = new();
+		private readonly SortedDictionary<byte, List<MixInstruction>> _opcodeInstructionMap = new();
+		private static InstructionSet _instance;
 
 		public InstructionSet()
 		{
@@ -17,10 +18,9 @@ namespace MixLib
 			var indexMetaSpec = new MetaFieldSpec(true, IndexRegister.DefaultFieldSpec);
 
 			FieldSpec[] rangeSpecs = new FieldSpec[8];
+
 			for (int i = 0; i < rangeSpecs.Length; i++)
-			{
 				rangeSpecs[i] = new FieldSpec(i);
-			}
 
 			MixInstruction.Executor executor = LoadInstructions.Load;
 			MixInstruction.Validator validator = InstructionHelpers.ValidateIndexAndFieldSpec;
@@ -250,44 +250,39 @@ namespace MixLib
 			AddInstruction("INT", 5, new FieldSpec(9), 2, executor, null);
 		}
 
-		private void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) => AddInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
+		private void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) 
+			=> AddInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
 
-		private void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) => AddInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
+		private void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) 
+			=> AddInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
 
 		private void AddInstruction(string mnemonic, MixInstruction instruction)
 		{
-			mMnemonicInstructionMap.Add(mnemonic, instruction);
-			var list = mOpcodeInstructionMap.GetOrCreate(instruction.Opcode);
+			_mnemonicInstructionMap.Add(mnemonic, instruction);
+			var list = _opcodeInstructionMap.GetOrCreate(instruction.Opcode);
+
 			if (instruction.FieldSpec == null)
-			{
 				list.Insert(0, instruction);
-			}
+
 			else
-			{
 				list.Add(instruction);
-			}
 		}
 
 		public static InstructionSet Instance
 		{
 			get
 			{
-				if (mInstance == null)
-				{
-					mInstance = new InstructionSet();
-				}
+				if (_instance == null)
+					_instance = new InstructionSet();
 
-				return mInstance;
+				return _instance;
 			}
 		}
 
 		public MixInstruction GetInstruction(byte opcode, FieldSpec fieldSpec)
 		{
-
-			if (!mOpcodeInstructionMap.TryGetValue(opcode, out List<MixInstruction> instructions))
-			{
+			if (!_opcodeInstructionMap.TryGetValue(opcode, out List<MixInstruction> instructions))
 				return null;
-			}
 
 			int startIndex = 0;
 			MixInstruction defaultInstruction = null;
@@ -301,16 +296,14 @@ namespace MixLib
 			for (int index = startIndex; index < instructions.Count; index++)
 			{
 				if (instructions[index].FieldSpec == fieldSpec)
-				{
 					return instructions[index];
-				}
 			}
 
 			return defaultInstruction;
 		}
 
-		public MixInstruction this[string mnemonic] =>
-						mMnemonicInstructionMap.ContainsKey(mnemonic) ? mMnemonicInstructionMap[mnemonic] : null;
+		public MixInstruction this[string mnemonic] 
+			=> _mnemonicInstructionMap.ContainsKey(mnemonic) ? _mnemonicInstructionMap[mnemonic] : null;
 
 		public MixInstruction[] this[byte opcode]
 		{
@@ -318,17 +311,12 @@ namespace MixLib
 			{
 				var list = new List<MixInstruction>();
 
-				foreach (MixInstruction instruction in mMnemonicInstructionMap.Values)
+				foreach (MixInstruction instruction in _mnemonicInstructionMap.Values.Where(instruction => instruction.Opcode == opcode))
 				{
-					if (instruction.Opcode == opcode)
-					{
-						list.Add(instruction);
+					list.Add(instruction);
 
-						if (instruction.FieldSpec == null)
-						{
-							break;
-						}
-					}
+					if (instruction.FieldSpec == null)
+						break;
 				}
 
 				return list.ToArray();

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MixLib.Interrupts;
 using MixLib.Modules;
 using MixLib.Type;
@@ -10,18 +10,23 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class MiscInstructions
 	{
-		private static readonly SortedDictionary<string, MoveStatus> mMoveStatuses = new();
-		private const byte zeroCharValue = 30;
+		private static readonly SortedDictionary<string, MoveStatus> _moveStatuses = new();
+
+		private const byte ZeroCharValue = 30;
+
 
 		/// <summary>
 		/// Method for performing the NOP instruction
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
 		public static bool Noop(ModuleBase module, MixInstruction.Instance instance)
 			=> true;
+
 
 		/// <summary>
 		/// Method for performing the CHAR instruction
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
 		public static bool ConvertToChar(ModuleBase module, MixInstruction.Instance instance)
 		{
 			Register rA = module.Registers.RA;
@@ -30,22 +35,24 @@ namespace MixLib.Instruction
 
 			for (int i = rX.ByteCount - 1; i >= 0; i--)
 			{
-				rX[i] = zeroCharValue + ((byte)(magnitudeLongValue % 10L));
+				rX[i] = ZeroCharValue + ((byte)(magnitudeLongValue % 10L));
 				magnitudeLongValue /= 10L;
 			}
 
 			for (int i = rA.ByteCount - 1; i >= 0; i--)
 			{
-				rA[i] = zeroCharValue + ((byte)(magnitudeLongValue % 10L));
+				rA[i] = ZeroCharValue + ((byte)(magnitudeLongValue % 10L));
 				magnitudeLongValue /= 10L;
 			}
 
 			return true;
 		}
 
+
 		/// <summary>
 		/// Method for performing the NUM instruction
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
 		public static bool ConvertToNumeric(ModuleBase module, MixInstruction.Instance instance)
 		{
 			decimal num = 0M;
@@ -105,13 +112,13 @@ namespace MixLib.Instruction
 		public static bool Move(ModuleBase module, MixInstruction.Instance instance)
 		{
 
-			mMoveStatuses.TryGetValue(module.ModuleName, out MoveStatus status);
+			_moveStatuses.TryGetValue(module.ModuleName, out MoveStatus status);
 
 			// if we have a move status, check if it applies to this instruction
 			if (status != null && status.ProgramCounter != module.ProgramCounter)
 			{
 				status = null;
-				mMoveStatuses.Remove(module.ModuleName);
+				_moveStatuses.Remove(module.ModuleName);
 			}
 
 			if (status == null)
@@ -125,7 +132,7 @@ namespace MixLib.Instruction
 					return false;
 
 				status = new MoveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
-				mMoveStatuses[module.ModuleName] = status;
+				_moveStatuses[module.ModuleName] = status;
 
 				return false;
 			}
@@ -143,7 +150,7 @@ namespace MixLib.Instruction
 					if (currentFromAddress > memory.MaxWordIndex || currentToAddress > memory.MaxWordIndex)
 					{
 						module.ReportRuntimeError("Source or target address overflow");
-						mMoveStatuses.Remove(module.ModuleName);
+						_moveStatuses.Remove(module.ModuleName);
 
 						return false;
 					}
@@ -161,7 +168,7 @@ namespace MixLib.Instruction
 
 					if (status.CurrentWord >= status.WordCount)
 					{
-						mMoveStatuses.Remove(module.ModuleName);
+						_moveStatuses.Remove(module.ModuleName);
 						return true;
 					}
 
@@ -197,7 +204,8 @@ namespace MixLib.Instruction
 				CurrentWordState = WordStates.BeforeMove;
 			}
 
-			public void NextWord() => CurrentWord++;
+			public void NextWord() 
+				=> CurrentWord++;
 
 			public enum WordStates
 			{

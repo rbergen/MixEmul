@@ -1,4 +1,4 @@
-using MixLib.Misc;
+﻿using MixLib.Misc;
 
 namespace MixLib.Instruction
 {
@@ -6,13 +6,14 @@ namespace MixLib.Instruction
 	{
 		public Sources Source { get; private set; }
 
-		public InstanceValidationError(Sources source, string message) : base(message) => Source = source;
+		public InstanceValidationError(Sources source, string message) : base(message) 
+			=> Source = source;
 
-		public InstanceValidationError(Sources source, int validLowerBound, int validUpperBound)
-			: base(validLowerBound, validUpperBound) => Source = source;
+		public InstanceValidationError(Sources source, int validLowerBound, int validUpperBound) : base(validLowerBound, validUpperBound) 
+			=> Source = source;
 
-		public InstanceValidationError(Sources source, string message, int validLowerBound, int validUpperBound)
-			: base(message, validLowerBound, validUpperBound) => Source = source;
+		public InstanceValidationError(Sources source, string message, int validLowerBound, int validUpperBound) : base(message, validLowerBound, validUpperBound) 
+			=> Source = source;
 
 		public override string CompiledMessage
 		{

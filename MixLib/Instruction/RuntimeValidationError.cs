@@ -1,4 +1,4 @@
-using MixLib.Misc;
+﻿using MixLib.Misc;
 
 namespace MixLib.Instruction
 {
@@ -9,9 +9,7 @@ namespace MixLib.Instruction
 		public int ProgramCounter { get; private set; }
 
 		public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, string message)
-	: this(programCounter, instance, message, int.MinValue, int.MinValue, int.MinValue)
-		{
-		}
+			: this(programCounter, instance, message, int.MinValue, int.MinValue, int.MinValue) {	}
 
 		public RuntimeValidationError(int programCounter, MixInstruction.Instance instance, int validLowerBound, int validUpperBound, int actualValue)
 			: this(programCounter, instance, null, validLowerBound, validUpperBound, actualValue) { }

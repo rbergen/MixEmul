@@ -1,4 +1,4 @@
-using MixLib.Type;
+﻿using MixLib.Type;
 
 namespace MixLib.Instruction
 {
@@ -40,9 +40,7 @@ namespace MixLib.Instruction
 		/// <param name="fieldIsRange"></param>
 		/// <param name="defaultFieldSpec"></param>
 		public MetaFieldSpec(bool fieldIsRange, FieldSpec defaultFieldSpec)
-						: this(Presences.Optional, fieldIsRange, defaultFieldSpec)
-		{
-		}
+						: this(Presences.Optional, fieldIsRange, defaultFieldSpec) { }
 
 		private MetaFieldSpec(Presences presence, bool fieldIsRange, FieldSpec defaultFieldSpec)
 		{

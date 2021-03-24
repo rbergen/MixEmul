@@ -1,28 +1,32 @@
-using MixLib.Type;
+﻿using MixLib.Type;
 
 namespace MixLib.Instruction
 {
 	public class InstructionText
 	{
-		private readonly MixInstruction.Instance mInstance;
+		private readonly MixInstruction.Instance _instance;
 
-		public InstructionText(MixInstruction.Instance instance) => mInstance = instance;
+		public InstructionText(MixInstruction.Instance instance) 
+			=> _instance = instance;
 
-		public string Index => mInstance.Index != 0 ? "," + mInstance.Index : "";
+		public string Index 
+			=> _instance.Index != 0 ? "," + _instance.Index : "";
 
-		public string InstanceText => Mnemonic + " " + Address + Index + Field;
+		public string InstanceText 
+			=> Mnemonic + " " + Address + Index + Field;
 
-		public string Mnemonic => mInstance.MixInstruction.Mnemonic;
+		public string Mnemonic 
+			=> _instance.MixInstruction.Mnemonic;
 
 		private string FieldText
 		{
 			get
 			{
-				FieldSpec fieldSpec = mInstance.FieldSpec;
-				if (mInstance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
-				{
+				FieldSpec fieldSpec = _instance.FieldSpec;
+
+				if (_instance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
 					return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
-				}
+
 				return fieldSpec.MixByteValue.ByteValue.ToString();
 			}
 		}
@@ -31,11 +35,10 @@ namespace MixLib.Instruction
 		{
 			get
 			{
-				var addressText = mInstance.AddressMagnitude.ToString();
-				if (mInstance.AddressSign.IsNegative())
-				{
+				var addressText = _instance.AddressMagnitude.ToString();
+				
+				if (_instance.AddressSign.IsNegative())
 					addressText = '-' + addressText;
-				}
 
 				return addressText;
 			}
@@ -46,13 +49,12 @@ namespace MixLib.Instruction
 			get
 			{
 				string str = null;
-				switch (mInstance.MixInstruction.MetaFieldSpec.Presence)
+				switch (_instance.MixInstruction.MetaFieldSpec.Presence)
 				{
 					case MetaFieldSpec.Presences.Optional:
-						if (mInstance.FieldSpec != mInstance.MixInstruction.MetaFieldSpec.DefaultFieldSpec)
-						{
+						if (_instance.FieldSpec != _instance.MixInstruction.MetaFieldSpec.DefaultFieldSpec)
 							str = FieldText;
-						}
+
 						break;
 
 					case MetaFieldSpec.Presences.Mandatory:

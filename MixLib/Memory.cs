@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,9 @@ namespace MixLib
 	public class Memory : IMemory, IEnumerable
 	{
 		public static readonly FieldSpec DefaultFieldSpec = new(0, 5);
-		private readonly SortedDictionary<int, MemoryFullWord> mWords;
-		private readonly object mSyncRoot;
+
+		private readonly SortedDictionary<int, MemoryFullWord> _words;
+		private readonly object _syncRoot;
 
 		public int MinWordIndex { get; set; }
 		public int MaxWordIndex { get; set; }
@@ -19,20 +20,19 @@ namespace MixLib
 		{
 			MinWordIndex = minIndex;
 			MaxWordIndex = maxIndex;
-			mWords = new SortedDictionary<int, MemoryFullWord>();
-			mSyncRoot = ((ICollection)mWords).SyncRoot;
+			_words = new SortedDictionary<int, MemoryFullWord>();
+			_syncRoot = ((ICollection)_words).SyncRoot;
 		}
 
-		public int WordCount => MaxWordIndex - MinWordIndex + 1;
+		public int WordCount 
+			=> MaxWordIndex - MinWordIndex + 1;
 
 		public void ResetProfilingCounts()
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				foreach (MemoryFullWord word in mWords.Values)
-				{
+				foreach (MemoryFullWord word in _words.Values)
 					word.ResetProfilingCounts();
-				}
 			}
 		}
 
@@ -40,9 +40,9 @@ namespace MixLib
 		{
 			get
 			{
-				lock (mSyncRoot)
+				lock (_syncRoot)
 				{
-					return mWords.Count == 0 ? 0 : mWords.Values.Select(w => w.ProfilingTickCount).Max();
+					return _words.Count == 0 ? 0 : _words.Values.Select(w => w.ProfilingTickCount).Max();
 				}
 			}
 		}
@@ -51,9 +51,9 @@ namespace MixLib
 		{
 			get
 			{
-				lock (mSyncRoot)
+				lock (_syncRoot)
 				{
-					return mWords.Count == 0 ? 0 : mWords.Values.Select(w => w.ProfilingExecutionCount).Max();
+					return _words.Count == 0 ? 0 : _words.Values.Select(w => w.ProfilingExecutionCount).Max();
 				}
 			}
 		}
@@ -69,9 +69,9 @@ namespace MixLib
 
 			while (!searchWrapped || index < startIndex)
 			{
-				lock (mSyncRoot)
+				lock (_syncRoot)
 				{
-					mWords.TryGetValue(index, out word);
+					_words.TryGetValue(index, out word);
 				}
 
 				if (word != null)
@@ -105,9 +105,9 @@ namespace MixLib
 
 				KeyValuePair<int, MemoryFullWord>? pair;
 
-				lock (mSyncRoot)
+				lock (_syncRoot)
 				{
-					pair = mWords.Cast<KeyValuePair<int, MemoryFullWord>?>().FirstOrDefault(kvp => kvp.Value.Key > index);
+					pair = _words.Cast<KeyValuePair<int, MemoryFullWord>?>().FirstOrDefault(kvp => kvp.Value.Key > index);
 				}
 
 				if (pair != null)
@@ -131,28 +131,26 @@ namespace MixLib
 
 		public IEnumerator GetEnumerator()
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				return mWords.Values.GetEnumerator();
+				return _words.Values.GetEnumerator();
 			}
 		}
 
 		public void ClearSourceLines()
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				foreach (MemoryFullWord word in mWords.Values)
-				{
+				foreach (MemoryFullWord word in _words.Values)
 					word.SourceLine = null;
-				}
 			}
 		}
 
 		public void Reset()
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				mWords.Clear();
+				_words.Clear();
 			}
 		}
 
@@ -161,15 +159,13 @@ namespace MixLib
 			get
 			{
 				if (index < MinWordIndex || index > MaxWordIndex)
-				{
 					throw new ArgumentOutOfRangeException(nameof(index), string.Format("value must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
-				}
 
 				MemoryFullWord word;
 
-				lock (mSyncRoot)
+				lock (_syncRoot)
 				{
-					mWords.TryGetValue(index, out word);
+					_words.TryGetValue(index, out word);
 				}
 
 				return (IMemoryFullWord)word ?? new VirtualMemoryFullWord(this, index);
@@ -177,16 +173,12 @@ namespace MixLib
 			set
 			{
 				if (index < MinWordIndex || index > MaxWordIndex)
-				{
 					throw new IndexOutOfRangeException(string.Format("index must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
-				}
 
 				var word = GetRealWord(index);
 
 				for (int byteIndex = 0; byteIndex < value.ByteCount; byteIndex++)
-				{
 					word[byteIndex] = value[byteIndex];
-				}
 
 				word.Sign = value.Sign;
 			}
@@ -196,12 +188,12 @@ namespace MixLib
 		{
 			MemoryFullWord word;
 
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				if (!mWords.TryGetValue(index, out word))
+				if (!_words.TryGetValue(index, out word))
 				{
 					word = new MemoryFullWord(index, 0);
-					mWords[index] = word;
+					_words[index] = word;
 				}
 			}
 
@@ -210,22 +202,20 @@ namespace MixLib
 
 		public bool HasContents(int index)
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				return mWords.ContainsKey(index) && !mWords[index].IsEmpty;
+				return _words.ContainsKey(index) && !_words[index].IsEmpty;
 			}
 		}
 
 		public int? LastAddressWithContentsBefore(int index)
 		{
 			if (index <= MinWordIndex)
-			{
 				return null;
-			}
 
-			var collection = mWords.TakeWhile(kvp => kvp.Key < index).Reverse().SkipWhile(kvp => kvp.Value.IsEmpty);
+			var collection = _words.TakeWhile(kvp => kvp.Key < index).Reverse().SkipWhile(kvp => kvp.Value.IsEmpty);
 
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
 				return collection.Any() ? collection.First().Key : null;
 			}
@@ -234,13 +224,11 @@ namespace MixLib
 		public int? FirstAddressWithContentsAfter(int index)
 		{
 			if (index >= MaxWordIndex)
-			{
 				return null;
-			}
 
-			var collection = mWords.SkipWhile(kvp => kvp.Key <= index || kvp.Value.IsEmpty);
+			var collection = _words.SkipWhile(kvp => kvp.Key <= index || kvp.Value.IsEmpty);
 
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
 				return collection.Any() ? collection.First().Key : null;
 			}
@@ -248,20 +236,18 @@ namespace MixLib
 
 		public void ResetRealWord(int index)
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				mWords.Remove(index);
+				_words.Remove(index);
 			}
 		}
 
 		public void ClearRealWordSourceLine(int index)
 		{
-			lock (mSyncRoot)
+			lock (_syncRoot)
 			{
-				if (mWords.ContainsKey(index))
-				{
-					mWords[index].SourceLine = null;
-				}
+				if (_words.ContainsKey(index))
+					_words[index].SourceLine = null;
 			}
 		}
 	}

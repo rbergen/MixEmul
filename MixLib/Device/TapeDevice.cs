@@ -17,7 +17,7 @@ namespace MixLib.Device
 		private const string WindingDescription = "Winding tape";
 
 		public const int WordsPerRecord = 100;
-		private const int bytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
+		private const int BytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
 
 		public TapeDevice(int id) : base(id, FileNamePrefix) 
 			=> UpdateSettings();
@@ -35,10 +35,10 @@ namespace MixLib.Device
 			=> true;
 
 		public static long CalculateBytePosition(long record) 
-			=> record * bytesPerRecord;
+			=> record * BytesPerRecord;
 
 		public static long CalculateRecordCount(FileStream stream) 
-			=> stream.Length / bytesPerRecord;
+			=> stream.Length / BytesPerRecord;
 
 		public sealed override void UpdateSettings()
 		{
@@ -120,27 +120,27 @@ namespace MixLib.Device
 
 			private new class Instance : StreamStep.Instance
 			{
-				private long mTicksLeft;
-				private const long unset = long.MinValue;
+				private long _ticksLeft;
+				private const long Unset = long.MinValue;
 
 				public Instance(StreamStatus streamStatus) : base(streamStatus) 
-					=> mTicksLeft = unset;
+					=> _ticksLeft = Unset;
 
 				public override bool Tick()
 				{
-					if (mTicksLeft == unset)
+					if (_ticksLeft == Unset)
 					{
 						if (!StreamStatus.PositionSet)
 							InitiateStreamPosition();
 
-						mTicksLeft = (Operands.MValue == 0 
+						_ticksLeft = (Operands.MValue == 0 
 							? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) 
 							: Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
-					mTicksLeft -= 1L;
+					_ticksLeft -= 1L;
 
-					if (mTicksLeft > 0L)
+					if (_ticksLeft > 0L)
 						return false;
 
 					if (Operands.MValue == 0)

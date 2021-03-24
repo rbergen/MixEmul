@@ -132,9 +132,8 @@ namespace MixLib.Instruction
 							module.Registers.OverflowIndicator = _executionStatus.OverflowDetected;
 
 							if (_executionStatus.Mnemonic == FcmpMnemonic)
-							{
 								module.Registers.CompareIndicator = comparatorValue;
-							}
+
 							else
 							{
 								module.Registers.RA.Magnitude = _executionStatus.RAValue.Magnitude;

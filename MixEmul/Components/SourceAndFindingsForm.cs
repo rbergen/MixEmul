@@ -33,7 +33,7 @@ namespace MixGui.Components
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new(typeof(SourceAndFindingsForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceAndFindingsForm));
 			_statusStrip = new System.Windows.Forms.StatusStrip();
 			_toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			_listPanel = new System.Windows.Forms.Panel();
@@ -153,7 +153,7 @@ namespace MixGui.Components
 			Controls.Add(_splitter);
 			Controls.Add(_listPanel);
 			Controls.Add(_statusStrip);
-			Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MinimizeBox = false;
 			MinimumSize = new System.Drawing.Size(400, 224);
 			Name = "SourceAndFindingsForm";

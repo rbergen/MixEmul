@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using MixLib.Device;
 using MixLib.Events;
 
@@ -8,7 +8,8 @@ namespace MixLib
 	{
 		public const int DeviceCount = 21;
 		public const byte CardReaderUnitCode = 16;
-		private readonly MixDevice[] mDevices = new MixDevice[DeviceCount];
+
+		private readonly MixDevice[] _devices = new MixDevice[DeviceCount];
 
 		public TeletypeDevice Teletype { get; private set; }
 
@@ -20,73 +21,68 @@ namespace MixLib
 
 			while (index < 8)
 			{
-				mDevices[index] = new TapeDevice(index);
+				_devices[index] = new TapeDevice(index);
 				index++;
 			}
 
 			while (index < 16)
 			{
-				mDevices[index] = new DiskDevice(index);
+				_devices[index] = new DiskDevice(index);
 				index++;
 			}
 
-			mDevices[CardReaderUnitCode] = new CardReaderDevice(CardReaderUnitCode);
-			mDevices[17] = new CardWriterDevice(17);
-			mDevices[18] = new PrinterDevice(18);
+			_devices[CardReaderUnitCode] = new CardReaderDevice(CardReaderUnitCode);
+			_devices[17] = new CardWriterDevice(17);
+			_devices[18] = new PrinterDevice(18);
 			Teletype = new TeletypeDevice(19);
-			mDevices[19] = Teletype;
-			mDevices[20] = new PaperTapeDevice(20);
+			_devices[19] = Teletype;
+			_devices[20] = new PaperTapeDevice(20);
 
-			foreach (MixDevice device in mDevices)
-			{
+			foreach (MixDevice device in _devices)
 				device.ReportingEvent += Device_Reporting;
-			}
 		}
 
-		public int Count => mDevices.Length;
+		public int Count 
+			=> _devices.Length;
 
-		public MixDevice this[int index] => mDevices[index];
+		public MixDevice this[int index] 
+			=> _devices[index];
 
-		public IEnumerator GetEnumerator() => mDevices.GetEnumerator();
+		public IEnumerator GetEnumerator() 
+			=> _devices.GetEnumerator();
 
-		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) => DeviceReportingEvent?.Invoke(this, args);
+		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) 
+			=> DeviceReportingEvent?.Invoke(this, args);
 
-		private void Device_Reporting(object sender, ReportingEventArgs args) => OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
+		private void Device_Reporting(object sender, ReportingEventArgs args) 
+			=> OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
 
 		public void Reset()
 		{
-			foreach (MixDevice device in mDevices)
-			{
+			foreach (MixDevice device in _devices)
 				device.Reset();
-			}
 		}
 
 		public void Tick()
 		{
-			foreach (MixDevice device in mDevices)
-			{
+			foreach (MixDevice device in _devices)
 				device.Tick();
-			}
 		}
 
 		public void UpdateSettings()
 		{
-			foreach (MixDevice device in mDevices)
-			{
+			foreach (MixDevice device in _devices)
 				device.UpdateSettings();
-			}
 		}
 
 		public bool IsAnyBusy
 		{
 			get
 			{
-				foreach (MixDevice device in mDevices)
+				foreach (MixDevice device in _devices)
 				{
 					if (device.Busy)
-					{
 						return true;
-					}
 				}
 
 				return false;

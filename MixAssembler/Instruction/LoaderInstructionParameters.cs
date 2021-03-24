@@ -35,10 +35,9 @@ namespace MixAssembler.Instruction
 		/// <returns></returns>
 		public InstructionInstanceBase CreateInstance(InstructionBase instruction, AssemblingStatus status)
 		{
-			if (!(instruction is LoaderInstruction))
+			if (instruction is not LoaderInstruction loaderInstruction)
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 
-			var loaderInstruction = (LoaderInstruction)instruction;
 			if (!_value.IsValueDefined(status.LocationCounter))
 			{
 				status.ReportParsingError(LineSection.AddressField, 0, _textLength, "value is not defined");
@@ -57,10 +56,9 @@ namespace MixAssembler.Instruction
 		/// <returns></returns>
 		public static IInstructionParameters ParseAddressField(InstructionBase instruction, string addressField, ParsingStatus status)
 		{
-			if (!(instruction is LoaderInstruction))
+			if (instruction is not LoaderInstruction loaderInstruction)
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 
-			var loaderInstruction = (LoaderInstruction)instruction;
 			IValue address = loaderInstruction.Alphanumeric ? CharacterConstantValue.ParseValue(addressField, 0, status) : WValue.ParseValue(addressField, 0, status);
 
 			if (address == null)

@@ -102,7 +102,7 @@ namespace MixGui.Settings
 				if (File.Exists(path))
 					return JsonSerializer.Deserialize<Configuration>(File.ReadAllBytes(path));
 			}
-			catch (Exception) {}
+			catch (Exception) { }
 
 			return new Configuration();
 		}

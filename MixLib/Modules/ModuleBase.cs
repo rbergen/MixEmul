@@ -16,7 +16,8 @@ namespace MixLib.Modules
 		public abstract RunStatus Status { get; protected set; }
 		public abstract RunMode Mode { get; set; }
 
-		public virtual Devices Devices => null;
+		public virtual Devices Devices 
+			=> null;
 
 		protected bool IsBreakpointSet(int address)
 			=> BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
@@ -40,18 +41,13 @@ namespace MixLib.Modules
 			set
 			{
 				if (mProgramCounter == value)
-				{
 					return;
-				}
 
 				if (value < Memory.MinWordIndex)
-				{
 					value = Memory.MinWordIndex;
-				}
+
 				else if (value > Memory.MaxWordIndex)
-				{
 					value = Memory.MaxWordIndex;
-				}
 
 				mProgramCounter = value;
 			}

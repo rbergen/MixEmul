@@ -19,11 +19,11 @@ namespace MixGui.Components
 
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
-		public WordValueEditor() : this(FullWord.ByteCount, true) {}
+		public WordValueEditor() : this(FullWord.ByteCount, true) { }
 
-		public WordValueEditor(IWord word)  : this(word, true) {}
+		public WordValueEditor(IWord word)  : this(word, true) { }
 
-		public WordValueEditor(int byteCount) : this(byteCount, true) {}
+		public WordValueEditor(int byteCount) : this(byteCount, true) { }
 
 		public WordValueEditor(IWord word, bool includeSign)
 			: this(word.ByteCount, includeSign) => WordValue = word;

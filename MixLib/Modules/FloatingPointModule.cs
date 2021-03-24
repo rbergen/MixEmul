@@ -17,60 +17,67 @@ namespace MixLib.Modules
 		private const string ExponentOverflowSymbol = "EXPOV";
 		private const string FixOverflowSymbol = "FIXOV";
 		private const string DivisionByZeroSymbol = "DIVZRO";
-		private readonly Mix mMix;
-		private readonly Memory mFullMemory;
-		private readonly IMemory mMemory;
-		private readonly Registers mRegisters;
-		private RunStatus mStatus;
-		private int? mAccAddress;
-		private int? mPrenormAddress;
-		private int? mExitAddress;
-		private int? mUnexpectedOverflowAddress;
-		private int? mExponentOverflowAddress;
-		private int? mExponentUnderflowAddress;
-		private int? mFixOverflowAddress;
-		private int? mDivisionByZeroAddress;
+
+		private readonly Mix _mix;
+		private readonly Memory _fullMemory;
+		private readonly IMemory _memory;
+		private readonly Registers _registers;
+		private RunStatus _status;
+		private int? _accAddress;
+		private int? _prenormAddress;
+		private int? _exitAddress;
+		private int? _unexpectedOverflowAddress;
+		private int? _exponentOverflowAddress;
+		private int? _exponentUnderflowAddress;
+		private int? _fixOverflowAddress;
+		private int? _divisionByZeroAddress;
 
 		public SymbolCollection Symbols { get; private set; }
 
 		public FloatingPointModule(Mix mix)
 		{
-			mMix = mix;
-			mFullMemory = new Memory(0, ModuleSettings.FloatingPointMemoryWordCount + 8);
-			mMemory = new MemoryView(mFullMemory, 0, ModuleSettings.FloatingPointMemoryWordCount - 1, 0);
-			mRegisters = new Registers();
+			_mix = mix;
+			_fullMemory = new Memory(0, ModuleSettings.FloatingPointMemoryWordCount + 8);
+			_memory = new MemoryView(_fullMemory, 0, ModuleSettings.FloatingPointMemoryWordCount - 1, 0);
+			_registers = new Registers();
 			ProgramCounter = 0;
-			mStatus = RunStatus.Idle;
+			_status = RunStatus.Idle;
 		}
 
-		public override string ModuleName => MyModuleName;
+		public override string ModuleName 
+			=> MyModuleName;
 
-		public override IMemory Memory => mMemory;
+		public override IMemory Memory 
+			=> _memory;
 
-		public override IMemory FullMemory => mFullMemory;
+		public override IMemory FullMemory 
+			=> _fullMemory;
 
-		public override Registers Registers => mMix.Registers;
+		public override Registers Registers 
+			=> _mix.Registers;
 
-		public override void AddLogLine(LogLine line) => mMix.AddLogLine(line);
+		public override void AddLogLine(LogLine line) 
+			=> _mix.AddLogLine(line);
 
-		public override void ResetProfilingCounts() => mFullMemory.ResetProfilingCounts();
+		public override void ResetProfilingCounts() 
+			=> _fullMemory.ResetProfilingCounts();
 
 		public override RunStatus Status
 		{
-			get => mStatus;
-			protected set => mStatus = value;
+			get => _status;
+			protected set => _status = value;
 		}
 
 		public override void Halt(int code)
 		{
 			Status = RunStatus.Idle;
 			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Halt requested", "Halting Mix"));
-			mMix.Halt(code);
+			_mix.Halt(code);
 		}
 
 		public override void Reset()
 		{
-			mRegisters.Reset();
+			_registers.Reset();
 
 			ProgramCounter = 0;
 			AddLogLine(new LogLine(ModuleName, Severity.Info, "Reset", "Module reset"));
@@ -82,29 +89,29 @@ namespace MixLib.Modules
 
 		public override bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
 		{
-			mMemory.Reset();
+			_memory.Reset();
 			Symbols = null;
-			mAccAddress = null;
-			mPrenormAddress = null;
-			mExitAddress = null;
-			mUnexpectedOverflowAddress = null;
-			mExponentOverflowAddress = null;
-			mExponentUnderflowAddress = null;
-			mFixOverflowAddress = null;
-			mDivisionByZeroAddress = null;
+			_accAddress = null;
+			_prenormAddress = null;
+			_exitAddress = null;
+			_unexpectedOverflowAddress = null;
+			_exponentOverflowAddress = null;
+			_exponentUnderflowAddress = null;
+			_fixOverflowAddress = null;
+			_divisionByZeroAddress = null;
 
 			if (!base.LoadInstructionInstances(instances, symbols))
 				return false;
 
 			Symbols = symbols;
-			mAccAddress = GetSymbolAddress(AccSymbol);
-			mPrenormAddress = GetSymbolAddress(PrenormSymbol);
-			mExitAddress = GetSymbolAddress(ExitSymbol);
-			mUnexpectedOverflowAddress = GetSymbolAddress(UnexpectedOverflowSymbol);
-			mExponentOverflowAddress = GetSymbolAddress(ExponentOverflowSymbol);
-			mExponentUnderflowAddress = GetSymbolAddress(ExponentUnderflowSymbol);
-			mFixOverflowAddress = GetSymbolAddress(FixOverflowSymbol);
-			mDivisionByZeroAddress = GetSymbolAddress(DivisionByZeroSymbol);
+			_accAddress = GetSymbolAddress(AccSymbol);
+			_prenormAddress = GetSymbolAddress(PrenormSymbol);
+			_exitAddress = GetSymbolAddress(ExitSymbol);
+			_unexpectedOverflowAddress = GetSymbolAddress(UnexpectedOverflowSymbol);
+			_exponentOverflowAddress = GetSymbolAddress(ExponentOverflowSymbol);
+			_exponentUnderflowAddress = GetSymbolAddress(ExponentUnderflowSymbol);
+			_fixOverflowAddress = GetSymbolAddress(FixOverflowSymbol);
+			_divisionByZeroAddress = GetSymbolAddress(DivisionByZeroSymbol);
 
 			ValidateAddresses(Severity.Warning);
 
@@ -124,21 +131,19 @@ namespace MixLib.Modules
 
 		private bool ValidateAddresses(Severity severity)
 		{
-			if (mAccAddress == null || mPrenormAddress == null || mExitAddress == null)
+			if (_accAddress == null || _prenormAddress == null || _exitAddress == null)
 			{
 				AddLogLine(new LogLine(MyModuleName, severity, "Symbols unset", string.Format("Symbols {0}, {1} and/or {2} are unset", AccSymbol, PrenormSymbol, ExitSymbol)));
 				return false;
 			}
 
-			return ValidateAddress(severity, AccSymbol, mAccAddress.Value) && ValidateAddress(severity, PrenormSymbol, mPrenormAddress.Value) && ValidateAddress(severity, ExitSymbol, mExitAddress.Value);
+			return ValidateAddress(severity, AccSymbol, _accAddress.Value) && ValidateAddress(severity, PrenormSymbol, _prenormAddress.Value) && ValidateAddress(severity, ExitSymbol, _exitAddress.Value);
 		}
 
 		public bool ValidateCall(string mnemonic)
 		{
 			if (!ValidateAddresses(Severity.Error))
-			{
 				return false;
-			}
 
 			long? instructionValue = GetSymbolAddress(mnemonic);
 			if (instructionValue == null)
@@ -153,7 +158,7 @@ namespace MixLib.Modules
 		public bool PreparePrenorm(IFullWord rAValue)
 		{
 			Registers.RA.LongValue = rAValue.LongValue;
-			ProgramCounter = mPrenormAddress.Value;
+			ProgramCounter = _prenormAddress.Value;
 
 			if (IsBreakpointSet(ProgramCounter))
 			{
@@ -187,7 +192,7 @@ namespace MixLib.Modules
 		public bool PrepareCall(string mnemonic, IFullWord rAValue, IFullWord paramValue)
 		{
 
-			Memory[mAccAddress.Value].LongValue = rAValue.LongValue;
+			Memory[_accAddress.Value].LongValue = rAValue.LongValue;
 			Registers.RA.LongValue = paramValue.LongValue;
 
 			return PrepareCall(mnemonic);
@@ -199,9 +204,7 @@ namespace MixLib.Modules
 			set
 			{
 				if (value != RunMode.Normal)
-				{
 					AddLogLine(new LogLine(ModuleName, Severity.Warning, "Invalid mode", string.Format("Mode {0} not supported by this module, change request ignored", value)));
-				}
 			}
 		}
 
@@ -209,34 +212,34 @@ namespace MixLib.Modules
 		{
 			bool overflowDetected = false;
 
-			if (ProgramCounter == mExitAddress.Value)
+			if (ProgramCounter == _exitAddress.Value)
 			{
 				Status = RunStatus.Idle;
 				return false;
 			}
 
-			if (mUnexpectedOverflowAddress != null && ProgramCounter == mUnexpectedOverflowAddress.Value)
+			if (_unexpectedOverflowAddress != null && ProgramCounter == _unexpectedOverflowAddress.Value)
 			{
 				ReportRuntimeError(string.Format("Overflow set at instruction start"));
 				return true;
 			}
 
-			if (mExponentOverflowAddress != null && ProgramCounter == mExponentOverflowAddress.Value)
+			if (_exponentOverflowAddress != null && ProgramCounter == _exponentOverflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Exponent overflow detected"));
 				overflowDetected = true;
 			}
-			else if (mExponentUnderflowAddress != null && ProgramCounter == mExponentUnderflowAddress.Value)
+			else if (_exponentUnderflowAddress != null && ProgramCounter == _exponentUnderflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Underflow", "Exponent underflow detected"));
 				overflowDetected = true;
 			}
-			else if (mFixOverflowAddress != null && ProgramCounter == mFixOverflowAddress.Value)
+			else if (_fixOverflowAddress != null && ProgramCounter == _fixOverflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Float to fix overflow detected"));
 				overflowDetected = true;
 			}
-			else if (mDivisionByZeroAddress != null && ProgramCounter == mDivisionByZeroAddress.Value)
+			else if (_divisionByZeroAddress != null && ProgramCounter == _divisionByZeroAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Division by zero detected"));
 				overflowDetected = true;
@@ -272,22 +275,18 @@ namespace MixLib.Modules
 			int programCounter = ProgramCounter;
 
 			if (increasePC)
-			{
 				programCounter++;
-			}
 
-			if (programCounter > mMemory.MaxWordIndex)
+			if (programCounter > _memory.MaxWordIndex)
 			{
-				ProgramCounter = mMemory.MaxWordIndex;
+				ProgramCounter = _memory.MaxWordIndex;
 				ReportRuntimeError("Program counter overflow");
 			}
 			else
 			{
 				ProgramCounter = programCounter;
 				if (Status == RunStatus.Running && IsBreakpointSet(programCounter))
-				{
 					ReportBreakpointReached();
-				}
 			}
 
 			return overflowDetected;

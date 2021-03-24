@@ -1,4 +1,4 @@
-using MixLib.Type;
+﻿using MixLib.Type;
 
 namespace MixLib.Instruction
 {
@@ -26,16 +26,16 @@ namespace MixLib.Instruction
 		/// </summary>
 		public class Instance : InstructionInstanceBase
 		{
-			private readonly LoaderInstruction mInstruction;
+			private readonly LoaderInstruction _instruction;
 			public FullWord Value { get; private set; }
 
 			public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)
 			{
-				mInstruction = instruction;
+				_instruction = instruction;
 				Value = new FullWord(sign, magnitude);
 			}
 
-			public override InstructionBase Instruction => mInstruction;
+			public override InstructionBase Instruction => _instruction;
 		}
 
 		public enum Operations

@@ -1,4 +1,4 @@
-using MixLib.Device;
+﻿using MixLib.Device;
 using MixLib.Misc;
 
 namespace MixLib.Events
@@ -7,7 +7,7 @@ namespace MixLib.Events
 	{
 		public MixDevice ReportingDevice { get; private set; }
 
-		public DeviceReportingEventArgs(MixDevice reportingDevice, Severity severity, string message)
-			: base(severity, message) => ReportingDevice = reportingDevice;
+		public DeviceReportingEventArgs(MixDevice reportingDevice, Severity severity, string message) : base(severity, message) 
+			=> ReportingDevice = reportingDevice;
 	}
 }
