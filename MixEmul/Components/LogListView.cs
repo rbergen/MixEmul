@@ -1,23 +1,24 @@
-using MixGui.Events;
-using MixLib.Misc;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Events;
+using MixLib.Misc;
 
 namespace MixGui.Components
 {
 	public class LogListView : UserControl
 	{
-		const int moduleFieldIndex = 1;
-		const int addressFieldIndex = 2;
-		const int noAddress = -1;
-		readonly ColumnHeader mSeverityColumn = new();
-		readonly ColumnHeader mModuleColumn = new();
-		readonly ColumnHeader mAddressColumn = new();
-		readonly ColumnHeader mTitleColumn = new();
-		readonly ColumnHeader mMessageColumn = new();
-		readonly Button mClearButton = new();
-		readonly ListView mListView = new();
+		private const int ModuleFieldIndex = 1;
+		private const int AddressFieldIndex = 2;
+		private const int NoAddress = -1;
+
+		private readonly ColumnHeader _severityColumn = new();
+		private readonly ColumnHeader _moduleColumn = new();
+		private readonly ColumnHeader _addressColumn = new();
+		private readonly ColumnHeader _titleColumn = new();
+		private readonly ColumnHeader _messageColumn = new();
+		private readonly Button _clearButton = new();
+		private readonly ListView _listView = new();
 
 		public event AddressSelectedHandler AddressSelected;
 
@@ -25,72 +26,65 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			mSeverityColumn.Text = "Severity";
-			mSeverityColumn.Width = 70;
+			_severityColumn.Text = "Severity";
+			_severityColumn.Width = 70;
 
-			mModuleColumn.Text = "Module";
-			mSeverityColumn.Width = 70;
+			_moduleColumn.Text = "Module";
+			_severityColumn.Width = 70;
 
-			mAddressColumn.Text = "Address";
-			mAddressColumn.Width = 50;
+			_addressColumn.Text = "Address";
+			_addressColumn.Width = 50;
 
-			mTitleColumn.Text = "Title";
-			mTitleColumn.Width = 100;
+			_titleColumn.Text = "Title";
+			_titleColumn.Width = 100;
 
-			mMessageColumn.Text = "Message";
-			mMessageColumn.Width = 400;
+			_messageColumn.Text = "Message";
+			_messageColumn.Width = 400;
 
-			mListView.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
-			mListView.Columns.AddRange(new ColumnHeader[] { mSeverityColumn, mModuleColumn, mAddressColumn, mTitleColumn, mMessageColumn });
-			mListView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-			mListView.FullRowSelect = true;
-			mListView.GridLines = true;
-			mListView.Location = new Point(0, 0);
-			mListView.MultiSelect = false;
-			mListView.Name = "mListView";
-			mListView.TabIndex = 0;
-			mListView.View = View.Details;
-			mListView.BorderStyle = BorderStyle.FixedSingle;
-			mListView.DoubleClick += This_DoubleClick;
-			mListView.KeyPress += MListView_KeyPress;
+			_listView.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
+			_listView.Columns.AddRange(new ColumnHeader[] { _severityColumn, _moduleColumn, _addressColumn, _titleColumn, _messageColumn });
+			_listView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+			_listView.FullRowSelect = true;
+			_listView.GridLines = true;
+			_listView.Location = new Point(0, 0);
+			_listView.MultiSelect = false;
+			_listView.Name = "mListView";
+			_listView.TabIndex = 0;
+			_listView.View = View.Details;
+			_listView.BorderStyle = BorderStyle.FixedSingle;
+			_listView.DoubleClick += This_DoubleClick;
+			_listView.KeyPress += ListView_KeyPress;
 
-			mClearButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-			mClearButton.Name = "mClearButton";
-			mClearButton.TabIndex = 1;
-			mClearButton.Text = "&Clear";
-			mClearButton.Location = new Point(Width - mClearButton.Width, 0);
-			mClearButton.FlatStyle = FlatStyle.Flat;
-			mClearButton.Click += MClearButton_Click;
+			_clearButton.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+			_clearButton.Name = "mClearButton";
+			_clearButton.TabIndex = 1;
+			_clearButton.Text = "&Clear";
+			_clearButton.Location = new Point(Width - _clearButton.Width, 0);
+			_clearButton.FlatStyle = FlatStyle.Flat;
+			_clearButton.Click += ClearButton_Click;
 
-			mListView.Size = new Size(mClearButton.Width - 8, Size.Height);
+			_listView.Size = new Size(_clearButton.Width - 8, Size.Height);
 
-			Controls.Add(mListView);
-			Controls.Add(mClearButton);
+			Controls.Add(_listView);
+			Controls.Add(_clearButton);
 			Name = "mLogListView";
+
 			ResumeLayout(false);
 		}
 
 		public void AddLogLine(LogLine line)
-		{
-			mListView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
-		}
+			=> _listView.Items.Insert(0, new ListViewItem(new string[] { line.Severity.ToString(), line.ModuleName ?? "", (line.Address == -1) ? "" : line.Address.ToString("D4"), line.Title ?? "", line.Message ?? "" }, (int)line.Severity));
 
 		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			AddressSelected?.Invoke(this, args);
-		}
+			=> AddressSelected?.Invoke(this, args);
 
-		void This_DoubleClick(object sender, EventArgs args)
-		{
-			HandleAddressSelected();
-		}
+		private void This_DoubleClick(object sender, EventArgs args)
+			=> HandleAddressSelected();
 
-		void MClearButton_Click(object sender, EventArgs e)
-		{
-			mListView.Items.Clear();
-		}
+		private void ClearButton_Click(object sender, EventArgs e)
+			=> _listView.Items.Clear();
 
-		void MListView_KeyPress(object sender, KeyPressEventArgs e)
+		private void ListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter)
 			{
@@ -99,27 +93,24 @@ namespace MixGui.Components
 			}
 		}
 
-		void HandleAddressSelected()
+		private void HandleAddressSelected()
 		{
 			int selectedAddress = SelectedAddress;
-			if (selectedAddress != noAddress)
-			{
+
+			if (selectedAddress != NoAddress)
 				OnAddressSelected(new AddressSelectedEventArgs(selectedAddress));
-			}
 		}
 
 		public string SelectedModule
 		{
 			get
 			{
-				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
+				ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
 
 				if (selectedItems.Count == 0)
-				{
 					return null;
-				}
 
-				string module = selectedItems[0].SubItems[moduleFieldIndex].Text;
+				string module = selectedItems[0].SubItems[ModuleFieldIndex].Text;
 
 				return string.IsNullOrEmpty(module) ? null : module;
 			}
@@ -129,21 +120,17 @@ namespace MixGui.Components
 		{
 			get
 			{
-				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
+				ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
 
-				if (selectedItems.Count == 0 || selectedItems[0].SubItems[addressFieldIndex].Text == "")
-				{
-					return noAddress;
-				}
+				if (selectedItems.Count == 0 || selectedItems[0].SubItems[AddressFieldIndex].Text == "")
+					return NoAddress;
 
-				int address = noAddress;
+				int address = NoAddress;
 				try
 				{
-					address = int.Parse(selectedItems[0].SubItems[addressFieldIndex].Text);
+					address = int.Parse(selectedItems[0].SubItems[AddressFieldIndex].Text);
 				}
-				catch (FormatException)
-				{
-				}
+				catch (FormatException) { }
 
 				return address;
 			}
@@ -151,8 +138,8 @@ namespace MixGui.Components
 
 		public ImageList SeverityImageList
 		{
-			get => mListView.SmallImageList;
-			set => mListView.SmallImageList = value;
+			get => _listView.SmallImageList;
+			set => _listView.SmallImageList = value;
 		}
 	}
 }

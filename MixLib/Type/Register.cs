@@ -3,19 +3,13 @@ namespace MixLib.Type
 
 	public abstract class Register : Word
 	{
-		readonly int mPaddingByteCount;
+		private readonly int mPaddingByteCount;
 
-		protected Register(int byteCount, int paddingByteCount) : base(byteCount)
-		{
-			mPaddingByteCount = paddingByteCount;
-		}
+		protected Register(int byteCount, int paddingByteCount) : base(byteCount) => mPaddingByteCount = paddingByteCount;
 
 		public int ByteCountWithPadding => mPaddingByteCount + ByteCount;
 
-		public MixByte GetByteWithPadding(int index)
-		{
-			return index < mPaddingByteCount ? 0 : base[index - mPaddingByteCount];
-		}
+		public MixByte GetByteWithPadding(int index) => index < mPaddingByteCount ? 0 : base[index - mPaddingByteCount];
 
 		public FullWord FullWordValue
 		{

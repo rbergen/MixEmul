@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -6,21 +6,12 @@ namespace MixGui.Components
 {
 	public partial class LongValueToolStripTextBox : ToolStripControlHost
 	{
-		public LongValueToolStripTextBox(IContainer container)
-			: this()
-		{
-			container.Add(this);
-		}
+		public LongValueToolStripTextBox(IContainer container) : this()
+			=> container.Add(this);
 
-		public LongValueToolStripTextBox()
-			: this(long.MinValue, long.MaxValue, 0L)
-		{
-		}
+		public LongValueToolStripTextBox() : this(long.MinValue, long.MaxValue, 0L) { }
 
-		public LongValueToolStripTextBox(long minValue, long maxValue)
-			: this(minValue, maxValue, 0L)
-		{
-		}
+		public LongValueToolStripTextBox(long minValue, long maxValue) : this(minValue, maxValue, 0L) { }
 
 		public LongValueToolStripTextBox(long minValue, long maxValue, long value)
 			: base(new LongValueTextBox(minValue, maxValue, value))
@@ -39,14 +30,14 @@ namespace MixGui.Components
 			Control.SizeChanged += Control_SizeChanged;
 		}
 
-		public LongValueTextBox LongValueTextBox => (LongValueTextBox)Control;
+		public LongValueTextBox LongValueTextBox
+			=> (LongValueTextBox)Control;
 
-		public bool SupportSign => ((LongValueTextBox)Control).SupportSign;
+		public bool SupportSign
+			=> ((LongValueTextBox)Control).SupportSign;
 
-		void Control_SizeChanged(object sender, EventArgs e)
-		{
-			Size = Control.Size;
-		}
+		private void Control_SizeChanged(object sender, EventArgs e)
+			=> Size = Control.Size;
 
 		public long LongValue
 		{

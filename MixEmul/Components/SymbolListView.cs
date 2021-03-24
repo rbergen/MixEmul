@@ -1,17 +1,17 @@
+﻿using System;
+using System.Windows.Forms;
 using MixAssembler.Symbol;
 using MixGui.Events;
 using MixLib.Type;
-using System;
-using System.Windows.Forms;
 
 namespace MixGui.Components
 {
 	public partial class SymbolListView : UserControl
 	{
-		SymbolCollection mSymbols;
+		private SymbolCollection _symbols;
 
-		const int nameFieldIndex = 0;
-		const int valueFieldIndex = 1;
+		private const int NameFieldIndex = 0;
+		private const int ValueFieldIndex = 1;
 
 		public int MemoryMinIndex { get; set; } = 0;
 		public int MemoryMaxIndex { get; set; } = 0;
@@ -20,139 +20,120 @@ namespace MixGui.Components
 
 		public SymbolListView()
 		{
-			mSymbols = null;
+			_symbols = null;
 
 			InitializeComponent();
 
-			mSymbolValueTextBox.MinValue = ValueSymbol.MinValue;
-			mSymbolValueTextBox.MaxValue = ValueSymbol.MaxValue;
-			mSymbolNameTextBox.MaxLength = ValueSymbol.MaxNameLength;
+			_symbolValueTextBox.MinValue = ValueSymbol.MinValue;
+			_symbolValueTextBox.MaxValue = ValueSymbol.MaxValue;
+			_symbolNameTextBox.MaxLength = ValueSymbol.MaxNameLength;
 
-			mSymbolNameTextBox.TextChanged += MSymbolNameTextBox_TextChanged;
-			mSymbolValueTextBox.TextChanged += MSymbolValueTextBox_TextChanged;
-			mListView.SelectedIndexChanged += MListView_SelectedIndexChanged;
+			_symbolNameTextBox.TextChanged += SymbolNameTextBox_TextChanged;
+			_symbolValueTextBox.TextChanged += SymbolValueTextBox_TextChanged;
+			_listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
 		}
 
-		void MSymbolValueTextBox_TextChanged(object sender, EventArgs e)
-		{
-			SetEnabledStates();
-		}
+		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e) 
+			=> SetEnabledStates();
 
-		void MSymbolNameTextBox_TextChanged(object sender, EventArgs e)
-		{
-			SetEnabledStates();
-		}
+		private void SymbolNameTextBox_TextChanged(object sender, EventArgs e) 
+			=> SetEnabledStates();
 
-		void SetEnabledStates()
-		{
-			SetEnabledStates(true);
-		}
+		private void SetEnabledStates() 
+			=> SetEnabledStates(true);
 
-		void MListView_DoubleClick(object sender, EventArgs e)
-		{
-			ValueSelected();
-		}
+		private void ListView_DoubleClick(object sender, EventArgs e) 
+			=> ValueSelected();
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
-		{
-			AddressSelected?.Invoke(this, args);
-		}
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) 
+			=> AddressSelected?.Invoke(this, args);
 
-		void SetEnabledStates(bool updateSelectedItem)
+		private void SetEnabledStates(bool updateSelectedItem)
 		{
-			string symbolName = mSymbolNameTextBox.Text;
-			mSetButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && mSymbolValueTextBox.TextLength > 0;
-			mUnsetButton.Enabled = mSymbols != null && mSymbols.Contains(symbolName);
+			string symbolName = _symbolNameTextBox.Text;
+			_setButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && _symbolValueTextBox.TextLength > 0;
+			_unsetButton.Enabled = _symbols != null && _symbols.Contains(symbolName);
 
-			if (updateSelectedItem)
+			if (!updateSelectedItem)
+				return;
+
+			if (_unsetButton.Enabled)
 			{
-				if (mUnsetButton.Enabled)
-				{
-					ListViewItem symbolItem = mListView.Items[symbolName];
-					symbolItem.Selected = true;
-					symbolItem.EnsureVisible();
-				}
-				else
-				{
-					foreach (ListViewItem item in mListView.Items)
-					{
-						item.Selected = false;
-					}
-				}
+				ListViewItem symbolItem = _listView.Items[symbolName];
+				symbolItem.Selected = true;
+				symbolItem.EnsureVisible();
+			}
+			else
+			{
+				foreach (ListViewItem item in _listView.Items)
+					item.Selected = false;
 			}
 		}
 
 		public SymbolCollection Symbols
 		{
-			get => mSymbols;
+			get => _symbols;
 
 			set
 			{
-				if (mSymbols == value)
-				{
+				if (_symbols == value)
 					return;
-				}
 
-				mSymbols = value;
+				_symbols = value;
 
-				mListView.BeginUpdate();
-				mListView.Items.Clear();
-				mSymbolNameTextBox.Text = "";
-				mSymbolValueTextBox.Text = "";
+				_listView.BeginUpdate();
+				_listView.Items.Clear();
+				_symbolNameTextBox.Text = "";
+				_symbolValueTextBox.Text = "";
 
-				if (mSymbols != null)
+				if (_symbols != null)
 				{
 					SuspendLayout();
 
-					foreach (SymbolBase symbol in mSymbols)
-					{
+					foreach (SymbolBase symbol in _symbols)
 						ShowSymbol(symbol);
-					}
 
 					ResumeLayout();
 				}
 
-				mListView.EndUpdate();
+				_listView.EndUpdate();
 			}
 		}
 
 		public void AddSymbol(SymbolBase symbol)
 		{
-			if (mSymbols == null)
-			{
-				mSymbols = new SymbolCollection();
-			}
+			if (_symbols == null)
+				_symbols = new SymbolCollection();
 
-			mSymbols.Add(symbol);
+			_symbols.Add(symbol);
 
 			ShowSymbol(symbol);
 		}
 
-		void ShowSymbol(SymbolBase symbol)
+		private void ShowSymbol(SymbolBase symbol)
 		{
 			if (symbol is ValueSymbol valueSymbol)
 			{
 				var valueText = valueSymbol.Magnitude.ToString();
 				if (valueSymbol.Sign.IsNegative())
-				{
 					valueText = '-' + valueText;
-				}
 
 				var viewItem = new ListViewItem(new string[] { valueSymbol.Name, valueText })
 				{
 					Name = valueSymbol.Name
 				};
-				mListView.Items.Add(viewItem);
+
+				_listView.Items.Add(viewItem);
 			}
 		}
 
 		public void Reset()
 		{
-			mSymbols = null;
+			_symbols = null;
 
 			SuspendLayout();
 
-			mListView.Items.Clear();
+			_listView.Items.Clear();
 
 			ResumeLayout();
 		}
@@ -161,36 +142,30 @@ namespace MixGui.Components
 		{
 			get
 			{
-				ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
+				ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
 
 				if (selectedItems.Count == 0)
-				{
 					return long.MinValue;
-				}
 
 				long value = long.MinValue;
 				try
 				{
-					value = long.Parse(selectedItems[0].SubItems[valueFieldIndex].Text);
+					value = long.Parse(selectedItems[0].SubItems[ValueFieldIndex].Text);
 				}
-				catch (FormatException)
-				{
-				}
+				catch (FormatException) {}
 
 				return value;
 			}
 		}
 
-		void ValueSelected()
+		private void ValueSelected()
 		{
 			long selectedValue = SelectedValue;
 			if (selectedValue >= MemoryMinIndex && selectedValue <= MemoryMaxIndex)
-			{
 				OnAddressSelected(new AddressSelectedEventArgs((int)selectedValue));
-			}
 		}
 
-		void MListView_KeyPress(object sender, KeyPressEventArgs e)
+		private void ListView_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Enter)
 			{
@@ -199,93 +174,82 @@ namespace MixGui.Components
 			}
 		}
 
-		void MSetButton_Click(object sender, EventArgs e)
+		private void SetButton_Click(object sender, EventArgs e)
 		{
-			if (mSymbols == null)
-			{
-				mSymbols = new SymbolCollection();
-			}
+			if (_symbols == null)
+				_symbols = new SymbolCollection();
 
-			string symbolName = mSymbolNameTextBox.Text;
-			long symbolMagnitude = mSymbolValueTextBox.Magnitude;
-			Word.Signs symbolSign = mSymbolValueTextBox.Sign;
-			SymbolBase symbol = mSymbols[symbolName];
+			string symbolName = _symbolNameTextBox.Text;
+			long symbolMagnitude = _symbolValueTextBox.Magnitude;
+			Word.Signs symbolSign = _symbolValueTextBox.Sign;
+			SymbolBase symbol = _symbols[symbolName];
 
 			if (symbol != null)
 			{
 				if (symbol is not ValueSymbol valueSymbol)
-				{
 					return;
-				}
 
 				valueSymbol.SetValue(symbolSign, symbolMagnitude);
 				var valueText = symbolMagnitude.ToString();
-				if (symbolSign.IsNegative())
-				{
-					valueText = '-' + valueText;
-				}
 
-				mListView.Items[symbolName].SubItems[valueFieldIndex].Text = valueText;
+				if (symbolSign.IsNegative())
+					valueText = '-' + valueText;
+
+				_listView.Items[symbolName].SubItems[ValueFieldIndex].Text = valueText;
 			}
 			else
 			{
 				if (ValueSymbol.ParseDefinition(symbolName) is not ValueSymbol valueSymbol)
-				{
 					return;
-				}
 
 				valueSymbol.SetValue(symbolSign, symbolMagnitude);
 
-				mSymbols.Add(valueSymbol);
+				_symbols.Add(valueSymbol);
 				ShowSymbol(valueSymbol);
 			}
 
 			SetEnabledStates();
 		}
 
-		void MUnsetButton_Click(object sender, EventArgs e)
+		private void UnsetButton_Click(object sender, EventArgs e)
 		{
-			if (mSymbols == null)
-			{
+			if (_symbols == null)
 				return;
-			}
 
-			string symbolName = mSymbolNameTextBox.Text;
-			mSymbols.Remove(symbolName);
-			mListView.Items.RemoveByKey(symbolName);
+			string symbolName = _symbolNameTextBox.Text;
+			_symbols.Remove(symbolName);
+			_listView.Items.RemoveByKey(symbolName);
 
 			SetEnabledStates();
 		}
 
-		void MListView_SelectedIndexChanged(object sender, EventArgs e)
+		private void ListView_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ListView.SelectedListViewItemCollection selectedItems = mListView.SelectedItems;
+			ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
 
 			if (selectedItems.Count == 0)
-			{
 				return;
-			}
 
 			ListViewItem selectedItem = selectedItems[0];
-			mSymbolNameTextBox.Text = selectedItem.SubItems[nameFieldIndex].Text;
+			_symbolNameTextBox.Text = selectedItem.SubItems[NameFieldIndex].Text;
 			long magnitude = 0;
 			Word.Signs sign = Word.Signs.Positive;
 			try
 			{
-				string valueText = selectedItem.SubItems[valueFieldIndex].Text;
+				string valueText = selectedItem.SubItems[ValueFieldIndex].Text;
+
 				if (valueText[0] == '-')
 				{
 					sign = Word.Signs.Negative;
 					valueText = valueText[1..];
 				}
+
 				magnitude = long.Parse(valueText);
 			}
-			catch (FormatException)
-			{
-			}
+			catch (FormatException) {}
 
-			mSymbolValueTextBox.Magnitude = magnitude;
-			mSymbolValueTextBox.Sign = sign;
+			_symbolValueTextBox.Magnitude = magnitude;
+			_symbolValueTextBox.Sign = sign;
 			SetEnabledStates(false);
 		}
 	}

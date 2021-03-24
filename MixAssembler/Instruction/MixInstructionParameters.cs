@@ -1,7 +1,7 @@
+﻿using System;
 using MixAssembler.Value;
 using MixLib.Instruction;
 using MixLib.Type;
-using System;
 
 namespace MixAssembler.Instruction
 {
@@ -13,40 +13,40 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class MixInstructionParameters : IInstructionParameters
 	{
-		private readonly IValue mAddress;
-		private readonly IValue mField;
-		private readonly int mFieldPartCharIndex;
-		private readonly IValue mIndex;
-		private readonly int mIndexPartCharIndex;
-		private readonly int mTextLength;
+		private readonly IValue _address;
+		private readonly IValue _field;
+		private readonly int _fieldPartCharIndex;
+		private readonly IValue _index;
+		private readonly int _indexPartCharIndex;
+		private readonly int _textLength;
 
 		private MixInstructionParameters(IValue address, int indexPartCharIndex, IValue index, int fieldPartCharIndex, IValue field, int textLength)
 		{
-			mAddress = address;
-			mIndex = index;
-			mField = field;
-			mIndexPartCharIndex = indexPartCharIndex;
-			mFieldPartCharIndex = fieldPartCharIndex;
-			mTextLength = textLength;
+			_address = address;
+			_index = index;
+			_field = field;
+			_indexPartCharIndex = indexPartCharIndex;
+			_fieldPartCharIndex = fieldPartCharIndex;
+			_textLength = textLength;
 		}
 
 		private bool AreValuesDefined(AssemblingStatus status)
 		{
-			if (!mAddress.IsValueDefined(status.LocationCounter))
+			if (!_address.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, 0, mIndexPartCharIndex, "address value undefined");
+				status.ReportParsingError(LineSection.AddressField, 0, _indexPartCharIndex, "address value undefined");
 				return false;
 			}
 
-			if (!mIndex.IsValueDefined(status.LocationCounter))
+			if (!_index.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, mIndexPartCharIndex, mFieldPartCharIndex - mIndexPartCharIndex, "index value undefined");
+				status.ReportParsingError(LineSection.AddressField, _indexPartCharIndex, _fieldPartCharIndex - _indexPartCharIndex, "index value undefined");
 				return false;
 			}
 
-			if (!mAddress.IsValueDefined(status.LocationCounter))
+			if (!_address.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, mFieldPartCharIndex, mTextLength - mFieldPartCharIndex, "field value undefined");
+				status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "field value undefined");
 				return false;
 			}
 
@@ -69,11 +69,11 @@ namespace MixAssembler.Instruction
 			if (!AreValuesDefined(status))
 				return null;
 
-			var addressMagnitude = mAddress.GetMagnitude(status.LocationCounter);
+			var addressMagnitude = _address.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
 			if (addressMagnitude > word.MaxMagnitude)
 			{
-				status.ReportError(LineSection.AddressField, 0, mIndexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
+				status.ReportError(LineSection.AddressField, 0, _indexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
 				return null;
 			}
 
@@ -84,13 +84,13 @@ namespace MixAssembler.Instruction
 
 			var instructionWord = new FullWord
 			{
-				Sign = mAddress.GetSign(status.LocationCounter)
+				Sign = _address.GetSign(status.LocationCounter)
 			};
 
 			for (int i = 0; i < word.ByteCount; i++)
 				instructionWord[i] = word[i];
 
-			instructionWord[MixInstruction.IndexByte] = (int)mIndex.GetValue(status.LocationCounter);
+			instructionWord[MixInstruction.IndexByte] = (int)_index.GetValue(status.LocationCounter);
 			instructionWord[MixInstruction.FieldSpecByte] = fieldSpecValue;
 			instructionWord[MixInstruction.OpcodeByte] = mixInstruction.Opcode;
 
@@ -102,7 +102,7 @@ namespace MixAssembler.Instruction
 
 		private MixByte GetFieldSpecValue(AssemblingStatus status, MixInstruction mixInstruction)
 		{
-			var fieldValue = mField.GetValue(status.LocationCounter);
+			var fieldValue = _field.GetValue(status.LocationCounter);
 
 			switch (mixInstruction.MetaFieldSpec.Presence)
 			{
@@ -110,7 +110,7 @@ namespace MixAssembler.Instruction
 					if (fieldValue == long.MinValue)
 						return mixInstruction.FieldSpec.MixByteValue;
 
-					status.ReportParsingError(LineSection.AddressField, mFieldPartCharIndex, mTextLength - mFieldPartCharIndex, "fieldspec forbidden for this instruction");
+					status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "fieldspec forbidden for this instruction");
 					return null;
 
 				case MetaFieldSpec.Presences.Optional:
@@ -123,7 +123,7 @@ namespace MixAssembler.Instruction
 					if (fieldValue != long.MinValue)
 						return (int)fieldValue;
 
-					status.ReportParsingError(LineSection.AddressField, mFieldPartCharIndex, mTextLength - mFieldPartCharIndex, "fieldspec mandatory for this instruction");
+					status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "fieldspec mandatory for this instruction");
 					return null;
 			}
 			return null;
@@ -187,17 +187,17 @@ namespace MixAssembler.Instruction
 				{
 					case InstanceValidationError.Sources.Address:
 						causeStartIndex = 0;
-						causeLength = mIndexPartCharIndex;
+						causeLength = _indexPartCharIndex;
 						break;
 
 					case InstanceValidationError.Sources.Index:
-						causeStartIndex = mIndexPartCharIndex;
-						causeLength = mFieldPartCharIndex - mIndexPartCharIndex;
+						causeStartIndex = _indexPartCharIndex;
+						causeLength = _fieldPartCharIndex - _indexPartCharIndex;
 						break;
 
 					case InstanceValidationError.Sources.FieldSpec:
-						causeStartIndex = mFieldPartCharIndex;
-						causeLength = mTextLength - mFieldPartCharIndex;
+						causeStartIndex = _fieldPartCharIndex;
+						causeLength = _textLength - _fieldPartCharIndex;
 						break;
 				}
 

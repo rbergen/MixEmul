@@ -5,12 +5,11 @@ namespace MixGui.Utils
 {
 	public static class ControlHelper
 	{
-		const int WM_SETREDRAW = 0x000B;
+		private const int WM_SETREDRAW = 0x000B;
 
 		public static void SuspendDrawing(this Control control)
 		{
-			var msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero,
-					IntPtr.Zero);
+			var msgSuspendUpdate = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
 
 			var window = NativeWindow.FromHandle(control.Handle);
 			window.DefWndProc(ref msgSuspendUpdate);
@@ -20,8 +19,7 @@ namespace MixGui.Utils
 		{
 			// Create a C "true" boolean as an IntPtr
 			var wparam = new IntPtr(1);
-			var msgResumeUpdate = Message.Create(control.Handle, WM_SETREDRAW, wparam,
-					IntPtr.Zero);
+			var msgResumeUpdate = Message.Create(control.Handle, WM_SETREDRAW, wparam, IntPtr.Zero);
 
 			var window = NativeWindow.FromHandle(control.Handle);
 			window.DefWndProc(ref msgResumeUpdate);
@@ -34,10 +32,9 @@ namespace MixGui.Utils
 			while (container != null)
 			{
 				Control activeControl = container.ActiveControl;
+
 				if (activeControl == control)
-				{
 					return true;
-				}
 
 				container = activeControl as ContainerControl;
 			}
@@ -50,9 +47,7 @@ namespace MixGui.Utils
 			if (textBox.Focus())
 			{
 				if (index.HasValue)
-				{
 					textBox.Select(index.Value > textBox.TextLength ? textBox.TextLength : index.Value, 0);
-				}
 
 				return true;
 			}

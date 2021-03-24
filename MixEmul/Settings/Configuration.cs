@@ -1,20 +1,21 @@
-using MixLib.Device.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Windows.Forms;
+using MixLib.Device.Settings;
 
 namespace MixGui.Settings
 {
 	[Serializable]
 	public class Configuration : ISerializable, IDeserializationCallback
 	{
-		const string fileName = "config.bin";
-		readonly SerializationInfo mSerializationInfo;
-		string mDeviceFilesDirectory;
+		private const string FileName = "config.bin";
+
+		private readonly SerializationInfo _serializationInfo;
+		private string _deviceFilesDirectory;
 
 		public Dictionary<string, Color> Colors { get; private set; }
 		public Dictionary<int, string> DeviceFilePaths { get; private set; }
@@ -52,27 +53,19 @@ namespace MixGui.Settings
 			FillEmptyMembers();
 		}
 
-		protected Configuration(SerializationInfo info, StreamingContext context)
-		{
-			mSerializationInfo = info;
-		}
+		protected Configuration(SerializationInfo info, StreamingContext context) 
+			=> _serializationInfo = info;
 
-		void FillEmptyMembers()
+		private void FillEmptyMembers()
 		{
 			if (Colors == null)
-			{
 				Colors = new Dictionary<string, Color>();
-			}
 
 			if (TickCounts == null)
-			{
 				TickCounts = new Dictionary<string, int>();
-			}
 
 			if (DeviceFilePaths == null)
-			{
 				DeviceFilePaths = new Dictionary<int, string>();
-			}
 		}
 
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -104,34 +97,30 @@ namespace MixGui.Settings
 		{
 			try
 			{
-				var path = Path.Combine(directory, fileName);
+				var path = Path.Combine(directory, FileName);
 
 				if (File.Exists(path))
-				{
 					return JsonSerializer.Deserialize<Configuration>(File.ReadAllBytes(path));
-				}
 			}
-			catch (Exception) { }
+			catch (Exception) {}
 
 			return new Configuration();
 		}
 
 		public void Save(string directory)
 		{
-			using var serializationStream = new FileStream(Path.Combine(directory, fileName), FileMode.Create);
+			using var serializationStream = new FileStream(Path.Combine(directory, FileName), FileMode.Create);
 			JsonSerializer.Serialize(new Utf8JsonWriter(serializationStream), this);
 			serializationStream.Close();
 		}
 
 		public string DeviceFilesDirectory
 		{
-			get => mDeviceFilesDirectory;
+			get => _deviceFilesDirectory;
 			set
 			{
 				if (value == null || Directory.Exists(value))
-				{
-					mDeviceFilesDirectory = value;
-				}
+					_deviceFilesDirectory = value;
 			}
 		}
 
@@ -150,127 +139,127 @@ namespace MixGui.Settings
 
 			try
 			{
-				Colors = (Dictionary<string, Color>)mSerializationInfo.GetValue("mColors", typeof(Dictionary<string, Color>));
+				Colors = (Dictionary<string, Color>)_serializationInfo.GetValue("mColors", typeof(Dictionary<string, Color>));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TickCounts = (Dictionary<string, int>)mSerializationInfo.GetValue("mTickCounts", typeof(Dictionary<string, int>));
+				TickCounts = (Dictionary<string, int>)_serializationInfo.GetValue("mTickCounts", typeof(Dictionary<string, int>));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceFilePaths = (Dictionary<int, string>)mSerializationInfo.GetValue("mDeviceFiles", typeof(Dictionary<int, string>));
+				DeviceFilePaths = (Dictionary<int, string>)_serializationInfo.GetValue("mDeviceFiles", typeof(Dictionary<int, string>));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceFilesDirectory = mSerializationInfo.GetString("mDeviceDirectory");
+				DeviceFilesDirectory = _serializationInfo.GetString("mDeviceDirectory");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceEditorWindowLocation = (Point)mSerializationInfo.GetValue("mDeviceEditorWindowLocation", typeof(Point));
+				DeviceEditorWindowLocation = (Point)_serializationInfo.GetValue("mDeviceEditorWindowLocation", typeof(Point));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceEditorWindowSize = (Size)mSerializationInfo.GetValue("mDeviceEditorWindowSize", typeof(Size));
+				DeviceEditorWindowSize = (Size)_serializationInfo.GetValue("mDeviceEditorWindowSize", typeof(Size));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceEditorVisible = mSerializationInfo.GetBoolean("mDeviceEditorVisible");
+				DeviceEditorVisible = _serializationInfo.GetBoolean("mDeviceEditorVisible");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				MainWindowLocation = (Point)mSerializationInfo.GetValue("mMainWindowLocation", typeof(Point));
+				MainWindowLocation = (Point)_serializationInfo.GetValue("mMainWindowLocation", typeof(Point));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				MainWindowSize = (Size)mSerializationInfo.GetValue("mMainWindowSize", typeof(Size));
+				MainWindowSize = (Size)_serializationInfo.GetValue("mMainWindowSize", typeof(Size));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				MainWindowState = (FormWindowState)mSerializationInfo.GetValue("mMainWindowState", typeof(FormWindowState));
+				MainWindowState = (FormWindowState)_serializationInfo.GetValue("mMainWindowState", typeof(FormWindowState));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TeletypeOnTop = mSerializationInfo.GetBoolean("mTeletypeOnTop");
+				TeletypeOnTop = _serializationInfo.GetBoolean("mTeletypeOnTop");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TeletypeWindowLocation = (Point)mSerializationInfo.GetValue("mTeletypeWindowLocation", typeof(Point));
+				TeletypeWindowLocation = (Point)_serializationInfo.GetValue("mTeletypeWindowLocation", typeof(Point));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TeletypeWindowSize = (Size)mSerializationInfo.GetValue("mTeletypeWindowSize", typeof(Size));
+				TeletypeWindowSize = (Size)_serializationInfo.GetValue("mTeletypeWindowSize", typeof(Size));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TeletypeVisible = mSerializationInfo.GetBoolean("mTeletypeVisible");
+				TeletypeVisible = _serializationInfo.GetBoolean("mTeletypeVisible");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				TeletypeEchoInput = mSerializationInfo.GetBoolean("mTeletypeEchoInput");
+				TeletypeEchoInput = _serializationInfo.GetBoolean("mTeletypeEchoInput");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				DeviceReloadInterval = mSerializationInfo.GetInt32("mDeviceReloadInterval");
+				DeviceReloadInterval = _serializationInfo.GetInt32("mDeviceReloadInterval");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				LoaderCards = (string[])mSerializationInfo.GetValue("mLoaderCards", typeof(string[]));
+				LoaderCards = (string[])_serializationInfo.GetValue("mLoaderCards", typeof(string[]));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				FloatingPointMemoryWordCount = (int?)mSerializationInfo.GetValue("mFloatingPointMemoryWordCount", typeof(int?));
+				FloatingPointMemoryWordCount = (int?)_serializationInfo.GetValue("mFloatingPointMemoryWordCount", typeof(int?));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				ProfilingEnabled = mSerializationInfo.GetBoolean("mProfilingEnabled");
+				ProfilingEnabled = _serializationInfo.GetBoolean("mProfilingEnabled");
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				ShowProfilingInfo = (GuiSettings.ProfilingInfoType)mSerializationInfo.GetValue("mShowProfilingInfo", typeof(GuiSettings.ProfilingInfoType));
+				ShowProfilingInfo = (GuiSettings.ProfilingInfoType)_serializationInfo.GetValue("mShowProfilingInfo", typeof(GuiSettings.ProfilingInfoType));
 			}
 			catch (SystemException) { }
 
 			try
 			{
-				ColorProfilingCounts = mSerializationInfo.GetBoolean("mColorProfilingCounts");
+				ColorProfilingCounts = _serializationInfo.GetBoolean("mColorProfilingCounts");
 			}
 			catch (SystemException) { }
 

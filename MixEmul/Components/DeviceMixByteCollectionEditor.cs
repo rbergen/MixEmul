@@ -1,82 +1,82 @@
-namespace MixGui.Components
+﻿namespace MixGui.Components
 {
+	using System;
+	using System.Drawing;
+	using System.Windows.Forms;
 	using MixGui.Events;
 	using MixGui.Settings;
 	using MixGui.Utils;
 	using MixLib.Type;
-	using System;
-	using System.Drawing;
-	using System.Windows.Forms;
 
 	public class DeviceMixByteCollectionEditor : UserControl, IMixByteCollectionEditor, INavigableControl
 	{
-		private readonly Label mMixByteCollectionIndexLabel;
-		private readonly MixByteCollectionCharTextBox mCharTextBox;
-		private int mMixByteCollectionIndex;
-		private IMixByteCollection mDeviceMixByteCollection;
-		private int mIndexCharCount = 2;
+		private readonly Label _mixByteCollectionIndexLabel;
+		private readonly MixByteCollectionCharTextBox _charTextBox;
+		private int _mixByteCollectionIndex;
+		private IMixByteCollection _deviceMixByteCollection;
+		private int _indexCharCount = 2;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 
 		public DeviceMixByteCollectionEditor(IMixByteCollection mixByteCollection = null)
 		{
-			mDeviceMixByteCollection = mixByteCollection;
-			if (mDeviceMixByteCollection == null)
-				mDeviceMixByteCollection = new MixByteCollection(FullWord.ByteCount);
+			_deviceMixByteCollection = mixByteCollection;
+			if (_deviceMixByteCollection == null)
+				_deviceMixByteCollection = new MixByteCollection(FullWord.ByteCount);
 
-			mCharTextBox = new MixByteCollectionCharTextBox(mDeviceMixByteCollection);
-			mMixByteCollectionIndexLabel = new Label();
+			_charTextBox = new MixByteCollectionCharTextBox(_deviceMixByteCollection);
+			_mixByteCollectionIndexLabel = new Label();
 			InitializeComponent();
 		}
 
-		public Control EditorControl 
+		public Control EditorControl
 			=> this;
 
-		public FieldTypes? FocusedField 
-			=> mCharTextBox.Focused ? FieldTypes.Chars : null;
+		public FieldTypes? FocusedField
+			=> _charTextBox.Focused ? FieldTypes.Chars : null;
 
-		public int? CaretIndex 
-			=> mCharTextBox.Focused ? mCharTextBox.SelectionStart + mCharTextBox.SelectionLength : null;
+		public int? CaretIndex
+			=> _charTextBox.Focused ? _charTextBox.SelectionStart + _charTextBox.SelectionLength : null;
 
-		public void Select(int start, int length) 
-			=> mCharTextBox.Select(start, length);
+		public void Select(int start, int length)
+			=> _charTextBox.Select(start, length);
 
-		public bool Focus(FieldTypes? field, int? index) 
-			=> mCharTextBox.FocusWithIndex(index);
+		public bool Focus(FieldTypes? field, int? index)
+			=> _charTextBox.FocusWithIndex(index);
 
-		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args) 
+		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
 
-		private void MixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) 
+		private void MixByteCollectionEditor_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
 			=> OnValueChanged(args);
 
 		private void InitializeComponent()
 		{
 			SuspendLayout();
 
-			mMixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mMixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mMixByteCollectionIndexLabel.Location = new Point(0, 0);
-			mMixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
-			mMixByteCollectionIndexLabel.Size = new Size(30, 13);
-			mMixByteCollectionIndexLabel.AutoSize = true;
-			mMixByteCollectionIndexLabel.TabIndex = 0;
-			mMixByteCollectionIndexLabel.Text = "00:";
+			_mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			_mixByteCollectionIndexLabel.Location = new Point(0, 0);
+			_mixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
+			_mixByteCollectionIndexLabel.Size = new Size(30, 13);
+			_mixByteCollectionIndexLabel.AutoSize = true;
+			_mixByteCollectionIndexLabel.TabIndex = 0;
+			_mixByteCollectionIndexLabel.Text = "00:";
 
-			mCharTextBox.Location = new Point(mMixByteCollectionIndexLabel.Right, 0);
-			mCharTextBox.Name = "mCharTextBox";
-			mCharTextBox.TabIndex = 1;
-			mCharTextBox.ValueChanged += MixByteCollectionEditor_ValueChanged;
-			mCharTextBox.NavigationKeyDown += This_KeyDown;
-			mCharTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			mCharTextBox.BorderStyle = BorderStyle.None;
-			mCharTextBox.Height = 13;
+			_charTextBox.Location = new Point(_mixByteCollectionIndexLabel.Right, 0);
+			_charTextBox.Name = "mCharTextBox";
+			_charTextBox.TabIndex = 1;
+			_charTextBox.ValueChanged += MixByteCollectionEditor_ValueChanged;
+			_charTextBox.NavigationKeyDown += This_KeyDown;
+			_charTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			_charTextBox.BorderStyle = BorderStyle.None;
+			_charTextBox.Height = 13;
 
-			Controls.Add(mMixByteCollectionIndexLabel);
-			Controls.Add(mCharTextBox);
+			Controls.Add(_mixByteCollectionIndexLabel);
+			Controls.Add(_charTextBox);
 			Name = "DeviceMixByteCollectionEditor";
-			Size = new Size(mCharTextBox.Right, mCharTextBox.Height);
+			Size = new Size(_charTextBox.Right, _charTextBox.Height);
 			KeyDown += This_KeyDown;
 			ResumeLayout(false);
 		}
@@ -99,65 +99,65 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			mCharTextBox.Update();
+			_charTextBox.Update();
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			mMixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			mMixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			mCharTextBox.UpdateLayout();
+			_mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			_charTextBox.UpdateLayout();
 		}
 
 		public int MixByteCollectionIndex
 		{
-			get => mMixByteCollectionIndex;
+			get => _mixByteCollectionIndex;
 			set
 			{
 				if (value < 0)
 					value = 0;
 
-				mMixByteCollectionIndex = value;
+				_mixByteCollectionIndex = value;
 				SetIndexLabelText();
 			}
 		}
 
-		private void SetIndexLabelText() 
-			=> mMixByteCollectionIndexLabel.Text = mMixByteCollectionIndex.ToString("D" + mIndexCharCount) + ":";
+		private void SetIndexLabelText()
+			=> _mixByteCollectionIndexLabel.Text = _mixByteCollectionIndex.ToString("D" + _indexCharCount) + ":";
 
 		public int IndexCharCount
 		{
-			get => mIndexCharCount;
+			get => _indexCharCount;
 			set
 			{
-				if (mIndexCharCount == value)
+				if (_indexCharCount == value)
 					return;
 
-				mIndexCharCount = value;
+				_indexCharCount = value;
 				SetIndexLabelText();
 
-				int oldCharBoxLeft = mCharTextBox.Left;
-				mCharTextBox.Left = mMixByteCollectionIndexLabel.Right + 3;
-				mCharTextBox.Width += oldCharBoxLeft - mCharTextBox.Left;
+				int oldCharBoxLeft = _charTextBox.Left;
+				_charTextBox.Left = _mixByteCollectionIndexLabel.Right + 3;
+				_charTextBox.Width += oldCharBoxLeft - _charTextBox.Left;
 			}
 		}
 
 		public IMixByteCollection DeviceMixByteCollection
 		{
-			get => mDeviceMixByteCollection;
+			get => _deviceMixByteCollection;
 			set
 			{
-				mDeviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
-				mCharTextBox.MixByteCollectionValue = mDeviceMixByteCollection;
-				mCharTextBox.Select(0, 0);
+				_deviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
+				_charTextBox.MixByteCollectionValue = _deviceMixByteCollection;
+				_charTextBox.Select(0, 0);
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => mCharTextBox.ReadOnly;
-			set => mCharTextBox.ReadOnly = value;
+			get => _charTextBox.ReadOnly;
+			set => _charTextBox.ReadOnly = value;
 		}
 
 		public IMixByteCollection MixByteCollectionValue

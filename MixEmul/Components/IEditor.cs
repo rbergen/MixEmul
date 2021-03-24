@@ -1,5 +1,5 @@
-using MixLib.Type;
 using System.Windows.Forms;
+using MixLib.Type;
 
 namespace MixGui.Components
 {

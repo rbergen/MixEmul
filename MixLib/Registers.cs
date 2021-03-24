@@ -1,5 +1,5 @@
-using MixLib.Type;
 using System;
+using MixLib.Type;
 
 namespace MixLib
 {
@@ -7,12 +7,11 @@ namespace MixLib
 	{
 		public const int MaxOffset = 7;
 		public const int RegisterCount = MaxOffset + 2;
-
-		const int addressByteIndex = 0;
-		const int flagsByteIndex = 2;
-		const int rJByteIndex = 3;
-		readonly Register[] mRegisters = new Register[RegisterCount - 1];
-		readonly Register mrJ;
+		private const int addressByteIndex = 0;
+		private const int flagsByteIndex = 2;
+		private const int rJByteIndex = 3;
+		private readonly Register[] mRegisters = new Register[RegisterCount - 1];
+		private readonly Register mrJ;
 
 		public CompValues CompareIndicator { get; set; }
 		public bool OverflowIndicator { get; set; }
@@ -184,7 +183,7 @@ namespace MixLib
 		}
 
 		[Flags]
-		enum FlagValues : byte
+		private enum FlagValues : byte
 		{
 			None = 0,
 			Less = 1,

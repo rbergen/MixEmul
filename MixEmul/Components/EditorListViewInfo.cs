@@ -1,5 +1,5 @@
-﻿using MixLib.Type;
-using System;
+﻿using System;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
@@ -9,13 +9,13 @@ namespace MixGui.Components
 		public int? SelectedIndex { get; set; }
 		public FieldTypes? FocusedField { get; set; }
 
-		public bool Equals(EditorListViewInfo other) 
+		public bool Equals(EditorListViewInfo other)
 			=> other != null && other.FirstVisibleIndex == FirstVisibleIndex;
 
-		public override bool Equals(object obj) 
+		public override bool Equals(object obj)
 			=> Equals(obj as EditorListViewInfo);
 
-		public override int GetHashCode() 
+		public override int GetHashCode()
 			=> FirstVisibleIndex.GetHashCode();
 	}
 }

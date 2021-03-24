@@ -18,10 +18,10 @@ namespace MixLib.Modules
 
 		public virtual Devices Devices => null;
 
-		protected bool IsBreakpointSet(int address) 
+		protected bool IsBreakpointSet(int address)
 			=> BreakpointManager != null && BreakpointManager.IsBreakpointSet(address);
 
-		void ReportLoadError(int locationCounter, string message) 
+		private void ReportLoadError(int locationCounter, string message)
 			=> AddLogLine(new LogLine(ModuleName, Severity.Error, locationCounter, "Loader error", message));
 
 		public abstract void ResetProfilingCounts();
@@ -57,7 +57,7 @@ namespace MixLib.Modules
 			}
 		}
 
-		int LoadInstructionInstance(LoaderInstruction.Instance instance, int locationCounter)
+		private int LoadInstructionInstance(LoaderInstruction.Instance instance, int locationCounter)
 		{
 			FullMemory[locationCounter].SourceLine = instance.SourceLine;
 
@@ -100,7 +100,7 @@ namespace MixLib.Modules
 			return locationCounter;
 		}
 
-		int LoadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
+		private int LoadInstructionInstance(MixInstruction.Instance instance, int locationCounter)
 		{
 			var validationErrors = instance.Validate();
 			if (validationErrors != null)
@@ -155,7 +155,7 @@ namespace MixLib.Modules
 			Status = RunStatus.InvalidInstruction;
 		}
 
-		void ReportLoadInstanceErrors(int counter, InstanceValidationError[] errors)
+		private void ReportLoadInstanceErrors(int counter, InstanceValidationError[] errors)
 		{
 			foreach (InstanceValidationError error in errors)
 				AddLogLine(new LogLine(ModuleName, Severity.Warning, counter, "Loaded invalid instruction", error.CompiledMessage));

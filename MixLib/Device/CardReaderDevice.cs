@@ -1,48 +1,48 @@
+﻿using System;
+using System.IO;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.IO;
 
 namespace MixLib.Device
 {
 	public class CardReaderDevice : FileBasedDevice
 	{
-		const string shortName = "CRD";
-		const string fileNamePrefix = "crdin";
+		private const string MyShortName = "CRD";
+		private const string FileNamePrefix = "crdin";
+		private const string InitializationDescription = "Initializing card reader";
+		private const string OpeningDescription = "Starting read from card reader";
+		private const int MyRecordWordCount = 16;
+		public const int BytesPerRecord = MyRecordWordCount * FullWord.ByteCount;
 
-		const string initializationDescription = "Initializing card reader";
-		const string openingDescription = "Starting read from card reader";
+		public CardReaderDevice(int id) : base(id, FileNamePrefix) 
+			=> UpdateSettings();
 
-		const int recordWordCount = 16;
-		public const int BytesPerRecord = recordWordCount * FullWord.ByteCount;
+		public override int RecordWordCount 
+			=> MyRecordWordCount;
 
-		public CardReaderDevice(int id) : base(id, fileNamePrefix)
-		{
-			UpdateSettings();
-		}
+		public override string ShortName 
+			=> MyShortName;
 
-		public override int RecordWordCount => recordWordCount;
+		public override bool SupportsInput 
+			=> true;
 
-		public override string ShortName => shortName;
-
-		public override bool SupportsInput => true;
-
-		public override bool SupportsOutput => false;
+		public override bool SupportsOutput 
+			=> false;
 
 		public sealed override void UpdateSettings()
 		{
-			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardReaderInitialization), initializationDescription);
+			DeviceStep nextStep = new NoOpStep(DeviceSettings.GetTickCount(DeviceSettings.CardReaderInitialization), InitializationDescription);
 			FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new TextReadStep(recordWordCount);
+			nextStep.NextStep = new TextReadStep(MyRecordWordCount);
 			nextStep = nextStep.NextStep;
 			nextStep.NextStep = new CloseStreamStep();
 			nextStep = nextStep.NextStep;
-			nextStep.NextStep = new WriteToMemoryStep(false, recordWordCount)
+			nextStep.NextStep = new WriteToMemoryStep(false, MyRecordWordCount)
 			{
 				NextStep = null
 			};
@@ -51,16 +51,15 @@ namespace MixLib.Device
 			FirstIocDeviceStep = null;
 		}
 
-		class OpenStreamStep : StreamStep
+		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription => openingDescription;
+			public override string StatusDescription 
+				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+				=> new Instance(streamStatus);
 
-			new class Instance : StreamStep.Instance
+			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
@@ -71,9 +70,7 @@ namespace MixLib.Device
 						var stream = new FileStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
 
 						if (!StreamStatus.PositionSet)
-						{
 							stream.Position = 0L;
-						}
 
 						StreamStatus.Stream = stream;
 					}

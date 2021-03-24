@@ -1,26 +1,26 @@
-using MixLib.Events;
-using MixLib.Misc;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using MixLib.Events;
+using MixLib.Misc;
+using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
 	public class TextWriteStep : StreamStep
 	{
-		private readonly int mRecordWordCount;
-		private const string statusDescription = "Writing textual data";
+		private readonly int _recordWordCount;
+		private const string MyStatusDescription = "Writing textual data";
 
-		public TextWriteStep(int recordWordCount) 
-			=> mRecordWordCount = recordWordCount;
+		public TextWriteStep(int recordWordCount)
+			=> _recordWordCount = recordWordCount;
 
-		public override string StatusDescription 
-			=> statusDescription;
+		public override string StatusDescription
+			=> MyStatusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
-			=> new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			=> new Instance(streamStatus, _recordWordCount);
 
 		public static void WriteBytes(Stream stream, int bytesPerRecord, List<IMixByteCollection> bytes)
 		{
@@ -47,23 +47,23 @@ namespace MixLib.Device.Step
 			return new String(charsToWrite).TrimEnd(' ');
 		}
 
-		new private class Instance : StreamStep.Instance
+		private new class Instance : StreamStep.Instance
 		{
-			private readonly int mRecordWordCount;
-			private MixByte[] mWriteBytes;
+			private readonly int _recordWordCount;
+			private MixByte[] _writeBytes;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) 
-				=> mRecordWordCount = recordWordCount;
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
+				=> _recordWordCount = recordWordCount;
 
 			public override bool Tick()
 			{
-				if (StreamStatus.Stream == null || mWriteBytes == null)
+				if (StreamStatus.Stream == null || _writeBytes == null)
 					return true;
 
 				try
 				{
 					var writer = new StreamWriter(StreamStatus.Stream, Encoding.ASCII);
-					writer.WriteLine(CreateStringFromBytes(mWriteBytes, mRecordWordCount * FullWord.ByteCount));
+					writer.WriteLine(CreateStringFromBytes(_writeBytes, _recordWordCount * FullWord.ByteCount));
 					writer.Flush();
 					StreamStatus.UpdatePosition();
 				}
@@ -77,7 +77,7 @@ namespace MixLib.Device.Step
 
 			public override object InputFromPreviousStep
 			{
-				set => mWriteBytes = (MixByte[])value;
+				set => _writeBytes = (MixByte[])value;
 			}
 		}
 	}

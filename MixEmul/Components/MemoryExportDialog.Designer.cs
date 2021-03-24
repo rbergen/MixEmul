@@ -25,117 +25,117 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.mFromAddressLabel = new System.Windows.Forms.Label();
-			this.mFromAddressUpDown = new System.Windows.Forms.NumericUpDown();
-			this.mToAddressLabel = new System.Windows.Forms.Label();
-			this.mToAddressUpDown = new System.Windows.Forms.NumericUpDown();
-			this.mProgramCounterLabel = new System.Windows.Forms.Label();
-			this.mProgramCounterUpDown = new System.Windows.Forms.NumericUpDown();
-			this.mOkButton = new System.Windows.Forms.Button();
-			this.mCancelButton = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.mFromAddressUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.mToAddressUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.mProgramCounterUpDown)).BeginInit();
+			this._fromAddressLabel = new System.Windows.Forms.Label();
+			this._fromAddressUpDown = new System.Windows.Forms.NumericUpDown();
+			this._toAddressLabel = new System.Windows.Forms.Label();
+			this._toAddressUpDown = new System.Windows.Forms.NumericUpDown();
+			this._programCounterLabel = new System.Windows.Forms.Label();
+			this._programCounterUpDown = new System.Windows.Forms.NumericUpDown();
+			this._okButton = new System.Windows.Forms.Button();
+			this._cancelButton = new System.Windows.Forms.Button();
+			((System.ComponentModel.ISupportInitialize)(this._fromAddressUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this._toAddressUpDown)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this._programCounterUpDown)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// mFromAddressLabel
 			// 
-			this.mFromAddressLabel.AutoSize = true;
-			this.mFromAddressLabel.Location = new System.Drawing.Point(16, 16);
-			this.mFromAddressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mFromAddressLabel.Name = "mFromAddressLabel";
-			this.mFromAddressLabel.Size = new System.Drawing.Size(153, 17);
-			this.mFromAddressLabel.TabIndex = 0;
-			this.mFromAddressLabel.Text = "First exported address:";
+			this._fromAddressLabel.AutoSize = true;
+			this._fromAddressLabel.Location = new System.Drawing.Point(16, 16);
+			this._fromAddressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._fromAddressLabel.Name = "mFromAddressLabel";
+			this._fromAddressLabel.Size = new System.Drawing.Size(153, 17);
+			this._fromAddressLabel.TabIndex = 0;
+			this._fromAddressLabel.Text = "First exported address:";
 			// 
 			// mFromAddressUpDown
 			// 
-			this.mFromAddressUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mFromAddressUpDown.Location = new System.Drawing.Point(181, 14);
-			this.mFromAddressUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.mFromAddressUpDown.Name = "mFromAddressUpDown";
-			this.mFromAddressUpDown.Size = new System.Drawing.Size(79, 22);
-			this.mFromAddressUpDown.TabIndex = 1;
-			this.mFromAddressUpDown.ValueChanged += new System.EventHandler(this.MFromAddressUpDown_ValueChanged);
+			this._fromAddressUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._fromAddressUpDown.Location = new System.Drawing.Point(181, 14);
+			this._fromAddressUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this._fromAddressUpDown.Name = "mFromAddressUpDown";
+			this._fromAddressUpDown.Size = new System.Drawing.Size(79, 22);
+			this._fromAddressUpDown.TabIndex = 1;
+			this._fromAddressUpDown.ValueChanged += new System.EventHandler(this.FromAddressUpDown_ValueChanged);
 			// 
 			// mToAddressLabel
 			// 
-			this.mToAddressLabel.AutoSize = true;
-			this.mToAddressLabel.Location = new System.Drawing.Point(16, 48);
-			this.mToAddressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mToAddressLabel.Name = "mToAddressLabel";
-			this.mToAddressLabel.Size = new System.Drawing.Size(153, 17);
-			this.mToAddressLabel.TabIndex = 2;
-			this.mToAddressLabel.Text = "Last exported address:";
+			this._toAddressLabel.AutoSize = true;
+			this._toAddressLabel.Location = new System.Drawing.Point(16, 48);
+			this._toAddressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._toAddressLabel.Name = "mToAddressLabel";
+			this._toAddressLabel.Size = new System.Drawing.Size(153, 17);
+			this._toAddressLabel.TabIndex = 2;
+			this._toAddressLabel.Text = "Last exported address:";
 			// 
 			// mToAddressUpDown
 			// 
-			this.mToAddressUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mToAddressUpDown.Location = new System.Drawing.Point(181, 46);
-			this.mToAddressUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.mToAddressUpDown.Name = "mToAddressUpDown";
-			this.mToAddressUpDown.Size = new System.Drawing.Size(79, 22);
-			this.mToAddressUpDown.TabIndex = 3;
-			this.mToAddressUpDown.ValueChanged += new System.EventHandler(this.MToAddressUpDown_ValueChanged);
+			this._toAddressUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._toAddressUpDown.Location = new System.Drawing.Point(181, 46);
+			this._toAddressUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this._toAddressUpDown.Name = "mToAddressUpDown";
+			this._toAddressUpDown.Size = new System.Drawing.Size(79, 22);
+			this._toAddressUpDown.TabIndex = 3;
+			this._toAddressUpDown.ValueChanged += new System.EventHandler(this.ToAddressUpDown_ValueChanged);
 			// 
 			// mProgramCounterLabel
 			// 
-			this.mProgramCounterLabel.AutoSize = true;
-			this.mProgramCounterLabel.Location = new System.Drawing.Point(16, 80);
-			this.mProgramCounterLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.mProgramCounterLabel.Name = "mProgramCounterLabel";
-			this.mProgramCounterLabel.Size = new System.Drawing.Size(158, 17);
-			this.mProgramCounterLabel.TabIndex = 4;
-			this.mProgramCounterLabel.Text = "Set program counter to:";
+			this._programCounterLabel.AutoSize = true;
+			this._programCounterLabel.Location = new System.Drawing.Point(16, 80);
+			this._programCounterLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this._programCounterLabel.Name = "mProgramCounterLabel";
+			this._programCounterLabel.Size = new System.Drawing.Size(158, 17);
+			this._programCounterLabel.TabIndex = 4;
+			this._programCounterLabel.Text = "Set program counter to:";
 			// 
 			// mProgramCounterUpDown
 			// 
-			this.mProgramCounterUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mProgramCounterUpDown.Location = new System.Drawing.Point(181, 78);
-			this.mProgramCounterUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.mProgramCounterUpDown.Name = "mProgramCounterUpDown";
-			this.mProgramCounterUpDown.Size = new System.Drawing.Size(79, 22);
-			this.mProgramCounterUpDown.TabIndex = 5;
+			this._programCounterUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._programCounterUpDown.Location = new System.Drawing.Point(181, 78);
+			this._programCounterUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this._programCounterUpDown.Name = "mProgramCounterUpDown";
+			this._programCounterUpDown.Size = new System.Drawing.Size(79, 22);
+			this._programCounterUpDown.TabIndex = 5;
 			// 
 			// mOkButton
 			// 
-			this.mOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.mOkButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mOkButton.Location = new System.Drawing.Point(53, 113);
-			this.mOkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.mOkButton.Name = "mOkButton";
-			this.mOkButton.Size = new System.Drawing.Size(100, 28);
-			this.mOkButton.TabIndex = 6;
-			this.mOkButton.Text = "&OK";
-			this.mOkButton.UseVisualStyleBackColor = true;
+			this._okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this._okButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._okButton.Location = new System.Drawing.Point(53, 113);
+			this._okButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this._okButton.Name = "mOkButton";
+			this._okButton.Size = new System.Drawing.Size(100, 28);
+			this._okButton.TabIndex = 6;
+			this._okButton.Text = "&OK";
+			this._okButton.UseVisualStyleBackColor = true;
 			// 
 			// mCancelButton
 			// 
-			this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.mCancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mCancelButton.Location = new System.Drawing.Point(161, 113);
-			this.mCancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.mCancelButton.Name = "mCancelButton";
-			this.mCancelButton.Size = new System.Drawing.Size(100, 28);
-			this.mCancelButton.TabIndex = 7;
-			this.mCancelButton.Text = "&Cancel";
-			this.mCancelButton.UseVisualStyleBackColor = true;
+			this._cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this._cancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._cancelButton.Location = new System.Drawing.Point(161, 113);
+			this._cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this._cancelButton.Name = "mCancelButton";
+			this._cancelButton.Size = new System.Drawing.Size(100, 28);
+			this._cancelButton.TabIndex = 7;
+			this._cancelButton.Text = "&Cancel";
+			this._cancelButton.UseVisualStyleBackColor = true;
 			// 
 			// MemoryExportDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(275, 145);
-			this.Controls.Add(this.mCancelButton);
-			this.Controls.Add(this.mOkButton);
-			this.Controls.Add(this.mProgramCounterUpDown);
-			this.Controls.Add(this.mToAddressUpDown);
-			this.Controls.Add(this.mFromAddressUpDown);
-			this.Controls.Add(this.mProgramCounterLabel);
-			this.Controls.Add(this.mToAddressLabel);
-			this.Controls.Add(this.mFromAddressLabel);
+			this.Controls.Add(this._cancelButton);
+			this.Controls.Add(this._okButton);
+			this.Controls.Add(this._programCounterUpDown);
+			this.Controls.Add(this._toAddressUpDown);
+			this.Controls.Add(this._fromAddressUpDown);
+			this.Controls.Add(this._programCounterLabel);
+			this.Controls.Add(this._toAddressLabel);
+			this.Controls.Add(this._fromAddressLabel);
 			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(293, 192);
@@ -146,9 +146,9 @@
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "Memory export";
-			((System.ComponentModel.ISupportInitialize)(this.mFromAddressUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.mToAddressUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.mProgramCounterUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this._fromAddressUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this._toAddressUpDown)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this._programCounterUpDown)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -156,13 +156,13 @@
 
 		#endregion
 
-		private System.Windows.Forms.Label mFromAddressLabel;
-		private System.Windows.Forms.NumericUpDown mFromAddressUpDown;
-		private System.Windows.Forms.Label mToAddressLabel;
-		private System.Windows.Forms.NumericUpDown mToAddressUpDown;
-		private System.Windows.Forms.Label mProgramCounterLabel;
-		private System.Windows.Forms.NumericUpDown mProgramCounterUpDown;
-		private System.Windows.Forms.Button mOkButton;
-		private System.Windows.Forms.Button mCancelButton;
+		private System.Windows.Forms.Label _fromAddressLabel;
+		private System.Windows.Forms.NumericUpDown _fromAddressUpDown;
+		private System.Windows.Forms.Label _toAddressLabel;
+		private System.Windows.Forms.NumericUpDown _toAddressUpDown;
+		private System.Windows.Forms.Label _programCounterLabel;
+		private System.Windows.Forms.NumericUpDown _programCounterUpDown;
+		private System.Windows.Forms.Button _okButton;
+		private System.Windows.Forms.Button _cancelButton;
 	}
 }

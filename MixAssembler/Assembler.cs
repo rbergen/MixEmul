@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using MixAssembler.Finding;
 using MixAssembler.Instruction;
 using MixAssembler.Symbol;
 using MixLib.Instruction;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MixAssembler
 {

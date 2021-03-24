@@ -43,7 +43,7 @@ namespace MixAssembler.Value
 				{
 					// ... parse its value...
 					var field = FPartValue.ParseValue(part[braceIndex..], (sectionCharIndex + currentIndex) + braceIndex, status);
-					
+
 					if (field == null)
 						return null;
 
@@ -54,7 +54,7 @@ namespace MixAssembler.Value
 
 				// use the fieldspec value to create and check an actual fieldspec
 				var fieldSpec = new FieldSpec(fieldValue);
-				
+
 				if (!fieldSpec.IsValid)
 				{
 					status.ReportParsingError((sectionCharIndex + currentIndex) + braceIndex, part.Length - braceIndex, "field must be a fieldspec");

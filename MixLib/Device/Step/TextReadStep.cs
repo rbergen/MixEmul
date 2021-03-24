@@ -1,26 +1,26 @@
-using MixLib.Events;
-using MixLib.Misc;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using MixLib.Events;
+using MixLib.Misc;
+using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
 	public class TextReadStep : StreamStep
 	{
-		private readonly int mRecordWordCount;
-		private const string statusDescription = "Reading textual data";
+		private readonly int _recordWordCount;
+		private const string MyStatusDescription = "Reading textual data";
 
-		public TextReadStep(int recordWordCount) 
-			=> mRecordWordCount = recordWordCount;
+		public TextReadStep(int recordWordCount)
+			=> _recordWordCount = recordWordCount;
 
-		public override string StatusDescription 
-			=> statusDescription;
+		public override string StatusDescription
+			=> MyStatusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
-			=> new Instance(streamStatus, mRecordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			=> new Instance(streamStatus, _recordWordCount);
 
 		public static List<IMixByteCollection> ReadBytes(Stream stream, int bytesPerRecord)
 		{
@@ -50,16 +50,16 @@ namespace MixLib.Device.Step
 			return readBytes;
 		}
 
-		new private class Instance : StreamStep.Instance
+		private new class Instance : StreamStep.Instance
 		{
-			private MixByte[] mReadBytes;
-			private readonly int mRecordWordCount;
+			private MixByte[] _readBytes;
+			private readonly int _recordWordCount;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) 
-				=> mRecordWordCount = recordWordCount;
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
+				=> _recordWordCount = recordWordCount;
 
-			public override object OutputForNextStep 
-				=> mReadBytes;
+			public override object OutputForNextStep
+				=> _readBytes;
 
 			public override bool Tick()
 			{
@@ -79,7 +79,7 @@ namespace MixLib.Device.Step
 					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
 				}
 
-				mReadBytes = ProcessReadText(readText, mRecordWordCount * FullWord.ByteCount);
+				_readBytes = ProcessReadText(readText, _recordWordCount * FullWord.ByteCount);
 
 				return true;
 			}

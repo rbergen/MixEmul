@@ -8,10 +8,10 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class LoadInstructions
 	{
-		const byte loadOpcodeBase = 8;
-		const byte loadNegOpcodeBase = 16;
+		private const byte loadOpcodeBase = 8;
+		private const byte loadNegOpcodeBase = 16;
 
-		static bool DoLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
+		private static bool DoLoad(ModuleBase module, MixInstruction.Instance instance, int registerIndex, bool negateSign)
 		{
 			var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 			if (indexedAddress == int.MinValue)

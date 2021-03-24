@@ -26,7 +26,7 @@ namespace MixLib.Instruction
 		/// </summary>
 		public class Instance : InstructionInstanceBase
 		{
-			readonly LoaderInstruction mInstruction;
+			private readonly LoaderInstruction mInstruction;
 			public FullWord Value { get; private set; }
 
 			public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)

@@ -1,77 +1,75 @@
-using MixGui.Events;
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MixGui.Events;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
 	public class FullWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private readonly Label mEqualsLabel;
-		private IFullWord mFullWord;
-		private bool mReadOnly;
-		private readonly MixByteCollectionCharTextBox mWordCharTextBox;
-		private readonly WordValueEditor mWordValueEditor;
+		private readonly Label _equalsLabel;
+		private IFullWord _fullWord;
+		private bool _readOnly;
+		private readonly MixByteCollectionCharTextBox _wordCharTextBox;
+		private readonly WordValueEditor _wordValueEditor;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
-		public FullWordEditor() : this(null) {}
-
-		public FullWordEditor(IFullWord fullWord)
+		public FullWordEditor(IFullWord fullWord = null)
 		{
-			mFullWord = fullWord ?? new FullWord();
-			mReadOnly = false;
-			mWordValueEditor = new WordValueEditor(mFullWord);
-			mWordCharTextBox = new MixByteCollectionCharTextBox(mFullWord);
-			mEqualsLabel = new Label();
+			_fullWord = fullWord ?? new FullWord();
+			_readOnly = false;
+			_wordValueEditor = new WordValueEditor(_fullWord);
+			_wordCharTextBox = new MixByteCollectionCharTextBox(_fullWord);
+			_equalsLabel = new Label();
 			InitializeComponent();
 		}
 
-		public Control EditorControl 
+		public Control EditorControl
 			=> this;
 
-		public FieldTypes? FocusedField 
-			=> mWordCharTextBox.Focused ? FieldTypes.Chars : mWordValueEditor.FocusedField;
+		public FieldTypes? FocusedField
+			=> _wordCharTextBox.Focused ? FieldTypes.Chars : _wordValueEditor.FocusedField;
 
-		public int? CaretIndex 
-			=> FocusedField == FieldTypes.Chars ? mWordCharTextBox.CaretIndex : mWordValueEditor.CaretIndex;
+		public int? CaretIndex
+			=> FocusedField == FieldTypes.Chars ? _wordCharTextBox.CaretIndex : _wordValueEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index) 
-			=> field == FieldTypes.Chars ? mWordCharTextBox.Focus(field, index) : mWordValueEditor.Focus(field, index);
+		public bool Focus(FieldTypes? field, int? index)
+			=> field == FieldTypes.Chars ? _wordCharTextBox.Focus(field, index) : _wordValueEditor.Focus(field, index);
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
 
 		private void InitializeComponent()
 		{
 			SuspendLayout();
 
-			mWordValueEditor.Location = new Point(0, 0);
-			mWordValueEditor.Name = "mWordValueEditor";
-			mWordValueEditor.TabIndex = 2;
-			mWordValueEditor.ValueChanged += MWordValueEditor_ValueChanged;
-			mWordValueEditor.NavigationKeyDown += This_KeyDown;
+			_wordValueEditor.Location = new Point(0, 0);
+			_wordValueEditor.Name = "mWordValueEditor";
+			_wordValueEditor.TabIndex = 2;
+			_wordValueEditor.ValueChanged += MWordValueEditor_ValueChanged;
+			_wordValueEditor.NavigationKeyDown += This_KeyDown;
 
-			mEqualsLabel.Location = new Point(mWordValueEditor.Right, mWordValueEditor.Top + 2);
-			mEqualsLabel.Name = "mFirstEqualsLabel";
-			mEqualsLabel.Size = new Size(10, mWordValueEditor.Height - 2);
-			mEqualsLabel.TabIndex = 3;
-			mEqualsLabel.Text = "=";
+			_equalsLabel.Location = new Point(_wordValueEditor.Right, _wordValueEditor.Top + 2);
+			_equalsLabel.Name = "mFirstEqualsLabel";
+			_equalsLabel.Size = new Size(10, _wordValueEditor.Height - 2);
+			_equalsLabel.TabIndex = 3;
+			_equalsLabel.Text = "=";
 
-			mWordCharTextBox.Location = new Point(mEqualsLabel.Right, mWordValueEditor.Top);
-			mWordCharTextBox.Name = "mWordCharTextBox";
-			mWordCharTextBox.Size = new Size(45, mWordValueEditor.Height);
-			mWordCharTextBox.TabIndex = 4;
-			mWordCharTextBox.ValueChanged += MWordCharTextBox_ValueChanged;
-			mWordCharTextBox.NavigationKeyDown += This_KeyDown;
+			_wordCharTextBox.Location = new Point(_equalsLabel.Right, _wordValueEditor.Top);
+			_wordCharTextBox.Name = "mWordCharTextBox";
+			_wordCharTextBox.Size = new Size(45, _wordValueEditor.Height);
+			_wordCharTextBox.TabIndex = 4;
+			_wordCharTextBox.ValueChanged += MWordCharTextBox_ValueChanged;
+			_wordCharTextBox.NavigationKeyDown += This_KeyDown;
 
-			Controls.Add(mWordValueEditor);
-			Controls.Add(mEqualsLabel);
-			Controls.Add(mWordCharTextBox);
+			Controls.Add(_wordValueEditor);
+			Controls.Add(_equalsLabel);
+			Controls.Add(_wordCharTextBox);
 			Name = "FullWordEditor";
-			Size = new Size(mWordCharTextBox.Right, mWordCharTextBox.Height);
+			Size = new Size(_wordCharTextBox.Right, _wordCharTextBox.Height);
 			KeyDown += This_KeyDown;
 			ResumeLayout(false);
 		}
@@ -82,7 +80,7 @@ namespace MixGui.Components
 				return;
 
 			FieldTypes editorField = FieldTypes.Chars;
-			int? index = mWordCharTextBox.SelectionStart + mWordCharTextBox.SelectionLength;
+			int? index = _wordCharTextBox.SelectionStart + _wordCharTextBox.SelectionLength;
 
 			if (e is FieldKeyEventArgs args)
 			{
@@ -100,72 +98,72 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Right:
-					if (sender == mWordValueEditor)
-						mWordCharTextBox.Focus();
+					if (sender == _wordValueEditor)
+						_wordCharTextBox.Focus();
 
-					else if (sender == mWordCharTextBox && NavigationKeyDown != null)
+					else if (sender == _wordCharTextBox && NavigationKeyDown != null)
 						NavigationKeyDown(this, e);
 
 					break;
 
 				case Keys.Left:
-					if (sender == mWordCharTextBox)
-						mWordValueEditor.Focus(FieldTypes.Value, null);
+					if (sender == _wordCharTextBox)
+						_wordValueEditor.Focus(FieldTypes.Value, null);
 
-					else if (sender == mWordValueEditor && NavigationKeyDown != null)
+					else if (sender == _wordValueEditor && NavigationKeyDown != null)
 						NavigationKeyDown(this, e);
 
 					break;
 			}
 		}
 
-		void MWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
+		private void MWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
 		{
-			mWordValueEditor.Update();
+			_wordValueEditor.Update();
 			OnValueChanged(new WordEditorValueChangedEventArgs((Word)args.OldValue, (Word)args.NewValue));
 		}
 
-		void MWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
+		private void MWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			mWordCharTextBox.Update();
+			_wordCharTextBox.Update();
 			OnValueChanged(args);
 		}
 
 		public new void Update()
 		{
-			mWordValueEditor.Update();
-			mWordCharTextBox.Update();
+			_wordValueEditor.Update();
+			_wordCharTextBox.Update();
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			mWordValueEditor.UpdateLayout();
-			mWordCharTextBox.UpdateLayout();
+			_wordValueEditor.UpdateLayout();
+			_wordCharTextBox.UpdateLayout();
 		}
 
 		public IFullWord FullWord
 		{
-			get => mFullWord;
+			get => _fullWord;
 			set
 			{
-				mFullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
-				mWordValueEditor.WordValue = mFullWord;
-				mWordCharTextBox.MixByteCollectionValue = mFullWord;
+				_fullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
+				_wordValueEditor.WordValue = _fullWord;
+				_wordCharTextBox.MixByteCollectionValue = _fullWord;
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => mReadOnly;
+			get => _readOnly;
 			set
 			{
-				if (mReadOnly != value)
-				{
-					mReadOnly = value;
-					mWordValueEditor.ReadOnly = mReadOnly;
-					mWordCharTextBox.ReadOnly = mReadOnly;
-				}
+				if (_readOnly == value)
+					return;
+
+				_readOnly = value;
+				_wordValueEditor.ReadOnly = _readOnly;
+				_wordCharTextBox.ReadOnly = _readOnly;
 			}
 		}
 
@@ -184,10 +182,10 @@ namespace MixGui.Components
 		public void Select(int start, int length)
 		{
 			if (FocusedField == FieldTypes.Chars)
-				mWordCharTextBox.Select(start, length);
+				_wordCharTextBox.Select(start, length);
 
 			else
-				mWordValueEditor.Select(start, length);
+				_wordValueEditor.Select(start, length);
 		}
 	}
 }

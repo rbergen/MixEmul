@@ -1,48 +1,47 @@
+﻿using System;
+using System.IO;
 using MixLib.Device.Settings;
 using MixLib.Device.Step;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.IO;
 
 namespace MixLib.Device
 {
 	public class DiskDevice : FileBasedDevice
 	{
-		const string shortName = "DSK";
-		const string fileNamePrefix = "disk";
-
-		const string initializationDescription = "Initializing disk";
-		const string openingDescription = "Starting data transfer with disk";
-		const string seekingDescription = "Seeking sector";
+		private const string MyShortName = "DSK";
+		private const string FileNamePrefix = "disk";
+		private const string InitializationDescription = "Initializing disk";
+		private const string OpeningDescription = "Starting data transfer with disk";
+		private const string SeekingDescription = "Seeking sector";
 
 		public const long SectorCount = 4096;
 		public const int WordsPerSector = 100;
 
-		public DiskDevice(int id) : base(id, fileNamePrefix)
-		{
-			UpdateSettings();
-		}
+		public DiskDevice(int id) : base(id, FileNamePrefix) 
+			=> UpdateSettings();
 
-		public override int RecordWordCount => WordsPerSector;
+		public override int RecordWordCount 
+			=> WordsPerSector;
 
-		public override string ShortName => shortName;
+		public override string ShortName 
+			=> MyShortName;
 
-		public override bool SupportsInput => true;
+		public override bool SupportsInput 
+			=> true;
 
-		public override bool SupportsOutput => true;
+		public override bool SupportsOutput 
+			=> true;
 
-		public static long CalculateBytePosition(long sector)
-		{
-			return sector * WordsPerSector * (FullWord.ByteCount + 1);
-		}
+		public static long CalculateBytePosition(long sector) 
+			=> sector * WordsPerSector * (FullWord.ByteCount + 1);
 
 		public sealed override void UpdateSettings()
 		{
 			var tickCount = DeviceSettings.GetTickCount(DeviceSettings.DiskInitialization);
 
-			DeviceStep nextStep = new NoOpStep(tickCount, initializationDescription);
+			DeviceStep nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstInputDeviceStep = nextStep;
 			nextStep.NextStep = new OpenStreamStep();
 			nextStep = nextStep.NextStep;
@@ -57,7 +56,7 @@ namespace MixLib.Device
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstOutputDeviceStep = nextStep;
 			nextStep.NextStep = new ReadFromMemoryStep(true, WordsPerSector);
 			nextStep = nextStep.NextStep;
@@ -72,7 +71,7 @@ namespace MixLib.Device
 				NextStep = null
 			};
 
-			nextStep = new NoOpStep(tickCount, initializationDescription);
+			nextStep = new NoOpStep(tickCount, InitializationDescription);
 			FirstIocDeviceStep = nextStep;
 			nextStep.NextStep = new SeekStep
 			{
@@ -80,7 +79,7 @@ namespace MixLib.Device
 			};
 		}
 
-		public new static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
+		public static new FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 		{
 			var stream = FileBasedDevice.OpenStream(fileName, fileMode, fileAccess, fileShare);
 			long byteCount = SectorCount * WordsPerSector * (FullWord.ByteCount + 1);
@@ -96,16 +95,15 @@ namespace MixLib.Device
 			return stream;
 		}
 
-		class OpenStreamStep : StreamStep
+		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription => openingDescription;
+			public override string StatusDescription 
+				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-			{
-				return new Instance(streamStatus);
-			}
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+				=> new Instance(streamStatus);
 
-			new class Instance : StreamStep.Instance
+			private new class Instance : StreamStep.Instance
 			{
 				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
 
@@ -113,12 +111,10 @@ namespace MixLib.Device
 				{
 					try
 					{
-						var stream = DiskDevice.OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+						var stream = OpenStream(StreamStatus.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
 
 						if (!StreamStatus.PositionSet)
-						{
 							stream.Position = 0L;
-						}
 
 						StreamStatus.Stream = stream;
 					}
@@ -132,53 +128,39 @@ namespace MixLib.Device
 			}
 		}
 
-		class SeekStep : StreamStep
+		private class SeekStep : StreamStep
 		{
-			public override string StatusDescription => seekingDescription;
+			public override string StatusDescription => SeekingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
+
+			private new class Instance : StreamStep.Instance
 			{
-				return new Instance(streamStatus);
-			}
+				private long _ticksLeft;
+				private const long Unset = long.MinValue;
 
-			new class Instance : StreamStep.Instance
-			{
-				long mTicksLeft;
-				const long unset = long.MinValue;
-
-				public Instance(StreamStatus streamStatus) : base(streamStatus)
-				{
-					mTicksLeft = unset;
-				}
+				public Instance(StreamStatus streamStatus) : base(streamStatus) => _ticksLeft = Unset;
 
 				public override bool Tick()
 				{
 					var desiredPosition = CalculateBytePosition(Operands.Sector);
+
 					if (desiredPosition == StreamStatus.Position)
-					{
 						return true;
-					}
 
-					if (mTicksLeft == unset)
-					{
-						mTicksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
-					}
+					if (_ticksLeft == Unset)
+						_ticksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
 
-					mTicksLeft -= 1L;
+					_ticksLeft -= 1L;
 
-					if (mTicksLeft > 0L)
-					{
+					if (_ticksLeft > 0L)
 						return false;
-					}
 
 					if (desiredPosition < 0L)
-					{
 						desiredPosition = 0L;
-					}
+
 					else if (Operands.Sector >= SectorCount)
-					{
 						desiredPosition = (SectorCount - 1) * WordsPerSector * (FullWord.ByteCount + 1);
-					}
 
 					StreamStatus.Position = desiredPosition;
 

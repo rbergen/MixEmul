@@ -6,15 +6,9 @@ namespace MixLib.Instruction
 	{
 		public const int InvalidAddress = int.MinValue;
 
-		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex)
-		{
-			return GetValidIndexedAddress(module, addressBase, registerIndex, true);
-		}
+		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex) => GetValidIndexedAddress(module, addressBase, registerIndex, true);
 
-		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance)
-		{
-			return instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
-		}
+		public static InstanceValidationError[] ValidateIndex(MixInstruction.Instance instance) => instance.Index > 6 ? new InstanceValidationError[] { new InstanceValidationError(InstanceValidationError.Sources.Index, 0, 6) } : null;
 
 		public static int GetValidIndexedAddress(ModuleBase module, int addressBase, int registerIndex, bool reportErrors)
 		{

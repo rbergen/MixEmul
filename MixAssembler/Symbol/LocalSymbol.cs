@@ -1,6 +1,6 @@
-using MixLib.Type;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MixLib.Type;
 
 namespace MixAssembler.Symbol
 {
@@ -10,43 +10,43 @@ namespace MixAssembler.Symbol
 	/// </summary>
 	public class LocalSymbol : SymbolBase
 	{
-		private readonly List<long> mAddresses;
+		private readonly List<long> _addresses;
 
 		public LocalSymbol(int index) : base(index.ToString())
 		{
 			if (index < 0 || index > 9)
 				throw new ArgumentException("index must be between 0 and 9");
 
-			mAddresses = new List<long>();
+			_addresses = new List<long>();
 		}
 
-		public override bool IsMultiValuedSymbol 
+		public override bool IsMultiValuedSymbol
 			=> true;
 
-		public override bool IsSymbolDefined 
+		public override bool IsSymbolDefined
 			=> true;
 
-		public override void SetValue(long value) 
-			=> mAddresses.Add(value);
+		public override void SetValue(long value)
+			=> _addresses.Add(value);
 
-		private static bool IsDefinitionChar(char c) 
+		private static bool IsDefinitionChar(char c)
 			=> c == 'H';
 
-		private static bool IsForwardReferenceChar(char c) 
+		private static bool IsForwardReferenceChar(char c)
 			=> c == 'F';
 
-		static bool IsLocalSymbol(string text) 
+		private static bool IsLocalSymbol(string text)
 			=> text.Length == 2 && char.IsNumber(text[0]) && IsLocalSymbolChar(text[1]);
 
-		static bool IsLocalSymbolChar(char c) => "BHF".Contains(c);
+		private static bool IsLocalSymbolChar(char c) => "BHF".Contains(c);
 
-		public override bool IsValueDefined(int currentAddress) 
+		public override bool IsValueDefined(int currentAddress)
 			=> false;
 
-		public override void SetValue(Word.Signs sign, long magnitude) 
-			=> mAddresses.Add(magnitude);
+		public override void SetValue(Word.Signs sign, long magnitude)
+			=> _addresses.Add(magnitude);
 
-		public override long GetValue(int currentAddress) 
+		public override long GetValue(int currentAddress)
 			=> throw new NotImplementedException();
 
 		public static SymbolBase ParseDefinition(string text, int sectionCharIndex, ParsingStatus status)
@@ -102,15 +102,15 @@ namespace MixAssembler.Symbol
 		{
 			get
 			{
-				mAddresses.Sort();
-				return mAddresses;
+				_addresses.Sort();
+				return _addresses;
 			}
 		}
 
-		public override long GetMagnitude(int currentAddress) 
+		public override long GetMagnitude(int currentAddress)
 			=> throw new NotImplementedException();
 
-		public override Word.Signs GetSign(int currentAddress) 
+		public override Word.Signs GetSign(int currentAddress)
 			=> throw new NotImplementedException();
 
 		private class Reference : IValue
@@ -124,13 +124,13 @@ namespace MixAssembler.Symbol
 				mDirection = direction;
 			}
 
-			public long GetMagnitude(int currentAddress) 
+			public long GetMagnitude(int currentAddress)
 				=> GetValue(currentAddress);
 
-			public Word.Signs GetSign(int currentAddress) 
+			public Word.Signs GetSign(int currentAddress)
 				=> Word.Signs.Positive;
 
-			public bool IsValueDefined(int currentAddress) 
+			public bool IsValueDefined(int currentAddress)
 				=> GetValue(currentAddress) != -1L;
 
 			/// <summary>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -13,21 +13,19 @@ namespace MixGui.Components
 										 ToolStripItemDesignerAvailability.StatusStrip)]
 	public partial class ToolStripCycleButton : ToolStripControlHost
 	{
-		Step mCurrentStep;
-		readonly List<Step> mSteps;
+		private Step _currentStep;
+		private readonly List<Step> _steps;
 
 		public event EventHandler ValueChanged;
 
-		public ToolStripCycleButton(IContainer container) : this()
-		{
-			container.Add(this);
-		}
+		public ToolStripCycleButton(IContainer container) : this() 
+			=> container.Add(this);
 
 		public ToolStripCycleButton()
 			: base(new Button { Text = "", FlatStyle = FlatStyle.Flat, Height = 21, Padding = new Padding(0), TextAlign = ContentAlignment.TopCenter })
 		{
 			InitializeComponent();
-			mSteps = new List<Step>();
+			_steps = new List<Step>();
 			AutoSize = false;
 			Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
@@ -36,33 +34,25 @@ namespace MixGui.Components
 			Text = "";
 		}
 
-		protected void OnValueChanged(EventArgs e)
-		{
-			ValueChanged?.Invoke(this, e);
-		}
+		protected void OnValueChanged(EventArgs e) 
+			=> ValueChanged?.Invoke(this, e);
 
-		void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
+		private void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
 		{
 			if (string.IsNullOrEmpty(Text))
-			{
-				e.Graphics.DrawString(mCurrentStep == null ? "<No steps>" : mCurrentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
-			}
+				e.Graphics.DrawString(_currentStep == null ? "<No steps>" : _currentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
 		}
 
-		void Control_Click(object sender, EventArgs e)
+		private void Control_Click(object sender, EventArgs e)
 		{
-			if (mCurrentStep == null || mCurrentStep.NextStep == null)
-			{
+			if (_currentStep == null || _currentStep.NextStep == null)
 				return;
-			}
 
-			SetCurrentStep(mCurrentStep.NextStep);
+			SetCurrentStep(_currentStep.NextStep);
 		}
 
-		void Control_SizeChanged(object sender, EventArgs e)
-		{
-			Size = Control.Size;
-		}
+		private void Control_SizeChanged(object sender, EventArgs e) 
+			=> Size = Control.Size;
 
 		public Step AddStep(object value)
 		{
@@ -103,52 +93,40 @@ namespace MixGui.Components
 		public void AddStep(Step step)
 		{
 			if (step == null || step.Value == null)
-			{
 				throw new ArgumentNullException(nameof(step), "step and its Value may not be null");
-			}
 
-			if (mSteps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
-			{
+			if (_steps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
 				throw new ArgumentException(string.Format("another step with Value {0} already exists", step.Value));
-			}
 
-			mSteps.Add(step);
+			_steps.Add(step);
 
-			if (mCurrentStep == null)
-			{
+			if (_currentStep == null)
 				SetCurrentStep(step);
-			}
 		}
 
 		public object Value
 		{
-			get => mCurrentStep?.Value;
+			get => _currentStep?.Value;
 			set
 			{
 				if (value == null)
-				{
 					return;
-				}
 
-				var step = mSteps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
+				var step = _steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
 
 				if (step == null)
-				{
 					throw new ArgumentException(string.Format("no step with Value {0} exists", value));
-				}
 
 				SetCurrentStep(step);
 			}
 		}
 
-		void SetCurrentStep(Step step)
+		private void SetCurrentStep(Step step)
 		{
-			if (mCurrentStep == step)
-			{
+			if (_currentStep == step)
 				return;
-			}
 
-			mCurrentStep = step;
+			_currentStep = step;
 			Invalidate();
 			OnValueChanged(new EventArgs());
 		}

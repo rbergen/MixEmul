@@ -1,5 +1,5 @@
-﻿using MixLib.Type;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using MixLib.Type;
 
 namespace MixGui.Components
 {
@@ -9,7 +9,7 @@ namespace MixGui.Components
 
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field) : this(keyData, field, null) { }
 
-		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : base(keyData, index) 
+		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : base(keyData, index)
 			=> Field = field;
 	}
 }

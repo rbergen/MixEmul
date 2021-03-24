@@ -1,7 +1,7 @@
+﻿using System;
 using MixAssembler.Value;
 using MixLib.Instruction;
 using MixLib.Type;
-using System;
 
 namespace MixAssembler.Instruction
 {
@@ -13,8 +13,8 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-		private readonly int mTextLength;
-		private readonly IValue mValue;
+		private readonly int _textLength;
+		private readonly IValue _value;
 
 		/// <summary>
 		/// Constructor for this class. 
@@ -23,8 +23,8 @@ namespace MixAssembler.Instruction
 		/// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
 		public LoaderInstructionParameters(IValue value, int textLength)
 		{
-			mValue = value;
-			mTextLength = textLength;
+			_value = value;
+			_textLength = textLength;
 		}
 
 		/// <summary>
@@ -39,13 +39,13 @@ namespace MixAssembler.Instruction
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 
 			var loaderInstruction = (LoaderInstruction)instruction;
-			if (!mValue.IsValueDefined(status.LocationCounter))
+			if (!_value.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, 0, mTextLength, "value is not defined");
+				status.ReportParsingError(LineSection.AddressField, 0, _textLength, "value is not defined");
 				return null;
 			}
 
-			return new LoaderInstruction.Instance(loaderInstruction, mValue.GetSign(status.LocationCounter), mValue.GetMagnitude(status.LocationCounter));
+			return new LoaderInstruction.Instance(loaderInstruction, _value.GetSign(status.LocationCounter), _value.GetMagnitude(status.LocationCounter));
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace MixAssembler.Instruction
 
 			var loaderInstruction = (LoaderInstruction)instruction;
 			IValue address = loaderInstruction.Alphanumeric ? CharacterConstantValue.ParseValue(addressField, 0, status) : WValue.ParseValue(addressField, 0, status);
-			
+
 			if (address == null)
 			{
 				status.ReportParsingError(0, addressField.Length, "unable to parse value");

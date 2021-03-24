@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
@@ -7,12 +7,12 @@ namespace MixGui.Components
 {
 	public class AboutForm : Form
 	{
-		private Button mCloseButton;
-		private Label mCopyrightLabel;
-		private Label mFullVersionLabel;
-		private PictureBox mLogoBox;
-		private Label mProductAndVersionLabel;
-		private readonly string mVersionString;
+		private Button _closeButton;
+		private Label _copyrightLabel;
+		private Label _fullVersionLabel;
+		private PictureBox _logoBox;
+		private Label _productAndVersionLabel;
+		private readonly string _versionString;
 
 		public AboutForm()
 		{
@@ -39,85 +39,85 @@ namespace MixGui.Components
 			Version version = executingAssembly.GetName().Version;
 			product += " " + version.ToString(2);
 
-			mProductAndVersionLabel.Text = product;
-			mVersionString = version.ToString();
-			mFullVersionLabel.Text += mVersionString;
-			mCopyrightLabel.Text = copyright;
+			_productAndVersionLabel.Text = product;
+			_versionString = version.ToString();
+			_fullVersionLabel.Text += _versionString;
+			_copyrightLabel.Text = copyright;
 		}
 
-		private void FullVersionLabel_Click(object sender, EventArgs e) 
-			=> Clipboard.SetText(mVersionString);
+		private void FullVersionLabel_Click(object sender, EventArgs e)
+			=> Clipboard.SetText(_versionString);
 
-		private void FullVersionLabel_DoubleClick(object sender, EventArgs e) 
-			=> Clipboard.SetText(mVersionString.Replace('.', '_'));
+		private void FullVersionLabel_DoubleClick(object sender, EventArgs e)
+			=> Clipboard.SetText(_versionString.Replace('.', '_'));
 
 		private void InitializeComponent()
 		{
 			var resources = new ComponentResourceManager(typeof(AboutForm));
-			mLogoBox = new PictureBox();
-			mCopyrightLabel = new Label();
-			mProductAndVersionLabel = new Label();
-			mCloseButton = new Button();
-			mFullVersionLabel = new Label();
-			((ISupportInitialize)(mLogoBox)).BeginInit();
+			_logoBox = new PictureBox();
+			_copyrightLabel = new Label();
+			_productAndVersionLabel = new Label();
+			_closeButton = new Button();
+			_fullVersionLabel = new Label();
+			((ISupportInitialize)(_logoBox)).BeginInit();
 			SuspendLayout();
 			// 
 			// mLogoBox
 			// 
-			mLogoBox.BorderStyle = BorderStyle.FixedSingle;
-			mLogoBox.Image = Properties.Resources.AboutFormLogoBoxImage;
-			mLogoBox.Location = new System.Drawing.Point(68, 104);
-			mLogoBox.Name = "mLogoBox";
-			mLogoBox.Size = new System.Drawing.Size(135, 135);
-			mLogoBox.TabIndex = 0;
-			mLogoBox.TabStop = false;
+			_logoBox.BorderStyle = BorderStyle.FixedSingle;
+			_logoBox.Image = Properties.Resources.AboutFormLogoBoxImage;
+			_logoBox.Location = new System.Drawing.Point(68, 104);
+			_logoBox.Name = "mLogoBox";
+			_logoBox.Size = new System.Drawing.Size(135, 135);
+			_logoBox.TabIndex = 0;
+			_logoBox.TabStop = false;
 			// 
 			// mCopyrightLabel
 			// 
-			mCopyrightLabel.Location = new System.Drawing.Point(0, 72);
-			mCopyrightLabel.Name = "mCopyrightLabel";
-			mCopyrightLabel.Size = new System.Drawing.Size(264, 16);
-			mCopyrightLabel.TabIndex = 2;
-			mCopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			_copyrightLabel.Location = new System.Drawing.Point(0, 72);
+			_copyrightLabel.Name = "mCopyrightLabel";
+			_copyrightLabel.Size = new System.Drawing.Size(264, 16);
+			_copyrightLabel.TabIndex = 2;
+			_copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// mProductAndVersionLabel
 			// 
-			mProductAndVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-			mProductAndVersionLabel.Location = new System.Drawing.Point(0, 8);
-			mProductAndVersionLabel.Name = "mProductAndVersionLabel";
-			mProductAndVersionLabel.Size = new System.Drawing.Size(264, 32);
-			mProductAndVersionLabel.TabIndex = 0;
-			mProductAndVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			_productAndVersionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+			_productAndVersionLabel.Location = new System.Drawing.Point(0, 8);
+			_productAndVersionLabel.Name = "mProductAndVersionLabel";
+			_productAndVersionLabel.Size = new System.Drawing.Size(264, 32);
+			_productAndVersionLabel.TabIndex = 0;
+			_productAndVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// mCloseButton
 			// 
-			mCloseButton.DialogResult = DialogResult.OK;
-			mCloseButton.Location = new System.Drawing.Point(99, 256);
-			mCloseButton.Name = "mCloseButton";
-			mCloseButton.Size = new System.Drawing.Size(74, 23);
-			mCloseButton.TabIndex = 3;
-			mCloseButton.FlatStyle = FlatStyle.Flat;
-			mCloseButton.Text = "&Close";
+			_closeButton.DialogResult = DialogResult.OK;
+			_closeButton.Location = new System.Drawing.Point(99, 256);
+			_closeButton.Name = "mCloseButton";
+			_closeButton.Size = new System.Drawing.Size(74, 23);
+			_closeButton.TabIndex = 3;
+			_closeButton.FlatStyle = FlatStyle.Flat;
+			_closeButton.Text = "&Close";
 			// 
 			// mFullVersionLabel
 			// 
-			mFullVersionLabel.Location = new System.Drawing.Point(0, 48);
-			mFullVersionLabel.Name = "mFullVersionLabel";
-			mFullVersionLabel.Size = new System.Drawing.Size(264, 16);
-			mFullVersionLabel.TabIndex = 1;
-			mFullVersionLabel.Text = "Full version number: ";
-			mFullVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			mFullVersionLabel.Click += FullVersionLabel_Click;
-			mFullVersionLabel.DoubleClick += FullVersionLabel_DoubleClick;
+			_fullVersionLabel.Location = new System.Drawing.Point(0, 48);
+			_fullVersionLabel.Name = "mFullVersionLabel";
+			_fullVersionLabel.Size = new System.Drawing.Size(264, 16);
+			_fullVersionLabel.TabIndex = 1;
+			_fullVersionLabel.Text = "Full version number: ";
+			_fullVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			_fullVersionLabel.Click += FullVersionLabel_Click;
+			_fullVersionLabel.DoubleClick += FullVersionLabel_DoubleClick;
 			// 
 			// AboutForm
 			// 
 			ClientSize = new System.Drawing.Size(264, 285);
-			Controls.Add(mFullVersionLabel);
-			Controls.Add(mCloseButton);
-			Controls.Add(mCopyrightLabel);
-			Controls.Add(mProductAndVersionLabel);
-			Controls.Add(mLogoBox);
+			Controls.Add(_fullVersionLabel);
+			Controls.Add(_closeButton);
+			Controls.Add(_copyrightLabel);
+			Controls.Add(_productAndVersionLabel);
+			Controls.Add(_logoBox);
 			FormBorderStyle = FormBorderStyle.FixedDialog;
 			Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			KeyPreview = true;
@@ -128,12 +128,12 @@ namespace MixGui.Components
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "About";
 			KeyPress += This_KeyPress;
-			((ISupportInitialize)(mLogoBox)).EndInit();
+			((ISupportInitialize)(_logoBox)).EndInit();
 			ResumeLayout(false);
 
 		}
 
-		void This_KeyPress(object sender, KeyPressEventArgs e)
+		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Escape)
 			{

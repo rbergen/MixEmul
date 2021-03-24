@@ -5,10 +5,7 @@ namespace MixLib.Type
 	{
 		public string Name { get; private set; }
 
-		protected SymbolBase(string name)
-		{
-			Name = name;
-		}
+		protected SymbolBase(string name) => Name = name;
 
 		public virtual long MemoryWordValue => 0L;
 

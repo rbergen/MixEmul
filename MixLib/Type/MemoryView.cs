@@ -4,9 +4,9 @@ namespace MixLib.Type
 {
 	public class MemoryView : IMemory
 	{
-		int mMinIndex;
-		int mMaxIndex;
-		int mIndexOffset;
+		private int mMinIndex;
+		private int mMaxIndex;
+		private int mIndexOffset;
 
 		public IMemory SourceMemory { get; private set; }
 
@@ -33,22 +33,13 @@ namespace MixLib.Type
 
 		public long MaxProfilingExecutionCount => SourceMemory.MaxProfilingExecutionCount;
 
-		public MemoryFullWord GetRealWord(int index)
-		{
-			return SourceMemory.GetRealWord(index + mIndexOffset);
-		}
+		public MemoryFullWord GetRealWord(int index) => SourceMemory.GetRealWord(index + mIndexOffset);
 
-		public void ResetRealWord(int index)
-		{
-			SourceMemory.ResetRealWord(index + mIndexOffset);
-		}
+		public void ResetRealWord(int index) => SourceMemory.ResetRealWord(index + mIndexOffset);
 
-		public void ClearRealWordSourceLine(int index)
-		{
-			SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
-		}
+		public void ClearRealWordSourceLine(int index) => SourceMemory.ClearRealWordSourceLine(index + mIndexOffset);
 
-		void ValidateParameters(int minIndex, int maxIndex, int offset)
+		private void ValidateParameters(int minIndex, int maxIndex, int offset)
 		{
 			if (minIndex + offset < SourceMemory.MinWordIndex)
 			{

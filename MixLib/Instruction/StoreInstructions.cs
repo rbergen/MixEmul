@@ -8,8 +8,8 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class StoreInstructions
 	{
-		const byte storeOpcodeBase = 24;
-		const byte storeJOpcode = 32;
+		private const byte storeOpcodeBase = 24;
+		private const byte storeJOpcode = 32;
 
 		/// <summary>
 		/// Method for performing STx instructions

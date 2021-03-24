@@ -1,8 +1,8 @@
-﻿using MixLib.Instruction;
-using MixLib.Utils;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MixLib.Instruction;
+using MixLib.Utils;
 
 namespace MixLib.Type
 {
@@ -42,46 +42,46 @@ namespace MixLib.Type
 			Index = index;
 		}
 
-		public int BitCount 
+		public int BitCount
 			=> mDefaultWord.BitCount;
 
-		public int ByteCount 
+		public int ByteCount
 			=> FullWord.ByteCount;
 
-		private FullWord ActiveWord 
+		private FullWord ActiveWord
 			=> RealWordFetched ? mRealWord : mDefaultWord;
 
-		public long MaxMagnitude 
+		public long MaxMagnitude
 			=> mDefaultWord.MaxMagnitude;
 
-		public long ProfilingTickCount 
+		public long ProfilingTickCount
 			=> RealWordFetched ? mRealWord.ProfilingTickCount : 0;
 
-		public long ProfilingExecutionCount 
+		public long ProfilingExecutionCount
 			=> RealWordFetched ? mRealWord.ProfilingExecutionCount : 0;
 
-		public IEnumerator GetEnumerator() 
+		public IEnumerator GetEnumerator()
 			=> ActiveWord.GetEnumerator();
 
-		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator() 
+		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
 			=> ((IEnumerable<MixByte>)ActiveWord).GetEnumerator();
 
-		public int MaxByteCount 
+		public int MaxByteCount
 			=> ActiveWord.MaxByteCount;
 
-		public bool IsEmpty 
+		public bool IsEmpty
 			=> !RealWordFetched || mRealWord.IsEmpty;
 
-		public MixByte[] ToArray() 
+		public MixByte[] ToArray()
 			=> ActiveWord.ToArray();
 
-		public object Clone() 
+		public object Clone()
 			=> ActiveWord.Clone();
 
-		public string ToString(bool asChars) 
+		public string ToString(bool asChars)
 			=> RealWordFetched ? mRealWord.ToString(asChars) : (asChars ? mDefaultCharString : mDefaultNonCharString);
 
-		void FetchRealWordIfNotFetched()
+		private void FetchRealWordIfNotFetched()
 		{
 			lock (mSyncRoot)
 			{
@@ -90,7 +90,7 @@ namespace MixLib.Type
 			}
 		}
 
-		bool RealWordFetched
+		private bool RealWordFetched
 		{
 			get
 			{
@@ -101,10 +101,10 @@ namespace MixLib.Type
 			}
 		}
 
-		void FetchRealWord() 
+		private void FetchRealWord()
 			=> mRealWord = mMemory.GetRealWord(Index);
 
-		bool FetchRealWordConditionally(Func<bool> condition)
+		private bool FetchRealWordConditionally(Func<bool> condition)
 		{
 			lock (mSyncRoot)
 			{
@@ -263,7 +263,7 @@ namespace MixLib.Type
 			return null;
 		}
 
-		public override bool Equals(object obj) 
+		public override bool Equals(object obj)
 			=> obj is VirtualMemoryFullWord other && other.Index == Index && other.mMemory == mMemory && other.mRealWord == mRealWord;
 
 		public override int GetHashCode()

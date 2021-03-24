@@ -6,10 +6,7 @@ namespace MixLib.Type
 	{
 		public MixByte MixByteValue { get; private set; }
 
-		public FieldSpec(MixByte value)
-		{
-			MixByteValue = value;
-		}
+		public FieldSpec(MixByte value) => MixByteValue = value;
 
 		public FieldSpec(int lowBound, int highBound)
 		{
@@ -21,40 +18,40 @@ namespace MixLib.Type
 			MixByteValue = (8 * lowBound) + highBound;
 		}
 
-		public int HighBoundByteIndex 
+		public int HighBoundByteIndex
 			=> (HighBound >= FullWord.ByteCount + 1) ? FullWord.ByteCount - 1 : HighBound - 1;
 
-		public bool IncludesSign 
+		public bool IncludesSign
 			=> LowBound == 0;
 
-		public bool IsValid 
+		public bool IsValid
 			=> IsValidFieldSpec(MixByteValue);
 
-		public int LowBoundByteIndex 
+		public int LowBoundByteIndex
 			=> LowBound <= 0 ? 0 : (LowBound - 1);
 
-		public int ByteCount 
+		public int ByteCount
 			=> HighBoundByteIndex - LowBoundByteIndex + 1;
 
-		public bool FloatingPoint 
+		public bool FloatingPoint
 			=> LowBound == 0 && HighBound == FullWord.ByteCount + 1;
 
-		public static bool operator ==(FieldSpec one, FieldSpec two) 
+		public static bool operator ==(FieldSpec one, FieldSpec two)
 			=> (((object)one) == null && ((object)two) == null) || one.Equals(two);
 
-		public static bool operator !=(FieldSpec one, FieldSpec two) 
+		public static bool operator !=(FieldSpec one, FieldSpec two)
 			=> !(one == two);
 
-		public override string ToString() 
+		public override string ToString()
 			=> IsValid ? string.Concat("(", LowBound, ':', HighBound, ')') : "(" + MixByteValue + ')';
 
-		public override bool Equals(object obj) 
+		public override bool Equals(object obj)
 			=> obj != null && obj is FieldSpec spec && spec.MixByteValue == MixByteValue;
 
-		public override int GetHashCode() 
+		public override int GetHashCode()
 			=> MixByteValue.GetHashCode();
 
-		public static bool IsValidFieldSpec(MixByte value) 
+		public static bool IsValidFieldSpec(MixByte value)
 			=> IsValidFieldSpec(value / 8, value % 8);
 
 		public static bool IsValidFieldSpec(int lowBound, int highBound)

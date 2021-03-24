@@ -6,8 +6,8 @@ namespace MixLib.Type
 {
 	public class MixByteCollection : IMixByteCollection
 	{
-		readonly int mMaxByteCount;
-		readonly MixByte[] mBytes;
+		private readonly int mMaxByteCount;
+		private readonly MixByte[] mBytes;
 
 		public MixByteCollection(int maxByteCount)
 		{
@@ -27,20 +27,11 @@ namespace MixLib.Type
 
 		public int MaxByteCount => mMaxByteCount;
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return mBytes.GetEnumerator();
-		}
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => mBytes.GetEnumerator();
 
-		public IEnumerator<MixByte> GetEnumerator()
-		{
-			return ((IEnumerable<MixByte>)mBytes).GetEnumerator();
-		}
+		public IEnumerator<MixByte> GetEnumerator() => ((IEnumerable<MixByte>)mBytes).GetEnumerator();
 
-		public MixByte[] ToArray()
-		{
-			return (MixByte[])mBytes.Clone();
-		}
+		public MixByte[] ToArray() => (MixByte[])mBytes.Clone();
 
 		public void Load(string text)
 		{

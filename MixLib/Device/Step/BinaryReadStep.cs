@@ -1,44 +1,37 @@
+﻿using System;
+using System.IO;
 using MixLib.Events;
 using MixLib.Misc;
 using MixLib.Type;
-using System;
-using System.IO;
 
 namespace MixLib.Device.Step
 {
 	public class BinaryReadStep : StreamStep
 	{
-		private readonly int mRecordWordCount;
-		private const string statusDescription = "Reading binary data";
+		private readonly int _recordWordCount;
 
-		public BinaryReadStep(int recordWordCount)
-		{
-			mRecordWordCount = recordWordCount;
-		}
+		private const string MyStatusDescription = "Reading binary data";
 
-		public override string StatusDescription => statusDescription;
+		public BinaryReadStep(int recordWordCount) 
+			=> _recordWordCount = recordWordCount;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
-		{
-			return new Instance(streamStatus, mRecordWordCount);
-		}
+		public override string StatusDescription 
+			=> MyStatusDescription;
+
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, _recordWordCount);
 
 		public static MixByte[] ReadBytes(Stream stream, int wordCount)
 		{
 			var buffer = new byte[wordCount * (FullWord.ByteCount + 1)];
-			
+
 			int readByteCount = stream.Read(buffer, 0, buffer.Length);
 			var readBytes = new MixByte[buffer.Length];
-			
+
 			for (int index = 0; index < readByteCount; index++)
-			{
 				readBytes[index] = buffer[index];
-			}
 
 			for (int index = readByteCount; index < readBytes.Length; index++)
-			{
 				readBytes[index] = 0;
-			}
 
 			return readBytes;
 		}
@@ -59,9 +52,7 @@ namespace MixLib.Device.Step
 				};
 
 				for (int j = 0; j < FullWord.ByteCount; j++)
-				{
 					currentWord[j] = readBytes[byteIndex++];
-				}
 
 				readWords[i] = currentWord;
 			}
@@ -69,24 +60,19 @@ namespace MixLib.Device.Step
 			return readWords;
 		}
 
-		new class Instance : StreamStep.Instance
+		private new class Instance : StreamStep.Instance
 		{
-			MixByte[] mReadBytes;
-			readonly int mRecordWordCount;
+			private MixByte[] mReadBytes;
+			private readonly int mRecordWordCount;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus)
-			{
-				mRecordWordCount = recordWordCount;
-			}
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) => mRecordWordCount = recordWordCount;
 
 			public override object OutputForNextStep => mReadBytes;
 
 			public override bool Tick()
 			{
 				if (StreamStatus.Stream == null)
-				{
 					return true;
-				}
 
 				try
 				{

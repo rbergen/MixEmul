@@ -1,4 +1,4 @@
-namespace MixGui.Components
+﻿namespace MixGui.Components
 {
   partial class SymbolListView
   {
@@ -25,123 +25,123 @@ namespace MixGui.Components
     /// </summary>
     private void InitializeComponent()
     {
-			this.mListView = new System.Windows.Forms.ListView();
-			this.mNameColumnHeader = new System.Windows.Forms.ColumnHeader();
-			this.mValueColumnHeader = new System.Windows.Forms.ColumnHeader();
-			this.mSymbolNameTextBox = new System.Windows.Forms.TextBox();
-			this.mSetButton = new System.Windows.Forms.Button();
-			this.mUnsetButton = new System.Windows.Forms.Button();
-			this.mSymbolValueTextBox = new MixGui.Components.LongValueTextBox();
+			this._listView = new System.Windows.Forms.ListView();
+			this._nameColumnHeader = new System.Windows.Forms.ColumnHeader();
+			this._valueColumnHeader = new System.Windows.Forms.ColumnHeader();
+			this._symbolNameTextBox = new System.Windows.Forms.TextBox();
+			this._setButton = new System.Windows.Forms.Button();
+			this._unsetButton = new System.Windows.Forms.Button();
+			this._symbolValueTextBox = new MixGui.Components.LongValueTextBox();
 			this.SuspendLayout();
 			// 
 			// mListView
 			// 
-			this.mListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this._listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.mListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.mNameColumnHeader,
-            this.mValueColumnHeader});
-			this.mListView.FullRowSelect = true;
-			this.mListView.GridLines = true;
-			this.mListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.mListView.HideSelection = false;
-			this.mListView.Location = new System.Drawing.Point(0, 23);
-			this.mListView.Margin = new System.Windows.Forms.Padding(4);
-			this.mListView.MultiSelect = false;
-			this.mListView.Name = "mListView";
-			this.mListView.ShowGroups = false;
-			this.mListView.Size = new System.Drawing.Size(254, 181);
-			this.mListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-			this.mListView.TabIndex = 4;
-			this.mListView.UseCompatibleStateImageBehavior = false;
-			this.mListView.View = System.Windows.Forms.View.Details;
-			this.mListView.SelectedIndexChanged += new System.EventHandler(this.MListView_SelectedIndexChanged);
-			this.mListView.DoubleClick += new System.EventHandler(this.MListView_DoubleClick);
-			this.mListView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MListView_KeyPress);
+			this._listView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this._nameColumnHeader,
+            this._valueColumnHeader});
+			this._listView.FullRowSelect = true;
+			this._listView.GridLines = true;
+			this._listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this._listView.HideSelection = false;
+			this._listView.Location = new System.Drawing.Point(0, 23);
+			this._listView.Margin = new System.Windows.Forms.Padding(4);
+			this._listView.MultiSelect = false;
+			this._listView.Name = "mListView";
+			this._listView.ShowGroups = false;
+			this._listView.Size = new System.Drawing.Size(254, 181);
+			this._listView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+			this._listView.TabIndex = 4;
+			this._listView.UseCompatibleStateImageBehavior = false;
+			this._listView.View = System.Windows.Forms.View.Details;
+			this._listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
+			this._listView.DoubleClick += new System.EventHandler(this.ListView_DoubleClick);
+			this._listView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListView_KeyPress);
 			// 
 			// mNameColumnHeader
 			// 
-			this.mNameColumnHeader.Text = "Name";
-			this.mNameColumnHeader.Width = 114;
+			this._nameColumnHeader.Text = "Name";
+			this._nameColumnHeader.Width = 114;
 			// 
 			// mValueColumnHeader
 			// 
-			this.mValueColumnHeader.Text = "Value";
-			this.mValueColumnHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.mValueColumnHeader.Width = 83;
+			this._valueColumnHeader.Text = "Value";
+			this._valueColumnHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this._valueColumnHeader.Width = 83;
 			// 
 			// mSymbolNameTextBox
 			// 
-			this.mSymbolNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this._symbolNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.mSymbolNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mSymbolNameTextBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-			this.mSymbolNameTextBox.Location = new System.Drawing.Point(0, 0);
-			this.mSymbolNameTextBox.Margin = new System.Windows.Forms.Padding(4);
-			this.mSymbolNameTextBox.Name = "mSymbolNameTextBox";
-			this.mSymbolNameTextBox.Size = new System.Drawing.Size(128, 23);
-			this.mSymbolNameTextBox.TabIndex = 0;
+			this._symbolNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._symbolNameTextBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+			this._symbolNameTextBox.Location = new System.Drawing.Point(0, 0);
+			this._symbolNameTextBox.Margin = new System.Windows.Forms.Padding(4);
+			this._symbolNameTextBox.Name = "mSymbolNameTextBox";
+			this._symbolNameTextBox.Size = new System.Drawing.Size(128, 23);
+			this._symbolNameTextBox.TabIndex = 0;
 			// 
 			// mSetButton
 			// 
-			this.mSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mSetButton.Enabled = false;
-			this.mSetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mSetButton.Location = new System.Drawing.Point(163, 0);
-			this.mSetButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.mSetButton.Name = "mSetButton";
-			this.mSetButton.Size = new System.Drawing.Size(36, 24);
-			this.mSetButton.TabIndex = 2;
-			this.mSetButton.Text = "&Set";
-			this.mSetButton.UseVisualStyleBackColor = true;
-			this.mSetButton.Click += new System.EventHandler(this.MSetButton_Click);
+			this._setButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._setButton.Enabled = false;
+			this._setButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._setButton.Location = new System.Drawing.Point(163, 0);
+			this._setButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this._setButton.Name = "mSetButton";
+			this._setButton.Size = new System.Drawing.Size(36, 24);
+			this._setButton.TabIndex = 2;
+			this._setButton.Text = "&Set";
+			this._setButton.UseVisualStyleBackColor = true;
+			this._setButton.Click += new System.EventHandler(this.SetButton_Click);
 			// 
 			// mUnsetButton
 			// 
-			this.mUnsetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mUnsetButton.Enabled = false;
-			this.mUnsetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.mUnsetButton.Location = new System.Drawing.Point(198, 0);
-			this.mUnsetButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.mUnsetButton.Name = "mUnsetButton";
-			this.mUnsetButton.Size = new System.Drawing.Size(56, 24);
-			this.mUnsetButton.TabIndex = 3;
-			this.mUnsetButton.Text = "U&nset";
-			this.mUnsetButton.UseVisualStyleBackColor = true;
-			this.mUnsetButton.Click += new System.EventHandler(this.MUnsetButton_Click);
+			this._unsetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._unsetButton.Enabled = false;
+			this._unsetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._unsetButton.Location = new System.Drawing.Point(198, 0);
+			this._unsetButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this._unsetButton.Name = "mUnsetButton";
+			this._unsetButton.Size = new System.Drawing.Size(56, 24);
+			this._unsetButton.TabIndex = 3;
+			this._unsetButton.Text = "U&nset";
+			this._unsetButton.UseVisualStyleBackColor = true;
+			this._unsetButton.Click += new System.EventHandler(this.UnsetButton_Click);
 			// 
 			// mSymbolValueTextBox
 			// 
-			this.mSymbolValueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.mSymbolValueTextBox.BackColor = System.Drawing.Color.White;
-			this.mSymbolValueTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.mSymbolValueTextBox.ClearZero = true;
-			this.mSymbolValueTextBox.ForeColor = System.Drawing.Color.Black;
-			this.mSymbolValueTextBox.Location = new System.Drawing.Point(127, 0);
-			this.mSymbolValueTextBox.LongValue = ((long)(0));
-			this.mSymbolValueTextBox.Magnitude = ((long)(0));
-			this.mSymbolValueTextBox.Margin = new System.Windows.Forms.Padding(4);
-			this.mSymbolValueTextBox.MaxLength = 20;
-			this.mSymbolValueTextBox.MaxValue = ((long)(9223372036854775807));
-			this.mSymbolValueTextBox.MinValue = ((long)(-9223372036854775808));
-			this.mSymbolValueTextBox.Name = "mSymbolValueTextBox";
-			this.mSymbolValueTextBox.Sign = MixLib.Type.Word.Signs.Positive;
-			this.mSymbolValueTextBox.Size = new System.Drawing.Size(37, 23);
-			this.mSymbolValueTextBox.SupportNegativeZero = true;
-			this.mSymbolValueTextBox.TabIndex = 1;
-			this.mSymbolValueTextBox.Text = "0";
+			this._symbolValueTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this._symbolValueTextBox.BackColor = System.Drawing.Color.White;
+			this._symbolValueTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this._symbolValueTextBox.ClearZero = true;
+			this._symbolValueTextBox.ForeColor = System.Drawing.Color.Black;
+			this._symbolValueTextBox.Location = new System.Drawing.Point(127, 0);
+			this._symbolValueTextBox.LongValue = ((long)(0));
+			this._symbolValueTextBox.Magnitude = ((long)(0));
+			this._symbolValueTextBox.Margin = new System.Windows.Forms.Padding(4);
+			this._symbolValueTextBox.MaxLength = 20;
+			this._symbolValueTextBox.MaxValue = ((long)(9223372036854775807));
+			this._symbolValueTextBox.MinValue = ((long)(-9223372036854775808));
+			this._symbolValueTextBox.Name = "mSymbolValueTextBox";
+			this._symbolValueTextBox.Sign = MixLib.Type.Word.Signs.Positive;
+			this._symbolValueTextBox.Size = new System.Drawing.Size(37, 23);
+			this._symbolValueTextBox.SupportNegativeZero = true;
+			this._symbolValueTextBox.TabIndex = 1;
+			this._symbolValueTextBox.Text = "0";
 			// 
 			// SymbolListView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.mUnsetButton);
-			this.Controls.Add(this.mSetButton);
-			this.Controls.Add(this.mSymbolValueTextBox);
-			this.Controls.Add(this.mSymbolNameTextBox);
-			this.Controls.Add(this.mListView);
+			this.Controls.Add(this._unsetButton);
+			this.Controls.Add(this._setButton);
+			this.Controls.Add(this._symbolValueTextBox);
+			this.Controls.Add(this._symbolNameTextBox);
+			this.Controls.Add(this._listView);
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "SymbolListView";
 			this.Size = new System.Drawing.Size(255, 204);
@@ -152,12 +152,12 @@ namespace MixGui.Components
 
     #endregion
 
-    private System.Windows.Forms.ListView mListView;
-    private System.Windows.Forms.ColumnHeader mNameColumnHeader;
-    private System.Windows.Forms.ColumnHeader mValueColumnHeader;
-    private System.Windows.Forms.TextBox mSymbolNameTextBox;
-    private LongValueTextBox mSymbolValueTextBox;
-    private System.Windows.Forms.Button mSetButton;
-    private System.Windows.Forms.Button mUnsetButton;
+    private System.Windows.Forms.ListView _listView;
+    private System.Windows.Forms.ColumnHeader _nameColumnHeader;
+    private System.Windows.Forms.ColumnHeader _valueColumnHeader;
+    private System.Windows.Forms.TextBox _symbolNameTextBox;
+    private LongValueTextBox _symbolValueTextBox;
+    private System.Windows.Forms.Button _setButton;
+    private System.Windows.Forms.Button _unsetButton;
   }
 }

@@ -1,14 +1,14 @@
-﻿using MixLib.Modules;
-using System;
+﻿using System;
+using MixLib.Modules;
 
 namespace MixLib.Interrupts
 {
 	public static class InterruptHandler
 	{
-		const int registerStorageAddressBase = -9;
-		const int forcedInterruptAddress = -12;
-		const int timerInterruptAddress = -11;
-		const int deviceInterruptAddressBase = -20;
+		private const int registerStorageAddressBase = -9;
+		private const int forcedInterruptAddress = -12;
+		private const int timerInterruptAddress = -11;
+		private const int deviceInterruptAddressBase = -20;
 
 		public static void HandleInterrupt(Mix mix, Interrupt interrupt)
 		{

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace MixGui.Settings
@@ -31,8 +31,8 @@ namespace MixGui.Settings
 		public const string TeletypeOutputText = "TeletypeOutputText";
 		public const string WarningText = "WarningText";
 
-		static readonly Dictionary<string, Color> mDefaultColors;
-		static readonly Dictionary<string, Font> mDefaultFonts;
+		private static readonly Dictionary<string, Color> _defaultColors;
+		private static readonly Dictionary<string, Font> _defaultFonts;
 
 		public static Dictionary<string, Color> Colors { private get; set; }
 		public static ProfilingInfoType ShowProfilingInfo { get; set; }
@@ -40,74 +40,67 @@ namespace MixGui.Settings
 
 		static GuiSettings()
 		{
-			mDefaultColors = new Dictionary<string, Color>
-						{
-								{ ErrorText, Color.Red },
-								{ WarningText, Color.DarkOrange },
-								{ InfoText, Color.DarkGreen },
-								{ DebugText, Color.DarkBlue },
-								{ RenderedText, Color.Black },
-								{ EditingText, Color.Blue },
-								{ ImmutableText, Color.DarkGray },
-								{ EditorBackground, Color.White },
-								{ LoadedInstructionText, Color.Black },
-								{ LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204) },
-								{ AddressText, Color.Black },
-								{ ProgramCounterAddressBackground, Color.Yellow },
-								{ DeviceIdle, Color.LawnGreen },
-								{ DeviceBusy, Color.Yellow },
-								{ LocationFieldText, Color.Black },
-								{ OpFieldText, Color.Blue },
-								{ AddressFieldText, Color.Black },
-								{ CommentFieldText, Color.DarkGreen },
-								{ LineNumberText, Color.DarkSeaGreen },
-								{ LineNumberSeparator, Color.DarkGray },
-								{ TeletypeInputText, Color.Black },
-								{ TeletypeInputBackground, Color.White },
-								{ TeletypeOutputText, Color.White },
-								{ TeletypeOutputBackground, Color.Black }
-						};
+			_defaultColors = new Dictionary<string, Color>
+			{
+				{ ErrorText, Color.Red },
+				{ WarningText, Color.DarkOrange },
+				{ InfoText, Color.DarkGreen },
+				{ DebugText, Color.DarkBlue },
+				{ RenderedText, Color.Black },
+				{ EditingText, Color.Blue },
+				{ ImmutableText, Color.DarkGray },
+				{ EditorBackground, Color.White },
+				{ LoadedInstructionText, Color.Black },
+				{ LoadedInstructionBackground, Color.FromArgb(255, 255, 255, 204) },
+				{ AddressText, Color.Black },
+				{ ProgramCounterAddressBackground, Color.Yellow },
+				{ DeviceIdle, Color.LawnGreen },
+				{ DeviceBusy, Color.Yellow },
+				{ LocationFieldText, Color.Black },
+				{ OpFieldText, Color.Blue },
+				{ AddressFieldText, Color.Black },
+				{ CommentFieldText, Color.DarkGreen },
+				{ LineNumberText, Color.DarkSeaGreen },
+				{ LineNumberSeparator, Color.DarkGray },
+				{ TeletypeInputText, Color.Black },
+				{ TeletypeInputBackground, Color.White },
+				{ TeletypeOutputText, Color.White },
+				{ TeletypeOutputBackground, Color.Black }
+			};
+
 			Colors = new Dictionary<string, Color>();
-			mDefaultFonts = new Dictionary<string, Font>
-						{
-								{ FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
-						};
+			_defaultFonts = new Dictionary<string, Font>
+			{
+				{ FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
+			};
+
 			ColorProfilingCounts = true;
 		}
 
-		public static bool IsKnownColor(string name)
-		{
-			return mDefaultColors.ContainsKey(name);
-		}
+		public static bool IsKnownColor(string name) => _defaultColors.ContainsKey(name);
 
 		public static Color GetColor(string name)
 		{
 			if (Colors.ContainsKey(name))
-			{
 				return Colors[name];
-			}
 
 			return GetDefaultColor(name);
 		}
 
 		public static Color GetDefaultColor(string name)
 		{
-			if (mDefaultColors.ContainsKey(name))
-			{
-				return mDefaultColors[name];
-			}
+			if (_defaultColors.ContainsKey(name))
+				return _defaultColors[name];
 
 			return SystemColors.WindowText;
 		}
 
 		public static Font GetFont(string name)
 		{
-			if (mDefaultFonts.ContainsKey(name))
-			{
-				return mDefaultFonts[name];
-			}
+			if (_defaultFonts.ContainsKey(name))
+				return _defaultFonts[name];
 
-			var enumerator = ((IEnumerable<Font>)mDefaultFonts).GetEnumerator();
+			var enumerator = ((IEnumerable<Font>)_defaultFonts).GetEnumerator();
 			enumerator.MoveNext();
 			return enumerator.Current;
 		}
@@ -116,8 +109,8 @@ namespace MixGui.Settings
 		{
 			get
 			{
-				string[] array = new string[mDefaultColors.Count];
-				mDefaultColors.Keys.CopyTo(array, 0);
+				string[] array = new string[_defaultColors.Count];
+				_defaultColors.Keys.CopyTo(array, 0);
 				return array;
 			}
 		}

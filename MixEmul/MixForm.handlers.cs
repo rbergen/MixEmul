@@ -1,4 +1,8 @@
-﻿using MixGui.Components;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
+using MixGui.Components;
 using MixGui.Events;
 using MixGui.Settings;
 using MixGui.Utils;
@@ -6,203 +10,166 @@ using MixLib.Device;
 using MixLib.Misc;
 using MixLib.Modules;
 using MixLib.Settings;
-using System;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace MixGui
 {
 	public partial class MixForm
 	{
-		void ExitMenuItem_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
+		private void ExitMenuItem_Click(object sender, EventArgs e) 
+			=> Close();
 
-		static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
-		{
-			HandleException(e.Exception);
-		}
+		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e) 
+			=> HandleException(e.Exception);
 
-		static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			HandleException((Exception)e.ExceptionObject);
-		}
+		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
+			=> HandleException((Exception)e.ExceptionObject);
 
-		void RunItem_Click(object sender, EventArgs e)
-		{
-			SwitchRunningState();
-		}
+		private void RunItem_Click(object sender, EventArgs e) 
+			=> SwitchRunningState();
 
-		void ShowPCButton_Click(object sender, EventArgs e)
-		{
-			mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter);
-		}
+		private void ShowPCButton_Click(object sender, EventArgs e) 
+			=> _mainMemoryEditor.MakeAddressVisible(_mix.ProgramCounter);
 
-		void TeletypeItem_Click(object sender, EventArgs e)
-		{
-			SwitchTeletypeVisibility();
-		}
+		private void TeletypeItem_Click(object sender, EventArgs e) 
+			=> SwitchTeletypeVisibility();
 
-		void FloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args)
-		{
-			ImplementFloatingPointPCChange(args.SelectedAddress);
-		}
+		private void FloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args) 
+			=> ImplementFloatingPointPCChange(args.SelectedAddress);
 
-		void DevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)
+		private void DevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)
 		{
 			if (e.Device is TeletypeDevice)
 			{
-				if (!mTeletype.Visible)
-				{
-					mTeletype.Show();
-				}
+				if (!_teletype.Visible)
+					_teletype.Show();
 
-				mTeletype.BringToFront();
+				_teletype.BringToFront();
 				return;
 			}
 
-			mDeviceEditor.ShowDevice(e.Device);
-			if (!mDeviceEditor.Visible)
-			{
-				mDeviceEditor.Show();
-			}
+			_deviceEditor.ShowDevice(e.Device);
+			if (!_deviceEditor.Visible)
+				_deviceEditor.Show();
 
-			mDeviceEditor.BringToFront();
+			_deviceEditor.BringToFront();
 		}
 
-		void ModeCycleButton_ValueChanged(object sender, EventArgs e)
+		private void ModeCycleButton_ValueChanged(object sender, EventArgs e)
 		{
-			int pc = mMix.ProgramCounter;
-			mMix.Mode = (ModuleBase.RunMode)mModeCycleButton.Value;
+			int pc = _mix.ProgramCounter;
+			_mix.Mode = (ModuleBase.RunMode)_modeCycleButton.Value;
 			SetPCBoxBounds();
 
-			if (pc != mMix.ProgramCounter)
+			if (pc != _mix.ProgramCounter)
 			{
-				if (mMainMemoryEditor.IsAddressVisible(pc))
-				{
-					mMainMemoryEditor.MakeAddressVisible(mMix.ProgramCounter, mMix.Status == ModuleBase.RunStatus.Idle);
-				}
+				if (_mainMemoryEditor.IsAddressVisible(pc))
+					_mainMemoryEditor.MakeAddressVisible(_mix.ProgramCounter, _mix.Status == ModuleBase.RunStatus.Idle);
 
-				mMainMemoryEditor.MarkedAddress = mMix.ProgramCounter;
-				mPCBox.LongValue = mMix.ProgramCounter;
+				_mainMemoryEditor.MarkedAddress = _mix.ProgramCounter;
+				_pcBox.LongValue = _mix.ProgramCounter;
 			}
 		}
 
-		void DeviceEditor_VisibleChanged(object sender, EventArgs e)
+		private void DeviceEditor_VisibleChanged(object sender, EventArgs e)
 		{
-			mDeviceEditorButton.Text = mDeviceEditor.Visible ? "Hide E&ditor" : "Show E&ditor";
-			mDeviceEditorToolStripMenuItem.Text = mDeviceEditor.Visible ? "Hide &Device Editor" : "Show &Device Editor";
+			_deviceEditorButton.Text = _deviceEditor.Visible ? "Hide E&ditor" : "Show E&ditor";
+			_deviceEditorToolStripMenuItem.Text = _deviceEditor.Visible ? "Hide &Device Editor" : "Show &Device Editor";
 		}
 
-		void AboutMenuItem_Click(object sender, EventArgs e)
+		private void AboutMenuItem_Click(object sender, EventArgs e)
 		{
-			if (mAboutForm == null)
-			{
-				mAboutForm = new AboutForm();
-			}
+			if (_aboutForm == null)
+				_aboutForm = new AboutForm();
 
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
-			mAboutForm.ShowDialog(this);
+			_aboutForm.ShowDialog(this);
 
-			mTeletype.TopMost |= teletypeWasOnTop;
-		}
-		void DetachItem_Click(object sender, EventArgs e)
-		{
-			mMix.RunDetached = !mMix.RunDetached;
-			mDetachToolStripButton.Text = mMix.RunDetached ? "Attac&h" : "Detac&h";
-			mDetachToolStripMenuItem.Text = mMix.RunDetached ? "&Attach" : "&Detach";
+			_teletype.TopMost |= teletypeWasOnTop;
 		}
 
-		void ListViews_addressSelected(object sender, AddressSelectedEventArgs args)
+		private void DetachItem_Click(object sender, EventArgs e)
 		{
-			if (sender == mLogListView)
-			{
-				mMemoryTabControl.SelectedIndex = mLogListView.SelectedModule == mMix.FloatingPointModule.ModuleName ? floatingPointMemoryEditorIndex : mainMemoryEditorIndex;
-			}
+			_mix.RunDetached = !_mix.RunDetached;
+			_detachToolStripButton.Text = _mix.RunDetached ? "Attac&h" : "Detac&h";
+			_detachToolStripMenuItem.Text = _mix.RunDetached ? "&Attach" : "&Detach";
+		}
+
+		private void ListViews_addressSelected(object sender, AddressSelectedEventArgs args)
+		{
+			if (sender == _logListView)
+				_memoryTabControl.SelectedIndex = _logListView.SelectedModule == _mix.FloatingPointModule.ModuleName ? FloatingPointMemoryEditorIndex : MainMemoryEditorIndex;
+
 			ActiveMemoryEditor.MakeAddressVisible(args.SelectedAddress);
 		}
 
-		void MemoryEditor_addressSelected(object sender, AddressSelectedEventArgs args)
+		private void MemoryEditor_addressSelected(object sender, AddressSelectedEventArgs args)
 		{
-			if (!mReadOnly)
-			{
+			if (!_readOnly)
 				ImplementPCChange(args.SelectedAddress);
-			}
 		}
 
-		void Mix_InputRequired(object sender, EventArgs e)
+		private void Mix_InputRequired(object sender, EventArgs e)
 		{
 			if (InvokeRequired)
 			{
 				Invoke(new EventHandler(Mix_InputRequired));
+				return;
 			}
-			else
-			{
-				mMix.RequestStop();
-				mTeletype.StatusText = "Teletype input required";
 
-				if (!mTeletype.Visible)
-				{
-					SwitchTeletypeVisibility();
-				}
+			_mix.RequestStop();
+			_teletype.StatusText = "Teletype input required";
 
-				mTeletype.Activate();
-			}
+			if (!_teletype.Visible)
+				SwitchTeletypeVisibility();
+
+			_teletype.Activate();
 		}
 
-		void Mix_LogLineAdded(object sender, EventArgs e)
+		private void Mix_LogLineAdded(object sender, EventArgs e)
 		{
 			if (InvokeRequired)
 			{
 				Invoke(new EventHandler(Mix_LogLineAdded));
+				return;
 			}
-			else
-			{
-				LogLine line;
-				while ((line = mMix.GetLogLine()) != null)
-				{
-					mLogListView.AddLogLine(line);
-				}
-			}
+
+			LogLine line;
+			while ((line = _mix.GetLogLine()) != null)
+				_logListView.AddLogLine(line);
 		}
 
-		void Mix_StepPerformed(object sender, EventArgs e)
+		private void Mix_StepPerformed(object sender, EventArgs e)
 		{
 			if (InvokeRequired)
 			{
 				Invoke(new EventHandler(Mix_StepPerformed));
+				return;
 			}
+
+			if (!_running)
+				_mix.RequestStop(false);
+
+			DateTime updateStartTime = DateTime.Now;
+			Update();
+
+			if (_mix.IsRunning)
+				_mix.ContinueRun(DateTime.Now - updateStartTime);
+
 			else
 			{
-				if (!mRunning)
-				{
-					mMix.RequestStop(false);
-				}
-
-				DateTime updateStartTime = DateTime.Now;
-				Update();
-
-				if (mMix.IsRunning)
-				{
-					mMix.ContinueRun(DateTime.Now - updateStartTime);
-				}
-				else
-				{
-					mRunning = false;
-					SetSteppingState(SteppingState.Idle);
-				}
+				_running = false;
+				SetSteppingState(SteppingState.Idle);
 			}
 		}
 
-		void OpenProgramMenuItem_Click(object sender, EventArgs e)
+		private void OpenProgramMenuItem_Click(object sender, EventArgs e)
 		{
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
-			if (mOpenProgramFileDialog == null)
+			if (_openProgramFileDialog == null)
 			{
-				mOpenProgramFileDialog = new OpenFileDialog
+				_openProgramFileDialog = new OpenFileDialog
 				{
 					AddExtension = false,
 					Filter = "MIXAL program (*.mixal)|*.mixal|All files (*.*)|*.*",
@@ -210,12 +177,12 @@ namespace MixGui
 				};
 			}
 
-			if (mOpenProgramFileDialog.ShowDialog(this) == DialogResult.OK)
+			if (_openProgramFileDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				mLogListView.AddLogLine(new LogLine("Assembler", Severity.Info, "Parsing source", "File: " + mOpenProgramFileDialog.FileName));
+				_logListView.AddLogLine(new LogLine("Assembler", Severity.Info, "Parsing source", "File: " + _openProgramFileDialog.FileName));
 				try
 				{
-					LoadProgram(mOpenProgramFileDialog.FileName);
+					LoadProgram(_openProgramFileDialog.FileName);
 				}
 				catch (Exception ex)
 				{
@@ -224,227 +191,200 @@ namespace MixGui
 				}
 			}
 
-			mTeletype.TopMost |= teletypeWasOnTop;
+			_teletype.TopMost |= teletypeWasOnTop;
 		}
 
-		void PreferencesMenuItem_Click(object sender, EventArgs e)
+		private void PreferencesMenuItem_Click(object sender, EventArgs e)
 		{
-			if (mPreferencesForm == null)
-			{
-				mPreferencesForm = new PreferencesForm(mConfiguration, mMix.Devices, mDefaultDirectory);
-			}
+			if (_preferencesForm == null)
+				_preferencesForm = new PreferencesForm(_configuration, _mix.Devices, _defaultDirectory);
 
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
-			if (mPreferencesForm.ShowDialog(this) == DialogResult.OK)
+			if (_preferencesForm.ShowDialog(this) == DialogResult.OK)
 			{
-				GuiSettings.ColorProfilingCounts = mConfiguration.ColorProfilingCounts;
+				GuiSettings.ColorProfilingCounts = _configuration.ColorProfilingCounts;
 				UpdateLayout();
 				UpdateDeviceConfig();
-				mDeviceEditor.UpdateSettings();
-				CardDeckExporter.LoaderCards = mConfiguration.LoaderCards;
+				_deviceEditor.UpdateSettings();
+				CardDeckExporter.LoaderCards = _configuration.LoaderCards;
 			}
 
-
-			mTeletype.TopMost |= teletypeWasOnTop;
+			_teletype.TopMost |= teletypeWasOnTop;
 		}
 
-		void ResetItem_Click(object sender, EventArgs e)
+		private void ResetItem_Click(object sender, EventArgs e)
 		{
-			mMemoryTabControl.SelectedIndex = 0;
+			_memoryTabControl.SelectedIndex = 0;
 
-			mMix.Reset();
-			mSymbolListView.Reset();
-			mMainMemoryEditor.ClearBreakpoints();
-			mMainMemoryEditor.Symbols = null;
+			_mix.Reset();
+			_symbolListView.Reset();
+			_mainMemoryEditor.ClearBreakpoints();
+			_mainMemoryEditor.Symbols = null;
 			LoadControlProgram();
 
-			mMix.FloatingPointModule.FullMemory.Reset();
+			_mix.FloatingPointModule.FullMemory.Reset();
 			ApplyFloatingPointSettings();
-			if (mFloatingPointMemoryEditor != null)
+
+			if (_floatingPointMemoryEditor != null)
 			{
-				mFloatingPointMemoryEditor.ClearBreakpoints();
-				mFloatingPointMemoryEditor.Symbols = mMix.FloatingPointModule.Symbols;
+				_floatingPointMemoryEditor.ClearBreakpoints();
+				_floatingPointMemoryEditor.Symbols = _mix.FloatingPointModule.Symbols;
 			}
 
 			Update();
 
-			mMainMemoryEditor.ClearHistory();
+			_mainMemoryEditor.ClearHistory();
 		}
 
-		void ResetTicksButton_Click(object sender, EventArgs e)
+		private void ResetTicksButton_Click(object sender, EventArgs e)
 		{
-			mMix.ResetTickCounter();
-			mTicksToolStripTextBox.Text = mMix.TickCounter.ToString();
+			_mix.ResetTickCounter();
+			_ticksToolStripTextBox.Text = _mix.TickCounter.ToString();
 		}
 
-		void StepItem_Click(object sender, EventArgs e)
+		private void StepItem_Click(object sender, EventArgs e)
 		{
 			SetSteppingState(SteppingState.Stepping);
-			mMix.StartStep();
+			_mix.StartStep();
 		}
 
-		void Teletype_VisibleChanged(object sender, EventArgs e)
+		private void Teletype_VisibleChanged(object sender, EventArgs e)
 		{
-			mTeletypeToolStripButton.Text = mTeletype.Visible ? "Hide &Teletype" : "Show &Teletype";
-			mTeletypeToolStripMenuItem.Text = mTeletype.Visible ? "&Hide Teletype" : "&Show Teletype";
+			_teletypeToolStripButton.Text = _teletype.Visible ? "Hide &Teletype" : "Show &Teletype";
+			_teletypeToolStripMenuItem.Text = _teletype.Visible ? "&Hide Teletype" : "&Show Teletype";
 		}
 
-		void TickItem_Click(object sender, EventArgs e)
+		private void TickItem_Click(object sender, EventArgs e)
 		{
-			mMix.Tick();
+			_mix.Tick();
 			Update();
 		}
 
-		void FormClosingHandler(object sender, FormClosingEventArgs e)
+		private void This_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			mConfiguration.MainWindowState = WindowState;
-			mConfiguration.DeviceEditorWindowLocation = mDeviceEditor.Location;
-			mConfiguration.DeviceEditorWindowSize = mDeviceEditor.Size;
-			mConfiguration.DeviceEditorVisible = mDeviceEditor.Visible;
-			mConfiguration.TeletypeOnTop = mTeletype.TopMost;
-			mConfiguration.TeletypeWindowLocation = mTeletype.Location;
-			mConfiguration.TeletypeWindowSize = mTeletype.Size;
-			mConfiguration.TeletypeVisible = mTeletype.Visible;
-			mConfiguration.TeletypeEchoInput = mTeletype.EchoInput;
+			_configuration.MainWindowState = WindowState;
+			_configuration.DeviceEditorWindowLocation = _deviceEditor.Location;
+			_configuration.DeviceEditorWindowSize = _deviceEditor.Size;
+			_configuration.DeviceEditorVisible = _deviceEditor.Visible;
+			_configuration.TeletypeOnTop = _teletype.TopMost;
+			_configuration.TeletypeWindowLocation = _teletype.Location;
+			_configuration.TeletypeWindowSize = _teletype.Size;
+			_configuration.TeletypeVisible = _teletype.Visible;
+			_configuration.TeletypeEchoInput = _teletype.EchoInput;
 
 			try
 			{
-				mConfiguration.Save(mDefaultDirectory);
+				_configuration.Save(_defaultDirectory);
 			}
-			catch (Exception)
-			{
-			}
+			catch (Exception) {}
 		}
 
-		void LocationChangedHandler(object sender, EventArgs e)
+		private void This_LocationChanged(object sender, EventArgs e)
 		{
 			if (WindowState == FormWindowState.Normal)
-			{
-				mConfiguration.MainWindowLocation = Location;
-			}
+				_configuration.MainWindowLocation = Location;
 		}
 
-		void SizeChangedHandler(object sender, EventArgs e)
+		private void This_SizeChanged(object sender, EventArgs e)
 		{
 			if (WindowState == FormWindowState.Normal)
-			{
-				mConfiguration.MainWindowSize = Size;
-			}
+				_configuration.MainWindowSize = Size;
 		}
 
-		void ResizeBeginHandler(object sender, EventArgs e)
+		private void This_ResizeBegin(object sender, EventArgs e)
 		{
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
-				if (editor != null)
-				{
-					editor.ResizeInProgress = true;
-				}
-			}
+			foreach (MemoryEditor editor in _memoryEditors.Where(editor => editor != null))
+				editor.ResizeInProgress = true;
 		}
 
-		void ResizeEndHandler(object sender, EventArgs e)
+		private void This_ResizeEnd(object sender, EventArgs e)
 		{
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
-				if (editor != null)
-				{
-					editor.ResizeInProgress = false;
-				}
-			}
+			foreach (MemoryEditor editor in _memoryEditors.Where(editor => editor != null))
+				editor.ResizeInProgress = false;
 		}
 
-		void ClearBreakpointsItem_Click(object sender, EventArgs e)
+		private void ClearBreakpointsItem_Click(object sender, EventArgs e)
 		{
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
+			foreach (MemoryEditor editor in _memoryEditors)
 				editor?.ClearBreakpoints();
-			}
 		}
 
-		void DeviceEditorItem_Click(object sender, EventArgs e)
+		private void DeviceEditorItem_Click(object sender, EventArgs e)
 		{
-			if (mDeviceEditor.Visible)
-			{
-				mDeviceEditor.Hide();
-			}
+			if (_deviceEditor.Visible)
+				_deviceEditor.Hide();
+
 			else
-			{
-				mDeviceEditor.Show();
-			}
-
+				_deviceEditor.Show();
 		}
 
-		void GoItem_Click(object sender, EventArgs e)
+		private void GoItem_Click(object sender, EventArgs e)
 		{
-			if (mSteppingState == SteppingState.Idle)
+			if (_steppingState == SteppingState.Idle)
 			{
-				mMix.PrepareLoader();
+				_mix.PrepareLoader();
 				SwitchRunningState();
 			}
 		}
 
-		void MemoryTabControl_Selecting(object sender, TabControlCancelEventArgs e)
+		private void MemoryTabControl_Selecting(object sender, TabControlCancelEventArgs e)
 		{
-			if (e.TabPageIndex == floatingPointMemoryEditorIndex)
-			{
-				if (mFloatingPointMemoryEditor == null)
-				{
-					mFloatingPointMemoryEditor = new MemoryEditor(mMix.FloatingPointModule.FullMemory);
+			if (e.TabPageIndex != FloatingPointMemoryEditorIndex)
+				return;
 
-					mFloatingPointMemoryTab.SuspendLayout();
-					mFloatingPointMemoryTab.Controls.Add(mFloatingPointMemoryEditor);
+			if (_floatingPointMemoryEditor != null)
+				return;
 
-					mFloatingPointMemoryEditor.ToolTip = mToolTip;
-					mFloatingPointMemoryEditor.Anchor = mMainMemoryEditor.Anchor;
-					mFloatingPointMemoryEditor.MarkedAddress = mMix.FloatingPointModule.ProgramCounter;
-					mFloatingPointMemoryEditor.FirstVisibleAddress = mFloatingPointMemoryEditor.MarkedAddress;
-					mFloatingPointMemoryEditor.IndexedAddressCalculatorCallback = CalculateIndexedAddress;
-					mFloatingPointMemoryEditor.Location = mMainMemoryEditor.Location;
-					mFloatingPointMemoryEditor.Size = mFloatingPointMemoryTab.Size;
-					mFloatingPointMemoryEditor.Name = "mFloatingPointMemoryEditor";
-					mFloatingPointMemoryEditor.ReadOnly = mReadOnly;
-					mFloatingPointMemoryEditor.ResizeInProgress = mMainMemoryEditor.ResizeInProgress;
-					mFloatingPointMemoryEditor.Symbols = mMix.FloatingPointModule.Symbols;
-					mFloatingPointMemoryEditor.TabIndex = 0;
-					mFloatingPointMemoryEditor.AddressSelected += FloatingPointMemoryEditor_AddressSelected;
+			_floatingPointMemoryEditor = new MemoryEditor(_mix.FloatingPointModule.FullMemory);
 
-					mFloatingPointMemoryTab.ResumeLayout(true);
+			_floatingPointMemoryTab.SuspendLayout();
+			_floatingPointMemoryTab.Controls.Add(_floatingPointMemoryEditor);
 
-					mMemoryEditors[floatingPointMemoryEditorIndex] = mFloatingPointMemoryEditor;
-					mMix.FloatingPointModule.BreakpointManager = mFloatingPointMemoryEditor;
-				}
+			_floatingPointMemoryEditor.ToolTip = _toolTip;
+			_floatingPointMemoryEditor.Anchor = _mainMemoryEditor.Anchor;
+			_floatingPointMemoryEditor.MarkedAddress = _mix.FloatingPointModule.ProgramCounter;
+			_floatingPointMemoryEditor.FirstVisibleAddress = _floatingPointMemoryEditor.MarkedAddress;
+			_floatingPointMemoryEditor.IndexedAddressCalculatorCallback = CalculateIndexedAddress;
+			_floatingPointMemoryEditor.Location = _mainMemoryEditor.Location;
+			_floatingPointMemoryEditor.Size = _floatingPointMemoryTab.Size;
+			_floatingPointMemoryEditor.Name = "mFloatingPointMemoryEditor";
+			_floatingPointMemoryEditor.ReadOnly = _readOnly;
+			_floatingPointMemoryEditor.ResizeInProgress = _mainMemoryEditor.ResizeInProgress;
+			_floatingPointMemoryEditor.Symbols = _mix.FloatingPointModule.Symbols;
+			_floatingPointMemoryEditor.TabIndex = 0;
+			_floatingPointMemoryEditor.AddressSelected += FloatingPointMemoryEditor_AddressSelected;
 
-			}
+			_floatingPointMemoryTab.ResumeLayout(true);
+
+			_memoryEditors[FloatingPointMemoryEditorIndex] = _floatingPointMemoryEditor;
+			_mix.FloatingPointModule.BreakpointManager = _floatingPointMemoryEditor;
 		}
 
-		void MemoryTabControl_SelectedIndexChanged(object sender, EventArgs e)
+		private void MemoryTabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			MemoryEditor editor = ActiveMemoryEditor;
-			mSymbolListView.Symbols = editor.Symbols;
-			mSymbolListView.MemoryMinIndex = editor.Memory.MinWordIndex;
-			mSymbolListView.MemoryMaxIndex = editor.Memory.MaxWordIndex;
+			_symbolListView.Symbols = editor.Symbols;
+			_symbolListView.MemoryMinIndex = editor.Memory.MinWordIndex;
+			_symbolListView.MemoryMaxIndex = editor.Memory.MaxWordIndex;
 		}
 
-		void FindMenuItem_Click(object sender, EventArgs e)
+		private void FindMenuItem_Click(object sender, EventArgs e)
 		{
-			if (mSearchDialog == null)
-			{
-				mSearchDialog = new SearchDialog();
-			}
+			if (_searchDialog == null)
+				_searchDialog = new SearchDialog();
 
-			if (mSearchDialog.ShowDialog(this) == DialogResult.OK)
+			if (_searchDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				mSearchOptions = mSearchDialog.SearchParameters;
+				_searchOptions = _searchDialog.SearchParameters;
 
 				FindNext();
 			}
 		}
 
-		void FindNextMenuItem_Click(object sender, EventArgs e)
+		private void FindNextMenuItem_Click(object sender, EventArgs e)
 		{
-			if (mSearchOptions == null)
+			if (_searchOptions == null)
 			{
 				FindMenuItem_Click(sender, e);
 				return;
@@ -453,38 +393,32 @@ namespace MixGui
 			FindNext();
 		}
 
-		void ProfilingEnabledMenuItem_CheckedChanged(object sender, EventArgs e)
+		private void ProfilingEnabledMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
-			ExecutionSettings.ProfilingEnabled = mProfilingEnabledMenuItem.Checked;
-			mConfiguration.ProfilingEnabled = ExecutionSettings.ProfilingEnabled;
+			ExecutionSettings.ProfilingEnabled = _profilingEnabledMenuItem.Checked;
+			_configuration.ProfilingEnabled = ExecutionSettings.ProfilingEnabled;
 
-			mProfilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
-			mProfilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
+			_profilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
+			_profilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
 
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
+			foreach (MemoryEditor editor in _memoryEditors)
 				editor?.UpdateLayout();
-			}
 		}
 
-		void ProfilingShowTickCountsMenuItem_CheckedChanged(object sender, EventArgs e)
+		private void ProfilingShowTickCountsMenuItem_CheckedChanged(object sender, EventArgs e)
 		{
-			GuiSettings.ShowProfilingInfo = mProfilingShowTickCountsMenuItem.Checked ? GuiSettings.ProfilingInfoType.Tick : GuiSettings.ProfilingInfoType.Execution;
-			mConfiguration.ShowProfilingInfo = GuiSettings.ShowProfilingInfo;
+			GuiSettings.ShowProfilingInfo = _profilingShowTickCountsMenuItem.Checked ? GuiSettings.ProfilingInfoType.Tick : GuiSettings.ProfilingInfoType.Execution;
+			_configuration.ShowProfilingInfo = GuiSettings.ShowProfilingInfo;
 
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
+			foreach (MemoryEditor editor in _memoryEditors)
 				editor?.UpdateLayout();
-			}
 		}
 
-		void ProfilingResetCountsMenuItem_Click(object sender, EventArgs e)
+		private void ProfilingResetCountsMenuItem_Click(object sender, EventArgs e)
 		{
-			mMix.ResetProfilingCounts();
-			foreach (MemoryEditor editor in mMemoryEditors)
-			{
+			_mix.ResetProfilingCounts();
+			foreach (MemoryEditor editor in _memoryEditors)
 				editor?.Update();
-			}
 		}
 	}
 }

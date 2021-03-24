@@ -1,8 +1,9 @@
-﻿using MixLib.Instruction;
-using MixLib.Type;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using MixLib.Instruction;
+using MixLib.Type;
 
 namespace MixGui.Utils
 {
@@ -15,37 +16,28 @@ namespace MixGui.Utils
 			" 2DEH K BB Q B. E  9"
 		};
 
-		static string[] mLoaderCards;
+		private static string[] _loaderCards;
 
-		const int maxWordsPerCard = 7;
+		private const int MaxWordsPerCard = 7;
 
-		static string GetTransLine(int programCounter)
-		{
-			return "TRANS0" + GetAddressText(programCounter);
-		}
+		private static string GetTransLine(int programCounter) 
+			=> "TRANS0" + GetAddressText(programCounter);
 
-		static char GetNegativeDigit(char digit)
-		{
-			return MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
-		}
+		private static char GetNegativeDigit(char digit) 
+			=> MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
 
 		public static string[] LoaderCards
 		{
-			get => mLoaderCards ?? DefaultLoaderCards;
-			set => mLoaderCards = value;
+			get => _loaderCards ?? DefaultLoaderCards;
+			set => _loaderCards = value;
 		}
 
-		static StreamWriter PrepareWriter(string filePath)
+		private static StreamWriter PrepareWriter(string filePath)
 		{
 			var writer = new StreamWriter(filePath, false, Encoding.ASCII);
 
-			foreach (string loaderCard in LoaderCards)
-			{
-				if (loaderCard != null && loaderCard.TrimEnd() != string.Empty)
-				{
-					writer.WriteLine(loaderCard);
-				}
-			}
+			foreach (string loaderCard in LoaderCards.Where(card => card != null && card.TrimEnd() != string.Empty))
+				writer.WriteLine(loaderCard);
 
 			return writer;
 		}
@@ -61,18 +53,16 @@ namespace MixGui.Utils
 			{
 				words.Add(word);
 
-				if (words.Count == maxWordsPerCard)
+				if (words.Count == MaxWordsPerCard)
 				{
 					writer.WriteLine(GetInformationLine(firstWordLocation, words));
 					words.Clear();
-					firstWordLocation += maxWordsPerCard;
+					firstWordLocation += MaxWordsPerCard;
 				}
 			}
 
 			if (words.Count > 0)
-			{
 				writer.WriteLine(GetInformationLine(firstWordLocation, words));
-			}
 
 			writer.WriteLine(GetTransLine(programCounter));
 			writer.Close();
@@ -88,45 +78,43 @@ namespace MixGui.Utils
 
 			foreach (InstructionInstanceBase instance in instances)
 			{
-				if (instance is LoaderInstruction.Instance loaderInstance)
+				switch (instance)
 				{
-					switch (((LoaderInstruction)instance.Instruction).Operation)
-					{
-						case LoaderInstruction.Operations.SetLocationCounter:
-							if (words.Count > 0)
-							{
-								writer.WriteLine(GetInformationLine(firstWordLocation, words));
-							}
+					case LoaderInstruction.Instance loaderInstance:
+						switch (((LoaderInstruction)instance.Instruction).Operation)
+						{
+							case LoaderInstruction.Operations.SetLocationCounter:
+								if (words.Count > 0)
+									writer.WriteLine(GetInformationLine(firstWordLocation, words));
 
-							words.Clear();
-							firstWordLocation = locationCounter = (int)loaderInstance.Value.LongValue;
+								words.Clear();
+								firstWordLocation = locationCounter = (int)loaderInstance.Value.LongValue;
 
-							break;
+								break;
 
-						case LoaderInstruction.Operations.SetMemoryWord:
-							words.Add(loaderInstance.Value);
-							locationCounter++;
+							case LoaderInstruction.Operations.SetMemoryWord:
+								words.Add(loaderInstance.Value);
+								locationCounter++;
 
-							break;
+								break;
 
-						case LoaderInstruction.Operations.SetProgramCounter:
-							if (words.Count > 0)
-							{
-								writer.WriteLine(GetInformationLine(firstWordLocation, words));
-							}
+							case LoaderInstruction.Operations.SetProgramCounter:
+								if (words.Count > 0)
+									writer.WriteLine(GetInformationLine(firstWordLocation, words));
 
-							writer.WriteLine(GetTransLine((int)loaderInstance.Value.LongValue));
-							writer.Close();
-							return;
-					}
-				}
-				else if (instance is MixInstruction.Instance mixInstance)
-				{
-					words.Add(mixInstance.InstructionWord);
-					locationCounter++;
+								writer.WriteLine(GetTransLine((int)loaderInstance.Value.LongValue));
+								writer.Close();
+								return;
+						}
+						break;
+
+					case MixInstruction.Instance mixInstance:
+						words.Add(mixInstance.InstructionWord);
+						locationCounter++;
+						break;
 				}
 
-				if (words.Count == maxWordsPerCard)
+				if (words.Count == MaxWordsPerCard)
 				{
 					writer.WriteLine(GetInformationLine(firstWordLocation, words));
 					words.Clear();
@@ -135,7 +123,7 @@ namespace MixGui.Utils
 			}
 		}
 
-		static string GetAddressText(int address)
+		private static string GetAddressText(int address)
 		{
 			if (address < 0)
 			{
@@ -147,7 +135,7 @@ namespace MixGui.Utils
 			return address.ToString("0000");
 		}
 
-		static string GetInformationLine(int firstWordLocation, List<IFullWord> words)
+		private static string GetInformationLine(int firstWordLocation, List<IFullWord> words)
 		{
 			var lineBuilder = new StringBuilder("INFO ");
 
@@ -161,9 +149,8 @@ namespace MixGui.Utils
 				numberText = word.MagnitudeLongValue.ToString("0000000000");
 
 				if (word.Sign.IsPositive())
-				{
 					lineBuilder.Append(numberText);
-				}
+
 				else
 				{
 					lineBuilder.Append(numberText.Substring(0, 9));
