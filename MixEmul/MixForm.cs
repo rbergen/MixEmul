@@ -179,7 +179,10 @@ namespace MixGui
 			_teletype.VisibleChanged += Teletype_VisibleChanged;
 
 			if (_configuration.TeletypeWindowLocation != Point.Empty)
+			{
+				_teletype.StartPosition = FormStartPosition.Manual;
 				_teletype.Location = _configuration.TeletypeWindowLocation;
+			}
 
 			if (_configuration.TeletypeWindowSize != Size.Empty)
 				_teletype.Size = _configuration.TeletypeWindowSize;
@@ -199,7 +202,10 @@ namespace MixGui
 			_deviceEditor.VisibleChanged += DeviceEditor_VisibleChanged;
 
 			if (_configuration.DeviceEditorWindowLocation != Point.Empty)
+			{
+				_deviceEditor.StartPosition = FormStartPosition.Manual;
 				_deviceEditor.Location = _configuration.DeviceEditorWindowLocation;
+			}
 
 			if (_configuration.DeviceEditorWindowSize != Size.Empty)
 				_deviceEditor.Size = _configuration.DeviceEditorWindowSize;
@@ -234,7 +240,12 @@ namespace MixGui
 			Update();
 
 			if (_configuration.MainWindowLocation != Point.Empty)
+			{
+				StartPosition = FormStartPosition.Manual;
 				Location = _configuration.MainWindowLocation;
+			}
+			else
+				StartPosition = FormStartPosition.CenterScreen;
 
 			if (_configuration.MainWindowSize != Size.Empty)
 				Size = _configuration.MainWindowSize;
@@ -283,17 +294,17 @@ namespace MixGui
 				if (instances != null)
 				{
 					if (!module.LoadInstructionInstances(instances, symbols))
-						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to load {0} program", programName)));
+						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", $"Failed to load {programName} program"));
 				}
 				else
 				{
 					if (findings != null)
 					{
-						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Parse failed", string.Format("Error(s) occured while assembling {0} program", programName)));
+						_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Parse failed", $"Error(s) occured while assembling {programName} program"));
 						foreach (AssemblyFinding finding in findings)
-							_logListView.AddLogLine(new LogLine("Assembler", finding.Severity, "Parse error", finding.LineNumber == int.MinValue ? finding.Message : string.Format("Line {0}: {1}", finding.LineNumber, finding.Message)));
+							_logListView.AddLogLine(new LogLine("Assembler", finding.Severity, "Parse error", finding.LineNumber == int.MinValue ? finding.Message : $"Line {finding.LineNumber}: {finding.Message}"));
 					}
-					_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to assemble {0} program", programName)));
+					_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", $"Failed to assemble {programName} program"));
 
 					return symbols;
 
@@ -301,7 +312,7 @@ namespace MixGui
 			}
 			catch (Exception ex)
 			{
-				_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", string.Format("Failed to read {0} program: {1}", programName, ex.Message)));
+				_logListView.AddLogLine(new LogLine("Assembler", Severity.Error, "Load failed", $"Failed to read {programName} program: {ex.Message}"));
 			}
 
 			return null;

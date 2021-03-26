@@ -64,7 +64,7 @@ namespace MixLib.Modules
 					if (desiredLC >= FullMemory.MinWordIndex && desiredLC <= FullMemory.MaxWordIndex)
 						return desiredLC;
 
-					ReportLoadError(locationCounter, string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
+					ReportLoadError(locationCounter, message: string.Format("Attempt to set location counter to invalid value {0}", desiredLC));
 
 					return locationCounter;
 
@@ -88,7 +88,7 @@ namespace MixLib.Modules
 						return locationCounter;
 					}
 
-					ReportLoadError(locationCounter, string.Format("Attempt to set program counter to invalid value {0}", desiredPC));
+					ReportLoadError(locationCounter, $"Attempt to set program counter to invalid value {desiredPC}");
 
 					return locationCounter;
 			}

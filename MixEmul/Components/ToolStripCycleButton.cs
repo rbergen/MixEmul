@@ -96,7 +96,7 @@ namespace MixGui.Components
 				throw new ArgumentNullException(nameof(step), "step and its Value may not be null");
 
 			if (_steps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
-				throw new ArgumentException(string.Format("another step with Value {0} already exists", step.Value));
+				throw new ArgumentException($"another step with Value {step.Value} already exists");
 
 			_steps.Add(step);
 
@@ -115,7 +115,7 @@ namespace MixGui.Components
 				var step = _steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
 
 				if (step == null)
-					throw new ArgumentException(string.Format("no step with Value {0} exists", value));
+					throw new ArgumentException($"no step with Value {value} exists");
 
 				SetCurrentStep(step);
 			}

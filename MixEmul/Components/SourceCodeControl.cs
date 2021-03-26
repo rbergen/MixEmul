@@ -38,6 +38,7 @@ namespace MixGui.Components
 			SuspendLayout();
 
 			_sourceBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
+			_sourceBox.BorderStyle = BorderStyle.FixedSingle;
 			_sourceBox.Location = new Point(0, 0);
 			_sourceBox.Name = "mSourceBox";
 			_sourceBox.ReadOnly = true;

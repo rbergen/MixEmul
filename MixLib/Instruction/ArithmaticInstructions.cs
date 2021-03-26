@@ -8,7 +8,7 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class ArithmaticInstructions
 	{
-		private const byte SubstractOpcode = 2;
+		private const byte SUB_Opcode = 2;
 
 		/// <summary>
 		/// Method for performing ADD and SUB instructions
@@ -24,7 +24,7 @@ namespace MixLib.Instruction
 			long rALongValue = rA.LongValue;
 			long memoryWordValue = WordField.LoadFromFullWord(instance.FieldSpec, module.Memory[indexedAddress]).LongValue;
 
-			if (instance.MixInstruction.Opcode == SubstractOpcode)
+			if (instance.MixInstruction.Opcode == SUB_Opcode)
 				memoryWordValue = -memoryWordValue;
 
 			long sumValue = rALongValue + memoryWordValue;

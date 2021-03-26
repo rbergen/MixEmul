@@ -9,6 +9,14 @@ x: Bugfix
 
 =========================================
 
+0.4.7755.38010 (2021-03-26)
+x Fixed regression in settings (de)serialisation, which made that colours weren't applied
+x Fixed opening of device and teletype windows on saved screen location
+! The settings file format changed, and its name changed from config.bin to config.json. This means that any saved settings in earlier versions will not be loaded when starting this version, the first time
+* Cleaned up binary (de)serialization code leftovers
+* Made the visual style of the "Assembly result" window more consistent
+* Removed a number of unnecessary/outdated files from the solution folders
+
 0.4.7752.30280 (2021-03-23)
 * Migrated to .NET 5.0
 * Applied visual changes, of which enabling visual styles is the most noticeable

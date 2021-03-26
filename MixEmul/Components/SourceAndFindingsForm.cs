@@ -34,136 +34,133 @@ namespace MixGui.Components
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SourceAndFindingsForm));
-			_statusStrip = new System.Windows.Forms.StatusStrip();
-			_toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-			_listPanel = new System.Windows.Forms.Panel();
-			_closeButton = new System.Windows.Forms.Button();
-			_exportButton = new System.Windows.Forms.Button();
-			_loadButton = new System.Windows.Forms.Button();
-			_findingListView = new MixGui.Components.AssemblyFindingListView();
-			_splitter = new System.Windows.Forms.Splitter();
-			_saveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
-			_sourceControl = new MixGui.Components.SourceCodeControl();
-			_statusStrip.SuspendLayout();
-			_listPanel.SuspendLayout();
-			SuspendLayout();
+			this._statusStrip = new System.Windows.Forms.StatusStrip();
+			this._toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this._listPanel = new System.Windows.Forms.Panel();
+			this._closeButton = new System.Windows.Forms.Button();
+			this._exportButton = new System.Windows.Forms.Button();
+			this._loadButton = new System.Windows.Forms.Button();
+			this._findingListView = new MixGui.Components.AssemblyFindingListView();
+			this._splitter = new System.Windows.Forms.Splitter();
+			this._saveExportFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this._sourceControl = new MixGui.Components.SourceCodeControl();
+			this._statusStrip.SuspendLayout();
+			this._listPanel.SuspendLayout();
+			this.SuspendLayout();
 			// 
-			// mStatusStrip
+			// _statusStrip
 			// 
-			_statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-						_toolStripStatusLabel});
-			_statusStrip.Location = new System.Drawing.Point(0, 383);
-			_statusStrip.Name = "mStatusStrip";
-			_statusStrip.Size = new System.Drawing.Size(568, 22);
-			_statusStrip.TabIndex = 3;
+			this._statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._toolStripStatusLabel});
+			this._statusStrip.Location = new System.Drawing.Point(0, 383);
+			this._statusStrip.Name = "_statusStrip";
+			this._statusStrip.Size = new System.Drawing.Size(568, 22);
+			this._statusStrip.TabIndex = 3;
 			// 
-			// mToolStripStatusLabel
+			// _toolStripStatusLabel
 			// 
-			_toolStripStatusLabel.Name = "mToolStripStatusLabel";
-			_toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+			this._toolStripStatusLabel.Name = "_toolStripStatusLabel";
+			this._toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
 			// 
-			// mListPanel
+			// _listPanel
 			// 
-			_listPanel.Controls.Add(_closeButton);
-			_listPanel.Controls.Add(_exportButton);
-			_listPanel.Controls.Add(_loadButton);
-			_listPanel.Controls.Add(_findingListView);
-			_listPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			_listPanel.Location = new System.Drawing.Point(0, 303);
-			_listPanel.Name = "mListPanel";
-			_listPanel.Size = new System.Drawing.Size(568, 80);
-			_listPanel.TabIndex = 2;
+			this._listPanel.Controls.Add(this._closeButton);
+			this._listPanel.Controls.Add(this._exportButton);
+			this._listPanel.Controls.Add(this._loadButton);
+			this._listPanel.Controls.Add(this._findingListView);
+			this._listPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this._listPanel.Location = new System.Drawing.Point(0, 303);
+			this._listPanel.Name = "_listPanel";
+			this._listPanel.Size = new System.Drawing.Size(568, 80);
+			this._listPanel.TabIndex = 2;
 			// 
-			// mCloseButton
+			// _closeButton
 			// 
-			_closeButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			_closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			_closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			_closeButton.Location = new System.Drawing.Point(498, 56);
-			_closeButton.Name = "mCloseButton";
-			_closeButton.Size = new System.Drawing.Size(62, 23);
-			_closeButton.TabIndex = 3;
-			_closeButton.Text = "&Close";
+			this._closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this._closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._closeButton.Location = new System.Drawing.Point(498, 56);
+			this._closeButton.Name = "_closeButton";
+			this._closeButton.Size = new System.Drawing.Size(62, 23);
+			this._closeButton.TabIndex = 3;
+			this._closeButton.Text = "&Close";
 			// 
-			// mExportButton
+			// _exportButton
 			// 
-			_exportButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			_exportButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			_exportButton.Location = new System.Drawing.Point(498, 28);
-			_exportButton.Name = "mExportButton";
-			_exportButton.Size = new System.Drawing.Size(62, 23);
-			_exportButton.TabIndex = 2;
-			_exportButton.Text = "&Export...";
+			this._exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._exportButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._exportButton.Location = new System.Drawing.Point(498, 28);
+			this._exportButton.Name = "_exportButton";
+			this._exportButton.Size = new System.Drawing.Size(62, 23);
+			this._exportButton.TabIndex = 2;
+			this._exportButton.Text = "&Export...";
 			// 
-			// mLoadButton
+			// _loadButton
 			// 
-			_loadButton.Anchor = (System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right);
-			_loadButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			_loadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			_loadButton.Location = new System.Drawing.Point(498, 0);
-			_loadButton.Name = "mLoadButton";
-			_loadButton.Size = new System.Drawing.Size(62, 23);
-			_loadButton.TabIndex = 1;
-			_loadButton.Text = "&Load";
+			this._loadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this._loadButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this._loadButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this._loadButton.Location = new System.Drawing.Point(498, 0);
+			this._loadButton.Name = "_loadButton";
+			this._loadButton.Size = new System.Drawing.Size(62, 23);
+			this._loadButton.TabIndex = 1;
+			this._loadButton.Text = "&Load";
 			// 
-			// mFindingListView
+			// _findingListView
 			// 
-			_findingListView.Anchor = (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right);
-			_findingListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			_findingListView.Location = new System.Drawing.Point(0, 0);
-			_findingListView.Name = "mFindingListView";
-			_findingListView.SeverityImageList = null;
-			_findingListView.Size = new System.Drawing.Size(492, 80);
-			_findingListView.TabIndex = 0;
+			this._findingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this._findingListView.Location = new System.Drawing.Point(0, 0);
+			this._findingListView.Name = "_findingListView";
+			this._findingListView.SeverityImageList = null;
+			this._findingListView.Size = new System.Drawing.Size(492, 80);
+			this._findingListView.TabIndex = 0;
 			// 
-			// mSplitter
+			// _splitter
 			// 
-			_splitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			_splitter.Dock = System.Windows.Forms.DockStyle.Bottom;
-			_splitter.Location = new System.Drawing.Point(0, 295);
-			_splitter.MinExtra = 100;
-			_splitter.MinSize = 80;
-			_splitter.Name = "mSplitter";
-			_splitter.Size = new System.Drawing.Size(568, 8);
-			_splitter.TabIndex = 1;
-			_splitter.TabStop = false;
+			this._splitter.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this._splitter.Location = new System.Drawing.Point(0, 295);
+			this._splitter.MinExtra = 100;
+			this._splitter.MinSize = 80;
+			this._splitter.Name = "_splitter";
+			this._splitter.Size = new System.Drawing.Size(568, 8);
+			this._splitter.TabIndex = 1;
+			this._splitter.TabStop = false;
 			// 
-			// mSaveExportFileDialog
+			// _saveExportFileDialog
 			// 
-			_saveExportFileDialog.DefaultExt = "mixdeck";
-			_saveExportFileDialog.Filter = "MixEmul card deck files|*.mixdeck|All files|*.*";
-			_saveExportFileDialog.Title = "Specify export file name";
+			this._saveExportFileDialog.DefaultExt = "mixdeck";
+			this._saveExportFileDialog.Filter = "MixEmul card deck files|*.mixdeck|All files|*.*";
+			this._saveExportFileDialog.Title = "Specify export file name";
 			// 
-			// mSourceControl
+			// _sourceControl
 			// 
-			_sourceControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			_sourceControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			_sourceControl.Location = new System.Drawing.Point(0, 0);
-			_sourceControl.MarkedFinding = null;
-			_sourceControl.Name = "mSourceControl";
-			_sourceControl.Size = new System.Drawing.Size(568, 295);
-			_sourceControl.TabIndex = 0;
+			this._sourceControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._sourceControl.Location = new System.Drawing.Point(0, 0);
+			this._sourceControl.MarkedFinding = null;
+			this._sourceControl.Name = "_sourceControl";
+			this._sourceControl.Size = new System.Drawing.Size(568, 295);
+			this._sourceControl.TabIndex = 0;
 			// 
 			// SourceAndFindingsForm
 			// 
-			ClientSize = new System.Drawing.Size(568, 405);
-			Controls.Add(_sourceControl);
-			Controls.Add(_splitter);
-			Controls.Add(_listPanel);
-			Controls.Add(_statusStrip);
-			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
-			MinimizeBox = false;
-			MinimumSize = new System.Drawing.Size(400, 224);
-			Name = "SourceAndFindingsForm";
-			ShowInTaskbar = false;
-			Text = "Assembly result";
-			_statusStrip.ResumeLayout(false);
-			_statusStrip.PerformLayout();
-			_listPanel.ResumeLayout(false);
-			ResumeLayout(false);
-			PerformLayout();
+			this.ClientSize = new System.Drawing.Size(568, 405);
+			this.Controls.Add(this._sourceControl);
+			this.Controls.Add(this._splitter);
+			this.Controls.Add(this._listPanel);
+			this.Controls.Add(this._statusStrip);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(400, 224);
+			this.Name = "SourceAndFindingsForm";
+			this.ShowInTaskbar = false;
+			this.Text = "Assembly result";
+			this._statusStrip.ResumeLayout(false);
+			this._statusStrip.PerformLayout();
+			this._listPanel.ResumeLayout(false);
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 

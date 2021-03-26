@@ -87,7 +87,7 @@ namespace MixLib.Instruction
 		{
 			if (!(module is Mix))
 			{
-				module.ReportRuntimeError(string.Format("The {0} instruction is only available in Mix", instance.Instruction.Mnemonic));
+				module.ReportRuntimeError($"The {instance.Instruction.Mnemonic} instruction is only available in Mix");
 				return false;
 			}
 

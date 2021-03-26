@@ -49,7 +49,7 @@ namespace MixGui.Components
 			=> Clipboard.SetText(_versionString);
 
 		private void FullVersionLabel_DoubleClick(object sender, EventArgs e)
-			=> Clipboard.SetText(_versionString.Replace('.', '_'));
+			=> Clipboard.SetText(_versionString);
 
 		private void InitializeComponent()
 		{

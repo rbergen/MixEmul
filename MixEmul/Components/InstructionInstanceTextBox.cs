@@ -474,7 +474,7 @@ namespace MixGui.Components
 				captionBuilder.Insert(0, "Instruction error: ");
 
 			else
-				captionBuilder.Insert(0, String.Format("Instruction errors:{0}", Environment.NewLine));
+				captionBuilder.Insert(0, $"Instruction errors:{Environment.NewLine}");
 
 			return captionBuilder.ToString();
 		}

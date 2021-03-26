@@ -122,7 +122,7 @@ namespace MixLib.Modules
 		{
 			if (address < 0 || address >= ModuleSettings.FloatingPointMemoryWordCount)
 			{
-				AddLogLine(new LogLine(MyModuleName, severity, "Address invalid", string.Format("Symbol {0} contains invalid address value {1}", name, address)));
+				AddLogLine(new LogLine(MyModuleName, severity, "Address invalid", $"Symbol {name} contains invalid address value {address}"));
 				return false;
 			}
 
@@ -133,7 +133,7 @@ namespace MixLib.Modules
 		{
 			if (_accAddress == null || _prenormAddress == null || _exitAddress == null)
 			{
-				AddLogLine(new LogLine(MyModuleName, severity, "Symbols unset", string.Format("Symbols {0}, {1} and/or {2} are unset", AccSymbol, PrenormSymbol, ExitSymbol)));
+				AddLogLine(new LogLine(MyModuleName, severity, "Symbols unset", $"Symbols {AccSymbol}, {PrenormSymbol} and/or {ExitSymbol} are unset"));
 				return false;
 			}
 
@@ -204,7 +204,7 @@ namespace MixLib.Modules
 			set
 			{
 				if (value != RunMode.Normal)
-					AddLogLine(new LogLine(ModuleName, Severity.Warning, "Invalid mode", string.Format("Mode {0} not supported by this module, change request ignored", value)));
+					AddLogLine(new LogLine(ModuleName, Severity.Warning, "Invalid mode", $"Mode {value} not supported by this module, change request ignored"));
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace MixLib.Modules
 
 			if (_unexpectedOverflowAddress != null && ProgramCounter == _unexpectedOverflowAddress.Value)
 			{
-				ReportRuntimeError(string.Format("Overflow set at instruction start"));
+				ReportRuntimeError("Overflow set at instruction start");
 				return true;
 			}
 

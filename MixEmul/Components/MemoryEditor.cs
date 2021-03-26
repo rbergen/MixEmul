@@ -520,7 +520,7 @@ namespace MixGui.Components
 
 			if (result == null)
 			{
-				MessageBox.Show(this, string.Format("Search text \"{0}\" could not be found.", options.SearchText), "Text not found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show(this, $"Search text \"{options.SearchText}\" could not be found.", "Text not found", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 

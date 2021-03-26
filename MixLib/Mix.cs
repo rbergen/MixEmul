@@ -150,7 +150,7 @@ namespace MixLib
 
 		public override void Halt(int code)
 		{
-			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Halted", string.Format("System halted with code {0}", code)));
+			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Halted", $"System halted with code {code}"));
 			Status = RunStatus.Halted;
 		}
 

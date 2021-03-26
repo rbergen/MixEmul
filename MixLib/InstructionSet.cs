@@ -198,7 +198,7 @@ namespace MixLib
 			AddInstruction("FDIV", 4, rangeSpecs[6], 11, executor, validator);
 			AddInstruction("FLOT", 5, rangeSpecs[6], 3, executor, validator);
 			AddInstruction("FIX", 5, rangeSpecs[7], 3, executor, validator);
-			AddInstruction(FloatingPointInstructions.FcmpMnemonic, 56, rangeSpecs[6], 4, executor, validator);
+			AddInstruction(FloatingPointInstructions.FCMP_Mnemonic, 56, rangeSpecs[6], 4, executor, validator);
 
 			executor = MiscInstructions.Move;
 			AddInstruction("MOVE", 7, new MetaFieldSpec(false, rangeSpecs[1]), 1, executor, validator);

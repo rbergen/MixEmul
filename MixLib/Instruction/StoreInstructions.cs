@@ -9,7 +9,7 @@ namespace MixLib.Instruction
 	public static class StoreInstructions
 	{
 		private const byte StoreOpcodeBase = 24;
-		private const byte StoreJOpcode = 32;
+		private const byte STJ_Opcode = 32;
 
 		/// <summary>
 		/// Method for performing STx instructions
@@ -21,7 +21,7 @@ namespace MixLib.Instruction
 			{
 				Register sourceRegister;
 
-				if (instance.MixInstruction.Opcode == StoreJOpcode)
+				if (instance.MixInstruction.Opcode == STJ_Opcode)
 					sourceRegister = module.Registers.RJ;
 
 				else

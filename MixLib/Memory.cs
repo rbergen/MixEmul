@@ -159,7 +159,7 @@ namespace MixLib
 			get
 			{
 				if (index < MinWordIndex || index > MaxWordIndex)
-					throw new ArgumentOutOfRangeException(nameof(index), string.Format("value must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
+					throw new ArgumentOutOfRangeException(nameof(index), $"value must be between MinWordIndex ({MinWordIndex}) and MaxWordIndex ({MaxWordIndex}), inclusive");
 
 				MemoryFullWord word;
 
@@ -173,7 +173,7 @@ namespace MixLib
 			set
 			{
 				if (index < MinWordIndex || index > MaxWordIndex)
-					throw new IndexOutOfRangeException(string.Format("index must be between MinWordIndex ({0}) and MaxWordIndex ({1}), inclusive", MinWordIndex, MaxWordIndex));
+					throw new IndexOutOfRangeException($"index must be between MinWordIndex ({MinWordIndex}) and MaxWordIndex ({MaxWordIndex}), inclusive");
 
 				var word = GetRealWord(index);
 

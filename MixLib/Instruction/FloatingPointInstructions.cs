@@ -7,28 +7,28 @@ namespace MixLib.Instruction
 {
 	public static class FloatingPointInstructions
 	{
-		private const int FaddOpcode = 1;
-		private const int FsubOpcode = 2;
-		private const int FmulOpcode = 3;
-		private const int FdivOpcode = 4;
-		private const int FcmpOpcode = 56;
-		public const string FcmpMnemonic = "FCMP";
+		private const int FADD_Opcode = 1;
+		private const int FSUB_Opcode = 2;
+		private const int FMUL_Opcode = 3;
+		private const int FDIV_Opcode = 4;
+		private const int FCMP_Opcode = 56;
+		public const string FCMP_Mnemonic = "FCMP";
 
 		private static ExecutionStatus _executionStatus;
-		private static readonly int[] _prenormOpcodes = { FaddOpcode, FsubOpcode, FmulOpcode, FdivOpcode };
+		private static readonly int[] _prenormOpcodes = { FADD_Opcode, FSUB_Opcode, FMUL_Opcode, FDIV_Opcode };
 
 		public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
 		{
 			if (module is not Mix mix)
 			{
-				module.ReportRuntimeError(string.Format("Floating point instruction {0} is only available within Mix", instance.Instruction.Mnemonic));
+				module.ReportRuntimeError($"Floating point instruction {instance.Instruction.Mnemonic} is only available within Mix");
 				return false;
 			}
 
 			FloatingPointModule floatingPointModule = mix.FloatingPointModule;
 			if (floatingPointModule == null)
 			{
-				module.ReportRuntimeError(string.Format("Instruction {0} requires floating point module to be enabled", instance.Instruction.Mnemonic));
+				module.ReportRuntimeError($"Instruction {instance.Instruction.Mnemonic} requires floating point module to be enabled");
 				return false;
 			}
 
@@ -43,7 +43,7 @@ namespace MixLib.Instruction
 				_executionStatus.RAValue = module.Registers.RA.FullWordValue;
 
 				bool prenormInstruction = Array.IndexOf(_prenormOpcodes, instance.MixInstruction.Opcode) != -1;
-				bool fcmpInstruction = !prenormInstruction && instance.MixInstruction.Opcode == FcmpOpcode;
+				bool fcmpInstruction = !prenormInstruction && instance.MixInstruction.Opcode == FCMP_Opcode;
 
 				if (prenormInstruction || fcmpInstruction)
 				{
@@ -131,7 +131,7 @@ namespace MixLib.Instruction
 							module.Registers.LoadFromMemory(floatingPointModule.FullMemory, ModuleSettings.FloatingPointMemoryWordCount);
 							module.Registers.OverflowIndicator = _executionStatus.OverflowDetected;
 
-							if (_executionStatus.Mnemonic == FcmpMnemonic)
+							if (_executionStatus.Mnemonic == FCMP_Mnemonic)
 								module.Registers.CompareIndicator = comparatorValue;
 
 							else
@@ -156,7 +156,7 @@ namespace MixLib.Instruction
 
 				case ModuleBase.RunStatus.InvalidInstruction:
 				case ModuleBase.RunStatus.RuntimeError:
-					module.ReportRuntimeError(string.Format("Floating point module failed to execute instruction {0}", _executionStatus.Mnemonic));
+					module.ReportRuntimeError($"Floating point module failed to execute instruction {_executionStatus.Mnemonic}");
 					module.Mode = _executionStatus.Mode;
 
 					_executionStatus = null;
