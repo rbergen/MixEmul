@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -12,8 +12,5 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MixLib\MixLib.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MixFormIcon.ico" />
   </ItemGroup>
 </Project>

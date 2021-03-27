@@ -3,7 +3,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>MixGui.MixForm</StartupObject>
-    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
     <RootNamespace>MixGui</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
@@ -12,54 +12,48 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Documentation\Changes.txt" />
-    <None Remove="Documentation\MixEmul Documentation 0.3.5.pdf" />
-    <None Remove="Sample programs\99bottles.mixal" />
-    <None Remove="Sample programs\easter.mixal" />
-    <None Remove="Sample programs\echo.mixal" />
-    <None Remove="Sample programs\hello.mixal" />
-    <None Remove="Sample programs\loader.mixal" />
-    <None Remove="Sample programs\permutations.mixal" />
-    <None Remove="Sample programs\primes.mixal" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MixAssembler\MixAssembler.csproj" />
     <ProjectReference Include="..\MixLib\MixLib.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="DeviceEditorFormIcon.ico" />
-    <Content Include="Documentation\Changes.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Documentation\MixEmul Documentation 0.3.5.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MixFormIcon.ico" />
+	<ItemGroup>
+		<Folder Include="doc\" />
+		<Folder Include="samples\" />
+	</ItemGroup>
+	<ItemGroup>
     <Content Include="control.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\99bottles.mixal">
+    <Content Include="..\..\doc\Changes.txt" Link="doc\Changes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\easter.mixal">
+		<Content Include="..\..\doc\Changes.txt" Link="doc\Changes.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+    <Content Include="..\..\doc\MixEmul Documentation 0.3.5.pdf" Link="doc\MixEmul Documentation 0.3.5.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\echo.mixal">
+    <Content Include="..\..\samples\99bottles.mixal" Link="samples\99bottles.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\hello.mixal">
+    <Content Include="..\..\samples\easter.mixal" Link="samples\easter.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\loader.mixal">
+    <Content Include="..\..\samples\echo.mixal" Link="samples\echo.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\permutations.mixal">
+    <Content Include="..\..\samples\hello.mixal" Link="samples\hello.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Sample programs\primes.mixal">
+    <Content Include="..\..\samples\loader.mixal" Link="samples\loader.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\samples\permutations.mixal" Link="samples\permutations.mixal">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\samples\primes.mixal" Link="samples\primes.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

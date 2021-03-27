@@ -4,13 +4,10 @@
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <ApplicationIcon>MixFormIcon.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<Deterministic>false</Deterministic>
 	</PropertyGroup>
-  <ItemGroup>
-    <Content Include="MixFormIcon.ico" />
-  </ItemGroup>
 </Project>
