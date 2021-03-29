@@ -12,13 +12,13 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="docs\.gitignore" />
+    <None Remove="samples\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MixAssembler\MixAssembler.csproj" />
     <ProjectReference Include="..\MixLib\MixLib.csproj" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="doc\" />
-		<Folder Include="samples\" />
-	</ItemGroup>
 	<ItemGroup>
     <Content Include="control.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -26,13 +26,10 @@
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\doc\Changes.txt" Link="doc\Changes.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-		<Content Include="..\..\doc\Changes.txt" Link="doc\Changes.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-    <Content Include="..\..\doc\MixEmul Documentation 0.3.5.pdf" Link="doc\MixEmul Documentation 0.3.5.pdf">
+	  <Content Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+    <Content Include="..\..\docs\MixEmul Documentation 0.3.5.pdf" Link="docs\MixEmul Documentation 0.3.5.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\samples\99bottles.mixal" Link="samples\99bottles.mixal">
