@@ -5,11 +5,7 @@ namespace MixAssembler
 {
 	public class AssemblingStatus
 	{
-		private readonly AssemblyFindingCollection _findings = new();
-		private int _lineNumber;
-		private int _locationCounter;
-
-		public AssemblyFindingCollection Findings => _findings;
+		public AssemblyFindingCollection Findings { get; } = new();
 
 		public void ReportError(LineSection lineSection, int causeStartIndex, int causeLength, ValidationError error)
 			=> Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, error));
@@ -29,16 +25,8 @@ namespace MixAssembler
 		public void ReportWarning(LineSection lineSection, int causeStartIndex, int causeLength, ValidationError error)
 			=> Findings.Add(new AssemblyWarning(LineNumber, lineSection, causeStartIndex, causeLength, error));
 
-		public int LineNumber
-		{
-			get => _lineNumber;
-			set => _lineNumber = value;
-		}
+		public int LineNumber { get; set; }
 
-		public int LocationCounter
-		{
-			get => _locationCounter;
-			set => _locationCounter = value;
-		}
+		public int LocationCounter { get; set; }
 	}
 }

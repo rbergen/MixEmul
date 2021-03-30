@@ -65,9 +65,11 @@ namespace MixLib.Device.Step
 			private MixByte[] mReadBytes;
 			private readonly int mRecordWordCount;
 
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) => mRecordWordCount = recordWordCount;
+			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) 
+				=> mRecordWordCount = recordWordCount;
 
-			public override object OutputForNextStep => mReadBytes;
+			public override object OutputForNextStep 
+				=> mReadBytes;
 
 			public override bool Tick()
 			{
