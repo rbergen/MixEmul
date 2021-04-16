@@ -1299,6 +1299,7 @@ namespace MixGui
 				SetSteppingState(SteppingState.Stepping);
 				_running = true;
 				_mix.StartRun();
+				UpdateStatusIndicator();
 			}
 			else
 			{
@@ -1343,6 +1344,15 @@ namespace MixGui
 				_teletype.Show();
 		}
 
+		private void UpdateStatusIndicator()
+			=> _toolStripStatusLabel.Text = _mix.Status switch
+			{
+				ModuleBase.RunStatus.InvalidInstruction => "Encountered invalid instruction",
+				ModuleBase.RunStatus.RuntimeError => "Runtime error occured",
+				ModuleBase.RunStatus.BreakpointReached => "Breakpoint reached",
+				_ => _mix.Status.ToString()
+			};
+
 		public new void Update()
 		{
 			_updating = true;
@@ -1362,26 +1372,10 @@ namespace MixGui
 
 			_ticksToolStripTextBox.Text = _mix.TickCounter.ToString();
 
-			switch (_mix.Status)
-			{
-				case ModuleBase.RunStatus.InvalidInstruction:
-					_toolStripStatusLabel.Text = "Encountered invalid instruction";
+			UpdateStatusIndicator();
+
+			if (_mix.Status == ModuleBase.RunStatus.InvalidInstruction || _mix.Status == ModuleBase.RunStatus.RuntimeError)
 					pcVisible = true;
-					break;
-
-				case ModuleBase.RunStatus.RuntimeError:
-					_toolStripStatusLabel.Text = "Runtime error occured";
-					pcVisible = true;
-					break;
-
-				case ModuleBase.RunStatus.BreakpointReached:
-					_toolStripStatusLabel.Text = "Breakpoint reached";
-					break;
-
-				default:
-					_toolStripStatusLabel.Text = _mix.Status.ToString();
-					break;
-			}
 
 			if (pcVisible)
 				_mainMemoryEditor.MakeAddressVisible(_mix.ProgramCounter, _mix.Status == ModuleBase.RunStatus.Idle);
