@@ -420,5 +420,15 @@ namespace MixGui
 			foreach (MemoryEditor editor in _memoryEditors)
 				editor?.Update();
 		}
+		private void ShowSourceInlineMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			GuiSettings.ShowSourceInline = _showSourceInlineMenuItem.Checked;
+			_configuration.ShowSourceInline = GuiSettings.ShowSourceInline;
+
+			foreach (MemoryEditor editor in _memoryEditors)
+				editor?.UpdateLayout();
+		}
+
+
 	}
 }

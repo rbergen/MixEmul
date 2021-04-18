@@ -62,6 +62,7 @@ namespace MixGui.Components
 
 			MemoryWord = memoryWord;
 
+			UpdateShowSourceInlineLayout();
 			UpdateProfilingLayout();
 		}
 
@@ -247,15 +248,26 @@ namespace MixGui.Components
 
 		private void This_Layout(object sender, LayoutEventArgs e)
 		{
+
 			int sourceWidth = Width - (_addressPanel.Width + _colonLabel.Width + _fullWordEditor.Width + _equalsLabel.Width + 2);
 			if (ExecutionSettings.ProfilingEnabled)
 				sourceWidth -= _colonLabel2.Width + _profileLabel.Width;
+
+			if (!GuiSettings.ShowSourceInline)
+			{
+				_instructionPanel.Width = sourceWidth;
+				return;
+			}
 
 			_instructionPanel.Width = (sourceWidth - _colonLabel3.Width) / 3;
 			_colonLabel3.Left = _instructionPanel.Right;
 			_sourceLineLabel.Left = _colonLabel3.Right;
 			_sourceLineLabel.Width = sourceWidth - (_colonLabel3.Width + _instructionPanel.Width);
+			SetSourceLineLabelToolTip();
 		}
+
+		private void SetSourceLineLabelToolTip()
+			=> _toolTip?.SetToolTip(_sourceLineLabel, _sourceLineLabel.PreferredWidth > _sourceLineLabel.Width && !string.IsNullOrEmpty(_memoryWord.SourceLine) ? _memoryWord.SourceLine : null);
 
 		private static Color Interpolate(Color color1, Color color2, double fraction)
 		{
@@ -283,6 +295,26 @@ namespace MixGui.Components
 				_profileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
 			}
 		}
+
+		private void UpdateShowSourceInlineLayout()
+		{
+			if (_sourceLineLabel.Visible == GuiSettings.ShowSourceInline)
+				return;
+
+			if (!GuiSettings.ShowSourceInline)
+			{
+				_colonLabel3.Visible = false;
+				_sourceLineLabel.Visible = false;
+				_instructionTextBox.ShowSourceLineToolTip = true;
+			}
+			else
+			{
+				_colonLabel3.Visible = true;
+				_sourceLineLabel.Visible = true;
+				_instructionTextBox.ShowSourceLineToolTip = false;
+			}
+		}
+
 
 		private void UpdateProfilingLayout()
 		{
@@ -403,6 +435,7 @@ namespace MixGui.Components
 			_fullWordEditor.UpdateLayout();
 			_instructionTextBox.UpdateLayout();
 
+			UpdateShowSourceInlineLayout();
 			UpdateProfilingLayout();
 		}
 
@@ -451,8 +484,7 @@ namespace MixGui.Components
 				_instructionTextBox.InstructionWord = _memoryWord;
 				_sourceLineLabel.Text = _memoryWord.SourceLine ?? string.Empty;
 
-				if (_toolTip != null)
-					_toolTip.SetToolTip(_sourceLineLabel, string.IsNullOrEmpty(_memoryWord.SourceLine) ? null : _memoryWord.SourceLine);
+				SetSourceLineLabelToolTip();
 
 				if (_profileLabel.Enabled)
 					UpdateProfilingCount();

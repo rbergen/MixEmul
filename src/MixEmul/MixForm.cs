@@ -100,16 +100,15 @@ namespace MixGui
 		private ToolStripStatusLabel _modeToolStripStatusLabel;
 		private ToolStripStatusLabel _statusToolStripStatusLabel;
 		private ToolTip _toolTip;
-		private ToolStripSeparator _toolStripSeparator8;
 		private ToolStripMenuItem _findMenuItem;
 		private ToolStripMenuItem _findNextMenuItem;
 		private readonly DeviceEditorForm _deviceEditor;
 		private SearchDialog _searchDialog;
-		private ToolStripSeparator _toolStripSeparator9;
 		private ToolStripMenuItem _profilingEnabledMenuItem;
 		private ToolStripMenuItem _profilingShowTickCountsMenuItem;
 		private ToolStripMenuItem _profilingResetCountsMenuItem;
 		private SearchParameters _searchOptions;
+		private ToolStripMenuItem _showSourceInlineMenuItem;
 
 		public MixForm()
 		{
@@ -118,6 +117,7 @@ namespace MixGui
 			GuiSettings.Colors = _configuration.Colors;
 			GuiSettings.ShowProfilingInfo = _configuration.ShowProfilingInfo;
 			GuiSettings.ColorProfilingCounts = _configuration.ColorProfilingCounts;
+			GuiSettings.ShowSourceInline = _configuration.ShowSourceInline;
 			DeviceSettings.DefaultDeviceFilesDirectory = _defaultDirectory;
 
 			if (_configuration.FloatingPointMemoryWordCount != null)
@@ -161,6 +161,8 @@ namespace MixGui
 			_profilingShowTickCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
 			_profilingShowTickCountsMenuItem.Checked = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick;
 			_profilingResetCountsMenuItem.Enabled = ExecutionSettings.ProfilingEnabled;
+
+			_showSourceInlineMenuItem.Checked = GuiSettings.ShowSourceInline;
 
 			_symbolListView.MemoryMinIndex = _mix.FullMemory.MinWordIndex;
 			_symbolListView.MemoryMaxIndex = _mix.FullMemory.MaxWordIndex;
@@ -406,6 +408,9 @@ namespace MixGui
 			ToolStripSeparator toolStripSeparator5;
 			ToolStripSeparator toolStripSeparator6;
 			ToolStripSeparator toolStripSeparator7;
+			ToolStripSeparator toolStripSeparator8;
+			ToolStripSeparator toolStripSeparator9;
+			ToolStripSeparator toolStripSeparator10;
 			var resources = new ComponentResourceManager(typeof(MixForm));
 			var registers1 = new Registers();
 			_severityImageList = new ImageList(_components);
@@ -416,7 +421,7 @@ namespace MixGui
 			_viewToolStripMenuItem = new ToolStripMenuItem();
 			_teletypeToolStripMenuItem = new ToolStripMenuItem();
 			_deviceEditorToolStripMenuItem = new ToolStripMenuItem();
-			_toolStripSeparator8 = new ToolStripSeparator();
+			_showSourceInlineMenuItem = new ToolStripMenuItem();
 			_findMenuItem = new ToolStripMenuItem();
 			_findNextMenuItem = new ToolStripMenuItem();
 			_actionsToolStripMenuItem = new ToolStripMenuItem();
@@ -429,7 +434,6 @@ namespace MixGui
 			_resetToolStripMenuItem = new ToolStripMenuItem();
 			toolsToolStripMenuItem = new ToolStripMenuItem();
 			_preferencesToolStripMenuItem = new ToolStripMenuItem();
-			_toolStripSeparator9 = new ToolStripSeparator();
 			_profilingEnabledMenuItem = new ToolStripMenuItem();
 			_profilingShowTickCountsMenuItem = new ToolStripMenuItem();
 			_helpToolStripMenuItem = new ToolStripMenuItem();
@@ -479,6 +483,9 @@ namespace MixGui
 			toolStripSeparator5 = new ToolStripSeparator();
 			toolStripSeparator6 = new ToolStripSeparator();
 			toolStripSeparator7 = new ToolStripSeparator();
+			toolStripSeparator8 = new ToolStripSeparator();
+			toolStripSeparator9 = new ToolStripSeparator();
+			toolStripSeparator10 = new ToolStripSeparator();
 			_mainMenuStrip.SuspendLayout();
 			_toolStripContainer.BottomToolStripPanel.SuspendLayout();
 			_toolStripContainer.ContentPanel.SuspendLayout();
@@ -538,6 +545,21 @@ namespace MixGui
 			toolStripSeparator7.Name = "toolStripSeparator7";
 			toolStripSeparator7.Size = new Size(6, 25);
 			// 
+			// toolStripSeparator8
+			// 
+			toolStripSeparator8.Name = "toolStripSeparator8";
+			toolStripSeparator8.Size = new Size(6, 25);
+			// 
+			// toolStripSeparator9
+			// 
+			toolStripSeparator9.Name = "toolStripSeparator9";
+			toolStripSeparator9.Size = new Size(6, 25);
+			// 
+			// toolStripSeparator10
+			// 
+			toolStripSeparator10.Name = "toolStripSeparator10";
+			toolStripSeparator10.Size = new Size(6, 25);
+			// 
 			// mSeverityImageList
 			// 
 			_severityImageList.ImageStream = ((ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
@@ -593,7 +615,9 @@ namespace MixGui
 			_viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
 						_teletypeToolStripMenuItem,
 						_deviceEditorToolStripMenuItem,
-						_toolStripSeparator8,
+						toolStripSeparator10,
+						_showSourceInlineMenuItem,
+						toolStripSeparator8,
 						_findMenuItem,
 						_findNextMenuItem});
 			_viewToolStripMenuItem.Name = "mViewToolStripMenuItem";
@@ -618,10 +642,14 @@ namespace MixGui
 			_deviceEditorToolStripMenuItem.Text = "Show &Device Editor";
 			_deviceEditorToolStripMenuItem.Click += DeviceEditorItem_Click;
 			// 
-			// toolStripSeparator8
+			// _showSourceInlineMenuItem
 			// 
-			_toolStripSeparator8.Name = "toolStripSeparator8";
-			_toolStripSeparator8.Size = new Size(212, 6);
+			_showSourceInlineMenuItem.CheckOnClick = true;
+			_showSourceInlineMenuItem.Name = "_showSourceInlineMenuItem";
+			_showSourceInlineMenuItem.ShortcutKeys = (Keys.Control | Keys.I);
+			_showSourceInlineMenuItem.Size = new Size(215, 22);
+			_showSourceInlineMenuItem.Text = "Show source inline";
+			_showSourceInlineMenuItem.CheckedChanged += ShowSourceInlineMenuItem_CheckedChanged;
 			// 
 			// mFindMenuItem
 			// 
@@ -722,7 +750,7 @@ namespace MixGui
 			// 
 			toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
 						_preferencesToolStripMenuItem,
-						_toolStripSeparator9,
+						toolStripSeparator9,
 						_profilingEnabledMenuItem,
 						_profilingShowTickCountsMenuItem,
 						_profilingResetCountsMenuItem});
@@ -738,11 +766,6 @@ namespace MixGui
 			_preferencesToolStripMenuItem.Size = new Size(185, 22);
 			_preferencesToolStripMenuItem.Text = "&Preferences...";
 			_preferencesToolStripMenuItem.Click += PreferencesMenuItem_Click;
-			// 
-			// toolStripSeparator9
-			// 
-			_toolStripSeparator9.Name = "toolStripSeparator9";
-			_toolStripSeparator9.Size = new Size(182, 6);
 			// 
 			// mProfilingEnabledMenuItem
 			// 

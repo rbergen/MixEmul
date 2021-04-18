@@ -37,7 +37,8 @@ namespace MixGui.Components
 		private bool _updating;
 		private string _lastRenderedSourceLine;
 		private string _caption;
-
+		private bool _showShourceLineToolTip;
+		private bool _lastRenderedShowSourceLineToolTip;
 		private readonly ToolStripMenuItem _showAddressMenuItem;
 		private readonly ToolStripMenuItem _showIndexedAddressMenuItem;
 		private readonly ContextMenuStrip _contextMenu;
@@ -47,6 +48,7 @@ namespace MixGui.Components
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback { get; set; } = null;
 		public SymbolCollection Symbols { get; set; }
 		public int MemoryAddress { get; set; }
+
 
 		public event WordEditorValueChangedEventHandler ValueChanged;
 		public event AddressSelectedHandler AddressSelected;
@@ -82,9 +84,24 @@ namespace MixGui.Components
 			_lastRenderedSign = Word.Signs.Positive;
 			_lastRenderedSourceLine = null;
 			_noInstructionRendered = true;
+			_showShourceLineToolTip = true;
 
 			Update();
 		}
+
+		public bool ShowSourceLineToolTip 
+		{
+			get => _showShourceLineToolTip;
+			set
+			{
+				if (_showShourceLineToolTip == value)
+					return;
+
+				_showShourceLineToolTip = value;
+				Update();
+			}
+		}
+
 
 		public Control EditorControl
 			=> this;
@@ -388,7 +405,8 @@ namespace MixGui.Components
 
 			if (_editMode || (_lastRenderedMagnitude == _instructionWord.MagnitudeLongValue
 												&& _lastRenderedSign == _instructionWord.Sign
-												&& _lastRenderedSourceLine == sourceLine))
+												&& _lastRenderedSourceLine == sourceLine
+												&& _lastRenderedShowSourceLineToolTip == _showShourceLineToolTip))
 			{
 				return;
 			}
@@ -402,7 +420,8 @@ namespace MixGui.Components
 			_lastRenderedSourceLine = sourceLine;
 			BackColor = _lastRenderedSourceLine != null ? _loadedInstructionBackgroundColor : _editorBackgroundColor;
 
-			string sourceCaption = _lastRenderedSourceLine != null ? "Original source:   " + _lastRenderedSourceLine : null;
+			_lastRenderedShowSourceLineToolTip = _showShourceLineToolTip;
+			string sourceCaption = _lastRenderedShowSourceLineToolTip && _lastRenderedSourceLine != null ? "Original source:   " + _lastRenderedSourceLine : null;
 
 			_lastRenderedMagnitude = _instructionWord.MagnitudeLongValue;
 			_lastRenderedSign = _instructionWord.Sign;
