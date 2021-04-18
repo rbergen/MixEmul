@@ -5,31 +5,31 @@ namespace MixGui.Settings
 {
 	public static class GuiSettings
 	{
-		public const string AddressFieldText = "AddressFieldText";
-		public const string AddressText = "AddressText";
-		public const string CommentFieldText = "CommentFieldText";
-		public const string DebugText = "DebugText";
-		public const string DeviceBusy = "DeviceBusy";
-		public const string DeviceIdle = "DeviceIdle";
-		public const string EditingText = "EditingText";
-		public const string EditorBackground = "EditorBackground";
-		public const string ErrorText = "ErrorText";
+		public const string AddressFieldText = nameof(AddressFieldText);
+		public const string AddressText = nameof(AddressText);
+		public const string CommentFieldText = nameof(CommentFieldText);
+		public const string DebugText = nameof(DebugText);
+		public const string DeviceBusy = nameof(DeviceBusy);
+		public const string DeviceIdle = nameof(DeviceIdle);
+		public const string EditingText = nameof(EditingText);
+		public const string EditorBackground = nameof(EditorBackground);
+		public const string ErrorText = nameof(ErrorText);
 		public const string FixedWidth = "FixedWidthFont";
-		public const string ImmutableText = "ImmutableText";
-		public const string InfoText = "InfoText";
-		public const string LoadedInstructionBackground = "LoadedInstructionBackground";
-		public const string LoadedInstructionText = "LoadedInstructionText";
-		public const string LineNumberSeparator = "LineNumberSeparator";
-		public const string LineNumberText = "LineNumberText";
-		public const string LocationFieldText = "LocationFieldText";
-		public const string OpFieldText = "OpFieldText";
-		public const string ProgramCounterAddressBackground = "ProgramCounterAddressBackground";
-		public const string RenderedText = "RenderedText";
-		public const string TeletypeInputBackground = "TeletypeInputBackground";
-		public const string TeletypeInputText = "TeletypeInputText";
-		public const string TeletypeOutputBackground = "TeletypeOutputBackground";
-		public const string TeletypeOutputText = "TeletypeOutputText";
-		public const string WarningText = "WarningText";
+		public const string ImmutableText = nameof(ImmutableText);
+		public const string InfoText = nameof(InfoText);
+		public const string LoadedInstructionBackground = nameof(LoadedInstructionBackground);
+		public const string LoadedInstructionText = nameof(LoadedInstructionText);
+		public const string LineNumberSeparator = nameof(LineNumberSeparator);
+		public const string LineNumberText = nameof(LineNumberText);
+		public const string LocationFieldText = nameof(LocationFieldText);
+		public const string OpFieldText = nameof(OpFieldText);
+		public const string ProgramCounterAddressBackground = nameof(ProgramCounterAddressBackground);
+		public const string RenderedText = nameof(RenderedText);
+		public const string TeletypeInputBackground = nameof(TeletypeInputBackground);
+		public const string TeletypeInputText = nameof(TeletypeInputText);
+		public const string TeletypeOutputBackground = nameof(TeletypeOutputBackground);
+		public const string TeletypeOutputText = nameof(TeletypeOutputText);
+		public const string WarningText = nameof(WarningText);
 
 		private static readonly Dictionary<string, Color> _defaultColors;
 		private static readonly Dictionary<string, Font> _defaultFonts;
@@ -37,6 +37,7 @@ namespace MixGui.Settings
 		public static Dictionary<string, Color> Colors { private get; set; }
 		public static ProfilingInfoType ShowProfilingInfo { get; set; }
 		public static bool ColorProfilingCounts { get; set; }
+		public static bool ShowSourceInline { get; set; }
 
 		static GuiSettings()
 		{

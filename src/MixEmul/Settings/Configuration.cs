@@ -37,6 +37,7 @@ namespace MixGui.Settings
 		public Dictionary<string, int> TickCounts { get; set; }
 		public GuiSettings.ProfilingInfoType ShowProfilingInfo { get; set; }
 		public bool ColorProfilingCounts { get; set; }
+		public bool ShowSourceInline { get; set; }
 
 		public Configuration()
 		{
@@ -50,6 +51,7 @@ namespace MixGui.Settings
 			DeviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 			FloatingPointMemoryWordCount = null;
 			ColorProfilingCounts = true;
+			ShowSourceInline = true;
 			FillEmptyMembers();
 		}
 

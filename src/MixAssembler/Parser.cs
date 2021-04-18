@@ -16,8 +16,8 @@ namespace MixAssembler
 	public static class Parser
 	{
 		public const int FieldSpacing = 2;
-		public const int MinAddressLength = 20;
-		public const int MinLocLength = 10;
+		public const int MinAddressLength = 10;
+		public const int MinLocLength = 8;
 		public const int MinOpLength = 4;
 
 		private const int LocFieldIndex = 0;
