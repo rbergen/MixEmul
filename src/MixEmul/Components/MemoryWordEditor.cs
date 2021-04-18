@@ -17,6 +17,7 @@ namespace MixGui.Components
 		private readonly CheckBox _breakPointBox;
 		private readonly Label _colonLabel;
 		private readonly Label _colonLabel2;
+		private readonly Label _colonLabel3;
 		private readonly InstructionInstanceTextBox _instructionTextBox;
 		private readonly FullWordEditor _fullWordEditor;
 		private bool _marked;
@@ -24,7 +25,9 @@ namespace MixGui.Components
 		private bool _readOnly;
 		private readonly Label _equalsLabel;
 		private readonly Label _profileLabel;
+		private readonly Label _sourceLineLabel;
 		private GetMaxProfilingCountCallback _getMaxProfilingCount;
+		private ToolTip _toolTip;
 
 		public event EventHandler AddressDoubleClick;
 		public event EventHandler BreakpointCheckedChanged;
@@ -51,6 +54,8 @@ namespace MixGui.Components
 			_colonLabel = new Label();
 			_equalsLabel = new Label();
 			_colonLabel = new Label();
+			_colonLabel3 = new Label();
+			_sourceLineLabel = new Label();
 			_colonLabel2 = new Label();
 			_profileLabel = new Label();
 			InitializeComponent();
@@ -172,7 +177,7 @@ namespace MixGui.Components
 			_instructionTextBox.Location = new Point(0, 0);
 			_instructionTextBox.Multiline = false;
 			_instructionTextBox.Name = "mInstructionTextBox";
-			_instructionTextBox.Size = new Size(128, 21);
+			_instructionTextBox.Size = new Size(39, 21);
 			_instructionTextBox.TabIndex = 0;
 			_instructionTextBox.KeyDown += This_KeyDown;
 			_instructionTextBox.ValueChanged += InstructionTextBox_ValueChanged;
@@ -180,17 +185,36 @@ namespace MixGui.Components
 			_instructionTextBox.MouseWheel += InstructionTextBox_MouseWheel;
 
 			_instructionPanel.Controls.Add(_instructionTextBox);
-			_instructionPanel.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
+			_instructionPanel.Anchor = AnchorStyles.Left | AnchorStyles.Top;
 			_instructionPanel.Location = new Point(_equalsLabel.Right, _fullWordEditor.Top);
 			_instructionPanel.Size = new Size(_instructionTextBox.Width, 21);
 			_instructionPanel.TabIndex = 4;
 			_instructionPanel.BorderStyle = BorderStyle.FixedSingle;
 
-			_colonLabel2.Location = new Point(_instructionPanel.Right, _addressPanel.Top + 3);
+			_colonLabel3.Location = new Point(_instructionPanel.Right, _addressPanel.Top + 3);
+			_colonLabel3.Anchor = AnchorStyles.Top;
+			_colonLabel3.Name = "mColonLabel3";
+			_colonLabel3.Size = new Size(10, _addressLabel.Height - 3);
+			_colonLabel3.TabIndex = 5;
+			_colonLabel3.Text = "<";
+			_colonLabel3.TextAlign = ContentAlignment.MiddleCenter;
+
+			_sourceLineLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+			_sourceLineLabel.Location = new Point(_colonLabel3.Right, _instructionPanel.Top);
+			_sourceLineLabel.Size = new Size(79, _instructionPanel.Height);
+			_sourceLineLabel.Name = "mSourceLineLabel";
+			_sourceLineLabel.TabIndex = 6;
+			_sourceLineLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			_sourceLineLabel.Text = string.Empty;
+			_sourceLineLabel.TextAlign = ContentAlignment.MiddleLeft;
+			_sourceLineLabel.BorderStyle = BorderStyle.FixedSingle;
+			_sourceLineLabel.AutoEllipsis = true;
+
+			_colonLabel2.Location = new Point(_sourceLineLabel.Right, _addressPanel.Top + 3);
 			_colonLabel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			_colonLabel2.Name = "mColonLabel2";
 			_colonLabel2.Size = new Size(10, _addressLabel.Height - 3);
-			_colonLabel2.TabIndex = 5;
+			_colonLabel2.TabIndex = 7;
 			_colonLabel2.Text = "x";
 			_colonLabel2.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -198,7 +222,7 @@ namespace MixGui.Components
 			_profileLabel.Location = new Point(_colonLabel2.Right, _instructionPanel.Top);
 			_profileLabel.Size = new Size(64, _instructionPanel.Height);
 			_profileLabel.Name = "mProfileLabel";
-			_profileLabel.TabIndex = 6;
+			_profileLabel.TabIndex = 8;
 			_profileLabel.Text = "0";
 			_profileLabel.TextAlign = ContentAlignment.MiddleRight;
 			_profileLabel.BorderStyle = BorderStyle.FixedSingle;
@@ -208,14 +232,29 @@ namespace MixGui.Components
 			Controls.Add(_fullWordEditor);
 			Controls.Add(_equalsLabel);
 			Controls.Add(_instructionPanel);
+			Controls.Add(_colonLabel3);
+			Controls.Add(_sourceLineLabel);
 			Controls.Add(_colonLabel2);
 			Controls.Add(_profileLabel);
 			Name = "MemoryWordEditor";
 			Size = new Size(_profileLabel.Right + 2, _instructionPanel.Height + 3);
 			KeyDown += This_KeyDown;
+			Layout += This_Layout;
 
 			_addressPanel.ResumeLayout(false);
 			ResumeLayout(false);
+		}
+
+		private void This_Layout(object sender, LayoutEventArgs e)
+		{
+			int sourceWidth = Width - (_addressPanel.Width + _colonLabel.Width + _fullWordEditor.Width + _equalsLabel.Width + 2);
+			if (ExecutionSettings.ProfilingEnabled)
+				sourceWidth -= _colonLabel2.Width + _profileLabel.Width;
+
+			_instructionPanel.Width = (sourceWidth - _colonLabel3.Width) / 3;
+			_colonLabel3.Left = _instructionPanel.Right;
+			_sourceLineLabel.Left = _colonLabel3.Right;
+			_sourceLineLabel.Width = sourceWidth - (_colonLabel3.Width + _instructionPanel.Width);
 		}
 
 		private static Color Interpolate(Color color1, Color color2, double fraction)
@@ -255,7 +294,6 @@ namespace MixGui.Components
 
 			if (!ExecutionSettings.ProfilingEnabled)
 			{
-				_instructionPanel.Width += _colonLabel2.Width + _profileLabel.Width;
 				_colonLabel2.Visible = false;
 				_profileLabel.Visible = false;
 				_profileLabel.Enabled = false;
@@ -265,7 +303,6 @@ namespace MixGui.Components
 				_colonLabel2.Visible = true;
 				_profileLabel.Visible = true;
 				_profileLabel.Enabled = true;
-				_instructionPanel.Width -= _colonLabel2.Width + _profileLabel.Width;
 			}
 		}
 
@@ -412,6 +449,10 @@ namespace MixGui.Components
 				_instructionTextBox.MemoryAddress = _memoryWord.Index;
 				_fullWordEditor.WordValue = _memoryWord;
 				_instructionTextBox.InstructionWord = _memoryWord;
+				_sourceLineLabel.Text = _memoryWord.SourceLine ?? string.Empty;
+
+				if (_toolTip != null)
+					_toolTip.SetToolTip(_sourceLineLabel, string.IsNullOrEmpty(_memoryWord.SourceLine) ? null : _memoryWord.SourceLine);
 
 				if (_profileLabel.Enabled)
 					UpdateProfilingCount();
@@ -440,7 +481,11 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			set => _instructionTextBox.ToolTip = value;
+			set
+			{
+				_toolTip = value;
+				_instructionTextBox.ToolTip = _toolTip;
+			}
 		}
 
 		public IWord WordValue
