@@ -9,6 +9,12 @@ x: Bugfix
 
 =========================================
 
+0.4.7778.28981 (2021-04-18)
++ It is now possible to show assembled-and-loaded source code in-line in the memory editor. This view can be switched on and off in the View menu
++ When starting a Detached run, the status bar now reflects this
+* Gitified source file structure
+* Minor cosmetic code improvements
+
 0.4.7755.38010 (2021-03-26)
 x Fixed regression in settings (de)serialisation, which made that colours weren't applied
 x Fixed opening of device and teletype windows on saved screen location

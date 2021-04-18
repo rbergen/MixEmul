@@ -62,8 +62,8 @@ namespace MixGui.Components
 
 			MemoryWord = memoryWord;
 
-			UpdateShowSourceInlineLayout();
-			UpdateProfilingLayout();
+			UpdateShowSourceInlineLayout(true);
+			UpdateProfilingLayout(true);
 		}
 
 		public Control EditorControl
@@ -296,9 +296,9 @@ namespace MixGui.Components
 			}
 		}
 
-		private void UpdateShowSourceInlineLayout()
+		private void UpdateShowSourceInlineLayout(bool force = false)
 		{
-			if (_sourceLineLabel.Visible == GuiSettings.ShowSourceInline)
+			if (!force && _sourceLineLabel.Visible == GuiSettings.ShowSourceInline)
 				return;
 
 			if (!GuiSettings.ShowSourceInline)
@@ -316,12 +316,12 @@ namespace MixGui.Components
 		}
 
 
-		private void UpdateProfilingLayout()
+		private void UpdateProfilingLayout(bool force = false)
 		{
 			if (ExecutionSettings.ProfilingEnabled)
 				UpdateProfilingCount();
 
-			if (_profileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
+			if (!force && _profileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
 				return;
 
 			if (!ExecutionSettings.ProfilingEnabled)
