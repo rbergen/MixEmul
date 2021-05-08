@@ -13,40 +13,40 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class MixInstructionParameters : IInstructionParameters
 	{
-		private readonly IValue _address;
-		private readonly IValue _field;
-		private readonly int _fieldPartCharIndex;
-		private readonly IValue _index;
-		private readonly int _indexPartCharIndex;
-		private readonly int _textLength;
+		private readonly IValue address;
+		private readonly IValue field;
+		private readonly int fieldPartCharIndex;
+		private readonly IValue index;
+		private readonly int indexPartCharIndex;
+		private readonly int textLength;
 
 		private MixInstructionParameters(IValue address, int indexPartCharIndex, IValue index, int fieldPartCharIndex, IValue field, int textLength)
 		{
-			_address = address;
-			_index = index;
-			_field = field;
-			_indexPartCharIndex = indexPartCharIndex;
-			_fieldPartCharIndex = fieldPartCharIndex;
-			_textLength = textLength;
+			this.address = address;
+			this.index = index;
+			this.field = field;
+			this.indexPartCharIndex = indexPartCharIndex;
+			this.fieldPartCharIndex = fieldPartCharIndex;
+			this.textLength = textLength;
 		}
 
 		private bool AreValuesDefined(AssemblingStatus status)
 		{
-			if (!_address.IsValueDefined(status.LocationCounter))
+			if (!this.address.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, 0, _indexPartCharIndex, "address value undefined");
+				status.ReportParsingError(LineSection.AddressField, 0, this.indexPartCharIndex, "address value undefined");
 				return false;
 			}
 
-			if (!_index.IsValueDefined(status.LocationCounter))
+			if (!this.index.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, _indexPartCharIndex, _fieldPartCharIndex - _indexPartCharIndex, "index value undefined");
+				status.ReportParsingError(LineSection.AddressField, this.indexPartCharIndex, this.fieldPartCharIndex - this.indexPartCharIndex, "index value undefined");
 				return false;
 			}
 
-			if (!_address.IsValueDefined(status.LocationCounter))
+			if (!this.address.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "field value undefined");
+				status.ReportParsingError(LineSection.AddressField, this.fieldPartCharIndex, this.textLength - this.fieldPartCharIndex, "field value undefined");
 				return false;
 			}
 
@@ -67,11 +67,11 @@ namespace MixAssembler.Instruction
 			if (!AreValuesDefined(status))
 				return null;
 
-			var addressMagnitude = _address.GetMagnitude(status.LocationCounter);
+			var addressMagnitude = this.address.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
 			if (addressMagnitude > word.MaxMagnitude)
 			{
-				status.ReportError(LineSection.AddressField, 0, _indexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
+				status.ReportError(LineSection.AddressField, 0, this.indexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
 				return null;
 			}
 
@@ -82,13 +82,13 @@ namespace MixAssembler.Instruction
 
 			var instructionWord = new FullWord
 			{
-				Sign = _address.GetSign(status.LocationCounter)
+				Sign = this.address.GetSign(status.LocationCounter)
 			};
 
 			for (int i = 0; i < word.ByteCount; i++)
 				instructionWord[i] = word[i];
 
-			instructionWord[MixInstruction.IndexByte] = (int)_index.GetValue(status.LocationCounter);
+			instructionWord[MixInstruction.IndexByte] = (int)this.index.GetValue(status.LocationCounter);
 			instructionWord[MixInstruction.FieldSpecByte] = fieldSpecValue;
 			instructionWord[MixInstruction.OpcodeByte] = mixInstruction.Opcode;
 
@@ -100,7 +100,7 @@ namespace MixAssembler.Instruction
 
 		private MixByte GetFieldSpecValue(AssemblingStatus status, MixInstruction mixInstruction)
 		{
-			var fieldValue = _field.GetValue(status.LocationCounter);
+			var fieldValue = this.field.GetValue(status.LocationCounter);
 
 			switch (mixInstruction.MetaFieldSpec.Presence)
 			{
@@ -108,7 +108,7 @@ namespace MixAssembler.Instruction
 					if (fieldValue == long.MinValue)
 						return mixInstruction.FieldSpec.MixByteValue;
 
-					status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "fieldspec forbidden for this instruction");
+					status.ReportParsingError(LineSection.AddressField, this.fieldPartCharIndex, this.textLength - this.fieldPartCharIndex, "fieldspec forbidden for this instruction");
 					return null;
 
 				case MetaFieldSpec.Presences.Optional:
@@ -121,7 +121,7 @@ namespace MixAssembler.Instruction
 					if (fieldValue != long.MinValue)
 						return (int)fieldValue;
 
-					status.ReportParsingError(LineSection.AddressField, _fieldPartCharIndex, _textLength - _fieldPartCharIndex, "fieldspec mandatory for this instruction");
+					status.ReportParsingError(LineSection.AddressField, this.fieldPartCharIndex, this.textLength - this.fieldPartCharIndex, "fieldspec mandatory for this instruction");
 					return null;
 			}
 			return null;
@@ -185,17 +185,17 @@ namespace MixAssembler.Instruction
 				{
 					case InstanceValidationError.Sources.Address:
 						causeStartIndex = 0;
-						causeLength = _indexPartCharIndex;
+						causeLength = this.indexPartCharIndex;
 						break;
 
 					case InstanceValidationError.Sources.Index:
-						causeStartIndex = _indexPartCharIndex;
-						causeLength = _fieldPartCharIndex - _indexPartCharIndex;
+						causeStartIndex = this.indexPartCharIndex;
+						causeLength = this.fieldPartCharIndex - this.indexPartCharIndex;
 						break;
 
 					case InstanceValidationError.Sources.FieldSpec:
-						causeStartIndex = _fieldPartCharIndex;
-						causeLength = _textLength - _fieldPartCharIndex;
+						causeStartIndex = this.fieldPartCharIndex;
+						causeLength = this.textLength - this.fieldPartCharIndex;
 						break;
 				}
 

@@ -8,14 +8,14 @@ namespace MixGui.Components
 {
 	public class DeviceStatusControl : UserControl
 	{
-		private readonly ContextMenuStrip _contextMenuStrip;
-		private readonly ToolStripSeparator _contextSeparator;
-		private MixDevice _device;
-		private readonly Label _indexLabel;
-		private readonly ToolStripMenuItem _inputMenuItem;
-		private readonly ToolStripMenuItem _outputMenuItem;
-		private readonly ToolStripMenuItem _resetMenuItem;
-		private readonly Label _statusLabel;
+		private readonly ContextMenuStrip contextMenuStrip;
+		private readonly ToolStripSeparator contextSeparator;
+		private MixDevice device;
+		private readonly Label indexLabel;
+		private readonly ToolStripMenuItem inputMenuItem;
+		private readonly ToolStripMenuItem outputMenuItem;
+		private readonly ToolStripMenuItem resetMenuItem;
+		private readonly Label statusLabel;
 
 		public ToolTip ToolTip { get; set; }
 
@@ -23,49 +23,49 @@ namespace MixGui.Components
 
 		public DeviceStatusControl(MixDevice device)
 		{
-			_device = device;
+			this.device = device;
 
-			_indexLabel = new Label();
-			_statusLabel = new Label();
-			_contextMenuStrip = new ContextMenuStrip();
-			_inputMenuItem = new ToolStripMenuItem();
-			_outputMenuItem = new ToolStripMenuItem();
-			_contextSeparator = new ToolStripSeparator();
-			_resetMenuItem = new ToolStripMenuItem();
+			this.indexLabel = new Label();
+			this.statusLabel = new Label();
+			this.contextMenuStrip = new ContextMenuStrip();
+			this.inputMenuItem = new ToolStripMenuItem();
+			this.outputMenuItem = new ToolStripMenuItem();
+			this.contextSeparator = new ToolStripSeparator();
+			this.resetMenuItem = new ToolStripMenuItem();
 
 			SuspendLayout();
 
-			_indexLabel.Location = new Point(0, 0);
-			_indexLabel.Name = "mIndexLabel";
-			_indexLabel.Size = new Size(20, 16);
-			_indexLabel.TabIndex = 0;
-			_indexLabel.Text = "00:";
-			_indexLabel.TextAlign = ContentAlignment.MiddleRight;
-			_indexLabel.DoubleClick += Control_DoubleClick;
+			this.indexLabel.Location = new Point(0, 0);
+			this.indexLabel.Name = "mIndexLabel";
+			this.indexLabel.Size = new Size(20, 16);
+			this.indexLabel.TabIndex = 0;
+			this.indexLabel.Text = "00:";
+			this.indexLabel.TextAlign = ContentAlignment.MiddleRight;
+			this.indexLabel.DoubleClick += Control_DoubleClick;
 
-			_statusLabel.BorderStyle = BorderStyle.FixedSingle;
-			_statusLabel.Location = new Point(20, 0);
-			_statusLabel.Name = "mStatusLabel";
-			_statusLabel.Size = new Size(32, 16);
-			_statusLabel.TabIndex = 1;
-			_statusLabel.Text = "";
-			_statusLabel.TextAlign = ContentAlignment.MiddleCenter;
-			_statusLabel.DoubleClick += Control_DoubleClick;
+			this.statusLabel.BorderStyle = BorderStyle.FixedSingle;
+			this.statusLabel.Location = new Point(20, 0);
+			this.statusLabel.Name = "mStatusLabel";
+			this.statusLabel.Size = new Size(32, 16);
+			this.statusLabel.TabIndex = 1;
+			this.statusLabel.Text = "";
+			this.statusLabel.TextAlign = ContentAlignment.MiddleCenter;
+			this.statusLabel.DoubleClick += Control_DoubleClick;
 
-			_inputMenuItem.Text = "Input device";
+			this.inputMenuItem.Text = "Input device";
 
-			_outputMenuItem.Text = "Output device";
+			this.outputMenuItem.Text = "Output device";
 
-			_resetMenuItem.Text = "Reset";
-			_resetMenuItem.Click += ResetMenuItem_Click;
+			this.resetMenuItem.Text = "Reset";
+			this.resetMenuItem.Click += ResetMenuItem_Click;
 
-			_contextMenuStrip.Items.AddRange(new ToolStripItem[] { _inputMenuItem, _outputMenuItem, _contextSeparator, _resetMenuItem });
-			ContextMenuStrip = _contextMenuStrip;
+			this.contextMenuStrip.Items.AddRange(new ToolStripItem[] { this.inputMenuItem, this.outputMenuItem, this.contextSeparator, this.resetMenuItem });
+			ContextMenuStrip = this.contextMenuStrip;
 
-			Controls.Add(_indexLabel);
-			Controls.Add(_statusLabel);
+			Controls.Add(this.indexLabel);
+			Controls.Add(this.statusLabel);
 			Name = "DeviceStatusControl";
-			Size = new Size(_indexLabel.Width + _statusLabel.Width, 16);
+			Size = new Size(this.indexLabel.Width + this.statusLabel.Width, 16);
 			ResumeLayout(false);
 
 			UpdateLayout();
@@ -76,9 +76,9 @@ namespace MixGui.Components
 
 		private void ResetMenuItem_Click(object sender, EventArgs e)
 		{
-			if (_device != null)
+			if (this.device != null)
 			{
-				_device.Reset();
+				this.device.Reset();
 				Update();
 			}
 		}
@@ -89,13 +89,13 @@ namespace MixGui.Components
 			{
 				SuspendLayout();
 
-				_indexLabel.Text = "";
-				_statusLabel.BackColor = Color.Gray;
-				_statusLabel.Text = "";
-				ToolTip?.SetToolTip(_statusLabel, "No device connected");
+				this.indexLabel.Text = "";
+				this.statusLabel.BackColor = Color.Gray;
+				this.statusLabel.Text = "";
+				ToolTip?.SetToolTip(this.statusLabel, "No device connected");
 
-				_inputMenuItem.Checked = false;
-				_outputMenuItem.Checked = false;
+				this.inputMenuItem.Checked = false;
+				this.outputMenuItem.Checked = false;
 
 				ResumeLayout();
 			}
@@ -103,12 +103,12 @@ namespace MixGui.Components
 			{
 				SuspendLayout();
 
-				_indexLabel.Text = Device.Id + ":";
-				_statusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
-				_statusLabel.Text = Device.ShortName;
-				ToolTip?.SetToolTip(_statusLabel, Device.StatusDescription);
-				_inputMenuItem.Checked = Device.SupportsInput;
-				_outputMenuItem.Checked = Device.SupportsOutput;
+				this.indexLabel.Text = Device.Id + ":";
+				this.statusLabel.BackColor = GuiSettings.GetColor(Device.Busy ? GuiSettings.DeviceBusy : GuiSettings.DeviceIdle);
+				this.statusLabel.Text = Device.ShortName;
+				ToolTip?.SetToolTip(this.statusLabel, Device.StatusDescription);
+				this.inputMenuItem.Checked = Device.SupportsInput;
+				this.outputMenuItem.Checked = Device.SupportsOutput;
 
 				ResumeLayout();
 			}
@@ -116,18 +116,18 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			_statusLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.statusLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			Update();
 		}
 
 		public MixDevice Device
 		{
-			get => _device;
+			get => this.device;
 			set
 			{
-				if (_device == null)
+				if (this.device == null)
 				{
-					_device = value;
+					this.device = value;
 					Update();
 				}
 			}

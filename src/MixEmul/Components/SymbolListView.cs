@@ -8,7 +8,7 @@ namespace MixGui.Components
 {
 	public partial class SymbolListView : UserControl
 	{
-		private SymbolCollection _symbols;
+		private SymbolCollection symbols;
 
 		private const int NameFieldIndex = 0;
 		private const int ValueFieldIndex = 1;
@@ -20,17 +20,17 @@ namespace MixGui.Components
 
 		public SymbolListView()
 		{
-			_symbols = null;
+			this.symbols = null;
 
 			InitializeComponent();
 
-			_symbolValueTextBox.MinValue = ValueSymbol.MinValue;
-			_symbolValueTextBox.MaxValue = ValueSymbol.MaxValue;
-			_symbolNameTextBox.MaxLength = ValueSymbol.MaxNameLength;
+			this.symbolValueTextBox.MinValue = ValueSymbol.MinValue;
+			this.symbolValueTextBox.MaxValue = ValueSymbol.MaxValue;
+			this.symbolNameTextBox.MaxLength = ValueSymbol.MaxNameLength;
 
-			_symbolNameTextBox.TextChanged += SymbolNameTextBox_TextChanged;
-			_symbolValueTextBox.TextChanged += SymbolValueTextBox_TextChanged;
-			_listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
+			this.symbolNameTextBox.TextChanged += SymbolNameTextBox_TextChanged;
+			this.symbolValueTextBox.TextChanged += SymbolValueTextBox_TextChanged;
+			this.listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
 		}
 
 		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e) 
@@ -50,62 +50,62 @@ namespace MixGui.Components
 
 		private void SetEnabledStates(bool updateSelectedItem)
 		{
-			string symbolName = _symbolNameTextBox.Text;
-			_setButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && _symbolValueTextBox.TextLength > 0;
-			_unsetButton.Enabled = _symbols != null && _symbols.Contains(symbolName);
+			string symbolName = this.symbolNameTextBox.Text;
+			this.setButton.Enabled = ValueSymbol.IsValueSymbolName(symbolName) && this.symbolValueTextBox.TextLength > 0;
+			this.unsetButton.Enabled = this.symbols != null && this.symbols.Contains(symbolName);
 
 			if (!updateSelectedItem)
 				return;
 
-			if (_unsetButton.Enabled)
+			if (this.unsetButton.Enabled)
 			{
-				ListViewItem symbolItem = _listView.Items[symbolName];
+				ListViewItem symbolItem = this.listView.Items[symbolName];
 				symbolItem.Selected = true;
 				symbolItem.EnsureVisible();
 			}
 			else
 			{
-				foreach (ListViewItem item in _listView.Items)
+				foreach (ListViewItem item in this.listView.Items)
 					item.Selected = false;
 			}
 		}
 
 		public SymbolCollection Symbols
 		{
-			get => _symbols;
+			get => this.symbols;
 
 			set
 			{
-				if (_symbols == value)
+				if (this.symbols == value)
 					return;
 
-				_symbols = value;
+				this.symbols = value;
 
-				_listView.BeginUpdate();
-				_listView.Items.Clear();
-				_symbolNameTextBox.Text = "";
-				_symbolValueTextBox.Text = "";
+				this.listView.BeginUpdate();
+				this.listView.Items.Clear();
+				this.symbolNameTextBox.Text = "";
+				this.symbolValueTextBox.Text = "";
 
-				if (_symbols != null)
+				if (this.symbols != null)
 				{
 					SuspendLayout();
 
-					foreach (SymbolBase symbol in _symbols)
+					foreach (SymbolBase symbol in this.symbols)
 						ShowSymbol(symbol);
 
 					ResumeLayout();
 				}
 
-				_listView.EndUpdate();
+				this.listView.EndUpdate();
 			}
 		}
 
 		public void AddSymbol(SymbolBase symbol)
 		{
-			if (_symbols == null)
-				_symbols = new SymbolCollection();
+			if (this.symbols == null)
+				this.symbols = new SymbolCollection();
 
-			_symbols.Add(symbol);
+			this.symbols.Add(symbol);
 
 			ShowSymbol(symbol);
 		}
@@ -123,17 +123,17 @@ namespace MixGui.Components
 					Name = valueSymbol.Name
 				};
 
-				_listView.Items.Add(viewItem);
+				this.listView.Items.Add(viewItem);
 			}
 		}
 
 		public void Reset()
 		{
-			_symbols = null;
+			this.symbols = null;
 
 			SuspendLayout();
 
-			_listView.Items.Clear();
+			this.listView.Items.Clear();
 
 			ResumeLayout();
 		}
@@ -142,7 +142,7 @@ namespace MixGui.Components
 		{
 			get
 			{
-				ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
+				ListView.SelectedListViewItemCollection selectedItems = this.listView.SelectedItems;
 
 				if (selectedItems.Count == 0)
 					return long.MinValue;
@@ -176,13 +176,13 @@ namespace MixGui.Components
 
 		private void SetButton_Click(object sender, EventArgs e)
 		{
-			if (_symbols == null)
-				_symbols = new SymbolCollection();
+			if (this.symbols == null)
+				this.symbols = new SymbolCollection();
 
-			string symbolName = _symbolNameTextBox.Text;
-			long symbolMagnitude = _symbolValueTextBox.Magnitude;
-			Word.Signs symbolSign = _symbolValueTextBox.Sign;
-			SymbolBase symbol = _symbols[symbolName];
+			string symbolName = this.symbolNameTextBox.Text;
+			long symbolMagnitude = this.symbolValueTextBox.Magnitude;
+			Word.Signs symbolSign = this.symbolValueTextBox.Sign;
+			SymbolBase symbol = this.symbols[symbolName];
 
 			if (symbol != null)
 			{
@@ -195,7 +195,7 @@ namespace MixGui.Components
 				if (symbolSign.IsNegative())
 					valueText = '-' + valueText;
 
-				_listView.Items[symbolName].SubItems[ValueFieldIndex].Text = valueText;
+				this.listView.Items[symbolName].SubItems[ValueFieldIndex].Text = valueText;
 			}
 			else
 			{
@@ -204,7 +204,7 @@ namespace MixGui.Components
 
 				valueSymbol.SetValue(symbolSign, symbolMagnitude);
 
-				_symbols.Add(valueSymbol);
+				this.symbols.Add(valueSymbol);
 				ShowSymbol(valueSymbol);
 			}
 
@@ -213,25 +213,25 @@ namespace MixGui.Components
 
 		private void UnsetButton_Click(object sender, EventArgs e)
 		{
-			if (_symbols == null)
+			if (this.symbols == null)
 				return;
 
-			string symbolName = _symbolNameTextBox.Text;
-			_symbols.Remove(symbolName);
-			_listView.Items.RemoveByKey(symbolName);
+			string symbolName = this.symbolNameTextBox.Text;
+			this.symbols.Remove(symbolName);
+			this.listView.Items.RemoveByKey(symbolName);
 
 			SetEnabledStates();
 		}
 
 		private void ListView_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ListView.SelectedListViewItemCollection selectedItems = _listView.SelectedItems;
+			ListView.SelectedListViewItemCollection selectedItems = this.listView.SelectedItems;
 
 			if (selectedItems.Count == 0)
 				return;
 
 			ListViewItem selectedItem = selectedItems[0];
-			_symbolNameTextBox.Text = selectedItem.SubItems[NameFieldIndex].Text;
+			this.symbolNameTextBox.Text = selectedItem.SubItems[NameFieldIndex].Text;
 			long magnitude = 0;
 			Word.Signs sign = Word.Signs.Positive;
 			try
@@ -248,8 +248,8 @@ namespace MixGui.Components
 			}
 			catch (FormatException) { }
 
-			_symbolValueTextBox.Magnitude = magnitude;
-			_symbolValueTextBox.Sign = sign;
+			this.symbolValueTextBox.Magnitude = magnitude;
+			this.symbolValueTextBox.Sign = sign;
 			SetEnabledStates(false);
 		}
 	}

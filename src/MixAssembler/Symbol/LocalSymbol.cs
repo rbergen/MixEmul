@@ -10,14 +10,14 @@ namespace MixAssembler.Symbol
 	/// </summary>
 	public class LocalSymbol : SymbolBase
 	{
-		private readonly List<long> _addresses;
+		private readonly List<long> addresses;
 
 		public LocalSymbol(int index) : base(index.ToString())
 		{
 			if (index < 0 || index > 9)
 				throw new ArgumentException("index must be between 0 and 9");
 
-			_addresses = new List<long>();
+			this.addresses = new List<long>();
 		}
 
 		public override bool IsMultiValuedSymbol
@@ -27,7 +27,7 @@ namespace MixAssembler.Symbol
 			=> true;
 
 		public override void SetValue(long value)
-			=> _addresses.Add(value);
+			=> this.addresses.Add(value);
 
 		private static bool IsDefinitionChar(char c)
 			=> c == 'H';
@@ -44,7 +44,7 @@ namespace MixAssembler.Symbol
 			=> false;
 
 		public override void SetValue(Word.Signs sign, long magnitude)
-			=> _addresses.Add(magnitude);
+			=> this.addresses.Add(magnitude);
 
 		public override long GetValue(int currentAddress)
 			=> throw new NotImplementedException();
@@ -102,8 +102,8 @@ namespace MixAssembler.Symbol
 		{
 			get
 			{
-				_addresses.Sort();
-				return _addresses;
+				this.addresses.Sort();
+				return this.addresses;
 			}
 		}
 

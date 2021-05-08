@@ -9,7 +9,7 @@ namespace MixLib
 		public const int DeviceCount = 21;
 		public const byte CardReaderUnitCode = 16;
 
-		private readonly MixDevice[] _devices = new MixDevice[DeviceCount];
+		private readonly MixDevice[] devices = new MixDevice[DeviceCount];
 
 		public TeletypeDevice Teletype { get; private set; }
 
@@ -21,35 +21,35 @@ namespace MixLib
 
 			while (index < 8)
 			{
-				_devices[index] = new TapeDevice(index);
+				this.devices[index] = new TapeDevice(index);
 				index++;
 			}
 
 			while (index < 16)
 			{
-				_devices[index] = new DiskDevice(index);
+				this.devices[index] = new DiskDevice(index);
 				index++;
 			}
 
-			_devices[CardReaderUnitCode] = new CardReaderDevice(CardReaderUnitCode);
-			_devices[17] = new CardWriterDevice(17);
-			_devices[18] = new PrinterDevice(18);
+			this.devices[CardReaderUnitCode] = new CardReaderDevice(CardReaderUnitCode);
+			this.devices[17] = new CardWriterDevice(17);
+			this.devices[18] = new PrinterDevice(18);
 			Teletype = new TeletypeDevice(19);
-			_devices[19] = Teletype;
-			_devices[20] = new PaperTapeDevice(20);
+			this.devices[19] = Teletype;
+			this.devices[20] = new PaperTapeDevice(20);
 
-			foreach (MixDevice device in _devices)
+			foreach (MixDevice device in this.devices)
 				device.ReportingEvent += Device_Reporting;
 		}
 
 		public int Count 
-			=> _devices.Length;
+			=> this.devices.Length;
 
 		public MixDevice this[int index] 
-			=> _devices[index];
+			=> this.devices[index];
 
 		public IEnumerator GetEnumerator() 
-			=> _devices.GetEnumerator();
+			=> this.devices.GetEnumerator();
 
 		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) 
 			=> DeviceReportingEvent?.Invoke(this, args);
@@ -59,19 +59,19 @@ namespace MixLib
 
 		public void Reset()
 		{
-			foreach (MixDevice device in _devices)
+			foreach (MixDevice device in this.devices)
 				device.Reset();
 		}
 
 		public void Tick()
 		{
-			foreach (MixDevice device in _devices)
+			foreach (MixDevice device in this.devices)
 				device.Tick();
 		}
 
 		public void UpdateSettings()
 		{
-			foreach (MixDevice device in _devices)
+			foreach (MixDevice device in this.devices)
 				device.UpdateSettings();
 		}
 
@@ -79,7 +79,7 @@ namespace MixLib
 		{
 			get
 			{
-				foreach (MixDevice device in _devices)
+				foreach (MixDevice device in this.devices)
 				{
 					if (device.Busy)
 						return true;

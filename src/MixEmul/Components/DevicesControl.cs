@@ -9,23 +9,23 @@ namespace MixGui.Components
 {
 	public class DevicesControl : UserControl
 	{
-		private DeviceStatusControl[] _deviceControls;
-		private MixLib.Devices _devices;
-		private int _lastSectionSize;
-		private int _maxSequenceSize;
-		private readonly Label _noDevicesLabel;
-		private int _sectionSize;
-		private int _sequenceSize;
-		private LayoutStructure _structure;
-		private ToolTip _toolTip;
+		private DeviceStatusControl[] deviceControls;
+		private MixLib.Devices devices;
+		private int lastSectionSize;
+		private int maxSequenceSize;
+		private readonly Label noDevicesLabel;
+		private int sectionSize;
+		private int sequenceSize;
+		private LayoutStructure structure;
+		private ToolTip toolTip;
 
 		public event EventHandler<DeviceEventArgs> DeviceDoubleClick;
 
 		public DevicesControl(MixLib.Devices devices = null, LayoutStructure layout = null)
 		{
-			_structure = layout;
+			this.structure = layout;
 
-			_noDevicesLabel = new Label
+			this.noDevicesLabel = new Label
 			{
 				Location = new Point(0, 0),
 				Name = "mNoDevicesLabel",
@@ -45,8 +45,8 @@ namespace MixGui.Components
 
 			Breaks breaks = index == 0
 				? Breaks.Sequence
-				: _structure != null
-					? _structure[index]
+				: this.structure != null
+					? this.structure[index]
 					: Breaks.None;
 
 			var horizontalSpacing = GetHorizontalSpacing();
@@ -54,75 +54,75 @@ namespace MixGui.Components
 
 			if (index == 0)
 			{
-				_sequenceSize = 0;
-				_sectionSize = 0;
-				_lastSectionSize = 0;
-				_maxSequenceSize = 0;
+				this.sequenceSize = 0;
+				this.sectionSize = 0;
+				this.lastSectionSize = 0;
+				this.maxSequenceSize = 0;
 			}
 
 			var controlLocation = new Point();
-			DeviceStatusControl control = _deviceControls[index];
+			DeviceStatusControl control = this.deviceControls[index];
 
 			switch (breaks)
 			{
 				case Breaks.Sequence:
 					if (orientation == Orientations.Horizontal)
 					{
-						controlLocation.X = _lastSectionSize;
-						controlLocation.Y = _sequenceSize;
-						_sequenceSize += control.Height + verticalSpacing;
-						_sectionSize = Math.Max(_sectionSize, _lastSectionSize + control.Width + horizontalSpacing);
+						controlLocation.X = this.lastSectionSize;
+						controlLocation.Y = this.sequenceSize;
+						this.sequenceSize += control.Height + verticalSpacing;
+						this.sectionSize = Math.Max(this.sectionSize, this.lastSectionSize + control.Width + horizontalSpacing);
 					}
 					else
 					{
-						controlLocation.X = _sequenceSize;
-						controlLocation.Y = _lastSectionSize;
-						_sequenceSize += control.Width + horizontalSpacing;
-						_sectionSize = Math.Max(_sectionSize, _lastSectionSize + control.Height + verticalSpacing);
+						controlLocation.X = this.sequenceSize;
+						controlLocation.Y = this.lastSectionSize;
+						this.sequenceSize += control.Width + horizontalSpacing;
+						this.sectionSize = Math.Max(this.sectionSize, this.lastSectionSize + control.Height + verticalSpacing);
 					}
 					break;
 
 				case Breaks.Section:
 					if (orientation == Orientations.Horizontal)
 					{
-						_lastSectionSize = _sectionSize;
-						controlLocation.X = _lastSectionSize;
+						this.lastSectionSize = this.sectionSize;
+						controlLocation.X = this.lastSectionSize;
 						controlLocation.Y = 0;
-						_sequenceSize = control.Height + verticalSpacing;
-						_sectionSize = _lastSectionSize + control.Width + horizontalSpacing;
+						this.sequenceSize = control.Height + verticalSpacing;
+						this.sectionSize = this.lastSectionSize + control.Width + horizontalSpacing;
 					}
 					else
 					{
-						_lastSectionSize = _sectionSize;
+						this.lastSectionSize = this.sectionSize;
 						controlLocation.X = 0;
-						controlLocation.Y = _lastSectionSize;
-						_sequenceSize = control.Width + horizontalSpacing;
-						_sectionSize = _lastSectionSize + control.Height + verticalSpacing;
+						controlLocation.Y = this.lastSectionSize;
+						this.sequenceSize = control.Width + horizontalSpacing;
+						this.sectionSize = this.lastSectionSize + control.Height + verticalSpacing;
 					}
 					break;
 
 				default:
 					if (orientation == Orientations.Horizontal)
 					{
-						DeviceStatusControl previousControl = _deviceControls[index - 1];
+						DeviceStatusControl previousControl = this.deviceControls[index - 1];
 						controlLocation.X = previousControl.Left + previousControl.Width + horizontalSpacing;
 						controlLocation.Y = previousControl.Top;
-						_sequenceSize = Math.Max(_sequenceSize, controlLocation.Y + control.Height + verticalSpacing);
-						_sectionSize = Math.Max(_sectionSize, controlLocation.X + control.Width + horizontalSpacing);
+						this.sequenceSize = Math.Max(this.sequenceSize, controlLocation.Y + control.Height + verticalSpacing);
+						this.sectionSize = Math.Max(this.sectionSize, controlLocation.X + control.Width + horizontalSpacing);
 					}
 					else
 					{
-						DeviceStatusControl previousControl = _deviceControls[index - 1];
+						DeviceStatusControl previousControl = this.deviceControls[index - 1];
 						controlLocation.X = previousControl.Left;
 						controlLocation.Y = previousControl.Top + previousControl.Height + horizontalSpacing;
-						_sequenceSize = Math.Max(_sequenceSize, controlLocation.X + control.Width + horizontalSpacing);
-						_sectionSize = Math.Max(_sectionSize, controlLocation.Y + control.Height + verticalSpacing);
+						this.sequenceSize = Math.Max(this.sequenceSize, controlLocation.X + control.Width + horizontalSpacing);
+						this.sectionSize = Math.Max(this.sectionSize, controlLocation.Y + control.Height + verticalSpacing);
 					}
 
 					break;
 			}
 
-			_maxSequenceSize = Math.Max(_maxSequenceSize, _sequenceSize);
+			this.maxSequenceSize = Math.Max(this.maxSequenceSize, this.sequenceSize);
 
 			control.Location = controlLocation;
 			Controls.Add(control);
@@ -135,11 +135,11 @@ namespace MixGui.Components
 
 			if (Devices == null)
 			{
-				Controls.Add(_noDevicesLabel);
+				Controls.Add(this.noDevicesLabel);
 			}
 			else
 			{
-				for (int i = 0; i < _deviceControls.Length; i++)
+				for (int i = 0; i < this.deviceControls.Length; i++)
 					AddDeviceControl(i);
 			}
 
@@ -147,17 +147,17 @@ namespace MixGui.Components
 		}
 
 		private int GetHorizontalSpacing()
-			=> _structure == null ? 0 : _structure.HorizontalSpacing;
+			=> this.structure == null ? 0 : this.structure.HorizontalSpacing;
 
 		private Orientations GetOrientation()
-			=> _structure == null ? Orientations.Horizontal : _structure.Orientation;
+			=> this.structure == null ? Orientations.Horizontal : this.structure.Orientation;
 
 		private int GetVerticalSpacing()
-			=> _structure == null ? 0 : _structure.VerticalSpacing;
+			=> this.structure == null ? 0 : this.structure.VerticalSpacing;
 
 		public new void Update()
 		{
-			foreach (DeviceStatusControl control in _deviceControls)
+			foreach (DeviceStatusControl control in this.deviceControls)
 				control.Update();
 
 			base.Update();
@@ -165,33 +165,33 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			foreach (DeviceStatusControl control in _deviceControls)
+			foreach (DeviceStatusControl control in this.deviceControls)
 				control.UpdateLayout();
 		}
 
 		public MixLib.Devices Devices
 		{
-			get => _devices;
+			get => this.devices;
 			set
 			{
-				if (_devices != null)
+				if (this.devices != null)
 					return;
 
-				_devices = value;
-				if (_devices != null)
+				this.devices = value;
+				if (this.devices != null)
 				{
-					_deviceControls = new DeviceStatusControl[_devices.Count];
+					this.deviceControls = new DeviceStatusControl[this.devices.Count];
 					DeviceStatusControl control;
-					foreach (MixDevice device in _devices)
+					foreach (MixDevice device in this.devices)
 					{
 						control = new DeviceStatusControl(device)
 						{
-							ToolTip = _toolTip
+							ToolTip = this.toolTip
 						};
 
 						control.DoubleClick += DevicesControl_DoubleClick;
 
-						_deviceControls[device.Id] = control;
+						this.deviceControls[device.Id] = control;
 					}
 				}
 
@@ -204,12 +204,12 @@ namespace MixGui.Components
 
 		public LayoutStructure Structure
 		{
-			get => _structure;
+			get => this.structure;
 			set
 			{
 				if (value != null)
 				{
-					_structure = value;
+					this.structure = value;
 					AddDeviceControls();
 				}
 			}
@@ -224,14 +224,14 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			get => _toolTip;
+			get => this.toolTip;
 			set
 			{
-				_toolTip = value;
+				this.toolTip = value;
 
-				if (_deviceControls != null)
+				if (this.deviceControls != null)
 				{
-					foreach (DeviceStatusControl control in _deviceControls)
+					foreach (DeviceStatusControl control in this.deviceControls)
 						control.ToolTip = value;
 				}
 			}

@@ -3,16 +3,16 @@
 
 	public abstract class Register : Word
 	{
-		private readonly int _paddingByteCount;
+		private readonly int paddingByteCount;
 
 		protected Register(int byteCount, int paddingByteCount) : base(byteCount) 
-			=> _paddingByteCount = paddingByteCount;
+			=> this.paddingByteCount = paddingByteCount;
 
 		public int ByteCountWithPadding 
-			=> _paddingByteCount + ByteCount;
+			=> this.paddingByteCount + ByteCount;
 
 		public MixByte GetByteWithPadding(int index) 
-			=> index < _paddingByteCount ? 0 : base[index - _paddingByteCount];
+			=> index < this.paddingByteCount ? 0 : base[index - this.paddingByteCount];
 
 		public FullWord FullWordValue
 		{
@@ -20,11 +20,11 @@
 			{
 				var word = new FullWord();
 
-				for (int i = 0; (i < _paddingByteCount) && (i < FullWord.ByteCount); i++)
+				for (int i = 0; (i < this.paddingByteCount) && (i < FullWord.ByteCount); i++)
 					word[i] = 0;
 
 				for (int i = 0; (i < ByteCount) && (i < FullWord.ByteCount); i++)
-					word[_paddingByteCount + i] = base[i];
+					word[this.paddingByteCount + i] = base[i];
 
 				word.Sign = Sign;
 

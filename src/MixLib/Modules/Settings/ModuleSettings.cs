@@ -8,58 +8,58 @@ namespace MixLib.Modules.Settings
 		public const string FloatingPointProgramFileDefault = "floatingpoint.mixal";
 		public const string ControlProgramFileDefault = "control.mixal";
 
-		private static bool? _floatingPointEnabled;
-		private static string _floatingPointProgramFile;
-		private static string _controlProgramFile;
-		private static int? _floatingPointMemoryWordCount;
+		private static bool? floatingPointEnabled;
+		private static string floatingPointProgramFile;
+		private static string controlProgramFile;
+		private static int? floatingPointMemoryWordCount;
 
 		public static bool FloatingPointEnabled
 		{
-			get => _floatingPointEnabled ?? FloatingPointEnabledDefault;
-			set => _floatingPointEnabled = value;
+			get => floatingPointEnabled ?? FloatingPointEnabledDefault;
+			set => floatingPointEnabled = value;
 		}
 
 		public static bool FloatingPointEnabledDefined
 		{
-			get => _floatingPointEnabled != null;
+			get => floatingPointEnabled != null;
 			set
 			{
 				if (!value)
-					_floatingPointEnabled = null;
+					floatingPointEnabled = null;
 
-				else if (_floatingPointEnabled == null)
-					_floatingPointEnabled = FloatingPointEnabledDefault;
+				else if (floatingPointEnabled == null)
+					floatingPointEnabled = FloatingPointEnabledDefault;
 			}
 		}
 
 		public static string FloatingPointProgramFile
 		{
-			get => _floatingPointProgramFile ?? FloatingPointProgramFileDefault;
-			set => _floatingPointProgramFile = value;
+			get => floatingPointProgramFile ?? FloatingPointProgramFileDefault;
+			set => floatingPointProgramFile = value;
 		}
 
 		public static string ControlProgramFile
 		{
-			get => _controlProgramFile ?? ControlProgramFileDefault;
-			set => _controlProgramFile = value;
+			get => controlProgramFile ?? ControlProgramFileDefault;
+			set => controlProgramFile = value;
 		}
 
 		public static int FloatingPointMemoryWordCount
 		{
-			get => _floatingPointMemoryWordCount ?? FloatingPointMemoryWordCountDefault;
-			set => _floatingPointMemoryWordCount = value;
+			get => floatingPointMemoryWordCount ?? FloatingPointMemoryWordCountDefault;
+			set => floatingPointMemoryWordCount = value;
 		}
 
 		public static bool FloatingPointMemoryWordCountDefined
 		{
-			get => _floatingPointMemoryWordCount != null;
+			get => floatingPointMemoryWordCount != null;
 			set
 			{
 				if (!value)
-					_floatingPointMemoryWordCount = null;
+					floatingPointMemoryWordCount = null;
 
-				else if (_floatingPointMemoryWordCount == null)
-					_floatingPointMemoryWordCount = FloatingPointMemoryWordCountDefault;
+				else if (floatingPointMemoryWordCount == null)
+					floatingPointMemoryWordCount = FloatingPointMemoryWordCountDefault;
 			}
 		}
 	}

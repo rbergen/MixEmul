@@ -31,8 +31,8 @@ namespace MixGui.Settings
 		public const string TeletypeOutputText = nameof(TeletypeOutputText);
 		public const string WarningText = nameof(WarningText);
 
-		private static readonly Dictionary<string, Color> _defaultColors;
-		private static readonly Dictionary<string, Font> _defaultFonts;
+		private static readonly Dictionary<string, Color> defaultColors;
+		private static readonly Dictionary<string, Font> defaultFonts;
 
 		public static Dictionary<string, Color> Colors { private get; set; }
 		public static ProfilingInfoType ShowProfilingInfo { get; set; }
@@ -41,7 +41,7 @@ namespace MixGui.Settings
 
 		static GuiSettings()
 		{
-			_defaultColors = new Dictionary<string, Color>
+			defaultColors = new Dictionary<string, Color>
 			{
 				{ ErrorText, Color.Red },
 				{ WarningText, Color.DarkOrange },
@@ -70,7 +70,7 @@ namespace MixGui.Settings
 			};
 
 			Colors = new Dictionary<string, Color>();
-			_defaultFonts = new Dictionary<string, Font>
+			defaultFonts = new Dictionary<string, Font>
 			{
 				{ FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
 			};
@@ -78,7 +78,7 @@ namespace MixGui.Settings
 			ColorProfilingCounts = true;
 		}
 
-		public static bool IsKnownColor(string name) => _defaultColors.ContainsKey(name);
+		public static bool IsKnownColor(string name) => defaultColors.ContainsKey(name);
 
 		public static Color GetColor(string name)
 		{
@@ -90,18 +90,18 @@ namespace MixGui.Settings
 
 		public static Color GetDefaultColor(string name)
 		{
-			if (_defaultColors.ContainsKey(name))
-				return _defaultColors[name];
+			if (defaultColors.ContainsKey(name))
+				return defaultColors[name];
 
 			return SystemColors.WindowText;
 		}
 
 		public static Font GetFont(string name)
 		{
-			if (_defaultFonts.ContainsKey(name))
-				return _defaultFonts[name];
+			if (defaultFonts.ContainsKey(name))
+				return defaultFonts[name];
 
-			var enumerator = ((IEnumerable<Font>)_defaultFonts).GetEnumerator();
+			var enumerator = ((IEnumerable<Font>)defaultFonts).GetEnumerator();
 			enumerator.MoveNext();
 			return enumerator.Current;
 		}
@@ -110,8 +110,8 @@ namespace MixGui.Settings
 		{
 			get
 			{
-				string[] array = new string[_defaultColors.Count];
-				_defaultColors.Keys.CopyTo(array, 0);
+				string[] array = new string[defaultColors.Count];
+				defaultColors.Keys.CopyTo(array, 0);
 				return array;
 			}
 		}

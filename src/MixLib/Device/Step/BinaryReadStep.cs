@@ -8,17 +8,17 @@ namespace MixLib.Device.Step
 {
 	public class BinaryReadStep : StreamStep
 	{
-		private readonly int _recordWordCount;
+		private readonly int recordWordCount;
 
 		private const string MyStatusDescription = "Reading binary data";
 
 		public BinaryReadStep(int recordWordCount) 
-			=> _recordWordCount = recordWordCount;
+			=> this.recordWordCount = recordWordCount;
 
 		public override string StatusDescription 
 			=> MyStatusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, _recordWordCount);
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, this.recordWordCount);
 
 		public static MixByte[] ReadBytes(Stream stream, int wordCount)
 		{

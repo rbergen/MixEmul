@@ -11,21 +11,21 @@ namespace MixLib.Device
 	{
 		public const string FileNameExtension = "mixdev";
 
-		private readonly string _fileNamePrefix;
-		private string _filePath;
+		private readonly string fileNamePrefix;
+		private string filePath;
 
 		protected StreamStatus StreamStatus { get; set; }
 
 		protected FileBasedDevice(int id, string fileNamePrefix) : base(id)
 		{
-			_fileNamePrefix = fileNamePrefix;
-			_filePath = null;
+			this.fileNamePrefix = fileNamePrefix;
+			this.filePath = null;
 			StreamStatus = new StreamStatus();
 			StreamStatus.ReportingEvent += StreamStatus_Reporting;
 		}
 
 		public string DefaultFileName
-			=> _fileNamePrefix + Id + "." + FileNameExtension;
+			=> this.fileNamePrefix + Id + "." + FileNameExtension;
 
 		public static FileStream OpenStream(string fileName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare)
 			=> new(fileName, fileMode, fileAccess, fileShare);
@@ -67,10 +67,10 @@ namespace MixLib.Device
 		{
 			get
 			{
-				string str = _filePath ?? DefaultFileName;
+				string str = this.filePath ?? DefaultFileName;
 				return Path.Combine(DeviceSettings.DeviceFilesDirectory, str);
 			}
-			set => _filePath = value;
+			set => this.filePath = value;
 		}
 	}
 }

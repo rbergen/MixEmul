@@ -13,8 +13,8 @@ namespace MixAssembler.Instruction
 	/// </summary>
 	public class LoaderInstructionParameters : IInstructionParameters
 	{
-		private readonly int _textLength;
-		private readonly IValue _value;
+		private readonly int textLength;
+		private readonly IValue value;
 
 		/// <summary>
 		/// Constructor for this class. 
@@ -23,8 +23,8 @@ namespace MixAssembler.Instruction
 		/// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
 		public LoaderInstructionParameters(IValue value, int textLength)
 		{
-			_value = value;
-			_textLength = textLength;
+			this.value = value;
+			this.textLength = textLength;
 		}
 
 		/// <summary>
@@ -38,13 +38,13 @@ namespace MixAssembler.Instruction
 			if (instruction is not LoaderInstruction loaderInstruction)
 				throw new ArgumentException("instruction must be a LoaderInstruction", nameof(instruction));
 
-			if (!_value.IsValueDefined(status.LocationCounter))
+			if (!value.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, 0, _textLength, "value is not defined");
+				status.ReportParsingError(LineSection.AddressField, 0, this.textLength, "value is not defined");
 				return null;
 			}
 
-			return new LoaderInstruction.Instance(loaderInstruction, _value.GetSign(status.LocationCounter), _value.GetMagnitude(status.LocationCounter));
+			return new LoaderInstruction.Instance(loaderInstruction, this.value.GetSign(status.LocationCounter), this.value.GetMagnitude(status.LocationCounter));
 		}
 
 		/// <summary>

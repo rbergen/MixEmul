@@ -2,13 +2,13 @@
 {
 	public class AssemblyInfo : AssemblyFinding
 	{
-		private readonly string _message;
+		private readonly string message;
 
 		public AssemblyInfo(string message, int lineNumber, LineSection lineSection, int startCharIndex, int length)
 			: base(MixLib.Misc.Severity.Info, lineNumber, lineSection, startCharIndex, length)
-			=> _message = message;
+			=> this.message = message;
 
 		public override string Message
-			=> _message;
+			=> this.message;
 	}
 }

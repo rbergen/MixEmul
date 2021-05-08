@@ -6,46 +6,46 @@ namespace MixLib.Type
 {
 	public class MixByteCollection : IMixByteCollection
 	{
-		private readonly int _maxByteCount;
-		private readonly MixByte[] _bytes;
+		private readonly int maxByteCount;
+		private readonly MixByte[] bytes;
 
 		public MixByteCollection(int maxByteCount)
 		{
-			_maxByteCount = maxByteCount;
-			_bytes = new MixByte[_maxByteCount];
+			this.maxByteCount = maxByteCount;
+			this.bytes = new MixByte[this.maxByteCount];
 
-			for (int i = 0; i < _maxByteCount; i++)
-				_bytes[i] = 0;
+			for (int i = 0; i < this.maxByteCount; i++)
+				this.bytes[i] = 0;
 		}
 
 		public MixByteCollection(MixByte[] bytes)
 		{
-			_maxByteCount = bytes.Length;
-			_bytes = bytes;
+			this.maxByteCount = bytes.Length;
+			this.bytes = bytes;
 		}
 
 		public int MaxByteCount 
-			=> _maxByteCount;
+			=> this.maxByteCount;
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() 
-			=> _bytes.GetEnumerator();
+			=> this.bytes.GetEnumerator();
 
 		public IEnumerator<MixByte> GetEnumerator() 
-			=> ((IEnumerable<MixByte>)_bytes).GetEnumerator();
+			=> ((IEnumerable<MixByte>)this.bytes).GetEnumerator();
 
 		public MixByte[] ToArray() 
-			=> (MixByte[])_bytes.Clone();
+			=> (MixByte[])this.bytes.Clone();
 
 		public void Load(string text)
 		{
-			int count = text == null ? 0 : Math.Min(_maxByteCount, text.Length);
+			int count = text == null ? 0 : Math.Min(this.maxByteCount, text.Length);
 			int index = 0;
 
 			for (; index < count; index++)
-				_bytes[index] = text[index];
+				this.bytes[index] = text[index];
 
-			while (index < _maxByteCount)
-				_bytes[index++] = 0;
+			while (index < this.maxByteCount)
+				this.bytes[index++] = 0;
 		}
 
 		public string ToString(bool asChars)
@@ -54,7 +54,7 @@ namespace MixLib.Type
 			{
 				var builder = new StringBuilder();
 
-				foreach (MixByte mixByte in _bytes)
+				foreach (MixByte mixByte in this.bytes)
 					builder.Append((char)mixByte);
 
 				return builder.ToString().TrimEnd();
@@ -65,18 +65,18 @@ namespace MixLib.Type
 
 		public MixByte this[int index]
 		{
-			get => _bytes[index];
-			set => _bytes[index] = value;
+			get => this.bytes[index];
+			set => this.bytes[index] = value;
 		}
 
 		#region ICloneable Members
 
 		public object Clone()
 		{
-			var clone = new MixByteCollection(_maxByteCount);
+			var clone = new MixByteCollection(this.maxByteCount);
 
-			for (int i = 0; i < _maxByteCount; i++)
-				clone._bytes[i] = _bytes[i].ByteValue;
+			for (int i = 0; i < this.maxByteCount; i++)
+				clone.bytes[i] = this.bytes[i].ByteValue;
 
 			return clone;
 		}

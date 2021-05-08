@@ -14,41 +14,41 @@ namespace MixGui.Components
 {
 	public class MemoryEditor : UserControl, IBreakpointManager
 	{
-		private readonly SortedList _breakpoints;
-		private Label _firstAddressLabel;
-		private Panel _firstAddressPanel;
-		private LongValueTextBox _firstAddressTextBox;
-		private int _markedAddress;
-		private IMemory _memory;
-		private readonly Label _noMemoryLabel;
-		private bool _readOnly;
-		private Label _setClipboardLabel;
-		private ToolTip _toolTip;
-		private WordEditorList _wordEditorList;
-		private IndexedAddressCalculatorCallback _indexedAddressCalculatorCallback;
-		private SymbolCollection _symbols;
-		private MixCharClipboardButtonControl _mixCharButtons;
-		private Button _exportButton;
-		private Button _upButton;
-		private Button _downButton;
-		private LinkedItemsSelectorControl<EditorListViewInfo> _addressHistorySelector;
-		private SaveFileDialog _saveExportFileDialog;
-		private int? _prevDataIndex;
-		private int? _nextDataIndex;
-		private readonly long[] _profilingMaxCounts;
+		private readonly SortedList breakpoints;
+		private Label firstAddressLabel;
+		private Panel firstAddressPanel;
+		private LongValueTextBox firstAddressTextBox;
+		private int markedAddress;
+		private IMemory memory;
+		private readonly Label noMemoryLabel;
+		private bool readOnly;
+		private Label setClipboardLabel;
+		private ToolTip toolTip;
+		private WordEditorList wordEditorList;
+		private IndexedAddressCalculatorCallback indexedAddressCalculatorCallback;
+		private SymbolCollection symbols;
+		private MixCharClipboardButtonControl mixCharButtons;
+		private Button exportButton;
+		private Button upButton;
+		private Button downButton;
+		private LinkedItemsSelectorControl<EditorListViewInfo> addressHistorySelector;
+		private SaveFileDialog saveExportFileDialog;
+		private int? prevDataIndex;
+		private int? nextDataIndex;
+		private readonly long[] profilingMaxCounts;
 
 		public event AddressSelectedHandler AddressSelected;
 
 		public MemoryEditor(IMemory memory = null)
 		{
-			_readOnly = false;
-			_markedAddress = -1;
+			this.readOnly = false;
+			this.markedAddress = -1;
 
-			_profilingMaxCounts = new long[Enum.GetValues(typeof(GuiSettings.ProfilingInfoType)).Length];
+			this.profilingMaxCounts = new long[Enum.GetValues(typeof(GuiSettings.ProfilingInfoType)).Length];
 
-			_breakpoints = SortedList.Synchronized(new SortedList());
+			this.breakpoints = SortedList.Synchronized(new SortedList());
 
-			_noMemoryLabel = new Label
+			this.noMemoryLabel = new Label
 			{
 				Location = new Point(0, 0),
 				Name = "mNoMemoryLabel",
@@ -62,22 +62,22 @@ namespace MixGui.Components
 		}
 
 		public ICollection Breakpoints
-			=> _breakpoints.Values;
+			=> this.breakpoints.Values;
 
 		private long GetMaxProfilingCount(GuiSettings.ProfilingInfoType infoType)
-			=> _profilingMaxCounts[(int)infoType];
+			=> this.profilingMaxCounts[(int)infoType];
 
 		public bool IsBreakpointSet(int address)
-			=> _breakpoints.Contains(address);
+			=> this.breakpoints.Contains(address);
 
 		public void MakeAddressVisible(int address)
 			=> MakeAddressVisible(address, true);
 
 		public bool IsAddressVisible(int address)
-			=> _wordEditorList.IsIndexVisible(address);
+			=> this.wordEditorList.IsIndexVisible(address);
 
 		public void ClearHistory()
-			=> _addressHistorySelector.Clear();
+			=> this.addressHistorySelector.Clear();
 
 		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
 			=> AddressSelected?.Invoke(this, args);
@@ -93,31 +93,31 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			get => _toolTip;
+			get => this.toolTip;
 			set
 			{
-				_toolTip = value;
+				this.toolTip = value;
 
-				if (_wordEditorList != null)
+				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor editor in _wordEditorList)
-						editor.ToolTip = _toolTip;
+					foreach (MemoryWordEditor editor in this.wordEditorList)
+						editor.ToolTip = this.toolTip;
 				}
 			}
 		}
 
 		private IWordEditor CreateWordEditor(int address)
 		{
-			var editor = new MemoryWordEditor(address >= _memory.MinWordIndex ? _memory[address] : new MemoryFullWord(address))
+			var editor = new MemoryWordEditor(address >= this.memory.MinWordIndex ? this.memory[address] : new MemoryFullWord(address))
 			{
 				GetMaxProfilingCount = GetMaxProfilingCount,
-				MemoryMinIndex = _memory.MinWordIndex,
-				MemoryMaxIndex = _memory.MaxWordIndex,
-				IndexedAddressCalculatorCallback = _indexedAddressCalculatorCallback,
-				BreakPointChecked = _breakpoints.Contains(address),
-				Marked = _markedAddress == address,
-				ToolTip = _toolTip,
-				Symbols = _symbols
+				MemoryMinIndex = this.memory.MinWordIndex,
+				MemoryMaxIndex = this.memory.MaxWordIndex,
+				IndexedAddressCalculatorCallback = this.indexedAddressCalculatorCallback,
+				BreakPointChecked = this.breakpoints.Contains(address),
+				Marked = this.markedAddress == address,
+				ToolTip = this.toolTip,
+				Symbols = this.symbols
 			};
 
 			editor.BreakpointCheckedChanged += BreakPointCheckedChanged;
@@ -131,35 +131,35 @@ namespace MixGui.Components
 		{
 			var memoryEditor = (MemoryWordEditor)editor;
 
-			if (address == memoryEditor.MemoryWord.Index && address >= _memory.MinWordIndex && memoryEditor.MemoryWord.Equals(_memory[address]))
+			if (address == memoryEditor.MemoryWord.Index && address >= this.memory.MinWordIndex && memoryEditor.MemoryWord.Equals(this.memory[address]))
 				memoryEditor.Update();
 
 			else
-				memoryEditor.MemoryWord = address >= _memory.MinWordIndex ? _memory[address] : new MemoryFullWord(address);
+				memoryEditor.MemoryWord = address >= this.memory.MinWordIndex ? this.memory[address] : new MemoryFullWord(address);
 
-			memoryEditor.BreakPointChecked = _breakpoints.Contains(address);
-			memoryEditor.Marked = _markedAddress == address;
+			memoryEditor.BreakPointChecked = this.breakpoints.Contains(address);
+			memoryEditor.Marked = this.markedAddress == address;
 		}
 
 		private void BreakPointCheckedChanged(object sender, EventArgs e)
 		{
-			if (_wordEditorList.IsReloading)
+			if (this.wordEditorList.IsReloading)
 				return;
 
 			var editor = (MemoryWordEditor)sender;
 			int memoryAddress = editor.MemoryWord.Index;
 
 			if (editor.BreakPointChecked)
-				_breakpoints.Add(memoryAddress, memoryAddress);
+				this.breakpoints.Add(memoryAddress, memoryAddress);
 
 			else
-				_breakpoints.Remove(memoryAddress);
+				this.breakpoints.Remove(memoryAddress);
 		}
 
 		public void ClearBreakpoints()
 		{
-			_breakpoints.Clear();
-			foreach (MemoryWordEditor editor in _wordEditorList)
+			this.breakpoints.Clear();
+			foreach (MemoryWordEditor editor in this.wordEditorList)
 				editor.BreakPointChecked = false;
 		}
 
@@ -168,114 +168,114 @@ namespace MixGui.Components
 			SuspendLayout();
 			Controls.Clear();
 
-			if (_memory == null)
+			if (this.memory == null)
 			{
-				Controls.Add(_noMemoryLabel);
-				_noMemoryLabel.Size = Size;
+				Controls.Add(this.noMemoryLabel);
+				this.noMemoryLabel.Size = Size;
 
 				ResumeLayout(false);
 				return;
 			}
 
-			_firstAddressPanel = new Panel();
-			_firstAddressLabel = new Label();
-			_firstAddressTextBox = new LongValueTextBox(_memory.MinWordIndex, _memory.MaxWordIndex);
-			_setClipboardLabel = new Label();
-			_addressHistorySelector = new LinkedItemsSelectorControl<EditorListViewInfo>();
-			_addressHistorySelector.SetCurrentItemCallback(GetCurrentListViewInfo);
-			_mixCharButtons = new MixCharClipboardButtonControl();
-			_exportButton = new Button();
-			_upButton = new Button();
-			_downButton = new Button();
+			this.firstAddressPanel = new Panel();
+			this.firstAddressLabel = new Label();
+			this.firstAddressTextBox = new LongValueTextBox(this.memory.MinWordIndex, this.memory.MaxWordIndex);
+			this.setClipboardLabel = new Label();
+			this.addressHistorySelector = new LinkedItemsSelectorControl<EditorListViewInfo>();
+			this.addressHistorySelector.SetCurrentItemCallback(GetCurrentListViewInfo);
+			this.mixCharButtons = new MixCharClipboardButtonControl();
+			this.exportButton = new Button();
+			this.upButton = new Button();
+			this.downButton = new Button();
 
-			_firstAddressPanel.SuspendLayout();
-			_firstAddressLabel.Location = new Point(0, 0);
-			_firstAddressLabel.Name = "mFirstAddressLabel";
-			_firstAddressLabel.Size = new Size(120, 20);
-			_firstAddressLabel.TabIndex = 0;
-			_firstAddressLabel.Text = "First visible address:";
-			_firstAddressLabel.TextAlign = ContentAlignment.MiddleLeft;
+			this.firstAddressPanel.SuspendLayout();
+			this.firstAddressLabel.Location = new Point(0, 0);
+			this.firstAddressLabel.Name = "mFirstAddressLabel";
+			this.firstAddressLabel.Size = new Size(120, 20);
+			this.firstAddressLabel.TabIndex = 0;
+			this.firstAddressLabel.Text = "First visible address:";
+			this.firstAddressLabel.TextAlign = ContentAlignment.MiddleLeft;
 
-			_firstAddressTextBox.Location = new Point(_firstAddressLabel.Width, 0);
-			_firstAddressTextBox.Name = "mFirstAddressTextBox";
-			_firstAddressTextBox.Size = new Size(35, 20);
-			_firstAddressTextBox.TabIndex = 1;
-			_firstAddressTextBox.ClearZero = false;
-			_firstAddressTextBox.ValueChanged += FirstAddressTextBox_ValueChanged;
+			this.firstAddressTextBox.Location = new Point(this.firstAddressLabel.Width, 0);
+			this.firstAddressTextBox.Name = "mFirstAddressTextBox";
+			this.firstAddressTextBox.Size = new Size(35, 20);
+			this.firstAddressTextBox.TabIndex = 1;
+			this.firstAddressTextBox.ClearZero = false;
+			this.firstAddressTextBox.ValueChanged += FirstAddressTextBox_ValueChanged;
 
-			_addressHistorySelector.Location = new Point(_firstAddressTextBox.Right + 4, 0);
-			_addressHistorySelector.Name = "mAddressHistorySelector";
-			_addressHistorySelector.TabIndex = 2;
-			_addressHistorySelector.ItemSelected += MAddressHistorySelector_ItemSelected;
+			this.addressHistorySelector.Location = new Point(this.firstAddressTextBox.Right + 4, 0);
+			this.addressHistorySelector.Name = "mAddressHistorySelector";
+			this.addressHistorySelector.TabIndex = 2;
+			this.addressHistorySelector.ItemSelected += MAddressHistorySelector_ItemSelected;
 
-			_setClipboardLabel.Location = new Point(_addressHistorySelector.Right + 16, 0);
-			_setClipboardLabel.Name = "mSetClipboardLabel";
-			_setClipboardLabel.Size = new Size(95, _firstAddressLabel.Height);
-			_setClipboardLabel.TabIndex = 3;
-			_setClipboardLabel.Text = "Set clipboard to:";
-			_setClipboardLabel.TextAlign = ContentAlignment.MiddleLeft;
+			this.setClipboardLabel.Location = new Point(this.addressHistorySelector.Right + 16, 0);
+			this.setClipboardLabel.Name = "mSetClipboardLabel";
+			this.setClipboardLabel.Size = new Size(95, this.firstAddressLabel.Height);
+			this.setClipboardLabel.TabIndex = 3;
+			this.setClipboardLabel.Text = "Set clipboard to:";
+			this.setClipboardLabel.TextAlign = ContentAlignment.MiddleLeft;
 
-			_mixCharButtons.Location = new Point(_setClipboardLabel.Right, 0);
-			_mixCharButtons.Name = "mMixCharButtons";
-			_mixCharButtons.TabIndex = 4;
+			this.mixCharButtons.Location = new Point(this.setClipboardLabel.Right, 0);
+			this.mixCharButtons.Name = "mMixCharButtons";
+			this.mixCharButtons.TabIndex = 4;
 
-			_exportButton.Location = new Point(_mixCharButtons.Right + 16, 0);
-			_exportButton.Name = "mExportButton";
-			_exportButton.Size = new Size(62, 21);
-			_exportButton.TabIndex = 5;
-			_exportButton.Text = "&Export...";
-			_exportButton.FlatStyle = FlatStyle.Flat;
-			_exportButton.Click += ExportButton_Click;
+			this.exportButton.Location = new Point(this.mixCharButtons.Right + 16, 0);
+			this.exportButton.Name = "mExportButton";
+			this.exportButton.Size = new Size(62, 21);
+			this.exportButton.TabIndex = 5;
+			this.exportButton.Text = "&Export...";
+			this.exportButton.FlatStyle = FlatStyle.Flat;
+			this.exportButton.Click += ExportButton_Click;
 
-			_downButton.Visible = _memory is Memory;
-			_downButton.Enabled = false;
-			_downButton.FlatStyle = FlatStyle.Flat;
-			_downButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			_downButton.Image = Resources.Symbols_Down_16xLG;
-			_downButton.Name = "mDownButton";
-			_downButton.Size = new Size(21, 21);
-			_downButton.Location = new Point(Width - _downButton.Width, 0);
-			_downButton.TabIndex = 7;
-			_downButton.Click += DownButton_Click;
+			this.downButton.Visible = this.memory is Memory;
+			this.downButton.Enabled = false;
+			this.downButton.FlatStyle = FlatStyle.Flat;
+			this.downButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			this.downButton.Image = Resources.Symbols_Down_16xLG;
+			this.downButton.Name = "mDownButton";
+			this.downButton.Size = new Size(21, 21);
+			this.downButton.Location = new Point(Width - this.downButton.Width, 0);
+			this.downButton.TabIndex = 7;
+			this.downButton.Click += DownButton_Click;
 
-			_upButton.Visible = _memory is Memory;
-			_upButton.Enabled = false;
-			_upButton.FlatStyle = FlatStyle.Flat;
-			_upButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			_upButton.Image = Resources.Symbols_Up_16xLG___kopie;
-			_upButton.Name = "mUpButton";
-			_upButton.Size = new Size(21, 21);
-			_upButton.Location = new Point(_downButton.Left - _upButton.Width, 0);
-			_upButton.TabIndex = 6;
-			_upButton.Click += UpButton_Click;
+			this.upButton.Visible = this.memory is Memory;
+			this.upButton.Enabled = false;
+			this.upButton.FlatStyle = FlatStyle.Flat;
+			this.upButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			this.upButton.Image = Resources.Symbols_Up_16xLG___kopie;
+			this.upButton.Name = "mUpButton";
+			this.upButton.Size = new Size(21, 21);
+			this.upButton.Location = new Point(this.downButton.Left - this.upButton.Width, 0);
+			this.upButton.TabIndex = 6;
+			this.upButton.Click += UpButton_Click;
 
-			_firstAddressPanel.Controls.Add(_firstAddressLabel);
-			_firstAddressPanel.Controls.Add(_firstAddressTextBox);
-			_firstAddressPanel.Controls.Add(_addressHistorySelector);
-			_firstAddressPanel.Controls.Add(_setClipboardLabel);
-			_firstAddressPanel.Controls.Add(_mixCharButtons);
-			_firstAddressPanel.Controls.Add(_exportButton);
-			_firstAddressPanel.Controls.Add(_upButton);
-			_firstAddressPanel.Controls.Add(_downButton);
-			_firstAddressPanel.Dock = DockStyle.Top;
-			_firstAddressPanel.Name = "mFirstAddressPanel";
-			_firstAddressPanel.TabIndex = 0;
-			_firstAddressPanel.Size = new Size(Width, _firstAddressTextBox.Height + 2);
+			this.firstAddressPanel.Controls.Add(this.firstAddressLabel);
+			this.firstAddressPanel.Controls.Add(this.firstAddressTextBox);
+			this.firstAddressPanel.Controls.Add(this.addressHistorySelector);
+			this.firstAddressPanel.Controls.Add(this.setClipboardLabel);
+			this.firstAddressPanel.Controls.Add(this.mixCharButtons);
+			this.firstAddressPanel.Controls.Add(this.exportButton);
+			this.firstAddressPanel.Controls.Add(this.upButton);
+			this.firstAddressPanel.Controls.Add(this.downButton);
+			this.firstAddressPanel.Dock = DockStyle.Top;
+			this.firstAddressPanel.Name = "mFirstAddressPanel";
+			this.firstAddressPanel.TabIndex = 0;
+			this.firstAddressPanel.Size = new Size(Width, this.firstAddressTextBox.Height + 2);
 
-			_wordEditorList = new WordEditorList(_memory.MinWordIndex, _memory.MaxWordIndex, CreateWordEditor, LoadWordEditor)
+			this.wordEditorList = new WordEditorList(this.memory.MinWordIndex, this.memory.MaxWordIndex, CreateWordEditor, LoadWordEditor)
 			{
 				Dock = DockStyle.Fill,
-				ReadOnly = _readOnly,
+				ReadOnly = this.readOnly,
 				BorderStyle = BorderStyle.FixedSingle
 			};
-			_wordEditorList.FirstVisibleIndexChanged += MWordEditorList_FirstVisibleIndexChanged;
+			this.wordEditorList.FirstVisibleIndexChanged += MWordEditorList_FirstVisibleIndexChanged;
 
-			Controls.Add(_wordEditorList);
-			Controls.Add(_firstAddressPanel);
+			Controls.Add(this.wordEditorList);
+			Controls.Add(this.firstAddressPanel);
 			Name = "MemoryEditor";
 			SizeChanged += MemoryEditor_SizeChanged;
 
-			_firstAddressPanel.ResumeLayout(false);
+			this.firstAddressPanel.ResumeLayout(false);
 			ResumeLayout(false);
 
 			SetUpDownButtonStates(NavigationDirection.None);
@@ -283,84 +283,84 @@ namespace MixGui.Components
 
 		private void SetUpButtonState(Memory memory)
 		{
-			_prevDataIndex = null;
+			this.prevDataIndex = null;
 
-			if (_wordEditorList.FirstVisibleIndex != _memory.MinWordIndex)
+			if (this.wordEditorList.FirstVisibleIndex != this.memory.MinWordIndex)
 			{
-				var firstIndex = Math.Max(_memory.MinWordIndex, _wordEditorList.FirstVisibleIndex - _wordEditorList.VisibleEditorCount);
+				var firstIndex = Math.Max(this.memory.MinWordIndex, this.wordEditorList.FirstVisibleIndex - this.wordEditorList.VisibleEditorCount);
 
-				for (int index = firstIndex; index < _wordEditorList.FirstVisibleIndex; index++)
+				for (int index = firstIndex; index < this.wordEditorList.FirstVisibleIndex; index++)
 				{
 					if (memory.HasContents(index))
 					{
-						_prevDataIndex = index;
+						this.prevDataIndex = index;
 						break;
 					}
 				}
 
-				if (_prevDataIndex == null)
+				if (this.prevDataIndex == null)
 				{
 					var lastPreviousDataIndex = memory.LastAddressWithContentsBefore(firstIndex);
 					if (lastPreviousDataIndex != null)
 					{
-						_prevDataIndex = lastPreviousDataIndex.Value;
+						this.prevDataIndex = lastPreviousDataIndex.Value;
 
-						for (int index = lastPreviousDataIndex.Value - 1; index >= Math.Max(_memory.MinWordIndex, lastPreviousDataIndex.Value - _wordEditorList.VisibleEditorCount + 1); index--)
+						for (int index = lastPreviousDataIndex.Value - 1; index >= Math.Max(this.memory.MinWordIndex, lastPreviousDataIndex.Value - this.wordEditorList.VisibleEditorCount + 1); index--)
 						{
 							if (memory.HasContents(index))
-								_prevDataIndex = index;
+								this.prevDataIndex = index;
 						}
 					}
 				}
 			}
 
-			_upButton.Enabled = _prevDataIndex.HasValue;
+			this.upButton.Enabled = this.prevDataIndex.HasValue;
 		}
 
 		private void SetDownButtonState(Memory memory)
 		{
-			_nextDataIndex = null;
+			this.nextDataIndex = null;
 
-			if (_wordEditorList.FirstVisibleIndex + _wordEditorList.VisibleEditorCount <= _memory.MaxWordIndex)
+			if (this.wordEditorList.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount <= this.memory.MaxWordIndex)
 			{
-				var lastIndex = Math.Min(_memory.MaxWordIndex, _wordEditorList.FirstVisibleIndex + (2 * _wordEditorList.VisibleEditorCount) - 1);
+				var lastIndex = Math.Min(this.memory.MaxWordIndex, this.wordEditorList.FirstVisibleIndex + (2 * this.wordEditorList.VisibleEditorCount) - 1);
 
-				for (int index = _wordEditorList.FirstVisibleIndex + _wordEditorList.VisibleEditorCount; index <= lastIndex; index++)
+				for (int index = this.wordEditorList.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount; index <= lastIndex; index++)
 				{
 					if (memory.HasContents(index))
 					{
-						_nextDataIndex = index;
+						this.nextDataIndex = index;
 						break;
 					}
 				}
 
-				if (_nextDataIndex == null)
-					_nextDataIndex = memory.FirstAddressWithContentsAfter(lastIndex);
+				if (this.nextDataIndex == null)
+					this.nextDataIndex = memory.FirstAddressWithContentsAfter(lastIndex);
 			}
 
-			_downButton.Enabled = _nextDataIndex.HasValue;
+			this.downButton.Enabled = this.nextDataIndex.HasValue;
 		}
 
 		private void SetUpDownButtonStates(NavigationDirection direction)
 		{
-			if (_memory is not Memory memory || _wordEditorList == null)
+			if (this.memory is not Memory memory || this.wordEditorList == null)
 				return;
 
-			if (direction != NavigationDirection.Up || (_prevDataIndex.HasValue && _prevDataIndex.Value >= _wordEditorList.FirstVisibleIndex))
+			if (direction != NavigationDirection.Up || (this.prevDataIndex.HasValue && this.prevDataIndex.Value >= this.wordEditorList.FirstVisibleIndex))
 				SetUpButtonState(memory);
 
-			if (direction != NavigationDirection.Down || (_nextDataIndex.HasValue && _nextDataIndex.Value <= _wordEditorList.FirstVisibleIndex + _wordEditorList.VisibleEditorCount))
+			if (direction != NavigationDirection.Down || (this.nextDataIndex.HasValue && this.nextDataIndex.Value <= this.wordEditorList.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount))
 				SetDownButtonState(memory);
 		}
 
 		public EditorListViewInfo GetCurrentListViewInfo()
 		{
-			var viewInfo = new EditorListViewInfo { FirstVisibleIndex = _wordEditorList.FirstVisibleIndex };
-			int selectedEditorIndex = _wordEditorList.ActiveEditorIndex;
+			var viewInfo = new EditorListViewInfo { FirstVisibleIndex = this.wordEditorList.FirstVisibleIndex };
+			int selectedEditorIndex = this.wordEditorList.ActiveEditorIndex;
 			if (selectedEditorIndex >= 0)
 			{
 				viewInfo.SelectedIndex = viewInfo.FirstVisibleIndex + selectedEditorIndex;
-				viewInfo.FocusedField = _wordEditorList[selectedEditorIndex].FocusedField;
+				viewInfo.FocusedField = this.wordEditorList[selectedEditorIndex].FocusedField;
 			}
 
 			return viewInfo;
@@ -372,102 +372,102 @@ namespace MixGui.Components
 
 			if (!viewInfo.SelectedIndex.HasValue)
 			{
-				_wordEditorList.FirstVisibleIndex = viewInfo.FirstVisibleIndex;
+				this.wordEditorList.FirstVisibleIndex = viewInfo.FirstVisibleIndex;
 				return;
 			}
 
 			int selectedIndex = viewInfo.SelectedIndex.Value;
 
-			if (selectedIndex < viewInfo.FirstVisibleIndex + _wordEditorList.VisibleEditorCount)
+			if (selectedIndex < viewInfo.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount)
 			{
-				_wordEditorList.FirstVisibleIndex = viewInfo.FirstVisibleIndex;
-				_wordEditorList[viewInfo.SelectedIndex.Value - viewInfo.FirstVisibleIndex].Focus(viewInfo.FocusedField, null);
+				this.wordEditorList.FirstVisibleIndex = viewInfo.FirstVisibleIndex;
+				this.wordEditorList[viewInfo.SelectedIndex.Value - viewInfo.FirstVisibleIndex].Focus(viewInfo.FocusedField, null);
 			}
 			else
 			{
-				_wordEditorList.MakeIndexVisible(selectedIndex);
+				this.wordEditorList.MakeIndexVisible(selectedIndex);
 			}
 		}
 
 		private void MWordEditorList_FirstVisibleIndexChanged(EditorList<IWordEditor> sender, WordEditorList.FirstVisibleIndexChangedEventArgs args)
 		{
-			if (args.FirstVisibleIndex < _firstAddressTextBox.LongValue)
+			if (args.FirstVisibleIndex < this.firstAddressTextBox.LongValue)
 				SetUpDownButtonStates(NavigationDirection.Up);
 
-			else if (args.FirstVisibleIndex > _firstAddressTextBox.LongValue)
+			else if (args.FirstVisibleIndex > this.firstAddressTextBox.LongValue)
 				SetUpDownButtonStates(NavigationDirection.Down);
 
-			_firstAddressTextBox.LongValue = args.FirstVisibleIndex;
+			this.firstAddressTextBox.LongValue = args.FirstVisibleIndex;
 		}
 
 		public void MakeAddressVisible(int address, bool trackChange)
 		{
 			if (!trackChange)
 			{
-				_wordEditorList.MakeIndexVisible(address);
+				this.wordEditorList.MakeIndexVisible(address);
 				return;
 			}
 
 			var oldViewInfo = GetCurrentListViewInfo();
 
-			_wordEditorList.MakeIndexVisible(address);
+			this.wordEditorList.MakeIndexVisible(address);
 
-			var newViewInfo = new EditorListViewInfo { FirstVisibleIndex = _wordEditorList.FirstVisibleIndex, SelectedIndex = address };
-			int selectedEditorIndex = _wordEditorList.ActiveEditorIndex;
+			var newViewInfo = new EditorListViewInfo { FirstVisibleIndex = this.wordEditorList.FirstVisibleIndex, SelectedIndex = address };
+			int selectedEditorIndex = this.wordEditorList.ActiveEditorIndex;
 
 			if (selectedEditorIndex >= 0)
-				newViewInfo.FocusedField = _wordEditorList[selectedEditorIndex].FocusedField;
+				newViewInfo.FocusedField = this.wordEditorList[selectedEditorIndex].FocusedField;
 
-			_addressHistorySelector.AddItem(oldViewInfo, newViewInfo);
+			this.addressHistorySelector.AddItem(oldViewInfo, newViewInfo);
 		}
 
 		private void FirstAddressTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
-			var oldViewInfo = new EditorListViewInfo { FirstVisibleIndex = _wordEditorList.FirstVisibleIndex };
-			int selectedEditorIndex = _wordEditorList.ActiveEditorIndex;
+			var oldViewInfo = new EditorListViewInfo { FirstVisibleIndex = this.wordEditorList.FirstVisibleIndex };
+			int selectedEditorIndex = this.wordEditorList.ActiveEditorIndex;
 
 			if (selectedEditorIndex >= 0)
 			{
 				oldViewInfo.SelectedIndex = oldViewInfo.FirstVisibleIndex + selectedEditorIndex;
-				oldViewInfo.FocusedField = _wordEditorList[selectedEditorIndex].FocusedField;
+				oldViewInfo.FocusedField = this.wordEditorList[selectedEditorIndex].FocusedField;
 			}
 
-			_wordEditorList.FirstVisibleIndex = (int)args.NewValue;
+			this.wordEditorList.FirstVisibleIndex = (int)args.NewValue;
 
-			_addressHistorySelector.AddItem(oldViewInfo, new EditorListViewInfo { FirstVisibleIndex = _wordEditorList.FirstVisibleIndex });
+			this.addressHistorySelector.AddItem(oldViewInfo, new EditorListViewInfo { FirstVisibleIndex = this.wordEditorList.FirstVisibleIndex });
 		}
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
-			get => _indexedAddressCalculatorCallback;
+			get => this.indexedAddressCalculatorCallback;
 			set
 			{
-				_indexedAddressCalculatorCallback = value;
+				this.indexedAddressCalculatorCallback = value;
 
-				if (_wordEditorList != null)
+				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor wordEditor in _wordEditorList)
-						wordEditor.IndexedAddressCalculatorCallback = _indexedAddressCalculatorCallback;
+					foreach (MemoryWordEditor wordEditor in this.wordEditorList)
+						wordEditor.IndexedAddressCalculatorCallback = this.indexedAddressCalculatorCallback;
 				}
 			}
 		}
 
 		public bool ResizeInProgress
 		{
-			get => _wordEditorList != null && _wordEditorList.ResizeInProgress;
+			get => this.wordEditorList != null && this.wordEditorList.ResizeInProgress;
 
 			set
 			{
-				if (_wordEditorList != null)
-					_wordEditorList.ResizeInProgress = value;
+				if (this.wordEditorList != null)
+					this.wordEditorList.ResizeInProgress = value;
 			}
 		}
 
 		public new void Update()
 		{
-			_profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = _memory.MaxProfilingExecutionCount;
-			_profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = _memory.MaxProfilingTickCount;
-			_wordEditorList.Update();
+			this.profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = this.memory.MaxProfilingExecutionCount;
+			this.profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = this.memory.MaxProfilingTickCount;
+			this.wordEditorList.Update();
 			SetUpDownButtonStates(NavigationDirection.None);
 
 			base.Update();
@@ -477,29 +477,29 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			_firstAddressTextBox.UpdateLayout();
+			this.firstAddressTextBox.UpdateLayout();
 
-			_mixCharButtons.UpdateLayout();
+			this.mixCharButtons.UpdateLayout();
 
-			_wordEditorList.UpdateLayout();
+			this.wordEditorList.UpdateLayout();
 
 			ResumeLayout();
 		}
 
 		public int FirstVisibleAddress
 		{
-			get => _wordEditorList != null ? _wordEditorList.FirstVisibleIndex : 0;
+			get => this.wordEditorList != null ? this.wordEditorList.FirstVisibleIndex : 0;
 			set
 			{
-				if (_wordEditorList != null)
-					_wordEditorList.FirstVisibleIndex = value;
+				if (this.wordEditorList != null)
+					this.wordEditorList.FirstVisibleIndex = value;
 			}
 		}
 
 		public void FindMatch(SearchParameters options)
 		{
-			int activeEditorIndex = _wordEditorList.ActiveEditorIndex;
-			IWordEditor activeEditor = activeEditorIndex >= 0 ? _wordEditorList[activeEditorIndex] : null;
+			int activeEditorIndex = this.wordEditorList.ActiveEditorIndex;
+			IWordEditor activeEditor = activeEditorIndex >= 0 ? this.wordEditorList[activeEditorIndex] : null;
 
 			if (activeEditor != null)
 			{
@@ -509,14 +509,14 @@ namespace MixGui.Components
 			}
 			else
 			{
-				if (_wordEditorList.FirstVisibleIndex > options.SearchFromWordIndex || _wordEditorList.FirstVisibleIndex + _wordEditorList.VisibleEditorCount <= options.SearchFromWordIndex)
-					options.SearchFromWordIndex = _wordEditorList.FirstVisibleIndex;
+				if (this.wordEditorList.FirstVisibleIndex > options.SearchFromWordIndex || this.wordEditorList.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount <= options.SearchFromWordIndex)
+					options.SearchFromWordIndex = this.wordEditorList.FirstVisibleIndex;
 
 				options.SearchFromField = FieldTypes.None;
 				options.SearchFromFieldIndex = 0;
 			}
 
-			var result = _memory.FindMatch(options);
+			var result = this.memory.FindMatch(options);
 
 			if (result == null)
 			{
@@ -525,22 +525,22 @@ namespace MixGui.Components
 			}
 
 			MakeAddressVisible(result.WordIndex);
-			activeEditor = _wordEditorList[result.WordIndex - _wordEditorList.FirstVisibleIndex];
+			activeEditor = this.wordEditorList[result.WordIndex - this.wordEditorList.FirstVisibleIndex];
 			activeEditor.Focus(result.Field, result.FieldIndex);
 			activeEditor.Select(result.FieldIndex, options.SearchText.Length);
 		}
 
 		public int MarkedAddress
 		{
-			get => _markedAddress;
+			get => this.markedAddress;
 			set
 			{
-				if (_markedAddress == value)
+				if (this.markedAddress == value)
 					return;
 
 				SetAddressMarkIfVisible(false);
 
-				_markedAddress = value;
+				this.markedAddress = value;
 
 				SetAddressMarkIfVisible(true);
 			}
@@ -548,85 +548,85 @@ namespace MixGui.Components
 
 		private void SetAddressMarkIfVisible(bool mark)
 		{
-			int firstVisibleIndex = _wordEditorList.FirstVisibleIndex;
+			int firstVisibleIndex = this.wordEditorList.FirstVisibleIndex;
 
-			if (_markedAddress >= firstVisibleIndex && _markedAddress < firstVisibleIndex + _wordEditorList.EditorCount)
-				((MemoryWordEditor)_wordEditorList[_markedAddress - firstVisibleIndex]).Marked = mark;
+			if (this.markedAddress >= firstVisibleIndex && this.markedAddress < firstVisibleIndex + this.wordEditorList.EditorCount)
+				((MemoryWordEditor)this.wordEditorList[this.markedAddress - firstVisibleIndex]).Marked = mark;
 		}
 
 		public IMemory Memory
 		{
-			get => _memory;
+			get => this.memory;
 			set
 			{
-				if (_memory != null || value == null)
+				if (this.memory != null || value == null)
 					return;
 
-				_memory = value;
+				this.memory = value;
 				InitializeComponent();
-				_profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = _memory.MaxProfilingExecutionCount;
-				_profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = _memory.MaxProfilingTickCount;
+				this.profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Execution] = this.memory.MaxProfilingExecutionCount;
+				this.profilingMaxCounts[(int)GuiSettings.ProfilingInfoType.Tick] = this.memory.MaxProfilingTickCount;
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _readOnly;
+			get => this.readOnly;
 			set
 			{
-				if (_readOnly == value)
+				if (this.readOnly == value)
 					return;
 
-				_readOnly = value;
-				if (_wordEditorList != null)
-					_wordEditorList.ReadOnly = _readOnly;
+				this.readOnly = value;
+				if (this.wordEditorList != null)
+					this.wordEditorList.ReadOnly = this.readOnly;
 			}
 		}
 
 		public SymbolCollection Symbols
 		{
-			get => _symbols;
+			get => this.symbols;
 			set
 			{
-				_symbols = value;
+				this.symbols = value;
 
-				if (_wordEditorList != null)
+				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor editor in _wordEditorList)
-						editor.Symbols = _symbols;
+					foreach (MemoryWordEditor editor in this.wordEditorList)
+						editor.Symbols = this.symbols;
 				}
 			}
 		}
 
 		private void UpButton_Click(object sender, EventArgs args)
 		{
-			if (_prevDataIndex.HasValue)
-				FirstVisibleAddress = _prevDataIndex.Value;
+			if (this.prevDataIndex.HasValue)
+				FirstVisibleAddress = this.prevDataIndex.Value;
 		}
 
 		private void DownButton_Click(object sender, EventArgs args)
 		{
-			if (_nextDataIndex.HasValue)
-				FirstVisibleAddress = _nextDataIndex.Value;
+			if (this.nextDataIndex.HasValue)
+				FirstVisibleAddress = this.nextDataIndex.Value;
 		}
 
 		private void ExportButton_Click(object sender, EventArgs args)
 		{
 			var exportDialog = new MemoryExportDialog
 			{
-				MinMemoryIndex = _memory.MinWordIndex,
-				MaxMemoryIndex = _memory.MaxWordIndex,
-				FromAddress = _wordEditorList.FirstVisibleIndex,
-				ToAddress = _wordEditorList.FirstVisibleIndex + _wordEditorList.VisibleEditorCount - 1,
-				ProgramCounter = _markedAddress
+				MinMemoryIndex = this.memory.MinWordIndex,
+				MaxMemoryIndex = this.memory.MaxWordIndex,
+				FromAddress = this.wordEditorList.FirstVisibleIndex,
+				ToAddress = this.wordEditorList.FirstVisibleIndex + this.wordEditorList.VisibleEditorCount - 1,
+				ProgramCounter = this.markedAddress
 			};
 
 			if (exportDialog.ShowDialog(this) != DialogResult.OK)
 				return;
 
-			if (_saveExportFileDialog == null)
+			if (this.saveExportFileDialog == null)
 			{
-				_saveExportFileDialog = new SaveFileDialog
+				this.saveExportFileDialog = new SaveFileDialog
 				{
 					DefaultExt = "mixdeck",
 					Filter = "MixEmul card deck files|*.mixdeck|All files|*.*",
@@ -634,18 +634,18 @@ namespace MixGui.Components
 				};
 			}
 
-			if (_saveExportFileDialog.ShowDialog(this) != DialogResult.OK)
+			if (this.saveExportFileDialog.ShowDialog(this) != DialogResult.OK)
 				return;
 
 			IFullWord[] memoryWords = new IFullWord[exportDialog.ToAddress - exportDialog.FromAddress + 1];
 
 			int fromAddressOffset = exportDialog.FromAddress;
 			for (int index = 0; index < memoryWords.Length; index++)
-				memoryWords[index] = _memory[fromAddressOffset + index];
+				memoryWords[index] = this.memory[fromAddressOffset + index];
 
 			try
 			{
-				CardDeckExporter.ExportFullWords(_saveExportFileDialog.FileName, memoryWords, fromAddressOffset, exportDialog.ProgramCounter);
+				CardDeckExporter.ExportFullWords(this.saveExportFileDialog.FileName, memoryWords, fromAddressOffset, exportDialog.ProgramCounter);
 				MessageBox.Show(this, "Memory successfully exported.", "Export successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			catch (Exception ex)

@@ -10,17 +10,17 @@ namespace MixGui.Components
 {
 	public class EditorList<T> : UserControl, IEnumerable<T> where T : IEditor
 	{
-		private readonly object _editorsSyncRoot;
-		private VScrollBar _indexScrollBar;
-		private int _firstVisibleIndex;
-		private bool _readOnly;
-		private readonly List<T> _editors;
-		private bool _resizeInProgress;
-		private bool _sizeAdaptationPending;
-		private readonly int _minIndex;
-		private int _maxIndex;
-		private CreateEditorCallback _createEditor;
-		private LoadEditorCallback _loadEditor;
+		private readonly object editorsSyncRoot;
+		private VScrollBar indexScrollBar;
+		private int firstVisibleIndex;
+		private bool readOnly;
+		private readonly List<T> editors;
+		private bool resizeInProgress;
+		private bool sizeAdaptationPending;
+		private readonly int minIndex;
+		private int maxIndex;
+		private CreateEditorCallback createEditor;
+		private LoadEditorCallback loadEditor;
 
 		public bool IsReloading { get; private set; }
 
@@ -32,40 +32,40 @@ namespace MixGui.Components
 
 		public EditorList(int minIndex = 0, int maxIndex = -1, CreateEditorCallback createEditor = null, LoadEditorCallback loadEditor = null)
 		{
-			_minIndex = minIndex;
-			_maxIndex = maxIndex;
-			_createEditor = createEditor;
-			_loadEditor = loadEditor;
-			_firstVisibleIndex = 0;
+			this.minIndex = minIndex;
+			this.maxIndex = maxIndex;
+			this.createEditor = createEditor;
+			this.loadEditor = loadEditor;
+			this.firstVisibleIndex = 0;
 
 			IsReloading = false;
-			_readOnly = false;
-			_resizeInProgress = false;
-			_sizeAdaptationPending = false;
+			this.readOnly = false;
+			this.resizeInProgress = false;
+			this.sizeAdaptationPending = false;
 
-			_editorsSyncRoot = new object();
-			_editors = new List<T>();
+			this.editorsSyncRoot = new object();
+			this.editors = new List<T>();
 
 			InitializeComponent();
 		}
 
 		public int EditorCount
-			=> _editors.Count;
+			=> this.editors.Count;
 
 		public int MaxEditorCount
-			=> _maxIndex - _minIndex + 1;
+			=> this.maxIndex - this.minIndex + 1;
 
 		public T this[int index]
-			=> _editors[index];
+			=> this.editors[index];
 
 		public bool IsIndexVisible(int index)
 			=> index >= FirstVisibleIndex && index < (FirstVisibleIndex + VisibleEditorCount);
 
 		public IEnumerator GetEnumerator()
-			=> _editors.GetEnumerator();
+			=> this.editors.GetEnumerator();
 
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-			=> _editors.GetEnumerator();
+			=> this.editors.GetEnumerator();
 
 		protected void OnFirstVisibleIndexChanged(FirstVisibleIndexChangedEventArgs args)
 			=> FirstVisibleIndexChanged?.Invoke(this, args);
@@ -77,9 +77,9 @@ namespace MixGui.Components
 				ContainerControl container = this;
 				Control control;
 
-				var editorControls = new List<Control>(_editors.Count);
+				var editorControls = new List<Control>(this.editors.Count);
 
-				foreach (T editor in _editors)
+				foreach (T editor in this.editors)
 					editorControls.Add(editor.EditorControl);
 
 				int index = -1;
@@ -101,24 +101,24 @@ namespace MixGui.Components
 
 		private void AdaptToSize()
 		{
-			if (MaxEditorCount <= 0 || _editors.Count == 0)
+			if (MaxEditorCount <= 0 || this.editors.Count == 0)
 				return;
 
 			int visibleEditorCount = VisibleEditorCount;
-			int editorsToAddCount = (visibleEditorCount - _editors.Count) + 1;
-			FirstVisibleIndex = _firstVisibleIndex;
+			int editorsToAddCount = (visibleEditorCount - this.editors.Count) + 1;
+			FirstVisibleIndex = this.firstVisibleIndex;
 
-			lock (_editorsSyncRoot)
+			lock (this.editorsSyncRoot)
 			{
 				IsReloading = true;
 
-				for (int i = 0; i < _editors.Count; i++)
-					_editors[i].EditorControl.Visible = FirstVisibleIndex + i <= MaxIndex;
+				for (int i = 0; i < this.editors.Count; i++)
+					this.editors[i].EditorControl.Visible = FirstVisibleIndex + i <= MaxIndex;
 
 				if (editorsToAddCount > 0)
 				{
 					for (int i = 0; i < editorsToAddCount; i++)
-						AddEditor(FirstVisibleIndex + _editors.Count);
+						AddEditor(FirstVisibleIndex + this.editors.Count);
 				}
 
 				IsReloading = false;
@@ -127,40 +127,40 @@ namespace MixGui.Components
 
 			if (visibleEditorCount == MaxEditorCount)
 			{
-				_indexScrollBar.Enabled = false;
+				this.indexScrollBar.Enabled = false;
 			}
 			else
 			{
-				_indexScrollBar.Enabled = true;
-				_indexScrollBar.Value = _firstVisibleIndex;
-				_indexScrollBar.LargeChange = visibleEditorCount;
-				_indexScrollBar.Refresh();
+				this.indexScrollBar.Enabled = true;
+				this.indexScrollBar.Value = this.firstVisibleIndex;
+				this.indexScrollBar.LargeChange = visibleEditorCount;
+				this.indexScrollBar.Refresh();
 			}
 
-			_sizeAdaptationPending = false;
+			this.sizeAdaptationPending = false;
 		}
 
 		private void AddEditor(int index)
 		{
-			Control lastEditorControl = _editors[^1].EditorControl;
-			bool indexInItemRange = index <= _maxIndex;
+			Control lastEditorControl = this.editors[^1].EditorControl;
+			bool indexInItemRange = index <= this.maxIndex;
 
 			SuspendLayout();
 
-			var newEditor = _createEditor(indexInItemRange ? index : int.MinValue);
+			var newEditor = this.createEditor(indexInItemRange ? index : int.MinValue);
 			Control newEditorControl = newEditor.EditorControl;
 			newEditorControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
 			newEditorControl.Location = new Point(0, lastEditorControl.Bottom);
 			newEditorControl.Size = lastEditorControl.Size;
-			newEditorControl.TabIndex = _editors.Count + 1;
+			newEditorControl.TabIndex = this.editors.Count + 1;
 			newEditorControl.Visible = indexInItemRange;
 			newEditorControl.MouseWheel += This_MouseWheel;
-			newEditor.ReadOnly = _readOnly;
+			newEditor.ReadOnly = this.readOnly;
 
 			if (newEditor is INavigableControl control)
 				control.NavigationKeyDown += This_KeyDown;
 
-			_editors.Add(newEditor);
+			this.editors.Add(newEditor);
 
 			Controls.Add(newEditor.EditorControl);
 
@@ -172,23 +172,23 @@ namespace MixGui.Components
 			SuspendLayout();
 			Controls.Clear();
 
-			_indexScrollBar = new VScrollBar
+			this.indexScrollBar = new VScrollBar
 			{
 				Location = new Point(Width - 16, 0),
 				Size = new Size(16, Height),
 				Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top,
-				Minimum = _minIndex,
-				Maximum = _maxIndex,
+				Minimum = this.minIndex,
+				Maximum = this.maxIndex,
 				Name = "mAddressScrollBar",
 				LargeChange = 1,
 				TabIndex = 0,
-				Enabled = !_readOnly
+				Enabled = !this.readOnly
 			};
-			_indexScrollBar.Scroll += MIndexScrollBar_Scroll;
+			this.indexScrollBar.Scroll += MIndexScrollBar_Scroll;
 
-			Control editorControl = _createEditor != null ? CreateFirstEditor() : null;
+			Control editorControl = this.createEditor != null ? CreateFirstEditor() : null;
 
-			Controls.Add(_indexScrollBar);
+			Controls.Add(this.indexScrollBar);
 
 			if (editorControl != null)
 				Controls.Add(editorControl);
@@ -211,19 +211,19 @@ namespace MixGui.Components
 
 		private Control CreateFirstEditor()
 		{
-			var editor = _createEditor(0);
+			var editor = this.createEditor(0);
 			Control editorControl = editor.EditorControl;
 			editorControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top;
 			editorControl.Location = new Point(0, 0);
-			editorControl.Width = _indexScrollBar.Left;
+			editorControl.Width = this.indexScrollBar.Left;
 			editorControl.TabIndex = 1;
 			editorControl.MouseWheel += This_MouseWheel;
-			editor.ReadOnly = _readOnly;
+			editor.ReadOnly = this.readOnly;
 
 			if (editor is INavigableControl control)
 				control.NavigationKeyDown += This_KeyDown;
 
-			_editors.Add(editor);
+			this.editors.Add(editor);
 
 			return editorControl;
 		}
@@ -263,13 +263,13 @@ namespace MixGui.Components
 
 					editor = (T)sender;
 
-					if (!editor.Equals(_editors[0]))
+					if (!editor.Equals(this.editors[0]))
 					{
-						_editors[_editors.IndexOf(editor) - 1].Focus(editorField, index);
+						this.editors[this.editors.IndexOf(editor) - 1].Focus(editorField, index);
 						return;
 					}
 
-					_indexScrollBar.Focus();
+					this.indexScrollBar.Focus();
 					FirstVisibleIndex--;
 					editor.Focus(editorField, index);
 
@@ -287,22 +287,22 @@ namespace MixGui.Components
 
 					editor = (T)sender;
 
-					if (_editors.IndexOf(editor) < VisibleEditorCount - 1)
+					if (this.editors.IndexOf(editor) < VisibleEditorCount - 1)
 					{
-						_editors[_editors.IndexOf(editor) + 1].Focus(editorField, index);
+						this.editors[this.editors.IndexOf(editor) + 1].Focus(editorField, index);
 						return;
 					}
 
-					_indexScrollBar.Focus();
+					this.indexScrollBar.Focus();
 					FirstVisibleIndex++;
-					_editors[VisibleEditorCount - 1].Focus(editorField, index);
+					this.editors[VisibleEditorCount - 1].Focus(editorField, index);
 
 					return;
 			}
 		}
 
 		private void MIndexScrollBar_Scroll(object sender, ScrollEventArgs e)
-			=> FirstVisibleIndex = _indexScrollBar.Value;
+			=> FirstVisibleIndex = this.indexScrollBar.Value;
 
 		public void MakeIndexVisible(int index)
 		{
@@ -312,31 +312,31 @@ namespace MixGui.Components
 
 		public LoadEditorCallback LoadEditor
 		{
-			get => _loadEditor;
+			get => this.loadEditor;
 			set
 			{
 				if (value == null)
 					return;
 
-				if (_loadEditor != null)
+				if (this.loadEditor != null)
 					throw new InvalidOperationException("value may only be set once");
 
-				_loadEditor = value;
+				this.loadEditor = value;
 			}
 		}
 
 		public CreateEditorCallback CreateEditor
 		{
-			get => _createEditor;
+			get => this.createEditor;
 			set
 			{
 				if (value == null)
 					return;
 
-				if (_createEditor != null)
+				if (this.createEditor != null)
 					throw new InvalidOperationException("value may only be set once");
 
-				_createEditor = value;
+				this.createEditor = value;
 
 				Controls.Add(CreateFirstEditor());
 				AdaptToSize();
@@ -345,26 +345,26 @@ namespace MixGui.Components
 
 		public bool ResizeInProgress
 		{
-			get => _resizeInProgress;
+			get => this.resizeInProgress;
 
 			set
 			{
-				if (_resizeInProgress == value)
+				if (this.resizeInProgress == value)
 					return;
 
-				_resizeInProgress = value;
+				this.resizeInProgress = value;
 
-				if (_resizeInProgress)
+				if (this.resizeInProgress)
 				{
-					for (int i = 1; i < _editors.Count; i++)
-						_editors[i].EditorControl.SuspendDrawing();
+					for (int i = 1; i < this.editors.Count; i++)
+						this.editors[i].EditorControl.SuspendDrawing();
 				}
 				else
 				{
-					for (int i = 1; i < _editors.Count; i++)
-						_editors[i].EditorControl.ResumeDrawing();
+					for (int i = 1; i < this.editors.Count; i++)
+						this.editors[i].EditorControl.ResumeDrawing();
 
-					if (_sizeAdaptationPending)
+					if (this.sizeAdaptationPending)
 						AdaptToSize();
 
 					Invalidate(true);
@@ -374,21 +374,21 @@ namespace MixGui.Components
 
 		private void This_SizeChanged(object sender, EventArgs e)
 		{
-			if (!_resizeInProgress)
+			if (!this.resizeInProgress)
 				AdaptToSize();
 
 			else
-				_sizeAdaptationPending = true;
+				this.sizeAdaptationPending = true;
 		}
 
 		public new void Update()
 		{
-			lock (_editorsSyncRoot)
+			lock (this.editorsSyncRoot)
 			{
-				for (int i = 0; i < _editors.Count; i++)
+				for (int i = 0; i < this.editors.Count; i++)
 				{
-					int index = _firstVisibleIndex + i;
-					_loadEditor(_editors[i], index <= _maxIndex ? index : int.MinValue);
+					int index = this.firstVisibleIndex + i;
+					this.loadEditor(this.editors[i], index <= this.maxIndex ? index : int.MinValue);
 				}
 			}
 
@@ -399,9 +399,9 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			lock (_editorsSyncRoot)
+			lock (this.editorsSyncRoot)
 			{
-				foreach (T editor in _editors)
+				foreach (T editor in this.editors)
 					editor.UpdateLayout();
 			}
 
@@ -410,36 +410,36 @@ namespace MixGui.Components
 
 		public int FirstVisibleIndex
 		{
-			get => _firstVisibleIndex;
+			get => this.firstVisibleIndex;
 			set
 			{
-				if (value < _minIndex)
-					value = _minIndex;
+				if (value < this.minIndex)
+					value = this.minIndex;
 
-				if (value + VisibleEditorCount > _maxIndex + 1)
-					value = _maxIndex - VisibleEditorCount + 1;
+				if (value + VisibleEditorCount > this.maxIndex + 1)
+					value = this.maxIndex - VisibleEditorCount + 1;
 
-				if (value == _firstVisibleIndex)
+				if (value == this.firstVisibleIndex)
 					return;
 
-				int indexDelta = value - _firstVisibleIndex;
+				int indexDelta = value - this.firstVisibleIndex;
 				int selectedEditorIndex = ActiveEditorIndex;
-				FieldTypes? field = selectedEditorIndex >= 0 ? _editors[selectedEditorIndex].FocusedField : null;
-				int? caretIndex = selectedEditorIndex >= 0 ? _editors[selectedEditorIndex].CaretIndex : null;
+				FieldTypes? field = selectedEditorIndex >= 0 ? this.editors[selectedEditorIndex].FocusedField : null;
+				int? caretIndex = selectedEditorIndex >= 0 ? this.editors[selectedEditorIndex].CaretIndex : null;
 
-				_firstVisibleIndex = value;
+				this.firstVisibleIndex = value;
 
-				lock (_editorsSyncRoot)
+				lock (this.editorsSyncRoot)
 				{
 					IsReloading = true;
 
-					for (int i = 0; i < _editors.Count; i++)
+					for (int i = 0; i < this.editors.Count; i++)
 					{
-						int index = _firstVisibleIndex + i;
-						bool indexInItemRange = index <= _maxIndex;
+						int index = this.firstVisibleIndex + i;
+						bool indexInItemRange = index <= this.maxIndex;
 
-						T editor = _editors[i];
-						_loadEditor?.Invoke(editor, indexInItemRange ? index : int.MinValue);
+						T editor = this.editors[i];
+						this.loadEditor?.Invoke(editor, indexInItemRange ? index : int.MinValue);
 
 						editor.EditorControl.Visible = indexInItemRange;
 					}
@@ -453,30 +453,30 @@ namespace MixGui.Components
 						else if (selectedEditorIndex >= VisibleEditorCount)
 							selectedEditorIndex = VisibleEditorCount - 1;
 
-						_editors[selectedEditorIndex].Focus(field, caretIndex);
+						this.editors[selectedEditorIndex].Focus(field, caretIndex);
 					}
 
 					IsReloading = false;
 				}
 
-				_indexScrollBar.Value = _firstVisibleIndex;
-				OnFirstVisibleIndexChanged(new FirstVisibleIndexChangedEventArgs(_firstVisibleIndex));
+				this.indexScrollBar.Value = this.firstVisibleIndex;
+				OnFirstVisibleIndexChanged(new FirstVisibleIndexChangedEventArgs(this.firstVisibleIndex));
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _readOnly;
+			get => this.readOnly;
 			set
 			{
-				if (_readOnly == value)
+				if (this.readOnly == value)
 					return;
 
-				_readOnly = value;
-				lock (_editorsSyncRoot)
+				this.readOnly = value;
+				lock (this.editorsSyncRoot)
 				{
-					foreach (T editor in _editors)
-						editor.ReadOnly = _readOnly;
+					foreach (T editor in this.editors)
+						editor.ReadOnly = this.readOnly;
 				}
 			}
 		}
@@ -485,7 +485,7 @@ namespace MixGui.Components
 		{
 			get
 			{
-				if (_editors.Count == 0)
+				if (this.editors.Count == 0)
 					return 0;
 
 				int editorAreaHeight = Height;
@@ -493,18 +493,18 @@ namespace MixGui.Components
 				if (editorAreaHeight < 0)
 					editorAreaHeight = 0;
 
-				return Math.Min(editorAreaHeight / _editors[0].EditorControl.Height, MaxEditorCount);
+				return Math.Min(editorAreaHeight / this.editors[0].EditorControl.Height, MaxEditorCount);
 			}
 		}
 
 		public int MaxIndex
 		{
-			get => _maxIndex;
+			get => this.maxIndex;
 			set
 			{
-				_maxIndex = value;
+				this.maxIndex = value;
 
-				_indexScrollBar.Maximum = _maxIndex;
+				this.indexScrollBar.Maximum = this.maxIndex;
 
 				AdaptToSize();
 			}
@@ -512,12 +512,12 @@ namespace MixGui.Components
 
 		public int MinIndex
 		{
-			get => _minIndex;
+			get => this.minIndex;
 			set
 			{
-				_maxIndex = value;
+				this.maxIndex = value;
 
-				_indexScrollBar.Minimum = _minIndex;
+				this.indexScrollBar.Minimum = this.minIndex;
 
 				AdaptToSize();
 			}

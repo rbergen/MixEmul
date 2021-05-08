@@ -8,57 +8,57 @@ namespace MixLib.Type
 {
 	public class VirtualMemoryFullWord : IMemoryFullWord
 	{
-		private static readonly string _defaultCharString;
-		private static readonly string _defaultNonCharString;
-		private static readonly string _defaultInstructionString;
+		private static readonly string defaultCharString;
+		private static readonly string defaultNonCharString;
+		private static readonly string defaultInstructionString;
 		private const long DefaultLongValue = 0;
-		private static readonly FullWord _defaultWord;
+		private static readonly FullWord defaultWord;
 
-		private MemoryFullWord _realWord;
-		private readonly IMemory _memory;
-		private readonly object _syncRoot = new();
+		private MemoryFullWord realWord;
+		private readonly IMemory memory;
+		private readonly object syncRoot = new();
 
 		public int Index { get; private set; }
 
 		static VirtualMemoryFullWord()
 		{
-			_defaultWord = new FullWord(DefaultLongValue);
-			_defaultCharString = _defaultWord.ToString(true);
-			_defaultNonCharString = _defaultWord.ToString(false);
+			defaultWord = new FullWord(DefaultLongValue);
+			defaultCharString = defaultWord.ToString(true);
+			defaultNonCharString = defaultWord.ToString(false);
 
-			var instruction = InstructionSet.Instance.GetInstruction(_defaultWord[MixInstruction.OpcodeByte], new FieldSpec(_defaultWord[MixInstruction.FieldSpecByte]));
+			var instruction = InstructionSet.Instance.GetInstruction(defaultWord[MixInstruction.OpcodeByte], new FieldSpec(defaultWord[MixInstruction.FieldSpecByte]));
 			if (instruction != null)
 			{
-				var instance = instruction.CreateInstance(_defaultWord);
+				var instance = instruction.CreateInstance(defaultWord);
 
 				if (instance != null)
-					_defaultInstructionString = new InstructionText(instance).InstanceText;
+					defaultInstructionString = new InstructionText(instance).InstanceText;
 			}
 		}
 
 		public VirtualMemoryFullWord(IMemory memory, int index)
 		{
-			_memory = memory;
+			this.memory = memory;
 			Index = index;
 		}
 
 		public int BitCount
-			=> _defaultWord.BitCount;
+			=> defaultWord.BitCount;
 
 		public int ByteCount
 			=> FullWord.ByteCount;
 
 		private FullWord ActiveWord
-			=> RealWordFetched ? _realWord : _defaultWord;
+			=> RealWordFetched ? this.realWord : defaultWord;
 
 		public long MaxMagnitude
-			=> _defaultWord.MaxMagnitude;
+			=> defaultWord.MaxMagnitude;
 
 		public long ProfilingTickCount
-			=> RealWordFetched ? _realWord.ProfilingTickCount : 0;
+			=> RealWordFetched ? this.realWord.ProfilingTickCount : 0;
 
 		public long ProfilingExecutionCount
-			=> RealWordFetched ? _realWord.ProfilingExecutionCount : 0;
+			=> RealWordFetched ? this.realWord.ProfilingExecutionCount : 0;
 
 		public IEnumerator GetEnumerator()
 			=> ActiveWord.GetEnumerator();
@@ -70,7 +70,7 @@ namespace MixLib.Type
 			=> ActiveWord.MaxByteCount;
 
 		public bool IsEmpty
-			=> !RealWordFetched || _realWord.IsEmpty;
+			=> !RealWordFetched || this.realWord.IsEmpty;
 
 		public MixByte[] ToArray()
 			=> ActiveWord.ToArray();
@@ -79,13 +79,13 @@ namespace MixLib.Type
 			=> ActiveWord.Clone();
 
 		public string ToString(bool asChars)
-			=> RealWordFetched ? _realWord.ToString(asChars) : (asChars ? _defaultCharString : _defaultNonCharString);
+			=> RealWordFetched ? this.realWord.ToString(asChars) : (asChars ? defaultCharString : defaultNonCharString);
 
 		private void FetchRealWordIfNotFetched()
 		{
-			lock (_syncRoot)
+			lock (this.syncRoot)
 			{
-				if (_realWord == null)
+				if (this.realWord == null)
 					FetchRealWord();
 			}
 		}
@@ -94,21 +94,21 @@ namespace MixLib.Type
 		{
 			get
 			{
-				lock (_syncRoot)
+				lock (this.syncRoot)
 				{
-					return _realWord != null;
+					return this.realWord != null;
 				}
 			}
 		}
 
 		private void FetchRealWord()
-			=> _realWord = _memory.GetRealWord(Index);
+			=> this.realWord = this.memory.GetRealWord(Index);
 
 		private bool FetchRealWordConditionally(Func<bool> condition)
 		{
-			lock (_syncRoot)
+			lock (this.syncRoot)
 			{
-				if (_realWord == null)
+				if (this.realWord == null)
 				{
 					if (!condition())
 						return false;
@@ -122,24 +122,24 @@ namespace MixLib.Type
 
 		public string SourceLine
 		{
-			get => RealWordFetched ? _realWord.SourceLine : null;
+			get => RealWordFetched ? this.realWord.SourceLine : null;
 			set
 			{
 				if (FetchRealWordConditionally(() => value != null))
-					_realWord.SourceLine = value;
+					this.realWord.SourceLine = value;
 			}
 		}
 
 		public void Load(string text)
 		{
-			if (FetchRealWordConditionally(() => text != _defaultCharString))
-				_realWord.Load(text);
+			if (FetchRealWordConditionally(() => text != defaultCharString))
+				this.realWord.Load(text);
 		}
 
 		public void InvertSign()
 		{
 			FetchRealWordIfNotFetched();
-			_realWord.InvertSign();
+			this.realWord.InvertSign();
 		}
 
 		public MixByte this[int index]
@@ -147,8 +147,8 @@ namespace MixLib.Type
 			get => ActiveWord[index];
 			set
 			{
-				if (FetchRealWordConditionally(() => _defaultWord[index].ByteValue != value.ByteValue))
-					_realWord[index] = value;
+				if (FetchRealWordConditionally(() => defaultWord[index].ByteValue != value.ByteValue))
+					this.realWord[index] = value;
 			}
 		}
 
@@ -158,7 +158,7 @@ namespace MixLib.Type
 			set
 			{
 				if (FetchRealWordConditionally(() => value != DefaultLongValue))
-					_realWord.LongValue = value;
+					this.realWord.LongValue = value;
 			}
 		}
 
@@ -168,7 +168,7 @@ namespace MixLib.Type
 			set
 			{
 				if (FetchRealWordConditionally(VerifyDifferentMixBytes))
-					_realWord.Magnitude = value;
+					this.realWord.Magnitude = value;
 
 				bool VerifyDifferentMixBytes()
 				{
@@ -181,7 +181,7 @@ namespace MixLib.Type
 						thisStartIndex = FullWord.ByteCount - value.Length;
 						for (int i = 0; i < thisStartIndex; i++)
 						{
-							if (_defaultWord[i].ByteValue != 0)
+							if (defaultWord[i].ByteValue != 0)
 							{
 								valueDifferent = true;
 								break;
@@ -195,7 +195,7 @@ namespace MixLib.Type
 					{
 						while (thisStartIndex < FullWord.ByteCount)
 						{
-							if (_defaultWord[thisStartIndex].ByteValue != value[valueStartIndex].ByteValue)
+							if (defaultWord[thisStartIndex].ByteValue != value[valueStartIndex].ByteValue)
 							{
 								valueDifferent = true;
 								break;
@@ -217,7 +217,7 @@ namespace MixLib.Type
 			set
 			{
 				if (FetchRealWordConditionally(() => value != DefaultLongValue))
-					_realWord.MagnitudeLongValue = value;
+					this.realWord.MagnitudeLongValue = value;
 			}
 		}
 
@@ -226,8 +226,8 @@ namespace MixLib.Type
 			get => ActiveWord.Sign;
 			set
 			{
-				if (FetchRealWordConditionally(() => value != _defaultWord.Sign))
-					_realWord.Sign = value;
+				if (FetchRealWordConditionally(() => value != defaultWord.Sign))
+					this.realWord.Sign = value;
 			}
 		}
 
@@ -245,7 +245,7 @@ namespace MixLib.Type
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Chars) && (options.SearchFields & FieldTypes.Chars) == FieldTypes.Chars)
 			{
-				index = _defaultCharString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Chars ? options.SearchFromFieldIndex : 0);
+				index = defaultCharString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Chars ? options.SearchFromFieldIndex : 0);
 
 				if (index >= 0)
 					return new SearchResult { Field = FieldTypes.Chars, FieldIndex = index };
@@ -253,7 +253,7 @@ namespace MixLib.Type
 
 			if ((!isStartIndex || options.SearchFromField <= FieldTypes.Instruction) && (options.SearchFields & FieldTypes.Instruction) == FieldTypes.Instruction)
 			{
-				index = _defaultInstructionString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Instruction ? options.SearchFromFieldIndex : 0);
+				index = defaultInstructionString.FindMatch(options, isStartIndex && options.SearchFromField == FieldTypes.Instruction ? options.SearchFromFieldIndex : 0);
 
 				if (index >= 0)
 					return new SearchResult { Field = FieldTypes.Instruction, FieldIndex = index };
@@ -263,17 +263,17 @@ namespace MixLib.Type
 		}
 
 		public override bool Equals(object obj)
-			=> obj is VirtualMemoryFullWord other && other.Index == Index && other._memory == _memory && other._realWord == _realWord;
+			=> obj is VirtualMemoryFullWord other && other.Index == Index && other.memory == this.memory && other.realWord == this.realWord;
 
 		public override int GetHashCode()
 		{
 			var hashcode = Index.GetHashCode();
 
-			if (_memory != null)
-				hashcode ^= _memory.GetHashCode();
+			if (this.memory != null)
+				hashcode ^= this.memory.GetHashCode();
 
-			if (_realWord != null)
-				hashcode ^= _realWord.GetHashCode();
+			if (this.realWord != null)
+				hashcode ^= this.realWord.GetHashCode();
 
 			return hashcode;
 		}
@@ -282,14 +282,14 @@ namespace MixLib.Type
 		{
 			FetchRealWordIfNotFetched();
 
-			_realWord.IncreaseProfilingTickCount(ticks);
+			this.realWord.IncreaseProfilingTickCount(ticks);
 		}
 
 		public void IncreaseProfilingExecutionCount()
 		{
 			FetchRealWordIfNotFetched();
 
-			_realWord.IncreaseProfilingExecutionCount();
+			this.realWord.IncreaseProfilingExecutionCount();
 		}
 	}
 }

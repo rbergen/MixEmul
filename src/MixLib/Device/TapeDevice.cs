@@ -120,27 +120,27 @@ namespace MixLib.Device
 
 			private new class Instance : StreamStep.Instance
 			{
-				private long _ticksLeft;
+				private long ticksLeft;
 				private const long Unset = long.MinValue;
 
 				public Instance(StreamStatus streamStatus) : base(streamStatus) 
-					=> _ticksLeft = Unset;
+					=> this.ticksLeft = Unset;
 
 				public override bool Tick()
 				{
-					if (_ticksLeft == Unset)
+					if (this.ticksLeft == Unset)
 					{
 						if (!StreamStatus.PositionSet)
 							InitiateStreamPosition();
 
-						_ticksLeft = (Operands.MValue == 0 
+						this.ticksLeft = (Operands.MValue == 0 
 							? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) 
 							: Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 
-					_ticksLeft -= 1L;
+					this.ticksLeft -= 1L;
 
-					if (_ticksLeft > 0L)
+					if (this.ticksLeft > 0L)
 						return false;
 
 					if (Operands.MValue == 0)

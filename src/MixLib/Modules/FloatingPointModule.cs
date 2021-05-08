@@ -18,66 +18,66 @@ namespace MixLib.Modules
 		private const string FixOverflowSymbol = "FIXOV";
 		private const string DivisionByZeroSymbol = "DIVZRO";
 
-		private readonly Mix _mix;
-		private readonly Memory _fullMemory;
-		private readonly IMemory _memory;
-		private readonly Registers _registers;
-		private RunStatus _status;
-		private int? _accAddress;
-		private int? _prenormAddress;
-		private int? _exitAddress;
-		private int? _unexpectedOverflowAddress;
-		private int? _exponentOverflowAddress;
-		private int? _exponentUnderflowAddress;
-		private int? _fixOverflowAddress;
-		private int? _divisionByZeroAddress;
+		private readonly Mix mix;
+		private readonly Memory fullMemory;
+		private readonly IMemory memory;
+		private readonly Registers registers;
+		private RunStatus status;
+		private int? accAddress;
+		private int? prenormAddress;
+		private int? exitAddress;
+		private int? unexpectedOverflowAddress;
+		private int? exponentOverflowAddress;
+		private int? exponentUnderflowAddress;
+		private int? fixOverflowAddress;
+		private int? divisionByZeroAddress;
 
 		public SymbolCollection Symbols { get; private set; }
 
 		public FloatingPointModule(Mix mix)
 		{
-			_mix = mix;
-			_fullMemory = new Memory(0, ModuleSettings.FloatingPointMemoryWordCount + 8);
-			_memory = new MemoryView(_fullMemory, 0, ModuleSettings.FloatingPointMemoryWordCount - 1, 0);
-			_registers = new Registers();
+			this.mix = mix;
+			this.fullMemory = new Memory(0, ModuleSettings.FloatingPointMemoryWordCount + 8);
+			this.memory = new MemoryView(this.fullMemory, 0, ModuleSettings.FloatingPointMemoryWordCount - 1, 0);
+			this.registers = new Registers();
 			ProgramCounter = 0;
-			_status = RunStatus.Idle;
+			this.status = RunStatus.Idle;
 		}
 
 		public override string ModuleName 
 			=> MyModuleName;
 
 		public override IMemory Memory 
-			=> _memory;
+			=> this.memory;
 
 		public override IMemory FullMemory 
-			=> _fullMemory;
+			=> this.fullMemory;
 
 		public override Registers Registers 
-			=> _mix.Registers;
+			=> this.mix.Registers;
 
 		public override void AddLogLine(LogLine line) 
-			=> _mix.AddLogLine(line);
+			=> this.mix.AddLogLine(line);
 
 		public override void ResetProfilingCounts() 
-			=> _fullMemory.ResetProfilingCounts();
+			=> this.fullMemory.ResetProfilingCounts();
 
 		public override RunStatus Status
 		{
-			get => _status;
-			protected set => _status = value;
+			get => this.status;
+			protected set => this.status = value;
 		}
 
 		public override void Halt(int code)
 		{
 			Status = RunStatus.Idle;
 			AddLogLine(new LogLine(ModuleName, Severity.Info, ProgramCounter, "Halt requested", "Halting Mix"));
-			_mix.Halt(code);
+			this.mix.Halt(code);
 		}
 
 		public override void Reset()
 		{
-			_registers.Reset();
+			this.registers.Reset();
 
 			ProgramCounter = 0;
 			AddLogLine(new LogLine(ModuleName, Severity.Info, "Reset", "Module reset"));
@@ -89,29 +89,29 @@ namespace MixLib.Modules
 
 		public override bool LoadInstructionInstances(InstructionInstanceBase[] instances, SymbolCollection symbols)
 		{
-			_memory.Reset();
+			this.memory.Reset();
 			Symbols = null;
-			_accAddress = null;
-			_prenormAddress = null;
-			_exitAddress = null;
-			_unexpectedOverflowAddress = null;
-			_exponentOverflowAddress = null;
-			_exponentUnderflowAddress = null;
-			_fixOverflowAddress = null;
-			_divisionByZeroAddress = null;
+			this.accAddress = null;
+			this.prenormAddress = null;
+			this.exitAddress = null;
+			this.unexpectedOverflowAddress = null;
+			this.exponentOverflowAddress = null;
+			this.exponentUnderflowAddress = null;
+			this.fixOverflowAddress = null;
+			this.divisionByZeroAddress = null;
 
 			if (!base.LoadInstructionInstances(instances, symbols))
 				return false;
 
 			Symbols = symbols;
-			_accAddress = GetSymbolAddress(AccSymbol);
-			_prenormAddress = GetSymbolAddress(PrenormSymbol);
-			_exitAddress = GetSymbolAddress(ExitSymbol);
-			_unexpectedOverflowAddress = GetSymbolAddress(UnexpectedOverflowSymbol);
-			_exponentOverflowAddress = GetSymbolAddress(ExponentOverflowSymbol);
-			_exponentUnderflowAddress = GetSymbolAddress(ExponentUnderflowSymbol);
-			_fixOverflowAddress = GetSymbolAddress(FixOverflowSymbol);
-			_divisionByZeroAddress = GetSymbolAddress(DivisionByZeroSymbol);
+			this.accAddress = GetSymbolAddress(AccSymbol);
+			this.prenormAddress = GetSymbolAddress(PrenormSymbol);
+			this.exitAddress = GetSymbolAddress(ExitSymbol);
+			this.unexpectedOverflowAddress = GetSymbolAddress(UnexpectedOverflowSymbol);
+			this.exponentOverflowAddress = GetSymbolAddress(ExponentOverflowSymbol);
+			this.exponentUnderflowAddress = GetSymbolAddress(ExponentUnderflowSymbol);
+			this.fixOverflowAddress = GetSymbolAddress(FixOverflowSymbol);
+			this.divisionByZeroAddress = GetSymbolAddress(DivisionByZeroSymbol);
 
 			ValidateAddresses(Severity.Warning);
 
@@ -131,13 +131,13 @@ namespace MixLib.Modules
 
 		private bool ValidateAddresses(Severity severity)
 		{
-			if (_accAddress == null || _prenormAddress == null || _exitAddress == null)
+			if (this.accAddress == null || this.prenormAddress == null || this.exitAddress == null)
 			{
 				AddLogLine(new LogLine(MyModuleName, severity, "Symbols unset", $"Symbols {AccSymbol}, {PrenormSymbol} and/or {ExitSymbol} are unset"));
 				return false;
 			}
 
-			return ValidateAddress(severity, AccSymbol, _accAddress.Value) && ValidateAddress(severity, PrenormSymbol, _prenormAddress.Value) && ValidateAddress(severity, ExitSymbol, _exitAddress.Value);
+			return ValidateAddress(severity, AccSymbol, this.accAddress.Value) && ValidateAddress(severity, PrenormSymbol, this.prenormAddress.Value) && ValidateAddress(severity, ExitSymbol, this.exitAddress.Value);
 		}
 
 		public bool ValidateCall(string mnemonic)
@@ -158,7 +158,7 @@ namespace MixLib.Modules
 		public bool PreparePrenorm(IFullWord rAValue)
 		{
 			Registers.RA.LongValue = rAValue.LongValue;
-			ProgramCounter = _prenormAddress.Value;
+			ProgramCounter = this.prenormAddress.Value;
 
 			if (IsBreakpointSet(ProgramCounter))
 			{
@@ -192,7 +192,7 @@ namespace MixLib.Modules
 		public bool PrepareCall(string mnemonic, IFullWord rAValue, IFullWord paramValue)
 		{
 
-			Memory[_accAddress.Value].LongValue = rAValue.LongValue;
+			Memory[this.accAddress.Value].LongValue = rAValue.LongValue;
 			Registers.RA.LongValue = paramValue.LongValue;
 
 			return PrepareCall(mnemonic);
@@ -212,34 +212,34 @@ namespace MixLib.Modules
 		{
 			bool overflowDetected = false;
 
-			if (ProgramCounter == _exitAddress.Value)
+			if (ProgramCounter == this.exitAddress.Value)
 			{
 				Status = RunStatus.Idle;
 				return false;
 			}
 
-			if (_unexpectedOverflowAddress != null && ProgramCounter == _unexpectedOverflowAddress.Value)
+			if (this.unexpectedOverflowAddress != null && ProgramCounter == this.unexpectedOverflowAddress.Value)
 			{
 				ReportRuntimeError("Overflow set at instruction start");
 				return true;
 			}
 
-			if (_exponentOverflowAddress != null && ProgramCounter == _exponentOverflowAddress.Value)
+			if (this.exponentOverflowAddress != null && ProgramCounter == this.exponentOverflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Exponent overflow detected"));
 				overflowDetected = true;
 			}
-			else if (_exponentUnderflowAddress != null && ProgramCounter == _exponentUnderflowAddress.Value)
+			else if (this.exponentUnderflowAddress != null && ProgramCounter == this.exponentUnderflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Underflow", "Exponent underflow detected"));
 				overflowDetected = true;
 			}
-			else if (_fixOverflowAddress != null && ProgramCounter == _fixOverflowAddress.Value)
+			else if (this.fixOverflowAddress != null && ProgramCounter == this.fixOverflowAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Float to fix overflow detected"));
 				overflowDetected = true;
 			}
-			else if (_divisionByZeroAddress != null && ProgramCounter == _divisionByZeroAddress.Value)
+			else if (this.divisionByZeroAddress != null && ProgramCounter == this.divisionByZeroAddress.Value)
 			{
 				AddLogLine(new LogLine(MyModuleName, Severity.Info, "Overflow", "Division by zero detected"));
 				overflowDetected = true;
@@ -277,9 +277,9 @@ namespace MixLib.Modules
 			if (increasePC)
 				programCounter++;
 
-			if (programCounter > _memory.MaxWordIndex)
+			if (programCounter > this.memory.MaxWordIndex)
 			{
-				ProgramCounter = _memory.MaxWordIndex;
+				ProgramCounter = this.memory.MaxWordIndex;
 				ReportRuntimeError("Program counter overflow");
 			}
 			else

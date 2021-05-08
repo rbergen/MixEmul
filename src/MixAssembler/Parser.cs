@@ -25,8 +25,8 @@ namespace MixAssembler
 		private const int AddressFieldIndex = 2;
 		private const int CommentFieldIndex = 3;
 
-		private static readonly InstructionSet _instructionSet = new();
-		private static readonly LoaderInstructions _loaderInstructions = new();
+		private static readonly InstructionSet instructionSet = new();
+		private static readonly LoaderInstructions loaderInstructions = new();
 
 		private static bool IsCommentLine(string sourceLine)
 			=> sourceLine.Trim().Length == 0 || sourceLine[0] == '*';
@@ -117,7 +117,7 @@ namespace MixAssembler
 			status.LineSection = LineSection.AddressField;
 			instructionParameters = null;
 
-			instruction = _loaderInstructions[opField];
+			instruction = loaderInstructions[opField];
 
 			if (instruction != null)
 			{
@@ -125,7 +125,7 @@ namespace MixAssembler
 				return;
 			}
 
-			instruction = _instructionSet[opField];
+			instruction = instructionSet[opField];
 
 			if (instruction != null)
 			{
@@ -233,7 +233,7 @@ namespace MixAssembler
 				symbol.SetValue(status.LocationCounter);
 
 				var parameters = new LoaderInstructionParameters(new NumberValue(symbol.MemoryWordSign, symbol.MemoryWordMagnitude), 0);
-				var instruction = new PreInstruction(_loaderInstructions["CON"], parameters);
+				var instruction = new PreInstruction(loaderInstructions["CON"], parameters);
 
 				preInstructions.Insert(endLineNumber, instruction);
 				status.LocationCounter++;

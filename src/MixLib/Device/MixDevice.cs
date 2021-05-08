@@ -12,8 +12,8 @@ namespace MixLib.Device
 		private const string ReadingDescription = "Reading from memory";
 		private const string WritingDescription = "Writing to memory";
 
-		private InOutputOperands _currentOperands;
-		private DeviceStep.Instance _currentStepInstance;
+		private InOutputOperands currentOperands;
+		private DeviceStep.Instance currentStepInstance;
 
 		protected DeviceStep CurrentStep { get; private set; }
 		protected DeviceStep FirstInputDeviceStep { get; set; }
@@ -55,14 +55,14 @@ namespace MixLib.Device
 		public virtual void Reset()
 		{
 			CurrentStep = null;
-			_currentStepInstance = null;
+			this.currentStepInstance = null;
 		}
 
 		public virtual void StartInput(IMemory memory, int value, int sector, InterruptQueueCallback callback)
 		{
 			if (!Busy && SupportsInput)
 			{
-				_currentOperands = new InOutputOperands(memory, value, sector, callback);
+				this.currentOperands = new InOutputOperands(memory, value, sector, callback);
 				CurrentStep = FirstInputDeviceStep;
 			}
 		}
@@ -71,7 +71,7 @@ namespace MixLib.Device
 		{
 			if (!Busy)
 			{
-				_currentOperands = new InOutputOperands(null, value, sector, callback);
+				this.currentOperands = new InOutputOperands(null, value, sector, callback);
 				CurrentStep = FirstIocDeviceStep;
 			}
 		}
@@ -80,7 +80,7 @@ namespace MixLib.Device
 		{
 			if (!Busy && SupportsOutput)
 			{
-				_currentOperands = new InOutputOperands(memory, value, sector, callback);
+				this.currentOperands = new InOutputOperands(memory, value, sector, callback);
 				CurrentStep = FirstOutputDeviceStep;
 			}
 		}
@@ -92,15 +92,15 @@ namespace MixLib.Device
 				return;
 
 			// At I/O start, the step instance is unset
-			if (_currentStepInstance == null)
+			if (this.currentStepInstance == null)
 			{
-				_currentStepInstance = GetCurrentStepInstance();
-				_currentStepInstance.Operands = _currentOperands;
-				_currentStepInstance.ReportingEvent += StepInstance_Reporting;
+				this.currentStepInstance = GetCurrentStepInstance();
+				this.currentStepInstance.Operands = this.currentOperands;
+				this.currentStepInstance.ReportingEvent += StepInstance_Reporting;
 			}
 
 			// Current step still busy? If so, we're done here
-			if (!_currentStepInstance.Tick())
+			if (!this.currentStepInstance.Tick())
 				return;
 
 			CurrentStep = CurrentStep.NextStep;
@@ -108,18 +108,18 @@ namespace MixLib.Device
 			// Have we reached the end of the I/O step chain? If so, trigger interrupt and quit
 			if (CurrentStep == null)
 			{
-				_currentStepInstance = null;
-				_currentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
+				this.currentStepInstance = null;
+				this.currentOperands.InterruptQueueCallback?.Invoke(new Interrupt(Id));
 
 				return;
 			}
 
 			// Move on to next I/O step
 			var currentStepInstance = GetCurrentStepInstance();
-			currentStepInstance.Operands = _currentOperands;
+			currentStepInstance.Operands = this.currentOperands;
 			currentStepInstance.ReportingEvent += StepInstance_Reporting;
-			currentStepInstance.InputFromPreviousStep = _currentStepInstance.OutputForNextStep;
-			_currentStepInstance = currentStepInstance;
+			currentStepInstance.InputFromPreviousStep = this.currentStepInstance.OutputForNextStep;
+			this.currentStepInstance = currentStepInstance;
 		}
 
 		public abstract void UpdateSettings();

@@ -16,7 +16,7 @@ namespace MixGui.Utils
 			" 2DEH K BB Q B. E  9"
 		};
 
-		private static string[] _loaderCards;
+		private static string[] loaderCards;
 
 		private const int MaxWordsPerCard = 7;
 
@@ -28,8 +28,8 @@ namespace MixGui.Utils
 
 		public static string[] LoaderCards
 		{
-			get => _loaderCards ?? DefaultLoaderCards;
-			set => _loaderCards = value;
+			get => loaderCards ?? DefaultLoaderCards;
+			set => loaderCards = value;
 		}
 
 		private static StreamWriter PrepareWriter(string filePath)

@@ -8,9 +8,9 @@ namespace MixLib
 {
 	public class InstructionSet
 	{
-		private readonly SortedDictionary<string, MixInstruction> _mnemonicInstructionMap = new();
-		private readonly SortedDictionary<byte, List<MixInstruction>> _opcodeInstructionMap = new();
-		private static InstructionSet _instance;
+		private readonly SortedDictionary<string, MixInstruction> mnemonicInstructionMap = new();
+		private readonly SortedDictionary<byte, List<MixInstruction>> opcodeInstructionMap = new();
+		private static InstructionSet instance;
 
 		public InstructionSet()
 		{
@@ -258,8 +258,8 @@ namespace MixLib
 
 		private void AddInstruction(string mnemonic, MixInstruction instruction)
 		{
-			_mnemonicInstructionMap.Add(mnemonic, instruction);
-			var list = _opcodeInstructionMap.GetOrCreate(instruction.Opcode);
+			this.mnemonicInstructionMap.Add(mnemonic, instruction);
+			var list = this.opcodeInstructionMap.GetOrCreate(instruction.Opcode);
 
 			if (instruction.FieldSpec == null)
 				list.Insert(0, instruction);
@@ -272,16 +272,16 @@ namespace MixLib
 		{
 			get
 			{
-				if (_instance == null)
-					_instance = new InstructionSet();
+				if (instance == null)
+					instance = new InstructionSet();
 
-				return _instance;
+				return instance;
 			}
 		}
 
 		public MixInstruction GetInstruction(byte opcode, FieldSpec fieldSpec)
 		{
-			if (!_opcodeInstructionMap.TryGetValue(opcode, out List<MixInstruction> instructions))
+			if (!opcodeInstructionMap.TryGetValue(opcode, out List<MixInstruction> instructions))
 				return null;
 
 			int startIndex = 0;
@@ -303,7 +303,7 @@ namespace MixLib
 		}
 
 		public MixInstruction this[string mnemonic] 
-			=> _mnemonicInstructionMap.ContainsKey(mnemonic) ? _mnemonicInstructionMap[mnemonic] : null;
+			=> this.mnemonicInstructionMap.ContainsKey(mnemonic) ? this.mnemonicInstructionMap[mnemonic] : null;
 
 		public MixInstruction[] this[byte opcode]
 		{
@@ -311,7 +311,7 @@ namespace MixLib
 			{
 				var list = new List<MixInstruction>();
 
-				foreach (MixInstruction instruction in _mnemonicInstructionMap.Values.Where(instruction => instruction.Opcode == opcode))
+				foreach (MixInstruction instruction in this.mnemonicInstructionMap.Values.Where(instruction => instruction.Opcode == opcode))
 				{
 					list.Add(instruction);
 

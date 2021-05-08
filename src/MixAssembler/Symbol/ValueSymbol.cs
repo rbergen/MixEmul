@@ -9,19 +9,19 @@ namespace MixAssembler.Symbol
 		public const long MinValue = -MaxValue;
 		public const int MaxNameLength = 10;
 
-		private bool _isDefined;
+		private bool isDefined;
 
 		public long Magnitude { get; private set; }
 		public Word.Signs Sign { get; private set; }
 
 		public ValueSymbol(string name) : base(name)
 		{
-			_isDefined = false;
+			this.isDefined = false;
 			Sign = Word.Signs.Positive;
 		}
 
 		public override bool IsSymbolDefined
-			=> _isDefined;
+			=> this.isDefined;
 
 		public long Value
 			=> Sign.ApplyTo(Magnitude);
@@ -39,7 +39,7 @@ namespace MixAssembler.Symbol
 			=> Sign;
 
 		public override bool IsValueDefined(int currentAddress)
-			=> _isDefined;
+			=> this.isDefined;
 
 		public static bool IsValueSymbolName(string text)
 		{
@@ -94,14 +94,14 @@ namespace MixAssembler.Symbol
 		{
 			Sign = value.GetSign();
 			Magnitude = value.GetMagnitude();
-			_isDefined = true;
+			this.isDefined = true;
 		}
 
 		public override void SetValue(Word.Signs sign, long magnitude)
 		{
 			Sign = sign;
 			Magnitude = magnitude;
-			_isDefined = true;
+			this.isDefined = true;
 		}
 	}
 }

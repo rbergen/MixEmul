@@ -2,13 +2,13 @@
 {
 	public class NoOpStep : TickingStep
 	{
-		private readonly string _statusDescription;
+		private readonly string statusDescription;
 
 		public NoOpStep(int tickCount, string statusDescription) : base(tickCount) 
-			=> _statusDescription = statusDescription;
+			=> this.statusDescription = statusDescription;
 
 		public override string StatusDescription 
-			=> _statusDescription;
+			=> this.statusDescription;
 
 		protected override TickingStep.Instance CreateTickingInstance() 
 			=> new Instance(TickCount);

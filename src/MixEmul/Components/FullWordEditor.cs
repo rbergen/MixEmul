@@ -8,22 +8,22 @@ namespace MixGui.Components
 {
 	public class FullWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private readonly Label _equalsLabel;
-		private IFullWord _fullWord;
-		private bool _readOnly;
-		private readonly MixByteCollectionCharTextBox _wordCharTextBox;
-		private readonly WordValueEditor _wordValueEditor;
+		private readonly Label equalsLabel;
+		private IFullWord fullWord;
+		private bool readOnly;
+		private readonly MixByteCollectionCharTextBox wordCharTextBox;
+		private readonly WordValueEditor wordValueEditor;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
 
 		public FullWordEditor(IFullWord fullWord = null)
 		{
-			_fullWord = fullWord ?? new FullWord();
-			_readOnly = false;
-			_wordValueEditor = new WordValueEditor(_fullWord);
-			_wordCharTextBox = new MixByteCollectionCharTextBox(_fullWord);
-			_equalsLabel = new Label();
+			this.fullWord = fullWord ?? new FullWord();
+			this.readOnly = false;
+			this.wordValueEditor = new WordValueEditor(this.fullWord);
+			this.wordCharTextBox = new MixByteCollectionCharTextBox(this.fullWord);
+			this.equalsLabel = new Label();
 			InitializeComponent();
 		}
 
@@ -31,13 +31,13 @@ namespace MixGui.Components
 			=> this;
 
 		public FieldTypes? FocusedField
-			=> _wordCharTextBox.Focused ? FieldTypes.Chars : _wordValueEditor.FocusedField;
+			=> this.wordCharTextBox.Focused ? FieldTypes.Chars : this.wordValueEditor.FocusedField;
 
 		public int? CaretIndex
-			=> FocusedField == FieldTypes.Chars ? _wordCharTextBox.CaretIndex : _wordValueEditor.CaretIndex;
+			=> FocusedField == FieldTypes.Chars ? this.wordCharTextBox.CaretIndex : this.wordValueEditor.CaretIndex;
 
 		public bool Focus(FieldTypes? field, int? index)
-			=> field == FieldTypes.Chars ? _wordCharTextBox.Focus(field, index) : _wordValueEditor.Focus(field, index);
+			=> field == FieldTypes.Chars ? this.wordCharTextBox.Focus(field, index) : this.wordValueEditor.Focus(field, index);
 
 		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
@@ -46,30 +46,30 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			_wordValueEditor.Location = new Point(0, 0);
-			_wordValueEditor.Name = "mWordValueEditor";
-			_wordValueEditor.TabIndex = 2;
-			_wordValueEditor.ValueChanged += MWordValueEditor_ValueChanged;
-			_wordValueEditor.NavigationKeyDown += This_KeyDown;
+			this.wordValueEditor.Location = new Point(0, 0);
+			this.wordValueEditor.Name = "mWordValueEditor";
+			this.wordValueEditor.TabIndex = 2;
+			this.wordValueEditor.ValueChanged += MWordValueEditor_ValueChanged;
+			this.wordValueEditor.NavigationKeyDown += This_KeyDown;
 
-			_equalsLabel.Location = new Point(_wordValueEditor.Right, _wordValueEditor.Top + 2);
-			_equalsLabel.Name = "mFirstEqualsLabel";
-			_equalsLabel.Size = new Size(10, _wordValueEditor.Height - 2);
-			_equalsLabel.TabIndex = 3;
-			_equalsLabel.Text = "=";
+			this.equalsLabel.Location = new Point(this.wordValueEditor.Right, this.wordValueEditor.Top + 2);
+			this.equalsLabel.Name = "mFirstEqualsLabel";
+			this.equalsLabel.Size = new Size(10, this.wordValueEditor.Height - 2);
+			this.equalsLabel.TabIndex = 3;
+			this.equalsLabel.Text = "=";
 
-			_wordCharTextBox.Location = new Point(_equalsLabel.Right, _wordValueEditor.Top);
-			_wordCharTextBox.Name = "mWordCharTextBox";
-			_wordCharTextBox.Size = new Size(45, _wordValueEditor.Height);
-			_wordCharTextBox.TabIndex = 4;
-			_wordCharTextBox.ValueChanged += MWordCharTextBox_ValueChanged;
-			_wordCharTextBox.NavigationKeyDown += This_KeyDown;
+			this.wordCharTextBox.Location = new Point(this.equalsLabel.Right, this.wordValueEditor.Top);
+			this.wordCharTextBox.Name = "mWordCharTextBox";
+			this.wordCharTextBox.Size = new Size(45, this.wordValueEditor.Height);
+			this.wordCharTextBox.TabIndex = 4;
+			this.wordCharTextBox.ValueChanged += MWordCharTextBox_ValueChanged;
+			this.wordCharTextBox.NavigationKeyDown += This_KeyDown;
 
-			Controls.Add(_wordValueEditor);
-			Controls.Add(_equalsLabel);
-			Controls.Add(_wordCharTextBox);
+			Controls.Add(this.wordValueEditor);
+			Controls.Add(this.equalsLabel);
+			Controls.Add(this.wordCharTextBox);
 			Name = "FullWordEditor";
-			Size = new Size(_wordCharTextBox.Right, _wordCharTextBox.Height);
+			Size = new Size(this.wordCharTextBox.Right, this.wordCharTextBox.Height);
 			KeyDown += This_KeyDown;
 			ResumeLayout(false);
 		}
@@ -80,7 +80,7 @@ namespace MixGui.Components
 				return;
 
 			FieldTypes editorField = FieldTypes.Chars;
-			int? index = _wordCharTextBox.SelectionStart + _wordCharTextBox.SelectionLength;
+			int? index = this.wordCharTextBox.SelectionStart + this.wordCharTextBox.SelectionLength;
 
 			if (e is FieldKeyEventArgs args)
 			{
@@ -98,19 +98,19 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Right:
-					if (sender == _wordValueEditor)
-						_wordCharTextBox.Focus();
+					if (sender == this.wordValueEditor)
+						this.wordCharTextBox.Focus();
 
-					else if (sender == _wordCharTextBox && NavigationKeyDown != null)
+					else if (sender == this.wordCharTextBox && NavigationKeyDown != null)
 						NavigationKeyDown(this, e);
 
 					break;
 
 				case Keys.Left:
-					if (sender == _wordCharTextBox)
-						_wordValueEditor.Focus(FieldTypes.Value, null);
+					if (sender == this.wordCharTextBox)
+						this.wordValueEditor.Focus(FieldTypes.Value, null);
 
-					else if (sender == _wordValueEditor && NavigationKeyDown != null)
+					else if (sender == this.wordValueEditor && NavigationKeyDown != null)
 						NavigationKeyDown(this, e);
 
 					break;
@@ -119,51 +119,51 @@ namespace MixGui.Components
 
 		private void MWordCharTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
 		{
-			_wordValueEditor.Update();
+			this.wordValueEditor.Update();
 			OnValueChanged(new WordEditorValueChangedEventArgs((Word)args.OldValue, (Word)args.NewValue));
 		}
 
 		private void MWordValueEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			_wordCharTextBox.Update();
+			this.wordCharTextBox.Update();
 			OnValueChanged(args);
 		}
 
 		public new void Update()
 		{
-			_wordValueEditor.Update();
-			_wordCharTextBox.Update();
+			this.wordValueEditor.Update();
+			this.wordCharTextBox.Update();
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			_wordValueEditor.UpdateLayout();
-			_wordCharTextBox.UpdateLayout();
+			this.wordValueEditor.UpdateLayout();
+			this.wordCharTextBox.UpdateLayout();
 		}
 
 		public IFullWord FullWord
 		{
-			get => _fullWord;
+			get => this.fullWord;
 			set
 			{
-				_fullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
-				_wordValueEditor.WordValue = _fullWord;
-				_wordCharTextBox.MixByteCollectionValue = _fullWord;
+				this.fullWord = value ?? throw new ArgumentNullException(nameof(value), "FullWord may not be set to null");
+				this.wordValueEditor.WordValue = this.fullWord;
+				this.wordCharTextBox.MixByteCollectionValue = this.fullWord;
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _readOnly;
+			get => this.readOnly;
 			set
 			{
-				if (_readOnly == value)
+				if (this.readOnly == value)
 					return;
 
-				_readOnly = value;
-				_wordValueEditor.ReadOnly = _readOnly;
-				_wordCharTextBox.ReadOnly = _readOnly;
+				this.readOnly = value;
+				this.wordValueEditor.ReadOnly = this.readOnly;
+				this.wordCharTextBox.ReadOnly = this.readOnly;
 			}
 		}
 
@@ -182,10 +182,10 @@ namespace MixGui.Components
 		public void Select(int start, int length)
 		{
 			if (FocusedField == FieldTypes.Chars)
-				_wordCharTextBox.Select(start, length);
+				this.wordCharTextBox.Select(start, length);
 
 			else
-				_wordValueEditor.Select(start, length);
+				this.wordValueEditor.Select(start, length);
 		}
 	}
 }

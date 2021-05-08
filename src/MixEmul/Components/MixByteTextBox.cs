@@ -11,13 +11,13 @@ namespace MixGui.Components
 		public const int UseHeight = 21;
 		public const int UseWidth = 18;
 
-		private byte _byteValue;
-		private Color _editingTextColor;
-		private bool _editMode;
-		private int _lastCaretPos;
-		private string _lastValidText;
-		private Color _renderedTextColor;
-		private bool _updating;
+		private byte byteValue;
+		private Color editingTextColor;
+		private bool editMode;
+		private int lastCaretPos;
+		private string lastValidText;
+		private Color renderedTextColor;
+		private bool updating;
 
 		public int Index { get; private set; }
 
@@ -26,10 +26,10 @@ namespace MixGui.Components
 		public MixByteTextBox(int index = 0)
 		{
 			Index = index;
-			_byteValue = 0;
+			this.byteValue = 0;
 
-			_lastValidText = _byteValue.ToString("D2");
-			_lastCaretPos = SelectionStart + SelectionLength;
+			this.lastValidText = this.byteValue.ToString("D2");
+			this.lastCaretPos = SelectionStart + SelectionLength;
 
 			SuspendLayout();
 
@@ -39,7 +39,7 @@ namespace MixGui.Components
 			Name = "mByteBox";
 			Size = new Size(UseWidth, UseHeight);
 			TabIndex = 0;
-			Text = _byteValue.ToString("D2");
+			Text = this.byteValue.ToString("D2");
 
 			ResumeLayout(false);
 
@@ -63,26 +63,26 @@ namespace MixGui.Components
 
 		private void CheckAndUpdateValue(byte byteValue)
 		{
-			_editMode = false;
+			this.editMode = false;
 
 			if (byteValue > byte.MaxValue)
 				byteValue = byte.MaxValue;
 
-			byte oldByteValue = _byteValue;
-			_byteValue = byteValue;
+			byte oldByteValue = this.byteValue;
+			this.byteValue = byteValue;
 
-			_updating = true;
+			this.updating = true;
 
-			ForeColor = _renderedTextColor;
-			_lastValidText = _byteValue.ToString("D2");
-			base.Text = _lastValidText;
-			_lastCaretPos = SelectionStart + SelectionLength;
+			ForeColor = this.renderedTextColor;
+			this.lastValidText = this.byteValue.ToString("D2");
+			base.Text = this.lastValidText;
+			this.lastCaretPos = SelectionStart + SelectionLength;
 			Select(0, TextLength);
 
-			_updating = false;
+			this.updating = false;
 
-			if (oldByteValue != _byteValue)
-				OnValueChanged(new ValueChangedEventArgs(_byteValue, _byteValue));
+			if (oldByteValue != this.byteValue)
+				OnValueChanged(new ValueChangedEventArgs(this.byteValue, this.byteValue));
 		}
 
 		private void This_KeyDown(object sender, KeyEventArgs e)
@@ -118,7 +118,7 @@ namespace MixGui.Components
 
 				case Keys.Escape:
 					e.Handled = true;
-					CheckAndUpdateValue(_byteValue);
+					CheckAndUpdateValue(this.byteValue);
 
 					return;
 			}
@@ -128,7 +128,7 @@ namespace MixGui.Components
 
 		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (_updating)
+			if (this.updating)
 				return;
 
 			bool textIsValid = true;
@@ -150,20 +150,20 @@ namespace MixGui.Components
 
 			if (!textIsValid)
 			{
-				_updating = true;
-				base.Text = _lastValidText;
-				Select(_lastCaretPos, 0);
-				_updating = false;
+				this.updating = true;
+				base.Text = this.lastValidText;
+				Select(this.lastCaretPos, 0);
+				this.updating = false;
 			}
 			else
 			{
-				_lastValidText = base.Text;
-				_lastCaretPos = SelectionStart + SelectionLength;
+				this.lastValidText = base.Text;
+				this.lastCaretPos = SelectionStart + SelectionLength;
 
-				if (!_editMode)
+				if (!this.editMode)
 				{
-					ForeColor = _editingTextColor;
-					_editMode = true;
+					ForeColor = this.editingTextColor;
+					this.editMode = true;
 				}
 			}
 		}
@@ -174,20 +174,20 @@ namespace MixGui.Components
 
 			Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			ForeColor = _renderedTextColor;
+			this.renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			this.editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			ForeColor = this.renderedTextColor;
 
 			ResumeLayout();
 		}
 
 		public MixByte MixByteValue
 		{
-			get => _byteValue;
+			get => this.byteValue;
 			set
 			{
-				_byteValue = value;
-				CheckAndUpdateValue(_byteValue);
+				this.byteValue = value;
+				CheckAndUpdateValue(this.byteValue);
 			}
 		}
 

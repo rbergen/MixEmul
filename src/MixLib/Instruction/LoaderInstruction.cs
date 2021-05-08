@@ -26,16 +26,16 @@ namespace MixLib.Instruction
 		/// </summary>
 		public class Instance : InstructionInstanceBase
 		{
-			private readonly LoaderInstruction _instruction;
+			private readonly LoaderInstruction instruction;
 			public FullWord Value { get; private set; }
 
 			public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)
 			{
-				_instruction = instruction;
+				this.instruction = instruction;
 				Value = new FullWord(sign, magnitude);
 			}
 
-			public override InstructionBase Instruction => _instruction;
+			public override InstructionBase Instruction => this.instruction;
 		}
 
 		public enum Operations

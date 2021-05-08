@@ -5,44 +5,44 @@ namespace MixAssembler.Symbol
 {
 	public class LiteralConstantSymbol : SymbolBase
 	{
-		private readonly long _literalMagnitude;
-		private readonly Word.Signs _literalSign;
-		private long _magnitude;
-		private Word.Signs _sign;
-		private bool _valueDefined;
+		private readonly long literalMagnitude;
+		private readonly Word.Signs literalSign;
+		private long magnitude;
+		private Word.Signs sign;
+		private bool valueDefined;
 
 		private LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
 		{
-			_literalSign = literalSign;
-			_literalMagnitude = literalMagnitude;
-			_magnitude = -1L;
-			_sign = Word.Signs.Positive;
-			_valueDefined = false;
+			this.literalSign = literalSign;
+			this.literalMagnitude = literalMagnitude;
+			this.magnitude = -1L;
+			this.sign = Word.Signs.Positive;
+			this.valueDefined = false;
 		}
 
 		public override bool IsSymbolDefined
-			=> _valueDefined;
+			=> this.valueDefined;
 
 		public override long MemoryWordMagnitude
-			=> _literalMagnitude;
+			=> this.literalMagnitude;
 
 		public override Word.Signs MemoryWordSign
-			=> _literalSign;
+			=> this.literalSign;
 
 		public override long MemoryWordValue
-			=> _literalSign.ApplyTo(_literalMagnitude);
+			=> this.literalSign.ApplyTo(this.literalMagnitude);
 
 		public override long GetValue(int currentAddress)
-			=> _sign.ApplyTo(_magnitude);
+			=> this.sign.ApplyTo(this.magnitude);
 
 		public override long GetMagnitude(int currentAddress)
-			=> _magnitude;
+			=> this.magnitude;
 
 		public override Word.Signs GetSign(int currentAddress)
-			=> _sign;
+			=> this.sign;
 
 		public override bool IsValueDefined(int currentAddress)
-			=> _valueDefined;
+			=> this.valueDefined;
 
 		private static string GetName(Word.Signs literalSign, long literalMagnitude, int count)
 			=> string.Concat("=", literalSign.IsNegative() ? "-" : "", literalMagnitude, '=', count);
@@ -76,16 +76,16 @@ namespace MixAssembler.Symbol
 
 		public override void SetValue(long value)
 		{
-			_sign = value.GetSign();
-			_magnitude = value.GetMagnitude();
-			_valueDefined = true;
+			this.sign = value.GetSign();
+			this.magnitude = value.GetMagnitude();
+			this.valueDefined = true;
 		}
 
 		public override void SetValue(Word.Signs sign, long magnitude)
 		{
-			_sign = sign;
-			_magnitude = magnitude;
-			_valueDefined = true;
+			this.sign = sign;
+			this.magnitude = magnitude;
+			this.valueDefined = true;
 		}
 	}
 }

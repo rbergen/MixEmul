@@ -8,17 +8,17 @@ namespace MixGui.Components
 {
 	public class LongValueTextBox : TextBox, IEscapeConsumer, INavigableControl
 	{
-		private Color _editingTextColor;
-		private bool _editMode;
-		private int _lastCaretPos;
-		private string _lastValidText;
-		private long _magnitude;
-		private Word.Signs _sign;
-		private long _maxValue;
-		private long _minValue;
-		private Color _renderedTextColor;
-		private bool _supportNegativeZero;
-		private bool _updating;
+		private Color editingTextColor;
+		private bool editMode;
+		private int lastCaretPos;
+		private string lastValidText;
+		private long magnitude;
+		private Word.Signs sign;
+		private long maxValue;
+		private long minValue;
+		private Color renderedTextColor;
+		private bool supportNegativeZero;
+		private bool updating;
 
 		public bool SupportSign { get; private set; }
 		public bool ClearZero { get; set; }
@@ -52,13 +52,13 @@ namespace MixGui.Components
 			CheckAndUpdateValue(sign, magnitude);
 			CheckAndUpdateMaxLength();
 
-			_updating = false;
-			_editMode = false;
+			this.updating = false;
+			this.editMode = false;
 
 			ClearZero = true;
 
-			_lastCaretPos = SelectionStart + SelectionLength;
-			_lastValidText = _magnitude.ToString();
+			this.lastCaretPos = SelectionStart + SelectionLength;
+			this.lastValidText = this.magnitude.ToString();
 		}
 
 		private void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude)
@@ -72,7 +72,7 @@ namespace MixGui.Components
 
 		private void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
-			if (ClearZero && _magnitude == 0 && _sign.IsPositive())
+			if (ClearZero && this.magnitude == 0 && this.sign.IsPositive())
 				base.Text = "";
 		}
 
@@ -113,7 +113,7 @@ namespace MixGui.Components
 		}
 
 		private void CheckAndUpdateMaxLength()
-			=> MaxLength = Math.Max(_minValue.ToString().Length, _maxValue.ToString().Length);
+			=> MaxLength = Math.Max(this.minValue.ToString().Length, this.maxValue.ToString().Length);
 
 		private void CheckAndUpdateValue(string newValue)
 		{
@@ -144,13 +144,13 @@ namespace MixGui.Components
 			}
 			catch (FormatException)
 			{
-				CheckAndUpdateValue(_lastValidText);
+				CheckAndUpdateValue(this.lastValidText);
 			}
 		}
 
 		private void CheckAndUpdateValue(Word.Signs newSign, long newMagnitude, bool suppressEvent)
 		{
-			_editMode = false;
+			this.editMode = false;
 			var newValue = newSign.ApplyTo(newMagnitude);
 
 			if (newValue < MinValue)
@@ -180,28 +180,28 @@ namespace MixGui.Components
 				}
 			}
 
-			_updating = true;
+			this.updating = true;
 			SuspendLayout();
 
-			ForeColor = _renderedTextColor;
-			_lastValidText = newMagnitude.ToString();
+			ForeColor = this.renderedTextColor;
+			this.lastValidText = newMagnitude.ToString();
 
-			if (newSign == Word.Signs.Negative && (_supportNegativeZero || newMagnitude != 0))
-				_lastValidText = '-' + _lastValidText;
+			if (newSign == Word.Signs.Negative && (this.supportNegativeZero || newMagnitude != 0))
+				this.lastValidText = '-' + this.lastValidText;
 
-			base.Text = _lastValidText;
-			_lastCaretPos = SelectionStart + SelectionLength;
+			base.Text = this.lastValidText;
+			this.lastCaretPos = SelectionStart + SelectionLength;
 			Select(TextLength, 0);
 
 			ResumeLayout();
-			_updating = false;
+			this.updating = false;
 
-			if (newMagnitude != _magnitude || newSign != _sign)
+			if (newMagnitude != this.magnitude || newSign != this.sign)
 			{
-				long magnitude = _magnitude;
-				_magnitude = newMagnitude;
-				Word.Signs sign = _sign;
-				_sign = newSign;
+				long magnitude = this.magnitude;
+				this.magnitude = newMagnitude;
+				Word.Signs sign = this.sign;
+				this.sign = newSign;
 
 				if (!suppressEvent)
 					OnValueChanged(new ValueChangedEventArgs(sign, magnitude, newSign, newMagnitude));
@@ -210,23 +210,23 @@ namespace MixGui.Components
 
 		private void SetMaxValue(long value)
 		{
-			_maxValue = value;
+			this.maxValue = value;
 
-			if (!SupportSign && (_maxValue < 0L))
-				_maxValue = -_maxValue;
+			if (!SupportSign && (this.maxValue < 0L))
+				this.maxValue = -this.maxValue;
 
-			if (_minValue > _maxValue)
-				_minValue = _maxValue;
+			if (this.minValue > this.maxValue)
+				this.minValue = this.maxValue;
 		}
 
 		private void SetMinValue(long value)
 		{
-			_minValue = value;
+			this.minValue = value;
 
-			if (_minValue > _maxValue)
-				_maxValue = _minValue;
+			if (this.minValue > this.maxValue)
+				this.maxValue = this.minValue;
 
-			SupportSign = _minValue < 0L;
+			SupportSign = this.minValue < 0L;
 		}
 
 		private void This_KeyPress(object sender, KeyPressEventArgs e)
@@ -243,7 +243,7 @@ namespace MixGui.Components
 
 				case Keys.Escape:
 					e.Handled = true;
-					CheckAndUpdateValue(_sign, _magnitude);
+					CheckAndUpdateValue(this.sign, this.magnitude);
 
 					return;
 			}
@@ -293,17 +293,17 @@ namespace MixGui.Components
 
 		public Word.Signs Sign
 		{
-			get => _sign;
+			get => this.sign;
 			set
 			{
-				if (_sign != value)
-					CheckAndUpdateValue(value, _magnitude, true);
+				if (this.sign != value)
+					CheckAndUpdateValue(value, this.magnitude, true);
 			}
 		}
 
 		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (_updating)
+			if (this.updating)
 				return;
 
 			bool textIsValid = true;
@@ -324,23 +324,23 @@ namespace MixGui.Components
 
 			if (!textIsValid)
 			{
-				_updating = true;
+				this.updating = true;
 
-				base.Text = _lastValidText;
-				Select(_lastCaretPos, 0);
+				base.Text = this.lastValidText;
+				Select(this.lastCaretPos, 0);
 
-				_updating = false;
+				this.updating = false;
 
 				return;
 			}
 
-			_lastValidText = base.Text;
-			_lastCaretPos = SelectionStart + SelectionLength;
+			this.lastValidText = base.Text;
+			this.lastCaretPos = SelectionStart + SelectionLength;
 
-			if (!_editMode)
+			if (!this.editMode)
 			{
-				ForeColor = _editingTextColor;
-				_editMode = true;
+				ForeColor = this.editingTextColor;
+				this.editMode = true;
 			}
 		}
 
@@ -349,16 +349,16 @@ namespace MixGui.Components
 			SuspendLayout();
 
 			BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			ForeColor = _renderedTextColor;
+			this.renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			this.editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			ForeColor = this.renderedTextColor;
 
 			ResumeLayout();
 		}
 
 		public long LongValue
 		{
-			get => _sign.ApplyTo(_magnitude);
+			get => this.sign.ApplyTo(this.magnitude);
 			set
 			{
 				Word.Signs sign = Word.Signs.Positive;
@@ -369,32 +369,32 @@ namespace MixGui.Components
 					value = -value;
 				}
 
-				if (sign != _sign || value != _magnitude)
+				if (sign != this.sign || value != this.magnitude)
 					CheckAndUpdateValue(sign, value, true);
 			}
 		}
 
 		public long Magnitude
 		{
-			get => _magnitude;
+			get => this.magnitude;
 			set
 			{
 				value = value.GetMagnitude();
 
-				if (_magnitude != value)
-					CheckAndUpdateValue(_sign, value, true);
+				if (this.magnitude != value)
+					CheckAndUpdateValue(this.sign, value, true);
 			}
 		}
 
 		public long MaxValue
 		{
-			get => _maxValue;
+			get => this.maxValue;
 			set
 			{
-				if (_maxValue != value)
+				if (this.maxValue != value)
 				{
 					SetMaxValue(value);
-					CheckAndUpdateValue(_sign, _magnitude);
+					CheckAndUpdateValue(this.sign, this.magnitude);
 					CheckAndUpdateMaxLength();
 				}
 			}
@@ -402,13 +402,13 @@ namespace MixGui.Components
 
 		public long MinValue
 		{
-			get => _minValue;
+			get => this.minValue;
 			set
 			{
-				if (_minValue != value)
+				if (this.minValue != value)
 				{
 					SetMinValue(value);
-					CheckAndUpdateValue(_sign, _magnitude);
+					CheckAndUpdateValue(this.sign, this.magnitude);
 					CheckAndUpdateMaxLength();
 				}
 			}
@@ -416,13 +416,13 @@ namespace MixGui.Components
 
 		public bool SupportNegativeZero
 		{
-			get => _supportNegativeZero;
+			get => this.supportNegativeZero;
 			set
 			{
-				if (_supportNegativeZero != value)
+				if (this.supportNegativeZero != value)
 				{
-					_supportNegativeZero = value;
-					CheckAndUpdateValue(_sign, _magnitude);
+					this.supportNegativeZero = value;
+					CheckAndUpdateValue(this.sign, this.magnitude);
 				}
 			}
 		}

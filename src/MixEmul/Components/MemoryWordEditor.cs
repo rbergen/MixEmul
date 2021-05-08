@@ -11,23 +11,23 @@ namespace MixGui.Components
 {
 	public class MemoryWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private readonly Label _addressLabel;
-		private readonly Panel _addressPanel;
-		private readonly Panel _instructionPanel;
-		private readonly CheckBox _breakPointBox;
-		private readonly Label _colonLabel;
-		private readonly Label _colonLabel2;
-		private readonly Label _colonLabel3;
-		private readonly InstructionInstanceTextBox _instructionTextBox;
-		private readonly FullWordEditor _fullWordEditor;
-		private bool _marked;
-		private IMemoryFullWord _memoryWord;
-		private bool _readOnly;
-		private readonly Label _equalsLabel;
-		private readonly Label _profileLabel;
-		private readonly Label _sourceLineLabel;
-		private GetMaxProfilingCountCallback _getMaxProfilingCount;
-		private ToolTip _toolTip;
+		private readonly Label addressLabel;
+		private readonly Panel addressPanel;
+		private readonly Panel instructionPanel;
+		private readonly CheckBox breakPointBox;
+		private readonly Label colonLabel;
+		private readonly Label colonLabel2;
+		private readonly Label colonLabel3;
+		private readonly InstructionInstanceTextBox instructionTextBox;
+		private readonly FullWordEditor fullWordEditor;
+		private bool marked;
+		private IMemoryFullWord memoryWord;
+		private bool readOnly;
+		private readonly Label equalsLabel;
+		private readonly Label profileLabel;
+		private readonly Label sourceLineLabel;
+		private GetMaxProfilingCountCallback getMaxProfilingCount;
+		private ToolTip toolTip;
 
 		public event EventHandler AddressDoubleClick;
 		public event EventHandler BreakpointCheckedChanged;
@@ -39,25 +39,25 @@ namespace MixGui.Components
 
 		public MemoryWordEditor(IMemoryFullWord memoryWord = null)
 		{
-			_readOnly = false;
-			_marked = false;
+			this.readOnly = false;
+			this.marked = false;
 
 			if (memoryWord == null)
 				memoryWord = new MemoryFullWord(int.MinValue);
 
-			_instructionTextBox = new InstructionInstanceTextBox(memoryWord);
-			_fullWordEditor = new FullWordEditor(memoryWord);
-			_addressPanel = new Panel();
-			_instructionPanel = new Panel();
-			_breakPointBox = new CheckBox();
-			_addressLabel = new Label();
-			_colonLabel = new Label();
-			_equalsLabel = new Label();
-			_colonLabel = new Label();
-			_colonLabel3 = new Label();
-			_sourceLineLabel = new Label();
-			_colonLabel2 = new Label();
-			_profileLabel = new Label();
+			this.instructionTextBox = new InstructionInstanceTextBox(memoryWord);
+			this.fullWordEditor = new FullWordEditor(memoryWord);
+			this.addressPanel = new Panel();
+			this.instructionPanel = new Panel();
+			this.breakPointBox = new CheckBox();
+			this.addressLabel = new Label();
+			this.colonLabel = new Label();
+			this.equalsLabel = new Label();
+			this.colonLabel = new Label();
+			this.colonLabel3 = new Label();
+			this.sourceLineLabel = new Label();
+			this.colonLabel2 = new Label();
+			this.profileLabel = new Label();
 			InitializeComponent();
 
 			MemoryWord = memoryWord;
@@ -70,13 +70,13 @@ namespace MixGui.Components
 			=> this;
 
 		public FieldTypes? FocusedField
-			=> _instructionTextBox.Focused ? FieldTypes.Instruction : _fullWordEditor.FocusedField;
+			=> this.instructionTextBox.Focused ? FieldTypes.Instruction : this.fullWordEditor.FocusedField;
 
 		public int? CaretIndex
-			=> FocusedField == FieldTypes.Instruction ? _instructionTextBox.CaretIndex : _fullWordEditor.CaretIndex;
+			=> FocusedField == FieldTypes.Instruction ? this.instructionTextBox.CaretIndex : this.fullWordEditor.CaretIndex;
 
 		public bool Focus(FieldTypes? field, int? index)
-			=> field == FieldTypes.Instruction ? _instructionTextBox.FocusWithIndex(index) : _fullWordEditor.Focus(field, index);
+			=> field == FieldTypes.Instruction ? this.instructionTextBox.FocusWithIndex(index) : this.fullWordEditor.Focus(field, index);
 
 		private static Color GetBlendedColor(double fraction)
 			=> fraction < .5
@@ -115,12 +115,12 @@ namespace MixGui.Components
 
 		public GetMaxProfilingCountCallback GetMaxProfilingCount
 		{
-			get => _getMaxProfilingCount;
+			get => this.getMaxProfilingCount;
 			set
 			{
-				if (_getMaxProfilingCount != value)
+				if (this.getMaxProfilingCount != value)
 				{
-					_getMaxProfilingCount = value;
+					this.getMaxProfilingCount = value;
 					UpdateProfilingCount();
 				}
 			}
@@ -128,146 +128,146 @@ namespace MixGui.Components
 
 		private void InitializeComponent()
 		{
-			_addressPanel.SuspendLayout();
+			this.addressPanel.SuspendLayout();
 			SuspendLayout();
 
-			_breakPointBox.Location = new Point(2, 2);
-			_breakPointBox.Name = "mBreakPointBox";
-			_breakPointBox.Size = new Size(16, 17);
-			_breakPointBox.TabIndex = 0;
-			_breakPointBox.FlatStyle = FlatStyle.Flat;
-			_breakPointBox.CheckedChanged += BreakPointBox_CheckedChanged;
+			this.breakPointBox.Location = new Point(2, 2);
+			this.breakPointBox.Name = "mBreakPointBox";
+			this.breakPointBox.Size = new Size(16, 17);
+			this.breakPointBox.TabIndex = 0;
+			this.breakPointBox.FlatStyle = FlatStyle.Flat;
+			this.breakPointBox.CheckedChanged += BreakPointBox_CheckedChanged;
 
-			_addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_addressLabel.Location = new Point(_breakPointBox.Right, _breakPointBox.Top - 1);
-			_addressLabel.Name = "mAddressLabel";
-			_addressLabel.Size = new Size(45, _breakPointBox.Height);
-			_addressLabel.TabIndex = 1;
-			_addressLabel.Text = "0000";
-			_addressLabel.TextAlign = ContentAlignment.MiddleCenter;
-			_addressLabel.DoubleClick += AddressLabel_DoubleClick;
+			this.addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.addressLabel.Location = new Point(this.breakPointBox.Right, this.breakPointBox.Top - 1);
+			this.addressLabel.Name = "mAddressLabel";
+			this.addressLabel.Size = new Size(45, this.breakPointBox.Height);
+			this.addressLabel.TabIndex = 1;
+			this.addressLabel.Text = "0000";
+			this.addressLabel.TextAlign = ContentAlignment.MiddleCenter;
+			this.addressLabel.DoubleClick += AddressLabel_DoubleClick;
 
-			_addressPanel.Controls.Add(_breakPointBox);
-			_addressPanel.Controls.Add(_addressLabel);
-			_addressPanel.Size = new Size(_addressLabel.Right, 21);
-			_addressPanel.Location = new Point(0, 1);
-			_addressLabel.TabIndex = 0;
+			this.addressPanel.Controls.Add(this.breakPointBox);
+			this.addressPanel.Controls.Add(this.addressLabel);
+			this.addressPanel.Size = new Size(this.addressLabel.Right, 21);
+			this.addressPanel.Location = new Point(0, 1);
+			this.addressLabel.TabIndex = 0;
 
-			_colonLabel.Location = new Point(_addressPanel.Right, _addressPanel.Top + 3);
-			_colonLabel.Name = "mFirstEqualsLabel";
-			_colonLabel.Size = new Size(10, _addressLabel.Height - 3);
-			_colonLabel.TabIndex = 1;
-			_colonLabel.Text = ":";
+			this.colonLabel.Location = new Point(this.addressPanel.Right, this.addressPanel.Top + 3);
+			this.colonLabel.Name = "mFirstEqualsLabel";
+			this.colonLabel.Size = new Size(10, this.addressLabel.Height - 3);
+			this.colonLabel.TabIndex = 1;
+			this.colonLabel.Text = ":";
 
-			_fullWordEditor.Location = new Point(_colonLabel.Right, _addressPanel.Top);
-			_fullWordEditor.Name = "mFullWordEditor";
-			_fullWordEditor.TabIndex = 2;
-			_fullWordEditor.ValueChanged += FullWordEditor_ValueChanged;
-			_fullWordEditor.NavigationKeyDown += This_KeyDown;
+			this.fullWordEditor.Location = new Point(this.colonLabel.Right, this.addressPanel.Top);
+			this.fullWordEditor.Name = "mFullWordEditor";
+			this.fullWordEditor.TabIndex = 2;
+			this.fullWordEditor.ValueChanged += FullWordEditor_ValueChanged;
+			this.fullWordEditor.NavigationKeyDown += This_KeyDown;
 
-			_equalsLabel.Location = new Point(_fullWordEditor.Right, _fullWordEditor.Top + 2);
-			_equalsLabel.Name = "mEqualsLabel";
-			_equalsLabel.Size = new Size(10, 19);
-			_equalsLabel.TabIndex = 3;
-			_equalsLabel.Text = "=";
+			this.equalsLabel.Location = new Point(this.fullWordEditor.Right, this.fullWordEditor.Top + 2);
+			this.equalsLabel.Name = "mEqualsLabel";
+			this.equalsLabel.Size = new Size(10, 19);
+			this.equalsLabel.TabIndex = 3;
+			this.equalsLabel.Text = "=";
 
-			_instructionTextBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-			_instructionTextBox.Dock = DockStyle.Fill;
-			_instructionTextBox.BorderStyle = BorderStyle.None;
-			_instructionTextBox.Location = new Point(0, 0);
-			_instructionTextBox.Multiline = false;
-			_instructionTextBox.Name = "mInstructionTextBox";
-			_instructionTextBox.Size = new Size(39, 21);
-			_instructionTextBox.TabIndex = 0;
-			_instructionTextBox.KeyDown += This_KeyDown;
-			_instructionTextBox.ValueChanged += InstructionTextBox_ValueChanged;
-			_instructionTextBox.AddressSelected += InstructionTextBox_AddressSelected;
-			_instructionTextBox.MouseWheel += InstructionTextBox_MouseWheel;
+			this.instructionTextBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
+			this.instructionTextBox.Dock = DockStyle.Fill;
+			this.instructionTextBox.BorderStyle = BorderStyle.None;
+			this.instructionTextBox.Location = new Point(0, 0);
+			this.instructionTextBox.Multiline = false;
+			this.instructionTextBox.Name = "mInstructionTextBox";
+			this.instructionTextBox.Size = new Size(39, 21);
+			this.instructionTextBox.TabIndex = 0;
+			this.instructionTextBox.KeyDown += This_KeyDown;
+			this.instructionTextBox.ValueChanged += InstructionTextBox_ValueChanged;
+			this.instructionTextBox.AddressSelected += InstructionTextBox_AddressSelected;
+			this.instructionTextBox.MouseWheel += InstructionTextBox_MouseWheel;
 
-			_instructionPanel.Controls.Add(_instructionTextBox);
-			_instructionPanel.Anchor = AnchorStyles.Left | AnchorStyles.Top;
-			_instructionPanel.Location = new Point(_equalsLabel.Right, _fullWordEditor.Top);
-			_instructionPanel.Size = new Size(_instructionTextBox.Width, 21);
-			_instructionPanel.TabIndex = 4;
-			_instructionPanel.BorderStyle = BorderStyle.FixedSingle;
+			this.instructionPanel.Controls.Add(this.instructionTextBox);
+			this.instructionPanel.Anchor = AnchorStyles.Left | AnchorStyles.Top;
+			this.instructionPanel.Location = new Point(this.equalsLabel.Right, this.fullWordEditor.Top);
+			this.instructionPanel.Size = new Size(this.instructionTextBox.Width, 21);
+			this.instructionPanel.TabIndex = 4;
+			this.instructionPanel.BorderStyle = BorderStyle.FixedSingle;
 
-			_colonLabel3.Location = new Point(_instructionPanel.Right, _addressPanel.Top + 3);
-			_colonLabel3.Anchor = AnchorStyles.Top;
-			_colonLabel3.Name = "mColonLabel3";
-			_colonLabel3.Size = new Size(10, _addressLabel.Height - 3);
-			_colonLabel3.TabIndex = 5;
-			_colonLabel3.Text = "<";
-			_colonLabel3.TextAlign = ContentAlignment.MiddleCenter;
+			this.colonLabel3.Location = new Point(this.instructionPanel.Right, this.addressPanel.Top + 3);
+			this.colonLabel3.Anchor = AnchorStyles.Top;
+			this.colonLabel3.Name = "mColonLabel3";
+			this.colonLabel3.Size = new Size(10, this.addressLabel.Height - 3);
+			this.colonLabel3.TabIndex = 5;
+			this.colonLabel3.Text = "<";
+			this.colonLabel3.TextAlign = ContentAlignment.MiddleCenter;
 
-			_sourceLineLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-			_sourceLineLabel.Location = new Point(_colonLabel3.Right, _instructionPanel.Top);
-			_sourceLineLabel.Size = new Size(79, _instructionPanel.Height);
-			_sourceLineLabel.Name = "mSourceLineLabel";
-			_sourceLineLabel.TabIndex = 6;
-			_sourceLineLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_sourceLineLabel.Text = string.Empty;
-			_sourceLineLabel.TextAlign = ContentAlignment.MiddleLeft;
-			_sourceLineLabel.BorderStyle = BorderStyle.FixedSingle;
-			_sourceLineLabel.AutoEllipsis = true;
+			this.sourceLineLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+			this.sourceLineLabel.Location = new Point(this.colonLabel3.Right, this.instructionPanel.Top);
+			this.sourceLineLabel.Size = new Size(79, this.instructionPanel.Height);
+			this.sourceLineLabel.Name = "mSourceLineLabel";
+			this.sourceLineLabel.TabIndex = 6;
+			this.sourceLineLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.sourceLineLabel.Text = string.Empty;
+			this.sourceLineLabel.TextAlign = ContentAlignment.MiddleLeft;
+			this.sourceLineLabel.BorderStyle = BorderStyle.FixedSingle;
+			this.sourceLineLabel.AutoEllipsis = true;
 
-			_colonLabel2.Location = new Point(_sourceLineLabel.Right, _addressPanel.Top + 3);
-			_colonLabel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-			_colonLabel2.Name = "mColonLabel2";
-			_colonLabel2.Size = new Size(10, _addressLabel.Height - 3);
-			_colonLabel2.TabIndex = 7;
-			_colonLabel2.Text = "x";
-			_colonLabel2.TextAlign = ContentAlignment.MiddleCenter;
+			this.colonLabel2.Location = new Point(this.sourceLineLabel.Right, this.addressPanel.Top + 3);
+			this.colonLabel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			this.colonLabel2.Name = "mColonLabel2";
+			this.colonLabel2.Size = new Size(10, this.addressLabel.Height - 3);
+			this.colonLabel2.TabIndex = 7;
+			this.colonLabel2.Text = "x";
+			this.colonLabel2.TextAlign = ContentAlignment.MiddleCenter;
 
-			_profileLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
-			_profileLabel.Location = new Point(_colonLabel2.Right, _instructionPanel.Top);
-			_profileLabel.Size = new Size(64, _instructionPanel.Height);
-			_profileLabel.Name = "mProfileLabel";
-			_profileLabel.TabIndex = 8;
-			_profileLabel.Text = "0";
-			_profileLabel.TextAlign = ContentAlignment.MiddleRight;
-			_profileLabel.BorderStyle = BorderStyle.FixedSingle;
+			this.profileLabel.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+			this.profileLabel.Location = new Point(this.colonLabel2.Right, this.instructionPanel.Top);
+			this.profileLabel.Size = new Size(64, this.instructionPanel.Height);
+			this.profileLabel.Name = "mProfileLabel";
+			this.profileLabel.TabIndex = 8;
+			this.profileLabel.Text = "0";
+			this.profileLabel.TextAlign = ContentAlignment.MiddleRight;
+			this.profileLabel.BorderStyle = BorderStyle.FixedSingle;
 
-			Controls.Add(_addressPanel);
-			Controls.Add(_colonLabel);
-			Controls.Add(_fullWordEditor);
-			Controls.Add(_equalsLabel);
-			Controls.Add(_instructionPanel);
-			Controls.Add(_colonLabel3);
-			Controls.Add(_sourceLineLabel);
-			Controls.Add(_colonLabel2);
-			Controls.Add(_profileLabel);
+			Controls.Add(this.addressPanel);
+			Controls.Add(this.colonLabel);
+			Controls.Add(this.fullWordEditor);
+			Controls.Add(this.equalsLabel);
+			Controls.Add(this.instructionPanel);
+			Controls.Add(this.colonLabel3);
+			Controls.Add(this.sourceLineLabel);
+			Controls.Add(this.colonLabel2);
+			Controls.Add(this.profileLabel);
 			Name = "MemoryWordEditor";
-			Size = new Size(_profileLabel.Right + 2, _instructionPanel.Height + 3);
+			Size = new Size(this.profileLabel.Right + 2, this.instructionPanel.Height + 3);
 			KeyDown += This_KeyDown;
 			Layout += This_Layout;
 
-			_addressPanel.ResumeLayout(false);
+			this.addressPanel.ResumeLayout(false);
 			ResumeLayout(false);
 		}
 
 		private void This_Layout(object sender, LayoutEventArgs e)
 		{
 
-			int sourceWidth = Width - (_addressPanel.Width + _colonLabel.Width + _fullWordEditor.Width + _equalsLabel.Width + 2);
+			int sourceWidth = Width - (this.addressPanel.Width + this.colonLabel.Width + this.fullWordEditor.Width + this.equalsLabel.Width + 2);
 			if (ExecutionSettings.ProfilingEnabled)
-				sourceWidth -= _colonLabel2.Width + _profileLabel.Width;
+				sourceWidth -= this.colonLabel2.Width + this.profileLabel.Width;
 
 			if (!GuiSettings.ShowSourceInline)
 			{
-				_instructionPanel.Width = sourceWidth;
+				this.instructionPanel.Width = sourceWidth;
 				return;
 			}
 
-			_instructionPanel.Width = (sourceWidth - _colonLabel3.Width) / 3;
-			_colonLabel3.Left = _instructionPanel.Right;
-			_sourceLineLabel.Left = _colonLabel3.Right;
-			_sourceLineLabel.Width = sourceWidth - (_colonLabel3.Width + _instructionPanel.Width);
+			this.instructionPanel.Width = (sourceWidth - this.colonLabel3.Width) / 3;
+			this.colonLabel3.Left = this.instructionPanel.Right;
+			this.sourceLineLabel.Left = this.colonLabel3.Right;
+			this.sourceLineLabel.Width = sourceWidth - (this.colonLabel3.Width + this.instructionPanel.Width);
 			SetSourceLineLabelToolTip();
 		}
 
 		private void SetSourceLineLabelToolTip()
-			=> _toolTip?.SetToolTip(_sourceLineLabel, _sourceLineLabel.PreferredWidth > _sourceLineLabel.Width && !string.IsNullOrEmpty(_memoryWord.SourceLine) ? _memoryWord.SourceLine : null);
+			=> this.toolTip?.SetToolTip(this.sourceLineLabel, this.sourceLineLabel.PreferredWidth > this.sourceLineLabel.Width && !string.IsNullOrEmpty(this.memoryWord.SourceLine) ? this.memoryWord.SourceLine : null);
 
 		private static Color Interpolate(Color color1, Color color2, double fraction)
 		{
@@ -279,39 +279,39 @@ namespace MixGui.Components
 
 		private void UpdateProfilingCount()
 		{
-			long count = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick ? _memoryWord.ProfilingTickCount : _memoryWord.ProfilingExecutionCount;
+			long count = GuiSettings.ShowProfilingInfo == GuiSettings.ProfilingInfoType.Tick ? this.memoryWord.ProfilingTickCount : this.memoryWord.ProfilingExecutionCount;
 			long max;
-			_profileLabel.Text = count.ToString();
+			this.profileLabel.Text = count.ToString();
 
 			if (count == 0 || !GuiSettings.ColorProfilingCounts || GetMaxProfilingCount == null || (max = GetMaxProfilingCount(GuiSettings.ShowProfilingInfo)) == 0)
 			{
-				_profileLabel.BackColor = _colonLabel2.BackColor;
-				_profileLabel.ForeColor = _colonLabel2.ForeColor;
+				this.profileLabel.BackColor = this.colonLabel2.BackColor;
+				this.profileLabel.ForeColor = this.colonLabel2.ForeColor;
 			}
 			else
 			{
 				var backColor = GetBlendedColor((double)count / max);
-				_profileLabel.BackColor = backColor;
-				_profileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
+				this.profileLabel.BackColor = backColor;
+				this.profileLabel.ForeColor = 255 - (int)(backColor.R * 0.299 + backColor.G * 0.587 + backColor.B * 0.114) < 105 ? Color.Black : Color.White;
 			}
 		}
 
 		private void UpdateShowSourceInlineLayout(bool force = false)
 		{
-			if (!force && _sourceLineLabel.Visible == GuiSettings.ShowSourceInline)
+			if (!force && this.sourceLineLabel.Visible == GuiSettings.ShowSourceInline)
 				return;
 
 			if (!GuiSettings.ShowSourceInline)
 			{
-				_colonLabel3.Visible = false;
-				_sourceLineLabel.Visible = false;
-				_instructionTextBox.ShowSourceLineToolTip = true;
+				this.colonLabel3.Visible = false;
+				this.sourceLineLabel.Visible = false;
+				this.instructionTextBox.ShowSourceLineToolTip = true;
 			}
 			else
 			{
-				_colonLabel3.Visible = true;
-				_sourceLineLabel.Visible = true;
-				_instructionTextBox.ShowSourceLineToolTip = false;
+				this.colonLabel3.Visible = true;
+				this.sourceLineLabel.Visible = true;
+				this.instructionTextBox.ShowSourceLineToolTip = false;
 			}
 		}
 
@@ -321,33 +321,33 @@ namespace MixGui.Components
 			if (ExecutionSettings.ProfilingEnabled)
 				UpdateProfilingCount();
 
-			if (!force && _profileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
+			if (!force && this.profileLabel.Enabled == ExecutionSettings.ProfilingEnabled)
 				return;
 
 			if (!ExecutionSettings.ProfilingEnabled)
 			{
-				_colonLabel2.Visible = false;
-				_profileLabel.Visible = false;
-				_profileLabel.Enabled = false;
+				this.colonLabel2.Visible = false;
+				this.profileLabel.Visible = false;
+				this.profileLabel.Enabled = false;
 			}
 			else
 			{
-				_colonLabel2.Visible = true;
-				_profileLabel.Visible = true;
-				_profileLabel.Enabled = true;
+				this.colonLabel2.Visible = true;
+				this.profileLabel.Visible = true;
+				this.profileLabel.Enabled = true;
 			}
 		}
 
 		public int MemoryMinIndex
 		{
-			get => _instructionTextBox.MemoryMinIndex;
-			set => _instructionTextBox.MemoryMinIndex = value;
+			get => this.instructionTextBox.MemoryMinIndex;
+			set => this.instructionTextBox.MemoryMinIndex = value;
 		}
 
 		public int MemoryMaxIndex
 		{
-			get => _instructionTextBox.MemoryMaxIndex;
-			set => _instructionTextBox.MemoryMaxIndex = value;
+			get => this.instructionTextBox.MemoryMaxIndex;
+			set => this.instructionTextBox.MemoryMaxIndex = value;
 		}
 
 		private void This_KeyDown(object sender, KeyEventArgs e)
@@ -356,7 +356,7 @@ namespace MixGui.Components
 				return;
 
 			FieldTypes editorField = FieldTypes.Instruction;
-			int? index = _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength;
+			int? index = this.instructionTextBox.SelectionStart + this.instructionTextBox.SelectionLength;
 
 			if (e is FieldKeyEventArgs args)
 			{
@@ -376,11 +376,11 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Right:
-					if (sender == _fullWordEditor)
+					if (sender == this.fullWordEditor)
 					{
-						_instructionTextBox.Focus();
+						this.instructionTextBox.Focus();
 					}
-					else if (sender == _instructionTextBox && _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength == _instructionTextBox.TextLength && NavigationKeyDown != null)
+					else if (sender == this.instructionTextBox && this.instructionTextBox.SelectionStart + this.instructionTextBox.SelectionLength == this.instructionTextBox.TextLength && NavigationKeyDown != null)
 					{
 						NavigationKeyDown(this, e);
 						e.Handled = true;
@@ -389,13 +389,13 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Left:
-					if (sender == _fullWordEditor)
+					if (sender == this.fullWordEditor)
 					{
 						NavigationKeyDown?.Invoke(this, e);
 					}
-					else if (sender == _instructionTextBox && _instructionTextBox.SelectionStart + _instructionTextBox.SelectionLength == 0)
+					else if (sender == this.instructionTextBox && this.instructionTextBox.SelectionStart + this.instructionTextBox.SelectionLength == 0)
 					{
-						_fullWordEditor.Focus(FieldTypes.Chars, null);
+						this.fullWordEditor.Focus(FieldTypes.Chars, null);
 						e.Handled = true;
 					}
 
@@ -405,22 +405,22 @@ namespace MixGui.Components
 
 		private void InstructionTextBox_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			_fullWordEditor.Update();
+			this.fullWordEditor.Update();
 			OnValueChanged(args);
 		}
 
 		private void FullWordEditor_ValueChanged(IWordEditor sender, WordEditorValueChangedEventArgs args)
 		{
-			_instructionTextBox.Update();
+			this.instructionTextBox.Update();
 			OnValueChanged(args);
 		}
 
 		public new void Update()
 		{
-			_fullWordEditor.Update();
-			_instructionTextBox.Update();
+			this.fullWordEditor.Update();
+			this.instructionTextBox.Update();
 
-			if (_profileLabel.Enabled)
+			if (this.profileLabel.Enabled)
 				UpdateProfilingCount();
 
 			base.Update();
@@ -428,12 +428,12 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			_addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_addressPanel.BackColor = _marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
+			this.addressLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.addressLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.addressPanel.BackColor = this.marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 
-			_fullWordEditor.UpdateLayout();
-			_instructionTextBox.UpdateLayout();
+			this.fullWordEditor.UpdateLayout();
+			this.instructionTextBox.UpdateLayout();
 
 			UpdateShowSourceInlineLayout();
 			UpdateProfilingLayout();
@@ -441,82 +441,82 @@ namespace MixGui.Components
 
 		public bool BreakPointChecked
 		{
-			get => _breakPointBox.Checked;
-			set => _breakPointBox.Checked = value;
+			get => this.breakPointBox.Checked;
+			set => this.breakPointBox.Checked = value;
 		}
 
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
-			get => _instructionTextBox.IndexedAddressCalculatorCallback;
-			set => _instructionTextBox.IndexedAddressCalculatorCallback = value;
+			get => this.instructionTextBox.IndexedAddressCalculatorCallback;
+			set => this.instructionTextBox.IndexedAddressCalculatorCallback = value;
 		}
 
 		public bool Marked
 		{
-			get => _marked;
+			get => this.marked;
 			set
 			{
-				if (_marked != value)
+				if (this.marked != value)
 				{
-					_marked = value;
-					_addressPanel.BackColor = _marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
+					this.marked = value;
+					this.addressPanel.BackColor = this.marked ? GuiSettings.GetColor(GuiSettings.ProgramCounterAddressBackground) : Color.Transparent;
 				}
 			}
 		}
 
 		public IMemoryFullWord MemoryWord
 		{
-			get => _memoryWord;
+			get => this.memoryWord;
 			set
 			{
-				_memoryWord = value ?? throw new ArgumentNullException(nameof(value), "MemoryWord may not be set to null");
-				var text = _memoryWord.Index.ToString("D4");
+				this.memoryWord = value ?? throw new ArgumentNullException(nameof(value), "MemoryWord may not be set to null");
+				var text = this.memoryWord.Index.ToString("D4");
 
-				if (_memoryWord.Index == 0)
+				if (this.memoryWord.Index == 0)
 					text = " " + text;
 
-				else if (_memoryWord.Index > 0)
+				else if (this.memoryWord.Index > 0)
 					text = "+" + text;
 
-				_addressLabel.Text = text;
-				_instructionTextBox.MemoryAddress = _memoryWord.Index;
-				_fullWordEditor.WordValue = _memoryWord;
-				_instructionTextBox.InstructionWord = _memoryWord;
-				_sourceLineLabel.Text = _memoryWord.SourceLine ?? string.Empty;
+				this.addressLabel.Text = text;
+				this.instructionTextBox.MemoryAddress = this.memoryWord.Index;
+				this.fullWordEditor.WordValue = this.memoryWord;
+				this.instructionTextBox.InstructionWord = this.memoryWord;
+				this.sourceLineLabel.Text = this.memoryWord.SourceLine ?? string.Empty;
 
 				SetSourceLineLabelToolTip();
 
-				if (_profileLabel.Enabled)
+				if (this.profileLabel.Enabled)
 					UpdateProfilingCount();
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _readOnly;
+			get => this.readOnly;
 			set
 			{
-				if (_readOnly == value)
+				if (this.readOnly == value)
 					return;
 
-				_readOnly = value;
-				_fullWordEditor.ReadOnly = _readOnly;
-				_instructionTextBox.ReadOnly = _readOnly;
+				this.readOnly = value;
+				this.fullWordEditor.ReadOnly = this.readOnly;
+				this.instructionTextBox.ReadOnly = this.readOnly;
 			}
 		}
 
 		public SymbolCollection Symbols
 		{
-			get => _instructionTextBox.Symbols;
-			set => _instructionTextBox.Symbols = value;
+			get => this.instructionTextBox.Symbols;
+			set => this.instructionTextBox.Symbols = value;
 		}
 
 		public ToolTip ToolTip
 		{
 			set
 			{
-				_toolTip = value;
-				_instructionTextBox.ToolTip = _toolTip;
+				this.toolTip = value;
+				this.instructionTextBox.ToolTip = this.toolTip;
 			}
 		}
 
@@ -535,10 +535,10 @@ namespace MixGui.Components
 		public void Select(int start, int length)
 		{
 			if (FocusedField == FieldTypes.Instruction)
-				_instructionTextBox.Select(start, length);
+				this.instructionTextBox.Select(start, length);
 
 			else
-				_fullWordEditor.Select(start, length);
+				this.fullWordEditor.Select(start, length);
 		}
 	}
 }

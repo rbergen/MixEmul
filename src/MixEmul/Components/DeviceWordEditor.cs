@@ -9,10 +9,10 @@ namespace MixGui.Components
 {
 	public class DeviceWordEditor : UserControl, IWordEditor, INavigableControl
 	{
-		private readonly Label _wordIndexLabel;
-		private readonly FullWordEditor _fullWordEditor;
-		private int _wordIndex;
-		private IFullWord _deviceWord;
+		private readonly Label wordIndexLabel;
+		private readonly FullWordEditor fullWordEditor;
+		private int wordIndex;
+		private IFullWord deviceWord;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
@@ -21,9 +21,9 @@ namespace MixGui.Components
 
 		public DeviceWordEditor(IFullWord deviceWord)
 		{
-			_deviceWord = deviceWord ?? new FullWord();
-			_fullWordEditor = new FullWordEditor(_deviceWord);
-			_wordIndexLabel = new Label();
+			this.deviceWord = deviceWord ?? new FullWord();
+			this.fullWordEditor = new FullWordEditor(this.deviceWord);
+			this.wordIndexLabel = new Label();
 			InitializeComponent();
 		}
 
@@ -31,16 +31,16 @@ namespace MixGui.Components
 			=> this;
 
 		public FieldTypes? FocusedField
-			=> _fullWordEditor.FocusedField;
+			=> this.fullWordEditor.FocusedField;
 
 		public int? CaretIndex
-			=> _fullWordEditor.CaretIndex;
+			=> this.fullWordEditor.CaretIndex;
 
 		public bool Focus(FieldTypes? field, int? index)
-			=> _fullWordEditor.Focus(field, index);
+			=> this.fullWordEditor.Focus(field, index);
 
 		public void Select(int start, int length)
-			=> _fullWordEditor.Select(start, length);
+			=> this.fullWordEditor.Select(start, length);
 
 		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
@@ -51,24 +51,24 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			_wordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_wordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_wordIndexLabel.Location = new Point(0, 4);
-			_wordIndexLabel.Name = "mWordIndexLabel";
-			_wordIndexLabel.Size = new Size(30, 13);
-			_wordIndexLabel.TabIndex = 0;
-			_wordIndexLabel.Text = "00:";
+			this.wordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.wordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.wordIndexLabel.Location = new Point(0, 4);
+			this.wordIndexLabel.Name = "mWordIndexLabel";
+			this.wordIndexLabel.Size = new Size(30, 13);
+			this.wordIndexLabel.TabIndex = 0;
+			this.wordIndexLabel.Text = "00:";
 
-			_fullWordEditor.Location = new Point(_wordIndexLabel.Right, 2);
-			_fullWordEditor.Name = "mFullWordEditor";
-			_fullWordEditor.TabIndex = 1;
-			_fullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
-			_fullWordEditor.NavigationKeyDown += This_KeyDown;
+			this.fullWordEditor.Location = new Point(this.wordIndexLabel.Right, 2);
+			this.fullWordEditor.Name = "mFullWordEditor";
+			this.fullWordEditor.TabIndex = 1;
+			this.fullWordEditor.ValueChanged += MFullWordEditor_ValueChanged;
+			this.fullWordEditor.NavigationKeyDown += This_KeyDown;
 
-			Controls.Add(_wordIndexLabel);
-			Controls.Add(_fullWordEditor);
+			Controls.Add(this.wordIndexLabel);
+			Controls.Add(this.fullWordEditor);
 			Name = "DeviceWordEditor";
-			Size = new Size(_fullWordEditor.Right + 2, _fullWordEditor.Height + 3);
+			Size = new Size(this.fullWordEditor.Right + 2, this.fullWordEditor.Height + 3);
 			KeyDown += This_KeyDown;
 			ResumeLayout(false);
 		}
@@ -91,41 +91,41 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			_fullWordEditor.Update();
+			this.fullWordEditor.Update();
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			_wordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_wordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_fullWordEditor.UpdateLayout();
+			this.wordIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.wordIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.fullWordEditor.UpdateLayout();
 		}
 
 		public int WordIndex
 		{
-			get => _wordIndex;
+			get => this.wordIndex;
 			set
 			{
-				_wordIndex = value;
-				_wordIndexLabel.Text = value.ToString("D2") + ":";
+				this.wordIndex = value;
+				this.wordIndexLabel.Text = value.ToString("D2") + ":";
 			}
 		}
 
 		public IFullWord DeviceWord
 		{
-			get => _deviceWord;
+			get => this.deviceWord;
 			set
 			{
-				_deviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
-				_fullWordEditor.WordValue = _deviceWord;
+				this.deviceWord = value ?? throw new ArgumentNullException(nameof(value), "DeviceWord may not be set to null");
+				this.fullWordEditor.WordValue = this.deviceWord;
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _fullWordEditor.ReadOnly;
-			set => _fullWordEditor.ReadOnly = value;
+			get => this.fullWordEditor.ReadOnly;
+			set => this.fullWordEditor.ReadOnly = value;
 		}
 
 		public IWord WordValue

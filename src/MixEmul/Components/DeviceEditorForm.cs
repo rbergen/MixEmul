@@ -15,70 +15,70 @@ namespace MixGui.Components
 		private const int PrinterTabIndex = 4;
 		private const int PaperTapeTabIndex = 5;
 
-		private Devices _devices;
-		private int _lastSelectedDisk;
-		private int _lastSelectedTape;
-		private int _lastSelectedDeviceTab;
+		private Devices devices;
+		private int lastSelectedDisk;
+		private int lastSelectedTape;
+		private int lastSelectedDeviceTab;
 
 		public DeviceEditorForm(Devices devices = null)
 		{
 			InitializeComponent();
 
-			_diskEditor.Initialize(DiskDevice.SectorCount, DiskDevice.WordsPerSector, DiskDevice.OpenStream, DiskDevice.CalculateBytePosition, BinaryReadStep.ReadWords, BinaryWriteStep.WriteWords);
-			_tapeEditor.Initialize(TapeDevice.CalculateRecordCount, TapeDevice.WordsPerRecord, FileBasedDevice.OpenStream, TapeDevice.CalculateBytePosition, BinaryReadStep.ReadWords, BinaryWriteStep.WriteWords);
-			_cardReaderEditor.Initialize(CardReaderDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
-			_cardWriterEditor.Initialize(CardWriterDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
-			_printerEditor.Initialize(PrinterDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
-			_paperTapeEditor.Initialize(PaperTapeDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
+			this.diskEditor.Initialize(DiskDevice.SectorCount, DiskDevice.WordsPerSector, DiskDevice.OpenStream, DiskDevice.CalculateBytePosition, BinaryReadStep.ReadWords, BinaryWriteStep.WriteWords);
+			this.tapeEditor.Initialize(TapeDevice.CalculateRecordCount, TapeDevice.WordsPerRecord, FileBasedDevice.OpenStream, TapeDevice.CalculateBytePosition, BinaryReadStep.ReadWords, BinaryWriteStep.WriteWords);
+			this.cardReaderEditor.Initialize(CardReaderDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
+			this.cardWriterEditor.Initialize(CardWriterDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
+			this.printerEditor.Initialize(PrinterDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
+			this.paperTapeEditor.Initialize(PaperTapeDevice.BytesPerRecord, FileBasedDevice.OpenStream, TextReadStep.ReadBytes, TextWriteStep.WriteBytes);
 
 			Devices = devices;
 
-			_lastSelectedDeviceTab = 0;
+			this.lastSelectedDeviceTab = 0;
 		}
 
 		private void CloseButton_Click(object sender, EventArgs e)
 			=> Hide();
 
 		private void TapeDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteBinaryDeviceFile(_tapeSelectorComboBox.SelectedItem.ToString(), _tapeEditor);
+			=> DeleteBinaryDeviceFile(this.tapeSelectorComboBox.SelectedItem.ToString(), this.tapeEditor);
 
 		private void DiskDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteBinaryDeviceFile(_diskSelectorComboBox.SelectedItem.ToString(), _diskEditor);
+			=> DeleteBinaryDeviceFile(this.diskSelectorComboBox.SelectedItem.ToString(), this.diskEditor);
 
 		private void CardReaderDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteTextDeviceFile("card reader", _cardReaderEditor);
+			=> DeleteTextDeviceFile("card reader", this.cardReaderEditor);
 
 		private void CardPunchDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteTextDeviceFile("card punch", _cardWriterEditor);
+			=> DeleteTextDeviceFile("card punch", this.cardWriterEditor);
 
 		private void PrinterDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteTextDeviceFile("printer", _printerEditor);
+			=> DeleteTextDeviceFile("printer", this.printerEditor);
 
 		private void PaperTapeDeleteButton_Click(object sender, EventArgs e)
-			=> DeleteTextDeviceFile("paper tape", _paperTapeEditor);
+			=> DeleteTextDeviceFile("paper tape", this.paperTapeEditor);
 
 		private void DiskSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (_lastSelectedDisk == _diskSelectorComboBox.SelectedIndex)
+			if (this.lastSelectedDisk == this.diskSelectorComboBox.SelectedIndex)
 				return;
 
 			if (UpdateDiskControls())
-				_lastSelectedDisk = _diskSelectorComboBox.SelectedIndex;
+				this.lastSelectedDisk = this.diskSelectorComboBox.SelectedIndex;
 
 			else
-				_diskSelectorComboBox.SelectedIndex = _lastSelectedDisk;
+				this.diskSelectorComboBox.SelectedIndex = this.lastSelectedDisk;
 		}
 
 		private void TapeSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (_lastSelectedTape == _tapeSelectorComboBox.SelectedIndex)
+			if (this.lastSelectedTape == this.tapeSelectorComboBox.SelectedIndex)
 				return;
 
 			if (UpdateTapeControls())
-				_lastSelectedTape = _tapeSelectorComboBox.SelectedIndex;
+				this.lastSelectedTape = this.tapeSelectorComboBox.SelectedIndex;
 
 			else
-				_tapeSelectorComboBox.SelectedIndex = _lastSelectedTape;
+				this.tapeSelectorComboBox.SelectedIndex = this.lastSelectedTape;
 		}
 
 		public new void Hide()
@@ -92,96 +92,96 @@ namespace MixGui.Components
 			switch (device)
 			{
 				case DiskDevice:
-					_deviceTypeTabs.SelectedIndex = DisksTabIndex;
-					_diskSelectorComboBox.SelectedItem = device;
+					this.deviceTypeTabs.SelectedIndex = DisksTabIndex;
+					this.diskSelectorComboBox.SelectedItem = device;
 					break;
 
 				case TapeDevice:
-					_deviceTypeTabs.SelectedIndex = TapesTabIndex;
-					_tapeSelectorComboBox.SelectedItem = device;
+					this.deviceTypeTabs.SelectedIndex = TapesTabIndex;
+					this.tapeSelectorComboBox.SelectedItem = device;
 					break;
 
 				case CardReaderDevice:
-					_deviceTypeTabs.SelectedIndex = CardReaderTabIndex;
+					this.deviceTypeTabs.SelectedIndex = CardReaderTabIndex;
 					break;
 
 				case CardWriterDevice:
-					_deviceTypeTabs.SelectedIndex = CardWriterTabIndex;
+					this.deviceTypeTabs.SelectedIndex = CardWriterTabIndex;
 					break;
 
 				case PrinterDevice:
-					_deviceTypeTabs.SelectedIndex = PrinterTabIndex;
+					this.deviceTypeTabs.SelectedIndex = PrinterTabIndex;
 					break;
 
 				case PaperTapeDevice:
-					_deviceTypeTabs.SelectedIndex = PaperTapeTabIndex;
+					this.deviceTypeTabs.SelectedIndex = PaperTapeTabIndex;
 					break;
 			}
 		}
 
 		public Devices Devices
 		{
-			get => _devices;
+			get => this.devices;
 			set
 			{
 				if (value == null)
 					return;
 
-				if (_devices != null)
+				if (this.devices != null)
 					throw new InvalidOperationException("value may only be set once");
 
-				_devices = value;
+				this.devices = value;
 				FileBasedDevice fileDevice;
 
-				foreach (MixDevice device in _devices)
+				foreach (MixDevice device in this.devices)
 				{
 					switch (device)
 					{
 						case DiskDevice:
-							_diskSelectorComboBox.Items.Add(device);
+							this.diskSelectorComboBox.Items.Add(device);
 							break;
 
 						case TapeDevice:
-							_tapeSelectorComboBox.Items.Add(device);
+							this.tapeSelectorComboBox.Items.Add(device);
 							break;
 
 						case CardReaderDevice:
 							fileDevice = (FileBasedDevice)device;
-							_cardReaderEditor.SetDevice(fileDevice);
-							_cardReaderPathBox.Text = fileDevice.FilePath;
+							this.cardReaderEditor.SetDevice(fileDevice);
+							this.cardReaderPathBox.Text = fileDevice.FilePath;
 							break;
 
 						case CardWriterDevice:
 							fileDevice = (FileBasedDevice)device;
-							_cardWriterEditor.SetDevice(fileDevice);
-							_cardWriterPathBox.Text = fileDevice.FilePath;
+							this.cardWriterEditor.SetDevice(fileDevice);
+							this.cardWriterPathBox.Text = fileDevice.FilePath;
 							break;
 
 						case PrinterDevice:
 							fileDevice = (FileBasedDevice)device;
-							_printerEditor.SetDevice(fileDevice);
-							_printerPathBox.Text = fileDevice.FilePath;
+							this.printerEditor.SetDevice(fileDevice);
+							this.printerPathBox.Text = fileDevice.FilePath;
 							break;
 
 						case PaperTapeDevice:
 							fileDevice = (FileBasedDevice)device;
-							_paperTapeEditor.SetDevice(fileDevice);
-							_paperTapePathBox.Text = fileDevice.FilePath;
+							this.paperTapeEditor.SetDevice(fileDevice);
+							this.paperTapePathBox.Text = fileDevice.FilePath;
 							break;
 					}
 				}
 
-				_lastSelectedDisk = 0;
+				this.lastSelectedDisk = 0;
 
-				if (_diskSelectorComboBox.Items.Count > 0)
-					_diskSelectorComboBox.SelectedIndex = 0;
+				if (this.diskSelectorComboBox.Items.Count > 0)
+					this.diskSelectorComboBox.SelectedIndex = 0;
 
 				UpdateDiskControls();
 
-				_lastSelectedTape = 0;
+				this.lastSelectedTape = 0;
 
-				if (_tapeSelectorComboBox.Items.Count > 0)
-					_tapeSelectorComboBox.SelectedIndex = 0;
+				if (this.tapeSelectorComboBox.Items.Count > 0)
+					this.tapeSelectorComboBox.SelectedIndex = 0;
 
 				UpdateTapeControls();
 			}
@@ -189,35 +189,35 @@ namespace MixGui.Components
 
 		public void UpdateSettings()
 		{
-			_tapeEditor.UpdateSettings();
-			_diskEditor.UpdateSettings();
-			_cardReaderEditor.UpdateSettings();
-			_cardWriterEditor.UpdateSettings();
-			_printerEditor.UpdateSettings();
-			_paperTapeEditor.UpdateSettings();
+			this.tapeEditor.UpdateSettings();
+			this.diskEditor.UpdateSettings();
+			this.cardReaderEditor.UpdateSettings();
+			this.cardWriterEditor.UpdateSettings();
+			this.printerEditor.UpdateSettings();
+			this.paperTapeEditor.UpdateSettings();
 
 			UpdateTapeControls();
 			UpdateDiskControls();
-			_cardReaderPathBox.Text = _cardReaderEditor.Device.FilePath;
-			_cardWriterPathBox.Text = _cardWriterEditor.Device.FilePath;
-			_printerPathBox.Text = _printerEditor.Device.FilePath;
-			_paperTapePathBox.Text = _paperTapeEditor.Device.FilePath;
+			this.cardReaderPathBox.Text = this.cardReaderEditor.Device.FilePath;
+			this.cardWriterPathBox.Text = this.cardWriterEditor.Device.FilePath;
+			this.printerPathBox.Text = this.printerEditor.Device.FilePath;
+			this.paperTapePathBox.Text = this.paperTapeEditor.Device.FilePath;
 		}
 
 		private bool UpdateDiskControls()
 		{
 			bool success = true;
 
-			if (_lastSelectedDisk != _diskSelectorComboBox.SelectedIndex)
-				success = _diskEditor.SaveCurrentSector();
+			if (this.lastSelectedDisk != this.diskSelectorComboBox.SelectedIndex)
+				success = this.diskEditor.SaveCurrentSector();
 
 			if (success)
 			{
-				var selectedDisk = (DiskDevice)_diskSelectorComboBox.SelectedItem;
-				success = _diskEditor.SetDevice(selectedDisk);
+				var selectedDisk = (DiskDevice)this.diskSelectorComboBox.SelectedItem;
+				success = this.diskEditor.SetDevice(selectedDisk);
 
 				if (success)
-					_diskPathBox.Text = selectedDisk.FilePath;
+					this.diskPathBox.Text = selectedDisk.FilePath;
 			}
 
 			return success;
@@ -225,28 +225,28 @@ namespace MixGui.Components
 
 		public void UpdateLayout()
 		{
-			_tapeEditor.UpdateLayout();
-			_diskEditor.UpdateLayout();
-			_cardReaderEditor.UpdateLayout();
-			_cardWriterEditor.UpdateLayout();
-			_printerEditor.UpdateLayout();
-			_paperTapeEditor.UpdateLayout();
+			this.tapeEditor.UpdateLayout();
+			this.diskEditor.UpdateLayout();
+			this.cardReaderEditor.UpdateLayout();
+			this.cardWriterEditor.UpdateLayout();
+			this.printerEditor.UpdateLayout();
+			this.paperTapeEditor.UpdateLayout();
 		}
 
 		private bool UpdateTapeControls()
 		{
 			bool success = true;
 
-			if (_lastSelectedTape != _tapeSelectorComboBox.SelectedIndex)
-				success = _tapeEditor.SaveCurrentSector();
+			if (this.lastSelectedTape != this.tapeSelectorComboBox.SelectedIndex)
+				success = this.tapeEditor.SaveCurrentSector();
 
 			if (success)
 			{
-				var selectedTape = (TapeDevice)_tapeSelectorComboBox.SelectedItem;
-				success = _tapeEditor.SetDevice(selectedTape);
+				var selectedTape = (TapeDevice)this.tapeSelectorComboBox.SelectedItem;
+				success = this.tapeEditor.SetDevice(selectedTape);
 
 				if (success)
-					_tapePathBox.Text = selectedTape.FilePath;
+					this.tapePathBox.Text = selectedTape.FilePath;
 			}
 
 			return success;
@@ -254,22 +254,22 @@ namespace MixGui.Components
 
 		private void DeviceEditorForm_ResizeBegin(object sender, EventArgs e)
 		{
-			_diskEditor.ResizeInProgress = true;
-			_tapeEditor.ResizeInProgress = true;
-			_cardReaderEditor.ResizeInProgress = true;
-			_cardWriterEditor.ResizeInProgress = true;
-			_printerEditor.ResizeInProgress = true;
-			_paperTapeEditor.ResizeInProgress = true;
+			this.diskEditor.ResizeInProgress = true;
+			this.tapeEditor.ResizeInProgress = true;
+			this.cardReaderEditor.ResizeInProgress = true;
+			this.cardWriterEditor.ResizeInProgress = true;
+			this.printerEditor.ResizeInProgress = true;
+			this.paperTapeEditor.ResizeInProgress = true;
 		}
 
 		private void DeviceEditorForm_ResizeEnd(object sender, EventArgs e)
 		{
-			_diskEditor.ResizeInProgress = false;
-			_tapeEditor.ResizeInProgress = false;
-			_cardReaderEditor.ResizeInProgress = false;
-			_cardWriterEditor.ResizeInProgress = false;
-			_printerEditor.ResizeInProgress = false;
-			_paperTapeEditor.ResizeInProgress = false;
+			this.diskEditor.ResizeInProgress = false;
+			this.tapeEditor.ResizeInProgress = false;
+			this.cardReaderEditor.ResizeInProgress = false;
+			this.cardWriterEditor.ResizeInProgress = false;
+			this.printerEditor.ResizeInProgress = false;
+			this.paperTapeEditor.ResizeInProgress = false;
 		}
 
 		private void DeviceEditorForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -281,44 +281,44 @@ namespace MixGui.Components
 
 		private void DeviceTypeTabs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (_deviceTypeTabs.SelectedIndex == _lastSelectedDeviceTab)
+			if (this.deviceTypeTabs.SelectedIndex == this.lastSelectedDeviceTab)
 				return;
 
 			if (SaveCurrentTabRecord())
-				_lastSelectedDeviceTab = _deviceTypeTabs.SelectedIndex;
+				this.lastSelectedDeviceTab = this.deviceTypeTabs.SelectedIndex;
 
 			else
-				_deviceTypeTabs.SelectedIndex = _lastSelectedDeviceTab;
+				this.deviceTypeTabs.SelectedIndex = this.lastSelectedDeviceTab;
 		}
 
 		private bool SaveCurrentTabRecord()
 		{
 			bool success = true;
 
-			switch (_lastSelectedDeviceTab)
+			switch (this.lastSelectedDeviceTab)
 			{
 				case TapesTabIndex:
-					success = _tapeEditor.SaveCurrentSector();
+					success = this.tapeEditor.SaveCurrentSector();
 					break;
 
 				case DisksTabIndex:
-					success = _diskEditor.SaveCurrentSector();
+					success = this.diskEditor.SaveCurrentSector();
 					break;
 
 				case CardReaderTabIndex:
-					success = _cardReaderEditor.Save();
+					success = this.cardReaderEditor.Save();
 					break;
 
 				case CardWriterTabIndex:
-					success = _cardReaderEditor.Save();
+					success = this.cardReaderEditor.Save();
 					break;
 
 				case PrinterTabIndex:
-					success = _cardReaderEditor.Save();
+					success = this.cardReaderEditor.Save();
 					break;
 
 				case PaperTapeTabIndex:
-					success = _cardReaderEditor.Save();
+					success = this.cardReaderEditor.Save();
 					break;
 			}
 
@@ -339,8 +339,8 @@ namespace MixGui.Components
 
 		private void CardReaderLoadButton_Click(object sender, EventArgs e)
 		{
-			if (_cardReaderLoadFileDialog.ShowDialog(this) == DialogResult.OK)
-				_cardReaderEditor.LoadDeviceFile(_cardReaderLoadFileDialog.FileName);
+			if (this.cardReaderLoadFileDialog.ShowDialog(this) == DialogResult.OK)
+				this.cardReaderEditor.LoadDeviceFile(this.cardReaderLoadFileDialog.FileName);
 		}
 	}
 }

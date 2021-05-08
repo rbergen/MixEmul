@@ -10,23 +10,23 @@
 
 	public class DeviceMixByteCollectionEditor : UserControl, IMixByteCollectionEditor, INavigableControl
 	{
-		private readonly Label _mixByteCollectionIndexLabel;
-		private readonly MixByteCollectionCharTextBox _charTextBox;
-		private int _mixByteCollectionIndex;
-		private IMixByteCollection _deviceMixByteCollection;
-		private int _indexCharCount = 2;
+		private readonly Label mixByteCollectionIndexLabel;
+		private readonly MixByteCollectionCharTextBox charTextBox;
+		private int mixByteCollectionIndex;
+		private IMixByteCollection deviceMixByteCollection;
+		private int indexCharCount = 2;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
 
 		public DeviceMixByteCollectionEditor(IMixByteCollection mixByteCollection = null)
 		{
-			_deviceMixByteCollection = mixByteCollection;
-			if (_deviceMixByteCollection == null)
-				_deviceMixByteCollection = new MixByteCollection(FullWord.ByteCount);
+			this.deviceMixByteCollection = mixByteCollection;
+			if (deviceMixByteCollection == null)
+				this.deviceMixByteCollection = new MixByteCollection(FullWord.ByteCount);
 
-			_charTextBox = new MixByteCollectionCharTextBox(_deviceMixByteCollection);
-			_mixByteCollectionIndexLabel = new Label();
+			this.charTextBox = new MixByteCollectionCharTextBox(this.deviceMixByteCollection);
+			this.mixByteCollectionIndexLabel = new Label();
 			InitializeComponent();
 		}
 
@@ -34,16 +34,16 @@
 			=> this;
 
 		public FieldTypes? FocusedField
-			=> _charTextBox.Focused ? FieldTypes.Chars : null;
+			=> this.charTextBox.Focused ? FieldTypes.Chars : null;
 
 		public int? CaretIndex
-			=> _charTextBox.Focused ? _charTextBox.SelectionStart + _charTextBox.SelectionLength : null;
+			=> this.charTextBox.Focused ? this.charTextBox.SelectionStart + this.charTextBox.SelectionLength : null;
 
 		public void Select(int start, int length)
-			=> _charTextBox.Select(start, length);
+			=> this.charTextBox.Select(start, length);
 
 		public bool Focus(FieldTypes? field, int? index)
-			=> _charTextBox.FocusWithIndex(index);
+			=> this.charTextBox.FocusWithIndex(index);
 
 		protected virtual void OnValueChanged(MixByteCollectionEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
@@ -55,28 +55,28 @@
 		{
 			SuspendLayout();
 
-			_mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_mixByteCollectionIndexLabel.Location = new Point(0, 0);
-			_mixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
-			_mixByteCollectionIndexLabel.Size = new Size(30, 13);
-			_mixByteCollectionIndexLabel.AutoSize = true;
-			_mixByteCollectionIndexLabel.TabIndex = 0;
-			_mixByteCollectionIndexLabel.Text = "00:";
+			this.mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.mixByteCollectionIndexLabel.Location = new Point(0, 0);
+			this.mixByteCollectionIndexLabel.Name = "mMixByteCollectionIndexLabel";
+			this.mixByteCollectionIndexLabel.Size = new Size(30, 13);
+			this.mixByteCollectionIndexLabel.AutoSize = true;
+			this.mixByteCollectionIndexLabel.TabIndex = 0;
+			this.mixByteCollectionIndexLabel.Text = "00:";
 
-			_charTextBox.Location = new Point(_mixByteCollectionIndexLabel.Right, 0);
-			_charTextBox.Name = "mCharTextBox";
-			_charTextBox.TabIndex = 1;
-			_charTextBox.ValueChanged += MixByteCollectionEditor_ValueChanged;
-			_charTextBox.NavigationKeyDown += This_KeyDown;
-			_charTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			_charTextBox.BorderStyle = BorderStyle.None;
-			_charTextBox.Height = 13;
+			this.charTextBox.Location = new Point(this.mixByteCollectionIndexLabel.Right, 0);
+			this.charTextBox.Name = "mCharTextBox";
+			this.charTextBox.TabIndex = 1;
+			this.charTextBox.ValueChanged += MixByteCollectionEditor_ValueChanged;
+			this.charTextBox.NavigationKeyDown += This_KeyDown;
+			this.charTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			this.charTextBox.BorderStyle = BorderStyle.None;
+			this.charTextBox.Height = 13;
 
-			Controls.Add(_mixByteCollectionIndexLabel);
-			Controls.Add(_charTextBox);
+			Controls.Add(this.mixByteCollectionIndexLabel);
+			Controls.Add(this.charTextBox);
 			Name = "DeviceMixByteCollectionEditor";
-			Size = new Size(_charTextBox.Right, _charTextBox.Height);
+			Size = new Size(this.charTextBox.Right, this.charTextBox.Height);
 			KeyDown += This_KeyDown;
 			ResumeLayout(false);
 		}
@@ -99,65 +99,65 @@
 
 		public new void Update()
 		{
-			_charTextBox.Update();
+			this.charTextBox.Update();
 			base.Update();
 		}
 
 		public void UpdateLayout()
 		{
-			_mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
-			_charTextBox.UpdateLayout();
+			this.mixByteCollectionIndexLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.mixByteCollectionIndexLabel.ForeColor = GuiSettings.GetColor(GuiSettings.AddressText);
+			this.charTextBox.UpdateLayout();
 		}
 
 		public int MixByteCollectionIndex
 		{
-			get => _mixByteCollectionIndex;
+			get => this.mixByteCollectionIndex;
 			set
 			{
 				if (value < 0)
 					value = 0;
 
-				_mixByteCollectionIndex = value;
+				this.mixByteCollectionIndex = value;
 				SetIndexLabelText();
 			}
 		}
 
 		private void SetIndexLabelText()
-			=> _mixByteCollectionIndexLabel.Text = _mixByteCollectionIndex.ToString("D" + _indexCharCount) + ":";
+			=> this.mixByteCollectionIndexLabel.Text = this.mixByteCollectionIndex.ToString("D" + this.indexCharCount) + ":";
 
 		public int IndexCharCount
 		{
-			get => _indexCharCount;
+			get => this.indexCharCount;
 			set
 			{
-				if (_indexCharCount == value)
+				if (this.indexCharCount == value)
 					return;
 
-				_indexCharCount = value;
+				this.indexCharCount = value;
 				SetIndexLabelText();
 
-				int oldCharBoxLeft = _charTextBox.Left;
-				_charTextBox.Left = _mixByteCollectionIndexLabel.Right + 3;
-				_charTextBox.Width += oldCharBoxLeft - _charTextBox.Left;
+				int oldCharBoxLeft = this.charTextBox.Left;
+				this.charTextBox.Left = this.mixByteCollectionIndexLabel.Right + 3;
+				this.charTextBox.Width += oldCharBoxLeft - this.charTextBox.Left;
 			}
 		}
 
 		public IMixByteCollection DeviceMixByteCollection
 		{
-			get => _deviceMixByteCollection;
+			get => this.deviceMixByteCollection;
 			set
 			{
-				_deviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
-				_charTextBox.MixByteCollectionValue = _deviceMixByteCollection;
-				_charTextBox.Select(0, 0);
+				this.deviceMixByteCollection = value ?? throw new ArgumentNullException(nameof(value), "DeviceMixByteCollection may not be set to null");
+				this.charTextBox.MixByteCollectionValue = this.deviceMixByteCollection;
+				this.charTextBox.Select(0, 0);
 			}
 		}
 
 		public bool ReadOnly
 		{
-			get => _charTextBox.ReadOnly;
-			set => _charTextBox.ReadOnly = value;
+			get => this.charTextBox.ReadOnly;
+			set => this.charTextBox.ReadOnly = value;
 		}
 
 		public IMixByteCollection MixByteCollectionValue

@@ -13,16 +13,16 @@ namespace MixAssembler.Value
 		private const long FullWordModulusMask = 1L << FullWordBitCount;
 
 		// Holds the mappings of binary operation identifiers to the methods (delegates) that perform the actual action
-		private static readonly SortedList<string, operationDelegate> _binaryOperations = new(new OperationComparator());
+		private static readonly SortedList<string, operationDelegate> binaryOperations = new(new OperationComparator());
 
 		static ExpressionValue()
 		{
-			_binaryOperations["+"] = DoAdd;
-			_binaryOperations["-"] = DoSubstract;
-			_binaryOperations["*"] = DoMultiply;
-			_binaryOperations["/"] = DoDivide;
-			_binaryOperations["//"] = DoFractionDivide;
-			_binaryOperations[":"] = DoCalculateField;
+			binaryOperations["+"] = DoAdd;
+			binaryOperations["-"] = DoSubstract;
+			binaryOperations["*"] = DoMultiply;
+			binaryOperations["/"] = DoDivide;
+			binaryOperations["//"] = DoFractionDivide;
+			binaryOperations[":"] = DoCalculateField;
 		}
 
 		private static IValue DoAdd(IValue left, IValue right, int currentAddress)
@@ -81,7 +81,7 @@ namespace MixAssembler.Value
 			operationDelegate operatorDelegate = null;
 
 			// find the last operator included the expression, if any
-			foreach (KeyValuePair<string, operationDelegate> pair in _binaryOperations)
+			foreach (KeyValuePair<string, operationDelegate> pair in binaryOperations)
 			{
 				string currentOperator = pair.Key;
 

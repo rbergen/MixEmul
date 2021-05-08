@@ -19,83 +19,83 @@ namespace MixGui.Components
 {
 	public class PreferencesForm : Form
 	{
-		private Button _cancelButton;
-		private Button _colorDefaultButton;
-		private ColorDialog _colorDialog;
-		private ComboBox _colorSelectionBox;
-		private Button _colorSetButton;
-		private GroupBox _colorsGroup;
-		private readonly Configuration _configuration;
-		private readonly string _defaultDirectory;
-		private Button _defaultsButton;
-		private TextBox _deviceDirectoryBox;
-		private Button _deviceDirectoryDefaultButton;
-		private Label _deviceDirectoryLabel;
-		private Button _deviceDirectorySetButton;
-		private TextBox _deviceFileBox;
-		private Button _deviceFileDefaultButton;
-		private string _deviceFilesDirectory;
-		private ComboBox _deviceFileSelectionBox;
-		private Button _deviceFileSetButton;
-		private FolderBrowserDialog _deviceFilesFolderBrowserDialog;
-		private GroupBox _deviceFilesGroup;
-		private readonly Devices _devices;
-		private GroupBox _deviceTickCountsGroup;
-		private Button _okButton;
-		private SaveFileDialog _selectDeviceFileDialog;
-		private Label _showColorLabel;
-		private LongValueTextBox _tickCountBox;
-		private Button _tickCountDefaultButton;
-		private ComboBox _tickCountSelectionBox;
-		private GroupBox _miscGroupBox;
-		private Button _deviceReloadIntervalDefaultButton;
-		private Label _deviceReloadIntervalLabel;
-		private ComboBox _deviceReloadIntervalComboBox;
-		private Button _tickCountSetButton;
-		private GroupBox _loaderCardsGroupBox;
-		private Panel _loaderCardsPanel;
-		private MixByteCollectionCharTextBox _loaderCard2TextBox;
-		private MixByteCollectionCharTextBox _loaderCard1TextBox;
-		private MixByteCollectionCharTextBox _loaderCard3TextBox;
-		private MixByteCollectionCharTextBox[] _loaderCardTextBoxes;
-		private Button _loaderCardsDefaultButton;
-		private GroupBox _floatingPointGroupBox;
-		private LongValueTextBox _floatingPointMemoryWordCountBox;
-		private Label _floatingPointMemoryWordCountLabel;
-		private Button _floatingPointMemoryWordCountDefaultButton;
-		private int _deviceReloadInterval;
-		private CheckBox _colorProfilingCountsCheckBox;
-		private int? _floatingPointMemoryWordCount;
+		private Button cancelButton;
+		private Button colorDefaultButton;
+		private ColorDialog colorDialog;
+		private ComboBox colorSelectionBox;
+		private Button colorSetButton;
+		private GroupBox colorsGroup;
+		private readonly Configuration configuration;
+		private readonly string defaultDirectory;
+		private Button defaultsButton;
+		private TextBox deviceDirectoryBox;
+		private Button deviceDirectoryDefaultButton;
+		private Label deviceDirectoryLabel;
+		private Button deviceDirectorySetButton;
+		private TextBox deviceFileBox;
+		private Button deviceFileDefaultButton;
+		private string deviceFilesDirectory;
+		private ComboBox deviceFileSelectionBox;
+		private Button deviceFileSetButton;
+		private FolderBrowserDialog deviceFilesFolderBrowserDialog;
+		private GroupBox deviceFilesGroup;
+		private readonly Devices devices;
+		private GroupBox deviceTickCountsGroup;
+		private Button okButton;
+		private SaveFileDialog selectDeviceFileDialog;
+		private Label showColorLabel;
+		private LongValueTextBox tickCountBox;
+		private Button tickCountDefaultButton;
+		private ComboBox tickCountSelectionBox;
+		private GroupBox miscGroupBox;
+		private Button deviceReloadIntervalDefaultButton;
+		private Label deviceReloadIntervalLabel;
+		private ComboBox deviceReloadIntervalComboBox;
+		private Button tickCountSetButton;
+		private GroupBox loaderCardsGroupBox;
+		private Panel loaderCardsPanel;
+		private MixByteCollectionCharTextBox loaderCard2TextBox;
+		private MixByteCollectionCharTextBox loaderCard1TextBox;
+		private MixByteCollectionCharTextBox loaderCard3TextBox;
+		private MixByteCollectionCharTextBox[] loaderCardTextBoxes;
+		private Button loaderCardsDefaultButton;
+		private GroupBox floatingPointGroupBox;
+		private LongValueTextBox floatingPointMemoryWordCountBox;
+		private Label floatingPointMemoryWordCountLabel;
+		private Button floatingPointMemoryWordCountDefaultButton;
+		private int deviceReloadInterval;
+		private CheckBox colorProfilingCountsCheckBox;
+		private int? floatingPointMemoryWordCount;
 
 		public PreferencesForm(Configuration configuration, Devices devices, string defaultDirectory)
 		{
 			InitializeComponent();
-			_showColorLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.showColorLabel.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 
 			FillDeviceReloadIntervalSelectionBox();
 
-			_configuration = configuration;
-			_devices = devices;
-			_defaultDirectory = defaultDirectory;
-			_deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
+			this.configuration = configuration;
+			this.devices = devices;
+			this.defaultDirectory = defaultDirectory;
+			this.deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 
 			InitializeLoaderCardTextBoxes();
 		}
 
 		private string GetCurrentDeviceFilesDirectory()
-			=> _deviceFilesDirectory ?? DeviceSettings.DefaultDeviceFilesDirectory;
+			=> this.deviceFilesDirectory ?? DeviceSettings.DefaultDeviceFilesDirectory;
 
 		public void UpdateLayout()
-			=> _tickCountBox.UpdateLayout();
+			=> this.tickCountBox.UpdateLayout();
 
 		private void ColorSelectionBox_SelectionChangeCommited(object sender, EventArgs e)
-			=> UpdateColorControls((ColorComboBoxItem)_colorSelectionBox.SelectedItem);
+			=> UpdateColorControls((ColorComboBoxItem)this.colorSelectionBox.SelectedItem);
 
 		private void DeviceFileSelectionBox_SelectionChangeCommitted(object sender, EventArgs e)
-			=> UpdateDeviceFileControls((DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem);
+			=> UpdateDeviceFileControls((DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem);
 
 		private void TickCountSelectionBox_SelectionChangeCommitted(object sender, EventArgs e)
-			=> UpdateTickCountControls((TickCountComboBoxItem)_tickCountSelectionBox.SelectedItem);
+			=> UpdateTickCountControls((TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem);
 
 		private void TickCountSetButton_Click(object sender, EventArgs e)
 			=> SetTickCountValue();
@@ -105,11 +105,11 @@ namespace MixGui.Components
 
 		private void InitializeLoaderCardTextBoxes()
 		{
-			_loaderCardTextBoxes = new MixByteCollectionCharTextBox[] { _loaderCard1TextBox, _loaderCard2TextBox, _loaderCard3TextBox };
+			this.loaderCardTextBoxes = new MixByteCollectionCharTextBox[] { this.loaderCard1TextBox, this.loaderCard2TextBox, this.loaderCard3TextBox };
 
-			for (int index = 0; index < _loaderCardTextBoxes.Length; index++)
+			for (int index = 0; index < this.loaderCardTextBoxes.Length; index++)
 			{
-				MixByteCollectionCharTextBox loaderCardTextBox = _loaderCardTextBoxes[index];
+				MixByteCollectionCharTextBox loaderCardTextBox = this.loaderCardTextBoxes[index];
 				loaderCardTextBox.MixByteCollectionValue = new MixByteCollection(CardReaderDevice.BytesPerRecord);
 				loaderCardTextBox.NavigationKeyDown += This_KeyDown;
 				loaderCardTextBox.ValueChanged += LoaderCardTextBox_ValueChanged;
@@ -117,7 +117,7 @@ namespace MixGui.Components
 		}
 
 		private void LoaderCardTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
-			=> _loaderCardsDefaultButton.Enabled = true;
+			=> this.loaderCardsDefaultButton.Enabled = true;
 
 		private void This_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -133,12 +133,12 @@ namespace MixGui.Components
 			switch (e.KeyCode)
 			{
 				case Keys.Up:
-					index = Array.IndexOf(_loaderCardTextBoxes, senderTextBox);
+					index = Array.IndexOf(this.loaderCardTextBoxes, senderTextBox);
 
 					if (index <= 0)
 						break;
 
-					targetTextBox = _loaderCardTextBoxes[index - 1];
+					targetTextBox = this.loaderCardTextBoxes[index - 1];
 					targetTextBox.Focus();
 
 					if (caretPos.HasValue)
@@ -147,12 +147,12 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Down:
-					index = Array.IndexOf(_loaderCardTextBoxes, senderTextBox);
+					index = Array.IndexOf(this.loaderCardTextBoxes, senderTextBox);
 
-					if (index >= _loaderCardTextBoxes.Length - 1)
+					if (index >= this.loaderCardTextBoxes.Length - 1)
 						break;
 
-					targetTextBox = _loaderCardTextBoxes[index + 1];
+					targetTextBox = this.loaderCardTextBoxes[index + 1];
 					targetTextBox.Focus();
 
 					if (caretPos.HasValue)
@@ -164,17 +164,17 @@ namespace MixGui.Components
 
 		private void FillDeviceReloadIntervalSelectionBox()
 		{
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(250));
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(500));
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(750));
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(1000));
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(1500));
-			_deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(2000));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(250));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(500));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(750));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(1000));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(1500));
+			this.deviceReloadIntervalComboBox.Items.Add(new DeviceReloadIntervalComboBoxItem(2000));
 		}
 
 		private void FillColorSelectionBox()
 		{
-			_colorSelectionBox.Items.Clear();
+			this.colorSelectionBox.Items.Clear();
 			string[] knownColorNames = GuiSettings.KnownColorNames;
 
 			var list = new List<ColorComboBoxItem>();
@@ -182,48 +182,48 @@ namespace MixGui.Components
 			{
 				var comboBoxItem = new ColorComboBoxItem(colorName);
 
-				if (_configuration.Colors.ContainsKey(colorName))
-					comboBoxItem.Color = _configuration.Colors[colorName];
+				if (this.configuration.Colors.ContainsKey(colorName))
+					comboBoxItem.Color = this.configuration.Colors[colorName];
 
 				list.Add(comboBoxItem);
 			}
 
-			_colorSelectionBox.Items.AddRange(list.ToArray());
+			this.colorSelectionBox.Items.AddRange(list.ToArray());
 
-			if (_colorSelectionBox.Items.Count > 0)
-				_colorSelectionBox.SelectedIndex = 0;
+			if (this.colorSelectionBox.Items.Count > 0)
+				this.colorSelectionBox.SelectedIndex = 0;
 
-			UpdateColorControls((ColorComboBoxItem)_colorSelectionBox.SelectedItem);
+			UpdateColorControls((ColorComboBoxItem)this.colorSelectionBox.SelectedItem);
 		}
 
 		private void FillDeviceFileSelectionBox()
 		{
-			_deviceFileSelectionBox.Items.Clear();
+			this.deviceFileSelectionBox.Items.Clear();
 			var list = new List<DeviceFileComboBoxItem>();
-			foreach (MixDevice device in _devices)
+			foreach (MixDevice device in this.devices)
 			{
 				if (!(device is FileBasedDevice))
 					continue;
 
 				var item = new DeviceFileComboBoxItem((FileBasedDevice)device);
 
-				if (_configuration.DeviceFilePaths.ContainsKey(device.Id))
-					item.FilePath = _configuration.DeviceFilePaths[device.Id];
+				if (this.configuration.DeviceFilePaths.ContainsKey(device.Id))
+					item.FilePath = this.configuration.DeviceFilePaths[device.Id];
 
 				list.Add(item);
 			}
 
-			_deviceFileSelectionBox.Items.AddRange(list.ToArray());
+			this.deviceFileSelectionBox.Items.AddRange(list.ToArray());
 
-			if (_deviceFileSelectionBox.Items.Count > 0)
-				_deviceFileSelectionBox.SelectedIndex = 0;
+			if (this.deviceFileSelectionBox.Items.Count > 0)
+				this.deviceFileSelectionBox.SelectedIndex = 0;
 
-			UpdateDeviceFileControls((DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem);
+			UpdateDeviceFileControls((DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem);
 		}
 
 		private void FillTickCountSelectionBox()
 		{
-			_tickCountSelectionBox.Items.Clear();
+			this.tickCountSelectionBox.Items.Clear();
 
 			string[] knownTickCountNames = DeviceSettings.KnownTickCountNames;
 
@@ -232,18 +232,18 @@ namespace MixGui.Components
 			{
 				var item = new TickCountComboBoxItem(tickCountName);
 
-				if (_configuration.TickCounts.ContainsKey(tickCountName))
-					item.TickCount = _configuration.TickCounts[tickCountName];
+				if (this.configuration.TickCounts.ContainsKey(tickCountName))
+					item.TickCount = this.configuration.TickCounts[tickCountName];
 
 				list.Add(item);
 			}
 
-			_tickCountSelectionBox.Items.AddRange(list.ToArray());
+			this.tickCountSelectionBox.Items.AddRange(list.ToArray());
 
-			if (_tickCountSelectionBox.Items.Count > 0)
-	  		_tickCountSelectionBox.SelectedIndex = 0;
+			if (this.tickCountSelectionBox.Items.Count > 0)
+	  		this.tickCountSelectionBox.SelectedIndex = 0;
 
-			UpdateTickCountControls((TickCountComboBoxItem)_tickCountSelectionBox.SelectedItem);
+			UpdateTickCountControls((TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem);
 		}
 
 		public Control GetFocusedControl()
@@ -283,7 +283,7 @@ namespace MixGui.Components
 			if (!GuiSettings.IsKnownColor(matchingColorName))
 				matchingColorName = wantBackground ? "EditorBackground" : "RenderedText";
 
-			foreach (ColorComboBoxItem item in _colorSelectionBox.Items)
+			foreach (ColorComboBoxItem item in this.colorSelectionBox.Items)
 			{
 				if (item.Name == matchingColorName)
 					return item.Color;
@@ -313,450 +313,450 @@ namespace MixGui.Components
 			var mixByte14 = new MixByte();
 			var mixByte15 = new MixByte();
 			var resources = new ComponentResourceManager(typeof(PreferencesForm));
-			_colorsGroup = new GroupBox();
-			_colorSetButton = new Button();
-			_showColorLabel = new Label();
-			_colorSelectionBox = new ComboBox();
-			_colorDefaultButton = new Button();
-			_deviceFilesGroup = new GroupBox();
-			_deviceDirectoryBox = new TextBox();
-			_deviceDirectoryLabel = new Label();
-			_deviceDirectorySetButton = new Button();
-			_deviceDirectoryDefaultButton = new Button();
-			_deviceFileSelectionBox = new ComboBox();
-			_deviceFileBox = new TextBox();
-			_deviceFileSetButton = new Button();
-			_deviceFileDefaultButton = new Button();
-			_okButton = new Button();
-			_cancelButton = new Button();
-			_deviceTickCountsGroup = new GroupBox();
-			_tickCountDefaultButton = new Button();
-			_tickCountSetButton = new Button();
-			_tickCountSelectionBox = new ComboBox();
-			_defaultsButton = new Button();
-			_miscGroupBox = new GroupBox();
-			_deviceReloadIntervalComboBox = new ComboBox();
-			_deviceReloadIntervalLabel = new Label();
-			_deviceReloadIntervalDefaultButton = new Button();
-			_loaderCardsGroupBox = new GroupBox();
-			_loaderCardsDefaultButton = new Button();
-			_loaderCardsPanel = new Panel();
-			_floatingPointGroupBox = new GroupBox();
-			_floatingPointMemoryWordCountLabel = new Label();
-			_floatingPointMemoryWordCountDefaultButton = new Button();
-			_floatingPointMemoryWordCountBox = new LongValueTextBox();
-			_loaderCard3TextBox = new MixByteCollectionCharTextBox();
-			_loaderCard2TextBox = new MixByteCollectionCharTextBox();
-			_loaderCard1TextBox = new MixByteCollectionCharTextBox();
-			_tickCountBox = new LongValueTextBox();
-			_colorProfilingCountsCheckBox = new CheckBox();
-			_colorsGroup.SuspendLayout();
-			_deviceFilesGroup.SuspendLayout();
-			_deviceTickCountsGroup.SuspendLayout();
-			_miscGroupBox.SuspendLayout();
-			_loaderCardsGroupBox.SuspendLayout();
-			_loaderCardsPanel.SuspendLayout();
-			_floatingPointGroupBox.SuspendLayout();
+			this.colorsGroup = new GroupBox();
+			this.colorSetButton = new Button();
+			this.showColorLabel = new Label();
+			this.colorSelectionBox = new ComboBox();
+			this.colorDefaultButton = new Button();
+			this.deviceFilesGroup = new GroupBox();
+			this.deviceDirectoryBox = new TextBox();
+			this.deviceDirectoryLabel = new Label();
+			this.deviceDirectorySetButton = new Button();
+			this.deviceDirectoryDefaultButton = new Button();
+			this.deviceFileSelectionBox = new ComboBox();
+			this.deviceFileBox = new TextBox();
+			this.deviceFileSetButton = new Button();
+			this.deviceFileDefaultButton = new Button();
+			this.okButton = new Button();
+			this.cancelButton = new Button();
+			this.deviceTickCountsGroup = new GroupBox();
+			this.tickCountDefaultButton = new Button();
+			this.tickCountSetButton = new Button();
+			this.tickCountSelectionBox = new ComboBox();
+			this.defaultsButton = new Button();
+			this.miscGroupBox = new GroupBox();
+			this.deviceReloadIntervalComboBox = new ComboBox();
+			this.deviceReloadIntervalLabel = new Label();
+			this.deviceReloadIntervalDefaultButton = new Button();
+			this.loaderCardsGroupBox = new GroupBox();
+			this.loaderCardsDefaultButton = new Button();
+			this.loaderCardsPanel = new Panel();
+			this.floatingPointGroupBox = new GroupBox();
+			this.floatingPointMemoryWordCountLabel = new Label();
+			this.floatingPointMemoryWordCountDefaultButton = new Button();
+			this.floatingPointMemoryWordCountBox = new LongValueTextBox();
+			this.loaderCard3TextBox = new MixByteCollectionCharTextBox();
+			this.loaderCard2TextBox = new MixByteCollectionCharTextBox();
+			this.loaderCard1TextBox = new MixByteCollectionCharTextBox();
+			this.tickCountBox = new LongValueTextBox();
+			this.colorProfilingCountsCheckBox = new CheckBox();
+			this.colorsGroup.SuspendLayout();
+			this.deviceFilesGroup.SuspendLayout();
+			this.deviceTickCountsGroup.SuspendLayout();
+			this.miscGroupBox.SuspendLayout();
+			this.loaderCardsGroupBox.SuspendLayout();
+			this.loaderCardsPanel.SuspendLayout();
+			this.floatingPointGroupBox.SuspendLayout();
 			SuspendLayout();
 			// 
 			// mColorsGroup
 			// 
-			_colorsGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.colorsGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_colorsGroup.Controls.Add(_colorProfilingCountsCheckBox);
-			_colorsGroup.Controls.Add(_colorSetButton);
-			_colorsGroup.Controls.Add(_showColorLabel);
-			_colorsGroup.Controls.Add(_colorSelectionBox);
-			_colorsGroup.Controls.Add(_colorDefaultButton);
-			_colorsGroup.Location = new Point(12, 12);
-			_colorsGroup.Name = "mColorsGroup";
-			_colorsGroup.Size = new Size(366, 70);
-			_colorsGroup.TabIndex = 1;
-			_colorsGroup.TabStop = false;
-			_colorsGroup.Text = "Colors";
+			this.colorsGroup.Controls.Add(this.colorProfilingCountsCheckBox);
+			this.colorsGroup.Controls.Add(this.colorSetButton);
+			this.colorsGroup.Controls.Add(this.showColorLabel);
+			this.colorsGroup.Controls.Add(this.colorSelectionBox);
+			this.colorsGroup.Controls.Add(this.colorDefaultButton);
+			this.colorsGroup.Location = new Point(12, 12);
+			this.colorsGroup.Name = "mColorsGroup";
+			this.colorsGroup.Size = new Size(366, 70);
+			this.colorsGroup.TabIndex = 1;
+			this.colorsGroup.TabStop = false;
+			this.colorsGroup.Text = "Colors";
 			// 
 			// mColorSetButton
 			// 
-			_colorSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_colorSetButton.Location = new Point(254, 15);
-			_colorSetButton.Name = "mColorSetButton";
-			_colorSetButton.Size = new Size(40, 23);
-			_colorSetButton.TabIndex = 2;
-			_colorSetButton.Text = "&Set...";
-			_colorSetButton.FlatStyle = FlatStyle.Flat;
-			_colorSetButton.Click += ColorSetButton_Click;
+			this.colorSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.colorSetButton.Location = new Point(254, 15);
+			this.colorSetButton.Name = "mColorSetButton";
+			this.colorSetButton.Size = new Size(40, 23);
+			this.colorSetButton.TabIndex = 2;
+			this.colorSetButton.Text = "&Set...";
+			this.colorSetButton.FlatStyle = FlatStyle.Flat;
+			this.colorSetButton.Click += ColorSetButton_Click;
 			// 
 			// mShowColorLabel
 			// 
-			_showColorLabel.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_showColorLabel.BorderStyle = BorderStyle.FixedSingle;
-			_showColorLabel.Location = new Point(198, 16);
-			_showColorLabel.Name = "mShowColorLabel";
-			_showColorLabel.Size = new Size(48, 21);
-			_showColorLabel.TabIndex = 1;
-			_showColorLabel.Text = "Color";
-			_showColorLabel.TextAlign = ContentAlignment.MiddleCenter;
+			this.showColorLabel.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.showColorLabel.BorderStyle = BorderStyle.FixedSingle;
+			this.showColorLabel.Location = new Point(198, 16);
+			this.showColorLabel.Name = "mShowColorLabel";
+			this.showColorLabel.Size = new Size(48, 21);
+			this.showColorLabel.TabIndex = 1;
+			this.showColorLabel.Text = "Color";
+			this.showColorLabel.TextAlign = ContentAlignment.MiddleCenter;
 			// 
 			// mColorSelectionBox
 			// 
-			_colorSelectionBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.colorSelectionBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_colorSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
-			_colorSelectionBox.Location = new Point(8, 16);
-			_colorSelectionBox.Name = "mColorSelectionBox";
-			_colorSelectionBox.Size = new Size(182, 21);
-			_colorSelectionBox.Sorted = true;
-			_colorSelectionBox.TabIndex = 0;
-			_colorSelectionBox.FlatStyle = FlatStyle.Flat;
-			_colorSelectionBox.SelectionChangeCommitted += ColorSelectionBox_SelectionChangeCommited;
+			this.colorSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.colorSelectionBox.Location = new Point(8, 16);
+			this.colorSelectionBox.Name = "mColorSelectionBox";
+			this.colorSelectionBox.Size = new Size(182, 21);
+			this.colorSelectionBox.Sorted = true;
+			this.colorSelectionBox.TabIndex = 0;
+			this.colorSelectionBox.FlatStyle = FlatStyle.Flat;
+			this.colorSelectionBox.SelectionChangeCommitted += ColorSelectionBox_SelectionChangeCommited;
 			// 
 			// mColorDefaultButton
 			// 
-			_colorDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_colorDefaultButton.Location = new Point(302, 15);
-			_colorDefaultButton.Name = "mColorDefaultButton";
-			_colorDefaultButton.Size = new Size(56, 23);
-			_colorDefaultButton.TabIndex = 3;
-			_colorDefaultButton.Text = "Default";
-			_colorDefaultButton.FlatStyle = FlatStyle.Flat;
-			_colorDefaultButton.Click += ColorDefaultButton_Click;
+			this.colorDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.colorDefaultButton.Location = new Point(302, 15);
+			this.colorDefaultButton.Name = "mColorDefaultButton";
+			this.colorDefaultButton.Size = new Size(56, 23);
+			this.colorDefaultButton.TabIndex = 3;
+			this.colorDefaultButton.Text = "Default";
+			this.colorDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.colorDefaultButton.Click += ColorDefaultButton_Click;
 			// 
 			// mDeviceFilesGroup
 			// 
-			_deviceFilesGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.deviceFilesGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_deviceFilesGroup.Controls.Add(_deviceDirectoryBox);
-			_deviceFilesGroup.Controls.Add(_deviceDirectoryLabel);
-			_deviceFilesGroup.Controls.Add(_deviceDirectorySetButton);
-			_deviceFilesGroup.Controls.Add(_deviceDirectoryDefaultButton);
-			_deviceFilesGroup.Controls.Add(_deviceFileSelectionBox);
-			_deviceFilesGroup.Controls.Add(_deviceFileBox);
-			_deviceFilesGroup.Controls.Add(_deviceFileSetButton);
-			_deviceFilesGroup.Controls.Add(_deviceFileDefaultButton);
-			_deviceFilesGroup.Location = new Point(12, 131);
-			_deviceFilesGroup.Name = "mDeviceFilesGroup";
-			_deviceFilesGroup.Size = new Size(366, 80);
-			_deviceFilesGroup.TabIndex = 3;
-			_deviceFilesGroup.TabStop = false;
-			_deviceFilesGroup.Text = "Device files";
+			this.deviceFilesGroup.Controls.Add(this.deviceDirectoryBox);
+			this.deviceFilesGroup.Controls.Add(this.deviceDirectoryLabel);
+			this.deviceFilesGroup.Controls.Add(this.deviceDirectorySetButton);
+			this.deviceFilesGroup.Controls.Add(this.deviceDirectoryDefaultButton);
+			this.deviceFilesGroup.Controls.Add(this.deviceFileSelectionBox);
+			this.deviceFilesGroup.Controls.Add(this.deviceFileBox);
+			this.deviceFilesGroup.Controls.Add(this.deviceFileSetButton);
+			this.deviceFilesGroup.Controls.Add(this.deviceFileDefaultButton);
+			this.deviceFilesGroup.Location = new Point(12, 131);
+			this.deviceFilesGroup.Name = "mDeviceFilesGroup";
+			this.deviceFilesGroup.Size = new Size(366, 80);
+			this.deviceFilesGroup.TabIndex = 3;
+			this.deviceFilesGroup.TabStop = false;
+			this.deviceFilesGroup.Text = "Device files";
 			// 
 			// mDeviceDirectoryBox
 			// 
-			_deviceDirectoryBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.deviceDirectoryBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_deviceDirectoryBox.Location = new Point(104, 16);
-			_deviceDirectoryBox.Name = "mDeviceDirectoryBox";
-			_deviceDirectoryBox.ReadOnly = true;
-			_deviceDirectoryBox.Size = new Size(142, 20);
-			_deviceDirectoryBox.TabIndex = 1;
-			_deviceDirectoryBox.BorderStyle = BorderStyle.FixedSingle;
+			this.deviceDirectoryBox.Location = new Point(104, 16);
+			this.deviceDirectoryBox.Name = "mDeviceDirectoryBox";
+			this.deviceDirectoryBox.ReadOnly = true;
+			this.deviceDirectoryBox.Size = new Size(142, 20);
+			this.deviceDirectoryBox.TabIndex = 1;
+			this.deviceDirectoryBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mDeviceDirectoryLabel
 			// 
-			_deviceDirectoryLabel.Location = new Point(6, 16);
-			_deviceDirectoryLabel.Name = "mDeviceDirectoryLabel";
-			_deviceDirectoryLabel.Size = new Size(100, 21);
-			_deviceDirectoryLabel.TabIndex = 0;
-			_deviceDirectoryLabel.Text = "Default directory:";
-			_deviceDirectoryLabel.TextAlign = ContentAlignment.MiddleLeft;
+			this.deviceDirectoryLabel.Location = new Point(6, 16);
+			this.deviceDirectoryLabel.Name = "mDeviceDirectoryLabel";
+			this.deviceDirectoryLabel.Size = new Size(100, 21);
+			this.deviceDirectoryLabel.TabIndex = 0;
+			this.deviceDirectoryLabel.Text = "Default directory:";
+			this.deviceDirectoryLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// mDeviceDirectorySetButton
 			// 
-			_deviceDirectorySetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_deviceDirectorySetButton.Location = new Point(254, 15);
-			_deviceDirectorySetButton.Name = "mDeviceDirectorySetButton";
-			_deviceDirectorySetButton.Size = new Size(40, 23);
-			_deviceDirectorySetButton.TabIndex = 2;
-			_deviceDirectorySetButton.Text = "S&et...";
-			_deviceDirectorySetButton.FlatStyle = FlatStyle.Flat;
-			_deviceDirectorySetButton.Click += DeviceDirectorySetButton_Click;
+			this.deviceDirectorySetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.deviceDirectorySetButton.Location = new Point(254, 15);
+			this.deviceDirectorySetButton.Name = "mDeviceDirectorySetButton";
+			this.deviceDirectorySetButton.Size = new Size(40, 23);
+			this.deviceDirectorySetButton.TabIndex = 2;
+			this.deviceDirectorySetButton.Text = "S&et...";
+			this.deviceDirectorySetButton.FlatStyle = FlatStyle.Flat;
+			this.deviceDirectorySetButton.Click += DeviceDirectorySetButton_Click;
 			// 
 			// mDeviceDirectoryDefaultButton
 			// 
-			_deviceDirectoryDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_deviceDirectoryDefaultButton.Location = new Point(302, 15);
-			_deviceDirectoryDefaultButton.Name = "mDeviceDirectoryDefaultButton";
-			_deviceDirectoryDefaultButton.Size = new Size(56, 23);
-			_deviceDirectoryDefaultButton.TabIndex = 3;
-			_deviceDirectoryDefaultButton.Text = "Default";
-			_deviceDirectoryDefaultButton.FlatStyle = FlatStyle.Flat;
-			_deviceDirectoryDefaultButton.Click += DeviceDirectoryDefaultButton_Click;
+			this.deviceDirectoryDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.deviceDirectoryDefaultButton.Location = new Point(302, 15);
+			this.deviceDirectoryDefaultButton.Name = "mDeviceDirectoryDefaultButton";
+			this.deviceDirectoryDefaultButton.Size = new Size(56, 23);
+			this.deviceDirectoryDefaultButton.TabIndex = 3;
+			this.deviceDirectoryDefaultButton.Text = "Default";
+			this.deviceDirectoryDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.deviceDirectoryDefaultButton.Click += DeviceDirectoryDefaultButton_Click;
 			// 
 			// mDeviceFileSelectionBox
 			// 
-			_deviceFileSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
-			_deviceFileSelectionBox.Location = new Point(6, 48);
-			_deviceFileSelectionBox.Name = "mDeviceFileSelectionBox";
-			_deviceFileSelectionBox.Size = new Size(92, 21);
-			_deviceFileSelectionBox.Sorted = true;
-			_deviceFileSelectionBox.TabIndex = 4;
-			_deviceFileSelectionBox.FlatStyle = FlatStyle.Flat;
-			_deviceFileSelectionBox.SelectionChangeCommitted += DeviceFileSelectionBox_SelectionChangeCommitted;
+			this.deviceFileSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.deviceFileSelectionBox.Location = new Point(6, 48);
+			this.deviceFileSelectionBox.Name = "mDeviceFileSelectionBox";
+			this.deviceFileSelectionBox.Size = new Size(92, 21);
+			this.deviceFileSelectionBox.Sorted = true;
+			this.deviceFileSelectionBox.TabIndex = 4;
+			this.deviceFileSelectionBox.FlatStyle = FlatStyle.Flat;
+			this.deviceFileSelectionBox.SelectionChangeCommitted += DeviceFileSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDeviceFileBox
 			// 
-			_deviceFileBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.deviceFileBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_deviceFileBox.Location = new Point(104, 48);
-			_deviceFileBox.Name = "mDeviceFileBox";
-			_deviceFileBox.ReadOnly = true;
-			_deviceFileBox.Size = new Size(142, 20);
-			_deviceFileBox.BorderStyle = BorderStyle.FixedSingle;
-			_deviceFileBox.TabIndex = 5;
+			this.deviceFileBox.Location = new Point(104, 48);
+			this.deviceFileBox.Name = "mDeviceFileBox";
+			this.deviceFileBox.ReadOnly = true;
+			this.deviceFileBox.Size = new Size(142, 20);
+			this.deviceFileBox.BorderStyle = BorderStyle.FixedSingle;
+			this.deviceFileBox.TabIndex = 5;
 			// 
 			// mDeviceFileSetButton
 			// 
-			_deviceFileSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_deviceFileSetButton.Location = new Point(254, 47);
-			_deviceFileSetButton.Name = "mDeviceFileSetButton";
-			_deviceFileSetButton.Size = new Size(40, 23);
-			_deviceFileSetButton.TabIndex = 6;
-			_deviceFileSetButton.Text = "Se&t...";
-			_deviceFileSetButton.FlatStyle = FlatStyle.Flat;
-			_deviceFileSetButton.Click += DeviceFileSetButton_Click;
+			this.deviceFileSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.deviceFileSetButton.Location = new Point(254, 47);
+			this.deviceFileSetButton.Name = "mDeviceFileSetButton";
+			this.deviceFileSetButton.Size = new Size(40, 23);
+			this.deviceFileSetButton.TabIndex = 6;
+			this.deviceFileSetButton.Text = "Se&t...";
+			this.deviceFileSetButton.FlatStyle = FlatStyle.Flat;
+			this.deviceFileSetButton.Click += DeviceFileSetButton_Click;
 			// 
 			// mDeviceFileDefaultButton
 			// 
-			_deviceFileDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_deviceFileDefaultButton.Location = new Point(302, 47);
-			_deviceFileDefaultButton.Name = "mDeviceFileDefaultButton";
-			_deviceFileDefaultButton.Size = new Size(56, 23);
-			_deviceFileDefaultButton.TabIndex = 7;
-			_deviceFileDefaultButton.Text = "Default";
-			_deviceFileDefaultButton.FlatStyle = FlatStyle.Flat;
-			_deviceFileDefaultButton.Click += DeviceFileDefaultButton_Click;
+			this.deviceFileDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.deviceFileDefaultButton.Location = new Point(302, 47);
+			this.deviceFileDefaultButton.Name = "mDeviceFileDefaultButton";
+			this.deviceFileDefaultButton.Size = new Size(56, 23);
+			this.deviceFileDefaultButton.TabIndex = 7;
+			this.deviceFileDefaultButton.Text = "Default";
+			this.deviceFileDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.deviceFileDefaultButton.Click += DeviceFileDefaultButton_Click;
 			// 
 			// mOkButton
 			// 
-			_okButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
-			_okButton.DialogResult = DialogResult.OK;
-			_okButton.Location = new Point(224, 382);
-			_okButton.Name = "mOkButton";
-			_okButton.Size = new Size(75, 23);
-			_okButton.TabIndex = 8;
-			_okButton.Text = "&OK";
-			_okButton.FlatStyle = FlatStyle.Flat;
-			_okButton.Click += OkButton_Click;
+			this.okButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.okButton.DialogResult = DialogResult.OK;
+			this.okButton.Location = new Point(224, 382);
+			this.okButton.Name = "mOkButton";
+			this.okButton.Size = new Size(75, 23);
+			this.okButton.TabIndex = 8;
+			this.okButton.Text = "&OK";
+			this.okButton.FlatStyle = FlatStyle.Flat;
+			this.okButton.Click += OkButton_Click;
 			// 
 			// mCancelButton
 			// 
-			_cancelButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
-			_cancelButton.DialogResult = DialogResult.Cancel;
-			_cancelButton.Location = new Point(304, 382);
-			_cancelButton.Name = "mCancelButton";
-			_cancelButton.Size = new Size(75, 23);
-			_cancelButton.TabIndex = 9;
-			_cancelButton.FlatStyle = FlatStyle.Flat;
-			_cancelButton.Text = "&Cancel";
+			this.cancelButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.cancelButton.DialogResult = DialogResult.Cancel;
+			this.cancelButton.Location = new Point(304, 382);
+			this.cancelButton.Name = "mCancelButton";
+			this.cancelButton.Size = new Size(75, 23);
+			this.cancelButton.TabIndex = 9;
+			this.cancelButton.FlatStyle = FlatStyle.Flat;
+			this.cancelButton.Text = "&Cancel";
 			// 
 			// mDeviceTickCountsGroup
 			// 
-			_deviceTickCountsGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.deviceTickCountsGroup.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_deviceTickCountsGroup.Controls.Add(_tickCountBox);
-			_deviceTickCountsGroup.Controls.Add(_tickCountDefaultButton);
-			_deviceTickCountsGroup.Controls.Add(_tickCountSetButton);
-			_deviceTickCountsGroup.Controls.Add(_tickCountSelectionBox);
-			_deviceTickCountsGroup.Location = new Point(12, 211);
-			_deviceTickCountsGroup.Name = "mDeviceTickCountsGroup";
-			_deviceTickCountsGroup.Size = new Size(366, 48);
-			_deviceTickCountsGroup.TabIndex = 4;
-			_deviceTickCountsGroup.TabStop = false;
-			_deviceTickCountsGroup.Text = "Device tick counts";
+			this.deviceTickCountsGroup.Controls.Add(this.tickCountBox);
+			this.deviceTickCountsGroup.Controls.Add(this.tickCountDefaultButton);
+			this.deviceTickCountsGroup.Controls.Add(this.tickCountSetButton);
+			this.deviceTickCountsGroup.Controls.Add(this.tickCountSelectionBox);
+			this.deviceTickCountsGroup.Location = new Point(12, 211);
+			this.deviceTickCountsGroup.Name = "mDeviceTickCountsGroup";
+			this.deviceTickCountsGroup.Size = new Size(366, 48);
+			this.deviceTickCountsGroup.TabIndex = 4;
+			this.deviceTickCountsGroup.TabStop = false;
+			this.deviceTickCountsGroup.Text = "Device tick counts";
 			// 
 			// mTickCountDefaultButton
 			// 
-			_tickCountDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_tickCountDefaultButton.Location = new Point(302, 16);
-			_tickCountDefaultButton.Name = "mTickCountDefaultButton";
-			_tickCountDefaultButton.Size = new Size(56, 23);
-			_tickCountDefaultButton.TabIndex = 3;
-			_tickCountDefaultButton.Text = "Default";
-			_tickCountDefaultButton.FlatStyle = FlatStyle.Flat;
-			_tickCountDefaultButton.Click += TickCountDefaultButton_Click;
+			this.tickCountDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.tickCountDefaultButton.Location = new Point(302, 16);
+			this.tickCountDefaultButton.Name = "mTickCountDefaultButton";
+			this.tickCountDefaultButton.Size = new Size(56, 23);
+			this.tickCountDefaultButton.TabIndex = 3;
+			this.tickCountDefaultButton.Text = "Default";
+			this.tickCountDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.tickCountDefaultButton.Click += TickCountDefaultButton_Click;
 			// 
 			// mTickCountSetButton
 			// 
-			_tickCountSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_tickCountSetButton.Location = new Point(246, 16);
-			_tickCountSetButton.Name = "mTickCountSetButton";
-			_tickCountSetButton.Size = new Size(48, 23);
-			_tickCountSetButton.TabIndex = 2;
-			_tickCountSetButton.Text = "&Apply";
-			_tickCountSetButton.FlatStyle = FlatStyle.Flat;
-			_tickCountSetButton.Click += TickCountSetButton_Click;
+			this.tickCountSetButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.tickCountSetButton.Location = new Point(246, 16);
+			this.tickCountSetButton.Name = "mTickCountSetButton";
+			this.tickCountSetButton.Size = new Size(48, 23);
+			this.tickCountSetButton.TabIndex = 2;
+			this.tickCountSetButton.Text = "&Apply";
+			this.tickCountSetButton.FlatStyle = FlatStyle.Flat;
+			this.tickCountSetButton.Click += TickCountSetButton_Click;
 			// 
 			// mTickCountSelectionBox
 			// 
-			_tickCountSelectionBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.tickCountSelectionBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_tickCountSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
-			_tickCountSelectionBox.Location = new Point(6, 16);
-			_tickCountSelectionBox.Name = "mTickCountSelectionBox";
-			_tickCountSelectionBox.Size = new Size(182, 21);
-			_tickCountSelectionBox.Sorted = true;
-			_tickCountSelectionBox.TabIndex = 0;
-			_tickCountSelectionBox.FlatStyle = FlatStyle.Flat;
-			_tickCountSelectionBox.SelectionChangeCommitted += TickCountSelectionBox_SelectionChangeCommitted;
+			this.tickCountSelectionBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.tickCountSelectionBox.Location = new Point(6, 16);
+			this.tickCountSelectionBox.Name = "mTickCountSelectionBox";
+			this.tickCountSelectionBox.Size = new Size(182, 21);
+			this.tickCountSelectionBox.Sorted = true;
+			this.tickCountSelectionBox.TabIndex = 0;
+			this.tickCountSelectionBox.FlatStyle = FlatStyle.Flat;
+			this.tickCountSelectionBox.SelectionChangeCommitted += TickCountSelectionBox_SelectionChangeCommitted;
 			// 
 			// mDefaultsButton
 			// 
-			_defaultsButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
-			_defaultsButton.Location = new Point(144, 382);
-			_defaultsButton.Name = "mDefaultsButton";
-			_defaultsButton.Size = new Size(75, 23);
-			_defaultsButton.TabIndex = 7;
-			_defaultsButton.Text = "&Defaults";
-			_defaultsButton.FlatStyle = FlatStyle.Flat;
-			_defaultsButton.Click += DefaultsButton_Click;
+			this.defaultsButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.defaultsButton.Location = new Point(144, 382);
+			this.defaultsButton.Name = "mDefaultsButton";
+			this.defaultsButton.Size = new Size(75, 23);
+			this.defaultsButton.TabIndex = 7;
+			this.defaultsButton.Text = "&Defaults";
+			this.defaultsButton.FlatStyle = FlatStyle.Flat;
+			this.defaultsButton.Click += DefaultsButton_Click;
 			// 
 			// mMiscGroupBox
 			// 
-			_miscGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.miscGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_miscGroupBox.Controls.Add(_deviceReloadIntervalComboBox);
-			_miscGroupBox.Controls.Add(_deviceReloadIntervalLabel);
-			_miscGroupBox.Controls.Add(_deviceReloadIntervalDefaultButton);
-			_miscGroupBox.Location = new Point(12, 327);
-			_miscGroupBox.Name = "mMiscGroupBox";
-			_miscGroupBox.Size = new Size(366, 48);
-			_miscGroupBox.TabIndex = 6;
-			_miscGroupBox.TabStop = false;
-			_miscGroupBox.Text = "Miscellaneous";
+			this.miscGroupBox.Controls.Add(this.deviceReloadIntervalComboBox);
+			this.miscGroupBox.Controls.Add(this.deviceReloadIntervalLabel);
+			this.miscGroupBox.Controls.Add(this.deviceReloadIntervalDefaultButton);
+			this.miscGroupBox.Location = new Point(12, 327);
+			this.miscGroupBox.Name = "mMiscGroupBox";
+			this.miscGroupBox.Size = new Size(366, 48);
+			this.miscGroupBox.TabIndex = 6;
+			this.miscGroupBox.TabStop = false;
+			this.miscGroupBox.Text = "Miscellaneous";
 			// 
 			// mDeviceReloadIntervalComboBox
 			// 
-			_deviceReloadIntervalComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-			_deviceReloadIntervalComboBox.FormattingEnabled = true;
-			_deviceReloadIntervalComboBox.Location = new Point(156, 15);
-			_deviceReloadIntervalComboBox.Name = "mDeviceReloadIntervalComboBox";
-			_deviceReloadIntervalComboBox.Size = new Size(73, 21);
-			_deviceReloadIntervalComboBox.TabIndex = 5;
-			_deviceReloadIntervalComboBox.FlatStyle = FlatStyle.Flat;
-			_deviceReloadIntervalComboBox.SelectedIndexChanged += DeviceReloadIntervalComboBox_SelectedIndexChanged;
+			this.deviceReloadIntervalComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.deviceReloadIntervalComboBox.FormattingEnabled = true;
+			this.deviceReloadIntervalComboBox.Location = new Point(156, 15);
+			this.deviceReloadIntervalComboBox.Name = "mDeviceReloadIntervalComboBox";
+			this.deviceReloadIntervalComboBox.Size = new Size(73, 21);
+			this.deviceReloadIntervalComboBox.TabIndex = 5;
+			this.deviceReloadIntervalComboBox.FlatStyle = FlatStyle.Flat;
+			this.deviceReloadIntervalComboBox.SelectedIndexChanged += DeviceReloadIntervalComboBox_SelectedIndexChanged;
 			// 
 			// mDeviceReloadIntervalLabel
 			// 
-			_deviceReloadIntervalLabel.AutoSize = true;
-			_deviceReloadIntervalLabel.Location = new Point(6, 18);
-			_deviceReloadIntervalLabel.Name = "mDeviceReloadIntervalLabel";
-			_deviceReloadIntervalLabel.Size = new Size(145, 13);
-			_deviceReloadIntervalLabel.TabIndex = 4;
-			_deviceReloadIntervalLabel.Text = "Device editor reload interval: ";
+			this.deviceReloadIntervalLabel.AutoSize = true;
+			this.deviceReloadIntervalLabel.Location = new Point(6, 18);
+			this.deviceReloadIntervalLabel.Name = "mDeviceReloadIntervalLabel";
+			this.deviceReloadIntervalLabel.Size = new Size(145, 13);
+			this.deviceReloadIntervalLabel.TabIndex = 4;
+			this.deviceReloadIntervalLabel.Text = "Device editor reload interval: ";
 			// 
 			// mDeviceReloadIntervalDefaultButton
 			// 
-			_deviceReloadIntervalDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_deviceReloadIntervalDefaultButton.Location = new Point(302, 15);
-			_deviceReloadIntervalDefaultButton.Name = "mDeviceReloadIntervalDefaultButton";
-			_deviceReloadIntervalDefaultButton.Size = new Size(56, 23);
-			_deviceReloadIntervalDefaultButton.TabIndex = 3;
-			_deviceReloadIntervalDefaultButton.Text = "Default";
-			_deviceReloadIntervalDefaultButton.FlatStyle = FlatStyle.Flat;
-			_deviceReloadIntervalDefaultButton.Click += DeviceReloadIntervalDefaultButton_Click;
+			this.deviceReloadIntervalDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.deviceReloadIntervalDefaultButton.Location = new Point(302, 15);
+			this.deviceReloadIntervalDefaultButton.Name = "mDeviceReloadIntervalDefaultButton";
+			this.deviceReloadIntervalDefaultButton.Size = new Size(56, 23);
+			this.deviceReloadIntervalDefaultButton.TabIndex = 3;
+			this.deviceReloadIntervalDefaultButton.Text = "Default";
+			this.deviceReloadIntervalDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.deviceReloadIntervalDefaultButton.Click += DeviceReloadIntervalDefaultButton_Click;
 			// 
 			// mLoaderCardsGroupBox
 			// 
-			_loaderCardsGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.loaderCardsGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_loaderCardsGroupBox.Controls.Add(_loaderCardsDefaultButton);
-			_loaderCardsGroupBox.Controls.Add(_loaderCardsPanel);
-			_loaderCardsGroupBox.Location = new Point(12, 259);
-			_loaderCardsGroupBox.Name = "mLoaderCardsGroupBox";
-			_loaderCardsGroupBox.Size = new Size(366, 68);
-			_loaderCardsGroupBox.TabIndex = 5;
-			_loaderCardsGroupBox.TabStop = false;
-			_loaderCardsGroupBox.Text = "Loader instruction cards";
+			this.loaderCardsGroupBox.Controls.Add(this.loaderCardsDefaultButton);
+			this.loaderCardsGroupBox.Controls.Add(this.loaderCardsPanel);
+			this.loaderCardsGroupBox.Location = new Point(12, 259);
+			this.loaderCardsGroupBox.Name = "mLoaderCardsGroupBox";
+			this.loaderCardsGroupBox.Size = new Size(366, 68);
+			this.loaderCardsGroupBox.TabIndex = 5;
+			this.loaderCardsGroupBox.TabStop = false;
+			this.loaderCardsGroupBox.Text = "Loader instruction cards";
 			// 
 			// mLoaderCardsDefaultButton
 			// 
-			_loaderCardsDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_loaderCardsDefaultButton.Location = new Point(302, 16);
-			_loaderCardsDefaultButton.Name = "mLoaderCardsDefaultButton";
-			_loaderCardsDefaultButton.Size = new Size(56, 23);
-			_loaderCardsDefaultButton.TabIndex = 4;
-			_loaderCardsDefaultButton.Text = "Default";
-			_loaderCardsDefaultButton.FlatStyle = FlatStyle.Flat;
-			_loaderCardsDefaultButton.Click += LoaderCardsDefaultButton_Click;
+			this.loaderCardsDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.loaderCardsDefaultButton.Location = new Point(302, 16);
+			this.loaderCardsDefaultButton.Name = "mLoaderCardsDefaultButton";
+			this.loaderCardsDefaultButton.Size = new Size(56, 23);
+			this.loaderCardsDefaultButton.TabIndex = 4;
+			this.loaderCardsDefaultButton.Text = "Default";
+			this.loaderCardsDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.loaderCardsDefaultButton.Click += LoaderCardsDefaultButton_Click;
 			// 
 			// mLoaderCardsPanel
 			// 
-			_loaderCardsPanel.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.loaderCardsPanel.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_loaderCardsPanel.BorderStyle = BorderStyle.FixedSingle;
-			_loaderCardsPanel.Controls.Add(_loaderCard3TextBox);
-			_loaderCardsPanel.Controls.Add(_loaderCard2TextBox);
-			_loaderCardsPanel.Controls.Add(_loaderCard1TextBox);
-			_loaderCardsPanel.Location = new Point(8, 16);
-			_loaderCardsPanel.Name = "mLoaderCardsPanel";
-			_loaderCardsPanel.Size = new Size(286, 44);
-			_loaderCardsPanel.TabIndex = 0;
+			this.loaderCardsPanel.BorderStyle = BorderStyle.FixedSingle;
+			this.loaderCardsPanel.Controls.Add(this.loaderCard3TextBox);
+			this.loaderCardsPanel.Controls.Add(this.loaderCard2TextBox);
+			this.loaderCardsPanel.Controls.Add(this.loaderCard1TextBox);
+			this.loaderCardsPanel.Location = new Point(8, 16);
+			this.loaderCardsPanel.Name = "mLoaderCardsPanel";
+			this.loaderCardsPanel.Size = new Size(286, 44);
+			this.loaderCardsPanel.TabIndex = 0;
 			// 
 			// mFloatingPointGroupBox
 			// 
-			_floatingPointGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.floatingPointGroupBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_floatingPointGroupBox.Controls.Add(_floatingPointMemoryWordCountBox);
-			_floatingPointGroupBox.Controls.Add(_floatingPointMemoryWordCountLabel);
-			_floatingPointGroupBox.Controls.Add(_floatingPointMemoryWordCountDefaultButton);
-			_floatingPointGroupBox.Location = new Point(12, 83);
-			_floatingPointGroupBox.Name = "mFloatingPointGroupBox";
-			_floatingPointGroupBox.Size = new Size(366, 48);
-			_floatingPointGroupBox.TabIndex = 2;
-			_floatingPointGroupBox.TabStop = false;
-			_floatingPointGroupBox.Text = "Floating point module";
+			this.floatingPointGroupBox.Controls.Add(this.floatingPointMemoryWordCountBox);
+			this.floatingPointGroupBox.Controls.Add(this.floatingPointMemoryWordCountLabel);
+			this.floatingPointGroupBox.Controls.Add(this.floatingPointMemoryWordCountDefaultButton);
+			this.floatingPointGroupBox.Location = new Point(12, 83);
+			this.floatingPointGroupBox.Name = "mFloatingPointGroupBox";
+			this.floatingPointGroupBox.Size = new Size(366, 48);
+			this.floatingPointGroupBox.TabIndex = 2;
+			this.floatingPointGroupBox.TabStop = false;
+			this.floatingPointGroupBox.Text = "Floating point module";
 			// 
 			// mFloatingPointMemoryWordCountLabel
 			// 
-			_floatingPointMemoryWordCountLabel.AutoSize = true;
-			_floatingPointMemoryWordCountLabel.Location = new Point(6, 18);
-			_floatingPointMemoryWordCountLabel.Name = "mFloatingPointMemoryWordCountLabel";
-			_floatingPointMemoryWordCountLabel.Size = new Size(181, 13);
-			_floatingPointMemoryWordCountLabel.TabIndex = 0;
-			_floatingPointMemoryWordCountLabel.Text = "Memory word count (requires restart):";
+			this.floatingPointMemoryWordCountLabel.AutoSize = true;
+			this.floatingPointMemoryWordCountLabel.Location = new Point(6, 18);
+			this.floatingPointMemoryWordCountLabel.Name = "mFloatingPointMemoryWordCountLabel";
+			this.floatingPointMemoryWordCountLabel.Size = new Size(181, 13);
+			this.floatingPointMemoryWordCountLabel.TabIndex = 0;
+			this.floatingPointMemoryWordCountLabel.Text = "Memory word count (requires restart):";
 			// 
 			// mFloatingPointMemoryWordCountDefaultButton
 			// 
-			_floatingPointMemoryWordCountDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_floatingPointMemoryWordCountDefaultButton.Location = new Point(302, 15);
-			_floatingPointMemoryWordCountDefaultButton.Name = "mFloatingPointMemoryWordCountDefaultButton";
-			_floatingPointMemoryWordCountDefaultButton.Size = new Size(56, 23);
-			_floatingPointMemoryWordCountDefaultButton.TabIndex = 2;
-			_floatingPointMemoryWordCountDefaultButton.Text = "Default";
-			_floatingPointMemoryWordCountDefaultButton.FlatStyle = FlatStyle.Flat;
-			_floatingPointMemoryWordCountDefaultButton.Click += FloatingPointMemoryWordCountDefaultButton_Click;
+			this.floatingPointMemoryWordCountDefaultButton.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.floatingPointMemoryWordCountDefaultButton.Location = new Point(302, 15);
+			this.floatingPointMemoryWordCountDefaultButton.Name = "mFloatingPointMemoryWordCountDefaultButton";
+			this.floatingPointMemoryWordCountDefaultButton.Size = new Size(56, 23);
+			this.floatingPointMemoryWordCountDefaultButton.TabIndex = 2;
+			this.floatingPointMemoryWordCountDefaultButton.Text = "Default";
+			this.floatingPointMemoryWordCountDefaultButton.FlatStyle = FlatStyle.Flat;
+			this.floatingPointMemoryWordCountDefaultButton.Click += FloatingPointMemoryWordCountDefaultButton_Click;
 			// 
 			// mFloatingPointMemoryWordCountBox
 			// 
-			_floatingPointMemoryWordCountBox.BackColor = Color.White;
-			_floatingPointMemoryWordCountBox.BorderStyle = BorderStyle.FixedSingle;
-			_floatingPointMemoryWordCountBox.ClearZero = true;
-			_floatingPointMemoryWordCountBox.ForeColor = Color.Black;
-			_floatingPointMemoryWordCountBox.Location = new Point(199, 16);
-			_floatingPointMemoryWordCountBox.LongValue = 200;
-			_floatingPointMemoryWordCountBox.Magnitude = 200;
-			_floatingPointMemoryWordCountBox.MaxLength = 5;
-			_floatingPointMemoryWordCountBox.MaxValue = 99999;
-			_floatingPointMemoryWordCountBox.MinValue = 1;
-			_floatingPointMemoryWordCountBox.Name = "mFloatingPointMemoryWordCountBox";
-			_floatingPointMemoryWordCountBox.Sign = Word.Signs.Positive;
-			_floatingPointMemoryWordCountBox.Size = new Size(40, 20);
-			_floatingPointMemoryWordCountBox.SupportNegativeZero = false;
-			_floatingPointMemoryWordCountBox.TabIndex = 1;
-			_floatingPointMemoryWordCountBox.Text = "200";
-			_floatingPointMemoryWordCountBox.ValueChanged += FloatingPointMemoryWordCountBox_ValueChanged;
+			this.floatingPointMemoryWordCountBox.BackColor = Color.White;
+			this.floatingPointMemoryWordCountBox.BorderStyle = BorderStyle.FixedSingle;
+			this.floatingPointMemoryWordCountBox.ClearZero = true;
+			this.floatingPointMemoryWordCountBox.ForeColor = Color.Black;
+			this.floatingPointMemoryWordCountBox.Location = new Point(199, 16);
+			this.floatingPointMemoryWordCountBox.LongValue = 200;
+			this.floatingPointMemoryWordCountBox.Magnitude = 200;
+			this.floatingPointMemoryWordCountBox.MaxLength = 5;
+			this.floatingPointMemoryWordCountBox.MaxValue = 99999;
+			this.floatingPointMemoryWordCountBox.MinValue = 1;
+			this.floatingPointMemoryWordCountBox.Name = "mFloatingPointMemoryWordCountBox";
+			this.floatingPointMemoryWordCountBox.Sign = Word.Signs.Positive;
+			this.floatingPointMemoryWordCountBox.Size = new Size(40, 20);
+			this.floatingPointMemoryWordCountBox.SupportNegativeZero = false;
+			this.floatingPointMemoryWordCountBox.TabIndex = 1;
+			this.floatingPointMemoryWordCountBox.Text = "200";
+			this.floatingPointMemoryWordCountBox.ValueChanged += FloatingPointMemoryWordCountBox_ValueChanged;
 			// 
 			// mLoaderCard3TextBox
 			// 
-			_loaderCard3TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.loaderCard3TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_loaderCard3TextBox.BackColor = Color.White;
-			_loaderCard3TextBox.BorderStyle = BorderStyle.None;
-			_loaderCard3TextBox.CharacterCasing = CharacterCasing.Upper;
-			_loaderCard3TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			_loaderCard3TextBox.ForeColor = Color.Blue;
-			_loaderCard3TextBox.Location = new Point(0, 28);
-			_loaderCard3TextBox.Margin = new Padding(0);
+			this.loaderCard3TextBox.BackColor = Color.White;
+			this.loaderCard3TextBox.BorderStyle = BorderStyle.None;
+			this.loaderCard3TextBox.CharacterCasing = CharacterCasing.Upper;
+			this.loaderCard3TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.loaderCard3TextBox.ForeColor = Color.Blue;
+			this.loaderCard3TextBox.Location = new Point(0, 28);
+			this.loaderCard3TextBox.Margin = new Padding(0);
 			fullWord1.LongValue = 0;
 			fullWord1.Magnitude = new MixByte[] {
 				mixByte1,
@@ -766,24 +766,24 @@ namespace MixGui.Components
 				mixByte5};
 			fullWord1.MagnitudeLongValue = 0;
 			fullWord1.Sign = Word.Signs.Positive;
-			_loaderCard3TextBox.MixByteCollectionValue = fullWord1;
-			_loaderCard3TextBox.Name = "mLoaderCard3TextBox";
-			_loaderCard3TextBox.Size = new Size(284, 14);
-			_loaderCard3TextBox.TabIndex = 2;
-			_loaderCard3TextBox.Text = "     ";
-			_loaderCard3TextBox.UseEditMode = true;
+			this.loaderCard3TextBox.MixByteCollectionValue = fullWord1;
+			this.loaderCard3TextBox.Name = "mLoaderCard3TextBox";
+			this.loaderCard3TextBox.Size = new Size(284, 14);
+			this.loaderCard3TextBox.TabIndex = 2;
+			this.loaderCard3TextBox.Text = "     ";
+			this.loaderCard3TextBox.UseEditMode = true;
 			// 
 			// mLoaderCard2TextBox
 			// 
-			_loaderCard2TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.loaderCard2TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_loaderCard2TextBox.BackColor = Color.White;
-			_loaderCard2TextBox.BorderStyle = BorderStyle.None;
-			_loaderCard2TextBox.CharacterCasing = CharacterCasing.Upper;
-			_loaderCard2TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			_loaderCard2TextBox.ForeColor = Color.Blue;
-			_loaderCard2TextBox.Location = new Point(0, 14);
-			_loaderCard2TextBox.Margin = new Padding(0);
+			this.loaderCard2TextBox.BackColor = Color.White;
+			this.loaderCard2TextBox.BorderStyle = BorderStyle.None;
+			this.loaderCard2TextBox.CharacterCasing = CharacterCasing.Upper;
+			this.loaderCard2TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.loaderCard2TextBox.ForeColor = Color.Blue;
+			this.loaderCard2TextBox.Location = new Point(0, 14);
+			this.loaderCard2TextBox.Margin = new Padding(0);
 			fullWord2.LongValue = 0;
 			fullWord2.Magnitude = new MixByte[] {
 				mixByte6,
@@ -793,24 +793,24 @@ namespace MixGui.Components
 				mixByte10};
 			fullWord2.MagnitudeLongValue = 0;
 			fullWord2.Sign = Word.Signs.Positive;
-			_loaderCard2TextBox.MixByteCollectionValue = fullWord2;
-			_loaderCard2TextBox.Name = "mLoaderCard2TextBox";
-			_loaderCard2TextBox.Size = new Size(284, 14);
-			_loaderCard2TextBox.TabIndex = 1;
-			_loaderCard2TextBox.Text = "     ";
-			_loaderCard2TextBox.UseEditMode = true;
+			this.loaderCard2TextBox.MixByteCollectionValue = fullWord2;
+			this.loaderCard2TextBox.Name = "mLoaderCard2TextBox";
+			this.loaderCard2TextBox.Size = new Size(284, 14);
+			this.loaderCard2TextBox.TabIndex = 1;
+			this.loaderCard2TextBox.Text = "     ";
+			this.loaderCard2TextBox.UseEditMode = true;
 			// 
 			// mLoaderCard1TextBox
 			// 
-			_loaderCard1TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
+			this.loaderCard1TextBox.Anchor = ((AnchorStyles.Top | AnchorStyles.Left)
 									| AnchorStyles.Right);
-			_loaderCard1TextBox.BackColor = Color.White;
-			_loaderCard1TextBox.BorderStyle = BorderStyle.None;
-			_loaderCard1TextBox.CharacterCasing = CharacterCasing.Upper;
-			_loaderCard1TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			_loaderCard1TextBox.ForeColor = Color.Blue;
-			_loaderCard1TextBox.Location = new Point(0, 0);
-			_loaderCard1TextBox.Margin = new Padding(0);
+			this.loaderCard1TextBox.BackColor = Color.White;
+			this.loaderCard1TextBox.BorderStyle = BorderStyle.None;
+			this.loaderCard1TextBox.CharacterCasing = CharacterCasing.Upper;
+			this.loaderCard1TextBox.Font = new Font("Courier New", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.loaderCard1TextBox.ForeColor = Color.Blue;
+			this.loaderCard1TextBox.Location = new Point(0, 0);
+			this.loaderCard1TextBox.Margin = new Padding(0);
 			fullWord3.LongValue = 0;
 			fullWord3.Magnitude = new MixByte[] {
 				mixByte11,
@@ -820,59 +820,59 @@ namespace MixGui.Components
 				mixByte15};
 			fullWord3.MagnitudeLongValue = 0;
 			fullWord3.Sign = Word.Signs.Positive;
-			_loaderCard1TextBox.MixByteCollectionValue = fullWord3;
-			_loaderCard1TextBox.Name = "mLoaderCard1TextBox";
-			_loaderCard1TextBox.Size = new Size(284, 14);
-			_loaderCard1TextBox.TabIndex = 0;
-			_loaderCard1TextBox.Text = "     ";
-			_loaderCard1TextBox.UseEditMode = true;
+			this.loaderCard1TextBox.MixByteCollectionValue = fullWord3;
+			this.loaderCard1TextBox.Name = "mLoaderCard1TextBox";
+			this.loaderCard1TextBox.Size = new Size(284, 14);
+			this.loaderCard1TextBox.TabIndex = 0;
+			this.loaderCard1TextBox.Text = "     ";
+			this.loaderCard1TextBox.UseEditMode = true;
 			// 
 			// mTickCountBox
 			// 
-			_tickCountBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_tickCountBox.BackColor = Color.White;
-			_tickCountBox.BorderStyle = BorderStyle.FixedSingle;
-			_tickCountBox.ClearZero = true;
-			_tickCountBox.ForeColor = Color.Black;
-			_tickCountBox.Location = new Point(198, 17);
-			_tickCountBox.LongValue = 1;
-			_tickCountBox.Magnitude = 1;
-			_tickCountBox.MaxLength = 5;
-			_tickCountBox.MaxValue = 99999;
-			_tickCountBox.MinValue = 1;
-			_tickCountBox.Name = "mTickCountBox";
-			_tickCountBox.Sign = Word.Signs.Positive;
-			_tickCountBox.Size = new Size(40, 20);
-			_tickCountBox.SupportNegativeZero = false;
-			_tickCountBox.TabIndex = 1;
-			_tickCountBox.Text = "1";
-			_tickCountBox.ValueChanged += TickCountBox_ValueChanged;
+			this.tickCountBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.tickCountBox.BackColor = Color.White;
+			this.tickCountBox.BorderStyle = BorderStyle.FixedSingle;
+			this.tickCountBox.ClearZero = true;
+			this.tickCountBox.ForeColor = Color.Black;
+			this.tickCountBox.Location = new Point(198, 17);
+			this.tickCountBox.LongValue = 1;
+			this.tickCountBox.Magnitude = 1;
+			this.tickCountBox.MaxLength = 5;
+			this.tickCountBox.MaxValue = 99999;
+			this.tickCountBox.MinValue = 1;
+			this.tickCountBox.Name = "mTickCountBox";
+			this.tickCountBox.Sign = Word.Signs.Positive;
+			this.tickCountBox.Size = new Size(40, 20);
+			this.tickCountBox.SupportNegativeZero = false;
+			this.tickCountBox.TabIndex = 1;
+			this.tickCountBox.Text = "1";
+			this.tickCountBox.ValueChanged += TickCountBox_ValueChanged;
 			// 
 			// mColorProfilingCountsCheckBox
 			// 
-			_colorProfilingCountsCheckBox.AutoSize = true;
-			_colorProfilingCountsCheckBox.Checked = true;
-			_colorProfilingCountsCheckBox.CheckState = CheckState.Checked;
-			_colorProfilingCountsCheckBox.Location = new Point(8, 43);
-			_colorProfilingCountsCheckBox.Name = "mColorProfilingCountsCheckBox";
-			_colorProfilingCountsCheckBox.Size = new Size(119, 17);
-			_colorProfilingCountsCheckBox.TabIndex = 4;
-			_colorProfilingCountsCheckBox.Text = "Color profiler counts";
-			_colorProfilingCountsCheckBox.UseVisualStyleBackColor = true;
-			_colorProfilingCountsCheckBox.FlatStyle = FlatStyle.Flat;
+			this.colorProfilingCountsCheckBox.AutoSize = true;
+			this.colorProfilingCountsCheckBox.Checked = true;
+			this.colorProfilingCountsCheckBox.CheckState = CheckState.Checked;
+			this.colorProfilingCountsCheckBox.Location = new Point(8, 43);
+			this.colorProfilingCountsCheckBox.Name = "mColorProfilingCountsCheckBox";
+			this.colorProfilingCountsCheckBox.Size = new Size(119, 17);
+			this.colorProfilingCountsCheckBox.TabIndex = 4;
+			this.colorProfilingCountsCheckBox.Text = "Color profiler counts";
+			this.colorProfilingCountsCheckBox.UseVisualStyleBackColor = true;
+			this.colorProfilingCountsCheckBox.FlatStyle = FlatStyle.Flat;
 			// 
 			// PreferencesForm
 			// 
 			ClientSize = new Size(384, 412);
-			Controls.Add(_floatingPointGroupBox);
-			Controls.Add(_loaderCardsGroupBox);
-			Controls.Add(_miscGroupBox);
-			Controls.Add(_defaultsButton);
-			Controls.Add(_deviceTickCountsGroup);
-			Controls.Add(_okButton);
-			Controls.Add(_deviceFilesGroup);
-			Controls.Add(_colorsGroup);
-			Controls.Add(_cancelButton);
+			Controls.Add(this.floatingPointGroupBox);
+			Controls.Add(this.loaderCardsGroupBox);
+			Controls.Add(this.miscGroupBox);
+			Controls.Add(this.defaultsButton);
+			Controls.Add(this.deviceTickCountsGroup);
+			Controls.Add(this.okButton);
+			Controls.Add(this.deviceFilesGroup);
+			Controls.Add(this.colorsGroup);
+			Controls.Add(this.cancelButton);
 			Icon = ((Icon)(resources.GetObject("$this.Icon")));
 			KeyPreview = true;
 			MaximizeBox = false;
@@ -886,37 +886,37 @@ namespace MixGui.Components
 			Text = "Preferences";
 			VisibleChanged += This_VisibleChanged;
 			KeyPress += This_KeyPress;
-			_colorsGroup.ResumeLayout(false);
-			_colorsGroup.PerformLayout();
-			_deviceFilesGroup.ResumeLayout(false);
-			_deviceFilesGroup.PerformLayout();
-			_deviceTickCountsGroup.ResumeLayout(false);
-			_deviceTickCountsGroup.PerformLayout();
-			_miscGroupBox.ResumeLayout(false);
-			_miscGroupBox.PerformLayout();
-			_loaderCardsGroupBox.ResumeLayout(false);
-			_loaderCardsPanel.ResumeLayout(false);
-			_loaderCardsPanel.PerformLayout();
-			_floatingPointGroupBox.ResumeLayout(false);
-			_floatingPointGroupBox.PerformLayout();
+			this.colorsGroup.ResumeLayout(false);
+			this.colorsGroup.PerformLayout();
+			this.deviceFilesGroup.ResumeLayout(false);
+			this.deviceFilesGroup.PerformLayout();
+			this.deviceTickCountsGroup.ResumeLayout(false);
+			this.deviceTickCountsGroup.PerformLayout();
+			this.miscGroupBox.ResumeLayout(false);
+			this.miscGroupBox.PerformLayout();
+			this.loaderCardsGroupBox.ResumeLayout(false);
+			this.loaderCardsPanel.ResumeLayout(false);
+			this.loaderCardsPanel.PerformLayout();
+			this.floatingPointGroupBox.ResumeLayout(false);
+			this.floatingPointGroupBox.PerformLayout();
 			ResumeLayout(false);
 
 		}
 
 		private void ColorDefaultButton_Click(object sender, EventArgs e)
 		{
-			var selectedItem = (ColorComboBoxItem)_colorSelectionBox.SelectedItem;
+			var selectedItem = (ColorComboBoxItem)this.colorSelectionBox.SelectedItem;
 
 			selectedItem.ResetDefault();
 			UpdateColorControls(selectedItem);
-			_colorSelectionBox.Focus();
+			this.colorSelectionBox.Focus();
 		}
 
 		private void ColorSetButton_Click(object sender, EventArgs e)
 		{
-			if (_colorDialog == null)
+			if (this.colorDialog == null)
 			{
-				_colorDialog = new ColorDialog
+				this.colorDialog = new ColorDialog
 				{
 					AnyColor = true,
 					SolidColorOnly = true,
@@ -924,39 +924,39 @@ namespace MixGui.Components
 				};
 			}
 
-			var selectedItem = (ColorComboBoxItem)_colorSelectionBox.SelectedItem;
-			_colorDialog.CustomColors = new int[] { selectedItem.Color.B << 16 | selectedItem.Color.G << 8 | selectedItem.Color.R };
-			_colorDialog.Color = selectedItem.Color;
+			var selectedItem = (ColorComboBoxItem)this.colorSelectionBox.SelectedItem;
+			this.colorDialog.CustomColors = new int[] { selectedItem.Color.B << 16 | selectedItem.Color.G << 8 | selectedItem.Color.R };
+			this.colorDialog.Color = selectedItem.Color;
 
-			if (_colorDialog.ShowDialog(this) == DialogResult.OK)
+			if (this.colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				selectedItem.Color = _colorDialog.Color;
+				selectedItem.Color = this.colorDialog.Color;
 				UpdateColorControls(selectedItem);
 			}
 		}
 
 		private void DefaultsButton_Click(object sender, EventArgs e)
 		{
-			foreach (ColorComboBoxItem colorItem in _colorSelectionBox.Items)
+			foreach (ColorComboBoxItem colorItem in this.colorSelectionBox.Items)
 				colorItem.ResetDefault();
 
-			_colorProfilingCountsCheckBox.Checked = true;
+			this.colorProfilingCountsCheckBox.Checked = true;
 
-			foreach (DeviceFileComboBoxItem deviceFileItem in _deviceFileSelectionBox.Items)
+			foreach (DeviceFileComboBoxItem deviceFileItem in this.deviceFileSelectionBox.Items)
 				deviceFileItem.ResetDefault();
 
-			foreach (TickCountComboBoxItem tickCountItem in _tickCountSelectionBox.Items)
+			foreach (TickCountComboBoxItem tickCountItem in this.tickCountSelectionBox.Items)
 				tickCountItem.ResetDefault();
 
-			_deviceFilesDirectory = null;
-			_deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
+			this.deviceFilesDirectory = null;
+			this.deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 
-			UpdateColorControls((ColorComboBoxItem)_colorSelectionBox.SelectedItem);
+			UpdateColorControls((ColorComboBoxItem)this.colorSelectionBox.SelectedItem);
 			UpdateDeviceDirectoryControls();
-			UpdateDeviceFileControls((DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem);
-			UpdateTickCountControls((TickCountComboBoxItem)_tickCountSelectionBox.SelectedItem);
+			UpdateDeviceFileControls((DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem);
+			UpdateTickCountControls((TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem);
 			UpdateDeviceReloadIntervalControls();
-			_floatingPointMemoryWordCount = null;
+			this.floatingPointMemoryWordCount = null;
 			UpdateFloatingPointControls();
 
 			LoadDefaultLoaderCards();
@@ -964,51 +964,51 @@ namespace MixGui.Components
 
 		private void UpdateFloatingPointControls()
 		{
-			_floatingPointMemoryWordCountBox.LongValue = _floatingPointMemoryWordCount ?? ModuleSettings.FloatingPointMemoryWordCountDefault;
-			_floatingPointMemoryWordCountDefaultButton.Enabled = _floatingPointMemoryWordCount != null;
+			this.floatingPointMemoryWordCountBox.LongValue = this.floatingPointMemoryWordCount ?? ModuleSettings.FloatingPointMemoryWordCountDefault;
+			this.floatingPointMemoryWordCountDefaultButton.Enabled = this.floatingPointMemoryWordCount != null;
 		}
 
 		private void DeviceDirectoryDefaultButton_Click(object sender, EventArgs e)
 		{
-			_deviceFilesDirectory = null;
+			this.deviceFilesDirectory = null;
 			UpdateDeviceDirectoryControls();
-			UpdateDeviceFileControls((DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem);
-			_deviceDirectoryBox.Focus();
+			UpdateDeviceFileControls((DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem);
+			this.deviceDirectoryBox.Focus();
 		}
 
 		private void DeviceDirectorySetButton_Click(object sender, EventArgs e)
 		{
-			if (_deviceFilesFolderBrowserDialog == null)
+			if (this.deviceFilesFolderBrowserDialog == null)
 			{
-				_deviceFilesFolderBrowserDialog = new FolderBrowserDialog
+				this.deviceFilesFolderBrowserDialog = new FolderBrowserDialog
 				{
 					Description = "Please select the default directory for device files."
 				};
 			}
 
-			_deviceFilesFolderBrowserDialog.SelectedPath = GetCurrentDeviceFilesDirectory();
+			this.deviceFilesFolderBrowserDialog.SelectedPath = GetCurrentDeviceFilesDirectory();
 
-			if (_deviceFilesFolderBrowserDialog.ShowDialog(this) == DialogResult.OK)
+			if (this.deviceFilesFolderBrowserDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				_deviceFilesDirectory = _deviceFilesFolderBrowserDialog.SelectedPath;
+				this.deviceFilesDirectory = this.deviceFilesFolderBrowserDialog.SelectedPath;
 				UpdateDeviceDirectoryControls();
-				UpdateDeviceFileControls((DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem);
+				UpdateDeviceFileControls((DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem);
 			}
 		}
 
 		private void DeviceFileDefaultButton_Click(object sender, EventArgs e)
 		{
-			var selectedItem = (DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem;
+			var selectedItem = (DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem;
 			selectedItem.ResetDefault();
 			UpdateDeviceFileControls(selectedItem);
-			_deviceFileSelectionBox.Focus();
+			this.deviceFileSelectionBox.Focus();
 		}
 
 		private void DeviceFileSetButton_Click(object sender, EventArgs e)
 		{
-			if (_selectDeviceFileDialog == null)
+			if (this.selectDeviceFileDialog == null)
 			{
-				_selectDeviceFileDialog = new SaveFileDialog
+				this.selectDeviceFileDialog = new SaveFileDialog
 				{
 					CreatePrompt = true,
 					DefaultExt = "mixdev",
@@ -1017,51 +1017,51 @@ namespace MixGui.Components
 				};
 			}
 
-			var selectedItem = (DeviceFileComboBoxItem)_deviceFileSelectionBox.SelectedItem;
-			_selectDeviceFileDialog.FileName = Path.Combine(GetCurrentDeviceFilesDirectory(), selectedItem.FilePath);
+			var selectedItem = (DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem;
+			this.selectDeviceFileDialog.FileName = Path.Combine(GetCurrentDeviceFilesDirectory(), selectedItem.FilePath);
 
-			if (_selectDeviceFileDialog.ShowDialog(this) == DialogResult.OK)
+			if (this.selectDeviceFileDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				selectedItem.FilePath = _selectDeviceFileDialog.FileName;
+				selectedItem.FilePath = this.selectDeviceFileDialog.FileName;
 				UpdateDeviceFileControls(selectedItem);
 			}
 		}
 
 		private void OkButton_Click(object sender, EventArgs e)
 		{
-			_configuration.Colors.Clear();
-			foreach (ColorComboBoxItem colorItem in _colorSelectionBox.Items)
+			this.configuration.Colors.Clear();
+			foreach (ColorComboBoxItem colorItem in this.colorSelectionBox.Items)
 			{
 				if (!colorItem.IsDefault)
-					_configuration.Colors.Add(colorItem.Name, colorItem.Color);
+					this.configuration.Colors.Add(colorItem.Name, colorItem.Color);
 			}
 
-			_configuration.ColorProfilingCounts = _colorProfilingCountsCheckBox.Checked;
+			this.configuration.ColorProfilingCounts = this.colorProfilingCountsCheckBox.Checked;
 
-			_configuration.DeviceFilePaths.Clear();
-			foreach (DeviceFileComboBoxItem deviceFileItem in _deviceFileSelectionBox.Items)
+			this.configuration.DeviceFilePaths.Clear();
+			foreach (DeviceFileComboBoxItem deviceFileItem in this.deviceFileSelectionBox.Items)
 			{
 				if (!deviceFileItem.IsDefault)
-					_configuration.DeviceFilePaths.Add(deviceFileItem.Id, deviceFileItem.FilePath);
+					this.configuration.DeviceFilePaths.Add(deviceFileItem.Id, deviceFileItem.FilePath);
 			}
 
-			_configuration.TickCounts.Clear();
-			foreach (TickCountComboBoxItem tickCountItem in _tickCountSelectionBox.Items)
+			this.configuration.TickCounts.Clear();
+			foreach (TickCountComboBoxItem tickCountItem in this.tickCountSelectionBox.Items)
 			{
 				if (!tickCountItem.IsDefault)
-					_configuration.TickCounts.Add(tickCountItem.Name, tickCountItem.TickCount);
+					this.configuration.TickCounts.Add(tickCountItem.Name, tickCountItem.TickCount);
 			}
 
-			_configuration.DeviceFilesDirectory = _deviceFilesDirectory;
-			_configuration.DeviceReloadInterval = _deviceReloadInterval;
+			this.configuration.DeviceFilesDirectory = this.deviceFilesDirectory;
+			this.configuration.DeviceReloadInterval = this.deviceReloadInterval;
 
-			_configuration.FloatingPointMemoryWordCount = _floatingPointMemoryWordCount;
+			this.configuration.FloatingPointMemoryWordCount = this.floatingPointMemoryWordCount;
 
-			_configuration.LoaderCards = _loaderCardsDefaultButton.Enabled ? _loaderCardTextBoxes.Select(box => box.MixByteCollectionValue.ToString(true)).ToArray() : null;
+			this.configuration.LoaderCards = this.loaderCardsDefaultButton.Enabled ? this.loaderCardTextBoxes.Select(box => box.MixByteCollectionValue.ToString(true)).ToArray() : null;
 
 			try
 			{
-				_configuration.Save(_defaultDirectory);
+				this.configuration.Save(this.defaultDirectory);
 			}
 			catch (Exception exception)
 			{
@@ -1076,16 +1076,16 @@ namespace MixGui.Components
 
 		private void TickCountDefaultButton_Click(object sender, EventArgs e)
 		{
-			var selectedItem = (TickCountComboBoxItem)_tickCountSelectionBox.SelectedItem;
+			var selectedItem = (TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem;
 			selectedItem.ResetDefault();
 			UpdateTickCountControls(selectedItem);
-			_tickCountSelectionBox.Focus();
+			this.tickCountSelectionBox.Focus();
 		}
 
 		private void SetTickCountValue()
 		{
-			var selectedItem = (TickCountComboBoxItem)_tickCountSelectionBox.SelectedItem;
-			selectedItem.TickCount = (int)_tickCountBox.LongValue;
+			var selectedItem = (TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem;
+			selectedItem.TickCount = (int)this.tickCountBox.LongValue;
 			UpdateTickCountControls(selectedItem);
 		}
 
@@ -1104,82 +1104,82 @@ namespace MixGui.Components
 				return;
 
 			FillColorSelectionBox();
-			_colorProfilingCountsCheckBox.Checked = _configuration.ColorProfilingCounts;
-			_deviceFilesDirectory = _configuration.DeviceFilesDirectory;
+			this.colorProfilingCountsCheckBox.Checked = this.configuration.ColorProfilingCounts;
+			this.deviceFilesDirectory = this.configuration.DeviceFilesDirectory;
 			UpdateDeviceDirectoryControls();
 			FillDeviceFileSelectionBox();
 			FillTickCountSelectionBox();
-			_deviceReloadInterval = _configuration.DeviceReloadInterval;
+			this.deviceReloadInterval = this.configuration.DeviceReloadInterval;
 			UpdateDeviceReloadIntervalControls();
-			_floatingPointMemoryWordCount = _configuration.FloatingPointMemoryWordCount;
+			this.floatingPointMemoryWordCount = this.configuration.FloatingPointMemoryWordCount;
 			UpdateFloatingPointControls();
 			LoadLoaderCards();
 		}
 
 		private void LoadLoaderCards()
 		{
-			string[] loaderCards = _configuration.LoaderCards ?? CardDeckExporter.DefaultLoaderCards;
+			string[] loaderCards = this.configuration.LoaderCards ?? CardDeckExporter.DefaultLoaderCards;
 
-			for (int index = 0; index < _loaderCardTextBoxes.Length; index++)
+			for (int index = 0; index < this.loaderCardTextBoxes.Length; index++)
 			{
-				MixByteCollectionCharTextBox loaderCardTextBox = _loaderCardTextBoxes[index];
+				MixByteCollectionCharTextBox loaderCardTextBox = this.loaderCardTextBoxes[index];
 				loaderCardTextBox.MixByteCollectionValue = new MixByteCollection(CardReaderDevice.BytesPerRecord);
 				loaderCardTextBox.MixByteCollectionValue.Load(index < loaderCards.Length ? loaderCards[index] : string.Empty);
 				loaderCardTextBox.Update();
 			}
 
-			_loaderCardsDefaultButton.Enabled = _configuration.LoaderCards != null;
+			this.loaderCardsDefaultButton.Enabled = this.configuration.LoaderCards != null;
 		}
 
 		private void UpdateColorControls(ColorComboBoxItem item)
 		{
 			if (item == null)
 			{
-				_showColorLabel.ForeColor = Color.Black;
-				_showColorLabel.BackColor = Color.White;
+				this.showColorLabel.ForeColor = Color.Black;
+				this.showColorLabel.BackColor = Color.White;
 
-				_colorSetButton.Enabled = false;
-				_colorDefaultButton.Enabled = false;
+				this.colorSetButton.Enabled = false;
+				this.colorDefaultButton.Enabled = false;
 			}
 			else
 			{
 				if (item.IsBackground)
 				{
-					_showColorLabel.ForeColor = GetMatchingColor(item.Name, false);
-					_showColorLabel.BackColor = item.Color;
+					this.showColorLabel.ForeColor = GetMatchingColor(item.Name, false);
+					this.showColorLabel.BackColor = item.Color;
 				}
 				else
 				{
-					_showColorLabel.ForeColor = item.Color;
-					_showColorLabel.BackColor = GetMatchingColor(item.Name, true);
+					this.showColorLabel.ForeColor = item.Color;
+					this.showColorLabel.BackColor = GetMatchingColor(item.Name, true);
 				}
 
-				_colorSetButton.Enabled = true;
-				_colorDefaultButton.Enabled = !item.IsDefault;
+				this.colorSetButton.Enabled = true;
+				this.colorDefaultButton.Enabled = !item.IsDefault;
 			}
 		}
 
 		private void UpdateDeviceReloadIntervalControls()
 		{
-			if (_deviceReloadInterval == DeviceSettings.UnsetDeviceReloadInterval)
+			if (this.deviceReloadInterval == DeviceSettings.UnsetDeviceReloadInterval)
 			{
 				SelectDeviceReloadInterval(DeviceSettings.DefaultDeviceReloadInterval);
-				_deviceReloadIntervalDefaultButton.Enabled = false;
+				this.deviceReloadIntervalDefaultButton.Enabled = false;
 			}
 			else
 			{
-				SelectDeviceReloadInterval(_deviceReloadInterval);
-				_deviceReloadIntervalDefaultButton.Enabled = true;
+				SelectDeviceReloadInterval(this.deviceReloadInterval);
+				this.deviceReloadIntervalDefaultButton.Enabled = true;
 			}
 		}
 
 		private void SelectDeviceReloadInterval(int interval)
 		{
-			foreach (DeviceReloadIntervalComboBoxItem item in _deviceReloadIntervalComboBox.Items)
+			foreach (DeviceReloadIntervalComboBoxItem item in this.deviceReloadIntervalComboBox.Items)
 			{
 				if (item.MilliSeconds >= interval)
 				{
-					_deviceReloadIntervalComboBox.SelectedItem = item;
+					this.deviceReloadIntervalComboBox.SelectedItem = item;
 					return;
 				}
 			}
@@ -1187,15 +1187,15 @@ namespace MixGui.Components
 
 		private void UpdateDeviceDirectoryControls()
 		{
-			if (_deviceFilesDirectory == null)
+			if (this.deviceFilesDirectory == null)
 			{
-				_deviceDirectoryBox.Text = DeviceSettings.DefaultDeviceFilesDirectory;
-				_deviceDirectoryDefaultButton.Enabled = false;
+				this.deviceDirectoryBox.Text = DeviceSettings.DefaultDeviceFilesDirectory;
+				this.deviceDirectoryDefaultButton.Enabled = false;
 			}
 			else
 			{
-				_deviceDirectoryBox.Text = _deviceFilesDirectory;
-				_deviceDirectoryDefaultButton.Enabled = true;
+				this.deviceDirectoryBox.Text = this.deviceFilesDirectory;
+				this.deviceDirectoryDefaultButton.Enabled = true;
 			}
 		}
 
@@ -1203,15 +1203,15 @@ namespace MixGui.Components
 		{
 			if (item == null)
 			{
-				_deviceFileBox.Text = "";
-				_deviceFileSetButton.Enabled = false;
-				_deviceFileDefaultButton.Enabled = false;
+				this.deviceFileBox.Text = "";
+				this.deviceFileSetButton.Enabled = false;
+				this.deviceFileDefaultButton.Enabled = false;
 			}
 			else
 			{
-				_deviceFileBox.Text = Path.Combine(GetCurrentDeviceFilesDirectory(), item.FilePath);
-				_deviceFileSetButton.Enabled = true;
-				_deviceFileDefaultButton.Enabled = !item.IsDefault;
+				this.deviceFileBox.Text = Path.Combine(GetCurrentDeviceFilesDirectory(), item.FilePath);
+				this.deviceFileSetButton.Enabled = true;
+				this.deviceFileDefaultButton.Enabled = !item.IsDefault;
 			}
 		}
 
@@ -1219,52 +1219,52 @@ namespace MixGui.Components
 		{
 			if (item == null)
 			{
-				_tickCountBox.LongValue = 1L;
-				_tickCountSetButton.Enabled = false;
-				_tickCountDefaultButton.Enabled = false;
+				this.tickCountBox.LongValue = 1L;
+				this.tickCountSetButton.Enabled = false;
+				this.tickCountDefaultButton.Enabled = false;
 			}
 			else
 			{
-				_tickCountBox.LongValue = item.TickCount;
-				_tickCountSetButton.Enabled = true;
-				_tickCountDefaultButton.Enabled = !item.IsDefault;
+				this.tickCountBox.LongValue = item.TickCount;
+				this.tickCountSetButton.Enabled = true;
+				this.tickCountDefaultButton.Enabled = !item.IsDefault;
 			}
 		}
 
 		private void DeviceReloadIntervalDefaultButton_Click(object sender, EventArgs e)
 		{
-			_deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
+			this.deviceReloadInterval = DeviceSettings.UnsetDeviceReloadInterval;
 			UpdateDeviceReloadIntervalControls();
 		}
 
 		private void DeviceReloadIntervalComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			_deviceReloadInterval = ((DeviceReloadIntervalComboBoxItem)_deviceReloadIntervalComboBox.SelectedItem).MilliSeconds;
-			_deviceReloadIntervalDefaultButton.Enabled = true;
+			this.deviceReloadInterval = ((DeviceReloadIntervalComboBoxItem)this.deviceReloadIntervalComboBox.SelectedItem).MilliSeconds;
+			this.deviceReloadIntervalDefaultButton.Enabled = true;
 		}
 
 		private void LoadDefaultLoaderCards()
 		{
 			string[] defaultLoaderCards = CardDeckExporter.DefaultLoaderCards;
 
-			for (int index = 0; index < _loaderCardTextBoxes.Length; index++)
+			for (int index = 0; index < this.loaderCardTextBoxes.Length; index++)
 			{
-				_loaderCardTextBoxes[index].MixByteCollectionValue.Load(index < defaultLoaderCards.Length ? defaultLoaderCards[index] : string.Empty);
-				_loaderCardTextBoxes[index].Update();
+				this.loaderCardTextBoxes[index].MixByteCollectionValue.Load(index < defaultLoaderCards.Length ? defaultLoaderCards[index] : string.Empty);
+				this.loaderCardTextBoxes[index].Update();
 			}
 
-			_loaderCardsDefaultButton.Enabled = false;
+			this.loaderCardsDefaultButton.Enabled = false;
 		}
 
 		private void FloatingPointMemoryWordCountDefaultButton_Click(object sender, EventArgs e)
 		{
-			_floatingPointMemoryWordCount = null;
+			this.floatingPointMemoryWordCount = null;
 			UpdateFloatingPointControls();
 		}
 
 		private void FloatingPointMemoryWordCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 		{
-			_floatingPointMemoryWordCount = (int)_floatingPointMemoryWordCountBox.LongValue;
+			this.floatingPointMemoryWordCount = (int)this.floatingPointMemoryWordCountBox.LongValue;
 			UpdateFloatingPointControls();
 		}
 

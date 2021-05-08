@@ -4,27 +4,27 @@ namespace MixLib.Instruction
 {
 	public class InstructionText
 	{
-		private readonly MixInstruction.Instance _instance;
+		private readonly MixInstruction.Instance instance;
 
 		public InstructionText(MixInstruction.Instance instance) 
-			=> _instance = instance;
+			=> this.instance = instance;
 
 		public string Index 
-			=> _instance.Index != 0 ? "," + _instance.Index : "";
+			=> this.instance.Index != 0 ? "," + this.instance.Index : "";
 
 		public string InstanceText 
 			=> Mnemonic + " " + Address + Index + Field;
 
 		public string Mnemonic 
-			=> _instance.MixInstruction.Mnemonic;
+			=> this.instance.MixInstruction.Mnemonic;
 
 		private string FieldText
 		{
 			get
 			{
-				FieldSpec fieldSpec = _instance.FieldSpec;
+				FieldSpec fieldSpec = this.instance.FieldSpec;
 
-				if (_instance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
+				if (this.instance.MixInstruction.MetaFieldSpec.FieldIsRange && fieldSpec.IsValid)
 					return (fieldSpec.LowBound + ":" + fieldSpec.HighBound);
 
 				return fieldSpec.MixByteValue.ByteValue.ToString();
@@ -35,9 +35,9 @@ namespace MixLib.Instruction
 		{
 			get
 			{
-				var addressText = _instance.AddressMagnitude.ToString();
+				var addressText = this.instance.AddressMagnitude.ToString();
 				
-				if (_instance.AddressSign.IsNegative())
+				if (this.instance.AddressSign.IsNegative())
 					addressText = '-' + addressText;
 
 				return addressText;
@@ -49,10 +49,10 @@ namespace MixLib.Instruction
 			get
 			{
 				string str = null;
-				switch (_instance.MixInstruction.MetaFieldSpec.Presence)
+				switch (this.instance.MixInstruction.MetaFieldSpec.Presence)
 				{
 					case MetaFieldSpec.Presences.Optional:
-						if (_instance.FieldSpec != _instance.MixInstruction.MetaFieldSpec.DefaultFieldSpec)
+						if (this.instance.FieldSpec != this.instance.MixInstruction.MetaFieldSpec.DefaultFieldSpec)
 							str = FieldText;
 
 						break;

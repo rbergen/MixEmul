@@ -20,28 +20,28 @@ namespace MixGui.Components
 	{
 		private const long Unrendered = long.MinValue;
 
-		private Color _editingTextColor;
-		private Color _errorTextColor;
-		private Color _immutableTextColor;
-		private Color _renderedTextColor;
-		private Color _editorBackgroundColor;
-		private Color _loadedInstructionTextColor;
-		private Color _loadedInstructionBackgroundColor;
+		private Color editingTextColor;
+		private Color errorTextColor;
+		private Color immutableTextColor;
+		private Color renderedTextColor;
+		private Color editorBackgroundColor;
+		private Color loadedInstructionTextColor;
+		private Color loadedInstructionBackgroundColor;
 
-		private bool _editMode;
-		private IFullWord _instructionWord;
-		private long _lastRenderedMagnitude;
-		private Word.Signs _lastRenderedSign;
-		private ToolTip _toolTip;
-		private bool _noInstructionRendered;
-		private bool _updating;
-		private string _lastRenderedSourceLine;
-		private string _caption;
-		private bool _showShourceLineToolTip;
-		private bool _lastRenderedShowSourceLineToolTip;
-		private readonly ToolStripMenuItem _showAddressMenuItem;
-		private readonly ToolStripMenuItem _showIndexedAddressMenuItem;
-		private readonly ContextMenuStrip _contextMenu;
+		private bool editMode;
+		private IFullWord instructionWord;
+		private long lastRenderedMagnitude;
+		private Word.Signs lastRenderedSign;
+		private ToolTip toolTip;
+		private bool noInstructionRendered;
+		private bool updating;
+		private string lastRenderedSourceLine;
+		private string caption;
+		private bool showShourceLineToolTip;
+		private bool lastRenderedShowSourceLineToolTip;
+		private readonly ToolStripMenuItem showAddressMenuItem;
+		private readonly ToolStripMenuItem showIndexedAddressMenuItem;
+		private readonly ContextMenuStrip contextMenu;
 
 		public int MemoryMinIndex { get; set; }
 		public int MemoryMaxIndex { get; set; }
@@ -55,7 +55,7 @@ namespace MixGui.Components
 
 		public InstructionInstanceTextBox(IFullWord instructionWord = null)
 		{
-			_instructionWord = instructionWord ?? new FullWord();
+			this.instructionWord = instructionWord ?? new FullWord();
 
 			UpdateLayout();
 
@@ -67,37 +67,37 @@ namespace MixGui.Components
 			Enter += This_Enter;
 			ReadOnlyChanged += This_ReadOnlyChanged;
 
-			_showAddressMenuItem = new ToolStripMenuItem("Show address", null, ShowAddressMenuItem_Click);
+			this.showAddressMenuItem = new ToolStripMenuItem("Show address", null, ShowAddressMenuItem_Click);
 
-			_showIndexedAddressMenuItem = new ToolStripMenuItem("Show indexed address", null, ShowIndexedAddressMenuItem_Click);
+			this.showIndexedAddressMenuItem = new ToolStripMenuItem("Show indexed address", null, ShowIndexedAddressMenuItem_Click);
 
-			_contextMenu = new ContextMenuStrip();
-			_contextMenu.Items.Add(_showAddressMenuItem);
-			_contextMenu.Items.Add(_showIndexedAddressMenuItem);
+			this.contextMenu = new ContextMenuStrip();
+			this.contextMenu.Items.Add(this.showAddressMenuItem);
+			this.contextMenu.Items.Add(this.showIndexedAddressMenuItem);
 
-			ContextMenuStrip = _contextMenu;
+			ContextMenuStrip = this.contextMenu;
 
-			_updating = false;
-			_editMode = false;
+			this.updating = false;
+			this.editMode = false;
 			MemoryAddress = 0;
-			_lastRenderedMagnitude = Unrendered;
-			_lastRenderedSign = Word.Signs.Positive;
-			_lastRenderedSourceLine = null;
-			_noInstructionRendered = true;
-			_showShourceLineToolTip = true;
+			this.lastRenderedMagnitude = Unrendered;
+			this.lastRenderedSign = Word.Signs.Positive;
+			this.lastRenderedSourceLine = null;
+			this.noInstructionRendered = true;
+			this.showShourceLineToolTip = true;
 
 			Update();
 		}
 
 		public bool ShowSourceLineToolTip 
 		{
-			get => _showShourceLineToolTip;
+			get => this.showShourceLineToolTip;
 			set
 			{
-				if (_showShourceLineToolTip == value)
+				if (this.showShourceLineToolTip == value)
 					return;
 
-				_showShourceLineToolTip = value;
+				this.showShourceLineToolTip = value;
 				Update();
 			}
 		}
@@ -125,7 +125,7 @@ namespace MixGui.Components
 			=> CheckContentsEditable();
 
 		private void ShowIndexedAddressMenuItem_Click(object sender, EventArgs e)
-			=> OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), _instructionWord[MixInstruction.IndexByte])));
+			=> OnAddressSelected(new AddressSelectedEventArgs(IndexedAddressCalculatorCallback(GetAddress(), this.instructionWord[MixInstruction.IndexByte])));
 
 		private void ShowAddressMenuItem_Click(object sender, EventArgs e)
 			=> OnAddressSelected(new AddressSelectedEventArgs(GetAddress()));
@@ -138,7 +138,7 @@ namespace MixGui.Components
 			int textLength = TextLength;
 			AppendText(element);
 			Select(textLength, element.Length);
-			SelectionColor = markAsError ? _errorTextColor : ForeColor;
+			SelectionColor = markAsError ? this.errorTextColor : ForeColor;
 		}
 
 		private string GetAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
@@ -201,7 +201,7 @@ namespace MixGui.Components
 
 		private bool AssembleInstruction(bool markErrors)
 		{
-			_editMode = false;
+			this.editMode = false;
 
 			var instance = Assembler.Assemble(Text, MemoryAddress, out ParsedSourceLine line, Symbols, out AssemblyFindingCollection findings);
 
@@ -213,7 +213,7 @@ namespace MixGui.Components
 
 			if (markErrors && findings.Count > 0)
 			{
-				_updating = true;
+				this.updating = true;
 
 				int selectionStart = SelectionStart;
 				int selectionLength = SelectionLength;
@@ -222,31 +222,31 @@ namespace MixGui.Components
 
 				base.Text = line.OpField + " " + line.AddressField;
 
-				_caption = GetAssemblyErrorsCaption(line, findings);
-				_toolTip?.SetToolTip(this, _caption);
+				this.caption = GetAssemblyErrorsCaption(line, findings);
+				this.toolTip?.SetToolTip(this, this.caption);
 
 				Select(selectionStart, selectionLength);
 				ResumeLayout();
 
-				_updating = false;
+				this.updating = false;
 			}
 
 			if (instance == null)
 				return false;
 
-			var oldValue = new FullWord(_instructionWord.LongValue);
-			_instructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
+			var oldValue = new FullWord(this.instructionWord.LongValue);
+			this.instructionWord.LongValue = ((MixInstruction.Instance)instance).InstructionWord.LongValue;
 
 			Update();
 
-			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new FullWord(_instructionWord.LongValue)));
+			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, new FullWord(this.instructionWord.LongValue)));
 
 			return true;
 		}
 
 		private bool CheckContentsEditable()
 		{
-			if (ReadOnly || !_noInstructionRendered && !_instructionWord.IsEmpty)
+			if (ReadOnly || !this.noInstructionRendered && !this.instructionWord.IsEmpty)
 				return true;
 
 			base.Text = "";
@@ -267,7 +267,7 @@ namespace MixGui.Components
 				return;
 
 			Select(startCharIndex, length);
-			SelectionColor = _errorTextColor;
+			SelectionColor = this.errorTextColor;
 			Select(selectionStart, selectionLength);
 		}
 
@@ -275,7 +275,7 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			ForeColor = _editingTextColor;
+			ForeColor = this.editingTextColor;
 
 			if (TextLength > 0)
 			{
@@ -289,19 +289,19 @@ namespace MixGui.Components
 
 			ResumeLayout();
 
-			_caption = null;
-			_toolTip?.SetToolTip(this, null);
+			this.caption = null;
+			this.toolTip?.SetToolTip(this, null);
 
 			ContextMenuStrip = null;
 
-			_lastRenderedMagnitude = Unrendered;
-			_lastRenderedSign = Word.Signs.Positive;
-			_editMode = true;
+			this.lastRenderedMagnitude = Unrendered;
+			this.lastRenderedSign = Word.Signs.Positive;
+			this.editMode = true;
 		}
 
 		private void ShowNonInstruction(string text)
 		{
-			_noInstructionRendered = true;
+			this.noInstructionRendered = true;
 
 			if (Focused && !CheckContentsEditable())
 				return;
@@ -311,7 +311,7 @@ namespace MixGui.Components
 			Select(0, TextLength);
 			SelectionFont = new Font(Font.Name, Font.Size, FontStyle.Italic, Font.Unit, Font.GdiCharSet);
 
-			ForeColor = _immutableTextColor;
+			ForeColor = this.immutableTextColor;
 			SelectionLength = 0;
 
 			Select(0, 0);
@@ -323,7 +323,7 @@ namespace MixGui.Components
 			if (e.KeyCode != Keys.Enter)
 				return;
 
-			if (_editMode)
+			if (this.editMode)
 				AssembleInstruction(true);
 
 			e.Handled = true;
@@ -335,16 +335,16 @@ namespace MixGui.Components
 				return;
 
 			e.Handled = true;
-			_editMode = false;
+			this.editMode = false;
 			Update();
 		}
 
 		private void This_LostFocus(object sender, EventArgs e)
 		{
-			if (_editMode && AssembleInstruction(false))
+			if (this.editMode && AssembleInstruction(false))
 				return;
 
-			_editMode = false;
+			this.editMode = false;
 			Update();
 		}
 
@@ -356,7 +356,7 @@ namespace MixGui.Components
 
 		private void This_TextChanged(object sender, EventArgs e)
 		{
-			if (!_updating && !_editMode)
+			if (!this.updating && !this.editMode)
 				SetEditMode();
 		}
 
@@ -377,11 +377,11 @@ namespace MixGui.Components
 			MixByte[] addressBytes = new MixByte[MixInstruction.AddressByteCount];
 
 			for (int i = 0; i < MixInstruction.AddressByteCount; i++)
-				addressBytes[i] = _instructionWord[i];
+				addressBytes[i] = this.instructionWord[i];
 
 			var address = (int)Word.BytesToLong(addressBytes);
 
-			if (_instructionWord.Sign.IsNegative())
+			if (this.instructionWord.Sign.IsNegative())
 				address = -address;
 
 			return address;
@@ -391,41 +391,41 @@ namespace MixGui.Components
 		{
 			ShowNonInstruction("No instruction");
 
-			_caption = caption;
-			_toolTip?.SetToolTip(this, caption);
+			this.caption = caption;
+			this.toolTip?.SetToolTip(this, caption);
 
 			ContextMenuStrip = null;
-			_updating = false;
+			this.updating = false;
 		}
 
 		public new void Update()
 		{
-			var memoryFullWord = _instructionWord as IMemoryFullWord;
+			var memoryFullWord = this.instructionWord as IMemoryFullWord;
 			string sourceLine = memoryFullWord?.SourceLine;
 
-			if (_editMode || (_lastRenderedMagnitude == _instructionWord.MagnitudeLongValue
-												&& _lastRenderedSign == _instructionWord.Sign
-												&& _lastRenderedSourceLine == sourceLine
-												&& _lastRenderedShowSourceLineToolTip == _showShourceLineToolTip))
+			if (this.editMode || (this.lastRenderedMagnitude == this.instructionWord.MagnitudeLongValue
+												&& this.lastRenderedSign == this.instructionWord.Sign
+												&& this.lastRenderedSourceLine == sourceLine
+												&& this.lastRenderedShowSourceLineToolTip == this.showShourceLineToolTip))
 			{
 				return;
 			}
 
-			_updating = true;
-			_editMode = false;
+			this.updating = true;
+			this.editMode = false;
 
-			_caption = null;
-			_toolTip?.SetToolTip(this, null);
+			this.caption = null;
+			this.toolTip?.SetToolTip(this, null);
 
-			_lastRenderedSourceLine = sourceLine;
-			BackColor = _lastRenderedSourceLine != null ? _loadedInstructionBackgroundColor : _editorBackgroundColor;
+			this.lastRenderedSourceLine = sourceLine;
+			BackColor = this.lastRenderedSourceLine != null ? this.loadedInstructionBackgroundColor : this.editorBackgroundColor;
 
-			_lastRenderedShowSourceLineToolTip = _showShourceLineToolTip;
-			string sourceCaption = _lastRenderedShowSourceLineToolTip && _lastRenderedSourceLine != null ? "Original source:   " + _lastRenderedSourceLine : null;
+			this.lastRenderedShowSourceLineToolTip = this.showShourceLineToolTip;
+			string sourceCaption = this.lastRenderedShowSourceLineToolTip && this.lastRenderedSourceLine != null ? "Original source:   " + this.lastRenderedSourceLine : null;
 
-			_lastRenderedMagnitude = _instructionWord.MagnitudeLongValue;
-			_lastRenderedSign = _instructionWord.Sign;
-			var instruction = InstructionSet.Instance.GetInstruction(_instructionWord[MixInstruction.OpcodeByte], new FieldSpec(_instructionWord[MixInstruction.FieldSpecByte]));
+			this.lastRenderedMagnitude = this.instructionWord.MagnitudeLongValue;
+			this.lastRenderedSign = this.instructionWord.Sign;
+			var instruction = InstructionSet.Instance.GetInstruction(this.instructionWord[MixInstruction.OpcodeByte], new FieldSpec(this.instructionWord[MixInstruction.FieldSpecByte]));
 
 			if (instruction == null)
 			{
@@ -433,14 +433,14 @@ namespace MixGui.Components
 				return;
 			}
 
-			var instance = instruction.CreateInstance(_instructionWord);
+			var instance = instruction.CreateInstance(this.instructionWord);
 			var errors = instance.Validate();
 			var text = new InstructionText(instance);
 
 			SuspendLayout();
 			base.Text = "";
 
-			ForeColor = _lastRenderedSourceLine != null ? _loadedInstructionTextColor : _renderedTextColor;
+			ForeColor = this.lastRenderedSourceLine != null ? this.loadedInstructionTextColor : this.renderedTextColor;
 			AddTextElement(text.Mnemonic + " ", false);
 			AddTextElement(text.Address, ItemInErrors(errors, InstanceValidationError.Sources.Address));
 			AddTextElement(text.Index, ItemInErrors(errors, InstanceValidationError.Sources.Index));
@@ -454,19 +454,19 @@ namespace MixGui.Components
 			if (sourceCaption != null)
 				caption = caption == null ? sourceCaption : string.Concat(sourceCaption, Environment.NewLine, caption);
 
-			_caption = caption;
-			_toolTip?.SetToolTip(this, caption);
+			this.caption = caption;
+			this.toolTip?.SetToolTip(this, caption);
 
 			var address = GetAddress();
-			_showAddressMenuItem.Enabled = address >= MemoryMinIndex && address <= MemoryMaxIndex;
-			_showIndexedAddressMenuItem.Enabled = IndexedAddressCalculatorCallback?.Invoke(address, _instructionWord[MixInstruction.IndexByte]) != int.MinValue;
-			ContextMenuStrip = _contextMenu;
+			this.showAddressMenuItem.Enabled = address >= MemoryMinIndex && address <= MemoryMaxIndex;
+			this.showIndexedAddressMenuItem.Enabled = IndexedAddressCalculatorCallback?.Invoke(address, this.instructionWord[MixInstruction.IndexByte]) != int.MinValue;
+			ContextMenuStrip = this.contextMenu;
 
 			base.Update();
 			ResumeLayout();
 
-			_noInstructionRendered = false;
-			_updating = false;
+			this.noInstructionRendered = false;
+			this.updating = false;
 		}
 
 		private static string GetAddressErrorsCaption(InstanceValidationError[] errors)
@@ -501,32 +501,32 @@ namespace MixGui.Components
 		public void UpdateLayout()
 		{
 			SuspendLayout();
-			_updating = true;
+			this.updating = true;
 
 			Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
-			_editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
-			_errorTextColor = GuiSettings.GetColor(GuiSettings.ErrorText);
-			_immutableTextColor = GuiSettings.GetColor(GuiSettings.ImmutableText);
-			_editorBackgroundColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			_loadedInstructionTextColor = GuiSettings.GetColor(GuiSettings.LoadedInstructionText);
-			_loadedInstructionBackgroundColor = GuiSettings.GetColor(GuiSettings.LoadedInstructionBackground);
-			ForeColor = _lastRenderedSourceLine != null ? _loadedInstructionTextColor : _renderedTextColor;
-			BackColor = _lastRenderedSourceLine != null ? _loadedInstructionBackgroundColor : _editorBackgroundColor;
+			this.renderedTextColor = GuiSettings.GetColor(GuiSettings.RenderedText);
+			this.editingTextColor = GuiSettings.GetColor(GuiSettings.EditingText);
+			this.errorTextColor = GuiSettings.GetColor(GuiSettings.ErrorText);
+			this.immutableTextColor = GuiSettings.GetColor(GuiSettings.ImmutableText);
+			this.editorBackgroundColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
+			this.loadedInstructionTextColor = GuiSettings.GetColor(GuiSettings.LoadedInstructionText);
+			this.loadedInstructionBackgroundColor = GuiSettings.GetColor(GuiSettings.LoadedInstructionBackground);
+			ForeColor = this.lastRenderedSourceLine != null ? this.loadedInstructionTextColor : this.renderedTextColor;
+			BackColor = this.lastRenderedSourceLine != null ? this.loadedInstructionBackgroundColor : this.editorBackgroundColor;
 
-			_updating = false;
+			this.updating = false;
 			ResumeLayout();
 		}
 
 		public IFullWord InstructionWord
 		{
-			get => _instructionWord;
+			get => this.instructionWord;
 			set
 			{
 				if (value != null)
 				{
-					_instructionWord = value;
-					_editMode = false;
+					this.instructionWord = value;
+					this.editMode = false;
 
 					Update();
 
@@ -540,17 +540,17 @@ namespace MixGui.Components
 
 		public ToolTip ToolTip
 		{
-			get => _toolTip;
+			get => this.toolTip;
 			set
 			{
-				_toolTip = value;
-				_toolTip?.SetToolTip(this, _caption);
+				this.toolTip = value;
+				this.toolTip?.SetToolTip(this, this.caption);
 			}
 		}
 
 		public IWord WordValue
 		{
-			get => _instructionWord;
+			get => this.instructionWord;
 			set
 			{
 				if (!(value is IFullWord))

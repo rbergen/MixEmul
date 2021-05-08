@@ -12,12 +12,12 @@ namespace MixGui.Components
 
 		private const int MaxItemCount = 1000;
 
-		private LinkedItem<T> _firstItem;
-		private LinkedItem<T> _currentItem;
-		private int _itemCount;
-		private Button _navigateBackwards;
-		private Button _navigateForwards;
-		private CurrentItemCallback _getCurrentItem;
+		private LinkedItem<T> firstItem;
+		private LinkedItem<T> currentItem;
+		private int itemCount;
+		private Button navigateBackwards;
+		private Button navigateForwards;
+		private CurrentItemCallback getCurrentItem;
 
 		public LinkedItemsSelectorControl()
 			=> InitializeComponent();
@@ -27,47 +27,47 @@ namespace MixGui.Components
 
 		private void InitializeComponent()
 		{
-			_navigateForwards = new Button();
-			_navigateBackwards = new Button();
+			this.navigateForwards = new Button();
+			this.navigateBackwards = new Button();
 
 			SuspendLayout();
 			// 
 			// mNavigateBackwards
 			// 
-			_navigateBackwards.Enabled = false;
-			_navigateBackwards.FlatStyle = FlatStyle.Flat;
-			_navigateBackwards.Image = Resources.NavigateBackwards_6270;
-			_navigateBackwards.Location = new Point(0, 0);
-			_navigateBackwards.Name = "mNavigateBackwards";
-			_navigateBackwards.Size = new Size(21, 21);
-			_navigateBackwards.TabIndex = 0;
-			_navigateBackwards.Click += MNavigateBackwards_Click;
+			this.navigateBackwards.Enabled = false;
+			this.navigateBackwards.FlatStyle = FlatStyle.Flat;
+			this.navigateBackwards.Image = Resources.NavigateBackwards_6270;
+			this.navigateBackwards.Location = new Point(0, 0);
+			this.navigateBackwards.Name = "mNavigateBackwards";
+			this.navigateBackwards.Size = new Size(21, 21);
+			this.navigateBackwards.TabIndex = 0;
+			this.navigateBackwards.Click += MNavigateBackwards_Click;
 			// 
 			// mNavigateForwards
 			// 
-			_navigateForwards.Enabled = false;
-			_navigateForwards.FlatStyle = FlatStyle.Flat;
-			_navigateForwards.Image = Resources.NavigateForward_6271;
-			_navigateForwards.Location = new Point(_navigateBackwards.Right - 1, 0);
-			_navigateForwards.Name = "mNavigateForwards";
-			_navigateForwards.Size = _navigateBackwards.Size;
-			_navigateForwards.TabIndex = 1;
-			_navigateForwards.Click += MNavigateForwards_Click;
+			this.navigateForwards.Enabled = false;
+			this.navigateForwards.FlatStyle = FlatStyle.Flat;
+			this.navigateForwards.Image = Resources.NavigateForward_6271;
+			this.navigateForwards.Location = new Point(this.navigateBackwards.Right - 1, 0);
+			this.navigateForwards.Name = "mNavigateForwards";
+			this.navigateForwards.Size = this.navigateBackwards.Size;
+			this.navigateForwards.TabIndex = 1;
+			this.navigateForwards.Click += MNavigateForwards_Click;
 			// 
 			// LinkedItemsSelectorControl
 			// 
 			AutoScaleDimensions = new SizeF(6F, 13F);
 			AutoScaleMode = AutoScaleMode.Font;
-			Controls.Add(_navigateForwards);
-			Controls.Add(_navigateBackwards);
+			Controls.Add(this.navigateForwards);
+			Controls.Add(this.navigateBackwards);
 			Name = "LinkedItemsSelectorControl";
-			Size = new Size(_navigateForwards.Right, _navigateForwards.Height);
+			Size = new Size(this.navigateForwards.Right, this.navigateForwards.Height);
 
 			ResumeLayout(false);
 		}
 
 		public void SetCurrentItemCallback(CurrentItemCallback getCurrentItem)
-			=> _getCurrentItem = getCurrentItem;
+			=> this.getCurrentItem = getCurrentItem;
 
 		public void AddItem(T currentItem, T newItem)
 		{
@@ -84,11 +84,11 @@ namespace MixGui.Components
 
 		private void PruneToMaxItemCount()
 		{
-			while (_itemCount > MaxItemCount)
+			while (this.itemCount > MaxItemCount)
 			{
-				_firstItem.Next.Previous = null;
-				_firstItem = _firstItem.Next;
-				_itemCount--;
+				this.firstItem.Next.Previous = null;
+				this.firstItem = this.firstItem.Next;
+				this.itemCount--;
 			}
 		}
 
@@ -97,54 +97,54 @@ namespace MixGui.Components
 			if (item == null)
 				return;
 
-			if (_firstItem == null)
+			if (this.firstItem == null)
 			{
-				_firstItem = new LinkedItem<T>(item);
-				_currentItem = _firstItem;
-				_itemCount++;
+				this.firstItem = new LinkedItem<T>(item);
+				this.currentItem = this.firstItem;
+				this.itemCount++;
 
 				return;
 			}
 
-			if (_currentItem.Item.Equals(item))
+			if (this.currentItem.Item.Equals(item))
 				return;
 
-			if (_currentItem.Next != null)
+			if (this.currentItem.Next != null)
 			{
 				int purgeItemCount = 0;
-				LinkedItem<T> oldNext = _currentItem.Next;
+				LinkedItem<T> oldNext = this.currentItem.Next;
 				while (oldNext != null)
 				{
 					purgeItemCount++;
 					oldNext = oldNext.Next;
 				}
 
-				_currentItem.Next.Previous = null;
-				_itemCount -= purgeItemCount;
+				this.currentItem.Next.Previous = null;
+				this.itemCount -= purgeItemCount;
 			}
 
-			_currentItem.Next = new LinkedItem<T>(item);
-			_itemCount++;
-			_currentItem.Next.Previous = _currentItem;
-			_currentItem = _currentItem.Next;
+			this.currentItem.Next = new LinkedItem<T>(item);
+			this.itemCount++;
+			this.currentItem.Next.Previous = this.currentItem;
+			this.currentItem = this.currentItem.Next;
 		}
 
 		private void SetEnabledState()
 		{
-			_navigateBackwards.Enabled = _currentItem != null && _currentItem.Previous != null;
-			_navigateForwards.Enabled = _currentItem != null && _currentItem.Next != null;
+			this.navigateBackwards.Enabled = this.currentItem != null && this.currentItem.Previous != null;
+			this.navigateForwards.Enabled = this.currentItem != null && this.currentItem.Next != null;
 		}
 
 		private void MNavigateBackwards_Click(object sender, EventArgs e)
 		{
-			var item = _getCurrentItem?.Invoke();
+			var item = this.getCurrentItem?.Invoke();
 
-			if (item != null && !_currentItem.Item.Equals(item) && !_currentItem.Previous.Item.Equals(item))
-				_currentItem = InsertItem(_currentItem, item);
+			if (item != null && !this.currentItem.Item.Equals(item) && !this.currentItem.Previous.Item.Equals(item))
+				this.currentItem = InsertItem(this.currentItem, item);
 
-			_currentItem = _currentItem.Previous;
+			this.currentItem = this.currentItem.Previous;
 
-			OnItemSelected(new ItemSelectedEventArgs<T>(_currentItem.Item));
+			OnItemSelected(new ItemSelectedEventArgs<T>(this.currentItem.Item));
 
 			SetEnabledState();
 		}
@@ -165,32 +165,32 @@ namespace MixGui.Components
 			insertee.Next = insertBefore;
 			insertBefore.Previous = insertee;
 
-			_itemCount++;
+			this.itemCount++;
 
-			if (_firstItem == insertBefore)
-				_firstItem = insertee;
+			if (this.firstItem == insertBefore)
+				this.firstItem = insertee;
 
 			return insertee;
 		}
 
 		private void MNavigateForwards_Click(object sender, EventArgs e)
 		{
-			var item = _getCurrentItem?.Invoke();
+			var item = this.getCurrentItem?.Invoke();
 
-			if (item != null && !_currentItem.Item.Equals(item) && !_currentItem.Next.Item.Equals(item))
-				_currentItem = InsertItem(_currentItem.Next, item);
+			if (item != null && !this.currentItem.Item.Equals(item) && !this.currentItem.Next.Item.Equals(item))
+				this.currentItem = InsertItem(this.currentItem.Next, item);
 
-			_currentItem = _currentItem.Next;
+			this.currentItem = this.currentItem.Next;
 
-			OnItemSelected(new ItemSelectedEventArgs<T>(_currentItem.Item));
+			OnItemSelected(new ItemSelectedEventArgs<T>(this.currentItem.Item));
 
 			SetEnabledState();
 		}
 
 		public void Clear()
 		{
-			_firstItem = _currentItem = null;
-			_itemCount = 0;
+			this.firstItem = this.currentItem = null;
+			this.itemCount = 0;
 
 			SetEnabledState();
 		}

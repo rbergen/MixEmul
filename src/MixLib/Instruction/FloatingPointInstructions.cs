@@ -14,8 +14,8 @@ namespace MixLib.Instruction
 		private const int FCMP_Opcode = 56;
 		public const string FCMP_Mnemonic = "FCMP";
 
-		private static ExecutionStatus _executionStatus;
-		private static readonly int[] _prenormOpcodes = { FADD_Opcode, FSUB_Opcode, FMUL_Opcode, FDIV_Opcode };
+		private static ExecutionStatus executionStatus;
+		private static readonly int[] prenormOpcodes = { FADD_Opcode, FSUB_Opcode, FMUL_Opcode, FDIV_Opcode };
 
 		public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
 		{
@@ -32,16 +32,16 @@ namespace MixLib.Instruction
 				return false;
 			}
 
-			if (_executionStatus != null && _executionStatus.ProgramCounter != module.ProgramCounter)
-				_executionStatus = null;
+			if (executionStatus != null && executionStatus.ProgramCounter != module.ProgramCounter)
+				executionStatus = null;
 
-			if (_executionStatus == null)
-				_executionStatus = new ExecutionStatus(module.Mode, module.ProgramCounter, instance.Instruction.Mnemonic);
+			if (executionStatus == null)
+				executionStatus = new ExecutionStatus(module.Mode, module.ProgramCounter, instance.Instruction.Mnemonic);
 
-			if (_executionStatus.CurrentStep == ExecutionStatus.Step.Initialize && !InitializeInstruction(module, instance, floatingPointModule))
+			if (executionStatus.CurrentStep == ExecutionStatus.Step.Initialize && !InitializeInstruction(module, instance, floatingPointModule))
 					return false;
 
-			_executionStatus.OverflowDetected |= floatingPointModule.Tick();
+			executionStatus.OverflowDetected |= floatingPointModule.Tick();
 
 			switch (floatingPointModule.Status)
 			{
@@ -61,10 +61,10 @@ namespace MixLib.Instruction
 
 				case ModuleBase.RunStatus.InvalidInstruction:
 				case ModuleBase.RunStatus.RuntimeError:
-					module.ReportRuntimeError($"Floating point module failed to execute instruction {_executionStatus.Mnemonic}");
-					module.Mode = _executionStatus.Mode;
+					module.ReportRuntimeError($"Floating point module failed to execute instruction { executionStatus.Mnemonic}");
+					module.Mode = executionStatus.Mode;
 
-					_executionStatus = null;
+					executionStatus = null;
 
 					break;
 			}
@@ -74,13 +74,13 @@ namespace MixLib.Instruction
 
 		private static bool? ProcessStep(ModuleBase module, FloatingPointModule floatingPointModule)
 		{
-			switch (_executionStatus.CurrentStep)
+			switch (executionStatus.CurrentStep)
 			{
 				case ExecutionStatus.Step.PrenormRA:
-					_executionStatus.RAValue = floatingPointModule.Registers.RA.FullWordValue;
-					_executionStatus.CurrentStep = ExecutionStatus.Step.PrenormParameter;
+					executionStatus.RAValue = floatingPointModule.Registers.RA.FullWordValue;
+					executionStatus.CurrentStep = ExecutionStatus.Step.PrenormParameter;
 
-					if (floatingPointModule.PreparePrenorm(_executionStatus.ParameterValue))
+					if (floatingPointModule.PreparePrenorm(executionStatus.ParameterValue))
 					{
 						module.ReportBreakpointReached();
 						return false;
@@ -89,10 +89,10 @@ namespace MixLib.Instruction
 					break;
 
 				case ExecutionStatus.Step.PrenormParameter:
-					_executionStatus.ParameterValue = floatingPointModule.Registers.RA.FullWordValue;
-					_executionStatus.CurrentStep = ExecutionStatus.Step.ExecuteInstruction;
+					executionStatus.ParameterValue = floatingPointModule.Registers.RA.FullWordValue;
+					executionStatus.CurrentStep = ExecutionStatus.Step.ExecuteInstruction;
 
-					if (floatingPointModule.PrepareCall(_executionStatus.Mnemonic, _executionStatus.RAValue, _executionStatus.ParameterValue))
+					if (floatingPointModule.PrepareCall(executionStatus.Mnemonic, executionStatus.RAValue, executionStatus.ParameterValue))
 					{
 						module.ReportBreakpointReached();
 						return false;
@@ -101,23 +101,23 @@ namespace MixLib.Instruction
 					break;
 
 				case ExecutionStatus.Step.ExecuteInstruction:
-					_executionStatus.RAValue = floatingPointModule.Registers.RA.FullWordValue;
+					executionStatus.RAValue = floatingPointModule.Registers.RA.FullWordValue;
 					Registers.CompValues comparatorValue = floatingPointModule.Registers.CompareIndicator;
 					module.Registers.LoadFromMemory(floatingPointModule.FullMemory, ModuleSettings.FloatingPointMemoryWordCount);
-					module.Registers.OverflowIndicator = _executionStatus.OverflowDetected;
+					module.Registers.OverflowIndicator = executionStatus.OverflowDetected;
 
-					if (_executionStatus.Mnemonic == FCMP_Mnemonic)
+					if (executionStatus.Mnemonic == FCMP_Mnemonic)
 						module.Registers.CompareIndicator = comparatorValue;
 
 					else
 					{
-						module.Registers.RA.Magnitude = _executionStatus.RAValue.Magnitude;
-						module.Registers.RA.Sign = _executionStatus.RAValue.Sign;
+						module.Registers.RA.Magnitude = executionStatus.RAValue.Magnitude;
+						module.Registers.RA.Sign = executionStatus.RAValue.Sign;
 					}
 
 					module.Mode = ModuleBase.RunMode.Normal;
 
-					_executionStatus = null;
+					executionStatus = null;
 
 					return true;
 			}
@@ -127,9 +127,9 @@ namespace MixLib.Instruction
 
 		private static bool InitializeInstruction(ModuleBase module, MixInstruction.Instance instance, FloatingPointModule floatingPointModule)
 		{
-			_executionStatus.RAValue = module.Registers.RA.FullWordValue;
+			executionStatus.RAValue = module.Registers.RA.FullWordValue;
 
-			bool prenormInstruction = Array.IndexOf(_prenormOpcodes, instance.MixInstruction.Opcode) != -1;
+			bool prenormInstruction = Array.IndexOf(prenormOpcodes, instance.MixInstruction.Opcode) != -1;
 			bool fcmpInstruction = !prenormInstruction && instance.MixInstruction.Opcode == FCMP_Opcode;
 
 			if (prenormInstruction || fcmpInstruction)
@@ -137,19 +137,19 @@ namespace MixLib.Instruction
 				var indexedAddress = InstructionHelpers.GetValidIndexedAddress(module, instance.AddressValue, instance.Index);
 				if (indexedAddress == int.MinValue)
 				{
-					_executionStatus = null;
+					executionStatus = null;
 					return false;
 				}
 
-				_executionStatus.ParameterValue = module.Memory[indexedAddress];
+				executionStatus.ParameterValue = module.Memory[indexedAddress];
 			}
 
 			module.Registers.SaveToMemory(floatingPointModule.FullMemory, ModuleSettings.FloatingPointMemoryWordCount, 0);
 
-			if (!floatingPointModule.ValidateCall(_executionStatus.Mnemonic))
+			if (!floatingPointModule.ValidateCall(executionStatus.Mnemonic))
 			{
 				module.ReportRuntimeError("Unable to initialize floating point module");
-				_executionStatus = null;
+				executionStatus = null;
 
 				return false;
 			}
@@ -158,9 +158,9 @@ namespace MixLib.Instruction
 
 			if (prenormInstruction)
 			{
-				_executionStatus.CurrentStep = ExecutionStatus.Step.PrenormRA;
+				executionStatus.CurrentStep = ExecutionStatus.Step.PrenormRA;
 
-				if (floatingPointModule.PreparePrenorm(_executionStatus.RAValue))
+				if (floatingPointModule.PreparePrenorm(executionStatus.RAValue))
 				{
 					module.ReportBreakpointReached();
 					return false;
@@ -168,11 +168,11 @@ namespace MixLib.Instruction
 			}
 			else
 			{
-				_executionStatus.CurrentStep = ExecutionStatus.Step.ExecuteInstruction;
+				executionStatus.CurrentStep = ExecutionStatus.Step.ExecuteInstruction;
 
 				if (fcmpInstruction
-					? floatingPointModule.PrepareCall(_executionStatus.Mnemonic, _executionStatus.RAValue, _executionStatus.ParameterValue)
-					: floatingPointModule.PrepareCall(_executionStatus.Mnemonic, _executionStatus.RAValue))
+					? floatingPointModule.PrepareCall(executionStatus.Mnemonic, executionStatus.RAValue, executionStatus.ParameterValue)
+					: floatingPointModule.PrepareCall(executionStatus.Mnemonic, executionStatus.RAValue))
 				{
 					module.ReportBreakpointReached();
 					return false;

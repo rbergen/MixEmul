@@ -136,10 +136,10 @@ namespace MixLib.Device
 
 			private new class Instance : StreamStep.Instance
 			{
-				private long _ticksLeft;
+				private long ticksLeft;
 				private const long Unset = long.MinValue;
 
-				public Instance(StreamStatus streamStatus) : base(streamStatus) => _ticksLeft = Unset;
+				public Instance(StreamStatus streamStatus) : base(streamStatus) => this.ticksLeft = Unset;
 
 				public override bool Tick()
 				{
@@ -148,12 +148,12 @@ namespace MixLib.Device
 					if (desiredPosition == StreamStatus.Position)
 						return true;
 
-					if (_ticksLeft == Unset)
-						_ticksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
+					if (this.ticksLeft == Unset)
+						this.ticksLeft = DeviceSettings.GetTickCount(DeviceSettings.DiskSectorSeek);
 
-					_ticksLeft -= 1L;
+					this.ticksLeft -= 1L;
 
-					if (_ticksLeft > 0L)
+					if (this.ticksLeft > 0L)
 						return false;
 
 					if (desiredPosition < 0L)

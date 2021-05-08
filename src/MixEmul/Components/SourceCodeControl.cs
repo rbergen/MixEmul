@@ -13,7 +13,7 @@ namespace MixGui.Components
 	public class SourceCodeControl : UserControl
 	{
 		private const string LineNumberSeparator = " │ ";
-		private static readonly Color[] _findingColors = 
+		private static readonly Color[] findingColors = 
 		{
 			GuiSettings.GetColor(GuiSettings.DebugText),
 			GuiSettings.GetColor(GuiSettings.InfoText),
@@ -21,68 +21,68 @@ namespace MixGui.Components
 			GuiSettings.GetColor(GuiSettings.ErrorText)
 		};
 
-		private Color _addressColor;
-		private Color _commentColor;
-		private bool _findingsColored;
-		private readonly List<ProcessedSourceLine> _instructions;
-		private Color _lineNumberColor;
-		private int _lineNumberLength;
-		private Color _lineNumberSeparatorColor;
-		private Color _locColor;
-		private AssemblyFinding _markedFinding;
-		private Color _opColor;
-		private readonly RichTextBox _sourceBox = new();
+		private Color addressColor;
+		private Color commentColor;
+		private bool findingsColored;
+		private readonly List<ProcessedSourceLine> instructions;
+		private Color lineNumberColor;
+		private int lineNumberLength;
+		private Color lineNumberSeparatorColor;
+		private Color locColor;
+		private AssemblyFinding markedFinding;
+		private Color opColor;
+		private readonly RichTextBox sourceBox = new();
 
 		public SourceCodeControl()
 		{
 			SuspendLayout();
 
-			_sourceBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
-			_sourceBox.BorderStyle = BorderStyle.FixedSingle;
-			_sourceBox.Location = new Point(0, 0);
-			_sourceBox.Name = "mSourceBox";
-			_sourceBox.ReadOnly = true;
-			_sourceBox.Size = Size;
-			_sourceBox.TabIndex = 0;
-			_sourceBox.Text = "";
-			_sourceBox.DetectUrls = false;
+			this.sourceBox.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
+			this.sourceBox.BorderStyle = BorderStyle.FixedSingle;
+			this.sourceBox.Location = new Point(0, 0);
+			this.sourceBox.Name = "mSourceBox";
+			this.sourceBox.ReadOnly = true;
+			this.sourceBox.Size = Size;
+			this.sourceBox.TabIndex = 0;
+			this.sourceBox.Text = "";
+			this.sourceBox.DetectUrls = false;
 
-			Controls.Add(_sourceBox);
+			Controls.Add(this.sourceBox);
 			Name = "SourceCodeControl";
 			ResumeLayout(false);
 
 			UpdateLayout();
 
-			_instructions = new List<ProcessedSourceLine>();
-			_lineNumberLength = 0;
-			_findingsColored = false;
+			this.instructions = new List<ProcessedSourceLine>();
+			this.lineNumberLength = 0;
+			this.findingsColored = false;
 		}
 
 		private void AddLine(ParsedSourceLine sourceLine)
 		{
-			int count = _instructions.Count;
-			if (_sourceBox.TextLength != 0)
-				_sourceBox.AppendText(Environment.NewLine);
+			int count = this.instructions.Count;
+			if (this.sourceBox.TextLength != 0)
+				this.sourceBox.AppendText(Environment.NewLine);
 
 			var lineNumberText = (count + 1).ToString();
-			_sourceBox.AppendText(new string(' ', _lineNumberLength - lineNumberText.Length) + lineNumberText + LineNumberSeparator);
+			this.sourceBox.AppendText(new string(' ', this.lineNumberLength - lineNumberText.Length) + lineNumberText + LineNumberSeparator);
 
-			var processedLine = new ProcessedSourceLine(sourceLine, _sourceBox.TextLength);
-			_instructions.Add(processedLine);
+			var processedLine = new ProcessedSourceLine(sourceLine, this.sourceBox.TextLength);
+			this.instructions.Add(processedLine);
 
 			if (sourceLine.IsCommentLine)
 			{
 				if (sourceLine.Comment.Length > 0)
-					_sourceBox.AppendText(sourceLine.Comment);
+					this.sourceBox.AppendText(sourceLine.Comment);
 			}
 			else
 			{
-				_sourceBox.AppendText(sourceLine.LocationField + new string(' ', (processedLine.LocTextLength - sourceLine.LocationField.Length) + Parser.FieldSpacing));
-				_sourceBox.AppendText(sourceLine.OpField + new string(' ', (processedLine.OpTextLength - sourceLine.OpField.Length) + Parser.FieldSpacing));
-				_sourceBox.AppendText(sourceLine.AddressField + new string(' ', (processedLine.AddressTextLength - sourceLine.AddressField.Length) + Parser.FieldSpacing));
+				this.sourceBox.AppendText(sourceLine.LocationField + new string(' ', (processedLine.LocTextLength - sourceLine.LocationField.Length) + Parser.FieldSpacing));
+				this.sourceBox.AppendText(sourceLine.OpField + new string(' ', (processedLine.OpTextLength - sourceLine.OpField.Length) + Parser.FieldSpacing));
+				this.sourceBox.AppendText(sourceLine.AddressField + new string(' ', (processedLine.AddressTextLength - sourceLine.AddressField.Length) + Parser.FieldSpacing));
 
 				if (sourceLine.Comment.Length > 0)
-					_sourceBox.AppendText(sourceLine.Comment);
+					this.sourceBox.AppendText(sourceLine.Comment);
 			}
 
 			ApplySyntaxColoring(processedLine);
@@ -90,10 +90,10 @@ namespace MixGui.Components
 
 		private void ApplyFindingColoring(AssemblyFinding finding, MarkOperation mark)
 		{
-			if (finding == null || finding.LineNumber == int.MinValue || finding.LineNumber < 0 || finding.LineNumber >= _instructions.Count)
+			if (finding == null || finding.LineNumber == int.MinValue || finding.LineNumber < 0 || finding.LineNumber >= this.instructions.Count)
 				return;
 
-			ProcessedSourceLine processedLine = _instructions[finding.LineNumber];
+			ProcessedSourceLine processedLine = this.instructions[finding.LineNumber];
 			int lineTextIndex = processedLine.LineTextIndex;
 			int length = 0;
 
@@ -161,25 +161,25 @@ namespace MixGui.Components
 					break;
 			}
 
-			_sourceBox.Select(lineTextIndex, length);
+			this.sourceBox.Select(lineTextIndex, length);
 
 			if (length != 0)
 			{
 				if (mark == MarkOperation.Mark)
 				{
-					Font font = _sourceBox.Font;
+					Font font = this.sourceBox.Font;
 
-					_sourceBox.SelectionFont = new Font(font.Name, font.Size, FontStyle.Underline, font.Unit, font.GdiCharSet);
-					_sourceBox.Focus();
-					_sourceBox.ScrollToCaret();
+					this.sourceBox.SelectionFont = new Font(font.Name, font.Size, FontStyle.Underline, font.Unit, font.GdiCharSet);
+					this.sourceBox.Focus();
+					this.sourceBox.ScrollToCaret();
 				}
 				else if (mark == MarkOperation.Unmark)
 				{
-					_sourceBox.SelectionFont = _sourceBox.Font;
+					this.sourceBox.SelectionFont = this.sourceBox.Font;
 				}
 
-				_sourceBox.SelectionColor = _findingColors[(int)finding.Severity];
-				_sourceBox.SelectionLength = 0;
+				this.sourceBox.SelectionColor = findingColors[(int)finding.Severity];
+				this.sourceBox.SelectionLength = 0;
 			}
 		}
 
@@ -194,67 +194,67 @@ namespace MixGui.Components
 
 		private void ApplySyntaxColoring(ProcessedSourceLine processedLine)
 		{
-			_sourceBox.SelectionStart = (processedLine.LineTextIndex - LineNumberSeparator.Length) - _lineNumberLength;
-			_sourceBox.SelectionLength = _lineNumberLength;
-			_sourceBox.SelectionColor = _lineNumberColor;
-			_sourceBox.SelectionStart += _lineNumberLength;
-			_sourceBox.SelectionLength = LineNumberSeparator.Length;
-			_sourceBox.SelectionColor = _lineNumberSeparatorColor;
+			this.sourceBox.SelectionStart = (processedLine.LineTextIndex - LineNumberSeparator.Length) - this.lineNumberLength;
+			this.sourceBox.SelectionLength = this.lineNumberLength;
+			this.sourceBox.SelectionColor = this.lineNumberColor;
+			this.sourceBox.SelectionStart += this.lineNumberLength;
+			this.sourceBox.SelectionLength = LineNumberSeparator.Length;
+			this.sourceBox.SelectionColor = this.lineNumberSeparatorColor;
 
 			if (!processedLine.SourceLine.IsCommentLine)
 			{
 				if (processedLine.SourceLine.LocationField.Length > 0)
 				{
-					_sourceBox.SelectionStart = processedLine.LocTextIndex;
-					_sourceBox.SelectionLength = processedLine.SourceLine.LocationField.Length;
-					_sourceBox.SelectionColor = _locColor;
+					this.sourceBox.SelectionStart = processedLine.LocTextIndex;
+					this.sourceBox.SelectionLength = processedLine.SourceLine.LocationField.Length;
+					this.sourceBox.SelectionColor = this.locColor;
 				}
 
 				if (processedLine.SourceLine.OpField.Length > 0)
 				{
-					_sourceBox.SelectionStart = processedLine.OpTextIndex;
-					_sourceBox.SelectionLength = processedLine.SourceLine.OpField.Length;
-					_sourceBox.SelectionColor = _opColor;
+					this.sourceBox.SelectionStart = processedLine.OpTextIndex;
+					this.sourceBox.SelectionLength = processedLine.SourceLine.OpField.Length;
+					this.sourceBox.SelectionColor = this.opColor;
 				}
 
 				if (processedLine.SourceLine.AddressField.Length > 0)
 				{
-					_sourceBox.SelectionStart = processedLine.AddressTextIndex;
-					_sourceBox.SelectionLength = processedLine.SourceLine.AddressField.Length;
-					_sourceBox.SelectionColor = _addressColor;
+					this.sourceBox.SelectionStart = processedLine.AddressTextIndex;
+					this.sourceBox.SelectionLength = processedLine.SourceLine.AddressField.Length;
+					this.sourceBox.SelectionColor = this.addressColor;
 				}
 			}
 
 			if (processedLine.SourceLine.Comment.Length > 0)
 			{
-				_sourceBox.SelectionStart = processedLine.CommentTextIndex;
-				_sourceBox.SelectionLength = processedLine.SourceLine.Comment.Length;
-				_sourceBox.SelectionColor = _commentColor;
+				this.sourceBox.SelectionStart = processedLine.CommentTextIndex;
+				this.sourceBox.SelectionLength = processedLine.SourceLine.Comment.Length;
+				this.sourceBox.SelectionColor = this.commentColor;
 			}
 		}
 
 		public void UpdateLayout()
 		{
-			_sourceBox.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
-			_sourceBox.BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
-			_lineNumberColor = GuiSettings.GetColor(GuiSettings.LineNumberText);
-			_lineNumberSeparatorColor = GuiSettings.GetColor(GuiSettings.LineNumberSeparator);
-			_locColor = GuiSettings.GetColor(GuiSettings.LocationFieldText);
-			_opColor = GuiSettings.GetColor(GuiSettings.OpFieldText);
-			_addressColor = GuiSettings.GetColor(GuiSettings.AddressFieldText);
-			_commentColor = GuiSettings.GetColor(GuiSettings.CommentFieldText);
+			this.sourceBox.Font = GuiSettings.GetFont(GuiSettings.FixedWidth);
+			this.sourceBox.BackColor = GuiSettings.GetColor(GuiSettings.EditorBackground);
+			this.lineNumberColor = GuiSettings.GetColor(GuiSettings.LineNumberText);
+			this.lineNumberSeparatorColor = GuiSettings.GetColor(GuiSettings.LineNumberSeparator);
+			this.locColor = GuiSettings.GetColor(GuiSettings.LocationFieldText);
+			this.opColor = GuiSettings.GetColor(GuiSettings.OpFieldText);
+			this.addressColor = GuiSettings.GetColor(GuiSettings.AddressFieldText);
+			this.commentColor = GuiSettings.GetColor(GuiSettings.CommentFieldText);
 		}
 
 		public AssemblyFindingCollection Findings
 		{
 			set
 			{
-				ApplyFindingColoring(_markedFinding, MarkOperation.Unmark);
-				_markedFinding = null;
+				ApplyFindingColoring(this.markedFinding, MarkOperation.Unmark);
+				this.markedFinding = null;
 
-				if (_findingsColored)
+				if (this.findingsColored)
 				{
-					foreach (ProcessedSourceLine line in _instructions)
+					foreach (ProcessedSourceLine line in this.instructions)
 						ApplySyntaxColoring(line);
 				}
 
@@ -270,7 +270,7 @@ namespace MixGui.Components
 				else if (value.ContainsDebugs)
 					ApplyFindingColoring(value, Severity.Debug);
 
-				_findingsColored = true;
+				this.findingsColored = true;
 			}
 		}
 
@@ -278,19 +278,19 @@ namespace MixGui.Components
 		{
 			set
 			{
-				_markedFinding = null;
-				_sourceBox.Text = "";
-				_instructions.Clear();
-				_findingsColored = false;
+				this.markedFinding = null;
+				this.sourceBox.Text = "";
+				this.instructions.Clear();
+				this.findingsColored = false;
 
 				if (value == null)
 				{
-					_lineNumberLength = 0;
+					this.lineNumberLength = 0;
 					return;
 				}
 
 				int lineCount = value.Length;
-				_lineNumberLength = lineCount.ToString().Length;
+				this.lineNumberLength = lineCount.ToString().Length;
 
 				var parsedLines = new SortedList<int, ParsedSourceLine>();
 
@@ -304,29 +304,29 @@ namespace MixGui.Components
 
 				foreach (ParsedSourceLine parsedLine in parsedLines.Values)
 				{
-					while (parsedLine.LineNumber > _instructions.Count)
+					while (parsedLine.LineNumber > this.instructions.Count)
 					{
-						AddLine(new ParsedSourceLine(_instructions.Count, ""));
+						AddLine(new ParsedSourceLine(this.instructions.Count, ""));
 					}
 
 					AddLine(parsedLine);
 				}
 
-				_sourceBox.SelectionStart = 0;
-				_sourceBox.SelectionLength = 0;
+				this.sourceBox.SelectionStart = 0;
+				this.sourceBox.SelectionLength = 0;
 			}
 		}
 
 		public AssemblyFinding MarkedFinding
 		{
-			get => _markedFinding;
+			get => this.markedFinding;
 			set
 			{
-				ApplyFindingColoring(_markedFinding, MarkOperation.Unmark);
+				ApplyFindingColoring(this.markedFinding, MarkOperation.Unmark);
 
-				_markedFinding = value;
+				this.markedFinding = value;
 
-				ApplyFindingColoring(_markedFinding, MarkOperation.Mark);
+				ApplyFindingColoring(this.markedFinding, MarkOperation.Mark);
 			}
 		}
 

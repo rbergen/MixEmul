@@ -10,7 +10,7 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class MiscInstructions
 	{
-		private static readonly SortedDictionary<string, MoveStatus> _moveStatuses = new();
+		private static readonly SortedDictionary<string, MoveStatus> moveStatuses = new();
 
 		private const byte ZeroCharValue = 30;
 
@@ -112,13 +112,13 @@ namespace MixLib.Instruction
 		public static bool Move(ModuleBase module, MixInstruction.Instance instance)
 		{
 
-			_moveStatuses.TryGetValue(module.ModuleName, out MoveStatus status);
+			moveStatuses.TryGetValue(module.ModuleName, out MoveStatus status);
 
 			// if we have a move status, check if it applies to this instruction
 			if (status != null && status.ProgramCounter != module.ProgramCounter)
 			{
 				status = null;
-				_moveStatuses.Remove(module.ModuleName);
+				moveStatuses.Remove(module.ModuleName);
 			}
 
 			if (status == null)
@@ -132,7 +132,7 @@ namespace MixLib.Instruction
 					return false;
 
 				status = new MoveStatus(module.ProgramCounter, fromAddress, toAddress, instance.FieldSpec.MixByteValue.ByteValue);
-				_moveStatuses[module.ModuleName] = status;
+				moveStatuses[module.ModuleName] = status;
 
 				return false;
 			}
@@ -150,7 +150,7 @@ namespace MixLib.Instruction
 					if (currentFromAddress > memory.MaxWordIndex || currentToAddress > memory.MaxWordIndex)
 					{
 						module.ReportRuntimeError("Source or target address overflow");
-						_moveStatuses.Remove(module.ModuleName);
+						moveStatuses.Remove(module.ModuleName);
 
 						return false;
 					}
@@ -168,7 +168,7 @@ namespace MixLib.Instruction
 
 					if (status.CurrentWord >= status.WordCount)
 					{
-						_moveStatuses.Remove(module.ModuleName);
+						moveStatuses.Remove(module.ModuleName);
 						return true;
 					}
 

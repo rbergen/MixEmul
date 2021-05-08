@@ -13,9 +13,9 @@ namespace MixGui.Settings
 	{
 		private const string FileName = "config.json";
 
-		private static JsonSerializerOptions _jsonSerializerOptions;
+		private static JsonSerializerOptions jsonSerializerOptions;
 
-		private string _deviceFilesDirectory;
+		private string deviceFilesDirectory;
 
 		public Dictionary<string, Color> Colors { get; set; }
 		public Dictionary<int, string> DeviceFilePaths { get; set; }
@@ -71,13 +71,13 @@ namespace MixGui.Settings
 		{
 			get
 			{
-				if (_jsonSerializerOptions == null)
+				if (jsonSerializerOptions == null)
 				{
-					_jsonSerializerOptions = new JsonSerializerOptions();
-					_jsonSerializerOptions.Converters.Add(new ColorJsonConverter());
+					jsonSerializerOptions = new JsonSerializerOptions();
+					jsonSerializerOptions.Converters.Add(new ColorJsonConverter());
 				}
 
-				return _jsonSerializerOptions;
+				return jsonSerializerOptions;
 			}
 		}
 
@@ -113,11 +113,11 @@ namespace MixGui.Settings
 
 		public string DeviceFilesDirectory
 		{
-			get => _deviceFilesDirectory;
+			get => this.deviceFilesDirectory;
 			set
 			{
 				if (value == null || Directory.Exists(value))
-					_deviceFilesDirectory = value;
+					this.deviceFilesDirectory = value;
 			}
 		}
 	}

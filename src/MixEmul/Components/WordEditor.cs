@@ -10,16 +10,16 @@ namespace MixGui.Components
 	{
 		private const long Unrendered = long.MinValue;
 
-		private MixByteTextBox[] _byteTextBoxes;
-		private int _focusByte;
-		private int _focusByteSelLength;
-		private int _focusByteSelStart;
-		private bool _includeSign;
-		private long _lastRenderedMagnitude;
-		private Word.Signs _lastRenderedSign;
-		private bool _readOnly;
-		private readonly Button _signButton;
-		private IWord _word;
+		private MixByteTextBox[] byteTextBoxes;
+		private int focusByte;
+		private int focusByteSelLength;
+		private int focusByteSelStart;
+		private bool includeSign;
+		private long lastRenderedMagnitude;
+		private Word.Signs lastRenderedSign;
+		private bool readOnly;
+		private readonly Button signButton;
+		private IWord word;
 
 		public event KeyEventHandler NavigationKeyDown;
 		public event WordEditorValueChangedEventHandler ValueChanged;
@@ -35,27 +35,27 @@ namespace MixGui.Components
 
 		public WordEditor(int byteCount, bool includeSign)
 		{
-			_word = new Word(byteCount);
-			_includeSign = includeSign;
-			_readOnly = false;
-			_lastRenderedMagnitude = Unrendered;
-			_lastRenderedSign = Word.Signs.Positive;
+			this.word = new Word(byteCount);
+			this.includeSign = includeSign;
+			this.readOnly = false;
+			this.lastRenderedMagnitude = Unrendered;
+			this.lastRenderedSign = Word.Signs.Positive;
 
-			_signButton = new Button
+			this.signButton = new Button
 			{
 				Location = new Point(0, 0),
 				Name = "SignButton",
 				Size = new Size(18, 21),
 				TabIndex = 0,
 				TabStop = false,
-				Text = "" + _word.Sign.ToChar(),
+				Text = "" + this.word.Sign.ToChar(),
 				FlatStyle = FlatStyle.Flat,
 				Enabled = !ReadOnly
 			};
 
-			_signButton.Click += SignButton_Click;
-			_signButton.KeyPress += Editor_KeyPress;
-			_signButton.KeyDown += This_KeyDown;
+			this.signButton.Click += SignButton_Click;
+			this.signButton.KeyPress += Editor_KeyPress;
+			this.signButton.KeyDown += This_KeyDown;
 
 			InitializeComponent();
 		}
@@ -68,20 +68,20 @@ namespace MixGui.Components
 
 		public bool Focus(FieldTypes? field, int? index) 
 			=> ByteCount > 0 
-			? _byteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() 
-			: _signButton.Focus();
+			? this.byteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() 
+			: this.signButton.Focus();
 
 		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
 			=> ValueChanged?.Invoke(this, args);
 
 		private void ByteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
 		{
-			var oldValue = new Word(_word.Magnitude, _word.Sign);
-			_word[textBox.Index] = args.NewValue;
-			_lastRenderedMagnitude = _word.MagnitudeLongValue;
-			_lastRenderedSign = _word.Sign;
+			var oldValue = new Word(this.word.Magnitude, this.word.Sign);
+			this.word[textBox.Index] = args.NewValue;
+			this.lastRenderedMagnitude = this.word.MagnitudeLongValue;
+			this.lastRenderedSign = this.word.Sign;
 
-			var newValue = new Word(_word.Magnitude, _word.Sign);
+			var newValue = new Word(this.word.Magnitude, this.word.Sign);
 			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
 		}
 
@@ -97,42 +97,42 @@ namespace MixGui.Components
 		{
 			char keyChar = e.KeyChar;
 
-			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && _word.Sign.IsNegative())))
+			if (IncludeSign && (keyChar == '-' || (keyChar == '+' && this.word.Sign.IsNegative())))
 				NegateSign();
 		}
 
 		private void Editor_Leave(object sender, EventArgs e)
 		{
 			var box = (MixByteTextBox)sender;
-			_focusByte = box.Index;
-			_focusByteSelStart = box.SelectionStart;
-			_focusByteSelLength = box.SelectionLength;
+			this.focusByte = box.Index;
+			this.focusByteSelStart = box.SelectionStart;
+			this.focusByteSelLength = box.SelectionLength;
 		}
 
 		private void InitializeComponent()
 		{
-			_focusByte = 0;
-			_focusByteSelStart = 0;
-			_focusByteSelLength = 0;
+			this.focusByte = 0;
+			this.focusByteSelStart = 0;
+			this.focusByteSelLength = 0;
 			int tabIndex = 0;
 			int width = 0;
 
 			SuspendLayout();
 			if (IncludeSign)
 			{
-				Controls.Add(_signButton);
+				Controls.Add(this.signButton);
 				tabIndex++;
-				width += _signButton.Width - 1;
+				width += this.signButton.Width - 1;
 			}
 
-			_byteTextBoxes = new MixByteTextBox[ByteCount];
+			this.byteTextBoxes = new MixByteTextBox[ByteCount];
 			for (int i = 0; i < ByteCount; i++)
 			{
 				var box = new MixByteTextBox(i)
 				{
 					Location = new Point(width, 0),
 					Name = "MixByteEditor" + i,
-					MixByteValue = _word[i],
+					MixByteValue = this.word[i],
 					ReadOnly = ReadOnly,
 					TabIndex = tabIndex
 				};
@@ -142,7 +142,7 @@ namespace MixGui.Components
 				box.KeyPress += Editor_KeyPress;
 				box.KeyDown += This_KeyDown;
 
-				_byteTextBoxes[i] = box;
+				this.byteTextBoxes[i] = box;
 
 				Controls.Add(box);
 
@@ -173,21 +173,21 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Right:
-					if (sender == _signButton && ByteCount > 0)
+					if (sender == this.signButton && ByteCount > 0)
 					{
-						_byteTextBoxes[0].Focus();
-						_byteTextBoxes[0].Select(0, 2);
+						this.byteTextBoxes[0].Focus();
+						this.byteTextBoxes[0].Select(0, 2);
 						break;
 					}
 
 					box = (MixByteTextBox)sender;
 					if (box.SelectionStart + box.SelectionLength == box.TextLength)
 					{
-						var byteIndex = Array.IndexOf(_byteTextBoxes, box);
+						var byteIndex = Array.IndexOf(this.byteTextBoxes, box);
 						if (byteIndex < ByteCount - 1)
 						{
-							_byteTextBoxes[byteIndex + 1].Focus();
-							_byteTextBoxes[byteIndex + 1].Select(0, 2);
+							this.byteTextBoxes[byteIndex + 1].Focus();
+							this.byteTextBoxes[byteIndex + 1].Select(0, 2);
 						}
 						else
 							NavigationKeyDown?.Invoke(this, e);
@@ -196,7 +196,7 @@ namespace MixGui.Components
 					break;
 
 				case Keys.Left:
-					if (sender == _signButton)
+					if (sender == this.signButton)
 					{
 						NavigationKeyDown?.Invoke(this, e);
 
@@ -207,14 +207,14 @@ namespace MixGui.Components
 					box = (MixByteTextBox)sender;
 					if (box.SelectionStart + box.SelectionLength == 0)
 					{
-						var byteIndex = Array.IndexOf(_byteTextBoxes, box);
+						var byteIndex = Array.IndexOf(this.byteTextBoxes, box);
 						if (byteIndex > 0)
 						{
-							_byteTextBoxes[byteIndex - 1].Focus();
-							_byteTextBoxes[byteIndex - 1].Select(0, 2);
+							this.byteTextBoxes[byteIndex - 1].Focus();
+							this.byteTextBoxes[byteIndex - 1].Select(0, 2);
 						}
 						else
-							_signButton.Focus();
+							this.signButton.Focus();
 					}
 
 					break;
@@ -224,24 +224,24 @@ namespace MixGui.Components
 		private void SignButton_Click(object sender, EventArgs e)
 		{
 			NegateSign();
-			if (_byteTextBoxes.Length > 0)
+			if (this.byteTextBoxes.Length > 0)
 			{
-				_byteTextBoxes[_focusByte].Focus();
-				_byteTextBoxes[_focusByte].SelectionStart = _focusByteSelStart;
-				_byteTextBoxes[_focusByte].SelectionLength = _focusByteSelLength;
+				this.byteTextBoxes[this.focusByte].Focus();
+				this.byteTextBoxes[this.focusByte].SelectionStart = this.focusByteSelStart;
+				this.byteTextBoxes[this.focusByte].SelectionLength = this.focusByteSelLength;
 			}
 		}
 
 		private void NegateSign()
 		{
-			Word.Signs sign = _word.Sign;
-			_word.InvertSign();
-			_lastRenderedMagnitude = _word.MagnitudeLongValue;
-			_lastRenderedSign = _word.Sign;
-			_signButton.Text = "" + _word.Sign.ToChar();
+			Word.Signs sign = this.word.Sign;
+			this.word.InvertSign();
+			this.lastRenderedMagnitude = this.word.MagnitudeLongValue;
+			this.lastRenderedSign = this.word.Sign;
+			this.signButton.Text = "" + this.word.Sign.ToChar();
 
-			var oldValue = new Word(_word.Magnitude, sign);
-			var newValue = new Word(_word.Magnitude, _word.Sign);
+			var oldValue = new Word(this.word.Magnitude, sign);
+			var newValue = new Word(this.word.Magnitude, this.word.Sign);
 			OnValueChanged(new WordEditorValueChangedEventArgs(oldValue, newValue));
 		}
 
@@ -249,7 +249,7 @@ namespace MixGui.Components
 		{
 			Controls.Clear();
 
-			foreach (MixByteTextBox box in _byteTextBoxes)
+			foreach (MixByteTextBox box in this.byteTextBoxes)
 				box.Dispose();
 
 			InitializeComponent();
@@ -257,33 +257,33 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			if (_lastRenderedMagnitude != _word.MagnitudeLongValue || _lastRenderedSign != _word.Sign || _lastRenderedMagnitude == Unrendered)
+			if (this.lastRenderedMagnitude != this.word.MagnitudeLongValue || this.lastRenderedSign != this.word.Sign || this.lastRenderedMagnitude == Unrendered)
 			{
-				_signButton.Text = "" + _word.Sign.ToChar();
+				this.signButton.Text = "" + this.word.Sign.ToChar();
 
-				foreach (MixByteTextBox box in _byteTextBoxes)
-					box.MixByteValue = _word[box.Index];
+				foreach (MixByteTextBox box in this.byteTextBoxes)
+					box.MixByteValue = this.word[box.Index];
 
 				base.Update();
-				_lastRenderedMagnitude = _word.MagnitudeLongValue;
-				_lastRenderedSign = _word.Sign;
+				this.lastRenderedMagnitude = this.word.MagnitudeLongValue;
+				this.lastRenderedSign = this.word.Sign;
 			}
 		}
 
 		public void UpdateLayout()
 		{
-			foreach (MixByteTextBox box in _byteTextBoxes)
+			foreach (MixByteTextBox box in this.byteTextBoxes)
 				box.UpdateLayout();
 		}
 
 		public int ByteCount
 		{
-			get => _word.ByteCount;
+			get => this.word.ByteCount;
 			set
 			{
 				if (ByteCount != value)
 				{
-					_word = new Word(value);
+					this.word = new Word(value);
 					ReinitializeComponent();
 				}
 			}
@@ -291,12 +291,12 @@ namespace MixGui.Components
 
 		public bool IncludeSign
 		{
-			get => _includeSign;
+			get => this.includeSign;
 			set
 			{
-				if (_includeSign != value)
+				if (this.includeSign != value)
 				{
-					_includeSign = value;
+					this.includeSign = value;
 					ReinitializeComponent();
 				}
 			}
@@ -304,27 +304,27 @@ namespace MixGui.Components
 
 		public bool ReadOnly
 		{
-			get => _readOnly;
+			get => this.readOnly;
 			set
 			{
 				if (ReadOnly == value)
 					return;
 
-				_readOnly = value;
-				_signButton.Enabled = !ReadOnly;
+				this.readOnly = value;
+				this.signButton.Enabled = !ReadOnly;
 
-				foreach (MixByteTextBox box in _byteTextBoxes)
+				foreach (MixByteTextBox box in this.byteTextBoxes)
 					box.ReadOnly = ReadOnly;
 			}
 		}
 
 		public IWord WordValue
 		{
-			get => _word;
+			get => this.word;
 			set
 			{
 				int byteCount = ByteCount;
-				_word = value;
+				this.word = value;
 
 				if (byteCount == value.ByteCount)
 					Update();
@@ -338,10 +338,10 @@ namespace MixGui.Components
 		{
 			get
 			{
-				if (_signButton.Focused)
+				if (this.signButton.Focused)
 					return FieldTypes.Word;
 
-				foreach (MixByteTextBox byteBox in _byteTextBoxes)
+				foreach (MixByteTextBox byteBox in this.byteTextBoxes)
 				{
 					if (byteBox.Focused)
 						return FieldTypes.Word;

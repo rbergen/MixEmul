@@ -17,7 +17,7 @@ charset = utf-8-bom
 # Organize usings
 dotnet_sort_system_directives_first = true
 # this. preferences
-dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_field = true:silent
 dotnet_style_qualification_for_property = false:silent
 dotnet_style_qualification_for_method = false:silent
 dotnet_style_qualification_for_event = false:silent

@@ -6,9 +6,9 @@ namespace MixLib.Device
 {
 	public class StreamStatus
 	{
-		private string _fileName;
-		private long _position;
-		private System.IO.Stream _stream;
+		private string fileName;
+		private long position;
+		private System.IO.Stream stream;
 
 		public bool PositionSet { get; private set; }
 
@@ -22,25 +22,25 @@ namespace MixLib.Device
 
 		public void CloseStream()
 		{
-			_stream?.Close();
-			_stream = null;
+			this.stream?.Close();
+			this.stream = null;
 		}
 
 		public void Reset()
 		{
 			CloseStream();
-			_position = 0L;
+			this.position = 0L;
 			PositionSet = false;
 		}
 
 		public void UpdatePosition()
 		{
-			if (_stream == null)
+			if (this.stream == null)
 				return;
 
 			try
 			{
-				Position = _stream.Position;
+				Position = this.stream.Position;
 				PositionSet = true;
 			}
 			catch (Exception exception)
@@ -51,30 +51,30 @@ namespace MixLib.Device
 
 		public string FileName
 		{
-			get => _fileName;
+			get => this.fileName;
 			set
 			{
-				if (_stream != null)
+				if (this.stream != null)
 					throw new InvalidOperationException("can't change filename on open stream. Open stream must first be closed.");
 
-				_fileName = value;
+				this.fileName = value;
 			}
 		}
 
 		public long Position
 		{
-			get => _position;
+			get => this.position;
 			set
 			{
-				_position = value;
+				this.position = value;
 				PositionSet = true;
 
-				if (_stream == null)
+				if (this.stream == null)
 					return;
 
 				try
 				{
-					_stream.Position = _position;
+					this.stream.Position = this.position;
 				}
 				catch (Exception exception)
 				{
@@ -85,16 +85,16 @@ namespace MixLib.Device
 
 		public System.IO.Stream Stream
 		{
-			get => _stream;
+			get => this.stream;
 			set
 			{
-				if (_stream != null)
+				if (this.stream != null)
 					throw new InvalidOperationException("can't replace open stream. Open stream must first be closed.");
 
-				_stream = value ?? throw new ArgumentNullException(nameof(value), "stream may not be set to null");
+				this.stream = value ?? throw new ArgumentNullException(nameof(value), "stream may not be set to null");
 
 				if (PositionSet)
-					_stream.Position = Position;
+					this.stream.Position = Position;
 
 				UpdatePosition();
 			}

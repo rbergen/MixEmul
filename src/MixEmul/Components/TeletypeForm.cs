@@ -9,22 +9,22 @@ namespace MixGui.Components
 {
 	public class TeletypeForm : Form
 	{
-		private Button _clearButton;
-		private CheckBox _echoInputCheckBox;
-		private TextBox _inputTextBox;
-		private CheckBox _onTopCheckBox;
-		private TextBox _outputTextBox;
-		private Label _promptLabel;
-		private Button _sendButton;
-		private StatusStrip _statusStrip;
-		private ToolStripStatusLabel _toolStripStatusLabel;
-		private MixLib.Device.TeletypeDevice _teletypeDevice;
+		private Button clearButton;
+		private CheckBox echoInputCheckBox;
+		private TextBox inputTextBox;
+		private CheckBox onTopCheckBox;
+		private TextBox outputTextBox;
+		private Label promptLabel;
+		private Button sendButton;
+		private StatusStrip statusStrip;
+		private ToolStripStatusLabel toolStripStatusLabel;
+		private MixLib.Device.TeletypeDevice teletypeDevice;
 
 		public TeletypeForm(MixLib.Device.TeletypeDevice teleType)
 		{
 			InitializeComponent();
 			UpdateLayout();
-			_inputTextBox.Focus();
+			this.inputTextBox.Focus();
 
 			TeletypeDevice = teleType;
 		}
@@ -37,35 +37,35 @@ namespace MixGui.Components
 
 		private void This_Activated(object sender, EventArgs e)
 		{
-			_outputTextBox.Select(_outputTextBox.TextLength, 0);
-			_outputTextBox.Focus();
-			_outputTextBox.ScrollToCaret();
-			_inputTextBox.Focus();
+			this.outputTextBox.Select(this.outputTextBox.TextLength, 0);
+			this.outputTextBox.Focus();
+			this.outputTextBox.ScrollToCaret();
+			this.inputTextBox.Focus();
 		}
 
 		private delegate void addOutputTextDelegate(string textToAdd);
 
 		public void AddOutputText(string textToAdd)
 		{
-			if (_outputTextBox.InvokeRequired)
+			if (this.outputTextBox.InvokeRequired)
 			{
-				_outputTextBox.Invoke(new addOutputTextDelegate(AddOutputText), textToAdd);
+				this.outputTextBox.Invoke(new addOutputTextDelegate(AddOutputText), textToAdd);
 				return;
 			}
 
-			if (_outputTextBox.TextLength > 0)
+			if (this.outputTextBox.TextLength > 0)
 				textToAdd = Environment.NewLine + textToAdd;
 
 			int startIndex = 0;
 
-			while (_outputTextBox.TextLength + textToAdd.Length - startIndex > _outputTextBox.MaxLength)
-				startIndex = _outputTextBox.Text.IndexOf(Environment.NewLine, startIndex, StringComparison.Ordinal) + Environment.NewLine.Length;
+			while (this.outputTextBox.TextLength + textToAdd.Length - startIndex > this.outputTextBox.MaxLength)
+				startIndex = this.outputTextBox.Text.IndexOf(Environment.NewLine, startIndex, StringComparison.Ordinal) + Environment.NewLine.Length;
 
 			if (startIndex > 0)
-				_outputTextBox.Text = _outputTextBox.Text[startIndex..] + textToAdd;
+				this.outputTextBox.Text = this.outputTextBox.Text[startIndex..] + textToAdd;
 
 			else
-				_outputTextBox.AppendText(textToAdd);
+				this.outputTextBox.AppendText(textToAdd);
 		}
 
 		private void This_FormClosing(object sender, FormClosingEventArgs e)
@@ -77,127 +77,127 @@ namespace MixGui.Components
 		private void InitializeComponent()
 		{
 			var resources = new ComponentResourceManager(typeof(TeletypeForm));
-			_outputTextBox = new TextBox();
-			_promptLabel = new Label();
-			_inputTextBox = new TextBox();
-			_statusStrip = new StatusStrip();
-			_toolStripStatusLabel = new ToolStripStatusLabel();
-			_clearButton = new Button();
-			_sendButton = new Button();
-			_onTopCheckBox = new CheckBox();
-			_echoInputCheckBox = new CheckBox();
+			this.outputTextBox = new TextBox();
+			this.promptLabel = new Label();
+			this.inputTextBox = new TextBox();
+			this.statusStrip = new StatusStrip();
+			this.toolStripStatusLabel = new ToolStripStatusLabel();
+			this.clearButton = new Button();
+			this.sendButton = new Button();
+			this.onTopCheckBox = new CheckBox();
+			this.echoInputCheckBox = new CheckBox();
 			SuspendLayout();
 			// 
 			// mOutputTextBox
 			// 
-			_outputTextBox.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
+			this.outputTextBox.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
 															| AnchorStyles.Left)
 															| AnchorStyles.Right);
-			_outputTextBox.Location = new Point(0, 0);
-			_outputTextBox.MaxLength = 1048576;
-			_outputTextBox.Multiline = true;
-			_outputTextBox.Name = "mOutputTextBox";
-			_outputTextBox.ReadOnly = true;
-			_outputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			_outputTextBox.Size = new Size(528, 264);
-			_outputTextBox.TabIndex = 0;
-			_outputTextBox.BorderStyle = BorderStyle.FixedSingle;
+			this.outputTextBox.Location = new Point(0, 0);
+			this.outputTextBox.MaxLength = 1048576;
+			this.outputTextBox.Multiline = true;
+			this.outputTextBox.Name = "mOutputTextBox";
+			this.outputTextBox.ReadOnly = true;
+			this.outputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.outputTextBox.Size = new Size(528, 264);
+			this.outputTextBox.TabIndex = 0;
+			this.outputTextBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mPromptLabel
 			// 
-			_promptLabel.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left);
-			_promptLabel.Location = new Point(0, 266);
-			_promptLabel.Name = "mPromptLabel";
-			_promptLabel.Size = new Size(8, 21);
-			_promptLabel.TabIndex = 2;
-			_promptLabel.Text = ">";
-			_promptLabel.TextAlign = ContentAlignment.MiddleLeft;
+			this.promptLabel.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left);
+			this.promptLabel.Location = new Point(0, 266);
+			this.promptLabel.Name = "mPromptLabel";
+			this.promptLabel.Size = new Size(8, 21);
+			this.promptLabel.TabIndex = 2;
+			this.promptLabel.Text = ">";
+			this.promptLabel.TextAlign = ContentAlignment.MiddleLeft;
 			// 
 			// mInputTextBox
 			// 
-			_inputTextBox.Anchor = ((AnchorStyles.Bottom | AnchorStyles.Left)
+			this.inputTextBox.Anchor = ((AnchorStyles.Bottom | AnchorStyles.Left)
 															| AnchorStyles.Right);
-			_inputTextBox.CharacterCasing = CharacterCasing.Upper;
-			_inputTextBox.Location = new Point(16, 265);
-			_inputTextBox.MaxLength = 70;
-			_inputTextBox.Name = "mInputTextBox";
-			_inputTextBox.Size = new Size(512, 20);
-			_inputTextBox.TabIndex = 3;
-			_inputTextBox.KeyPress += This_KeyPress;
-			_inputTextBox.BorderStyle = BorderStyle.FixedSingle;
+			this.inputTextBox.CharacterCasing = CharacterCasing.Upper;
+			this.inputTextBox.Location = new Point(16, 265);
+			this.inputTextBox.MaxLength = 70;
+			this.inputTextBox.Name = "mInputTextBox";
+			this.inputTextBox.Size = new Size(512, 20);
+			this.inputTextBox.TabIndex = 3;
+			this.inputTextBox.KeyPress += This_KeyPress;
+			this.inputTextBox.BorderStyle = BorderStyle.FixedSingle;
 			// 
 			// mStatusBar
 			// 
-			_statusStrip.Location = new Point(0, 287);
-			_statusStrip.Name = "mStatusBar";
-			_statusStrip.Items.AddRange(new ToolStripItem[] {
-						_toolStripStatusLabel});
-			_statusStrip.Size = new Size(616, 22);
-			_statusStrip.TabIndex = 5;
+			this.statusStrip.Location = new Point(0, 287);
+			this.statusStrip.Name = "mStatusBar";
+			this.statusStrip.Items.AddRange(new ToolStripItem[] {
+						this.toolStripStatusLabel});
+			this.statusStrip.Size = new Size(616, 22);
+			this.statusStrip.TabIndex = 5;
 			// 
 			// mStatusBarPanel
 			// 
-			_toolStripStatusLabel.AutoSize = true;
-			_toolStripStatusLabel.Name = "mStatusBarPanel";
-			_toolStripStatusLabel.Text = "Idle";
-			_toolStripStatusLabel.Width = 600;
-			_toolStripStatusLabel.BorderStyle = Border3DStyle.Flat;
+			this.toolStripStatusLabel.AutoSize = true;
+			this.toolStripStatusLabel.Name = "mStatusBarPanel";
+			this.toolStripStatusLabel.Text = "Idle";
+			this.toolStripStatusLabel.Width = 600;
+			this.toolStripStatusLabel.BorderStyle = Border3DStyle.Flat;
 			// 
 			// mClearButton
 			// 
-			_clearButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
-			_clearButton.Location = new Point(536, 232);
-			_clearButton.Name = "mClearButton";
-			_clearButton.Size = new Size(75, 23);
-			_clearButton.TabIndex = 1;
-			_clearButton.Text = "&Clear";
-			_clearButton.FlatStyle = FlatStyle.Flat;
-			_clearButton.Click += ClearButton_Click;
+			this.clearButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.clearButton.Location = new Point(536, 232);
+			this.clearButton.Name = "mClearButton";
+			this.clearButton.Size = new Size(75, 23);
+			this.clearButton.TabIndex = 1;
+			this.clearButton.Text = "&Clear";
+			this.clearButton.FlatStyle = FlatStyle.Flat;
+			this.clearButton.Click += ClearButton_Click;
 			// 
 			// mSendButton
 			// 
-			_sendButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
-			_sendButton.Location = new Point(536, 264);
-			_sendButton.Name = "mSendButton";
-			_sendButton.Size = new Size(75, 23);
-			_sendButton.TabIndex = 4;
-			_sendButton.Text = "&Send";
-			_sendButton.FlatStyle = FlatStyle.Flat;
-			_sendButton.Click += SendButton_Click;
+			this.sendButton.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+			this.sendButton.Location = new Point(536, 264);
+			this.sendButton.Name = "mSendButton";
+			this.sendButton.Size = new Size(75, 23);
+			this.sendButton.TabIndex = 4;
+			this.sendButton.Text = "&Send";
+			this.sendButton.FlatStyle = FlatStyle.Flat;
+			this.sendButton.Click += SendButton_Click;
 			// 
 			// mOnTopCheckBox
 			// 
-			_onTopCheckBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_onTopCheckBox.Location = new Point(536, 0);
-			_onTopCheckBox.Name = "mOnTopCheckBox";
-			_onTopCheckBox.Size = new Size(72, 24);
-			_onTopCheckBox.TabIndex = 6;
-			_onTopCheckBox.Text = "&On top";
-			_onTopCheckBox.FlatStyle = FlatStyle.Flat;
-			_onTopCheckBox.CheckedChanged += MOnTopCheckBox_CheckedChanged;
+			this.onTopCheckBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.onTopCheckBox.Location = new Point(536, 0);
+			this.onTopCheckBox.Name = "mOnTopCheckBox";
+			this.onTopCheckBox.Size = new Size(72, 24);
+			this.onTopCheckBox.TabIndex = 6;
+			this.onTopCheckBox.Text = "&On top";
+			this.onTopCheckBox.FlatStyle = FlatStyle.Flat;
+			this.onTopCheckBox.CheckedChanged += MOnTopCheckBox_CheckedChanged;
 			// 
 			// mEchoInputCheckBox
 			// 
-			_echoInputCheckBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			_echoInputCheckBox.Location = new Point(536, 24);
-			_echoInputCheckBox.Name = "mEchoInputCheckBox";
-			_echoInputCheckBox.Size = new Size(88, 24);
-			_echoInputCheckBox.TabIndex = 7;
-			_echoInputCheckBox.Text = "&Echo input";
-			_echoInputCheckBox.FlatStyle = FlatStyle.Flat;
+			this.echoInputCheckBox.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.echoInputCheckBox.Location = new Point(536, 24);
+			this.echoInputCheckBox.Name = "mEchoInputCheckBox";
+			this.echoInputCheckBox.Size = new Size(88, 24);
+			this.echoInputCheckBox.TabIndex = 7;
+			this.echoInputCheckBox.Text = "&Echo input";
+			this.echoInputCheckBox.FlatStyle = FlatStyle.Flat;
 			// 
 			// TeletypeForm
 			// 
 			//this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			ClientSize = new Size(616, 309);
-			Controls.Add(_echoInputCheckBox);
-			Controls.Add(_onTopCheckBox);
-			Controls.Add(_sendButton);
-			Controls.Add(_clearButton);
-			Controls.Add(_statusStrip);
-			Controls.Add(_promptLabel);
-			Controls.Add(_inputTextBox);
-			Controls.Add(_outputTextBox);
+			Controls.Add(this.echoInputCheckBox);
+			Controls.Add(this.onTopCheckBox);
+			Controls.Add(this.sendButton);
+			Controls.Add(this.clearButton);
+			Controls.Add(this.statusStrip);
+			Controls.Add(this.promptLabel);
+			Controls.Add(this.inputTextBox);
+			Controls.Add(this.outputTextBox);
 			Icon = ((Icon)(resources.GetObject("$this.Icon")));
 			MaximizeBox = false;
 			MinimizeBox = false;
@@ -227,16 +227,16 @@ namespace MixGui.Components
 
 		public void ClearOutput()
 		{
-			if (_outputTextBox.InvokeRequired)
+			if (this.outputTextBox.InvokeRequired)
 			{
-				_outputTextBox.Invoke(new MethodInvoker(ClearOutput));
+				this.outputTextBox.Invoke(new MethodInvoker(ClearOutput));
 				return;
 			}
 
-			_outputTextBox.Text = "";
+			this.outputTextBox.Text = "";
 		}
 
-		private void MOnTopCheckBox_CheckedChanged(object sender, EventArgs e) => TopMost = _onTopCheckBox.Checked;
+		private void MOnTopCheckBox_CheckedChanged(object sender, EventArgs e) => TopMost = this.onTopCheckBox.Checked;
 
 		private void OutputAdded(object sender, EventArgs e)
 		{
@@ -249,7 +249,7 @@ namespace MixGui.Components
 			string outputLine;
 			string textToAdd = "";
 
-			while ((outputLine = _teletypeDevice.GetOutputLine()) != null)
+			while ((outputLine = this.teletypeDevice.GetOutputLine()) != null)
 			{
 				if (textToAdd.Length != 0)
 				{
@@ -259,25 +259,25 @@ namespace MixGui.Components
 			}
 
 			AddOutputText(textToAdd);
-			_toolStripStatusLabel.Text = "Received output from Mix";
+			this.toolStripStatusLabel.Text = "Received output from Mix";
 
 			if (Visible)
 			{
-				_outputTextBox.Select(_outputTextBox.TextLength, 0);
-				_outputTextBox.Focus();
-				_outputTextBox.ScrollToCaret();
-				_inputTextBox.Focus();
+				this.outputTextBox.Select(this.outputTextBox.TextLength, 0);
+				this.outputTextBox.Focus();
+				this.outputTextBox.ScrollToCaret();
+				this.inputTextBox.Focus();
 			}
 		}
 
 		private void SendInput()
 		{
 			if (EchoInput)
-				AddOutputText("> " + _inputTextBox.Text);
+				AddOutputText("> " + this.inputTextBox.Text);
 
-			_teletypeDevice.AddInputLine(_inputTextBox.Text);
-			_inputTextBox.Text = "";
-			_toolStripStatusLabel.Text = "Sent input to Mix";
+			this.teletypeDevice.AddInputLine(this.inputTextBox.Text);
+			this.inputTextBox.Text = "";
+			this.toolStripStatusLabel.Text = "Sent input to Mix";
 		}
 
 		public void UpdateLayout()
@@ -285,46 +285,46 @@ namespace MixGui.Components
 			var font = GuiSettings.GetFont(GuiSettings.FixedWidth);
 			var color = GuiSettings.GetColor(GuiSettings.TeletypeInputText);
 
-			_promptLabel.Font = font;
-			_promptLabel.ForeColor = color;
+			this.promptLabel.Font = font;
+			this.promptLabel.ForeColor = color;
 
-			_inputTextBox.Font = font;
-			_inputTextBox.ForeColor = color;
-			_inputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeInputBackground);
+			this.inputTextBox.Font = font;
+			this.inputTextBox.ForeColor = color;
+			this.inputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeInputBackground);
 
-			_outputTextBox.Font = font;
-			_outputTextBox.ForeColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputText);
-			_outputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputBackground);
+			this.outputTextBox.Font = font;
+			this.outputTextBox.ForeColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputText);
+			this.outputTextBox.BackColor = GuiSettings.GetColor(GuiSettings.TeletypeOutputBackground);
 		}
 
 		private void This_VisibleChanged(object sender, EventArgs e)
 		{
 			if (!Visible)
-				_toolStripStatusLabel.Text = "Idle";
+				this.toolStripStatusLabel.Text = "Idle";
 		}
 
 		public bool EchoInput
 		{
-			get => _echoInputCheckBox.Checked;
-			set => _echoInputCheckBox.Checked = value;
+			get => this.echoInputCheckBox.Checked;
+			set => this.echoInputCheckBox.Checked = value;
 		}
 
 		public string StatusText
 		{
-			set => _toolStripStatusLabel.Text = value;
+			set => this.toolStripStatusLabel.Text = value;
 		}
 
 		public MixLib.Device.TeletypeDevice TeletypeDevice
 		{
-			get => _teletypeDevice;
+			get => this.teletypeDevice;
 			set
 			{
-				if (_teletypeDevice == null)
+				if (this.teletypeDevice == null)
 				{
-					_teletypeDevice = value;
+					this.teletypeDevice = value;
 
-					if (_teletypeDevice != null)
-						_teletypeDevice.OutputAdded += OutputAdded;
+					if (this.teletypeDevice != null)
+						this.teletypeDevice.OutputAdded += OutputAdded;
 				}
 			}
 		}
@@ -334,7 +334,7 @@ namespace MixGui.Components
 			get => base.TopMost;
 			set
 			{
-				_onTopCheckBox.Checked = value;
+				this.onTopCheckBox.Checked = value;
 				base.TopMost = value;
 			}
 		}

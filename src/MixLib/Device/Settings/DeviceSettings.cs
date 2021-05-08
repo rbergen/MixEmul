@@ -18,16 +18,16 @@ namespace MixLib.Device.Settings
 		public const int UnsetDeviceReloadInterval = int.MinValue;
 		public const int DefaultDefaultTickCount = 50;
 
-		private static string _defaultDeviceFilesDirectory;
-		private static string _deviceFilesDirectory;
-		private static int _deviceReloadInterval;
-		private static readonly Dictionary<string, int> _defaultTickCounts;
+		private static string defaultDeviceFilesDirectory;
+		private static string deviceFilesDirectory;
+		private static int deviceReloadInterval;
+		private static readonly Dictionary<string, int> defaultTickCounts;
 
 		public static Dictionary<string, int> TickCounts { private get; set; }
 
 		static DeviceSettings()
 		{
-			_defaultTickCounts = new Dictionary<string, int>
+			defaultTickCounts = new Dictionary<string, int>
 			{
 				{ CardReaderInitialization, 100 },
 				{ CardWriterInitialization, 100 },
@@ -43,42 +43,42 @@ namespace MixLib.Device.Settings
 
 			TickCounts = new Dictionary<string, int>();
 
-			_deviceReloadInterval = UnsetDeviceReloadInterval;
+			deviceReloadInterval = UnsetDeviceReloadInterval;
 		}
 
 		public static bool IsKnownTickCount(string name) 
-			=> _defaultTickCounts.ContainsKey(name);
+			=> defaultTickCounts.ContainsKey(name);
 
 		public static int GetDefaultTickCount(string name) 
-			=> IsKnownTickCount(name) ? _defaultTickCounts[name] : DefaultDefaultTickCount;
+			=> IsKnownTickCount(name) ? defaultTickCounts[name] : DefaultDefaultTickCount;
 
 		public static int GetTickCount(string name) 
 			=> TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
 
 		public static string DefaultDeviceFilesDirectory
 		{
-			get => _defaultDeviceFilesDirectory ?? "";
-			set => _defaultDeviceFilesDirectory = value;
+			get => defaultDeviceFilesDirectory ?? "";
+			set => defaultDeviceFilesDirectory = value;
 		}
 
 		public static string DeviceFilesDirectory
 		{
-			get => _deviceFilesDirectory ?? DefaultDeviceFilesDirectory;
-			set => _deviceFilesDirectory = value;
+			get => deviceFilesDirectory ?? DefaultDeviceFilesDirectory;
+			set => deviceFilesDirectory = value;
 		}
 
 		public static int DeviceReloadInterval
 		{
-			get => _deviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : _deviceReloadInterval;
-			set => _deviceReloadInterval = value;
+			get => deviceReloadInterval == UnsetDeviceReloadInterval ? DefaultDeviceReloadInterval : deviceReloadInterval;
+			set => deviceReloadInterval = value;
 		}
 
 		public static string[] KnownTickCountNames
 		{
 			get
 			{
-				string[] array = new string[_defaultTickCounts.Count];
-				_defaultTickCounts.Keys.CopyTo(array, 0);
+				string[] array = new string[defaultTickCounts.Count];
+				defaultTickCounts.Keys.CopyTo(array, 0);
 				return array;
 			}
 		}

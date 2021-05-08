@@ -12,59 +12,59 @@ namespace MixLib
 		private const int FlagsByteIndex = 2;
 		private const int RJByteIndex = 3;
 
-		private readonly Register[] _registers = new Register[RegisterCount - 1];
-		private readonly Register _rJ;
+		private readonly Register[] registers = new Register[RegisterCount - 1];
+		private readonly Register rJ;
 
 		public CompValues CompareIndicator { get; set; }
 		public bool OverflowIndicator { get; set; }
 
 		public Registers()
 		{
-			_registers[(int)Offset.rA] = new FullWordRegister();
-			_registers[(int)Offset.rX] = new FullWordRegister();
+			this.registers[(int)Offset.rA] = new FullWordRegister();
+			this.registers[(int)Offset.rX] = new FullWordRegister();
 
-			_rJ = new AddressRegister();
+			this.rJ = new AddressRegister();
 			CompareIndicator = CompValues.Equal;
 			OverflowIndicator = false;
 
 			for (int i = (int)Offset.rI1; i <= (int)Offset.rI6; i++)
 			{
-				_registers[i] = new IndexRegister();
+				this.registers[i] = new IndexRegister();
 			}
 		}
 
 		public Register this[int offset] 
-			=> _registers[offset];
+			=> this.registers[offset];
 
 		public Register this[Offset offset] 
 			=> this[(int)offset];
 
 		public Register RI1 
-			=> _registers[(int)Offset.rI1];
+			=> this.registers[(int)Offset.rI1];
 
 		public Register RI2 
-			=> _registers[(int)Offset.rI2];
+			=> this.registers[(int)Offset.rI2];
 
 		public Register RI3 
-			=> _registers[(int)Offset.rI3];
+			=> this.registers[(int)Offset.rI3];
 
 		public Register RI4 
-			=> _registers[(int)Offset.rI4];
+			=> this.registers[(int)Offset.rI4];
 
 		public Register RI5 
-			=> _registers[(int)Offset.rI5];
+			=> this.registers[(int)Offset.rI5];
 
 		public Register RI6 
-			=> _registers[(int)Offset.rI6];
+			=> this.registers[(int)Offset.rI6];
 
 		public Register RA => 
-			_registers[(int)Offset.rA];
+			this.registers[(int)Offset.rA];
 
 		public Register RJ 
-			=> _rJ;
+			=> this.rJ;
 
 		public Register RX 
-			=> _registers[(int)Offset.rX];
+			=> this.registers[(int)Offset.rX];
 
 		public int GetIndexedAddress(int mValue, int index)
 		{
@@ -74,17 +74,17 @@ namespace MixLib
 			if (index < (int)Offset.rI1 || index > (int)Offset.rI6)
 				throw new ArgumentException("index must be between 0 and " + (int)Offset.rI6, nameof(index));
 
-			return mValue + (int)_registers[index].LongValue;
+			return mValue + (int)this.registers[index].LongValue;
 		}
 
 		public void SaveToMemory(IMemory memory, int firstAddress, int addressValue)
 		{
 			int i;
 
-			for (i = 0; i < _registers.Length; i++)
+			for (i = 0; i < this.registers.Length; i++)
 			{
-				memory[firstAddress + i].Magnitude = _registers[i].Magnitude;
-				memory[firstAddress + i].Sign = _registers[i].Sign;
+				memory[firstAddress + i].Magnitude = this.registers[i].Magnitude;
+				memory[firstAddress + i].Sign = this.registers[i].Sign;
 			}
 
 			IFullWord composedWord = memory[firstAddress + i];
@@ -120,10 +120,10 @@ namespace MixLib
 		{
 			int i;
 
-			for (i = 0; i < _registers.Length; i++)
+			for (i = 0; i < this.registers.Length; i++)
 			{
-				_registers[i].Magnitude = memory[firstAddress + i].Magnitude;
-				_registers[i].Sign = memory[firstAddress + i].Sign;
+				this.registers[i].Magnitude = memory[firstAddress + i].Magnitude;
+				this.registers[i].Sign = memory[firstAddress + i].Sign;
 			}
 
 			IFullWord composedWord = memory[firstAddress + i];
@@ -152,14 +152,14 @@ namespace MixLib
 
 		public void Reset()
 		{
-			foreach (Register register in _registers)
+			foreach (Register register in this.registers)
 			{
 				register.MagnitudeLongValue = 0L;
 				register.Sign = Word.Signs.Positive;
 			}
 
-			_rJ.MagnitudeLongValue = 0L;
-			_rJ.Sign = Word.Signs.Positive;
+			this.rJ.MagnitudeLongValue = 0L;
+			this.rJ.Sign = Word.Signs.Positive;
 			CompareIndicator = CompValues.Equal;
 			OverflowIndicator = false;
 		}

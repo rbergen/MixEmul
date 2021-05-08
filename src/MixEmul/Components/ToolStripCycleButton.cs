@@ -13,8 +13,8 @@ namespace MixGui.Components
 										 ToolStripItemDesignerAvailability.StatusStrip)]
 	public partial class ToolStripCycleButton : ToolStripControlHost
 	{
-		private Step _currentStep;
-		private readonly List<Step> _steps;
+		private Step currentStep;
+		private readonly List<Step> steps;
 
 		public event EventHandler ValueChanged;
 
@@ -25,7 +25,7 @@ namespace MixGui.Components
 			: base(new Button { Text = "", FlatStyle = FlatStyle.Flat, Height = 21, Padding = new Padding(0), TextAlign = ContentAlignment.TopCenter })
 		{
 			InitializeComponent();
-			_steps = new List<Step>();
+			this.steps = new List<Step>();
 			AutoSize = false;
 			Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
@@ -40,15 +40,15 @@ namespace MixGui.Components
 		private void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
 		{
 			if (string.IsNullOrEmpty(Text))
-				e.Graphics.DrawString(_currentStep == null ? "<No steps>" : _currentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
+				e.Graphics.DrawString(this.currentStep == null ? "<No steps>" : this.currentStep.Text, Control.Font, new SolidBrush(Control.ForeColor), 1, 1);
 		}
 
 		private void Control_Click(object sender, EventArgs e)
 		{
-			if (_currentStep == null || _currentStep.NextStep == null)
+			if (this.currentStep == null || this.currentStep.NextStep == null)
 				return;
 
-			SetCurrentStep(_currentStep.NextStep);
+			SetCurrentStep(this.currentStep.NextStep);
 		}
 
 		private void Control_SizeChanged(object sender, EventArgs e) 
@@ -95,24 +95,24 @@ namespace MixGui.Components
 			if (step == null || step.Value == null)
 				throw new ArgumentNullException(nameof(step), "step and its Value may not be null");
 
-			if (_steps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
+			if (this.steps.Any(s => s.Value is IComparable comparable ? comparable.CompareTo(step.Value) == 0 : s.Value.Equals(step.Value)))
 				throw new ArgumentException($"another step with Value {step.Value} already exists");
 
-			_steps.Add(step);
+			this.steps.Add(step);
 
-			if (_currentStep == null)
+			if (this.currentStep == null)
 				SetCurrentStep(step);
 		}
 
 		public object Value
 		{
-			get => _currentStep?.Value;
+			get => this.currentStep?.Value;
 			set
 			{
 				if (value == null)
 					return;
 
-				var step = _steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
+				var step = this.steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
 
 				if (step == null)
 					throw new ArgumentException($"no step with Value {value} exists");
@@ -123,10 +123,10 @@ namespace MixGui.Components
 
 		private void SetCurrentStep(Step step)
 		{
-			if (_currentStep == step)
+			if (this.currentStep == step)
 				return;
 
-			_currentStep = step;
+			this.currentStep = step;
 			Invalidate();
 			OnValueChanged(new EventArgs());
 		}
