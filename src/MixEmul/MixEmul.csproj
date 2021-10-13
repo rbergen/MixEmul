@@ -29,9 +29,6 @@
 	  <Content Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-    <Content Include="..\..\docs\MixEmul Documentation 0.3.5.pdf" Link="docs\MixEmul Documentation 0.3.5.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\samples\99bottles.mixal" Link="samples\99bottles.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -54,4 +51,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+	<ItemGroup>
+	  <None Include="..\..\docs\MixEmul Documentation 0.4.0.pdf" Link="docs\MixEmul Documentation 0.4.0.pdf" />
+	</ItemGroup>
 </Project>
