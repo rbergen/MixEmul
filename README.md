@@ -17,3 +17,5 @@ For incomprehensible reasons, MIX enthusiasts are not as common as you or I woul
 I'm afraid you'll just have to trust me when I say that MixEmul was not written to cause you or your computer any harm. Over the years, I have spent quite a few hours figuring out first how to improve MixEmul and then how to code those improvements; causing trouble is never an improvement in my book.
 
 So again, trust me when I say that MixEmul is safe. Or don't trust me, and miss out on what I still consider to be the best MIX emulator available. :)
+
+_- Rutger van Bergen - [github.com/rbergen](https://github.com/rbergen)_
