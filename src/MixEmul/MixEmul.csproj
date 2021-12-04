@@ -28,9 +28,9 @@
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-	  <Content Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
+	  <None Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+	  </None>
     <Content Include="..\..\samples\99bottles.mixal" Link="samples\99bottles.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -54,6 +54,8 @@
     </Content>
   </ItemGroup>
 	<ItemGroup>
-	  <None Include="..\..\docs\MixEmul Documentation 0.4.0.pdf" Link="docs\MixEmul Documentation 0.4.0.pdf" />
+	  <Content Include="..\..\docs\MixEmul Documentation 0.4.0.pdf" Link="docs\MixEmul Documentation 0.4.0.pdf">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 </Project>
