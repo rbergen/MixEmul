@@ -9,6 +9,11 @@ x: Bugfix
 
 =========================================
 
+0.5.0.0 (2021-12-04)
+* Moved to .NET 6.0
+* Switched to deterministic versioning
+* Started creating self-contained builds
+
 0.4.7778.28981 (2021-04-18)
 + It is now possible to show assembled-and-loaded source code in-line in the memory editor. This view can be switched on and off in the View menu
 + When starting a Detached run, the status bar now reflects this

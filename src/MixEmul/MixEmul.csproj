@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>MixGui.MixForm</StartupObject>
     <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
@@ -8,12 +8,14 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <Deterministic>false</Deterministic>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="docs\.gitignore" />
     <None Remove="samples\.gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MixAssembler\MixAssembler.csproj" />

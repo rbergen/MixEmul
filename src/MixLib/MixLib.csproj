@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
     <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-		<Deterministic>false</Deterministic>
-	</PropertyGroup>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
+  </ItemGroup>
 </Project>
