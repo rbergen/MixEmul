@@ -21,4 +21,7 @@ I'm afraid you'll just have to trust me when I say that MixEmul was not written 
 
 So again, trust me when I say that MixEmul is safe. Or don't trust me, and miss out on what I still consider to be the best MIX emulator available. :)
 
+## Can I support the author?
+Yes. You can support me through [PayPal](https://www.paypal.me/rutgervanbergen).
+
 _- Rutger van Bergen - [github.com/rbergen](https://github.com/rbergen)_
