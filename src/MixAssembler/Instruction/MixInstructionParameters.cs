@@ -69,10 +69,13 @@ namespace MixAssembler.Instruction
 
 			var addressMagnitude = this.address.GetMagnitude(status.LocationCounter);
 			var word = new Word(MixInstruction.AddressByteCount);
-			if (addressMagnitude > word.MaxMagnitude)
+			if (mixInstruction.Opcode < 48 || mixInstruction.Opcode > 55)
 			{
-				status.ReportError(LineSection.AddressField, 0, this.indexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
-				return null;
+				if (addressMagnitude > word.MaxMagnitude)
+				{
+					status.ReportError(LineSection.AddressField, 0, this.indexPartCharIndex, new MixAssembler.Finding.ParsingError("address value " + addressMagnitude + " invalid", (int)-word.MaxMagnitude, (int)word.MaxMagnitude));
+					return null;
+				}
 			}
 
 			word.MagnitudeLongValue = addressMagnitude;
