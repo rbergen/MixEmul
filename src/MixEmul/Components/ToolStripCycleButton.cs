@@ -22,7 +22,7 @@ namespace MixGui.Components
 			=> container.Add(this);
 
 		public ToolStripCycleButton()
-			: base(new Button { Text = "", FlatStyle = FlatStyle.Flat, Height = 21, Padding = new Padding(0), TextAlign = ContentAlignment.TopCenter })
+			: base(new Button { Text = string.Empty, FlatStyle = FlatStyle.Flat, Height = 21, Padding = new Padding(0), TextAlign = ContentAlignment.TopCenter })
 		{
 			InitializeComponent();
 			this.steps = new List<Step>();
@@ -31,7 +31,7 @@ namespace MixGui.Components
 			Control.SizeChanged += Control_SizeChanged;
 			Control.Click += Control_Click;
 			Control.Paint += ToolStripCycleButton_Paint;
-			Text = "";
+			Text = string.Empty;
 		}
 
 		protected void OnValueChanged(EventArgs e) 

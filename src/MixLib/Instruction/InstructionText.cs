@@ -10,7 +10,7 @@ namespace MixLib.Instruction
 			=> this.instance = instance;
 
 		public string Index 
-			=> this.instance.Index != 0 ? "," + this.instance.Index : "";
+			=> this.instance.Index != 0 ? "," + this.instance.Index : string.Empty;
 
 		public string InstanceText 
 			=> Mnemonic + " " + Address + Index + Field;
@@ -62,7 +62,7 @@ namespace MixLib.Instruction
 						break;
 				}
 
-				return str != null ? "(" + str + ")" : "";
+				return str != null ? "(" + str + ")" : string.Empty;
 			}
 		}
 	}

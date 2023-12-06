@@ -57,7 +57,7 @@ namespace MixLib.Device.Settings
 
 		public static string DefaultDeviceFilesDirectory
 		{
-			get => defaultDeviceFilesDirectory ?? "";
+			get => defaultDeviceFilesDirectory ?? string.Empty;
 			set => defaultDeviceFilesDirectory = value;
 		}
 

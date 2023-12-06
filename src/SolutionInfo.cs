@@ -3,7 +3,7 @@ using System.Runtime.Versioning;
 
 [assembly: AssemblyCompany("Rutger van Bergen")]
 [assembly: AssemblyProduct("MixEmul")]
-[assembly: AssemblyCopyright("© Copyright 2021, Rutger van Bergen")]
+[assembly: AssemblyCopyright("© Copyright 2023, Rutger van Bergen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyConfiguration("")]
@@ -16,5 +16,5 @@ using System.Runtime.Versioning;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.5.0.0")]
-[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyVersion("0.5.1.0")]
+[assembly: AssemblyFileVersion("0.5.1.0")]

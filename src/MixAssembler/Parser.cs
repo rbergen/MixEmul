@@ -145,11 +145,11 @@ namespace MixAssembler
 			lineFields[OpFieldIndex] = lineFields[OpFieldIndex].ToUpper();
 			lineFields[AddressFieldIndex] = lineFields[AddressFieldIndex].ToUpper();
 
-			if (lineFields[OpFieldIndex] == "")
+			if (lineFields[OpFieldIndex] == string.Empty)
 			{
 				status.ReportParsingError(LineSection.LocationField, 0, sourceLine.Length, "op and address fields are missing");
 
-				return new ParsedSourceLine(status.LineNumber, lineFields[0], "", "", "", null, null);
+				return new ParsedSourceLine(status.LineNumber, lineFields[0], string.Empty, string.Empty, string.Empty, null, null);
 			}
 
 			var symbol = ParseLocField(lineFields[LocFieldIndex], status);
@@ -170,7 +170,7 @@ namespace MixAssembler
 
 		private static SymbolBase ParseLocField(string locField, ParsingStatus status)
 		{
-			if (locField == "")
+			if (locField == string.Empty)
 				return null;
 
 			status.LineSection = LineSection.LocationField;
@@ -249,23 +249,23 @@ namespace MixAssembler
 			var searchBeyondIndex = FindFirstWhiteSpace(sourceLine, -1);
 
 			if (searchBeyondIndex == -1)
-				return new string[] { sourceLine, "", "", "" };
+				return new string[] { sourceLine, string.Empty, string.Empty, string.Empty };
 
 			var opFieldStart = FindFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
 
 			if (opFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), "", "", "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), string.Empty, string.Empty, string.Empty };
 
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
 
 			if (opFieldEnd == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine[opFieldStart..], "", "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine[opFieldStart..], string.Empty, string.Empty };
 
 			int opFieldLength = opFieldEnd - opFieldStart;
 			var addressFieldStart = FindFirstNonWhiteSpace(sourceLine, opFieldEnd);
 
 			if (addressFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), "", "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), string.Empty, string.Empty };
 
 			if (sourceLine[addressFieldStart] == '"')
 			{
@@ -280,13 +280,13 @@ namespace MixAssembler
 				addressFieldEnd = FindFirstWhiteSpace(sourceLine, addressFieldStart);
 
 			if (addressFieldEnd == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], string.Empty };
 
 			int addressFieldLength = addressFieldEnd - addressFieldStart;
 			var commentFieldStart = FindFirstNonWhiteSpace(sourceLine, addressFieldEnd);
 
 			if (commentFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };
+				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), string.Empty };
 
 			return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
 		}

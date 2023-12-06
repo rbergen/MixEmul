@@ -9,6 +9,10 @@ x: Bugfix
 
 =========================================
 
+0.5.1.0 (2023-12-06)
+* Moved to .NET 8.0
+* Use string.Empty for empty strings
+
 0.5.0.0 (2021-12-04)
 * Moved to .NET 6.0
 * Switched to deterministic versioning

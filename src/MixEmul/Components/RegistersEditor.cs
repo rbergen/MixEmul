@@ -211,7 +211,7 @@ namespace MixGui.Components
 			this.compareButton.Size = new Size(18, 21);
 			this.compareButton.Location = new Point((this.rAEditor.Left + this.rAEditor.Width) - this.compareButton.Width, this.rJEditor.Top);
 			this.compareButton.TabIndex = 21;
-			this.compareButton.Text = "" + this.registers.CompareIndicator.ToChar();
+			this.compareButton.Text = this.registers.CompareIndicator.ToChar().ToString();
 			this.compareButton.Click += CompareButton_Click;
 
 			this.overflowLabel.Location = new Point(Math.Min(this.compareButton.Left, this.overflowBox.Left) - Math.Max(this.compareLabel.Width, this.overflowLabel.Width), this.overflowBox.Top);
@@ -273,7 +273,7 @@ namespace MixGui.Components
 		{
 			var compValue = this.registers.CompareIndicator.Next();
 			this.registers.CompareIndicator = compValue;
-			this.compareButton.Text = "" + compValue.ToChar();
+			this.compareButton.Text = compValue.ToChar().ToString();
 		}
 
 		public new void Update()
@@ -281,7 +281,7 @@ namespace MixGui.Components
 			foreach (WordValueEditor editor in this.editors)
 				editor.Update();
 
-			this.compareButton.Text = "" + this.registers.CompareIndicator.ToChar();
+			this.compareButton.Text = this.registers.CompareIndicator.ToChar().ToString();
 			this.overflowBox.Checked = this.registers.OverflowIndicator;
 
 			base.Update();

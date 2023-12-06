@@ -1203,7 +1203,7 @@ namespace MixGui.Components
 		{
 			if (item == null)
 			{
-				this.deviceFileBox.Text = "";
+				this.deviceFileBox.Text = string.Empty;
 				this.deviceFileSetButton.Enabled = false;
 				this.deviceFileDefaultButton.Enabled = false;
 			}

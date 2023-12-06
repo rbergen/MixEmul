@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <StartupObject>MixGui.MixForm</StartupObject>
     <ApplicationIcon>..\..\img\MixFormIcon.ico</ApplicationIcon>
@@ -9,6 +9,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <GenerateManifests>true</GenerateManifests>
+	<GenerateResourceWarnOnBinaryFormatterUse>false</GenerateResourceWarnOnBinaryFormatterUse>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="docs\.gitignore" />
@@ -21,16 +22,16 @@
     <ProjectReference Include="..\MixAssembler\MixAssembler.csproj" />
     <ProjectReference Include="..\MixLib\MixLib.csproj" />
   </ItemGroup>
-	<ItemGroup>
+  <ItemGroup>
     <Content Include="control.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="floatingpoint.mixal">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-	  <None Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+    <None Include="..\..\docs\Changes.txt" Link="docs\Changes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="..\..\samples\99bottles.mixal" Link="samples\99bottles.mixal">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -53,9 +54,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-	<ItemGroup>
-	  <Content Include="..\..\docs\MixEmul Documentation 0.4.0.pdf" Link="docs\MixEmul Documentation 0.4.0.pdf">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	</ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\docs\MixEmul Documentation 0.4.0.pdf" Link="docs\MixEmul Documentation 0.4.0.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

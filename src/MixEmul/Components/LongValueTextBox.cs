@@ -73,7 +73,7 @@ namespace MixGui.Components
 		private void LongValueTextBox_Enter(object sender, EventArgs e)
 		{
 			if (ClearZero && this.magnitude == 0 && this.sign.IsPositive())
-				base.Text = "";
+				base.Text = string.Empty;
 		}
 
 		private void This_KeyDown(object sender, KeyEventArgs e)
@@ -122,7 +122,7 @@ namespace MixGui.Components
 				long magnitude = 0;
 				Word.Signs sign = Word.Signs.Positive;
 
-				if (newValue == "" || newValue == "-")
+				if (newValue == string.Empty || newValue == "-")
 				{
 					if (MinValue > 0)
 						magnitude = MinValue;
@@ -311,7 +311,7 @@ namespace MixGui.Components
 			try
 			{
 				string text = Text;
-				if (text != "" && (!SupportSign || text != "-"))
+				if (text != string.Empty && (!SupportSign || text != "-"))
 				{
 					var num = long.Parse(text);
 					textIsValid = ((num >= MinValue) && (num <= MaxValue)) && (SupportSign || (num >= 0L));

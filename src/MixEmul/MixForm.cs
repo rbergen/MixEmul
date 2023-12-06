@@ -564,10 +564,10 @@ namespace MixGui
 			// 
 			this.severityImageList.ImageStream = ((ImageListStreamer)(resources.GetObject("mSeverityImageList.ImageStream")));
 			this.severityImageList.TransparentColor = Color.Transparent;
-			this.severityImageList.Images.SetKeyName(0, "");
-			this.severityImageList.Images.SetKeyName(1, "");
-			this.severityImageList.Images.SetKeyName(2, "");
-			this.severityImageList.Images.SetKeyName(3, "");
+			this.severityImageList.Images.SetKeyName(0, string.Empty);
+			this.severityImageList.Images.SetKeyName(1, string.Empty);
+			this.severityImageList.Images.SetKeyName(2, string.Empty);
+			this.severityImageList.Images.SetKeyName(3, string.Empty);
 			// 
 			// mMainMenuStrip
 			// 

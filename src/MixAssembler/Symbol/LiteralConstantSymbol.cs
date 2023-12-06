@@ -45,7 +45,7 @@ namespace MixAssembler.Symbol
 			=> this.valueDefined;
 
 		private static string GetName(Word.Signs literalSign, long literalMagnitude, int count)
-			=> string.Concat("=", literalSign.IsNegative() ? "-" : "", literalMagnitude, '=', count);
+			=> string.Concat("=", literalSign.IsNegative() ? "-" : string.Empty, literalMagnitude, '=', count);
 
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{

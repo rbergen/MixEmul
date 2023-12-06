@@ -79,7 +79,7 @@ namespace MixGui.Components
 			}
 			else
 			{
-				this.searchTextBox.Text = "";
+				this.searchTextBox.Text = string.Empty;
 				this.valueCheckBox.Checked = true;
 				this.charsCheckBox.Checked = true;
 				this.instructionCheckBox.Checked = true;

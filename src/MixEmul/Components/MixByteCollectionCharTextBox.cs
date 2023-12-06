@@ -140,7 +140,7 @@ namespace MixGui.Components
 			if (this.updating)
 				return;
 
-			string validText = "";
+			string validText = string.Empty;
 
 			foreach (var c in Text.Where(c => MixByte.MixChars.Contains(c)))
 				validText += c;

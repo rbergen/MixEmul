@@ -130,7 +130,7 @@ namespace MixLib.Device
 						return false;
 					}
 
-					string stringToRead = (this.inputBuffer.Count == 0) ? "" : ((string)this.inputBuffer.Dequeue());
+					string stringToRead = (this.inputBuffer.Count == 0) ? string.Empty : ((string)this.inputBuffer.Dequeue());
 					this.readBytes = new MixByte[FullWord.ByteCount * MyRecordWordCount];
 
 					var bytesToReadCount = Math.Min(stringToRead.Length, this.readBytes.Length);

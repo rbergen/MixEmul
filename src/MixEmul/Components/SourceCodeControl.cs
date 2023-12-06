@@ -44,7 +44,7 @@ namespace MixGui.Components
 			this.sourceBox.ReadOnly = true;
 			this.sourceBox.Size = Size;
 			this.sourceBox.TabIndex = 0;
-			this.sourceBox.Text = "";
+			this.sourceBox.Text = string.Empty;
 			this.sourceBox.DetectUrls = false;
 
 			Controls.Add(this.sourceBox);
@@ -279,7 +279,7 @@ namespace MixGui.Components
 			set
 			{
 				this.markedFinding = null;
-				this.sourceBox.Text = "";
+				this.sourceBox.Text = string.Empty;
 				this.instructions.Clear();
 				this.findingsColored = false;
 
@@ -306,7 +306,7 @@ namespace MixGui.Components
 				{
 					while (parsedLine.LineNumber > this.instructions.Count)
 					{
-						AddLine(new ParsedSourceLine(this.instructions.Count, ""));
+						AddLine(new ParsedSourceLine(this.instructions.Count, string.Empty));
 					}
 
 					AddLine(parsedLine);
@@ -352,7 +352,7 @@ namespace MixGui.Components
 					!SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
 
 			public int LineTextLength =>
-					(SourceLine.Comment == "" ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
+					(SourceLine.Comment == string.Empty ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
 
 			public int LocTextIndex 
 				=> LineTextIndex;
@@ -376,7 +376,7 @@ namespace MixGui.Components
 					if (SourceLine.IsCommentLine)
 						return 0;
 
-					if (SourceLine.Comment != "")
+					if (SourceLine.Comment != string.Empty)
 						return Math.Max(Parser.MinAddressLength, SourceLine.AddressField.Length);
 
 					return SourceLine.AddressField.Length;

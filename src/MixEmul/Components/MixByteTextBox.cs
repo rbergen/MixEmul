@@ -99,7 +99,7 @@ namespace MixGui.Components
 		{
 			try
 			{
-				CheckAndUpdateValue(newValue == "" ? (byte)0 : byte.Parse(newValue));
+				CheckAndUpdateValue(newValue == string.Empty ? (byte)0 : byte.Parse(newValue));
 			}
 			catch (FormatException) { }
 		}
@@ -137,7 +137,7 @@ namespace MixGui.Components
 			{
 				string text = Text;
 
-				if (text != "")
+				if (text != string.Empty)
 				{
 					var byteValue = byte.Parse(text);
 					textIsValid = byteValue >= 0 && byteValue <= MixByte.MaxValue;

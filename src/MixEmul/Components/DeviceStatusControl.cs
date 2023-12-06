@@ -48,7 +48,7 @@ namespace MixGui.Components
 			this.statusLabel.Name = "mStatusLabel";
 			this.statusLabel.Size = new Size(32, 16);
 			this.statusLabel.TabIndex = 1;
-			this.statusLabel.Text = "";
+			this.statusLabel.Text = string.Empty;
 			this.statusLabel.TextAlign = ContentAlignment.MiddleCenter;
 			this.statusLabel.DoubleClick += Control_DoubleClick;
 
@@ -89,9 +89,9 @@ namespace MixGui.Components
 			{
 				SuspendLayout();
 
-				this.indexLabel.Text = "";
+				this.indexLabel.Text = string.Empty;
 				this.statusLabel.BackColor = Color.Gray;
-				this.statusLabel.Text = "";
+				this.statusLabel.Text = string.Empty;
 				ToolTip?.SetToolTip(this.statusLabel, "No device connected");
 
 				this.inputMenuItem.Checked = false;

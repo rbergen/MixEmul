@@ -132,7 +132,7 @@ namespace MixGui.Components
 
 		private void AddTextElement(string element, bool markAsError)
 		{
-			if (element == "")
+			if (element == string.Empty)
 				return;
 
 			int textLength = TextLength;
@@ -143,12 +143,12 @@ namespace MixGui.Components
 
 		private string GetAssemblyErrorsCaption(ParsedSourceLine line, AssemblyFindingCollection findings)
 		{
-			string caption = "";
+			string caption = string.Empty;
 			int findingNumber = 1;
 
 			foreach (AssemblyFinding finding in findings)
 			{
-				string fieldLabel = "";
+				string fieldLabel = string.Empty;
 
 				if (finding.Severity == Severity.Error)
 				{
@@ -249,7 +249,7 @@ namespace MixGui.Components
 			if (ReadOnly || !this.noInstructionRendered && !this.instructionWord.IsEmpty)
 				return true;
 
-			base.Text = "";
+			base.Text = string.Empty;
 			SetEditMode();
 
 			return false;
@@ -438,7 +438,7 @@ namespace MixGui.Components
 			var text = new InstructionText(instance);
 
 			SuspendLayout();
-			base.Text = "";
+			base.Text = string.Empty;
 
 			ForeColor = this.lastRenderedSourceLine != null ? this.loadedInstructionTextColor : this.renderedTextColor;
 			AddTextElement(text.Mnemonic + " ", false);

@@ -83,8 +83,8 @@ namespace MixGui.Components
 
 				this.listView.BeginUpdate();
 				this.listView.Items.Clear();
-				this.symbolNameTextBox.Text = "";
-				this.symbolValueTextBox.Text = "";
+				this.symbolNameTextBox.Text = string.Empty;
+				this.symbolValueTextBox.Text = string.Empty;
 
 				if (this.symbols != null)
 				{

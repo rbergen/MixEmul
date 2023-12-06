@@ -48,7 +48,7 @@ namespace MixGui.Components
 				Size = new Size(18, 21),
 				TabIndex = 0,
 				TabStop = false,
-				Text = "" + this.word.Sign.ToChar(),
+				Text = this.word.Sign.ToChar().ToString(),
 				FlatStyle = FlatStyle.Flat,
 				Enabled = !ReadOnly
 			};
@@ -238,7 +238,7 @@ namespace MixGui.Components
 			this.word.InvertSign();
 			this.lastRenderedMagnitude = this.word.MagnitudeLongValue;
 			this.lastRenderedSign = this.word.Sign;
-			this.signButton.Text = "" + this.word.Sign.ToChar();
+			this.signButton.Text = this.word.Sign.ToChar().ToString();
 
 			var oldValue = new Word(this.word.Magnitude, sign);
 			var newValue = new Word(this.word.Magnitude, this.word.Sign);
@@ -259,7 +259,7 @@ namespace MixGui.Components
 		{
 			if (this.lastRenderedMagnitude != this.word.MagnitudeLongValue || this.lastRenderedSign != this.word.Sign || this.lastRenderedMagnitude == Unrendered)
 			{
-				this.signButton.Text = "" + this.word.Sign.ToChar();
+				this.signButton.Text = this.word.Sign.ToChar().ToString();
 
 				foreach (MixByteTextBox box in this.byteTextBoxes)
 					box.MixByteValue = this.word[box.Index];

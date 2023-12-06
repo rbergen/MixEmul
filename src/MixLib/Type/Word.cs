@@ -106,7 +106,7 @@ namespace MixLib.Type
 			}
 			else
 			{
-				stringValue = "" + Sign.ToChar();
+				stringValue = Sign.ToChar().ToString();
 
 				foreach (MixByte mixByte in this.bytes)
 					stringValue += ' ' + mixByte;

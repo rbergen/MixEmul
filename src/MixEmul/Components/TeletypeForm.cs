@@ -233,7 +233,7 @@ namespace MixGui.Components
 				return;
 			}
 
-			this.outputTextBox.Text = "";
+			this.outputTextBox.Text = string.Empty;
 		}
 
 		private void MOnTopCheckBox_CheckedChanged(object sender, EventArgs e) => TopMost = this.onTopCheckBox.Checked;
@@ -247,7 +247,7 @@ namespace MixGui.Components
 			}
 
 			string outputLine;
-			string textToAdd = "";
+			string textToAdd = string.Empty;
 
 			while ((outputLine = this.teletypeDevice.GetOutputLine()) != null)
 			{
@@ -276,7 +276,7 @@ namespace MixGui.Components
 				AddOutputText("> " + this.inputTextBox.Text);
 
 			this.teletypeDevice.AddInputLine(this.inputTextBox.Text);
-			this.inputTextBox.Text = "";
+			this.inputTextBox.Text = string.Empty;
 			this.toolStripStatusLabel.Text = "Sent input to Mix";
 		}
 
