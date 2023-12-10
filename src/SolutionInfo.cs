@@ -16,5 +16,5 @@ using System.Runtime.Versioning;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.5.1.0")]
-[assembly: AssemblyFileVersion("0.5.1.0")]
+[assembly: AssemblyVersion("0.5.1.1")]
+[assembly: AssemblyFileVersion("0.5.1.1")]
