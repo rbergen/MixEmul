@@ -117,12 +117,9 @@ namespace MixGui.Components
 			}
 		}
 
-		public class SelectionChangedEventArgs : EventArgs
+		public class SelectionChangedEventArgs(AssemblyFinding finding) : EventArgs
 		{
-			private readonly AssemblyFinding mSelectedFinding;
-
-			public SelectionChangedEventArgs(AssemblyFinding finding)
-				=> mSelectedFinding = finding;
+			private readonly AssemblyFinding mSelectedFinding = finding;
 
 			public AssemblyFinding SelectedFinding => mSelectedFinding;
 		}

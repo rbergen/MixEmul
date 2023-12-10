@@ -146,7 +146,7 @@ namespace MixGui.Components
 				validText += c;
 
 			if (validText.Length > this.byteCollection.MaxByteCount)
-				validText = validText.Substring(0, this.byteCollection.MaxByteCount);
+				validText = validText[..this.byteCollection.MaxByteCount];
 
 			if (validText.Length > 0 || TextLength == 0)
 			{
@@ -281,7 +281,7 @@ namespace MixGui.Components
 					this.byteCollection = value;
 
 					if (TextLength > this.byteCollection.MaxByteCount)
-						Text = Text.Substring(0, this.byteCollection.MaxByteCount);
+						Text = Text[..this.byteCollection.MaxByteCount];
 
 					Select(TextLength, 0);
 

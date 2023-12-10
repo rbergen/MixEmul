@@ -41,9 +41,7 @@ namespace MixGui.Components
 
 		private void FindButton_Click(object sender, EventArgs e)
 		{
-			if (this.searchParameters == null)
-				this.searchParameters = new SearchParameters();
-
+			this.searchParameters ??= new SearchParameters();
 			this.searchParameters.SearchText = this.searchTextBox.MixByteCollectionValue.ToString(true).Trim();
 			this.searchParameters.SearchFields = FieldTypes.None;
 

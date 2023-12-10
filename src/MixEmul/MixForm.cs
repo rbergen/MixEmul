@@ -28,7 +28,7 @@ namespace MixGui
 		private const int MainMemoryEditorIndex = 0;
 		private const int FloatingPointMemoryEditorIndex = 1;
 
-		private IContainer components;
+		private Container components;
 		private AboutForm aboutForm;
 		private readonly Configuration configuration;
 		private readonly string defaultDirectory = Environment.CurrentDirectory;
@@ -1282,13 +1282,10 @@ namespace MixGui
 			var instances = Assembler.Assemble(File.ReadAllLines(filePath), out PreInstruction[] instructions, out SymbolCollection symbols, out AssemblyFindingCollection findings);
 			if (instructions != null && findings != null)
 			{
-				if (this.sourceAndFindingsForm == null)
+				this.sourceAndFindingsForm ??= new SourceAndFindingsForm
 				{
-					this.sourceAndFindingsForm = new SourceAndFindingsForm
-					{
-						SeverityImageList = this.severityImageList
-					};
-				}
+					SeverityImageList = this.severityImageList
+				};
 
 				this.sourceAndFindingsForm.SetInstructionsAndFindings(instructions, instances, findings);
 
@@ -1424,9 +1421,7 @@ namespace MixGui
 
 			foreach (var device in this.mix.Devices.OfType<FileBasedDevice>())
 			{
-				device.FilePath = this.configuration.DeviceFilePaths.ContainsKey(device.Id)
-					? this.configuration.DeviceFilePaths[device.Id]
-					: null;
+				device.FilePath = this.configuration.DeviceFilePaths.TryGetValue(device.Id, out var path) ? path : null;
 			}
 		}
 

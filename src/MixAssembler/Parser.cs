@@ -254,18 +254,18 @@ namespace MixAssembler
 			var opFieldStart = FindFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
 
 			if (opFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), string.Empty, string.Empty, string.Empty };
+				return new string[] { sourceLine[..searchBeyondIndex], string.Empty, string.Empty, string.Empty };
 
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
 
 			if (opFieldEnd == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine[opFieldStart..], string.Empty, string.Empty };
+				return new string[] { sourceLine[..searchBeyondIndex], sourceLine[opFieldStart..], string.Empty, string.Empty };
 
 			int opFieldLength = opFieldEnd - opFieldStart;
 			var addressFieldStart = FindFirstNonWhiteSpace(sourceLine, opFieldEnd);
 
 			if (addressFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), string.Empty, string.Empty };
+				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), string.Empty, string.Empty };
 
 			if (sourceLine[addressFieldStart] == '"')
 			{
@@ -280,15 +280,15 @@ namespace MixAssembler
 				addressFieldEnd = FindFirstWhiteSpace(sourceLine, addressFieldStart);
 
 			if (addressFieldEnd == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], string.Empty };
+				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], string.Empty };
 
 			int addressFieldLength = addressFieldEnd - addressFieldStart;
 			var commentFieldStart = FindFirstNonWhiteSpace(sourceLine, addressFieldEnd);
 
 			if (commentFieldStart == -1)
-				return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), string.Empty };
+				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };
 
-			return new string[] { sourceLine.Substring(0, searchBeyondIndex), sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
+			return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
 		}
 	}
 }

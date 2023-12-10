@@ -433,22 +433,14 @@ namespace MixGui.Components
 			set => CheckAndUpdateValue(value);
 		}
 
-		public class ValueChangedEventArgs : EventArgs
+		public class ValueChangedEventArgs(Word.Signs oldSign, long oldMagnitude, Word.Signs newSign, long newMagnitude) : EventArgs
 		{
-			public long OldMagnitude { get; private set; }
-			public Word.Signs OldSign { get; private set; }
-			public long NewMagnitude { get; private set; }
-			public Word.Signs NewSign { get; private set; }
+	  public long OldMagnitude { get; private set; } = oldMagnitude;
+	  public Word.Signs OldSign { get; private set; } = oldSign;
+	  public long NewMagnitude { get; private set; } = newMagnitude;
+	  public Word.Signs NewSign { get; private set; } = newSign;
 
-			public ValueChangedEventArgs(Word.Signs oldSign, long oldMagnitude, Word.Signs newSign, long newMagnitude)
-			{
-				OldMagnitude = oldMagnitude;
-				NewMagnitude = newMagnitude;
-				OldSign = oldSign;
-				NewSign = newSign;
-			}
-
-			public long NewValue
+	  public long NewValue
 				=> NewSign.ApplyTo(NewMagnitude);
 
 			public long OldValue

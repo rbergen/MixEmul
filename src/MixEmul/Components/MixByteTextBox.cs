@@ -197,17 +197,11 @@ namespace MixGui.Components
 			set => CheckAndUpdateValue(value);
 		}
 
-		public class ValueChangedEventArgs : EventArgs
+		public class ValueChangedEventArgs(MixByte oldValue, MixByte newValue) : EventArgs
 		{
-			public MixByte NewValue { get; private set; }
-			public MixByte OldValue { get; private set; }
-
-			public ValueChangedEventArgs(MixByte oldValue, MixByte newValue)
-			{
-				OldValue = oldValue;
-				NewValue = newValue;
-			}
-		}
+	  public MixByte NewValue { get; private set; } = newValue;
+	  public MixByte OldValue { get; private set; } = oldValue;
+	}
 
 		public delegate void ValueChangedEventHandler(MixByteTextBox sender, MixByteTextBox.ValueChangedEventArgs e);
 	}

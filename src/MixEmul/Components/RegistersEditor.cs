@@ -51,8 +51,8 @@ namespace MixGui.Components
 			this.compareLabel = new Label();
 			this.overflowLabel = new Label();
 
-			this.editors = new List<WordValueEditor>
-			{
+			this.editors =
+			[
 					(this.rAEditor = new WordValueEditor(this.registers.RA)),
 					(this.rXEditor = new WordValueEditor(this.registers.RX)),
 					(this.rI1Editor = new WordValueEditor(this.registers.RI1)),
@@ -62,7 +62,7 @@ namespace MixGui.Components
 					(this.r5Editor = new WordValueEditor(this.registers.RI5)),
 					(this.rI6Editor = new WordValueEditor(this.registers.RI6)),
 					(this.rJEditor = new WordValueEditor(this.registers.RJ, false))
-			};
+			];
 
 			this.compareButton = new Button();
 			this.overflowBox = new CheckBox();

@@ -25,7 +25,7 @@ namespace MixGui.Components
 			: base(new Button { Text = string.Empty, FlatStyle = FlatStyle.Flat, Height = 21, Padding = new Padding(0), TextAlign = ContentAlignment.TopCenter })
 		{
 			InitializeComponent();
-			this.steps = new List<Step>();
+			this.steps = [];
 			AutoSize = false;
 			Size = Control.Size;
 			Control.SizeChanged += Control_SizeChanged;
@@ -112,11 +112,9 @@ namespace MixGui.Components
 				if (value == null)
 					return;
 
-				var step = this.steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value));
-
-				if (step == null)
-					throw new ArgumentException($"no step with Value {value} exists");
-
+				var step = this.steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value)) 
+					?? throw new ArgumentException($"no step with Value {value} exists");
+		    
 				SetCurrentStep(step);
 			}
 		}
@@ -131,24 +129,17 @@ namespace MixGui.Components
 			OnValueChanged(new EventArgs());
 		}
 
-		public class Step
-		{
-			public object Value { get; private set; }
-			public string Text { get; private set; }
-			public Step NextStep { get; set; }
+		public class Step(object value, string text, Step nextStep)
+	{
+	  public object Value { get; private set; } = value;
+	  public string Text { get; private set; } = text;
+	  public Step NextStep { get; set; } = nextStep;
 
-			public Step(object value, string text) : this(value, text, null) { }
+	  public Step(object value, string text) : this(value, text, null) { }
 
-			public Step(object value) : this(value, value.ToString(), null) { }
+		public Step(object value) : this(value, value.ToString(), null) { }
 
-			public Step(object value, Step nextStep) : this(value, value.ToString(), nextStep) { }
-
-			public Step(object value, string text, Step nextStep)
-			{
-				Value = value;
-				Text = text;
-				NextStep = nextStep;
-			}
-		}
+		public Step(object value, Step nextStep) : this(value, value.ToString(), nextStep) { }
 	}
+  }
 }

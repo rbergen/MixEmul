@@ -14,12 +14,12 @@ namespace MixGui.Components
 	{
 		private const string LineNumberSeparator = " │ ";
 		private static readonly Color[] findingColors = 
-		{
+		[
 			GuiSettings.GetColor(GuiSettings.DebugText),
 			GuiSettings.GetColor(GuiSettings.InfoText),
 			GuiSettings.GetColor(GuiSettings.WarningText),
 			GuiSettings.GetColor(GuiSettings.ErrorText)
-		};
+		];
 
 		private Color addressColor;
 		private Color commentColor;
@@ -53,7 +53,7 @@ namespace MixGui.Components
 
 			UpdateLayout();
 
-			this.instructions = new List<ProcessedSourceLine>();
+			this.instructions = [];
 			this.lineNumberLength = 0;
 			this.findingsColored = false;
 		}
@@ -337,18 +337,12 @@ namespace MixGui.Components
 			Mark
 		}
 
-		private class ProcessedSourceLine
-		{
-			public ParsedSourceLine SourceLine { get; private set; }
-			public int LineTextIndex { get; private set; }
+		private class ProcessedSourceLine(ParsedSourceLine sourceLine, int lineTextIndex)
+	{
+	  public ParsedSourceLine SourceLine { get; private set; } = sourceLine;
+	  public int LineTextIndex { get; private set; } = lineTextIndex;
 
-			public ProcessedSourceLine(ParsedSourceLine sourceLine, int lineTextIndex)
-			{
-				SourceLine = sourceLine;
-				LineTextIndex = lineTextIndex;
-			}
-
-			public int CommentTextIndex =>
+	  public int CommentTextIndex =>
 					!SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
 
 			public int LineTextLength =>

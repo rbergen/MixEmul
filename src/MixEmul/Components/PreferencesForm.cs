@@ -105,7 +105,7 @@ namespace MixGui.Components
 
 		private void InitializeLoaderCardTextBoxes()
 		{
-			this.loaderCardTextBoxes = new MixByteCollectionCharTextBox[] { this.loaderCard1TextBox, this.loaderCard2TextBox, this.loaderCard3TextBox };
+			this.loaderCardTextBoxes = [this.loaderCard1TextBox, this.loaderCard2TextBox, this.loaderCard3TextBox];
 
 			for (int index = 0; index < this.loaderCardTextBoxes.Length; index++)
 			{
@@ -182,8 +182,8 @@ namespace MixGui.Components
 			{
 				var comboBoxItem = new ColorComboBoxItem(colorName);
 
-				if (this.configuration.Colors.ContainsKey(colorName))
-					comboBoxItem.Color = this.configuration.Colors[colorName];
+				if (this.configuration.Colors.TryGetValue(colorName, out var color))
+					comboBoxItem.Color = color;
 
 				list.Add(comboBoxItem);
 			}
@@ -202,13 +202,13 @@ namespace MixGui.Components
 			var list = new List<DeviceFileComboBoxItem>();
 			foreach (MixDevice device in this.devices)
 			{
-				if (!(device is FileBasedDevice))
+				if (device is not FileBasedDevice)
 					continue;
 
 				var item = new DeviceFileComboBoxItem((FileBasedDevice)device);
 
-				if (this.configuration.DeviceFilePaths.ContainsKey(device.Id))
-					item.FilePath = this.configuration.DeviceFilePaths[device.Id];
+				if (this.configuration.DeviceFilePaths.TryGetValue(device.Id, out var path))
+					item.FilePath = path;
 
 				list.Add(item);
 			}
@@ -232,8 +232,8 @@ namespace MixGui.Components
 			{
 				var item = new TickCountComboBoxItem(tickCountName);
 
-				if (this.configuration.TickCounts.ContainsKey(tickCountName))
-					item.TickCount = this.configuration.TickCounts[tickCountName];
+				if (this.configuration.TickCounts.TryGetValue(tickCountName, out var tickCount))
+					item.TickCount = tickCount;
 
 				list.Add(item);
 			}
@@ -758,12 +758,7 @@ namespace MixGui.Components
 			this.loaderCard3TextBox.Location = new Point(0, 28);
 			this.loaderCard3TextBox.Margin = new Padding(0);
 			fullWord1.LongValue = 0;
-			fullWord1.Magnitude = new MixByte[] {
-				mixByte1,
-				mixByte2,
-				mixByte3,
-				mixByte4,
-				mixByte5};
+			fullWord1.Magnitude = [mixByte1, mixByte2, mixByte3, mixByte4, mixByte5];
 			fullWord1.MagnitudeLongValue = 0;
 			fullWord1.Sign = Word.Signs.Positive;
 			this.loaderCard3TextBox.MixByteCollectionValue = fullWord1;
@@ -785,12 +780,7 @@ namespace MixGui.Components
 			this.loaderCard2TextBox.Location = new Point(0, 14);
 			this.loaderCard2TextBox.Margin = new Padding(0);
 			fullWord2.LongValue = 0;
-			fullWord2.Magnitude = new MixByte[] {
-				mixByte6,
-				mixByte7,
-				mixByte8,
-				mixByte9,
-				mixByte10};
+			fullWord2.Magnitude = [mixByte6, mixByte7, mixByte8, mixByte9, mixByte10];
 			fullWord2.MagnitudeLongValue = 0;
 			fullWord2.Sign = Word.Signs.Positive;
 			this.loaderCard2TextBox.MixByteCollectionValue = fullWord2;
@@ -812,12 +802,7 @@ namespace MixGui.Components
 			this.loaderCard1TextBox.Location = new Point(0, 0);
 			this.loaderCard1TextBox.Margin = new Padding(0);
 			fullWord3.LongValue = 0;
-			fullWord3.Magnitude = new MixByte[] {
-				mixByte11,
-				mixByte12,
-				mixByte13,
-				mixByte14,
-				mixByte15};
+			fullWord3.Magnitude = [mixByte11, mixByte12, mixByte13, mixByte14, mixByte15];
 			fullWord3.MagnitudeLongValue = 0;
 			fullWord3.Sign = Word.Signs.Positive;
 			this.loaderCard1TextBox.MixByteCollectionValue = fullWord3;
@@ -914,18 +899,15 @@ namespace MixGui.Components
 
 		private void ColorSetButton_Click(object sender, EventArgs e)
 		{
-			if (this.colorDialog == null)
+			this.colorDialog ??= new ColorDialog
 			{
-				this.colorDialog = new ColorDialog
-				{
-					AnyColor = true,
-					SolidColorOnly = true,
-					AllowFullOpen = true
-				};
-			}
+				AnyColor = true,
+				SolidColorOnly = true,
+				AllowFullOpen = true
+			};
 
 			var selectedItem = (ColorComboBoxItem)this.colorSelectionBox.SelectedItem;
-			this.colorDialog.CustomColors = new int[] { selectedItem.Color.B << 16 | selectedItem.Color.G << 8 | selectedItem.Color.R };
+			this.colorDialog.CustomColors = [selectedItem.Color.B << 16 | selectedItem.Color.G << 8 | selectedItem.Color.R];
 			this.colorDialog.Color = selectedItem.Color;
 
 			if (this.colorDialog.ShowDialog(this) == DialogResult.OK)
@@ -978,13 +960,10 @@ namespace MixGui.Components
 
 		private void DeviceDirectorySetButton_Click(object sender, EventArgs e)
 		{
-			if (this.deviceFilesFolderBrowserDialog == null)
+			this.deviceFilesFolderBrowserDialog ??= new FolderBrowserDialog
 			{
-				this.deviceFilesFolderBrowserDialog = new FolderBrowserDialog
-				{
-					Description = "Please select the default directory for device files."
-				};
-			}
+				Description = "Please select the default directory for device files."
+			};
 
 			this.deviceFilesFolderBrowserDialog.SelectedPath = GetCurrentDeviceFilesDirectory();
 
@@ -1006,16 +985,13 @@ namespace MixGui.Components
 
 		private void DeviceFileSetButton_Click(object sender, EventArgs e)
 		{
-			if (this.selectDeviceFileDialog == null)
+			this.selectDeviceFileDialog ??= new SaveFileDialog
 			{
-				this.selectDeviceFileDialog = new SaveFileDialog
-				{
-					CreatePrompt = true,
-					DefaultExt = "mixdev",
-					Filter = "MIX device files|*.mixdev|All files|*.*",
-					OverwritePrompt = false
-				};
-			}
+				CreatePrompt = true,
+				DefaultExt = "mixdev",
+				Filter = "MIX device files|*.mixdev|All files|*.*",
+				OverwritePrompt = false
+			};
 
 			var selectedItem = (DeviceFileComboBoxItem)this.deviceFileSelectionBox.SelectedItem;
 			this.selectDeviceFileDialog.FileName = Path.Combine(GetCurrentDeviceFilesDirectory(), selectedItem.FilePath);
@@ -1091,7 +1067,7 @@ namespace MixGui.Components
 
 		private void This_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == (char)Keys.Escape && !(GetFocusedControl() is IEscapeConsumer))
+			if (e.KeyChar == (char)Keys.Escape && GetFocusedControl() is not IEscapeConsumer)
 			{
 				DialogResult = DialogResult.Cancel;
 				Hide();
@@ -1271,22 +1247,15 @@ namespace MixGui.Components
 		/// <summary>
 		/// Instances of this class are used to store the color settings 
 		/// </summary>
-		private class ColorComboBoxItem
-		{
-			private readonly string mDisplayName;
-			public bool IsDefault { get; private set; }
-			public string Name { get; private set; }
+		private class ColorComboBoxItem(string name)
+	{
+		private readonly string mDisplayName = GetDisplayName(name);
+	  public bool IsDefault { get; private set; } = true;
+	  public string Name { get; private set; } = name;
 
-			private Color mSetColor;
+	  private Color mSetColor;
 
-			public ColorComboBoxItem(string name)
-			{
-				Name = name;
-				mDisplayName = GetDisplayName(name);
-				IsDefault = true;
-			}
-
-			public bool IsBackground => !Name.EndsWith("Text", StringComparison.Ordinal);
+	  public bool IsBackground => !Name.EndsWith("Text", StringComparison.Ordinal);
 
 			public override string ToString() => mDisplayName;
 
@@ -1324,14 +1293,12 @@ namespace MixGui.Components
 		/// <summary>
 		/// Instances of this class are used to store the device file settings 
 		/// </summary>
-		private class DeviceFileComboBoxItem
-		{
-			private readonly FileBasedDevice mDevice;
-			private string mFilePath;
+		private class DeviceFileComboBoxItem(FileBasedDevice device)
+	{
+		private readonly FileBasedDevice mDevice = device;
+		private string mFilePath;
 
-			public DeviceFileComboBoxItem(FileBasedDevice device) => mDevice = device;
-
-			public int Id => mDevice.Id;
+	  public int Id => mDevice.Id;
 
 			public bool IsDefault => mFilePath == null;
 
@@ -1349,21 +1316,14 @@ namespace MixGui.Components
 		/// <summary>
 		/// Instances of this class are used to store the tick count settings 
 		/// </summary>
-		private class TickCountComboBoxItem
-		{
-			private readonly string mDisplayName;
-			private bool mIsDefault;
-			private readonly string mName;
-			private int mSetTickCount;
+		private class TickCountComboBoxItem(string name)
+	{
+		private readonly string mDisplayName = GetDisplayName(name);
+		private bool mIsDefault = true;
+		private readonly string mName = name;
+		private int mSetTickCount;
 
-			public TickCountComboBoxItem(string name)
-			{
-				mName = name;
-				mDisplayName = GetDisplayName(name);
-				mIsDefault = true;
-			}
-
-			public bool IsDefault => mIsDefault;
+	  public bool IsDefault => mIsDefault;
 
 			public string Name => mName;
 
@@ -1400,13 +1360,11 @@ namespace MixGui.Components
 			}
 		}
 
-		private class DeviceReloadIntervalComboBoxItem
-		{
-			public int MilliSeconds { get; set; }
+		private class DeviceReloadIntervalComboBoxItem(int milliSeconds)
+	{
+	  public int MilliSeconds { get; set; } = milliSeconds;
 
-			public DeviceReloadIntervalComboBoxItem(int milliSeconds) => MilliSeconds = milliSeconds;
-
-			public override string ToString()
+	  public override string ToString()
 			{
 				if (MilliSeconds < 1000)
 					return MilliSeconds.ToString("##0 ms");

@@ -205,7 +205,7 @@ namespace MixGui.Components
 
 			var instance = Assembler.Assemble(Text, MemoryAddress, out ParsedSourceLine line, Symbols, out AssemblyFindingCollection findings);
 
-			if (instance != null && !(instance is MixInstruction.Instance))
+			if (instance != null && instance is not MixInstruction.Instance)
 			{
 				findings.Add(new AssemblyError(0, LineSection.OpField, 0, line.OpField.Length, new ValidationError("only MIX instruction mnemonics supported")));
 				instance = null;
@@ -553,7 +553,7 @@ namespace MixGui.Components
 			get => this.instructionWord;
 			set
 			{
-				if (!(value is IFullWord))
+				if (value is not IFullWord)
 				{
 					throw new ArgumentException("value must be an IFullWord");
 				}

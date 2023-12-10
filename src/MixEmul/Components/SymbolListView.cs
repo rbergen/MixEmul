@@ -102,9 +102,7 @@ namespace MixGui.Components
 
 		public void AddSymbol(SymbolBase symbol)
 		{
-			if (this.symbols == null)
-				this.symbols = new SymbolCollection();
-
+			this.symbols ??= [];
 			this.symbols.Add(symbol);
 
 			ShowSymbol(symbol);
@@ -176,8 +174,7 @@ namespace MixGui.Components
 
 		private void SetButton_Click(object sender, EventArgs e)
 		{
-			if (this.symbols == null)
-				this.symbols = new SymbolCollection();
+			this.symbols ??= [];
 
 			string symbolName = this.symbolNameTextBox.Text;
 			long symbolMagnitude = this.symbolValueTextBox.Magnitude;
