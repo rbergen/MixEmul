@@ -130,8 +130,7 @@ namespace MixGui.Components
 			// 
 			this.statusStrip.Location = new Point(0, 287);
 			this.statusStrip.Name = "mStatusBar";
-			this.statusStrip.Items.AddRange(new ToolStripItem[] {
-						this.toolStripStatusLabel});
+			this.statusStrip.Items.AddRange([this.toolStripStatusLabel]);
 			this.statusStrip.Size = new Size(616, 22);
 			this.statusStrip.TabIndex = 5;
 			// 

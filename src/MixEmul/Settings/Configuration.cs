@@ -57,14 +57,9 @@ namespace MixGui.Settings
 
 		private void FillEmptyMembers()
 		{
-			if (Colors == null)
-				Colors = new Dictionary<string, Color>();
-
-			if (TickCounts == null)
-				TickCounts = new Dictionary<string, int>();
-
-			if (DeviceFilePaths == null)
-				DeviceFilePaths = new Dictionary<int, string>();
+			Colors ??= [];
+			TickCounts ??= [];
+			DeviceFilePaths ??= [];
 		}
 
 		public static JsonSerializerOptions JsonSerializerOptions
@@ -96,8 +91,7 @@ namespace MixGui.Settings
 			catch (Exception) 
 			{}
 
-			if (configuration == null)
-				configuration = new();
+			configuration ??= new();
 
 			configuration.FillEmptyMembers();
 

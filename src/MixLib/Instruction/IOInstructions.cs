@@ -64,7 +64,7 @@ namespace MixLib.Instruction
 			}
 
 			if (index == 1)
-				return new InstanceValidationError[] { errorArray[0] };
+				return [errorArray[0]];
 
 			if (index == 2)
 				return errorArray;

@@ -78,8 +78,7 @@ namespace MixGui
 
 		private void AboutMenuItem_Click(object sender, EventArgs e)
 		{
-			if (this.aboutForm == null)
-				this.aboutForm = new AboutForm();
+			this.aboutForm ??= new AboutForm();
 
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
@@ -167,15 +166,12 @@ namespace MixGui
 		{
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
-			if (this.openProgramFileDialog == null)
+			this.openProgramFileDialog ??= new OpenFileDialog
 			{
-				this.openProgramFileDialog = new OpenFileDialog
-				{
-					AddExtension = false,
-					Filter = "MIXAL program (*.mixal)|*.mixal|All files (*.*)|*.*",
-					Title = "Select program to open"
-				};
-			}
+				AddExtension = false,
+				Filter = "MIXAL program (*.mixal)|*.mixal|All files (*.*)|*.*",
+				Title = "Select program to open"
+			};
 
 			if (this.openProgramFileDialog.ShowDialog(this) == DialogResult.OK)
 			{
@@ -196,8 +192,7 @@ namespace MixGui
 
 		private void PreferencesMenuItem_Click(object sender, EventArgs e)
 		{
-			if (this.preferencesForm == null)
-				this.preferencesForm = new PreferencesForm(this.configuration, this.mix.Devices, this.defaultDirectory);
+			this.preferencesForm ??= new PreferencesForm(this.configuration, this.mix.Devices, this.defaultDirectory);
 
 			var teletypeWasOnTop = DisableTeletypeOnTop();
 
@@ -371,8 +366,7 @@ namespace MixGui
 
 		private void FindMenuItem_Click(object sender, EventArgs e)
 		{
-			if (this.searchDialog == null)
-				this.searchDialog = new SearchDialog();
+			this.searchDialog ??= new SearchDialog();
 
 			if (this.searchDialog.ShowDialog(this) == DialogResult.OK)
 			{

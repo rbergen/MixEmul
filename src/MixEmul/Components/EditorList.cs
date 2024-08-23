@@ -44,7 +44,7 @@ namespace MixGui.Components
 			this.sizeAdaptationPending = false;
 
 			this.editorsSyncRoot = new object();
-			this.editors = new List<T>();
+			this.editors = [];
 
 			InitializeComponent();
 		}
@@ -424,7 +424,7 @@ namespace MixGui.Components
 
 				int indexDelta = value - this.firstVisibleIndex;
 				int selectedEditorIndex = ActiveEditorIndex;
-				FieldTypes? field = selectedEditorIndex >= 0 ? this.editors[selectedEditorIndex].FocusedField : null;
+				FieldTypes? @field = selectedEditorIndex >= 0 ? this.editors[selectedEditorIndex].FocusedField : null;
 				int? caretIndex = selectedEditorIndex >= 0 ? this.editors[selectedEditorIndex].CaretIndex : null;
 
 				this.firstVisibleIndex = value;
@@ -453,7 +453,7 @@ namespace MixGui.Components
 						else if (selectedEditorIndex >= VisibleEditorCount)
 							selectedEditorIndex = VisibleEditorCount - 1;
 
-						this.editors[selectedEditorIndex].Focus(field, caretIndex);
+						this.editors[selectedEditorIndex].Focus(@field, caretIndex);
 					}
 
 					IsReloading = false;
@@ -523,12 +523,9 @@ namespace MixGui.Components
 			}
 		}
 
-		public class FirstVisibleIndexChangedEventArgs : EventArgs
+		public class FirstVisibleIndexChangedEventArgs(int firstVisibleIndex) : EventArgs
 		{
-			public int FirstVisibleIndex { get; private set; }
-
-			public FirstVisibleIndexChangedEventArgs(int firstVisibleIndex)
-				=> FirstVisibleIndex = firstVisibleIndex;
+			public int FirstVisibleIndex { get; private set; } = firstVisibleIndex;
 		}
 
 	}

@@ -6,14 +6,11 @@ using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
-	public class BinaryReadStep : StreamStep
+	public class BinaryReadStep(int recordWordCount) : StreamStep
 	{
-		private readonly int recordWordCount;
+		private readonly int recordWordCount = recordWordCount;
 
 		private const string MyStatusDescription = "Reading binary data";
-
-		public BinaryReadStep(int recordWordCount) 
-			=> this.recordWordCount = recordWordCount;
 
 		public override string StatusDescription 
 			=> MyStatusDescription;
@@ -60,13 +57,9 @@ namespace MixLib.Device.Step
 			return readWords;
 		}
 
-		private new class Instance : StreamStep.Instance
+		private new class Instance(StreamStatus streamStatus, int recordWordCount) : StreamStep.Instance(streamStatus)
 		{
 			private MixByte[] mReadBytes;
-			private readonly int mRecordWordCount;
-
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) 
-				=> mRecordWordCount = recordWordCount;
 
 			public override object OutputForNextStep 
 				=> mReadBytes;
@@ -78,13 +71,13 @@ namespace MixLib.Device.Step
 
 				try
 				{
-					mReadBytes = ReadBytes(StreamStatus.Stream, mRecordWordCount);
+					mReadBytes = ReadBytes(StreamStatus.Stream, recordWordCount);
 					StreamStatus.UpdatePosition();
 				}
 				catch (Exception exception)
 				{
 					OnReportingEvent(new ReportingEventArgs(Severity.Error, "exception while reading file " + StreamStatus.FileName + ": " + exception.Message));
-					mReadBytes = Array.Empty<MixByte>();
+					mReadBytes = [];
 				}
 
 				return true;

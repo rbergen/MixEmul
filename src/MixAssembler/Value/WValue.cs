@@ -1,4 +1,4 @@
-using MixLib.Type;
+﻿using MixLib.Type;
 
 namespace MixAssembler.Value
 {
@@ -10,7 +10,7 @@ namespace MixAssembler.Value
 		public static IValue ParseValue(string text, int sectionCharIndex, ParsingStatus status)
 		{
 			// split the text to parse in its W-value components
-			var textParts = text.Split(new char[] { ',' });
+			var textParts = text.Split([',']);
 			int currentIndex = 0;
 
 			var register = new FullWordRegister();
@@ -21,7 +21,7 @@ namespace MixAssembler.Value
 			{
 				// parse the address part...
 				var braceIndex = part.IndexOf('(');
-				var address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part.Substring(0, braceIndex), sectionCharIndex + currentIndex, status);
+				var address = ExpressionValue.ParseValue((braceIndex == -1) ? part : part[..braceIndex], sectionCharIndex + currentIndex, status);
 				if (address == null)
 					return null;
 

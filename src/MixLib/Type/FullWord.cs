@@ -9,7 +9,7 @@
 		public FullWord(long value) : this() 
 			=> LongValue = value;
 
-		public FullWord(Word.Signs sign, long magnitude) : this()
+		public FullWord(Signs sign, long magnitude) : this()
 		{
 			MagnitudeLongValue = magnitude;
 			Sign = sign;

@@ -5,7 +5,7 @@ namespace MixLib
 {
 	public class LoaderInstructions
 	{
-		private readonly SortedDictionary<string, LoaderInstruction> instructions = new();
+		private readonly SortedDictionary<string, LoaderInstruction> instructions = [];
 
 		public LoaderInstructions()
 		{
@@ -16,7 +16,7 @@ namespace MixLib
 		}
 
 		public LoaderInstruction this[string mnemonic] 
-			=> this.instructions.ContainsKey(mnemonic) ? this.instructions[mnemonic] : null;
+			=> this.instructions.TryGetValue(mnemonic, out var value) ? value : null;
 
 		private void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) 
 			=> this.instructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));

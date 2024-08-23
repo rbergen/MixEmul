@@ -1,9 +1,8 @@
 ﻿
 namespace MixGui.Components
 {
-	public class MixByteCollectionEditorList : EditorList<IMixByteCollectionEditor>
+	public class MixByteCollectionEditorList(int maxWordCount = 0, EditorList<IMixByteCollectionEditor>.CreateEditorCallback createEditor = null, EditorList<IMixByteCollectionEditor>.LoadEditorCallback loadEditor = null) 
+		: EditorList<IMixByteCollectionEditor>(0, maxWordCount - 1, createEditor, loadEditor)
 	{
-		public MixByteCollectionEditorList(int maxWordCount = 0, CreateEditorCallback createEditor = null, LoadEditorCallback loadEditor = null)
-				: base(0, maxWordCount - 1, createEditor, loadEditor) { }
-	}
+  }
 }

@@ -5,28 +5,19 @@ using MixLib.Type;
 
 namespace MixAssembler.Instruction
 {
-	/// <summary>
-	/// This class contains the parameters that are required to create an instance object of a specific loader instruction "template".
-	/// 
-	/// The (static) ParseAddressField method is to be called during the parsing of the MIXAL source (first assembly pass), to create a parameter object based on the loader instruction's address field.
-	/// The CreateInstance method should be called during the second assembly pass, to create the actual loader instruction instance.
-	/// </summary>
-	public class LoaderInstructionParameters : IInstructionParameters
+  /// <summary>
+  /// This class contains the parameters that are required to create an instance object of a specific loader instruction "template".
+  /// 
+  /// The (static) ParseAddressField method is to be called during the parsing of the MIXAL source (first assembly pass), to create a parameter object based on the loader instruction's address field.
+  /// The CreateInstance method should be called during the second assembly pass, to create the actual loader instruction instance.
+  /// </summary>
+  /// <remarks>
+  /// Constructor for this class. 
+  /// </remarks>
+  /// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
+  /// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
+  public class LoaderInstructionParameters(IValue value, int textLength) : IInstructionParameters
 	{
-		private readonly int textLength;
-		private readonly IValue value;
-
-		/// <summary>
-		/// Constructor for this class. 
-		/// </summary>
-		/// <param name="value">The parameter value associated with the instruction. The type of the value depends on the loader instruction it is connected with</param>
-		/// <param name="textLength">The length (character count) of the value in the source code it was parsed from</param>
-		public LoaderInstructionParameters(IValue value, int textLength)
-		{
-			this.value = value;
-			this.textLength = textLength;
-		}
-
 		/// <summary>
 		/// Create a loader instruction instance with the parameters contained in this object.
 		/// </summary>
@@ -40,11 +31,11 @@ namespace MixAssembler.Instruction
 
 			if (!value.IsValueDefined(status.LocationCounter))
 			{
-				status.ReportParsingError(LineSection.AddressField, 0, this.textLength, "value is not defined");
+				status.ReportParsingError(LineSection.AddressField, 0, textLength, "value is not defined");
 				return null;
 			}
 
-			return new LoaderInstruction.Instance(loaderInstruction, this.value.GetSign(status.LocationCounter), this.value.GetMagnitude(status.LocationCounter));
+			return new LoaderInstruction.Instance(loaderInstruction, value.GetSign(status.LocationCounter), value.GetMagnitude(status.LocationCounter));
 		}
 
 		/// <summary>

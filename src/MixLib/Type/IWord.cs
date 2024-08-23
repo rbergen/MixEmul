@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MixLib.Type
 {
-	public interface IWord : IEnumerable, IEnumerable<MixByte>, IMixByteCollection
+	public interface IWord : IEnumerable<MixByte>, IMixByteCollection
 	{
 		void InvertSign();
 

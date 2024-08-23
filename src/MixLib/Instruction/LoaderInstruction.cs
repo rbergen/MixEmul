@@ -10,32 +10,19 @@ namespace MixLib.Instruction
 	/// * The operation the loader instruction stands for
 	/// * An indication if the instruction's parameter value ("address section") is alfanumeric
 	/// </summary>
-	public class LoaderInstruction : InstructionBase
+	public class LoaderInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) : InstructionBase(mnemonic)
 	{
-		public bool Alphanumeric { get; private set; }
-		public Operations Operation { get; private set; }
-
-		public LoaderInstruction(string mnemonic, Operations operation, bool alphanumeric) : base(mnemonic)
-		{
-			Operation = operation;
-			Alphanumeric = alphanumeric;
-		}
+		public bool Alphanumeric => alphanumeric;
+		public Operations Operation => operation;
 
 		/// <summary>
 		/// This class represents a specific instance of a loader instruction.
 		/// </summary>
-		public class Instance : InstructionInstanceBase
+		public class Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude) : InstructionInstanceBase
 		{
-			private readonly LoaderInstruction instruction;
-			public FullWord Value { get; private set; }
+			public FullWord Value { get; private set; } = new FullWord(sign, magnitude);
 
-			public Instance(LoaderInstruction instruction, Word.Signs sign, long magnitude)
-			{
-				this.instruction = instruction;
-				Value = new FullWord(sign, magnitude);
-			}
-
-			public override InstructionBase Instruction => this.instruction;
+			public override InstructionBase Instruction => instruction;
 		}
 
 		public enum Operations

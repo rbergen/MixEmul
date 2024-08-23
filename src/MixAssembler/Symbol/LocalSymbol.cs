@@ -17,7 +17,7 @@ namespace MixAssembler.Symbol
 			if (index < 0 || index > 9)
 				throw new ArgumentException("index must be between 0 and 9");
 
-			this.addresses = new List<long>();
+			this.addresses = [];
 		}
 
 		public override bool IsMultiValuedSymbol
@@ -83,7 +83,7 @@ namespace MixAssembler.Symbol
 				status.Symbols.Add(symbol);
 			}
 
-			if (!(symbol is LocalSymbol))
+			if (symbol is not LocalSymbol)
 			{
 				status.ReportParsingError(sectionCharIndex, 1, "non-local symbol named " + localSymbolChar + " already defined, unable to refer to it");
 				return symbol;
@@ -113,18 +113,12 @@ namespace MixAssembler.Symbol
 		public override Word.Signs GetSign(int currentAddress)
 			=> throw new NotImplementedException();
 
-		private class Reference : IValue
+		private class Reference(LocalSymbol referee, Reference.Directions direction) : IValue
 		{
-			private readonly Directions mDirection;
-			private readonly LocalSymbol mReferee;
+			private readonly Directions mDirection = direction;
+			private readonly LocalSymbol mReferee = referee;
 
-			public Reference(LocalSymbol referee, Directions direction)
-			{
-				mReferee = referee;
-				mDirection = direction;
-			}
-
-			public long GetMagnitude(int currentAddress)
+	  public long GetMagnitude(int currentAddress)
 				=> GetValue(currentAddress);
 
 			public Word.Signs GetSign(int currentAddress)

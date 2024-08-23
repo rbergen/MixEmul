@@ -5,7 +5,7 @@ namespace MixAssembler
 {
 	public class AssemblingStatus
 	{
-		public AssemblyFindingCollection Findings { get; } = new();
+		public AssemblyFindingCollection Findings { get; } = [];
 
 		public void ReportError(LineSection lineSection, int causeStartIndex, int causeLength, ValidationError error)
 			=> Findings.Add(new AssemblyError(LineNumber, lineSection, causeStartIndex, causeLength, error));

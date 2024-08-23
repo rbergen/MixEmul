@@ -188,7 +188,7 @@ namespace MixGui.Components
 				list.Add(comboBoxItem);
 			}
 
-			this.colorSelectionBox.Items.AddRange(list.ToArray());
+			this.colorSelectionBox.Items.AddRange([.. list]);
 
 			if (this.colorSelectionBox.Items.Count > 0)
 				this.colorSelectionBox.SelectedIndex = 0;
@@ -213,7 +213,7 @@ namespace MixGui.Components
 				list.Add(item);
 			}
 
-			this.deviceFileSelectionBox.Items.AddRange(list.ToArray());
+			this.deviceFileSelectionBox.Items.AddRange([.. list]);
 
 			if (this.deviceFileSelectionBox.Items.Count > 0)
 				this.deviceFileSelectionBox.SelectedIndex = 0;
@@ -238,7 +238,7 @@ namespace MixGui.Components
 				list.Add(item);
 			}
 
-			this.tickCountSelectionBox.Items.AddRange(list.ToArray());
+			this.tickCountSelectionBox.Items.AddRange([.. list]);
 
 			if (this.tickCountSelectionBox.Items.Count > 0)
 	  		this.tickCountSelectionBox.SelectedIndex = 0;

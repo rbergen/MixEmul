@@ -237,27 +237,19 @@ namespace MixGui.Components
 			}
 		}
 
-		public class LayoutStructure
-		{
-			private readonly SortedList<int, Breaks> mLayoutList;
+		public class LayoutStructure(DevicesControl.Orientations orientation, int horizontalSpacing, int verticalSpacing)
+	{
+			private readonly SortedList<int, Breaks> mLayoutList = [];
 
-			public Orientations Orientation { get; set; }
-			public int HorizontalSpacing { get; set; }
-			public int VerticalSpacing { get; set; }
+			public Orientations Orientation { get; set; } = orientation;
+			public int HorizontalSpacing { get; set; } = horizontalSpacing;
+			public int VerticalSpacing { get; set; } = verticalSpacing;
 
 			public LayoutStructure(Orientations orientation) : this(orientation, 0, 0) { }
 
-			public LayoutStructure(Orientations orientation, int horizontalSpacing, int verticalSpacing)
-			{
-				mLayoutList = new SortedList<int, Breaks>();
-				Orientation = orientation;
-				HorizontalSpacing = horizontalSpacing;
-				VerticalSpacing = verticalSpacing;
-			}
-
 			public Breaks this[int location]
 			{
-				get => !mLayoutList.ContainsKey(location) ? Breaks.None : mLayoutList[location];
+				get => !mLayoutList.TryGetValue(location, out var value) ? Breaks.None : value;
 				set
 				{
 					if (mLayoutList.ContainsKey(location))

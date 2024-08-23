@@ -10,11 +10,11 @@ namespace MixGui.Utils
 	public static class CardDeckExporter
 	{
 		public static readonly string[] DefaultLoaderCards =
-		{
+		[
 			" O O6 A O4 2 O6 C O4   BK 2DO6   BI G O4 3D-H M BB B  U 3DEH A  F F CF 0  E B LU",
 			" 3DIH M BB B EJ  CA. 2DEU B EH K BA B EU 5A-H M BB  C U 4AEH 5AEN    E  CLU  ABG",
 			" 2DEH K BB Q B. E  9"
-		};
+		];
 
 		private static string[] loaderCards;
 
@@ -129,7 +129,7 @@ namespace MixGui.Utils
 			{
 				address = -address;
 				var addressText = address.ToString("0000");
-				return addressText.Substring(0, 3) + GetNegativeDigit(addressText[3]);
+				return addressText[..3] + GetNegativeDigit(addressText[3]);
 			}
 
 			return address.ToString("0000");
@@ -153,7 +153,7 @@ namespace MixGui.Utils
 
 				else
 				{
-					lineBuilder.Append(numberText.Substring(0, 9));
+					lineBuilder.Append(numberText[..9]);
 					lineBuilder.Append(GetNegativeDigit(numberText[9]));
 				}
 			}

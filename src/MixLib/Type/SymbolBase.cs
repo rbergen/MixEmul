@@ -1,12 +1,9 @@
 ﻿namespace MixLib.Type
 {
 
-	public abstract class SymbolBase : IValue
+	public abstract class SymbolBase(string name) : IValue
 	{
-		public string Name { get; private set; }
-
-		protected SymbolBase(string name) 
-			=> Name = name;
+		public string Name => name;
 
 		public virtual long MemoryWordValue 
 			=> 0L;

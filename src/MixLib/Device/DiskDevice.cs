@@ -103,10 +103,8 @@ namespace MixLib.Device
 			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
 				=> new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
+			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)
 			{
-				public Instance(StreamStatus streamStatus) : base(streamStatus) { }
-
 				public override bool Tick()
 				{
 					try
@@ -134,12 +132,10 @@ namespace MixLib.Device
 
 			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus);
 
-			private new class Instance : StreamStep.Instance
+			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)
 			{
-				private long ticksLeft;
+				private long ticksLeft = Unset;
 				private const long Unset = long.MinValue;
-
-				public Instance(StreamStatus streamStatus) : base(streamStatus) => this.ticksLeft = Unset;
 
 				public override bool Tick()
 				{

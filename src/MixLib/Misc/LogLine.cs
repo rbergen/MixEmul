@@ -1,26 +1,16 @@
 ﻿
 namespace MixLib.Misc
 {
-	public class LogLine
-	{
+	public class LogLine(string moduleName, Severity severity, int address, string title, string message)
+  {
 		public const int NoAddress = -1;
+		public int Address => address;
+		public string Message => message;
+		public Severity Severity => severity;
+		public string Title => title;
+		public string ModuleName => moduleName;
 
-		public int Address { get; private set; }
-		public string Message { get; private set; }
-		public Misc.Severity Severity { get; private set; }
-		public string Title { get; private set; }
-		public string ModuleName { get; private set; }
-
-		public LogLine(string moduleName, Misc.Severity severity, string title, string message)
+		public LogLine(string moduleName, Severity severity, string title, string message)
 			: this(moduleName, severity, NoAddress, title, message) { }
-
-		public LogLine(string moduleName, Misc.Severity severity, int address, string title, string message)
-		{
-			Severity = severity;
-			Address = address;
-			Title = title;
-			Message = message;
-			ModuleName = moduleName;
-		}
-	}
+  }
 }

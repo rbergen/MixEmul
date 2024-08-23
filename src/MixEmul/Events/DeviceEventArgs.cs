@@ -3,11 +3,8 @@ using MixLib.Device;
 
 namespace MixGui.Events
 {
-	public class DeviceEventArgs : EventArgs
+	public class DeviceEventArgs(MixDevice device) : EventArgs
 	{
-		public MixDevice Device { get; private set; }
-
-		public DeviceEventArgs(MixDevice device) 
-			=> Device = device;
-	}
+		public MixDevice Device => device;
+  }
 }

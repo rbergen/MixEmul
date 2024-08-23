@@ -572,12 +572,12 @@ namespace MixGui
 			// mMainMenuStrip
 			// 
 			this.mainMenuStrip.Dock = DockStyle.None;
-			this.mainMenuStrip.Items.AddRange(new ToolStripItem[] {
+			this.mainMenuStrip.Items.AddRange([
 						this.fileToolStripMenuItem,
 						this.viewToolStripMenuItem,
 						this.actionsToolStripMenuItem,
 						toolsToolStripMenuItem,
-						this.helpToolStripMenuItem});
+						this.helpToolStripMenuItem]);
 			this.mainMenuStrip.Location = new Point(0, 0);
 			this.mainMenuStrip.Name = "mMainMenuStrip";
 			this.mainMenuStrip.Size = new Size(804, 24);
@@ -586,10 +586,10 @@ namespace MixGui
 			// 
 			// mFileToolStripMenuItem
 			// 
-			this.fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+			this.fileToolStripMenuItem.DropDownItems.AddRange([
 						this.openProgramToolStripMenuItem,
 						fileMenuToolStripSeparator,
-						this.exitToolStripMenuItem});
+						this.exitToolStripMenuItem]);
 			this.fileToolStripMenuItem.Name = "mFileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new Size(37, 20);
 			this.fileToolStripMenuItem.Text = "&File";
@@ -612,14 +612,14 @@ namespace MixGui
 			// 
 			// mViewToolStripMenuItem
 			// 
-			this.viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+			this.viewToolStripMenuItem.DropDownItems.AddRange([
 						this.teletypeToolStripMenuItem,
 						this.deviceEditorToolStripMenuItem,
 						toolStripSeparator10,
 						this.showSourceInlineMenuItem,
 						toolStripSeparator8,
 						this.findMenuItem,
-						this.findNextMenuItem});
+						this.findNextMenuItem]);
 			this.viewToolStripMenuItem.Name = "mViewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new Size(44, 20);
 			this.viewToolStripMenuItem.Text = "&View";
@@ -670,7 +670,7 @@ namespace MixGui
 			// 
 			// mActionsToolStripMenuItem
 			// 
-			this.actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+			this.actionsToolStripMenuItem.DropDownItems.AddRange([
 						this.tickToolStripMenuItem,
 						this.stepToolStripMenuItem,
 						this.runToolStripMenuItem,
@@ -679,7 +679,7 @@ namespace MixGui
 						this.detachToolStripMenuItem,
 						toolStripSeparator2,
 						this.clearBreakpointsToolStripMenuItem,
-						this.resetToolStripMenuItem});
+						this.resetToolStripMenuItem]);
 			this.actionsToolStripMenuItem.Name = "mActionsToolStripMenuItem";
 			this.actionsToolStripMenuItem.Size = new Size(59, 20);
 			this.actionsToolStripMenuItem.Text = "&Actions";
@@ -748,12 +748,12 @@ namespace MixGui
 			// 
 			// mToolsToolStripMenuItem
 			// 
-			toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
+			toolsToolStripMenuItem.DropDownItems.AddRange([
 						this.preferencesToolStripMenuItem,
 						toolStripSeparator9,
 						this.profilingEnabledMenuItem,
 						this.profilingShowTickCountsMenuItem,
-						this.profilingResetCountsMenuItem});
+						this.profilingResetCountsMenuItem]);
 			toolsToolStripMenuItem.Name = "mToolsToolStripMenuItem";
 			toolsToolStripMenuItem.Size = new Size(48, 20);
 			toolsToolStripMenuItem.Text = "&Tools";
@@ -785,8 +785,8 @@ namespace MixGui
 			// 
 			// mHelpToolStripMenuItem
 			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] {
-						this.aboutToolStripMenuItem});
+			this.helpToolStripMenuItem.DropDownItems.AddRange([
+						this.aboutToolStripMenuItem]);
 			this.helpToolStripMenuItem.Name = "mHelpToolStripMenuItem";
 			this.helpToolStripMenuItem.Size = new Size(44, 20);
 			this.helpToolStripMenuItem.Text = "&Help";
@@ -827,11 +827,11 @@ namespace MixGui
 			// mStatusStrip
 			// 
 			this.statusStrip.Dock = DockStyle.None;
-			this.statusStrip.Items.AddRange(new ToolStripItem[] {
+			this.statusStrip.Items.AddRange([
 						this.modeToolStripStatusLabel,
 						this.modeCycleButton,
 						this.statusToolStripStatusLabel,
-						this.toolStripStatusLabel});
+						this.toolStripStatusLabel]);
 			this.statusStrip.Location = new Point(0, 0);
 			this.statusStrip.Name = "mStatusStrip";
 			this.statusStrip.Size = new Size(804, 22);
@@ -970,7 +970,7 @@ namespace MixGui
 			this.registersEditor.Location = new Point(8, 16);
 			this.registersEditor.Name = "mRegistersEditor";
 			this.registersEditor.ReadOnly = false;
-			registers1.CompareIndicator = MixLib.Registers.CompValues.Equal;
+			registers1.CompareIndicator = Registers.CompValues.Equal;
 			registers1.OverflowIndicator = false;
 			this.registersEditor.Registers = registers1;
 			this.registersEditor.Size = new Size(218, 214);
@@ -1068,9 +1068,9 @@ namespace MixGui
 			// mControlToolStrip
 			// 
 			this.controlToolStrip.Dock = DockStyle.None;
-			this.controlToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.controlToolStrip.Items.AddRange(new ToolStripItem[] 
-			{
+			this.controlToolStrip.GripStyle = ToolStripGripStyle.Hidden;
+			this.controlToolStrip.Items.AddRange(
+			[
 				this.pcToolStripLabel,
 				this.showPCToolStripButton,
 				toolStripSeparator3,
@@ -1089,7 +1089,7 @@ namespace MixGui
 				this.resetToolStripButton,
 				toolStripSeparator7,
 				this.teletypeToolStripButton
-			});
+			]);
 
 			this.controlToolStrip.Location = new Point(3, 24);
 			this.controlToolStrip.Name = "mControlToolStrip";
