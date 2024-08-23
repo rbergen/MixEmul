@@ -9,6 +9,10 @@ x: Bugfix
 
 =========================================
 
+0.5.1.2 (2024-08-23)
+* Bumped Lib and Assembler to .NET 8.0
+* Applied .NET 8.0 and C# 12 based improvements
+
 0.5.1.1 (2023-12-10)
 * Applied .NET 8.0 based improvements
 
