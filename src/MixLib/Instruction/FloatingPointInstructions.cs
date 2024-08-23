@@ -15,7 +15,7 @@ namespace MixLib.Instruction
 		public const string FCMP_Mnemonic = "FCMP";
 
 		private static ExecutionStatus executionStatus;
-		private static readonly int[] prenormOpcodes = { FADD_Opcode, FSUB_Opcode, FMUL_Opcode, FDIV_Opcode };
+		private static readonly int[] prenormOpcodes = [FADD_Opcode, FSUB_Opcode, FMUL_Opcode, FDIV_Opcode];
 
 		public static bool DoFloatingPoint(ModuleBase module, MixInstruction.Instance instance)
 		{
@@ -35,8 +35,7 @@ namespace MixLib.Instruction
 			if (executionStatus != null && executionStatus.ProgramCounter != module.ProgramCounter)
 				executionStatus = null;
 
-			if (executionStatus == null)
-				executionStatus = new ExecutionStatus(module.Mode, module.ProgramCounter, instance.Instruction.Mnemonic);
+			executionStatus ??= new ExecutionStatus(module.Mode, module.ProgramCounter, instance.Instruction.Mnemonic);
 
 			if (executionStatus.CurrentStep == ExecutionStatus.Step.Initialize && !InitializeInstruction(module, instance, floatingPointModule))
 					return false;
@@ -182,24 +181,15 @@ namespace MixLib.Instruction
 			return true;
 		}
 
-		private class ExecutionStatus
+		private class ExecutionStatus(ModuleBase.RunMode mode, int programCounter, string mnemonic)
 		{
-			public ModuleBase.RunMode Mode { get; private set; }
-			public string Mnemonic { get; private set; }
-			public int ProgramCounter { get; private set; }
-			public Step CurrentStep { get; set; }
+			public ModuleBase.RunMode Mode => mode;
+			public string Mnemonic => mnemonic;
+			public int ProgramCounter => programCounter;
+			public Step CurrentStep { get; set; } = Step.Initialize;
 			public IFullWord ParameterValue { get; set; }
 			public IFullWord RAValue { get; set; }
-			public bool OverflowDetected { get; set; }
-
-			public ExecutionStatus(ModuleBase.RunMode mode, int programCounter, string mnemonic)
-			{
-				Mode = mode;
-				ProgramCounter = programCounter;
-				Mnemonic = mnemonic;
-				CurrentStep = Step.Initialize;
-				OverflowDetected = false;
-			}
+			public bool OverflowDetected { get; set; } = false;
 
 			public enum Step
 			{

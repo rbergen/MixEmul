@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using MixAssembler.Finding;
@@ -71,12 +71,10 @@ namespace MixAssembler
 			if (status.Findings.ContainsErrors)
 				return null;
 
-			symbols = new SymbolCollection();
-			foreach (SymbolBase symbol in status.Symbols.Where(symbol => symbol is ValueSymbol))
-				symbols.Add(symbol);
+			symbols = [.. status.Symbols.Where(symbol => symbol is ValueSymbol)];
 
 			status.Findings.Add(new AssemblyInfo("assembly completed successfully", int.MinValue, LineSection.EntireLine, 0, 0));
-			return list.ToArray();
+			return [.. list];
 		}
 
 		public static InstructionInstanceBase Assemble(string instructionLine, int locationCounter, out ParsedSourceLine parsedLine, SymbolCollection symbols, out AssemblyFindingCollection findings)

@@ -1,18 +1,13 @@
 ﻿namespace MixLib.Type
 {
 
-	public abstract class Register : Word
+	public abstract class Register(int byteCount, int paddingByteCount) : Word(byteCount)
 	{
-		private readonly int paddingByteCount;
-
-		protected Register(int byteCount, int paddingByteCount) : base(byteCount) 
-			=> this.paddingByteCount = paddingByteCount;
-
 		public int ByteCountWithPadding 
-			=> this.paddingByteCount + ByteCount;
+			=> paddingByteCount + ByteCount;
 
 		public MixByte GetByteWithPadding(int index) 
-			=> index < this.paddingByteCount ? 0 : base[index - this.paddingByteCount];
+			=> index < paddingByteCount ? 0 : base[index - paddingByteCount];
 
 		public FullWord FullWordValue
 		{
@@ -20,11 +15,11 @@
 			{
 				var word = new FullWord();
 
-				for (int i = 0; (i < this.paddingByteCount) && (i < FullWord.ByteCount); i++)
+				for (int i = 0; (i < paddingByteCount) && (i < FullWord.ByteCount); i++)
 					word[i] = 0;
 
 				for (int i = 0; (i < ByteCount) && (i < FullWord.ByteCount); i++)
-					word[this.paddingByteCount + i] = base[i];
+					word[paddingByteCount + i] = base[i];
 
 				word.Sign = Sign;
 

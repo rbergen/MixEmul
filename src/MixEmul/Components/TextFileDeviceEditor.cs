@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
 using MixGui.Settings;
@@ -56,8 +57,8 @@ namespace MixGui.Components
 			this.lastLoadTime = DateTime.Now;
 			this.ioDelayTimer.Interval = DeviceSettings.DeviceReloadInterval;
 
-			this.readBytes = new List<IMixByteCollection>();
-			this.editBytes = new List<IMixByteCollection>();
+			this.readBytes = [];
+			this.editBytes = [];
 
 			SetDeviceRecordCount(1);
 
@@ -206,7 +207,7 @@ namespace MixGui.Components
 
 			this.indexCharCount = (recordCount - 1).ToString().Length;
 
-			foreach (DeviceMixByteCollectionEditor editor in this.mixByteCollectionEditorList)
+			foreach (DeviceMixByteCollectionEditor editor in this.mixByteCollectionEditorList.Cast<DeviceMixByteCollectionEditor>())
 				editor.IndexCharCount = this.indexCharCount;
 
 			ProcessSupportsAppending();
@@ -337,7 +338,7 @@ namespace MixGui.Components
 					stream.Close();
 				}
 				else
-					readBytes = new List<IMixByteCollection>();
+					readBytes = [];
 
 				if (readBytes.Count == 0)
 					readBytes.Add(new MixByteCollection(this.deviceBytesPerRecord));

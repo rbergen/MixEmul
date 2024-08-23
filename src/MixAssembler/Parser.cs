@@ -129,7 +129,7 @@ namespace MixAssembler
 
 			if (instruction != null)
 			{
-				instructionParameters = MixInstructionParameters.ParseAddressField(instruction, addressField, status);
+				instructionParameters = MixInstructionParameters.ParseAddressField(addressField, status);
 				status.LocationCounter++;
 			}
 		}
@@ -224,7 +224,7 @@ namespace MixAssembler
 			if (endLineNumber == -1)
 			{
 				status.Findings.Add(new AssemblyError(int.MinValue, LineSection.CommentField, 0, 0, new ParsingError("END operation is mandatory but not included")));
-				return preInstructions.ToArray();
+				return [.. preInstructions];
 			}
 
 			// all symbols that are not yet defined at the end of the parsing process are treated as if "<symbolname> CON *" instructions were included just before the END instruction
@@ -240,7 +240,7 @@ namespace MixAssembler
 				endLineNumber++;
 			}
 
-			return preInstructions.ToArray();
+			return [.. preInstructions];
 		}
 
 		private static string[] SplitLine(string sourceLine)
@@ -249,23 +249,23 @@ namespace MixAssembler
 			var searchBeyondIndex = FindFirstWhiteSpace(sourceLine, -1);
 
 			if (searchBeyondIndex == -1)
-				return new string[] { sourceLine, string.Empty, string.Empty, string.Empty };
+				return [sourceLine, string.Empty, string.Empty, string.Empty];
 
 			var opFieldStart = FindFirstNonWhiteSpace(sourceLine, searchBeyondIndex);
 
 			if (opFieldStart == -1)
-				return new string[] { sourceLine[..searchBeyondIndex], string.Empty, string.Empty, string.Empty };
+				return [sourceLine[..searchBeyondIndex], string.Empty, string.Empty, string.Empty];
 
 			var opFieldEnd = FindFirstWhiteSpace(sourceLine, opFieldStart);
 
 			if (opFieldEnd == -1)
-				return new string[] { sourceLine[..searchBeyondIndex], sourceLine[opFieldStart..], string.Empty, string.Empty };
+				return [sourceLine[..searchBeyondIndex], sourceLine[opFieldStart..], string.Empty, string.Empty];
 
 			int opFieldLength = opFieldEnd - opFieldStart;
 			var addressFieldStart = FindFirstNonWhiteSpace(sourceLine, opFieldEnd);
 
 			if (addressFieldStart == -1)
-				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), string.Empty, string.Empty };
+				return [sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), string.Empty, string.Empty];
 
 			if (sourceLine[addressFieldStart] == '"')
 			{
@@ -280,15 +280,15 @@ namespace MixAssembler
 				addressFieldEnd = FindFirstWhiteSpace(sourceLine, addressFieldStart);
 
 			if (addressFieldEnd == -1)
-				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], string.Empty };
+				return [sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine[addressFieldStart..], string.Empty];
 
 			int addressFieldLength = addressFieldEnd - addressFieldStart;
 			var commentFieldStart = FindFirstNonWhiteSpace(sourceLine, addressFieldEnd);
 
 			if (commentFieldStart == -1)
-				return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), "" };
+				return [sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), ""];
 
-			return new string[] { sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..] };
+			return [sourceLine[..searchBeyondIndex], sourceLine.Substring(opFieldStart, opFieldLength), sourceLine.Substring(addressFieldStart, addressFieldLength), sourceLine[commentFieldStart..]];
 		}
 	}
 }

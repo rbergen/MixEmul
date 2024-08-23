@@ -3,22 +3,16 @@ using MixLib.Type;
 
 namespace MixAssembler.Symbol
 {
-	public class ValueSymbol : SymbolBase, IValueSymbol
+	public class ValueSymbol(string name) : SymbolBase(name), IValueSymbol
 	{
 		public const long MaxValue = (1 << MixByte.BitCount * MixInstruction.AddressByteCount) - 1;
 		public const long MinValue = -MaxValue;
 		public const int MaxNameLength = 10;
 
-		private bool isDefined;
+		private bool isDefined = false;
 
 		public long Magnitude { get; private set; }
-		public Word.Signs Sign { get; private set; }
-
-		public ValueSymbol(string name) : base(name)
-		{
-			this.isDefined = false;
-			Sign = Word.Signs.Positive;
-		}
+		public Word.Signs Sign { get; private set; } = Word.Signs.Positive;
 
 		public override bool IsSymbolDefined
 			=> this.isDefined;

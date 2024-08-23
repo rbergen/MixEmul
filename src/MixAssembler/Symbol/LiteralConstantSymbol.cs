@@ -3,34 +3,23 @@ using MixLib.Type;
 
 namespace MixAssembler.Symbol
 {
-	public class LiteralConstantSymbol : SymbolBase
+	public class LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : SymbolBase(name)
 	{
-		private readonly long literalMagnitude;
-		private readonly Word.Signs literalSign;
 		private long magnitude;
 		private Word.Signs sign;
 		private bool valueDefined;
-
-		private LiteralConstantSymbol(Word.Signs literalSign, long literalMagnitude, string name) : base(name)
-		{
-			this.literalSign = literalSign;
-			this.literalMagnitude = literalMagnitude;
-			this.magnitude = -1L;
-			this.sign = Word.Signs.Positive;
-			this.valueDefined = false;
-		}
 
 		public override bool IsSymbolDefined
 			=> this.valueDefined;
 
 		public override long MemoryWordMagnitude
-			=> this.literalMagnitude;
+			=> literalMagnitude;
 
 		public override Word.Signs MemoryWordSign
-			=> this.literalSign;
+			=> literalSign;
 
 		public override long MemoryWordValue
-			=> this.literalSign.ApplyTo(this.literalMagnitude);
+			=> literalSign.ApplyTo(literalMagnitude);
 
 		public override long GetValue(int currentAddress)
 			=> this.sign.ApplyTo(this.magnitude);

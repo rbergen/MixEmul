@@ -9,12 +9,9 @@
 
 		public abstract Instance CreateStreamInstance(StreamStatus streamStatus);
 
-		public new abstract class Instance : DeviceStep.Instance
+		public new abstract class Instance(StreamStatus streamStatus) : DeviceStep.Instance
 		{
-			protected StreamStatus StreamStatus { get; private set; }
-
-			protected Instance(StreamStatus streamStatus) 
-				=> StreamStatus = streamStatus;
+			protected StreamStatus StreamStatus { get; private set; } = streamStatus;
 		}
 	}
 }

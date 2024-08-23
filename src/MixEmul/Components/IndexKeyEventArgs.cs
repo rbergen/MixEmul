@@ -2,11 +2,8 @@
 
 namespace MixGui.Components
 {
-	public class IndexKeyEventArgs : KeyEventArgs
+	public class IndexKeyEventArgs(Keys keyData, int? index) : KeyEventArgs(keyData)
 	{
-		public int? Index { get; private set; }
-
-		public IndexKeyEventArgs(Keys keyData, int? index) : base(keyData)
-			=> Index = index;
-	}
+		public int? Index => index;
+  }
 }

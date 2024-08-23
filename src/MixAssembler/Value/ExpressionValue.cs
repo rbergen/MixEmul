@@ -25,22 +25,22 @@ namespace MixAssembler.Value
 			binaryOperations[":"] = DoCalculateField;
 		}
 
-		private static IValue DoAdd(IValue left, IValue right, int currentAddress)
-			=> new NumberValue((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % FullWordModulusMask);
+		private static NumberValue DoAdd(IValue left, IValue right, int currentAddress)
+			=> new((left.GetValue(currentAddress) + right.GetValue(currentAddress)) % FullWordModulusMask);
 
-		private static IValue DoCalculateField(IValue left, IValue right, int currentAddress)
-			=> new NumberValue(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % FullWordModulusMask);
+		private static NumberValue DoCalculateField(IValue left, IValue right, int currentAddress)
+			=> new(((left.GetValue(currentAddress) * 8L) + right.GetValue(currentAddress)) % FullWordModulusMask);
 
-		private static IValue DoDivide(IValue left, IValue right, int currentAddress)
-			=> new NumberValue(left.GetValue(currentAddress) / right.GetValue(currentAddress) % FullWordModulusMask);
+		private static NumberValue DoDivide(IValue left, IValue right, int currentAddress)
+			=> new(left.GetValue(currentAddress) / right.GetValue(currentAddress) % FullWordModulusMask);
 
-		private static IValue DoMultiply(IValue left, IValue right, int currentAddress)
-			=> new NumberValue(left.GetValue(currentAddress) * right.GetValue(currentAddress) % FullWordModulusMask);
+		private static NumberValue DoMultiply(IValue left, IValue right, int currentAddress)
+			=> new(left.GetValue(currentAddress) * right.GetValue(currentAddress) % FullWordModulusMask);
 
-		private static IValue DoSubstract(IValue left, IValue right, int currentAddress)
-			=> new NumberValue((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % FullWordModulusMask);
+		private static NumberValue DoSubstract(IValue left, IValue right, int currentAddress)
+			=> new((left.GetValue(currentAddress) - right.GetValue(currentAddress)) % FullWordModulusMask);
 
-		private static IValue DoFractionDivide(IValue left, IValue right, int currentAddress)
+		private static NumberValue DoFractionDivide(IValue left, IValue right, int currentAddress)
 		{
 			var divider = new decimal(left.GetValue(currentAddress));
 			divider *= FullWordModulusMask;
@@ -101,7 +101,7 @@ namespace MixAssembler.Value
 
 			int rightTermStartIndex = operatorPosition + operatorText.Length;
 			// the left term can itself be an expression, so parse it as one (recursively)
-			var left = ParseValue(text.Substring(0, operatorPosition), sectionCharIndex, status);
+			var left = ParseValue(text[..operatorPosition], sectionCharIndex, status);
 			// the right term must be an atomic expression
 			var right = AtomicExpressionValue.ParseValue(text[rightTermStartIndex..], sectionCharIndex + rightTermStartIndex, status);
 

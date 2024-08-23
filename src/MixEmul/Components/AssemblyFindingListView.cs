@@ -29,7 +29,7 @@ namespace MixGui.Components
 			mMessageColumn.Width = 400;
 
 			mFindingsListView.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
-			mFindingsListView.Columns.AddRange(new ColumnHeader[] { mSeverityColumn, mLineNumberColumn, mMessageColumn });
+			mFindingsListView.Columns.AddRange([mSeverityColumn, mLineNumberColumn, mMessageColumn]);
 			mFindingsListView.FullRowSelect = true;
 			mFindingsListView.GridLines = true;
 			mFindingsListView.Location = new Point(0, 0);

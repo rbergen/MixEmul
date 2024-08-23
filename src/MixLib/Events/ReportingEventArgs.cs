@@ -1,16 +1,10 @@
-using System;
+﻿using System;
 
 namespace MixLib.Events
 {
-	public class ReportingEventArgs : EventArgs
+	public class ReportingEventArgs(Misc.Severity severity, string message) : EventArgs
 	{
-		public string Message { get; private set; }
-		public MixLib.Misc.Severity Severity { get; private set; }
-
-		public ReportingEventArgs(MixLib.Misc.Severity severity, string message)
-		{
-			Severity = severity;
-			Message = message;
-		}
-	}
+		public string Message => message;
+		public Misc.Severity Severity => severity;
+  }
 }

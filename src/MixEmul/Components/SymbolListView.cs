@@ -116,7 +116,7 @@ namespace MixGui.Components
 				if (valueSymbol.Sign.IsNegative())
 					valueText = '-' + valueText;
 
-				var viewItem = new ListViewItem(new string[] { valueSymbol.Name, valueText })
+				var viewItem = new ListViewItem([valueSymbol.Name, valueText])
 				{
 					Name = valueSymbol.Name
 				};

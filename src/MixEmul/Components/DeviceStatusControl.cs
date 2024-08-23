@@ -59,7 +59,7 @@ namespace MixGui.Components
 			this.resetMenuItem.Text = "Reset";
 			this.resetMenuItem.Click += ResetMenuItem_Click;
 
-			this.contextMenuStrip.Items.AddRange(new ToolStripItem[] { this.inputMenuItem, this.outputMenuItem, this.contextSeparator, this.resetMenuItem });
+			this.contextMenuStrip.Items.AddRange([this.inputMenuItem, this.outputMenuItem, this.contextSeparator, this.resetMenuItem]);
 			ContextMenuStrip = this.contextMenuStrip;
 
 			Controls.Add(this.indexLabel);

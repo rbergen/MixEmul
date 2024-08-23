@@ -2,11 +2,8 @@
 {
 	using System;
 
-	public class AddressSelectedEventArgs : EventArgs
+	public class AddressSelectedEventArgs(int selectedAddress) : EventArgs
 	{
-		public int SelectedAddress { get; private set; }
-
-		public AddressSelectedEventArgs(int selectedAddress) 
-			=> SelectedAddress = selectedAddress;
-	}
+		public int SelectedAddress => selectedAddress;
+  }
 }

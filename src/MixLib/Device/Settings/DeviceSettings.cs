@@ -41,7 +41,7 @@ namespace MixLib.Device.Settings
 				{ TeletypeInitialization, 25 }
 			};
 
-			TickCounts = new Dictionary<string, int>();
+			TickCounts = [];
 
 			deviceReloadInterval = UnsetDeviceReloadInterval;
 		}
@@ -53,7 +53,7 @@ namespace MixLib.Device.Settings
 			=> IsKnownTickCount(name) ? defaultTickCounts[name] : DefaultDefaultTickCount;
 
 		public static int GetTickCount(string name) 
-			=> TickCounts.ContainsKey(name) ? TickCounts[name] : GetDefaultTickCount(name);
+			=> TickCounts.TryGetValue(name, out var value) ? value : GetDefaultTickCount(name);
 
 		public static string DefaultDeviceFilesDirectory
 		{

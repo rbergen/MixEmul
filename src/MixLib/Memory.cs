@@ -20,7 +20,7 @@ namespace MixLib
 		{
 			MinWordIndex = minIndex;
 			MaxWordIndex = maxIndex;
-			this.words = new SortedDictionary<int, MemoryFullWord>();
+			this.words = [];
 			this.syncRoot = ((ICollection)this.words).SyncRoot;
 		}
 
@@ -246,8 +246,8 @@ namespace MixLib
 		{
 			lock (this.syncRoot)
 			{
-				if (this.words.ContainsKey(index))
-					this.words[index].SourceLine = null;
+				if (this.words.TryGetValue(index, out var value))
+					value.SourceLine = null;
 			}
 		}
 	}

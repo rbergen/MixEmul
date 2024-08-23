@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using MixLib.Modules;
 using MixLib.Type;
 
@@ -111,10 +111,10 @@ namespace MixLib.Instruction
 				=> new InstructionText(this).InstanceText;
 
 			private static int AddressMagnitudeFromWord(IWord word)
-				=> (int)Word.BytesToLong(Word.Signs.Positive, new MixByte[] { word[0], word[1] });
+				=> (int)Word.BytesToLong(Word.Signs.Positive, [word[0], word[1]]);
 
 			private static int AddressValueFromWord(IWord word)
-				=> (int)Word.BytesToLong(word.Sign, new MixByte[] { word[0], word[1] });
+				=> (int)Word.BytesToLong(word.Sign, [word[0], word[1]]);
 
 			public bool Execute(ModuleBase module)
 			{

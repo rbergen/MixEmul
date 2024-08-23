@@ -42,7 +42,7 @@ namespace MixGui.Components
 			this.messageColumn.Width = 400;
 
 			this.listView.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top;
-			this.listView.Columns.AddRange(new ColumnHeader[] { this.severityColumn, this.moduleColumn, this.addressColumn, this.titleColumn, this.messageColumn });
+			this.listView.Columns.AddRange([this.severityColumn, this.moduleColumn, this.addressColumn, this.titleColumn, this.messageColumn]);
 			this.listView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
 			this.listView.FullRowSelect = true;
 			this.listView.GridLines = true;

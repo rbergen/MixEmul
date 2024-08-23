@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Properties;
@@ -46,7 +47,7 @@ namespace MixGui.Components
 
 			this.profilingMaxCounts = new long[Enum.GetValues(typeof(GuiSettings.ProfilingInfoType)).Length];
 
-			this.breakpoints = SortedList.Synchronized(new SortedList());
+			this.breakpoints = SortedList.Synchronized([]);
 
 			this.noMemoryLabel = new Label
 			{
@@ -100,7 +101,7 @@ namespace MixGui.Components
 
 				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor editor in this.wordEditorList)
+					foreach (MemoryWordEditor editor in this.wordEditorList.Cast<MemoryWordEditor>())
 						editor.ToolTip = this.toolTip;
 				}
 			}
@@ -159,7 +160,7 @@ namespace MixGui.Components
 		public void ClearBreakpoints()
 		{
 			this.breakpoints.Clear();
-			foreach (MemoryWordEditor editor in this.wordEditorList)
+			foreach (MemoryWordEditor editor in this.wordEditorList.Cast<MemoryWordEditor>())
 				editor.BreakPointChecked = false;
 		}
 
@@ -334,8 +335,7 @@ namespace MixGui.Components
 					}
 				}
 
-				if (this.nextDataIndex == null)
-					this.nextDataIndex = memory.FirstAddressWithContentsAfter(lastIndex);
+				this.nextDataIndex ??= memory.FirstAddressWithContentsAfter(lastIndex);
 			}
 
 			this.downButton.Enabled = this.nextDataIndex.HasValue;
@@ -446,7 +446,7 @@ namespace MixGui.Components
 
 				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor wordEditor in this.wordEditorList)
+					foreach (MemoryWordEditor wordEditor in this.wordEditorList.Cast<MemoryWordEditor>())
 						wordEditor.IndexedAddressCalculatorCallback = this.indexedAddressCalculatorCallback;
 				}
 			}
@@ -592,7 +592,7 @@ namespace MixGui.Components
 
 				if (this.wordEditorList != null)
 				{
-					foreach (MemoryWordEditor editor in this.wordEditorList)
+					foreach (MemoryWordEditor editor in this.wordEditorList.Cast<MemoryWordEditor>())
 						editor.Symbols = this.symbols;
 				}
 			}
@@ -624,15 +624,12 @@ namespace MixGui.Components
 			if (exportDialog.ShowDialog(this) != DialogResult.OK)
 				return;
 
-			if (this.saveExportFileDialog == null)
+			this.saveExportFileDialog ??= new SaveFileDialog
 			{
-				this.saveExportFileDialog = new SaveFileDialog
-				{
-					DefaultExt = "mixdeck",
-					Filter = "MixEmul card deck files|*.mixdeck|All files|*.*",
-					Title = "Specify export file name"
-				};
-			}
+				DefaultExt = "mixdeck",
+				Filter = "MixEmul card deck files|*.mixdeck|All files|*.*",
+				Title = "Specify export file name"
+			};
 
 			if (this.saveExportFileDialog.ShowDialog(this) != DialogResult.OK)
 				return;

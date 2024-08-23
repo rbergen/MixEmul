@@ -6,19 +6,15 @@ using MixLib.Type;
 
 namespace MixLib.Device.Step
 {
-	public class BinaryWriteStep : StreamStep
+	public class BinaryWriteStep(int recordWordCount) : StreamStep
 	{
-		private readonly int recordWordCount;
 		private const string MyStatusDescription = "Writing binary data";
-
-		public BinaryWriteStep(int recordWordCount) 
-			=> this.recordWordCount = recordWordCount;
 
 		public override string StatusDescription 
 			=> MyStatusDescription;
 
 		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
-			=> new Instance(streamStatus, this.recordWordCount);
+			=> new Instance(streamStatus, recordWordCount);
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)
 		{
@@ -48,13 +44,9 @@ namespace MixLib.Device.Step
 			stream.Flush();
 		}
 
-		private new class Instance : StreamStep.Instance
+		private new class Instance(StreamStatus streamStatus, int recordWordCount) : StreamStep.Instance(streamStatus)
 		{
-			private readonly int recordWordCount;
 			private MixByte[] writeBytes;
-
-			public Instance(StreamStatus streamStatus, int recordWordCount) : base(streamStatus) 
-				=> this.recordWordCount = recordWordCount;
 
 			public override bool Tick()
 			{
@@ -63,7 +55,7 @@ namespace MixLib.Device.Step
 
 				try
 				{
-					WriteBytes(StreamStatus.Stream, this.recordWordCount, this.writeBytes);
+					WriteBytes(StreamStatus.Stream, recordWordCount, this.writeBytes);
 					StreamStatus.UpdatePosition();
 				}
 				catch (Exception exception)

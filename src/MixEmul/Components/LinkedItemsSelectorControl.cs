@@ -196,26 +196,16 @@ namespace MixGui.Components
 		}
 	}
 
-	public class ItemSelectedEventArgs<T> : EventArgs
+	public class ItemSelectedEventArgs<T>(T selectedItem) : EventArgs
 	{
-		public ItemSelectedEventArgs(T selectedItem)
-			=> SelectedItem = selectedItem;
+		public T SelectedItem { get; private set; } = selectedItem;
+  }
 
-		public T SelectedItem { get; private set; }
-	}
-
-	public class LinkedItem<T>
-	{
-		public LinkedItem<T> Previous { get; set; }
-		public LinkedItem<T> Next { get; set; }
-		public T Item { get; private set; }
-
-		public LinkedItem(LinkedItem<T> previous, T item, LinkedItem<T> next)
-		{
-			Previous = previous;
-			Item = item;
-			Next = next;
-		}
+	public class LinkedItem<T>(LinkedItem<T> previous, T item, LinkedItem<T> next)
+  {
+		public LinkedItem<T> Previous { get; set; } = previous;
+		public LinkedItem<T> Next { get; set; } = next;
+		public T Item { get; private set; } = item;
 
 		public LinkedItem(LinkedItem<T> previous, T item) : this(previous, item, null) { }
 

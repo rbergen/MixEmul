@@ -276,8 +276,7 @@ namespace MixLib
 		public override void ResetProfilingCounts()
 		{
 			this.fullMemory.ResetProfilingCounts();
-			if (FloatingPointModule != null)
-				FloatingPointModule.ResetProfilingCounts();
+			FloatingPointModule?.ResetProfilingCounts();
 		}
 
 		public void Tick()

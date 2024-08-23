@@ -20,7 +20,7 @@ namespace MixLib.Modules
 
 		private readonly Mix mix;
 		private readonly Memory fullMemory;
-		private readonly IMemory memory;
+		private readonly MemoryView memory;
 		private readonly Registers registers;
 		private RunStatus status;
 		private int? accAddress;

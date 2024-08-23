@@ -6,13 +6,13 @@ namespace MixLib.Type
 {
 	public sealed class SymbolCollection : IEnumerable<SymbolBase>, IEnumerable
 	{
-		private readonly SortedList<string, SymbolBase> list = new();
+		private readonly SortedList<string, SymbolBase> list = [];
 
 		public int Count 
 			=> this.list.Count;
 
 		public SymbolBase this[string name] 
-			=> this.list.ContainsKey(name) ? this.list[name] : null;
+			=> this.list.TryGetValue(name, out var value) ? value : null;
 
 		public bool Contains(SymbolBase value) 
 			=> Contains(value.Name);

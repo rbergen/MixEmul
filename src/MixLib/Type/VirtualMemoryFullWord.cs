@@ -6,7 +6,7 @@ using MixLib.Utils;
 
 namespace MixLib.Type
 {
-	public class VirtualMemoryFullWord : IMemoryFullWord
+	public class VirtualMemoryFullWord(IMemory memory, int index) : IMemoryFullWord
 	{
 		private static readonly string defaultCharString;
 		private static readonly string defaultNonCharString;
@@ -15,10 +15,10 @@ namespace MixLib.Type
 		private static readonly FullWord defaultWord;
 
 		private MemoryFullWord realWord;
-		private readonly IMemory memory;
+		private readonly IMemory memory = memory;
 		private readonly object syncRoot = new();
 
-		public int Index { get; private set; }
+		public int Index => index;
 
 		static VirtualMemoryFullWord()
 		{
@@ -36,17 +36,14 @@ namespace MixLib.Type
 			}
 		}
 
-		public VirtualMemoryFullWord(IMemory memory, int index)
-		{
-			this.memory = memory;
-			Index = index;
-		}
-
 		public int BitCount
 			=> defaultWord.BitCount;
 
 		public int ByteCount
 			=> FullWord.ByteCount;
+
+		public int Count
+			=> ByteCount;
 
 		private FullWord ActiveWord
 			=> RealWordFetched ? this.realWord : defaultWord;
@@ -60,8 +57,8 @@ namespace MixLib.Type
 		public long ProfilingExecutionCount
 			=> RealWordFetched ? this.realWord.ProfilingExecutionCount : 0;
 
-		public IEnumerator GetEnumerator()
-			=> ActiveWord.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator()
+			=> ((IEnumerable)ActiveWord).GetEnumerator();
 
 		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
 			=> ((IEnumerable<MixByte>)ActiveWord).GetEnumerator();
@@ -73,7 +70,10 @@ namespace MixLib.Type
 			=> !RealWordFetched || this.realWord.IsEmpty;
 
 		public MixByte[] ToArray()
-			=> ActiveWord.ToArray();
+			=> [..ActiveWord];
+
+		public MixByte[] Slice(int startIndex, int count)
+			=> ActiveWord.Slice(startIndex, count);
 
 		public object Clone()
 			=> ActiveWord.Clone();

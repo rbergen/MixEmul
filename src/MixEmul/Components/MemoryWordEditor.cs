@@ -42,8 +42,7 @@ namespace MixGui.Components
 			this.readOnly = false;
 			this.marked = false;
 
-			if (memoryWord == null)
-				memoryWord = new MemoryFullWord(int.MinValue);
+			memoryWord ??= new MemoryFullWord(int.MinValue);
 
 			this.instructionTextBox = new InstructionInstanceTextBox(memoryWord);
 			this.fullWordEditor = new FullWordEditor(memoryWord);

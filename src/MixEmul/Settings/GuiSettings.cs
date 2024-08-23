@@ -69,7 +69,7 @@ namespace MixGui.Settings
 				{ TeletypeOutputBackground, Color.Black }
 			};
 
-			Colors = new Dictionary<string, Color>();
+			Colors = [];
 			defaultFonts = new Dictionary<string, Font>
 			{
 				{ FixedWidth, new Font("Courier New", 9f, FontStyle.Regular, GraphicsUnit.Point, 0) }
@@ -82,24 +82,24 @@ namespace MixGui.Settings
 
 		public static Color GetColor(string name)
 		{
-			if (Colors.ContainsKey(name))
-				return Colors[name];
+			if (Colors.TryGetValue(name, out var value))
+				return value;
 
 			return GetDefaultColor(name);
 		}
 
 		public static Color GetDefaultColor(string name)
 		{
-			if (defaultColors.ContainsKey(name))
-				return defaultColors[name];
+			if (defaultColors.TryGetValue(name, out var value))
+				return value;
 
 			return SystemColors.WindowText;
 		}
 
 		public static Font GetFont(string name)
 		{
-			if (defaultFonts.ContainsKey(name))
-				return defaultFonts[name];
+			if (defaultFonts.TryGetValue(name, out var value))
+				return value;
 
 			var enumerator = ((IEnumerable<Font>)defaultFonts).GetEnumerator();
 			enumerator.MoveNext();

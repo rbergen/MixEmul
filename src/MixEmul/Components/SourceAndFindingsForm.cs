@@ -50,8 +50,7 @@ namespace MixGui.Components
 			// 
 			// this.statusStrip
 			// 
-			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
+			this.statusStrip.Items.AddRange([this.toolStripStatusLabel]);
 			this.statusStrip.Location = new System.Drawing.Point(0, 383);
 			this.statusStrip.Name = "_statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(568, 22);

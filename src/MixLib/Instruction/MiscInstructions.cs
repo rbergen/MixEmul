@@ -10,7 +10,7 @@ namespace MixLib.Instruction
 	/// </summary>
 	public static class MiscInstructions
 	{
-		private static readonly SortedDictionary<string, MoveStatus> moveStatuses = new();
+		private static readonly SortedDictionary<string, MoveStatus> moveStatuses = [];
 
 		private const byte ZeroCharValue = 30;
 
@@ -85,7 +85,7 @@ namespace MixLib.Instruction
 
 		public static bool ForceInterrupt(ModuleBase module, MixInstruction.Instance instance)
 		{
-			if (!(module is Mix))
+			if (module is not Mix)
 			{
 				module.ReportRuntimeError($"The {instance.Instruction.Mnemonic} instruction is only available in Mix");
 				return false;
@@ -185,26 +185,16 @@ namespace MixLib.Instruction
 		/// This helper class tracks the status of a running MOVE instruction. It is necessary because a MIX MOVE instruction takes
 		/// several ticks, the exact number of ticks depending on the number of words moved.
 		/// </summary>
-		private class MoveStatus
-		{
-			public int CurrentWord { get; private set; }
-			public WordStates CurrentWordState { get; set; }
-			public int FromAddress { get; private set; }
-			public int ProgramCounter { get; private set; }
-			public int ToAddress { get; private set; }
-			public byte WordCount { get; private set; }
+		private class MoveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
+	{
+	  public int CurrentWord { get; private set; } = 0;
+	  public WordStates CurrentWordState { get; set; } = WordStates.BeforeMove;
+	  public int FromAddress => fromAddress;
+	  public int ProgramCounter => programCounter;
+	  public int ToAddress => toAddress;
+	  public byte WordCount => wordCount;
 
-			public MoveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
-			{
-				ProgramCounter = programCounter;
-				FromAddress = fromAddress;
-				ToAddress = toAddress;
-				WordCount = wordCount;
-				CurrentWord = 0;
-				CurrentWordState = WordStates.BeforeMove;
-			}
-
-			public void NextWord() 
+	  public void NextWord() 
 				=> CurrentWord++;
 
 			public enum WordStates

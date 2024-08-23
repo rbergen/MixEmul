@@ -3,13 +3,10 @@ using MixLib.Type;
 
 namespace MixGui.Components
 {
-	public class FieldKeyEventArgs : IndexKeyEventArgs
+	public class FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : IndexKeyEventArgs(keyData, index)
 	{
-		public FieldTypes Field { get; private set; }
+		public FieldTypes Field => @field;
 
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field) : this(keyData, field, null) { }
-
-		public FieldKeyEventArgs(Keys keyData, FieldTypes field, int? index) : base(keyData, index)
-			=> Field = field;
-	}
+  }
 }

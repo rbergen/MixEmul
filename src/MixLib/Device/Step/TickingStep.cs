@@ -1,26 +1,17 @@
 ﻿namespace MixLib.Device.Step
 {
-	public abstract class TickingStep : DeviceStep
+	public abstract class TickingStep(int tickCount) : DeviceStep
 	{
-		protected int TickCount { get; private set; }
+	protected int TickCount => tickCount;
 
-		protected TickingStep(int tickCount) 
-			=> TickCount = tickCount;
-
-		public sealed override DeviceStep.Instance CreateInstance() => CreateTickingInstance();
+	public sealed override DeviceStep.Instance CreateInstance() => CreateTickingInstance();
 
 		protected abstract Instance CreateTickingInstance();
 
-		protected new abstract class Instance : DeviceStep.Instance
+		protected new abstract class Instance(int tickCount) : DeviceStep.Instance
 		{
-			protected int CurrentTick { get; private set; }
-			protected int TickCount { get; private set; }
-
-			protected Instance(int tickCount)
-			{
-				TickCount = tickCount;
-				CurrentTick = 0;
-			}
+		  protected int CurrentTick { get; private set; } = 0;
+		  protected int TickCount => tickCount;
 
 			protected abstract void ProcessTick();
 

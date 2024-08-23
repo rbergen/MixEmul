@@ -51,6 +51,9 @@ namespace MixLib.Type
 		public virtual bool IsEmpty
 			=> MagnitudeLongValue == 0 && Sign.IsPositive();
 
+		public int Count
+			=> ByteCount;
+
 		public int MaxByteCount
 			=> ByteCount;
 
@@ -63,7 +66,7 @@ namespace MixLib.Type
 		public override string ToString()
 			=> ToString(false);
 
-		public IEnumerator GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 			=> this.bytes.GetEnumerator();
 
 		IEnumerator<MixByte> IEnumerable<MixByte>.GetEnumerator()
@@ -88,6 +91,16 @@ namespace MixLib.Type
 			longValue = sign.ApplyTo(longValue);
 
 			return longValue;
+		}
+
+		public MixByte[] Slice(int startIndex, int count)
+		{
+			MixByte[] slice = new MixByte[count];
+
+			for (int i = 0; i < count; i++)
+				slice[i] = this.bytes[startIndex + i];
+
+			return slice;
 		}
 
 		public void InvertSign()

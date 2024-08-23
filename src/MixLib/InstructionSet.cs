@@ -8,8 +8,8 @@ namespace MixLib
 {
 	public class InstructionSet
 	{
-		private readonly SortedDictionary<string, MixInstruction> mnemonicInstructionMap = new();
-		private readonly SortedDictionary<byte, List<MixInstruction>> opcodeInstructionMap = new();
+		private readonly SortedDictionary<string, MixInstruction> mnemonicInstructionMap = [];
+		private readonly SortedDictionary<byte, List<MixInstruction>> opcodeInstructionMap = [];
 		private static InstructionSet instance;
 
 		public InstructionSet()
@@ -272,8 +272,7 @@ namespace MixLib
 		{
 			get
 			{
-				if (instance == null)
-					instance = new InstructionSet();
+				instance ??= new InstructionSet();
 
 				return instance;
 			}
@@ -303,7 +302,7 @@ namespace MixLib
 		}
 
 		public MixInstruction this[string mnemonic] 
-			=> this.mnemonicInstructionMap.ContainsKey(mnemonic) ? this.mnemonicInstructionMap[mnemonic] : null;
+			=> this.mnemonicInstructionMap.TryGetValue(mnemonic, out var value) ? value : null;
 
 		public MixInstruction[] this[byte opcode]
 		{
@@ -319,7 +318,7 @@ namespace MixLib
 						break;
 				}
 
-				return list.ToArray();
+				return [.. list];
 			}
 		}
 	}
