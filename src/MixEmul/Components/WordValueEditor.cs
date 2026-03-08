@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Utils;
@@ -21,7 +22,7 @@ namespace MixGui.Components
 
 		public WordValueEditor() : this(FullWord.ByteCount, true) { }
 
-		public WordValueEditor(IWord word)  : this(word, true) { }
+		public WordValueEditor(IWord word) : this(word, true) { }
 
 		public WordValueEditor(int byteCount) : this(byteCount, true) { }
 
@@ -72,26 +73,26 @@ namespace MixGui.Components
 			SizeComponent();
 		}
 
-		public Control EditorControl 
+		public Control EditorControl
 			=> this;
 
-		public FieldTypes? FocusedField 
+		public FieldTypes? FocusedField
 			=> this.longValueTextBox.Focused ? FieldTypes.Value : this.wordEditor.FocusedField;
 
-		public int? CaretIndex 
-			=> FocusedField == FieldTypes.Value 
-			? this.longValueTextBox.SelectionStart + this.longValueTextBox.SelectionLength 
+		public int? CaretIndex
+			=> FocusedField == FieldTypes.Value
+			? this.longValueTextBox.SelectionStart + this.longValueTextBox.SelectionLength
 			: this.wordEditor.CaretIndex;
 
-		public bool Focus(FieldTypes? field, int? index) 
-			=> field == FieldTypes.Value 
-			? this.longValueTextBox.FocusWithIndex(index) 
+		public bool Focus(FieldTypes? field, int? index)
+			=> field == FieldTypes.Value
+			? this.longValueTextBox.FocusWithIndex(index)
 			: this.wordEditor.Focus(field, index);
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
 
-		protected override void Dispose(bool disposing) 
+		protected override void Dispose(bool disposing)
 		{
 		}
 
@@ -187,6 +188,7 @@ namespace MixGui.Components
 			OnValueChanged(args);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ByteCount
 		{
 			get => this.wordEditor.ByteCount;
@@ -200,6 +202,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IncludeSign
 		{
 			get => this.includeSign;
@@ -214,6 +217,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -228,6 +232,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int TextBoxWidth
 		{
 			get => this.textBoxWidth;
@@ -241,6 +246,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => this.wordEditor.WordValue;

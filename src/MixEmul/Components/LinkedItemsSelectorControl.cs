@@ -159,8 +159,7 @@ namespace MixGui.Components
 				Previous = insertBefore.Previous
 			};
 
-			if (insertee.Previous != null)
-				insertee.Previous.Next = insertee;
+			insertee.Previous?.Next = insertee;
 
 			insertee.Next = insertBefore;
 			insertBefore.Previous = insertee;
@@ -199,10 +198,10 @@ namespace MixGui.Components
 	public class ItemSelectedEventArgs<T>(T selectedItem) : EventArgs
 	{
 		public T SelectedItem { get; private set; } = selectedItem;
-  }
+	}
 
 	public class LinkedItem<T>(LinkedItem<T> previous, T item, LinkedItem<T> next)
-  {
+	{
 		public LinkedItem<T> Previous { get; set; } = previous;
 		public LinkedItem<T> Next { get; set; } = next;
 		public T Item { get; private set; } = item;

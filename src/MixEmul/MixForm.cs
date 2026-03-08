@@ -1395,7 +1395,7 @@ namespace MixGui
 			UpdateStatusIndicator();
 
 			if (this.mix.Status == ModuleBase.RunStatus.InvalidInstruction || this.mix.Status == ModuleBase.RunStatus.RuntimeError)
-					pcVisible = true;
+				pcVisible = true;
 
 			if (pcVisible)
 				this.mainMemoryEditor.MakeAddressVisible(this.mix.ProgramCounter, this.mix.Status == ModuleBase.RunStatus.Idle);
@@ -1441,6 +1441,7 @@ namespace MixGui
 			this.deviceEditor.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -1484,8 +1485,7 @@ namespace MixGui
 
 			this.mix.FloatingPointModule.ProgramCounter = address;
 
-			if (this.floatingPointMemoryEditor != null)
-				this.floatingPointMemoryEditor.MarkedAddress = this.mix.FloatingPointModule.ProgramCounter;
+			this.floatingPointMemoryEditor?.MarkedAddress = this.mix.FloatingPointModule.ProgramCounter;
 		}
 
 	}

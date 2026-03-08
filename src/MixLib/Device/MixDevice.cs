@@ -7,7 +7,7 @@ using MixLib.Type;
 namespace MixLib.Device
 {
 	public abstract class MixDevice(int id)
-  {
+	{
 		private const string IdleDescription = "Idle";
 		private const string ReadingDescription = "Reading from memory";
 		private const string WritingDescription = "Writing to memory";
@@ -15,8 +15,8 @@ namespace MixLib.Device
 		private InOutputOperands currentOperands;
 		private DeviceStep.Instance currentStepInstance;
 
-	protected DeviceStep CurrentStep { get; private set; } = null;
-	protected DeviceStep FirstInputDeviceStep { get; set; }
+		protected DeviceStep CurrentStep { get; private set; } = null;
+		protected DeviceStep FirstInputDeviceStep { get; set; }
 		protected DeviceStep FirstIocDeviceStep { get; set; }
 		protected DeviceStep FirstOutputDeviceStep { get; set; }
 		public int Id => id;
@@ -28,22 +28,22 @@ namespace MixLib.Device
 
 		public event ReportingEventHandler ReportingEvent;
 
-	public bool Busy 
+		public bool Busy
 			=> CurrentStep != null;
 
-		public string StatusDescription 
+		public string StatusDescription
 			=> Busy ? CurrentStep.StatusDescription : IdleDescription;
 
-		protected virtual DeviceStep.Instance GetCurrentStepInstance() 
+		protected virtual DeviceStep.Instance GetCurrentStepInstance()
 			=> CurrentStep.CreateInstance();
 
-		public override string ToString() 
+		public override string ToString()
 			=> ShortName + ": " + Id;
 
-		protected virtual void OnReportingEvent(ReportingEventArgs args) 
+		protected virtual void OnReportingEvent(ReportingEventArgs args)
 			=> ReportingEvent?.Invoke(this, args);
 
-		private void StepInstance_Reporting(object sender, ReportingEventArgs args) 
+		private void StepInstance_Reporting(object sender, ReportingEventArgs args)
 			=> OnReportingEvent(args);
 
 		public virtual void Reset()
@@ -120,10 +120,10 @@ namespace MixLib.Device
 
 		protected class ReadFromMemoryStep(bool includeSign, int recordWordCount) : TickingStep(recordWordCount)
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> ReadingDescription;
 
-			protected override TickingStep.Instance CreateTickingInstance() 
+			protected override TickingStep.Instance CreateTickingInstance()
 				=> new Instance(TickCount, includeSign);
 
 			private new class Instance : TickingStep.Instance
@@ -168,7 +168,7 @@ namespace MixLib.Device
 
 		protected class WriteToMemoryStep(bool includeSign, int recordWordCount) : TickingStep(recordWordCount)
 		{
-		  public override string StatusDescription => WritingDescription;
+			public override string StatusDescription => WritingDescription;
 
 			protected override TickingStep.Instance CreateTickingInstance() => new Instance(TickCount, includeSign);
 

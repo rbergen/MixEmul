@@ -6,5 +6,5 @@ namespace MixGui.Events
 	public class DeviceEventArgs(MixDevice device) : EventArgs
 	{
 		public MixDevice Device => device;
-  }
+	}
 }

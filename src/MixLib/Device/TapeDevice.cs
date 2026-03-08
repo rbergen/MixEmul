@@ -19,25 +19,25 @@ namespace MixLib.Device
 		public const int WordsPerRecord = 100;
 		private const int BytesPerRecord = WordsPerRecord * (FullWord.ByteCount + 1);
 
-		public TapeDevice(int id) : base(id, FileNamePrefix) 
+		public TapeDevice(int id) : base(id, FileNamePrefix)
 			=> UpdateSettings();
 
-		public override int RecordWordCount 
+		public override int RecordWordCount
 			=> WordsPerRecord;
 
-		public override string ShortName 
+		public override string ShortName
 			=> MyShortName;
 
-		public override bool SupportsInput 
+		public override bool SupportsInput
 			=> true;
 
-		public override bool SupportsOutput 
+		public override bool SupportsOutput
 			=> true;
 
-		public static long CalculateBytePosition(long record) 
+		public static long CalculateBytePosition(long record)
 			=> record * BytesPerRecord;
 
-		public static long CalculateRecordCount(FileStream stream) 
+		public static long CalculateRecordCount(FileStream stream)
 			=> stream.Length / BytesPerRecord;
 
 		public sealed override void UpdateSettings()
@@ -80,10 +80,10 @@ namespace MixLib.Device
 
 		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 				=> new Instance(streamStatus);
 
 			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)
@@ -110,10 +110,10 @@ namespace MixLib.Device
 
 		private class SeekStep : StreamStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> WindingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 				=> new Instance(streamStatus);
 
 			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)
@@ -128,8 +128,8 @@ namespace MixLib.Device
 						if (!StreamStatus.PositionSet)
 							InitiateStreamPosition();
 
-						this.ticksLeft = (Operands.MValue == 0 
-							? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord)) 
+						this.ticksLeft = (Operands.MValue == 0
+							? (StreamStatus.Position / ((FullWord.ByteCount + 1) * WordsPerRecord))
 							: Math.Abs(Operands.MValue)) * DeviceSettings.GetTickCount(DeviceSettings.TapeRecordWind);
 					}
 

@@ -7,5 +7,5 @@ namespace MixGui.Events
 	{
 		public IWord NewValue => newValue;
 		public IWord OldValue => oldValue;
-  }
+	}
 }

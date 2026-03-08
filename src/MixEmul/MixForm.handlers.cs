@@ -15,25 +15,25 @@ namespace MixGui
 {
 	public partial class MixForm
 	{
-		private void ExitMenuItem_Click(object sender, EventArgs e) 
+		private void ExitMenuItem_Click(object sender, EventArgs e)
 			=> Close();
 
-		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e) 
+		private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 			=> HandleException(e.Exception);
 
-		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
+		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 			=> HandleException((Exception)e.ExceptionObject);
 
-		private void RunItem_Click(object sender, EventArgs e) 
+		private void RunItem_Click(object sender, EventArgs e)
 			=> SwitchRunningState();
 
-		private void ShowPCButton_Click(object sender, EventArgs e) 
+		private void ShowPCButton_Click(object sender, EventArgs e)
 			=> this.mainMemoryEditor.MakeAddressVisible(this.mix.ProgramCounter);
 
-		private void TeletypeItem_Click(object sender, EventArgs e) 
+		private void TeletypeItem_Click(object sender, EventArgs e)
 			=> SwitchTeletypeVisibility();
 
-		private void FloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args) 
+		private void FloatingPointMemoryEditor_AddressSelected(object sender, AddressSelectedEventArgs args)
 			=> ImplementFloatingPointPCChange(args.SelectedAddress);
 
 		private void DevicesControl_DeviceDoubleClick(object sender, DeviceEventArgs e)

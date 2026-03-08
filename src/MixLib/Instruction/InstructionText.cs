@@ -3,14 +3,14 @@
 namespace MixLib.Instruction
 {
 	public class InstructionText(MixInstruction.Instance instance)
-  {
-		public string Index 
+	{
+		public string Index
 			=> instance.Index != 0 ? "," + instance.Index : string.Empty;
 
-		public string InstanceText 
+		public string InstanceText
 			=> Mnemonic + " " + Address + Index + Field;
 
-		public string Mnemonic 
+		public string Mnemonic
 			=> instance.MixInstruction.Mnemonic;
 
 		private string FieldText
@@ -31,7 +31,7 @@ namespace MixLib.Instruction
 			get
 			{
 				var addressText = instance.AddressMagnitude.ToString();
-				
+
 				if (instance.AddressSign.IsNegative())
 					addressText = '-' + addressText;
 

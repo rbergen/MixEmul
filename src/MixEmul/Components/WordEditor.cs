@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
@@ -30,7 +31,7 @@ namespace MixGui.Components
 
 		public WordEditor(int byteCount) : this(byteCount, true) { }
 
-		public WordEditor(IWord word, bool includeSign) : this(word.ByteCount, includeSign) 
+		public WordEditor(IWord word, bool includeSign) : this(word.ByteCount, includeSign)
 			=> WordValue = word;
 
 		public WordEditor(int byteCount, bool includeSign)
@@ -60,18 +61,18 @@ namespace MixGui.Components
 			InitializeComponent();
 		}
 
-		public int? CaretIndex 
+		public int? CaretIndex
 			=> null;
 
-		public Control EditorControl 
+		public Control EditorControl
 			=> this;
 
-		public bool Focus(FieldTypes? field, int? index) 
-			=> ByteCount > 0 
-			? this.byteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus() 
+		public bool Focus(FieldTypes? field, int? index)
+			=> ByteCount > 0
+			? this.byteTextBoxes[field == FieldTypes.LastByte ? ByteCount - 1 : 0].Focus()
 			: this.signButton.Focus();
 
-		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args) 
+		protected virtual void OnValueChanged(WordEditorValueChangedEventArgs args)
 			=> ValueChanged?.Invoke(this, args);
 
 		private void ByteValueChanged(MixByteTextBox textBox, MixByteTextBox.ValueChangedEventArgs args)
@@ -276,6 +277,7 @@ namespace MixGui.Components
 				box.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ByteCount
 		{
 			get => this.word.ByteCount;
@@ -289,6 +291,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IncludeSign
 		{
 			get => this.includeSign;
@@ -302,6 +305,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -318,6 +322,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => this.word;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using MixLib.Instruction;
 using MixLib.Utils;
 
@@ -16,7 +17,7 @@ namespace MixLib.Type
 
 		private MemoryFullWord realWord;
 		private readonly IMemory memory = memory;
-		private readonly object syncRoot = new();
+		private readonly Lock syncLock = new();
 
 		public int Index => index;
 
@@ -70,7 +71,7 @@ namespace MixLib.Type
 			=> !RealWordFetched || this.realWord.IsEmpty;
 
 		public MixByte[] ToArray()
-			=> [..ActiveWord];
+			=> [.. ActiveWord];
 
 		public MixByte[] Slice(int startIndex, int count)
 			=> ActiveWord.Slice(startIndex, count);
@@ -83,7 +84,7 @@ namespace MixLib.Type
 
 		private void FetchRealWordIfNotFetched()
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				if (this.realWord == null)
 					FetchRealWord();
@@ -94,7 +95,7 @@ namespace MixLib.Type
 		{
 			get
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					return this.realWord != null;
 				}
@@ -106,7 +107,7 @@ namespace MixLib.Type
 
 		private bool FetchRealWordConditionally(Func<bool> condition)
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				if (this.realWord == null)
 				{

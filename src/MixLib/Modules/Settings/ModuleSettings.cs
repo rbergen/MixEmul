@@ -27,7 +27,7 @@ namespace MixLib.Modules.Settings
 				if (!value)
 					floatingPointEnabled = null;
 
-				else 
+				else
 					floatingPointEnabled ??= FloatingPointEnabledDefault;
 			}
 		}
@@ -58,7 +58,7 @@ namespace MixLib.Modules.Settings
 				if (!value)
 					floatingPointMemoryWordCount = null;
 
-				else 
+				else
 					floatingPointMemoryWordCount ??= FloatingPointMemoryWordCountDefault;
 			}
 		}

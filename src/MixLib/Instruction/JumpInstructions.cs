@@ -38,7 +38,7 @@ namespace MixLib.Instruction
 		/// <summary>
 		/// Public jump method for use by other classes
 		/// </summary>
-		public static void Jump(ModuleBase module, int indexedAddress) 
+		public static void Jump(ModuleBase module, int indexedAddress)
 			=> DoJump(module, indexedAddress, false);
 
 		/// <summary>

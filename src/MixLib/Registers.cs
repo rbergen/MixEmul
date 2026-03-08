@@ -33,37 +33,37 @@ namespace MixLib
 			}
 		}
 
-		public Register this[int offset] 
+		public Register this[int offset]
 			=> this.registers[offset];
 
-		public Register this[Offset offset] 
+		public Register this[Offset offset]
 			=> this[(int)offset];
 
-		public Register RI1 
+		public Register RI1
 			=> this.registers[(int)Offset.rI1];
 
-		public Register RI2 
+		public Register RI2
 			=> this.registers[(int)Offset.rI2];
 
-		public Register RI3 
+		public Register RI3
 			=> this.registers[(int)Offset.rI3];
 
-		public Register RI4 
+		public Register RI4
 			=> this.registers[(int)Offset.rI4];
 
-		public Register RI5 
+		public Register RI5
 			=> this.registers[(int)Offset.rI5];
 
-		public Register RI6 
+		public Register RI6
 			=> this.registers[(int)Offset.rI6];
 
-		public Register RA => 
-			this.registers[(int)Offset.rA];
+		public Register RA
+			=> this.registers[(int)Offset.rA];
 
-		public Register RJ 
+		public Register RJ
 			=> this.rJ;
 
-		public Register RX 
+		public Register RX
 			=> this.registers[(int)Offset.rX];
 
 		public int GetIndexedAddress(int mValue, int index)

@@ -18,19 +18,19 @@ namespace MixLib.Device
 		private const int MyRecordWordCount = 14;
 		public const int BytesPerRecord = MyRecordWordCount * FullWord.ByteCount;
 
-		public PaperTapeDevice(int id) : base(id, FileNamePrefix) 
+		public PaperTapeDevice(int id) : base(id, FileNamePrefix)
 			=> UpdateSettings();
 
-		public override int RecordWordCount 
+		public override int RecordWordCount
 			=> MyRecordWordCount;
 
-		public override string ShortName 
+		public override string ShortName
 			=> MyShortName;
 
-		public override bool SupportsInput 
+		public override bool SupportsInput
 			=> true;
 
-		public override bool SupportsOutput 
+		public override bool SupportsOutput
 			=> false;
 
 		public sealed override void UpdateSettings()
@@ -86,10 +86,10 @@ namespace MixLib.Device
 
 		private class RewindStep : StreamStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> RewindingDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 				=> new Instance(streamStatus);
 
 			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)

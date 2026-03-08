@@ -5,5 +5,5 @@
 	public class AddressSelectedEventArgs(int selectedAddress) : EventArgs
 	{
 		public int SelectedAddress => selectedAddress;
-  }
+	}
 }

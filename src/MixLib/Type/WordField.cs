@@ -6,7 +6,7 @@ namespace MixLib.Type
 	{
 		private readonly FieldSpec fieldSpec;
 
-		private WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount) 
+		private WordField(FieldSpec fieldSpec, int byteCount) : base(byteCount)
 			=> this.fieldSpec = fieldSpec;
 
 		public void ApplyToFullWord(IFullWord word)

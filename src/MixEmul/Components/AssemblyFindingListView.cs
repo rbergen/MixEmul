@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixAssembler.Finding;
@@ -53,7 +54,7 @@ namespace MixGui.Components
 
 		private void AddFinding(AssemblyFinding finding)
 		{
-			var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? string.Empty : (finding.LineNumber + 1).ToString(), finding.Message }, (int)finding.Severity)
+			var item = new ListViewItem([finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? string.Empty : (finding.LineNumber + 1).ToString(), finding.Message], (int)finding.Severity)
 			{
 				Tag = finding
 			};
@@ -61,6 +62,7 @@ namespace MixGui.Components
 			mFindingsListView.Items.Add(item);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public AssemblyFindingCollection Findings
 		{
 			set
@@ -91,6 +93,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ImageList SeverityImageList
 		{
 			get => mFindingsListView.SmallImageList;

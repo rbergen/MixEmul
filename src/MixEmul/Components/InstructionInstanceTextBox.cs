@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -43,10 +44,15 @@ namespace MixGui.Components
 		private readonly ToolStripMenuItem showIndexedAddressMenuItem;
 		private readonly ContextMenuStrip contextMenu;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMinIndex { get; set; }
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMaxIndex { get; set; }
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback { get; set; } = null;
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SymbolCollection Symbols { get; set; }
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryAddress { get; set; }
 
 
@@ -89,7 +95,8 @@ namespace MixGui.Components
 			Update();
 		}
 
-		public bool ShowSourceLineToolTip 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool ShowSourceLineToolTip
 		{
 			get => this.showShourceLineToolTip;
 			set
@@ -360,6 +367,7 @@ namespace MixGui.Components
 				SetEditMode();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public new string Text
 		{
 			get => base.Text;
@@ -518,6 +526,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IFullWord InstructionWord
 		{
 			get => this.instructionWord;
@@ -538,6 +547,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ToolTip ToolTip
 		{
 			get => this.toolTip;
@@ -548,6 +558,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => this.instructionWord;

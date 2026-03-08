@@ -6,7 +6,7 @@
 
 		public FullWord() : base(ByteCount) { }
 
-		public FullWord(long value) : this() 
+		public FullWord(long value) : this()
 			=> LongValue = value;
 
 		public FullWord(Signs sign, long magnitude) : this()
@@ -15,7 +15,7 @@
 			Sign = sign;
 		}
 
-		public static implicit operator FullWord(long value) 
+		public static implicit operator FullWord(long value)
 			=> new(value);
 
 		public override object Clone()

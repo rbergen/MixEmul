@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixAssembler;
@@ -13,7 +14,7 @@ namespace MixGui.Components
 	public class SourceCodeControl : UserControl
 	{
 		private const string LineNumberSeparator = " │ ";
-		private static readonly Color[] findingColors = 
+		private static readonly Color[] findingColors =
 		[
 			GuiSettings.GetColor(GuiSettings.DebugText),
 			GuiSettings.GetColor(GuiSettings.InfoText),
@@ -245,6 +246,7 @@ namespace MixGui.Components
 			this.commentColor = GuiSettings.GetColor(GuiSettings.CommentFieldText);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public AssemblyFindingCollection Findings
 		{
 			set
@@ -274,6 +276,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public PreInstruction[] Instructions
 		{
 			set
@@ -317,6 +320,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public AssemblyFinding MarkedFinding
 		{
 			get => this.markedFinding;
@@ -338,29 +342,29 @@ namespace MixGui.Components
 		}
 
 		private class ProcessedSourceLine(ParsedSourceLine sourceLine, int lineTextIndex)
-	{
-	  public ParsedSourceLine SourceLine { get; private set; } = sourceLine;
-	  public int LineTextIndex { get; private set; } = lineTextIndex;
+		{
+			public ParsedSourceLine SourceLine { get; private set; } = sourceLine;
+			public int LineTextIndex { get; private set; } = lineTextIndex;
 
-	  public int CommentTextIndex =>
-					!SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
+			public int CommentTextIndex =>
+				!SourceLine.IsCommentLine ? AddressTextIndex + AddressTextLength + Parser.FieldSpacing : LineTextIndex;
 
 			public int LineTextLength =>
-					(SourceLine.Comment == string.Empty ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
+				(SourceLine.Comment == string.Empty ? AddressTextIndex + AddressTextLength : CommentTextIndex + SourceLine.Comment.Length) - LineTextIndex;
 
-			public int LocTextIndex 
+			public int LocTextIndex
 				=> LineTextIndex;
 
-			public int LocTextLength 
+			public int LocTextLength
 				=> !SourceLine.IsCommentLine ? Math.Max(Parser.MinLocLength, SourceLine.LocationField.Length) : 0;
 
-			public int OpTextIndex 
+			public int OpTextIndex
 				=> !SourceLine.IsCommentLine ? LocTextIndex + LocTextLength + Parser.FieldSpacing : LineTextIndex;
 
-			public int OpTextLength 
+			public int OpTextLength
 				=> !SourceLine.IsCommentLine ? Math.Max(Parser.MinOpLength, SourceLine.OpField.Length) : 0;
 
-			public int AddressTextIndex 
+			public int AddressTextIndex
 				=> !SourceLine.IsCommentLine ? OpTextIndex + OpTextLength + Parser.FieldSpacing : LineTextIndex;
 
 			public int AddressTextLength

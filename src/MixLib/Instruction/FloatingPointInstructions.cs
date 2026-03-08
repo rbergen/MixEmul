@@ -38,7 +38,7 @@ namespace MixLib.Instruction
 			executionStatus ??= new ExecutionStatus(module.Mode, module.ProgramCounter, instance.Instruction.Mnemonic);
 
 			if (executionStatus.CurrentStep == ExecutionStatus.Step.Initialize && !InitializeInstruction(module, instance, floatingPointModule))
-					return false;
+				return false;
 
 			executionStatus.OverflowDetected |= floatingPointModule.Tick();
 
@@ -60,7 +60,7 @@ namespace MixLib.Instruction
 
 				case ModuleBase.RunStatus.InvalidInstruction:
 				case ModuleBase.RunStatus.RuntimeError:
-					module.ReportRuntimeError($"Floating point module failed to execute instruction { executionStatus.Mnemonic}");
+					module.ReportRuntimeError($"Floating point module failed to execute instruction {executionStatus.Mnemonic}");
 					module.Mode = executionStatus.Mode;
 
 					executionStatus = null;

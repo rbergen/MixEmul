@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Settings;
@@ -102,6 +103,7 @@ namespace MixGui.Components
 			this.fullWordEditor.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int WordIndex
 		{
 			get => this.wordIndex;
@@ -112,6 +114,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IFullWord DeviceWord
 		{
 			get => this.deviceWord;
@@ -122,12 +125,14 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.fullWordEditor.ReadOnly;
 			set => this.fullWordEditor.ReadOnly = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => DeviceWord;

@@ -10,19 +10,19 @@ namespace MixLib.Type
 		public long ProfilingTickCount { get; private set; }
 		public long ProfilingExecutionCount { get; private set; }
 
-		public MemoryFullWord(int index) 
+		public MemoryFullWord(int index)
 			=> Index = index;
 
-		public MemoryFullWord(int index, long value) : base(value) 
+		public MemoryFullWord(int index, long value) : base(value)
 			=> Index = index;
 
-		public override bool IsEmpty 
+		public override bool IsEmpty
 			=> base.IsEmpty && SourceLine == null;
 
-		public void IncreaseProfilingTickCount(int ticks) 
+		public void IncreaseProfilingTickCount(int ticks)
 			=> ProfilingTickCount += ticks;
 
-		public void IncreaseProfilingExecutionCount() 
+		public void IncreaseProfilingExecutionCount()
 			=> ProfilingExecutionCount++;
 
 		public SearchResult FindMatch(SearchParameters options)

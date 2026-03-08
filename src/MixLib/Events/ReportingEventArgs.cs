@@ -6,5 +6,5 @@ namespace MixLib.Events
 	{
 		public string Message => message;
 		public Misc.Severity Severity => severity;
-  }
+	}
 }

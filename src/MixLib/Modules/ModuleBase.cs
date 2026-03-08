@@ -16,7 +16,7 @@ namespace MixLib.Modules
 		public abstract RunStatus Status { get; protected set; }
 		public abstract RunMode Mode { get; set; }
 
-		public virtual Devices Devices 
+		public virtual Devices Devices
 			=> null;
 
 		protected bool IsBreakpointSet(int address)

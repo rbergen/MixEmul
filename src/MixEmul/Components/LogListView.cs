@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixLib.Misc;
@@ -73,14 +74,14 @@ namespace MixGui.Components
 		}
 
 		public void AddLogLine(LogLine line)
-			=> this.listView.Items.Insert(0, new ListViewItem(new string[] 
-			{ 
-				line.Severity.ToString(), 
-				line.ModuleName ?? string.Empty, 
-				(line.Address == -1) ? string.Empty : line.Address.ToString("D4"), 
-				line.Title ?? string.Empty, 
-				line.Message ?? string.Empty 
-			}, (int)line.Severity));
+			=> this.listView.Items.Insert(0, new ListViewItem(
+			[
+				line.Severity.ToString(),
+				line.ModuleName ?? string.Empty,
+				(line.Address == -1) ? string.Empty : line.Address.ToString("D4"),
+				line.Title ?? string.Empty,
+				line.Message ?? string.Empty
+			], (int)line.Severity));
 
 		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
 			=> AddressSelected?.Invoke(this, args);
@@ -143,6 +144,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ImageList SeverityImageList
 		{
 			get => this.listView.SmallImageList;

@@ -118,7 +118,7 @@ namespace MixAssembler.Symbol
 			private readonly Directions mDirection = direction;
 			private readonly LocalSymbol mReferee = referee;
 
-	  public long GetMagnitude(int currentAddress)
+			public long GetMagnitude(int currentAddress)
 				=> GetValue(currentAddress);
 
 			public Word.Signs GetSign(int currentAddress)

@@ -8,31 +8,31 @@ namespace MixLib.Type
 	{
 		private readonly SortedList<string, SymbolBase> list = [];
 
-		public int Count 
+		public int Count
 			=> this.list.Count;
 
-		public SymbolBase this[string name] 
+		public SymbolBase this[string name]
 			=> this.list.TryGetValue(name, out var value) ? value : null;
 
-		public bool Contains(SymbolBase value) 
+		public bool Contains(SymbolBase value)
 			=> Contains(value.Name);
 
-		public bool Contains(string value) 
+		public bool Contains(string value)
 			=> this.list.ContainsKey(value);
 
-		private IEnumerator<SymbolBase> GetEnumerator() 
+		private IEnumerator<SymbolBase> GetEnumerator()
 			=> this.list.Values.GetEnumerator();
 
-		public void Remove(SymbolBase value) 
+		public void Remove(SymbolBase value)
 			=> Remove(value.Name);
 
-		public void Remove(string name) 
+		public void Remove(string name)
 			=> this.list.Remove(name);
 
-		IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator() 
+		IEnumerator<SymbolBase> IEnumerable<SymbolBase>.GetEnumerator()
 			=> GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator() 
+		IEnumerator IEnumerable.GetEnumerator()
 			=> GetEnumerator();
 
 		public void Add(SymbolBase value)

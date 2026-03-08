@@ -20,10 +20,10 @@ namespace MixLib.Device.Step
 
 			public event ReportingEventHandler ReportingEvent;
 
-			public virtual object OutputForNextStep 
+			public virtual object OutputForNextStep
 				=> this.passthrough;
 
-			protected virtual void OnReportingEvent(ReportingEventArgs args) 
+			protected virtual void OnReportingEvent(ReportingEventArgs args)
 				=> ReportingEvent?.Invoke(this, args);
 
 			protected Instance() { }

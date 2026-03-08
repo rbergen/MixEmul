@@ -15,10 +15,10 @@ namespace MixLib
 			AddInstruction("END", LoaderInstruction.Operations.SetProgramCounter, false);
 		}
 
-		public LoaderInstruction this[string mnemonic] 
+		public LoaderInstruction this[string mnemonic]
 			=> this.instructions.TryGetValue(mnemonic, out var value) ? value : null;
 
-		private void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric) 
+		private void AddInstruction(string mnemonic, LoaderInstruction.Operations operation, bool alphanumeric)
 			=> this.instructions.Add(mnemonic, new LoaderInstruction(mnemonic, operation, alphanumeric));
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using MixLib.Events;
 
@@ -10,7 +12,7 @@ namespace MixLib.Type
 	{
 		public event WordValueChangedEventHandler WordValueChanged;
 
-		private readonly ReaderWriterLock accessLock;
+		private readonly Lock accessLock = new();
 		private readonly MixByte[] bytes;
 		private Signs sign;
 
@@ -33,7 +35,6 @@ namespace MixLib.Type
 			ByteCount = byteCount;
 			this.sign = sign;
 			this.bytes = new MixByte[byteCount];
-			this.accessLock = new ReaderWriterLock();
 		}
 
 		public void Load(string text)
@@ -108,61 +109,43 @@ namespace MixLib.Type
 
 		public string ToString(bool asChars)
 		{
-			string stringValue;
-
 			if (asChars)
 			{
-				stringValue = string.Empty;
-
-				foreach (MixByte mixByte in this.bytes)
-					stringValue += (char)mixByte;
+				return new string([.. this.bytes.Select(b => (char)b)]);
 			}
 			else
 			{
-				stringValue = Sign.ToChar().ToString();
+				var sb = new StringBuilder();
+				sb.Append(Sign.ToChar());
 
 				foreach (MixByte mixByte in this.bytes)
-					stringValue += ' ' + mixByte;
-			}
+				{
+					sb.Append(' ');
+					sb.Append(mixByte.ToString());
+				}
 
-			return stringValue;
+				return sb.ToString();
+			}
 		}
 
 		public MixByte this[int index]
 		{
 			get
 			{
-				MixByte selectedByte;
-
-				this.accessLock.AcquireReaderLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
-					selectedByte = this.bytes[index];
+					return this.bytes[index];
 				}
-				finally
-				{
-					this.accessLock.ReleaseReaderLock();
-				}
-
-				return selectedByte;
 			}
 			set
 			{
-				this.accessLock.AcquireWriterLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					MixByte oldValue = this.bytes[index];
-
 					this.bytes[index] = value ?? new MixByte();
 
 					if (oldValue.ByteValue == this.bytes[index].ByteValue)
 						return;
-				}
-				finally
-				{
-					this.accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -173,35 +156,20 @@ namespace MixLib.Type
 		{
 			get
 			{
-				long longValue;
-				this.accessLock.AcquireReaderLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
-					longValue = BytesToLong(Sign, this.bytes);
+					return BytesToLong(Sign, this.bytes);
 				}
-				finally
-				{
-					this.accessLock.ReleaseReaderLock();
-				}
-
-				return longValue;
 			}
 			set
 			{
-				this.accessLock.AcquireWriterLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					if (value == LongValue)
 						return;
 
 					SetMagnitudeLongValue(value);
 					this.sign = value.GetSign();
-				}
-				finally
-				{
-					this.accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -230,26 +198,14 @@ namespace MixLib.Type
 		{
 			get
 			{
-				MixByte[] bytes;
-
-				this.accessLock.AcquireReaderLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
-					bytes = (MixByte[])this.bytes.Clone();
+					return (MixByte[])this.bytes.Clone();
 				}
-				finally
-				{
-					this.accessLock.ReleaseReaderLock();
-				}
-
-				return bytes;
 			}
 			set
 			{
-				this.accessLock.AcquireWriterLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					long oldValue = MagnitudeLongValue;
 
@@ -276,10 +232,6 @@ namespace MixLib.Type
 					if (oldValue == MagnitudeLongValue)
 						return;
 				}
-				finally
-				{
-					this.accessLock.ReleaseWriterLock();
-				}
 
 				OnWordValueChanged();
 			}
@@ -289,33 +241,17 @@ namespace MixLib.Type
 		{
 			get
 			{
-				long longValue;
-
-				this.accessLock.AcquireReaderLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
-					longValue = BytesToLong(this.bytes);
+					return BytesToLong(this.bytes);
 				}
-				finally
-				{
-					this.accessLock.ReleaseReaderLock();
-				}
-
-				return longValue;
 			}
 			set
 			{
-				this.accessLock.AcquireWriterLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					if (SetMagnitudeLongValue(value) == value.GetMagnitude())
 						return;
-				}
-				finally
-				{
-					this.accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();
@@ -326,31 +262,19 @@ namespace MixLib.Type
 		{
 			get
 			{
-				this.accessLock.AcquireReaderLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					return this.sign;
-				}
-				finally
-				{
-					this.accessLock.ReleaseReaderLock();
 				}
 			}
 			set
 			{
-				this.accessLock.AcquireWriterLock(Timeout.Infinite);
-
-				try
+				lock (accessLock)
 				{
 					if (value == this.sign)
 						return;
 
 					this.sign = value;
-				}
-				finally
-				{
-					this.accessLock.ReleaseWriterLock();
 				}
 
 				OnWordValueChanged();

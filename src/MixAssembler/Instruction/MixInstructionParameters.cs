@@ -118,7 +118,7 @@ namespace MixAssembler.Instruction
 		/// 
 		/// <returns></returns>
 		public static IInstructionParameters ParseAddressField(string addressField, ParsingStatus status)
-	  {
+		{
 			var indexCharIndex = addressField.IndexOf(',');
 			var sectionCharIndex = addressField.IndexOf('(', Math.Max(indexCharIndex, 0));
 

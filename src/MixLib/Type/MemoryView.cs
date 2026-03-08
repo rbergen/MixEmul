@@ -27,22 +27,22 @@ namespace MixLib.Type
 			this.indexOffset = indexOffset;
 		}
 
-		public int WordCount 
+		public int WordCount
 			=> this.maxIndex - this.minIndex + 1;
 
-		public long MaxProfilingTickCount 
+		public long MaxProfilingTickCount
 			=> SourceMemory.MaxProfilingTickCount;
 
-		public long MaxProfilingExecutionCount 
+		public long MaxProfilingExecutionCount
 			=> SourceMemory.MaxProfilingExecutionCount;
 
-		public MemoryFullWord GetRealWord(int index) 
+		public MemoryFullWord GetRealWord(int index)
 			=> SourceMemory.GetRealWord(index + this.indexOffset);
 
-		public void ResetRealWord(int index) 
+		public void ResetRealWord(int index)
 			=> SourceMemory.ResetRealWord(index + this.indexOffset);
 
-		public void ClearRealWordSourceLine(int index) 
+		public void ClearRealWordSourceLine(int index)
 			=> SourceMemory.ClearRealWordSourceLine(index + this.indexOffset);
 
 		private void ValidateParameters(int minIndex, int maxIndex, int offset)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixLib.Type;
@@ -18,9 +19,10 @@ namespace MixGui.Components
 		private void FieldCheckedChanged(object sender, EventArgs e)
 			=> SetFindButtonEnabledState();
 
-		private void SearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) 
+		private void SearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args)
 			=> SetFindButtonEnabledState();
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SearchParameters SearchParameters
 		{
 			get => this.searchParameters;
@@ -36,7 +38,7 @@ namespace MixGui.Components
 			}
 		}
 
-		private void SetFindButtonEnabledState() 
+		private void SetFindButtonEnabledState()
 			=> this.findButton.Enabled = this.searchTextBox.MixByteCollectionValue.ToString(true).Trim() != string.Empty && (this.valueCheckBox.Checked || this.charsCheckBox.Checked || this.instructionCheckBox.Checked);
 
 		private void FindButton_Click(object sender, EventArgs e)

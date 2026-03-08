@@ -24,16 +24,16 @@ namespace MixLib.Type
 			this.bytes = bytes;
 		}
 
-		public int MaxByteCount 
+		public int MaxByteCount
 			=> this.maxByteCount;
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() 
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 			=> this.bytes.GetEnumerator();
 
-		public IEnumerator<MixByte> GetEnumerator() 
+		public IEnumerator<MixByte> GetEnumerator()
 			=> ((IEnumerable<MixByte>)this.bytes).GetEnumerator();
 
-		public MixByte[] ToArray() 
+		public MixByte[] ToArray()
 			=> (MixByte[])this.bytes.Clone();
 
 		public void Load(string text)

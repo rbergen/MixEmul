@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Settings;
@@ -181,6 +182,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixByte MixByteValue
 		{
 			get => this.byteValue;
@@ -199,9 +201,9 @@ namespace MixGui.Components
 
 		public class ValueChangedEventArgs(MixByte oldValue, MixByte newValue) : EventArgs
 		{
-	  public MixByte NewValue { get; private set; } = newValue;
-	  public MixByte OldValue { get; private set; } = oldValue;
-	}
+			public MixByte NewValue { get; private set; } = newValue;
+			public MixByte OldValue { get; private set; } = oldValue;
+		}
 
 		public delegate void ValueChangedEventHandler(MixByteTextBox sender, MixByteTextBox.ValueChangedEventArgs e);
 	}

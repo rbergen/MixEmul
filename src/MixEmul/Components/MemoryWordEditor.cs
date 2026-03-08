@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
@@ -112,6 +113,7 @@ namespace MixGui.Components
 		private void BreakPointBox_CheckedChanged(object sender, EventArgs e)
 			=> OnBreakpointCheckedChanged(e);
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public GetMaxProfilingCountCallback GetMaxProfilingCount
 		{
 			get => this.getMaxProfilingCount;
@@ -337,12 +339,14 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMinIndex
 		{
 			get => this.instructionTextBox.MemoryMinIndex;
 			set => this.instructionTextBox.MemoryMinIndex = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMaxIndex
 		{
 			get => this.instructionTextBox.MemoryMaxIndex;
@@ -438,18 +442,21 @@ namespace MixGui.Components
 			UpdateProfilingLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool BreakPointChecked
 		{
 			get => this.breakPointBox.Checked;
 			set => this.breakPointBox.Checked = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
 			get => this.instructionTextBox.IndexedAddressCalculatorCallback;
 			set => this.instructionTextBox.IndexedAddressCalculatorCallback = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool Marked
 		{
 			get => this.marked;
@@ -463,6 +470,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IMemoryFullWord MemoryWord
 		{
 			get => this.memoryWord;
@@ -490,6 +498,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -504,12 +513,14 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SymbolCollection Symbols
 		{
 			get => this.instructionTextBox.Symbols;
 			set => this.instructionTextBox.Symbols = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ToolTip ToolTip
 		{
 			set
@@ -519,6 +530,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => MemoryWord;

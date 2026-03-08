@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixAssembler.Symbol;
 using MixGui.Events;
@@ -13,7 +14,9 @@ namespace MixGui.Components
 		private const int NameFieldIndex = 0;
 		private const int ValueFieldIndex = 1;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMinIndex { get; set; } = 0;
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMaxIndex { get; set; } = 0;
 
 		public event AddressSelectedHandler AddressSelected;
@@ -33,19 +36,19 @@ namespace MixGui.Components
 			this.listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
 		}
 
-		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e) 
+		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e)
 			=> SetEnabledStates();
 
-		private void SymbolNameTextBox_TextChanged(object sender, EventArgs e) 
+		private void SymbolNameTextBox_TextChanged(object sender, EventArgs e)
 			=> SetEnabledStates();
 
-		private void SetEnabledStates() 
+		private void SetEnabledStates()
 			=> SetEnabledStates(true);
 
-		private void ListView_DoubleClick(object sender, EventArgs e) 
+		private void ListView_DoubleClick(object sender, EventArgs e)
 			=> ValueSelected();
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) 
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
 			=> AddressSelected?.Invoke(this, args);
 
 		private void SetEnabledStates(bool updateSelectedItem)
@@ -70,6 +73,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SymbolCollection Symbols
 		{
 			get => this.symbols;

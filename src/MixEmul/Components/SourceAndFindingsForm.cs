@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixAssembler.Finding;
 using MixAssembler.Instruction;
@@ -28,7 +29,7 @@ namespace MixGui.Components
 			this.findingListView.SelectionChanged += FindingListView_SelectionChanged;
 		}
 
-		public void UpdateLayout() 
+		public void UpdateLayout()
 			=> this.sourceControl.UpdateLayout();
 
 		private void InitializeComponent()
@@ -107,9 +108,9 @@ namespace MixGui.Components
 			// 
 			// this.findingListView
 			// 
-			this.findingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.findingListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.findingListView.Location = new System.Drawing.Point(0, 0);
 			this.findingListView.Name = "_findingListView";
 			this.findingListView.SeverityImageList = null;
@@ -163,7 +164,7 @@ namespace MixGui.Components
 
 		}
 
-		private void FindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args) 
+		private void FindingListView_SelectionChanged(AssemblyFindingListView sender, AssemblyFindingListView.SelectionChangedEventArgs args)
 			=> this.sourceControl.MarkedFinding = args.SelectedFinding;
 
 		public void SetInstructionsAndFindings(PreInstruction[] instructions, InstructionInstanceBase[] instances, AssemblyFindingCollection findings)
@@ -179,7 +180,7 @@ namespace MixGui.Components
 
 		private void SetStatusBarText(AssemblyFindingCollection findings)
 		{
-			var severityNames = Enum.GetNames(typeof(Severity));
+			var severityNames = Enum.GetNames<Severity>();
 			int[] severityCounts = new int[severityNames.Length];
 
 			foreach (AssemblyFinding finding in findings)
@@ -214,6 +215,7 @@ namespace MixGui.Components
 			this.toolStripStatusLabel.Text = message;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ImageList SeverityImageList
 		{
 			get => this.findingListView.SeverityImageList;

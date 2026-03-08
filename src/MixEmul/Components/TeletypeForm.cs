@@ -29,10 +29,10 @@ namespace MixGui.Components
 			TeletypeDevice = teleType;
 		}
 
-		private void ClearButton_Click(object sender, EventArgs e) 
+		private void ClearButton_Click(object sender, EventArgs e)
 			=> ClearOutput();
 
-		private void SendButton_Click(object sender, EventArgs e) 
+		private void SendButton_Click(object sender, EventArgs e)
 			=> SendInput();
 
 		private void This_Activated(object sender, EventArgs e)
@@ -302,17 +302,20 @@ namespace MixGui.Components
 				this.toolStripStatusLabel.Text = "Idle";
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool EchoInput
 		{
 			get => this.echoInputCheckBox.Checked;
 			set => this.echoInputCheckBox.Checked = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public string StatusText
 		{
 			set => this.toolStripStatusLabel.Text = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixLib.Device.TeletypeDevice TeletypeDevice
 		{
 			get => this.teletypeDevice;
@@ -322,12 +325,12 @@ namespace MixGui.Components
 				{
 					this.teletypeDevice = value;
 
-					if (this.teletypeDevice != null)
-						this.teletypeDevice.OutputAdded += OutputAdded;
+					this.teletypeDevice?.OutputAdded += OutputAdded;
 				}
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public new bool TopMost
 		{
 			get => base.TopMost;

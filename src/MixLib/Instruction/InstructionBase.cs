@@ -6,7 +6,7 @@
 	/// It defines the attributes common to all types, which basically is the fact that they all have a mnemonic.
 	/// </summary>
 	public abstract class InstructionBase(string mnemonic)
-  {
+	{
 		public string Mnemonic => mnemonic;
-  }
+	}
 }

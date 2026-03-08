@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -20,6 +21,7 @@ namespace MixGui.Components
 		private bool updating;
 		private IMixByteCollection byteCollection;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool UseEditMode { get; set; }
 
 		public event MixByteCollectionEditorValueChangedEventHandler ValueChanged;
@@ -271,6 +273,7 @@ namespace MixGui.Components
 			Update();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IMixByteCollection MixByteCollectionValue
 		{
 			get => this.byteCollection;
