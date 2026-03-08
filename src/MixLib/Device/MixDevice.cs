@@ -31,19 +31,19 @@ namespace MixLib.Device
 		public bool Busy
 			=> CurrentStep != null;
 
-		public string StatusDescription 
+		public string StatusDescription
 			=> Busy ? CurrentStep.StatusDescription : IdleDescription;
 
-		protected virtual DeviceStep.Instance GetCurrentStepInstance() 
+		protected virtual DeviceStep.Instance GetCurrentStepInstance()
 			=> CurrentStep.CreateInstance();
 
-		public override string ToString() 
+		public override string ToString()
 			=> ShortName + ": " + Id;
 
-		protected virtual void OnReportingEvent(ReportingEventArgs args) 
+		protected virtual void OnReportingEvent(ReportingEventArgs args)
 			=> ReportingEvent?.Invoke(this, args);
 
-		private void StepInstance_Reporting(object sender, ReportingEventArgs args) 
+		private void StepInstance_Reporting(object sender, ReportingEventArgs args)
 			=> OnReportingEvent(args);
 
 		public virtual void Reset()
@@ -120,10 +120,10 @@ namespace MixLib.Device
 
 		protected class ReadFromMemoryStep(bool includeSign, int recordWordCount) : TickingStep(recordWordCount)
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> ReadingDescription;
 
-			protected override TickingStep.Instance CreateTickingInstance() 
+			protected override TickingStep.Instance CreateTickingInstance()
 				=> new Instance(TickCount, includeSign);
 
 			private new class Instance : TickingStep.Instance

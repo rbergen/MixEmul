@@ -7,10 +7,10 @@ namespace MixLib.Instruction
 		public string Index
 			=> instance.Index != 0 ? "," + instance.Index : string.Empty;
 
-		public string InstanceText 
+		public string InstanceText
 			=> Mnemonic + " " + Address + Index + Field;
 
-		public string Mnemonic 
+		public string Mnemonic
 			=> instance.MixInstruction.Mnemonic;
 
 		private string FieldText

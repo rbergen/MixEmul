@@ -247,7 +247,7 @@ namespace MixGui.Components
 			ResumeLayout(false);
 		}
 
-		private void OverflowBox_CheckedChanged(object sender, EventArgs e) 
+		private void OverflowBox_CheckedChanged(object sender, EventArgs e)
 			=> this.registers.OverflowIndicator = this.overflowBox.Checked;
 
 		private void This_KeyDown(object sender, KeyEventArgs e)

@@ -18,7 +18,7 @@ namespace MixGui.Components
 
 		public event EventHandler ValueChanged;
 
-		public ToolStripCycleButton(IContainer container) : this() 
+		public ToolStripCycleButton(IContainer container) : this()
 			=> container.Add(this);
 
 		public ToolStripCycleButton()
@@ -34,7 +34,7 @@ namespace MixGui.Components
 			Text = string.Empty;
 		}
 
-		protected void OnValueChanged(EventArgs e) 
+		protected void OnValueChanged(EventArgs e)
 			=> ValueChanged?.Invoke(this, e);
 
 		private void ToolStripCycleButton_Paint(object sender, PaintEventArgs e)
@@ -51,7 +51,7 @@ namespace MixGui.Components
 			SetCurrentStep(this.currentStep.NextStep);
 		}
 
-		private void Control_SizeChanged(object sender, EventArgs e) 
+		private void Control_SizeChanged(object sender, EventArgs e)
 			=> Size = Control.Size;
 
 		public Step AddStep(object value)
@@ -113,9 +113,9 @@ namespace MixGui.Components
 				if (value == null)
 					return;
 
-				var step = this.steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value)) 
+				var step = this.steps.FirstOrDefault(s => s.Value is IComparable comparable ? comparable.CompareTo(value) == 0 : s.Value.Equals(value))
 					?? throw new ArgumentException($"no step with Value {value} exists");
-		    
+
 				SetCurrentStep(step);
 			}
 		}
@@ -131,16 +131,16 @@ namespace MixGui.Components
 		}
 
 		public class Step(object value, string text, Step nextStep)
-	{
-	  public object Value { get; private set; } = value;
-	  public string Text { get; private set; } = text;
-	  public Step NextStep { get; set; } = nextStep;
+		{
+			public object Value { get; private set; } = value;
+			public string Text { get; private set; } = text;
+			public Step NextStep { get; set; } = nextStep;
 
-	  public Step(object value, string text) : this(value, text, null) { }
+			public Step(object value, string text) : this(value, text, null) { }
 
-		public Step(object value) : this(value, value.ToString(), null) { }
+			public Step(object value) : this(value, value.ToString(), null) { }
 
-		public Step(object value, Step nextStep) : this(value, value.ToString(), nextStep) { }
-	}
+			public Step(object value, Step nextStep) : this(value, value.ToString(), nextStep) { }
+		}
 	}
 }
