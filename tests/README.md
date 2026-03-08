@@ -19,10 +19,17 @@ Tests for the core MixLib library, including:
   - `AddressRegisterTests.cs` - Tests for 2-byte address registers
   - `FullWordRegisterTests.cs` - Tests for 5-byte registers
 
+- **Core Component Tests**
+  - `MemoryTests.cs` - Tests for Memory class (indexing, bounds checking, storage)
+  - `RegistersTests.cs` - Tests for Registers collection (initialization, indexing, addressing)
+
+- **Instruction Tests** (`Instruction/`)
+  - `InstructionHelpersTests.cs` - Tests for instruction utility methods
+
 - **Misc Tests** (`Misc/`)
   - `ValidationErrorTests.cs` - Tests for validation error messages and formatting
 
-**Total: 279 tests**
+**Total: 325 tests**
 
 ### MixAssembler.Tests
 Tests for the MixAssembler library, including:
