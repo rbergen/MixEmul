@@ -1,6 +1,7 @@
 ﻿namespace MixGui.Components
 {
 	using System;
+	using System.ComponentModel;
 	using System.Drawing;
 	using System.Windows.Forms;
 	using MixGui.Events;
@@ -110,6 +111,7 @@
 			this.charTextBox.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MixByteCollectionIndex
 		{
 			get => this.mixByteCollectionIndex;
@@ -126,6 +128,7 @@
 		private void SetIndexLabelText()
 			=> this.mixByteCollectionIndexLabel.Text = this.mixByteCollectionIndex.ToString("D" + this.indexCharCount) + ":";
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int IndexCharCount
 		{
 			get => this.indexCharCount;
@@ -143,6 +146,7 @@
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IMixByteCollection DeviceMixByteCollection
 		{
 			get => this.deviceMixByteCollection;
@@ -154,12 +158,14 @@
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.charTextBox.ReadOnly;
 			set => this.charTextBox.ReadOnly = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IMixByteCollection MixByteCollectionValue
 		{
 			get => DeviceMixByteCollection;

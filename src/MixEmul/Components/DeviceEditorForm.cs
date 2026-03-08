@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixLib;
 using MixLib.Device;
@@ -119,6 +120,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Devices Devices
 		{
 			get => this.devices;

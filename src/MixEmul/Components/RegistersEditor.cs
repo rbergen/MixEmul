@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixLib.Type;
@@ -293,6 +294,7 @@ namespace MixGui.Components
 				editor.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -311,6 +313,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixLib.Registers Registers
 		{
 			get => this.registers;

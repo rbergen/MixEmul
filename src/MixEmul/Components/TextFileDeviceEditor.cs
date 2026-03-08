@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Timers;
@@ -119,6 +120,7 @@ namespace MixGui.Components
 			ProcessVisibility();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public string RecordName
 		{
 			get => this.recordName;
@@ -138,6 +140,7 @@ namespace MixGui.Components
 			this.truncateButton.Enabled = supportsAppending && DeviceRecordCount > 1;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ShowReadOnly
 		{
 			get => this.showReadOnly;
@@ -497,12 +500,14 @@ namespace MixGui.Components
 			Update();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnlyCheckBox.Checked;
 			set => this.readOnlyCheckBox.Checked = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ResizeInProgress
 		{
 			get => this.mixByteCollectionEditorList.ResizeInProgress;

@@ -1441,6 +1441,7 @@ namespace MixGui
 			this.deviceEditor.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;

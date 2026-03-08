@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace MixGui.Components
@@ -8,6 +9,7 @@ namespace MixGui.Components
 		public MemoryExportDialog()
 			=> InitializeComponent();
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MinMemoryIndex
 		{
 			set
@@ -18,6 +20,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MaxMemoryIndex
 		{
 			set
@@ -28,18 +31,21 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int FromAddress
 		{
 			get => (int)this.fromAddressUpDown.Value;
 			set => this.fromAddressUpDown.Value = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ToAddress
 		{
 			get => (int)this.toAddressUpDown.Value;
 			set => this.toAddressUpDown.Value = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ProgramCounter
 		{
 			get => (int)this.programCounterUpDown.Value;

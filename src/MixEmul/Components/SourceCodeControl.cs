@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixAssembler;
@@ -245,6 +246,7 @@ namespace MixGui.Components
 			this.commentColor = GuiSettings.GetColor(GuiSettings.CommentFieldText);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public AssemblyFindingCollection Findings
 		{
 			set
@@ -274,6 +276,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public PreInstruction[] Instructions
 		{
 			set
@@ -317,6 +320,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public AssemblyFinding MarkedFinding
 		{
 			get => this.markedFinding;

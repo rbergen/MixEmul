@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixLib.Type;
@@ -21,6 +22,7 @@ namespace MixGui.Components
 		private void SearchTextBox_ValueChanged(IMixByteCollectionEditor sender, MixByteCollectionEditorValueChangedEventArgs args) 
 			=> SetFindButtonEnabledState();
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SearchParameters SearchParameters
 		{
 			get => this.searchParameters;

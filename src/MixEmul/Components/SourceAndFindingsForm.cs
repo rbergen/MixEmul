@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixAssembler.Finding;
 using MixAssembler.Instruction;
@@ -214,6 +215,7 @@ namespace MixGui.Components
 			this.toolStripStatusLabel.Text = message;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ImageList SeverityImageList
 		{
 			get => this.findingListView.SeverityImageList;

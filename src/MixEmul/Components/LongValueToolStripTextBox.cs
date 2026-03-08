@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace MixGui.Components
@@ -39,24 +40,28 @@ namespace MixGui.Components
 		private void Control_SizeChanged(object sender, EventArgs e)
 			=> Size = Control.Size;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long LongValue
 		{
 			get => ((LongValueTextBox)Control).LongValue;
 			set => ((LongValueTextBox)Control).LongValue = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long MaxValue
 		{
 			get => ((LongValueTextBox)Control).MaxValue;
 			set => ((LongValueTextBox)Control).MaxValue = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long MinValue
 		{
 			get => ((LongValueTextBox)Control).MinValue;
 			set => ((LongValueTextBox)Control).MinValue = value;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ClearZero
 		{
 			get => ((LongValueTextBox)Control).ClearZero;

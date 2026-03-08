@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Settings;
@@ -21,6 +22,7 @@ namespace MixGui.Components
 		private bool updating;
 
 		public bool SupportSign { get; private set; }
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ClearZero { get; set; }
 
 		public event ValueChangedEventHandler ValueChanged;
@@ -291,6 +293,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Word.Signs Sign
 		{
 			get => this.sign;
@@ -356,6 +359,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long LongValue
 		{
 			get => this.sign.ApplyTo(this.magnitude);
@@ -374,6 +378,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long Magnitude
 		{
 			get => this.magnitude;
@@ -386,6 +391,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long MaxValue
 		{
 			get => this.maxValue;
@@ -400,6 +406,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public long MinValue
 		{
 			get => this.minValue;
@@ -414,6 +421,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool SupportNegativeZero
 		{
 			get => this.supportNegativeZero;

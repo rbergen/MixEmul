@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixAssembler.Symbol;
 using MixGui.Events;
@@ -13,7 +14,9 @@ namespace MixGui.Components
 		private const int NameFieldIndex = 0;
 		private const int ValueFieldIndex = 1;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMinIndex { get; set; } = 0;
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MemoryMaxIndex { get; set; } = 0;
 
 		public event AddressSelectedHandler AddressSelected;
@@ -70,6 +73,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SymbolCollection Symbols
 		{
 			get => this.symbols;

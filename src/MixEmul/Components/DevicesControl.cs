@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
@@ -169,6 +170,7 @@ namespace MixGui.Components
 				control.UpdateLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixLib.Devices Devices
 		{
 			get => this.devices;
@@ -202,6 +204,7 @@ namespace MixGui.Components
 		private void DevicesControl_DoubleClick(object sender, EventArgs e)
 			=> DeviceDoubleClick?.Invoke(this, new DeviceEventArgs(((DeviceStatusControl)sender).Device));
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public LayoutStructure Structure
 		{
 			get => this.structure;
@@ -222,6 +225,7 @@ namespace MixGui.Components
 			Section
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ToolTip ToolTip
 		{
 			get => this.toolTip;

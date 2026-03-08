@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -92,6 +93,7 @@ namespace MixGui.Components
 		private void MemoryEditor_SizeChanged(object sender, EventArgs e)
 			=> SetUpDownButtonStates(NavigationDirection.None);
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ToolTip ToolTip
 		{
 			get => this.toolTip;
@@ -437,6 +439,7 @@ namespace MixGui.Components
 			this.addressHistorySelector.AddItem(oldViewInfo, new EditorListViewInfo { FirstVisibleIndex = this.wordEditorList.FirstVisibleIndex });
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IndexedAddressCalculatorCallback IndexedAddressCalculatorCallback
 		{
 			get => this.indexedAddressCalculatorCallback;
@@ -452,6 +455,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ResizeInProgress
 		{
 			get => this.wordEditorList != null && this.wordEditorList.ResizeInProgress;
@@ -486,6 +490,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int FirstVisibleAddress
 		{
 			get => this.wordEditorList != null ? this.wordEditorList.FirstVisibleIndex : 0;
@@ -530,6 +535,7 @@ namespace MixGui.Components
 			activeEditor.Select(result.FieldIndex, options.SearchText.Length);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int MarkedAddress
 		{
 			get => this.markedAddress;
@@ -554,6 +560,7 @@ namespace MixGui.Components
 				((MemoryWordEditor)this.wordEditorList[this.markedAddress - firstVisibleIndex]).Marked = mark;
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IMemory Memory
 		{
 			get => this.memory;
@@ -569,6 +576,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -583,6 +591,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SymbolCollection Symbols
 		{
 			get => this.symbols;

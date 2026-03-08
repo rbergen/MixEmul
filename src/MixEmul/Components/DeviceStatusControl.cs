@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Settings;
@@ -17,6 +18,7 @@ namespace MixGui.Components
 		private readonly ToolStripMenuItem resetMenuItem;
 		private readonly Label statusLabel;
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ToolTip ToolTip { get; set; }
 
 		public DeviceStatusControl() : this(null) { }
@@ -120,6 +122,7 @@ namespace MixGui.Components
 			Update();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixDevice Device
 		{
 			get => this.device;

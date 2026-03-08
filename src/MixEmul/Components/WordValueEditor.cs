@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixGui.Utils;
@@ -187,6 +188,7 @@ namespace MixGui.Components
 			OnValueChanged(args);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int ByteCount
 		{
 			get => this.wordEditor.ByteCount;
@@ -200,6 +202,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IncludeSign
 		{
 			get => this.includeSign;
@@ -214,6 +217,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ReadOnly
 		{
 			get => this.readOnly;
@@ -228,6 +232,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int TextBoxWidth
 		{
 			get => this.textBoxWidth;
@@ -241,6 +246,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWord WordValue
 		{
 			get => this.wordEditor.WordValue;

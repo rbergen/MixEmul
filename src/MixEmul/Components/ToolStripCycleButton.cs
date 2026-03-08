@@ -104,6 +104,7 @@ namespace MixGui.Components
 				SetCurrentStep(step);
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public object Value
 		{
 			get => this.currentStep?.Value;

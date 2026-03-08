@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using MixGui.Settings;
@@ -181,6 +182,7 @@ namespace MixGui.Components
 			ResumeLayout();
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MixByte MixByteValue
 		{
 			get => this.byteValue;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.ComponentModel;
 using System.Windows.Forms;
 using MixGui.Events;
 using MixLib.Misc;
@@ -143,6 +144,7 @@ namespace MixGui.Components
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public ImageList SeverityImageList
 		{
 			get => this.listView.SmallImageList;
