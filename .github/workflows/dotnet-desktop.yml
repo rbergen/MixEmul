@@ -68,7 +68,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -77,5 +77,11 @@ jobs:
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Build the application
       run: msbuild $env:Solution_Name /restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    # Run tests
+    - name: Run tests
+      run: dotnet test $env:Solution_Name --configuration $env:Configuration --no-build --verbosity normal
       env:
         Configuration: ${{ matrix.configuration }}
