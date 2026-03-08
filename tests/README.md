@@ -10,15 +10,19 @@ Tests for the core MixLib library, including:
 - **Type Tests** (`Type/`)
   - `MixByteTests.cs` - Tests for the 6-bit MixByte type (constructors, operators, conversions)
   - `FullWordTests.cs` - Tests for 5-byte FullWord type (value operations, sign handling, cloning)
+  - `WordTests.cs` - Tests for Word base class (static methods, slicing, magnitude operations)
   - `FieldSpecTests.cs` - Tests for field specifications (bounds validation, byte indexing)
   - `ExtensionMethodsTests.cs` - Tests for extension methods (sign operations, comparison values)
   - `MixByteCollectionTests.cs` - Tests for MixByte collections (loading, cloning, enumeration)
   - `WordFieldTests.cs` - Tests for word field operations (loading, applying, comparing)
+  - `IndexRegisterTests.cs` - Tests for 2-byte index registers with padding
+  - `AddressRegisterTests.cs` - Tests for 2-byte address registers
+  - `FullWordRegisterTests.cs` - Tests for 5-byte registers
 
 - **Misc Tests** (`Misc/`)
   - `ValidationErrorTests.cs` - Tests for validation error messages and formatting
 
-**Total: 243 tests**
+**Total: 279 tests**
 
 ### MixAssembler.Tests
 Tests for the MixAssembler library, including:
@@ -29,7 +33,7 @@ Tests for the MixAssembler library, including:
 - **Value Tests** (`Value/`)
   - `NumberValueTests.cs` - Tests for numeric literal parsing and value operations
 
-**Total: 22 tests**
+**Total: 46 tests**
 
 ## Running Tests
 
