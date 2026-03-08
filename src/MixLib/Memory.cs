@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MixLib.Type;
 
 namespace MixLib
@@ -11,7 +12,7 @@ namespace MixLib
 		public static readonly FieldSpec DefaultFieldSpec = new(0, 5);
 
 		private readonly SortedDictionary<int, MemoryFullWord> words;
-		private readonly object syncRoot;
+		private readonly Lock syncLock = new();
 
 		public int MinWordIndex { get; set; }
 		public int MaxWordIndex { get; set; }
@@ -21,7 +22,6 @@ namespace MixLib
 			MinWordIndex = minIndex;
 			MaxWordIndex = maxIndex;
 			this.words = [];
-			this.syncRoot = ((ICollection)this.words).SyncRoot;
 		}
 
 		public int WordCount 
@@ -29,7 +29,7 @@ namespace MixLib
 
 		public void ResetProfilingCounts()
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				foreach (MemoryFullWord word in this.words.Values)
 					word.ResetProfilingCounts();
@@ -40,7 +40,7 @@ namespace MixLib
 		{
 			get
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					return this.words.Count == 0 ? 0 : this.words.Values.Select(w => w.ProfilingTickCount).Max();
 				}
@@ -51,7 +51,7 @@ namespace MixLib
 		{
 			get
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					return this.words.Count == 0 ? 0 : this.words.Values.Select(w => w.ProfilingExecutionCount).Max();
 				}
@@ -69,7 +69,7 @@ namespace MixLib
 
 			while (!searchWrapped || index < startIndex)
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					this.words.TryGetValue(index, out word);
 				}
@@ -105,7 +105,7 @@ namespace MixLib
 
 				KeyValuePair<int, MemoryFullWord>? pair;
 
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					pair = this.words.Cast<KeyValuePair<int, MemoryFullWord>?>().FirstOrDefault(kvp => kvp.Value.Key > index);
 				}
@@ -131,7 +131,7 @@ namespace MixLib
 
 		public IEnumerator GetEnumerator()
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				return this.words.Values.GetEnumerator();
 			}
@@ -139,7 +139,7 @@ namespace MixLib
 
 		public void ClearSourceLines()
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				foreach (MemoryFullWord word in this.words.Values)
 					word.SourceLine = null;
@@ -148,7 +148,7 @@ namespace MixLib
 
 		public void Reset()
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				this.words.Clear();
 			}
@@ -163,7 +163,7 @@ namespace MixLib
 
 				MemoryFullWord word;
 
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					this.words.TryGetValue(index, out word);
 				}
@@ -188,7 +188,7 @@ namespace MixLib
 		{
 			MemoryFullWord word;
 
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				if (!this.words.TryGetValue(index, out word))
 				{
@@ -202,7 +202,7 @@ namespace MixLib
 
 		public bool HasContents(int index)
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				return this.words.ContainsKey(index) && !this.words[index].IsEmpty;
 			}
@@ -215,7 +215,7 @@ namespace MixLib
 
 			var collection = this.words.TakeWhile(kvp => kvp.Key < index).Reverse().SkipWhile(kvp => kvp.Value.IsEmpty);
 
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				return collection.Any() ? collection.First().Key : null;
 			}
@@ -228,7 +228,7 @@ namespace MixLib
 
 			var collection = this.words.SkipWhile(kvp => kvp.Key <= index || kvp.Value.IsEmpty);
 
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				return collection.Any() ? collection.First().Key : null;
 			}
@@ -236,7 +236,7 @@ namespace MixLib
 
 		public void ResetRealWord(int index)
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				this.words.Remove(index);
 			}
@@ -244,7 +244,7 @@ namespace MixLib
 
 		public void ClearRealWordSourceLine(int index)
 		{
-			lock (this.syncRoot)
+			lock (syncLock)
 			{
 				if (this.words.TryGetValue(index, out var value))
 					value.SourceLine = null;

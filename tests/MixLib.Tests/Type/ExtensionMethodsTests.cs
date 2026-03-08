@@ -79,7 +79,7 @@ public class ExtensionMethodsTests
 	{
 		var value = (decimal)valueDouble;
 		var expected = (decimal)expectedDouble;
-		
+
 		var result = value.GetMagnitude();
 
 		result.Should().Be(expected);

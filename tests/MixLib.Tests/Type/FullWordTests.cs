@@ -55,9 +55,9 @@ public class FullWordTests
 		var clone = (FullWord)original.Clone();
 
 		clone.LongValue.Should().Be(original.LongValue);
-		
+
 		clone.LongValue = 100;
-		
+
 		original.LongValue.Should().Be(42);
 		clone.LongValue.Should().Be(100);
 	}
@@ -146,9 +146,9 @@ public class FullWordTests
 	}
 
 	[Theory]
-	[InlineData(42, "+000042")]
-	[InlineData(-42, "-000042")]
-	[InlineData(0, "+00000")]
+	[InlineData(42, "+ 00 00 00 00 42")]
+	[InlineData(-42, "- 00 00 00 00 42")]
+	[InlineData(0, "+ 00 00 00 00 00")]
 	public void ToString_WithoutChars_ShouldFormatCorrectly(long value, string expected)
 	{
 		var word = new FullWord(value);

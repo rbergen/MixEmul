@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -36,7 +36,7 @@ namespace MixLib
 		private RunStatus status;
 		private RunMode mode;
 		private bool interruptExecuted;
-		private readonly object syncRoot = new();
+		private readonly Lock syncLock = new();
 
 		public FloatingPointModule FloatingPointModule { get; private set; }
 		public long TickCounter { get; private set; }
@@ -383,14 +383,14 @@ namespace MixLib
 		{
 			get
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					return this.runDetached;
 				}
 			}
 			set
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					this.runDetached = value;
 				}
@@ -415,7 +415,7 @@ namespace MixLib
 		{
 			get
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					return this.status;
 				}
@@ -423,7 +423,7 @@ namespace MixLib
 
 			protected set
 			{
-				lock (this.syncRoot)
+				lock (syncLock)
 				{
 					this.status = value;
 				}
