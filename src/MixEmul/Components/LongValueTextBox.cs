@@ -443,12 +443,12 @@ namespace MixGui.Components
 
 		public class ValueChangedEventArgs(Word.Signs oldSign, long oldMagnitude, Word.Signs newSign, long newMagnitude) : EventArgs
 		{
-	  public long OldMagnitude { get; private set; } = oldMagnitude;
-	  public Word.Signs OldSign { get; private set; } = oldSign;
-	  public long NewMagnitude { get; private set; } = newMagnitude;
-	  public Word.Signs NewSign { get; private set; } = newSign;
+			public long OldMagnitude { get; private set; } = oldMagnitude;
+			public Word.Signs OldSign { get; private set; } = oldSign;
+			public long NewMagnitude { get; private set; } = newMagnitude;
+			public Word.Signs NewSign { get; private set; } = newSign;
 
-	  public long NewValue
+			public long NewValue
 				=> NewSign.ApplyTo(NewMagnitude);
 
 			public long OldValue

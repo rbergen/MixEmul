@@ -6,7 +6,7 @@ namespace MixLib.Type
 	{
 		public MixByte MixByteValue { get; private set; }
 
-		public FieldSpec(MixByte value) 
+		public FieldSpec(MixByte value)
 			=> MixByteValue = value;
 
 		public FieldSpec(int lowBound, int highBound)

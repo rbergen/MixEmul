@@ -4,7 +4,7 @@
 	{
 		protected StreamStep() { }
 
-		public override DeviceStep.Instance CreateInstance() 
+		public override DeviceStep.Instance CreateInstance()
 			=> CreateStreamInstance(null);
 
 		public abstract Instance CreateStreamInstance(StreamStatus streamStatus);

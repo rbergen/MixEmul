@@ -159,8 +159,7 @@ namespace MixGui.Components
 				Previous = insertBefore.Previous
 			};
 
-			if (insertee.Previous != null)
-				insertee.Previous.Next = insertee;
+			insertee.Previous?.Next = insertee;
 
 			insertee.Next = insertBefore;
 			insertBefore.Previous = insertee;

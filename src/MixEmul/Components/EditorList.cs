@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using MixGui.Utils;
 using MixLib.Type;
@@ -11,7 +12,7 @@ namespace MixGui.Components
 {
 	public class EditorList<T> : UserControl, IEnumerable<T> where T : IEditor
 	{
-		private readonly object editorsSyncRoot;
+		private readonly Lock editorsLock;
 		private VScrollBar indexScrollBar;
 		private int firstVisibleIndex;
 		private bool readOnly;
@@ -44,7 +45,7 @@ namespace MixGui.Components
 			this.resizeInProgress = false;
 			this.sizeAdaptationPending = false;
 
-			this.editorsSyncRoot = new object();
+			this.editorsLock = new();
 			this.editors = [];
 
 			InitializeComponent();
@@ -109,7 +110,7 @@ namespace MixGui.Components
 			int editorsToAddCount = (visibleEditorCount - this.editors.Count) + 1;
 			FirstVisibleIndex = this.firstVisibleIndex;
 
-			lock (this.editorsSyncRoot)
+			lock (this.editorsLock)
 			{
 				IsReloading = true;
 
@@ -387,7 +388,7 @@ namespace MixGui.Components
 
 		public new void Update()
 		{
-			lock (this.editorsSyncRoot)
+			lock (this.editorsLock)
 			{
 				for (int i = 0; i < this.editors.Count; i++)
 				{
@@ -403,7 +404,7 @@ namespace MixGui.Components
 		{
 			SuspendLayout();
 
-			lock (this.editorsSyncRoot)
+			lock (this.editorsLock)
 			{
 				foreach (T editor in this.editors)
 					editor.UpdateLayout();
@@ -434,7 +435,7 @@ namespace MixGui.Components
 
 				this.firstVisibleIndex = value;
 
-				lock (this.editorsSyncRoot)
+				lock (this.editorsLock)
 				{
 					IsReloading = true;
 
@@ -479,7 +480,7 @@ namespace MixGui.Components
 					return;
 
 				this.readOnly = value;
-				lock (this.editorsSyncRoot)
+				lock (this.editorsLock)
 				{
 					foreach (T editor in this.editors)
 						editor.ReadOnly = this.readOnly;

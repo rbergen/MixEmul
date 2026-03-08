@@ -44,22 +44,22 @@ namespace MixLib.Modules
 			this.status = RunStatus.Idle;
 		}
 
-		public override string ModuleName 
+		public override string ModuleName
 			=> MyModuleName;
 
-		public override IMemory Memory 
+		public override IMemory Memory
 			=> this.memory;
 
-		public override IMemory FullMemory 
+		public override IMemory FullMemory
 			=> this.fullMemory;
 
-		public override Registers Registers 
+		public override Registers Registers
 			=> this.mix.Registers;
 
-		public override void AddLogLine(LogLine line) 
+		public override void AddLogLine(LogLine line)
 			=> this.mix.AddLogLine(line);
 
-		public override void ResetProfilingCounts() 
+		public override void ResetProfilingCounts()
 			=> this.fullMemory.ResetProfilingCounts();
 
 		public override RunStatus Status

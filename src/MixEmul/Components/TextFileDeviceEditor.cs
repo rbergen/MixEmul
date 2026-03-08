@@ -67,31 +67,31 @@ namespace MixGui.Components
 			this.loading = false;
 		}
 
-		public bool SupportsAppending 
+		public bool SupportsAppending
 			=> !this.readOnlyCheckBox.Checked;
 
-		private bool LoadRecords() 
+		private bool LoadRecords()
 			=> LoadRecords(LoadErrorHandlingMode.AbortOnError);
 
-		public new void Update() 
+		public new void Update()
 			=> this.mixByteCollectionEditorList.Update();
 
-		public bool Save() 
+		public bool Save()
 			=> WriteRecords();
 
-		private void SaveButton_Click(object sender, EventArgs e) 
+		private void SaveButton_Click(object sender, EventArgs e)
 			=> WriteRecords();
 
-		private void RevertButton_Click(object sender, EventArgs e) 
+		private void RevertButton_Click(object sender, EventArgs e)
 			=> Revert();
 
-		private void DeviceFileWatcher_Event(object sender, FileSystemEventArgs e) 
+		private void DeviceFileWatcher_Event(object sender, FileSystemEventArgs e)
 			=> HandleFileWatcherEvent();
 
-		private void DeviceEditor_VisibleChanged(object sender, EventArgs e) 
+		private void DeviceEditor_VisibleChanged(object sender, EventArgs e)
 			=> ProcessVisibility();
 
-		private void DeviceFileWatcher_Renamed(object sender, RenamedEventArgs e) 
+		private void DeviceFileWatcher_Renamed(object sender, RenamedEventArgs e)
 			=> HandleFileWatcherEvent();
 
 		public void Initialize(int bytesPerRecord, OpenStreamCallback openStream, ReadMixByteCallback readBytes, WriteMixByteCallback writeBytes)
@@ -480,10 +480,10 @@ namespace MixGui.Components
 			ProcessReadOnlySettings();
 		}
 
-		private void FirstRecordTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args) 
+		private void FirstRecordTextBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
 			=> this.mixByteCollectionEditorList.FirstVisibleIndex = (int)args.NewValue;
 
-		private void MixByteCollectionEditorList_FirstVisibleIndexChanged(EditorList<IMixByteCollectionEditor> sender, MixByteCollectionEditorList.FirstVisibleIndexChangedEventArgs args) 
+		private void MixByteCollectionEditorList_FirstVisibleIndexChanged(EditorList<IMixByteCollectionEditor> sender, MixByteCollectionEditorList.FirstVisibleIndexChangedEventArgs args)
 			=> this.firstRecordTextBox.LongValue = this.mixByteCollectionEditorList.FirstVisibleIndex;
 
 		private void Revert()

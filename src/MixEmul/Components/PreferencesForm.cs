@@ -241,7 +241,7 @@ namespace MixGui.Components
 			this.tickCountSelectionBox.Items.AddRange([.. list]);
 
 			if (this.tickCountSelectionBox.Items.Count > 0)
-	  		this.tickCountSelectionBox.SelectedIndex = 0;
+				this.tickCountSelectionBox.SelectedIndex = 0;
 
 			UpdateTickCountControls((TickCountComboBoxItem)this.tickCountSelectionBox.SelectedItem);
 		}
@@ -1033,7 +1033,7 @@ namespace MixGui.Components
 
 			this.configuration.FloatingPointMemoryWordCount = this.floatingPointMemoryWordCount;
 
-			this.configuration.LoaderCards = this.loaderCardsDefaultButton.Enabled ? this.loaderCardTextBoxes.Select(box => box.MixByteCollectionValue.ToString(true)).ToArray() : null;
+			this.configuration.LoaderCards = this.loaderCardsDefaultButton.Enabled ? [.. this.loaderCardTextBoxes.Select(box => box.MixByteCollectionValue.ToString(true))] : null;
 
 			try
 			{
@@ -1047,8 +1047,8 @@ namespace MixGui.Components
 			DialogResult = DialogResult.OK;
 		}
 
-		private void TickCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args) 
-      => SetTickCountValue();
+		private void TickCountBox_ValueChanged(LongValueTextBox source, LongValueTextBox.ValueChangedEventArgs args)
+			=> SetTickCountValue();
 
 		private void TickCountDefaultButton_Click(object sender, EventArgs e)
 		{
@@ -1248,14 +1248,14 @@ namespace MixGui.Components
 		/// Instances of this class are used to store the color settings 
 		/// </summary>
 		private class ColorComboBoxItem(string name)
-	{
-		private readonly string mDisplayName = GetDisplayName(name);
-	  public bool IsDefault { get; private set; } = true;
-	  public string Name { get; private set; } = name;
+		{
+			private readonly string mDisplayName = GetDisplayName(name);
+			public bool IsDefault { get; private set; } = true;
+			public string Name { get; private set; } = name;
 
-	  private Color mSetColor;
+			private Color mSetColor;
 
-	  public bool IsBackground => !Name.EndsWith("Text", StringComparison.Ordinal);
+			public bool IsBackground => !Name.EndsWith("Text", StringComparison.Ordinal);
 
 			public override string ToString() => mDisplayName;
 
@@ -1294,11 +1294,11 @@ namespace MixGui.Components
 		/// Instances of this class are used to store the device file settings 
 		/// </summary>
 		private class DeviceFileComboBoxItem(FileBasedDevice device)
-	{
-		private readonly FileBasedDevice mDevice = device;
-		private string mFilePath;
+		{
+			private readonly FileBasedDevice mDevice = device;
+			private string mFilePath;
 
-	  public int Id => mDevice.Id;
+			public int Id => mDevice.Id;
 
 			public bool IsDefault => mFilePath == null;
 
@@ -1317,13 +1317,13 @@ namespace MixGui.Components
 		/// Instances of this class are used to store the tick count settings 
 		/// </summary>
 		private class TickCountComboBoxItem(string name)
-	{
-		private readonly string mDisplayName = GetDisplayName(name);
-		private bool mIsDefault = true;
-		private readonly string mName = name;
-		private int mSetTickCount;
+		{
+			private readonly string mDisplayName = GetDisplayName(name);
+			private bool mIsDefault = true;
+			private readonly string mName = name;
+			private int mSetTickCount;
 
-	  public bool IsDefault => mIsDefault;
+			public bool IsDefault => mIsDefault;
 
 			public string Name => mName;
 
@@ -1361,10 +1361,10 @@ namespace MixGui.Components
 		}
 
 		private class DeviceReloadIntervalComboBoxItem(int milliSeconds)
-	{
-	  public int MilliSeconds { get; set; } = milliSeconds;
+		{
+			public int MilliSeconds { get; set; } = milliSeconds;
 
-	  public override string ToString()
+			public override string ToString()
 			{
 				if (MilliSeconds < 1000)
 					return MilliSeconds.ToString("##0 ms");

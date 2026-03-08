@@ -46,13 +46,13 @@ namespace MixLib.Device.Settings
 			deviceReloadInterval = UnsetDeviceReloadInterval;
 		}
 
-		public static bool IsKnownTickCount(string name) 
+		public static bool IsKnownTickCount(string name)
 			=> defaultTickCounts.ContainsKey(name);
 
-		public static int GetDefaultTickCount(string name) 
+		public static int GetDefaultTickCount(string name)
 			=> IsKnownTickCount(name) ? defaultTickCounts[name] : DefaultDefaultTickCount;
 
-		public static int GetTickCount(string name) 
+		public static int GetTickCount(string name)
 			=> TickCounts.TryGetValue(name, out var value) ? value : GetDefaultTickCount(name);
 
 		public static string DefaultDeviceFilesDirectory

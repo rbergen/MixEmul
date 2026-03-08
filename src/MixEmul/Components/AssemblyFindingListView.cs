@@ -54,7 +54,7 @@ namespace MixGui.Components
 
 		private void AddFinding(AssemblyFinding finding)
 		{
-			var item = new ListViewItem(new string[] { finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? string.Empty : (finding.LineNumber + 1).ToString(), finding.Message }, (int)finding.Severity)
+			var item = new ListViewItem([finding.Severity.ToString(), (finding.LineNumber == int.MinValue) ? string.Empty : (finding.LineNumber + 1).ToString(), finding.Message], (int)finding.Severity)
 			{
 				Tag = finding
 			};

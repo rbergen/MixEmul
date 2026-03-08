@@ -111,7 +111,7 @@ namespace MixLib.Type
 		{
 			if (asChars)
 			{
-				return new string(this.bytes.Select(b => (char)b).ToArray());
+				return new string([.. this.bytes.Select(b => (char)b)]);
 			}
 			else
 			{

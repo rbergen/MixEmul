@@ -71,7 +71,7 @@ namespace MixLib.Type
 			=> !RealWordFetched || this.realWord.IsEmpty;
 
 		public MixByte[] ToArray()
-			=> [..ActiveWord];
+			=> [.. ActiveWord];
 
 		public MixByte[] Slice(int startIndex, int count)
 			=> ActiveWord.Slice(startIndex, count);

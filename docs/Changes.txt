@@ -9,6 +9,13 @@ x: Bugfix
 
 =========================================
 
+0.5.2.0 (2026-03-08)
+* Bumped all projects to .NET 10.0
+* Applied C# 14 based improvements
+* Added unit tests for a number of (foundational) classes
+* Fixed a number of minor bugs
+* Fixed a number of formatting issues in the source code
+
 0.5.1.2 (2024-08-23)
 * Bumped Lib and Assembler to .NET 8.0
 * Applied .NET 8.0 and C# 12 based improvements

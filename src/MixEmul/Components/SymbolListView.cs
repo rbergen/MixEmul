@@ -36,19 +36,19 @@ namespace MixGui.Components
 			this.listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
 		}
 
-		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e) 
+		private void SymbolValueTextBox_TextChanged(object sender, EventArgs e)
 			=> SetEnabledStates();
 
-		private void SymbolNameTextBox_TextChanged(object sender, EventArgs e) 
+		private void SymbolNameTextBox_TextChanged(object sender, EventArgs e)
 			=> SetEnabledStates();
 
-		private void SetEnabledStates() 
+		private void SetEnabledStates()
 			=> SetEnabledStates(true);
 
-		private void ListView_DoubleClick(object sender, EventArgs e) 
+		private void ListView_DoubleClick(object sender, EventArgs e)
 			=> ValueSelected();
 
-		protected virtual void OnAddressSelected(AddressSelectedEventArgs args) 
+		protected virtual void OnAddressSelected(AddressSelectedEventArgs args)
 			=> AddressSelected?.Invoke(this, args);
 
 		private void SetEnabledStates(bool updateSelectedItem)

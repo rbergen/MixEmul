@@ -100,10 +100,10 @@ namespace MixLib.Device
 
 		private class ReadLineStep(Queue inputBuffer) : DeviceStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> ReadingDescription;
 
-			public override DeviceStep.Instance CreateInstance() 
+			public override DeviceStep.Instance CreateInstance()
 				=> new Instance(inputBuffer);
 
 			public new class Instance(Queue inputBuffer) : DeviceStep.Instance
@@ -147,10 +147,10 @@ namespace MixLib.Device
 
 		private class WriteLineStep(Queue outputBuffer) : DeviceStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> WritingDescription;
 
-			public override DeviceStep.Instance CreateInstance() 
+			public override DeviceStep.Instance CreateInstance()
 				=> new Instance(outputBuffer);
 
 			public new class Instance(Queue outputBuffer) : DeviceStep.Instance

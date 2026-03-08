@@ -21,19 +21,19 @@ namespace MixLib.Device
 
 
 		public PrinterDevice(int id)
-			: base(id, FileNamePrefix) 
+			: base(id, FileNamePrefix)
 			=> UpdateSettings();
 
-		public override int RecordWordCount 
+		public override int RecordWordCount
 			=> MyRecordWordCount;
 
-		public override string ShortName 
+		public override string ShortName
 			=> MyShortName;
 
-		public override bool SupportsInput 
+		public override bool SupportsInput
 			=> false;
 
-		public override bool SupportsOutput 
+		public override bool SupportsOutput
 			=> true;
 
 		public sealed override void UpdateSettings()
@@ -69,10 +69,10 @@ namespace MixLib.Device
 
 		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 				=> new Instance(streamStatus);
 
 			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)

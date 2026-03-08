@@ -42,19 +42,19 @@ namespace MixLib
 				device.ReportingEvent += Device_Reporting;
 		}
 
-		public int Count 
+		public int Count
 			=> this.devices.Length;
 
-		public MixDevice this[int index] 
+		public MixDevice this[int index]
 			=> this.devices[index];
 
-		public IEnumerator GetEnumerator() 
+		public IEnumerator GetEnumerator()
 			=> this.devices.GetEnumerator();
 
-		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args) 
+		protected virtual void OnDeviceReportingEvent(DeviceReportingEventArgs args)
 			=> DeviceReportingEvent?.Invoke(this, args);
 
-		private void Device_Reporting(object sender, ReportingEventArgs args) 
+		private void Device_Reporting(object sender, ReportingEventArgs args)
 			=> OnDeviceReportingEvent(new DeviceReportingEventArgs((MixDevice)sender, args.Severity, args.Message));
 
 		public void Reset()

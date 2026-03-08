@@ -250,10 +250,10 @@ namespace MixLib
 			AddInstruction("INT", 5, new FieldSpec(9), 2, executor, null);
 		}
 
-		private void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) 
+		private void AddInstruction(string mnemonic, byte opcode, MetaFieldSpec metaFieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
 			=> AddInstruction(mnemonic, new MixInstruction(opcode, mnemonic, metaFieldSpec, tickCount, executor, validator));
 
-		private void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator) 
+		private void AddInstruction(string mnemonic, byte opcode, FieldSpec fieldSpec, int tickCount, MixInstruction.Executor executor, MixInstruction.Validator validator)
 			=> AddInstruction(mnemonic, new MixInstruction(opcode, fieldSpec, mnemonic, tickCount, executor, validator));
 
 		private void AddInstruction(string mnemonic, MixInstruction instruction)
@@ -301,7 +301,7 @@ namespace MixLib
 			return defaultInstruction;
 		}
 
-		public MixInstruction this[string mnemonic] 
+		public MixInstruction this[string mnemonic]
 			=> this.mnemonicInstructionMap.TryGetValue(mnemonic, out var value) ? value : null;
 
 		public MixInstruction[] this[byte opcode]

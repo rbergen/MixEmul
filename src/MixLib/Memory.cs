@@ -7,24 +7,17 @@ using MixLib.Type;
 
 namespace MixLib
 {
-	public class Memory : IMemory, IEnumerable
+	public class Memory(int minIndex, int maxIndex) : IMemory, IEnumerable
 	{
 		public static readonly FieldSpec DefaultFieldSpec = new(0, 5);
 
-		private readonly SortedDictionary<int, MemoryFullWord> words;
+		private readonly SortedDictionary<int, MemoryFullWord> words = [];
 		private readonly Lock syncLock = new();
 
-		public int MinWordIndex { get; set; }
-		public int MaxWordIndex { get; set; }
+		public int MinWordIndex { get; set; } = minIndex;
+		public int MaxWordIndex { get; set; } = maxIndex;
 
-		public Memory(int minIndex, int maxIndex)
-		{
-			MinWordIndex = minIndex;
-			MaxWordIndex = maxIndex;
-			this.words = [];
-		}
-
-		public int WordCount 
+		public int WordCount
 			=> MaxWordIndex - MinWordIndex + 1;
 
 		public void ResetProfilingCounts()

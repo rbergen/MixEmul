@@ -186,16 +186,16 @@ namespace MixLib.Instruction
 		/// several ticks, the exact number of ticks depending on the number of words moved.
 		/// </summary>
 		private class MoveStatus(int programCounter, int fromAddress, int toAddress, byte wordCount)
-	{
-	  public int CurrentWord { get; private set; } = 0;
-	  public WordStates CurrentWordState { get; set; } = WordStates.BeforeMove;
-	  public int FromAddress => fromAddress;
-	  public int ProgramCounter => programCounter;
-	  public int ToAddress => toAddress;
-	  public byte WordCount => wordCount;
+		{
+			public int CurrentWord { get; private set; } = 0;
+			public WordStates CurrentWordState { get; set; } = WordStates.BeforeMove;
+			public int FromAddress => fromAddress;
+			public int ProgramCounter => programCounter;
+			public int ToAddress => toAddress;
+			public byte WordCount => wordCount;
 
-	  public void NextWord() 
-				=> CurrentWord++;
+			public void NextWord()
+					=> CurrentWord++;
 
 			public enum WordStates
 			{

@@ -20,10 +20,10 @@ namespace MixGui.Utils
 
 		private const int MaxWordsPerCard = 7;
 
-		private static string GetTransLine(int programCounter) 
+		private static string GetTransLine(int programCounter)
 			=> "TRANS0" + GetAddressText(programCounter);
 
-		private static char GetNegativeDigit(char digit) 
+		private static char GetNegativeDigit(char digit)
 			=> MixByte.MixChars[MixByte.MixChars.IndexOf(digit) - 30];
 
 		public static string[] LoaderCards

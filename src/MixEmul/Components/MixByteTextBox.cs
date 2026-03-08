@@ -201,9 +201,9 @@ namespace MixGui.Components
 
 		public class ValueChangedEventArgs(MixByte oldValue, MixByte newValue) : EventArgs
 		{
-	  public MixByte NewValue { get; private set; } = newValue;
-	  public MixByte OldValue { get; private set; } = oldValue;
-	}
+			public MixByte NewValue { get; private set; } = newValue;
+			public MixByte OldValue { get; private set; } = oldValue;
+		}
 
 		public delegate void ValueChangedEventHandler(MixByteTextBox sender, MixByteTextBox.ValueChangedEventArgs e);
 	}

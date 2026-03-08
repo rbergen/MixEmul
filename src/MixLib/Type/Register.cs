@@ -3,10 +3,10 @@
 
 	public abstract class Register(int byteCount, int paddingByteCount) : Word(byteCount)
 	{
-		public int ByteCountWithPadding 
+		public int ByteCountWithPadding
 			=> paddingByteCount + ByteCount;
 
-		public MixByte GetByteWithPadding(int index) 
+		public MixByte GetByteWithPadding(int index)
 			=> index < paddingByteCount ? 0 : base[index - paddingByteCount];
 
 		public FullWord FullWordValue

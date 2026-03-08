@@ -19,22 +19,22 @@ namespace MixLib.Device
 		public const long SectorCount = 4096;
 		public const int WordsPerSector = 100;
 
-		public DiskDevice(int id) : base(id, FileNamePrefix) 
+		public DiskDevice(int id) : base(id, FileNamePrefix)
 			=> UpdateSettings();
 
-		public override int RecordWordCount 
+		public override int RecordWordCount
 			=> WordsPerSector;
 
-		public override string ShortName 
+		public override string ShortName
 			=> MyShortName;
 
-		public override bool SupportsInput 
+		public override bool SupportsInput
 			=> true;
 
-		public override bool SupportsOutput 
+		public override bool SupportsOutput
 			=> true;
 
-		public static long CalculateBytePosition(long sector) 
+		public static long CalculateBytePosition(long sector)
 			=> sector * WordsPerSector * (FullWord.ByteCount + 1);
 
 		public sealed override void UpdateSettings()
@@ -97,10 +97,10 @@ namespace MixLib.Device
 
 		private class OpenStreamStep : StreamStep
 		{
-			public override string StatusDescription 
+			public override string StatusDescription
 				=> OpeningDescription;
 
-			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+			public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 				=> new Instance(streamStatus);
 
 			private new class Instance(StreamStatus streamStatus) : StreamStep.Instance(streamStatus)

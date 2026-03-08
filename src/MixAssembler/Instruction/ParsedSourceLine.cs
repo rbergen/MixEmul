@@ -10,7 +10,7 @@ namespace MixAssembler.Instruction
 	/// instruction does not necessarily have to be executable by MIX; it can also concern a loader instruction, for instance. In 
 	/// addition, the instruction may be invalid.
 	/// </summary>
-	public class ParsedSourceLine(int lineNumber, string locationField, string opField, string addressField, string comment, InstructionBase instruction, IInstructionParameters parameters) 
+	public class ParsedSourceLine(int lineNumber, string locationField, string opField, string addressField, string comment, InstructionBase instruction, IInstructionParameters parameters)
 		: PreInstruction(instruction, parameters)
 	{
 		public string AddressField => addressField;

@@ -88,8 +88,8 @@ namespace MixGui.Settings
 				if (File.Exists(path))
 					configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllBytes(path), JsonSerializerOptions);
 			}
-			catch (Exception) 
-			{}
+			catch (Exception)
+			{ }
 
 			configuration ??= new();
 

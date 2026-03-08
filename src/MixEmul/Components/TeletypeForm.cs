@@ -29,10 +29,10 @@ namespace MixGui.Components
 			TeletypeDevice = teleType;
 		}
 
-		private void ClearButton_Click(object sender, EventArgs e) 
+		private void ClearButton_Click(object sender, EventArgs e)
 			=> ClearOutput();
 
-		private void SendButton_Click(object sender, EventArgs e) 
+		private void SendButton_Click(object sender, EventArgs e)
 			=> SendInput();
 
 		private void This_Activated(object sender, EventArgs e)
@@ -325,8 +325,7 @@ namespace MixGui.Components
 				{
 					this.teletypeDevice = value;
 
-					if (this.teletypeDevice != null)
-						this.teletypeDevice.OutputAdded += OutputAdded;
+					this.teletypeDevice?.OutputAdded += OutputAdded;
 				}
 			}
 		}

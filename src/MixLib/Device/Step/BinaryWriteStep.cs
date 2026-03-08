@@ -10,10 +10,10 @@ namespace MixLib.Device.Step
 	{
 		private const string MyStatusDescription = "Writing binary data";
 
-		public override string StatusDescription 
+		public override string StatusDescription
 			=> MyStatusDescription;
 
-		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) 
+		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus)
 			=> new Instance(streamStatus, recordWordCount);
 
 		public static void WriteWords(Stream stream, int wordCount, IFullWord[] writeWords)

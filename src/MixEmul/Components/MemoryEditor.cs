@@ -46,7 +46,7 @@ namespace MixGui.Components
 			this.readOnly = false;
 			this.markedAddress = -1;
 
-			this.profilingMaxCounts = new long[Enum.GetValues(typeof(GuiSettings.ProfilingInfoType)).Length];
+			this.profilingMaxCounts = new long[Enum.GetValues<GuiSettings.ProfilingInfoType>().Length];
 
 			this.breakpoints = SortedList.Synchronized([]);
 
@@ -462,8 +462,7 @@ namespace MixGui.Components
 
 			set
 			{
-				if (this.wordEditorList != null)
-					this.wordEditorList.ResizeInProgress = value;
+				this.wordEditorList?.ResizeInProgress = value;
 			}
 		}
 
@@ -496,8 +495,7 @@ namespace MixGui.Components
 			get => this.wordEditorList != null ? this.wordEditorList.FirstVisibleIndex : 0;
 			set
 			{
-				if (this.wordEditorList != null)
-					this.wordEditorList.FirstVisibleIndex = value;
+				this.wordEditorList?.FirstVisibleIndex = value;
 			}
 		}
 
@@ -586,8 +584,7 @@ namespace MixGui.Components
 					return;
 
 				this.readOnly = value;
-				if (this.wordEditorList != null)
-					this.wordEditorList.ReadOnly = this.readOnly;
+				this.wordEditorList?.ReadOnly = this.readOnly;
 			}
 		}
 

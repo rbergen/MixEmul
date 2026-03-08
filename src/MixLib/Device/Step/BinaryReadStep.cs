@@ -12,7 +12,7 @@ namespace MixLib.Device.Step
 
 		private const string MyStatusDescription = "Reading binary data";
 
-		public override string StatusDescription 
+		public override string StatusDescription
 			=> MyStatusDescription;
 
 		public override StreamStep.Instance CreateStreamInstance(StreamStatus streamStatus) => new Instance(streamStatus, this.recordWordCount);
@@ -61,7 +61,7 @@ namespace MixLib.Device.Step
 		{
 			private MixByte[] mReadBytes;
 
-			public override object OutputForNextStep 
+			public override object OutputForNextStep
 				=> mReadBytes;
 
 			public override bool Tick()

@@ -14,10 +14,10 @@ namespace MixLib.Device
 
 		public event ReportingEventHandler ReportingEvent;
 
-		public StreamStatus() 
+		public StreamStatus()
 			=> Reset();
 
-		private void OnReportingEvent(ReportingEventArgs args) 
+		private void OnReportingEvent(ReportingEventArgs args)
 			=> ReportingEvent?.Invoke(this, args);
 
 		public void CloseStream()
