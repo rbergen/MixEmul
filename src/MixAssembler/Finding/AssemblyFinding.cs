@@ -4,7 +4,7 @@ namespace MixAssembler.Finding
 {
 
 	public abstract class AssemblyFinding(Severity severity, int lineNumber, LineSection section, int startCharIndex, int length)
-  {
+	{
 		public int Length => length;
 		public int LineNumber => lineNumber;
 		public LineSection LineSection => section;

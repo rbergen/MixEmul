@@ -7,7 +7,7 @@ namespace MixAssembler.Instruction
 	/// Specifically, it contains an instruction "template" and the parameters required to create an actual instance of that instruction.
 	/// </summary>
 	public class PreInstruction(InstructionBase instruction, IInstructionParameters parameters)
-  {
+	{
 		public InstructionBase Instruction => instruction;
 		public IInstructionParameters Parameters => parameters;
 

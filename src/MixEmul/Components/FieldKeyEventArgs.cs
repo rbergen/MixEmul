@@ -8,5 +8,5 @@ namespace MixGui.Components
 		public FieldTypes Field => @field;
 
 		public FieldKeyEventArgs(Keys keyData, FieldTypes field) : this(keyData, field, null) { }
-  }
+	}
 }

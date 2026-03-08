@@ -4,5 +4,5 @@
 		: EditorList<IWordEditor>(minIndex, maxIndex, createEditor, loadEditor)
 	{
 		public WordEditorList() : this(0, -1, null, null) { }
-  }
+	}
 }

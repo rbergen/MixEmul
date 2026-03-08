@@ -7,5 +7,5 @@ namespace MixGui.Events
 	{
 		public IMixByteCollection NewValue => newValue;
 		public IMixByteCollection OldValue => oldValue;
-  }
+	}
 }

@@ -142,5 +142,5 @@ namespace MixGui.Components
 
 		public Step(object value, Step nextStep) : this(value, value.ToString(), nextStep) { }
 	}
-  }
+	}
 }

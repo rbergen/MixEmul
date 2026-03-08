@@ -6,5 +6,5 @@ namespace MixLib.Events
 	public class DeviceReportingEventArgs(MixDevice reportingDevice, Severity severity, string message) : ReportingEventArgs(severity, message)
 	{
 		public MixDevice ReportingDevice => reportingDevice;
-  }
+	}
 }
